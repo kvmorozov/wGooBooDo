@@ -1,8 +1,7 @@
 package Logic;
 
 import org.junit.Test;
-import ru.kmorozov.App.Logic.BookProcessor;
-import ru.kmorozov.App.Network.ImageExtractor;
+import ru.kmorozov.App.ImageExtractor;
 
 import static junit.framework.TestCase.assertTrue;
 
@@ -15,11 +14,18 @@ public class ExtractorTest {
 
     @Test
     public void testExtractor() {
-        BookProcessor processor = new BookProcessor(TEST_BOOK_URL);
+        ImageExtractor extractor = new ImageExtractor(TEST_BOOK_URL);
 
-        assertTrue(processor.validate());
+        assertTrue(extractor.validate());
 
-        ImageExtractor extractor = new ImageExtractor(processor.getBookAddress());
         extractor.process();
+
+        assertTrue(extractor.getPagesCount() > 0);
+
+        try {
+            Thread.sleep(100000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
