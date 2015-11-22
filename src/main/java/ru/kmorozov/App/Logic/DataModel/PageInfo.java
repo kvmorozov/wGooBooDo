@@ -1,6 +1,8 @@
 package ru.kmorozov.App.Logic.DataModel;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by km on 21.11.2015.
@@ -12,8 +14,8 @@ public class PageInfo {
     private int order, h;
     private Object links;
 
-    public AtomicBoolean sigRequestStarted = new AtomicBoolean(false);
-    public AtomicBoolean imgRequestStarted = new AtomicBoolean(false);
+    public Lock sigRequestLock = new ReentrantLock();
+    public Lock imgRequestLock = new ReentrantLock();
 
     public String getPid() {
         return pid;

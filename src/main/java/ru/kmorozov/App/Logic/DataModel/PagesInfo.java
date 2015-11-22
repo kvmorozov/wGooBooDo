@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by km on 21.11.2015.
@@ -37,7 +38,7 @@ public class PagesInfo {
 
     public void build() {
         List<PageInfo> _pages = Arrays.asList(getPages());
-        pagesMap = new HashMap<String, PageInfo>(_pages.size());
+        pagesMap = new ConcurrentHashMap<String, PageInfo>(_pages.size());
         for(PageInfo page : _pages)
             pagesMap.put(page.getPid(), page);
     }

@@ -7,6 +7,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClients;
 import ru.kmorozov.App.Logic.DataModel.PageInfo;
 import ru.kmorozov.App.Logic.DataModel.PagesInfo;
+import ru.kmorozov.App.Logic.ExecutionContext;
 import ru.kmorozov.App.Utils.Mapper;
 import ru.kmorozov.App.Utils.Pools;
 
@@ -37,6 +38,7 @@ public class PageSigProcessor implements Runnable {
         String rqUrl = baseUrl + ImageExtractor.PAGES_REQUEST_TEMPLATE.replace(ImageExtractor.RQ_PG_PLACEHOLED, page.getPid());
 
         HttpClient instance = HttpClients.custom().setUserAgent(ImageExtractor.USER_AGENT).build();
+        boolean sigFound = false;
 
         try {
             logger.info("Started sig processing for " + page.getPid());
@@ -50,14 +52,19 @@ public class PageSigProcessor implements Runnable {
                 if (framePage.getSrc() != null) {
                     PageInfo _page = bookInfo.getPageByPid(framePage.getPid());
 
-                    if (_page.getSrc() != null && _page.imgRequestStarted.get())
+                    // URL картинки известен и кто-то его уже грузит
+                    if (_page.getSrc() != null && !_page.imgRequestLock.tryLock())
                         continue;
 
+                    // Мы уже залочили страницу
                     _page.setSrc(framePage.getSrc());
-                    if (_page.getSig() != null && !_page.imgRequestStarted.get()) {
-                        _page.imgRequestStarted.set(true);
-                        Pools.imgExecutor.execute(new PageImgProcessor(bookInfo, baseUrl, page, dir));
-//                        (new PageImgProcessor(bookInfo, baseUrl, page, dir)).run();
+
+                    if (_page.getSig() != null) {
+                        sigFound = true;
+                        synchronized(_page) {
+                            Pools.imgExecutor.execute(new PageImgProcessor(bookInfo, baseUrl, page, dir));
+//                            (new PageImgProcessor(bookInfo, baseUrl, page, dir)).run();
+                        }
                     }
                 }
         } catch (EOFException eof) {
@@ -74,7 +81,7 @@ public class PageSigProcessor implements Runnable {
                     e.printStackTrace();
                 }
 
-            logger.info("Finished sig processing for " + page.getPid());
+            logger.info("Finished sig processing for " + page.getPid() + "; sig " + (sigFound ? "" : " not " ) + "found.");
         }
     }
 }

@@ -23,7 +23,8 @@ public class ExtractorTest {
         assertTrue(extractor.getPagesCount() > 0);
 
         try {
-            Thread.sleep(100000);
+            for(;;)
+                Thread.sleep(100000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

@@ -6,6 +6,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClients;
 import ru.kmorozov.App.Logic.DataModel.PageInfo;
 import ru.kmorozov.App.Logic.DataModel.PagesInfo;
+import ru.kmorozov.App.Logic.ExecutionContext;
 
 import java.io.*;
 import java.util.logging.Logger;
@@ -31,8 +32,11 @@ public class PageImgProcessor implements Runnable {
 
     @Override
     public void run() {
-        if (page.getSig() == null || !page.imgRequestStarted.get())
+        // Залочено по ошибке, разлочиваем
+        if (page.getSig() == null || !page.imgRequestLock.tryLock()) {
+            page.imgRequestLock.unlock();
             return;
+        }
 
         InputStream inputStream = null;
         OutputStream outputStream = null;
@@ -46,13 +50,16 @@ public class PageImgProcessor implements Runnable {
                     .replace(ImageExtractor.RQ_PG_PLACEHOLED, page.getPid())
                     .replace(ImageExtractor.RQ_SIG_PLACEHOLED, page.getSig());
 
+            ExecutionContext.imgUrlsBuffer.append(imgUrl);
+            ExecutionContext.imgUrlsBuffer.append(System.getProperty("line.separator"));
+
             HttpResponse response = instance.execute(new HttpGet(imgUrl));
 
             inputStream = response.getEntity().getContent();
 
             outputStream = new FileOutputStream(new File(dir.getPath() + "\\" + page.getPid() + ".png"));
             int read = 0;
-            byte[] bytes = new byte[1024];
+            byte[] bytes = new byte[4096];
 
             while ((read = inputStream.read(bytes)) != -1) {
                 outputStream.write(bytes, 0, read);

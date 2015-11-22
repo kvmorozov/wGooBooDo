@@ -8,6 +8,7 @@ import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 import ru.kmorozov.App.Logic.DataModel.PageInfo;
 import ru.kmorozov.App.Logic.DataModel.PagesInfo;
+import ru.kmorozov.App.Logic.ExecutionContext;
 import ru.kmorozov.App.Utils.Mapper;
 import ru.kmorozov.App.Utils.Pools;
 
@@ -16,6 +17,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -78,13 +80,26 @@ public class ImageExtractor {
 
     private void getPagesInfo() throws IOException {
         for(PageInfo page : bookInfo.getPages())
-            if (page.getSig() == null && !page.sigRequestStarted.get()) {
+            if (page.getSig() == null && page.sigRequestLock.tryLock()) {
                 logger.info("Starting processing for img = " + page.getPid());
 
-                page.sigRequestStarted.set(true);
+                page.sigRequestLock.lock();
                 Pools.sigExecutor.execute (new PageSigProcessor(bookInfo, url, page, dir));
 //                (new PageSigProcessor(bookInfo, url, page, dir)).run();
             }
+
+/*        try {
+            Pools.sigExecutor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+            Pools.imgExecutor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+
+            BufferedWriter bwr = new BufferedWriter(new FileWriter(new File(dir.getPath() + "\\" + "urls.txt")));
+            bwr.write(ExecutionContext.imgUrlsBuffer.toString());
+            bwr.flush();
+            bwr.close();
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }*/
     }
 
     public void process() {
