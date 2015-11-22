@@ -41,20 +41,17 @@ public class ImageExtractor {
 
     private static final String OUTPUT_DIR = "C:\\Work\\imgOut";
 
-    private String url;
-    private PagesInfo bookInfo;
-    private File dir;
 
     public ImageExtractor(String url) {
-        this.url = url;
+        ExecutionContext.baseUrl = url;
 
-        dir = new File(OUTPUT_DIR + "\\" + System.currentTimeMillis());
-        dir.mkdir();
+        ExecutionContext.outputDir = new File(OUTPUT_DIR + "\\" + System.currentTimeMillis());
+        ExecutionContext.outputDir.mkdir();
     }
 
     private PagesInfo getBookInfo() throws IOException {
         Document doc = Jsoup
-                .connect(url + OPEN_PAGE_ADD_URL)
+                .connect(ExecutionContext.baseUrl + OPEN_PAGE_ADD_URL)
                 .userAgent(USER_AGENT)
                 .get();
 
@@ -79,47 +76,53 @@ public class ImageExtractor {
     }
 
     private void getPagesInfo() throws IOException {
-        for(PageInfo page : bookInfo.getPages())
+        for(PageInfo page : ExecutionContext.bookInfo.getPages())
             if (page.getSig() == null && page.sigRequestLock.tryLock()) {
-                logger.info("Starting processing for img = " + page.getPid());
+                logger.info(String.format("Starting processing for img = %s", page.getPid()));
 
                 page.sigRequestLock.lock();
-                Pools.sigExecutor.execute (new PageSigProcessor(bookInfo, url, page, dir));
-//                (new PageSigProcessor(bookInfo, url, page, dir)).run();
+                Pools.sigExecutor.execute (new PageSigProcessor(page));
             }
 
-/*        try {
-            Pools.sigExecutor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-            Pools.imgExecutor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+        for(;;) {
+            boolean allSigsChecked = true;
+            for(PageInfo page : ExecutionContext.bookInfo.getPages())
+                if (!page.isSigChecked()) {
+                    allSigsChecked = false;
+                    break;
+                }
 
-            BufferedWriter bwr = new BufferedWriter(new FileWriter(new File(dir.getPath() + "\\" + "urls.txt")));
-            bwr.write(ExecutionContext.imgUrlsBuffer.toString());
-            bwr.flush();
-            bwr.close();
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }*/
+            if (allSigsChecked) {
+                ExecutionContext.bookInfo.exportPagesUrls();
+                break;
+            }
+            else
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+        }
     }
 
     public void process() {
         try {
-            bookInfo = getBookInfo();
-            bookInfo.build();
+            ExecutionContext.bookInfo = getBookInfo();
+            ExecutionContext.bookInfo.build();
             getPagesInfo();
 
         } catch (HttpStatusException hse) {
-            logger.severe("Cannot process images: " + hse.getMessage() + " (" + hse.getStatusCode() + ")");
+            logger.severe(String.format("Cannot process images: %s (%d)", hse.getMessage(), hse.getStatusCode()));
         } catch (IOException e) {
             logger.severe("Cannot process images!");
         }
     }
 
-    public int getPagesCount() {return bookInfo.getPagesCount();}
+    public int getPagesCount() {return ExecutionContext.bookInfo.getPagesCount();}
 
     public boolean validate() {
         try {
-            URL bookUrl = new URL(url);
+            URL bookUrl = new URL(ExecutionContext.baseUrl);
             URLConnection connection = bookUrl.openConnection();
 
             return true;

@@ -1,17 +1,24 @@
 package ru.kmorozov.App.Logic.DataModel;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import ru.kmorozov.App.Logic.ExecutionContext;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Logger;
 
 /**
  * Created by km on 21.11.2015.
  */
 public class PagesInfo {
+
+    private static Logger logger = Logger.getLogger(PagesInfo.class.getName());
 
     private PageInfo[] pages;
     private Map<String, PageInfo> pagesMap;
@@ -44,4 +51,23 @@ public class PagesInfo {
     }
 
     public PageInfo getPageByPid(String pid) {return pagesMap.get(pid);}
+
+    public void exportPagesUrls() throws IOException {
+        StringBuffer imgUrlsBuffer = new StringBuffer();
+        BufferedWriter bwr = new BufferedWriter(new FileWriter(new File(ExecutionContext.outputDir.getPath() + "\\" + "urls.txt")));
+
+        int foundPagesCount = 0;
+
+        for(PageInfo page : pages)
+            if (page.getSig() != null) {
+                foundPagesCount++;
+                imgUrlsBuffer.append(page.getPageUrl()).append(System.getProperty("line.separator"));
+            }
+
+        bwr.write(imgUrlsBuffer.toString());
+        bwr.flush();
+        bwr.close();
+
+        logger.info(String.format("Found %d pages!", foundPagesCount));
+    }
 }

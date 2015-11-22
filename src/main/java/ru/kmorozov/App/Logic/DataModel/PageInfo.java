@@ -1,5 +1,8 @@
 package ru.kmorozov.App.Logic.DataModel;
 
+import ru.kmorozov.App.Logic.ExecutionContext;
+import ru.kmorozov.App.Logic.Runtime.ImageExtractor;
+
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -10,12 +13,14 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class PageInfo {
 
-    private String pid, flags, title, src, uf;
+    private String pid, flags, title, src, uf, sig;
     private int order, h;
     private Object links;
 
     public Lock sigRequestLock = new ReentrantLock();
     public Lock imgRequestLock = new ReentrantLock();
+
+    private boolean sigChecked = false;
 
     public String getPid() {
         return pid;
@@ -81,7 +86,21 @@ public class PageInfo {
         this.links = links;
     }
 
+    public boolean isSigChecked() {
+        return sigChecked;
+    }
+
+    public void setSigChecked(boolean sigChecked) {
+        this.sigChecked = sigChecked;
+    }
+
     public String getSig() {
-        return src == null ? null : src.substring(src.indexOf("sig=") + 4);
+        return src == null ? null : sig == null ? sig = src.substring(src.indexOf("sig=") + 4) : sig;
+    }
+
+    public String getPageUrl() {
+        return ExecutionContext.baseUrl + ImageExtractor.IMG_REQUEST_TEMPLATE
+                .replace(ImageExtractor.RQ_PG_PLACEHOLED, getPid())
+                .replace(ImageExtractor.RQ_SIG_PLACEHOLED, getSig());
     }
 }

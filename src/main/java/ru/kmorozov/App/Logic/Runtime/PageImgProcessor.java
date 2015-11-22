@@ -5,7 +5,6 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClients;
 import ru.kmorozov.App.Logic.DataModel.PageInfo;
-import ru.kmorozov.App.Logic.DataModel.PagesInfo;
 import ru.kmorozov.App.Logic.ExecutionContext;
 
 import java.io.*;
@@ -19,22 +18,21 @@ public class PageImgProcessor implements Runnable {
     private static Logger logger = Logger.getLogger(PageImgProcessor.class.getName());
 
     private PageInfo page;
-    private File dir;
-    private String baseUrl;
-    private PagesInfo bookInfo;
 
-    public PageImgProcessor(PagesInfo bookInfo, String baseUrl, PageInfo page, File dir) {
+    public PageImgProcessor(PageInfo page) {
         this.page = page;
-        this.dir = dir;
-        this.baseUrl = baseUrl;
-        this.bookInfo = bookInfo;
     }
 
     @Override
     public void run() {
         // Залочено по ошибке, разлочиваем
         if (page.getSig() == null || !page.imgRequestLock.tryLock()) {
-            page.imgRequestLock.unlock();
+            try {
+                page.imgRequestLock.unlock();
+            }
+            catch(Exception ex) {
+                return;
+            }
             return;
         }
 
@@ -44,20 +42,17 @@ public class PageImgProcessor implements Runnable {
         HttpClient instance = HttpClients.custom().setUserAgent(ImageExtractor.USER_AGENT).build();
 
         try {
-            logger.info("Started img processing for " + page.getPid());
+            logger.info(String.format("Started img processing for %s", page.getPid()));
 
-            String imgUrl = baseUrl + ImageExtractor.IMG_REQUEST_TEMPLATE
+            String imgUrl = ExecutionContext.baseUrl + ImageExtractor.IMG_REQUEST_TEMPLATE
                     .replace(ImageExtractor.RQ_PG_PLACEHOLED, page.getPid())
                     .replace(ImageExtractor.RQ_SIG_PLACEHOLED, page.getSig());
-
-            ExecutionContext.imgUrlsBuffer.append(imgUrl);
-            ExecutionContext.imgUrlsBuffer.append(System.getProperty("line.separator"));
 
             HttpResponse response = instance.execute(new HttpGet(imgUrl));
 
             inputStream = response.getEntity().getContent();
 
-            outputStream = new FileOutputStream(new File(dir.getPath() + "\\" + page.getPid() + ".png"));
+            outputStream = new FileOutputStream(new File(ExecutionContext.outputDir.getPath() + "\\" + page.getPid() + ".png"));
             int read = 0;
             byte[] bytes = new byte[4096];
 
@@ -89,7 +84,7 @@ public class PageImgProcessor implements Runnable {
                     e.printStackTrace();
                 }
 
-            logger.info("Finished img processing for " + page.getPid());
+            logger.info(String.format("Finished img processing for %s", page.getPid()));
         }
     }
 }

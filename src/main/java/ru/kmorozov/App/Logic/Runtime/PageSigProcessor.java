@@ -11,7 +11,9 @@ import ru.kmorozov.App.Logic.ExecutionContext;
 import ru.kmorozov.App.Utils.Mapper;
 import ru.kmorozov.App.Utils.Pools;
 
-import java.io.*;
+import java.io.Closeable;
+import java.io.EOFException;
+import java.io.IOException;
 import java.util.logging.Logger;
 
 /**
@@ -22,26 +24,20 @@ public class PageSigProcessor implements Runnable {
     private static Logger logger = Logger.getLogger(PageSigProcessor.class.getName());
 
     private PageInfo page;
-    private File dir;
-    private String baseUrl;
-    private PagesInfo bookInfo;
 
-    public PageSigProcessor(PagesInfo bookInfo, String baseUrl, PageInfo page, File dir) {
+    public PageSigProcessor(PageInfo page) {
         this.page = page;
-        this.dir = dir;
-        this.baseUrl = baseUrl;
-        this.bookInfo = bookInfo;
     }
 
     @Override
     public void run() {
-        String rqUrl = baseUrl + ImageExtractor.PAGES_REQUEST_TEMPLATE.replace(ImageExtractor.RQ_PG_PLACEHOLED, page.getPid());
+        String rqUrl = ExecutionContext.baseUrl + ImageExtractor.PAGES_REQUEST_TEMPLATE.replace(ImageExtractor.RQ_PG_PLACEHOLED, page.getPid());
 
         HttpClient instance = HttpClients.custom().setUserAgent(ImageExtractor.USER_AGENT).build();
         boolean sigFound = false;
 
         try {
-            logger.info("Started sig processing for " + page.getPid());
+            logger.info(String.format("Started sig processing for %s", page.getPid()));
 
             HttpResponse response = instance.execute(new HttpGet(rqUrl));
 
@@ -50,7 +46,7 @@ public class PageSigProcessor implements Runnable {
 
             for (PageInfo framePage : framePages.getPages())
                 if (framePage.getSrc() != null) {
-                    PageInfo _page = bookInfo.getPageByPid(framePage.getPid());
+                    PageInfo _page = ExecutionContext.bookInfo.getPageByPid(framePage.getPid());
 
                     // URL картинки известен и кто-то его уже грузит
                     if (_page.getSrc() != null && !_page.imgRequestLock.tryLock())
@@ -62,8 +58,7 @@ public class PageSigProcessor implements Runnable {
                     if (_page.getSig() != null) {
                         sigFound = true;
                         synchronized(_page) {
-                            Pools.imgExecutor.execute(new PageImgProcessor(bookInfo, baseUrl, page, dir));
-//                            (new PageImgProcessor(bookInfo, baseUrl, page, dir)).run();
+//                            Pools.imgExecutor.execute(new PageImgProcessor(page));
                         }
                     }
                 }
@@ -81,7 +76,9 @@ public class PageSigProcessor implements Runnable {
                     e.printStackTrace();
                 }
 
-            logger.info("Finished sig processing for " + page.getPid() + "; sig " + (sigFound ? "" : " not " ) + "found.");
+            page.setSigChecked(true);
+
+            logger.info(String.format("Finished sig processing for %s; sig %s found.", page.getPid(), sigFound ? "" : " not "));
         }
     }
 }
