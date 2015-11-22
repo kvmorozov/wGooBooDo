@@ -1,4 +1,4 @@
-package ru.kmorozov.App;
+package ru.kmorozov.App.Logic.Runtime;
 
 import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
@@ -8,7 +8,6 @@ import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 import ru.kmorozov.App.Logic.DataModel.PageInfo;
 import ru.kmorozov.App.Logic.DataModel.PagesInfo;
-import ru.kmorozov.App.Logic.Runtime.PageSigProcessor;
 import ru.kmorozov.App.Utils.Mapper;
 import ru.kmorozov.App.Utils.Pools;
 
@@ -80,8 +79,11 @@ public class ImageExtractor {
     private void getPagesInfo() throws IOException {
         for(PageInfo page : bookInfo.getPages())
             if (page.getSig() == null && !page.sigRequestStarted.get()) {
+                logger.info("Starting processing for img = " + page.getPid());
+
                 page.sigRequestStarted.set(true);
                 Pools.sigExecutor.execute (new PageSigProcessor(bookInfo, url, page, dir));
+//                (new PageSigProcessor(bookInfo, url, page, dir)).run();
             }
     }
 
@@ -92,9 +94,9 @@ public class ImageExtractor {
             getPagesInfo();
 
         } catch (HttpStatusException hse) {
-            logger.log(Level.SEVERE, "Cannot process images: " + hse.getMessage() + " (" + hse.getStatusCode() + ")");
+            logger.severe("Cannot process images: " + hse.getMessage() + " (" + hse.getStatusCode() + ")");
         } catch (IOException e) {
-            logger.log(Level.SEVERE, "Cannot process images!");
+            logger.severe("Cannot process images!");
         }
     }
 
@@ -107,10 +109,10 @@ public class ImageExtractor {
 
             return true;
         } catch (MalformedURLException e) {
-            logger.log(Level.SEVERE, "Invalid address!");
+            logger.severe("Invalid address!");
             return false;
         } catch (IOException e) {
-            logger.log(Level.SEVERE, "Cannot open url!");
+            logger.severe("Cannot open url!");
             return false;
         }
     }

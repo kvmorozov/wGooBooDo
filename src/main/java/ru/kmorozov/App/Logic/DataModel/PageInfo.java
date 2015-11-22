@@ -55,11 +55,11 @@ public class PageInfo {
         this.title = title;
     }
 
-    public String getSrc() {
+    public synchronized String getSrc() {
         return src;
     }
 
-    public void setSrc(String src) {
+    public synchronized void setSrc(String src) {
         this.src = src;
     }
 

@@ -8,6 +8,6 @@ import java.util.concurrent.Executors;
  */
 public class Pools {
 
-    public final static ExecutorService sigExecutor = Executors.newFixedThreadPool(5);
-    public final static ExecutorService imgExecutor = Executors.newFixedThreadPool(5);
+    public final static ExecutorService sigExecutor = Executors.newWorkStealingPool(10);
+    public final static ExecutorService imgExecutor = Executors.newWorkStealingPool(10);
 }
