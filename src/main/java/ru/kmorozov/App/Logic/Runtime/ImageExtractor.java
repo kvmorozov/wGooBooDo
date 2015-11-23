@@ -78,7 +78,7 @@ public class ImageExtractor {
     private void getPagesInfo() throws IOException {
         for(PageInfo page : ExecutionContext.bookInfo.getPages())
             if (page.getSig() == null && page.sigRequestLock.tryLock()) {
-                logger.info(String.format("Starting processing for img = %s", page.getPid()));
+                logger.finest(String.format("Starting processing for img = %s", page.getPid()));
 
                 page.sigRequestLock.lock();
                 Pools.sigExecutor.execute (new PageSigProcessor(page));

@@ -1,15 +1,17 @@
 package ru.kmorozov.App.Logic.Runtime;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import ru.kmorozov.App.Logic.DataModel.PageInfo;
 import ru.kmorozov.App.Logic.DataModel.PagesInfo;
 import ru.kmorozov.App.Logic.ExecutionContext;
+import ru.kmorozov.App.Logic.Proxy.ProxyListProvider;
 import ru.kmorozov.App.Utils.Mapper;
-import ru.kmorozov.App.Utils.Pools;
 
 import java.io.Closeable;
 import java.io.EOFException;
@@ -24,20 +26,31 @@ public class PageSigProcessor implements Runnable {
     private static Logger logger = Logger.getLogger(PageSigProcessor.class.getName());
 
     private PageInfo page;
+    private String rqUrl;
 
     public PageSigProcessor(PageInfo page) {
         this.page = page;
+
+        rqUrl = ExecutionContext.baseUrl + ImageExtractor.PAGES_REQUEST_TEMPLATE.replace(ImageExtractor.RQ_PG_PLACEHOLED, page.getPid());
     }
 
-    @Override
-    public void run() {
-        String rqUrl = ExecutionContext.baseUrl + ImageExtractor.PAGES_REQUEST_TEMPLATE.replace(ImageExtractor.RQ_PG_PLACEHOLED, page.getPid());
+    private void getSigs(HttpHost proxy) {
+        HttpClientBuilder instanceBuilder = HttpClients.custom().setUserAgent(ImageExtractor.USER_AGENT);
 
-        HttpClient instance = HttpClients.custom().setUserAgent(ImageExtractor.USER_AGENT).build();
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        if (proxy != null)
+            instanceBuilder.setProxy(proxy);
+
+        HttpClient instance = instanceBuilder.build();
         boolean sigFound = false;
 
         try {
-            logger.info(String.format("Started sig processing for %s", page.getPid()));
+            logger.finest(String.format("Started sig processing for %s", page.getPid()));
 
             HttpResponse response = instance.execute(new HttpGet(rqUrl));
 
@@ -48,21 +61,13 @@ public class PageSigProcessor implements Runnable {
                 if (framePage.getSrc() != null) {
                     PageInfo _page = ExecutionContext.bookInfo.getPageByPid(framePage.getPid());
 
-                    // URL картинки известен и кто-то его уже грузит
-                    if (_page.getSrc() != null && !_page.imgRequestLock.tryLock())
-                        continue;
-
-                    // Мы уже залочили страницу
                     _page.setSrc(framePage.getSrc());
 
-                    if (_page.getSig() != null) {
+                    if (_page.getSig() != null)
                         sigFound = true;
-                        synchronized(_page) {
-//                            Pools.imgExecutor.execute(new PageImgProcessor(page));
-                        }
-                    }
                 }
-        } catch (EOFException eof) {
+        }
+        catch (EOFException eof) {
             eof.printStackTrace();
         }
         catch (Exception ex) {
@@ -78,7 +83,20 @@ public class PageSigProcessor implements Runnable {
 
             page.setSigChecked(true);
 
-            logger.info(String.format("Finished sig processing for %s; sig %s found.", page.getPid(), sigFound ? "" : " not "));
+            logger.finest(String.format("Finished sig processing for %s; sig %s found.", page.getPid(), sigFound ? "" : " not "));
+
+            if (!sigFound)
+                System.out.println(rqUrl);
         }
+    }
+
+    @Override
+    public void run() {
+        // Без прокси
+        getSigs(null);
+
+        for(HttpHost proxy : ProxyListProvider.INSTANCE.getProxyList())
+            if (proxy.getPort() > 0)
+                getSigs(proxy);
     }
 }
