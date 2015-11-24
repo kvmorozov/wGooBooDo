@@ -1,7 +1,7 @@
-package ru.kmorozov.App.Logic.DataModel;
+package ru.simpleGBD.App.Logic.DataModel;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import ru.kmorozov.App.Logic.ExecutionContext;
+import ru.simpleGBD.App.Logic.ExecutionContext;
 
 import java.io.BufferedWriter;
 import java.io.File;

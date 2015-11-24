@@ -1,4 +1,4 @@
-package ru.kmorozov.App.Utils;
+package ru.simpleGBD.App.Utils;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

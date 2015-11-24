@@ -1,6 +1,6 @@
-package ru.kmorozov.App.Logic;
+package ru.simpleGBD.App.Logic;
 
-import ru.kmorozov.App.Logic.DataModel.PagesInfo;
+import ru.simpleGBD.App.Logic.DataModel.PagesInfo;
 
 import java.io.File;
 

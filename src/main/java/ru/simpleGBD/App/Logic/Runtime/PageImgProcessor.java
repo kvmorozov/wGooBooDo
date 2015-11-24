@@ -1,12 +1,12 @@
-package ru.kmorozov.App.Logic.Runtime;
+package ru.simpleGBD.App.Logic.Runtime;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClients;
-import ru.kmorozov.App.Logic.DataModel.PageInfo;
-import ru.kmorozov.App.Logic.ExecutionContext;
-import ru.kmorozov.App.Utils.HttpConnections;
+import ru.simpleGBD.App.Logic.DataModel.PageInfo;
+import ru.simpleGBD.App.Logic.ExecutionContext;
+import ru.simpleGBD.App.Utils.HttpConnections;
 
 import java.io.*;
 import java.util.logging.Logger;

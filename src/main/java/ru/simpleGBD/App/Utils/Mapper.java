@@ -1,4 +1,4 @@
-package ru.kmorozov.App.Utils;
+package ru.simpleGBD.App.Utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

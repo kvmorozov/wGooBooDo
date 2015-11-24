@@ -1,9 +1,8 @@
-package ru.kmorozov.App.Logic.DataModel;
+package ru.simpleGBD.App.Logic.DataModel;
 
-import ru.kmorozov.App.Logic.ExecutionContext;
-import ru.kmorozov.App.Logic.Runtime.ImageExtractor;
+import ru.simpleGBD.App.Logic.ExecutionContext;
+import ru.simpleGBD.App.Logic.Runtime.ImageExtractor;
 
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 

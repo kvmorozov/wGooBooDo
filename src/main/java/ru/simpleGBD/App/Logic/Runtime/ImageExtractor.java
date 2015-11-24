@@ -1,4 +1,4 @@
-package ru.kmorozov.App.Logic.Runtime;
+package ru.simpleGBD.App.Logic.Runtime;
 
 import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
@@ -6,11 +6,11 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
-import ru.kmorozov.App.Logic.DataModel.PageInfo;
-import ru.kmorozov.App.Logic.DataModel.PagesInfo;
-import ru.kmorozov.App.Logic.ExecutionContext;
-import ru.kmorozov.App.Utils.Mapper;
-import ru.kmorozov.App.Utils.Pools;
+import ru.simpleGBD.App.Logic.DataModel.PageInfo;
+import ru.simpleGBD.App.Logic.DataModel.PagesInfo;
+import ru.simpleGBD.App.Logic.ExecutionContext;
+import ru.simpleGBD.App.Utils.Mapper;
+import ru.simpleGBD.App.Utils.Pools;
 
 import java.io.File;
 import java.io.IOException;

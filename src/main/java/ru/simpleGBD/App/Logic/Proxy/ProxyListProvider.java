@@ -1,10 +1,9 @@
-package ru.kmorozov.App.Logic.Proxy;
+package ru.simpleGBD.App.Logic.Proxy;
 
 import org.apache.http.HttpHost;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.TextNode;
-import ru.kmorozov.App.Logic.ExecutionContext;
 
 import java.io.IOException;
 import java.util.ArrayList;

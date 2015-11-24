@@ -1,4 +1,4 @@
-package ru.kmorozov.App.Logic.Runtime;
+package ru.simpleGBD.App.Logic.Runtime;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpHost;
@@ -7,12 +7,12 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
-import ru.kmorozov.App.Logic.DataModel.PageInfo;
-import ru.kmorozov.App.Logic.DataModel.PagesInfo;
-import ru.kmorozov.App.Logic.ExecutionContext;
-import ru.kmorozov.App.Logic.Proxy.ProxyListProvider;
-import ru.kmorozov.App.Utils.HttpConnections;
-import ru.kmorozov.App.Utils.Mapper;
+import ru.simpleGBD.App.Logic.DataModel.PageInfo;
+import ru.simpleGBD.App.Logic.DataModel.PagesInfo;
+import ru.simpleGBD.App.Logic.ExecutionContext;
+import ru.simpleGBD.App.Logic.Proxy.ProxyListProvider;
+import ru.simpleGBD.App.Utils.HttpConnections;
+import ru.simpleGBD.App.Utils.Mapper;
 
 import java.io.Closeable;
 import java.io.EOFException;

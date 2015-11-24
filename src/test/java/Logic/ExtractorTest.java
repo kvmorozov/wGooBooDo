@@ -1,7 +1,7 @@
 package Logic;
 
 import org.junit.Test;
-import ru.kmorozov.App.Logic.Runtime.ImageExtractor;
+import ru.simpleGBD.App.Logic.Runtime.ImageExtractor;
 
 import static junit.framework.TestCase.assertTrue;
 

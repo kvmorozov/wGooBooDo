@@ -1,7 +1,7 @@
-package ru.kmorozov.App;
+package ru.simpleGBD.App;
 
-import ru.kmorozov.App.Logic.Proxy.ProxyListProvider;
-import ru.kmorozov.App.Logic.Runtime.ImageExtractor;
+import ru.simpleGBD.App.Logic.Proxy.ProxyListProvider;
+import ru.simpleGBD.App.Logic.Runtime.ImageExtractor;
 
 import java.util.logging.Logger;
 
