@@ -11,6 +11,7 @@ import ru.kmorozov.App.Logic.DataModel.PageInfo;
 import ru.kmorozov.App.Logic.DataModel.PagesInfo;
 import ru.kmorozov.App.Logic.ExecutionContext;
 import ru.kmorozov.App.Logic.Proxy.ProxyListProvider;
+import ru.kmorozov.App.Utils.HttpConnections;
 import ru.kmorozov.App.Utils.Mapper;
 
 import java.io.Closeable;
@@ -35,13 +36,7 @@ public class PageSigProcessor implements Runnable {
     }
 
     private void getSigs(HttpHost proxy) {
-        HttpClientBuilder instanceBuilder = HttpClients.custom().setUserAgent(ImageExtractor.USER_AGENT);
-
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        HttpClientBuilder instanceBuilder = HttpClients.custom().setUserAgent(ImageExtractor.USER_AGENT).setDefaultCookieStore(HttpConnections.INSTANCE.getCookieStore());
 
         if (proxy != null)
             instanceBuilder.setProxy(proxy);
@@ -66,14 +61,11 @@ public class PageSigProcessor implements Runnable {
                     if (_page.getSig() != null)
                         sigFound = true;
                 }
-        }
-        catch (EOFException eof) {
+        } catch (EOFException eof) {
             eof.printStackTrace();
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
-        }
-        finally {
+        } finally {
             if (instance instanceof Closeable)
                 try {
                     ((Closeable) instance).close();
@@ -84,9 +76,6 @@ public class PageSigProcessor implements Runnable {
             page.setSigChecked(true);
 
             logger.finest(String.format("Finished sig processing for %s; sig %s found.", page.getPid(), sigFound ? "" : " not "));
-
-            if (!sigFound)
-                System.out.println(rqUrl);
         }
     }
 
@@ -95,7 +84,7 @@ public class PageSigProcessor implements Runnable {
         // Без прокси
         getSigs(null);
 
-        for(HttpHost proxy : ProxyListProvider.INSTANCE.getProxyList())
+        for (HttpHost proxy : ProxyListProvider.INSTANCE.getProxyList())
             if (proxy.getPort() > 0)
                 getSigs(proxy);
     }

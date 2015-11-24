@@ -6,6 +6,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClients;
 import ru.kmorozov.App.Logic.DataModel.PageInfo;
 import ru.kmorozov.App.Logic.ExecutionContext;
+import ru.kmorozov.App.Utils.HttpConnections;
 
 import java.io.*;
 import java.util.logging.Logger;
@@ -39,7 +40,10 @@ public class PageImgProcessor implements Runnable {
         InputStream inputStream = null;
         OutputStream outputStream = null;
 
-        HttpClient instance = HttpClients.custom().setUserAgent(ImageExtractor.USER_AGENT).build();
+        HttpClient instance = HttpClients
+                .custom()
+                .setUserAgent(ImageExtractor.USER_AGENT)
+                .setDefaultCookieStore(HttpConnections.INSTANCE.getCookieStore()).build();
 
         try {
             logger.info(String.format("Started img processing for %s", page.getPid()));
@@ -52,7 +56,7 @@ public class PageImgProcessor implements Runnable {
 
             inputStream = response.getEntity().getContent();
 
-            outputStream = new FileOutputStream(new File(ExecutionContext.outputDir.getPath() + "\\" + page.getPid() + ".png"));
+            outputStream = new FileOutputStream(new File(ExecutionContext.outputDir.getPath() + "\\" + page.getOrder() + ".png"));
             int read = 0;
             byte[] bytes = new byte[4096];
 

@@ -12,13 +12,12 @@ import ru.kmorozov.App.Logic.ExecutionContext;
 import ru.kmorozov.App.Utils.Mapper;
 import ru.kmorozov.App.Utils.Pools;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -103,6 +102,10 @@ public class ImageExtractor {
                     e.printStackTrace();
                 }
         }
+
+        for(PageInfo page : ExecutionContext.bookInfo.getPages())
+            if (page.getSig() != null)
+                Pools.imgExecutor.execute (new PageSigProcessor(page));
     }
 
     public void process() {
