@@ -10,7 +10,8 @@ import org.apache.http.impl.client.HttpClients;
 import ru.simpleGBD.App.Logic.DataModel.PageInfo;
 import ru.simpleGBD.App.Logic.DataModel.PagesInfo;
 import ru.simpleGBD.App.Logic.ExecutionContext;
-import ru.simpleGBD.App.Logic.Proxy.ProxyListProvider;
+import ru.simpleGBD.App.Logic.Proxy.IProxyListProvider;
+import ru.simpleGBD.App.Logic.Proxy.StaticProxyListProvider;
 import ru.simpleGBD.App.Utils.HttpConnections;
 import ru.simpleGBD.App.Utils.Mapper;
 
@@ -84,7 +85,7 @@ public class PageSigProcessor implements Runnable {
         // Без прокси
         getSigs(null);
 
-        for (HttpHost proxy : ProxyListProvider.INSTANCE.getProxyList())
+        for (HttpHost proxy : IProxyListProvider.getInstance().getProxyList())
             if (proxy.getPort() > 0)
                 getSigs(proxy);
     }
