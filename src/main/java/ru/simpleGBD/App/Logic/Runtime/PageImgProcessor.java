@@ -49,8 +49,9 @@ public class PageImgProcessor implements Runnable {
             logger.info(String.format("Started img processing for %s", page.getPid()));
 
             String imgUrl = ExecutionContext.baseUrl + ImageExtractor.IMG_REQUEST_TEMPLATE
-                    .replace(ImageExtractor.RQ_PG_PLACEHOLED, page.getPid())
-                    .replace(ImageExtractor.RQ_SIG_PLACEHOLED, page.getSig())
+                    .replace(ImageExtractor.RQ_PG_PLACEHOLDER, page.getPid())
+                    .replace(ImageExtractor.RQ_SIG_PLACEHOLDER, page.getSig())
+                    .replace(ImageExtractor.RQ_WIDTH_PLACEHOLDER, "800")
                     .replace("%WIDTH%", "800");
 
             HttpResponse response = instance.execute(new HttpGet(imgUrl));

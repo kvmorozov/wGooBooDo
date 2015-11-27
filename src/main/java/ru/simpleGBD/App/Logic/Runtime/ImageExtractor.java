@@ -35,10 +35,11 @@ public class ImageExtractor {
     private static final String OC_RUN_ATTRIBUTE = "_OC_Run";
     private static final String BOOK_INFO_START_TAG = "fullview";
 
-    public static final String RQ_PG_PLACEHOLED = "$$$";
-    public static final String RQ_SIG_PLACEHOLED = "###";
-    public static final String PAGES_REQUEST_TEMPLATE = "&lpg=PP1&hl=ru&pg=$$$&jscmd=click3";
-    public static final String IMG_REQUEST_TEMPLATE = "&pg=$$$&img=1&zoom=3&hl=ru&sig=###";
+    public static final String RQ_PG_PLACEHOLDER = "%PG%";
+    public static final String RQ_SIG_PLACEHOLDER = "%SIG%";
+    public static final String RQ_WIDTH_PLACEHOLDER = "%WIDTH%";
+    public static final String PAGES_REQUEST_TEMPLATE = "&lpg=PP1&hl=ru&pg=%PG%&jscmd=click3";
+    public static final String IMG_REQUEST_TEMPLATE = "&pg=%PG%&img=1&zoom=3&hl=ru&sig=%SIG%&w=%WIDTH%";
     public static final String OPEN_PAGE_ADD_URL = "&printsec=frontcover&hl=ru#v=onepage&q&f=false";
 
     private static final String OUTPUT_DIR = "C:\\Work\\imgOut";

@@ -32,7 +32,7 @@ public class PageSigProcessor implements Runnable {
     public PageSigProcessor(PageInfo page) {
         this.page = page;
 
-        rqUrl = ExecutionContext.baseUrl + ImageExtractor.PAGES_REQUEST_TEMPLATE.replace(ImageExtractor.RQ_PG_PLACEHOLED, page.getPid());
+        rqUrl = ExecutionContext.baseUrl + ImageExtractor.PAGES_REQUEST_TEMPLATE.replace(ImageExtractor.RQ_PG_PLACEHOLDER, page.getPid());
     }
 
     private void getSigs(HttpHost proxy) {

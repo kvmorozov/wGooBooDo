@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 public class ProxyListProvider {
 
     private static Logger logger = Logger.getLogger(ProxyListProvider.class.getName());
-    private static final String PROXY_LIST_URL = "http://ab57.ru/downloads/proxylist.txt";
+    private static final String PROXY_LIST_URL = "http://webanetlabs.net/freeproxy/proxylist_at_24.11.2015.txt";
 
     public static final ProxyListProvider INSTANCE = new ProxyListProvider();
 
@@ -34,7 +34,7 @@ public class ProxyListProvider {
                     .get();
 
             List<String> proxyItems = Arrays.asList(((TextNode) doc.child(0).child(1).childNode(0)).getWholeText().split("\\r\\n"));
-            proxyList = new ArrayList<HttpHost>(proxyItems.size());
+            proxyList = new ArrayList<>(proxyItems.size());
             for(String proxyItem : proxyItems) {
                String[] proxyItemArr = proxyItem.split(":");
                 HttpHost host = new HttpHost(proxyItemArr[0], Integer.valueOf(proxyItemArr[1]));
