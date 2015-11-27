@@ -14,7 +14,7 @@ public class Main {
 
     public static void main(String[] args) {
         if (IProxyListProvider.getInstance().getProxyList() != null && IProxyListProvider.getInstance().getProxyList().size() > 0)
-            logger.info(String.format("Starting with %s proxies.", WebProxyListProvider.INSTANCE.getProxyList().size()));
+            logger.info(String.format("Starting with %s proxies.", IProxyListProvider.getInstance().getProxyList().size()));
         ImageExtractor extractor = new ImageExtractor(TEST_BOOK_URL);
 
         extractor.process();

@@ -20,14 +20,14 @@ public abstract class AbstractProxyPistProvider implements IProxyListProvider {
         for (String proxyItem : proxyItems) {
             String[] proxyItemArr = proxyItem.split(":");
             HttpHost host = new HttpHost(proxyItemArr[0], Integer.valueOf(proxyItemArr[1]));
-            try {
-                if (host.getAddress().isReachable(100)) {
+/*            try {
+                if (host.getAddress().isReachable(100)) {*/
                     proxyList.add(host);
                     logger.info(String.format("Proxy %s added.", host.toHostString()));
-                }
+/*                }
             } catch (Exception ex) {
 
-            }
+            }*/
         }
     }
 

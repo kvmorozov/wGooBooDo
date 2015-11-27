@@ -1,17 +1,16 @@
 package ru.simpleGBD.App.Logic.Runtime;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.HttpClients;
 import ru.simpleGBD.App.Logic.DataModel.PageInfo;
 import ru.simpleGBD.App.Logic.DataModel.PagesInfo;
 import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Logic.Proxy.IProxyListProvider;
-import ru.simpleGBD.App.Logic.Proxy.StaticProxyListProvider;
 import ru.simpleGBD.App.Utils.HttpConnections;
 import ru.simpleGBD.App.Utils.Mapper;
 
@@ -37,7 +36,10 @@ public class PageSigProcessor implements Runnable {
     }
 
     private void getSigs(HttpHost proxy) {
-        HttpClientBuilder instanceBuilder = HttpClients.custom().setUserAgent(ImageExtractor.USER_AGENT).setDefaultCookieStore(HttpConnections.INSTANCE.getCookieStore());
+        HttpClientBuilder instanceBuilder = HttpConnections.INSTANCE
+                .getBuilder()
+                .setUserAgent(ImageExtractor.USER_AGENT)
+                .setDefaultCookieStore(HttpConnections.INSTANCE.getCookieStore());
 
         if (proxy != null)
             instanceBuilder.setProxy(proxy);
@@ -62,6 +64,8 @@ public class PageSigProcessor implements Runnable {
                     if (_page.getSig() != null)
                         sigFound = true;
                 }
+        } catch (JsonParseException jpe) {
+
         } catch (EOFException eof) {
             eof.printStackTrace();
         } catch (Exception ex) {
