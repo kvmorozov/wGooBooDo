@@ -50,13 +50,14 @@ public class PageImgProcessor implements Runnable {
 
             String imgUrl = ExecutionContext.baseUrl + ImageExtractor.IMG_REQUEST_TEMPLATE
                     .replace(ImageExtractor.RQ_PG_PLACEHOLED, page.getPid())
-                    .replace(ImageExtractor.RQ_SIG_PLACEHOLED, page.getSig());
+                    .replace(ImageExtractor.RQ_SIG_PLACEHOLED, page.getSig())
+                    .replace("%WIDTH%", "800");
 
             HttpResponse response = instance.execute(new HttpGet(imgUrl));
 
             inputStream = response.getEntity().getContent();
 
-            outputStream = new FileOutputStream(new File(ExecutionContext.outputDir.getPath() + "\\" + page.getOrder() + ".png"));
+            outputStream = new FileOutputStream(new File(ExecutionContext.outputDir.getPath() + "\\" + page.getPid() + ".png"));
             int read = 0;
             byte[] bytes = new byte[4096];
 

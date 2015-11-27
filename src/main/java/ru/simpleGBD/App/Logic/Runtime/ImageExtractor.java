@@ -1,5 +1,6 @@
 package ru.simpleGBD.App.Logic.Runtime;
 
+import org.jsoup.Connection;
 import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -9,6 +10,7 @@ import org.jsoup.select.Elements;
 import ru.simpleGBD.App.Logic.DataModel.PageInfo;
 import ru.simpleGBD.App.Logic.DataModel.PagesInfo;
 import ru.simpleGBD.App.Logic.ExecutionContext;
+import ru.simpleGBD.App.Utils.HttpConnections;
 import ru.simpleGBD.App.Utils.Mapper;
 import ru.simpleGBD.App.Utils.Pools;
 
@@ -18,6 +20,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 /**
@@ -49,10 +52,12 @@ public class ImageExtractor {
     }
 
     private PagesInfo getBookInfo() throws IOException {
-        Document doc = Jsoup
+        Connection.Response res = Jsoup
                 .connect(ExecutionContext.baseUrl + OPEN_PAGE_ADD_URL)
-                .userAgent(USER_AGENT)
-                .get();
+                .userAgent(USER_AGENT).method(Connection.Method.GET).execute();
+
+        Document doc = res.parse();
+        HttpConnections.INSTANCE.setCookies(res.cookies());
 
         Elements scripts = doc.select("script");
         for (Element script : scripts) {
@@ -75,37 +80,30 @@ public class ImageExtractor {
     }
 
     private void getPagesInfo() throws IOException {
-        for(PageInfo page : ExecutionContext.bookInfo.getPages())
+        for (PageInfo page : ExecutionContext.bookInfo.getPages())
             if (page.getSig() == null && page.sigRequestLock.tryLock()) {
                 logger.finest(String.format("Starting processing for img = %s", page.getPid()));
 
                 page.sigRequestLock.lock();
-                Pools.sigExecutor.execute (new PageSigProcessor(page));
+                Pools.sigExecutor.execute(new PageSigProcessor(page));
             }
 
-        for(;;) {
-            boolean allSigsChecked = true;
-            for(PageInfo page : ExecutionContext.bookInfo.getPages())
-                if (!page.isSigChecked()) {
-                    allSigsChecked = false;
-                    break;
-                }
-
-            if (allSigsChecked) {
-                ExecutionContext.bookInfo.exportPagesUrls();
-                break;
-            }
-            else
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+        Pools.sigExecutor.shutdown();
+        try {
+            Pools.sigExecutor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+        } catch (InterruptedException e) {
         }
+        ExecutionContext.bookInfo.exportPagesUrls();
 
-        for(PageInfo page : ExecutionContext.bookInfo.getPages())
+        for (PageInfo page : ExecutionContext.bookInfo.getPages())
             if (page.getSig() != null)
-                Pools.imgExecutor.execute (new PageSigProcessor(page));
+                Pools.imgExecutor.execute(new PageImgProcessor(page));
+
+        Pools.imgExecutor.shutdown();
+        try {
+            Pools.imgExecutor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+        } catch (InterruptedException e) {
+        }
     }
 
     public void process() {
@@ -121,7 +119,9 @@ public class ImageExtractor {
         }
     }
 
-    public int getPagesCount() {return ExecutionContext.bookInfo.getPagesCount();}
+    public int getPagesCount() {
+        return ExecutionContext.bookInfo.getPagesCount();
+    }
 
     public boolean validate() {
         try {
