@@ -28,13 +28,15 @@ public abstract class AbstractProxyPistProvider implements IProxyListProvider {
                 proxyList.add(host);
                 logger.info(String.format("Proxy %s added.", host.toHostString()));
             }
+            else
+                logger.severe(String.format("Proxy %s NOT added.", host.toHostString()));
         }
     }
 
     private boolean checkProxy(HttpHost proxy) {
         try {
             HttpConnections.INSTANCE
-                    .getBuilder().setProxy(proxy).build().execute(new HttpGet(ExecutionContext.baseUrl));
+                    .getBuilderWithTimeout().setProxy(proxy).build().execute(new HttpGet(ExecutionContext.baseUrl));
 
             return true;
         } catch (IOException e) {

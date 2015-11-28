@@ -17,8 +17,6 @@ public class WebProxyListProvider extends AbstractProxyPistProvider {
 
     private static final String PROXY_LIST_URL = "http://webanetlabs.net/freeproxy/proxylist_at_24.11.2015.txt";
 
-    public static final IProxyListProvider INSTANCE = new WebProxyListProvider();
-
     WebProxyListProvider() {
         buildList();
     }

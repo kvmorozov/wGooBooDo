@@ -22,11 +22,41 @@ public class HttpConnections {
 
     public static HttpConnections INSTANCE = new HttpConnections();
 
-    private BasicCookieStore cookieStore = new BasicCookieStore();
-    private HttpClientBuilder builder;
+    private BasicCookieStore cookieStore;
+    private HttpClientBuilder builder, builderWithTimeout;
 
     private HttpConnections() {
+        cookieStore = new BasicCookieStore();
 
+        builder = HttpClientBuilder
+                .create()
+                .setUserAgent(ImageExtractor.USER_AGENT)
+                .setDefaultCookieStore(cookieStore);
+
+        builderWithTimeout = HttpClientBuilder
+                .create()
+                .setUserAgent(ImageExtractor.USER_AGENT)
+                .setDefaultCookieStore(cookieStore);
+
+        try {
+            SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, new TrustStrategy() {
+                public boolean isTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
+                    return true;
+                }
+            }).build();
+            builder.setSSLContext(sslContext);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        RequestConfig requestConfig = RequestConfig.copy(RequestConfig.DEFAULT)
+                .setSocketTimeout(HTTP_TIMEOUT)
+                .setConnectTimeout(HTTP_TIMEOUT)
+                .setConnectionRequestTimeout(HTTP_TIMEOUT)
+                .build();
+
+        builderWithTimeout.setDefaultRequestConfig(requestConfig);
     }
 
     public BasicCookieStore getCookieStore() {
@@ -43,36 +73,10 @@ public class HttpConnections {
     }
 
     public HttpClientBuilder getBuilder() {
-        if (builder != null)
-            return builder;
-
-        builder = HttpClientBuilder
-                .create()
-                .setUserAgent(ImageExtractor.USER_AGENT)
-                .setDefaultCookieStore(HttpConnections.INSTANCE.getCookieStore());
-
-        try {
-            // setup a Trust Strategy that allows all certificates.
-            //
-            SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, new TrustStrategy() {
-                public boolean isTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
-                    return true;
-                }
-            }).build();
-            builder.setSSLContext(sslContext);
-
-            RequestConfig requestConfig = RequestConfig.copy(RequestConfig.DEFAULT)
-                    .setSocketTimeout(HTTP_TIMEOUT)
-                    .setConnectTimeout(HTTP_TIMEOUT)
-                    .setConnectionRequestTimeout(HTTP_TIMEOUT)
-                    .build();
-
-            builder.setDefaultRequestConfig(requestConfig);
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
         return builder;
+    }
+
+    public HttpClientBuilder getBuilderWithTimeout() {
+        return builderWithTimeout;
     }
 }

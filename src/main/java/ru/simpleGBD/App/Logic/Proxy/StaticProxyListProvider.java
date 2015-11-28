@@ -14,8 +14,6 @@ public class StaticProxyListProvider extends AbstractProxyPistProvider {
 
     private static final String PROXY_LIST_RES = "proxy/list1";
 
-    public static final IProxyListProvider INSTANCE = new StaticProxyListProvider();
-
     StaticProxyListProvider() {
         buildList();
     }

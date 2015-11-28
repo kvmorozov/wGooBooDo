@@ -17,6 +17,8 @@ import java.util.logging.Logger;
 public class PageImgProcessor implements Runnable {
 
     private static Logger logger = Logger.getLogger(PageImgProcessor.class.getName());
+    private static byte[] pngFormat = {(byte) 0x89, 0x50, 0x4e, 0x47};
+    private static int dataChunk = 4096;
 
     private PageInfo page;
 
@@ -36,10 +38,7 @@ public class PageImgProcessor implements Runnable {
             return;
         }
 
-        File outputFile = new File(ExecutionContext.outputDir.getPath() + "\\" + page.getOrder() + "_" + page.getPid() + ".png");
-        if (outputFile.exists())
-            return;
-
+        File outputFile = null;
         InputStream inputStream = null;
         OutputStream outputStream = null;
 
@@ -52,8 +51,6 @@ public class PageImgProcessor implements Runnable {
         HttpClient instance = instanceBuilder.build();
 
         try {
-            logger.info(String.format("Started img processing for %s", page.getPid()));
-
             String imgUrl = ExecutionContext.baseUrl + ImageExtractor.IMG_REQUEST_TEMPLATE
                     .replace(ImageExtractor.RQ_PG_PLACEHOLDER, page.getPid())
                     .replace(ImageExtractor.RQ_SIG_PLACEHOLDER, page.getSig())
@@ -64,15 +61,36 @@ public class PageImgProcessor implements Runnable {
 
             inputStream = response.getEntity().getContent();
 
-            outputStream = new FileOutputStream(outputFile);
             int read = 0;
-            byte[] bytes = new byte[4096];
+            byte[] bytes = new byte[dataChunk];
+            boolean firstChunk = true, dataProcessed = false;
 
             while ((read = inputStream.read(bytes)) != -1) {
+                if (firstChunk) {
+                    if (bytes[0] == pngFormat[0] && bytes[1] == pngFormat[1] && bytes[2] == pngFormat[2] && bytes[3] == pngFormat[3])
+                        outputFile = new File(ExecutionContext.outputDir.getPath() + "\\" + page.getOrder() + "_" + page.getPid() + ".png");
+                    else
+                        outputFile = new File(ExecutionContext
+                                .outputDir.getPath() + "\\" + page.getOrder() + "_" + page.getPid() + "_" + System.currentTimeMillis() + "err.txt");
+
+                    if (outputFile != null && outputFile.exists())
+                        break;
+                    else
+                        dataProcessed = true;
+
+                    logger.info(String.format("Started img processing for %s", page.getPid()));
+                    outputStream = new FileOutputStream(outputFile);
+                }
+
+                firstChunk = false;
+
                 outputStream.write(bytes, 0, read);
             }
-        } catch (Exception ex) {}
-        finally {
+
+            if (dataProcessed)
+                logger.info(String.format("Finished img processing for %s", page.getPid()));
+        } catch (Exception ex) {
+        } finally {
             if (inputStream != null) {
                 try {
                     inputStream.close();
@@ -94,8 +112,6 @@ public class PageImgProcessor implements Runnable {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
-            logger.info(String.format("Finished img processing for %s", page.getPid()));
         }
     }
 }
