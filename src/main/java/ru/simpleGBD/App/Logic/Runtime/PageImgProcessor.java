@@ -54,8 +54,7 @@ public class PageImgProcessor implements Runnable {
             String imgUrl = ExecutionContext.baseUrl + ImageExtractor.IMG_REQUEST_TEMPLATE
                     .replace(ImageExtractor.RQ_PG_PLACEHOLDER, page.getPid())
                     .replace(ImageExtractor.RQ_SIG_PLACEHOLDER, page.getSig())
-                    .replace(ImageExtractor.RQ_WIDTH_PLACEHOLDER, "800")
-                    .replace("%WIDTH%", "800");
+                    .replace(ImageExtractor.RQ_WIDTH_PLACEHOLDER, "800");
 
             HttpResponse response = instance.execute(new HttpGet(imgUrl));
 
@@ -63,7 +62,7 @@ public class PageImgProcessor implements Runnable {
 
             int read = 0;
             byte[] bytes = new byte[dataChunk];
-            boolean firstChunk = true, dataProcessed = false;
+            boolean firstChunk = true;
 
             while ((read = inputStream.read(bytes)) != -1) {
                 if (firstChunk) {
@@ -76,7 +75,7 @@ public class PageImgProcessor implements Runnable {
                     if (outputFile != null && outputFile.exists())
                         break;
                     else
-                        dataProcessed = true;
+                        page.setDataProcessed(true);
 
                     logger.info(String.format("Started img processing for %s", page.getPid()));
                     outputStream = new FileOutputStream(outputFile);
@@ -87,7 +86,7 @@ public class PageImgProcessor implements Runnable {
                 outputStream.write(bytes, 0, read);
             }
 
-            if (dataProcessed)
+            if (page.isDataProcessed())
                 logger.info(String.format("Finished img processing for %s", page.getPid()));
         } catch (Exception ex) {
         } finally {

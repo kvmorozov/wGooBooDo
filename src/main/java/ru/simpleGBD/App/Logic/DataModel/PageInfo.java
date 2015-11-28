@@ -22,6 +22,7 @@ public class PageInfo {
     public Lock imgRequestLock = new ReentrantLock();
 
     private boolean sigChecked = false;
+    private boolean dataProcessed = false;
 
     public String getPid() {
         return pid;
@@ -101,6 +102,14 @@ public class PageInfo {
 
     public void setUsedProxy(HttpHost usedProxy) {
         this.usedProxy = usedProxy;
+    }
+
+    public boolean isDataProcessed() {
+        return dataProcessed;
+    }
+
+    public void setDataProcessed(boolean dataProcessed) {
+        this.dataProcessed = dataProcessed;
     }
 
     public String getSig() {
