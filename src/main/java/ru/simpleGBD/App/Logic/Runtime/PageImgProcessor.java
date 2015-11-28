@@ -3,7 +3,7 @@ package ru.simpleGBD.App.Logic.Runtime;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.client.HttpClientBuilder;
 import ru.simpleGBD.App.Logic.DataModel.PageInfo;
 import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Utils.HttpConnections;
@@ -30,24 +30,26 @@ public class PageImgProcessor implements Runnable {
         if (page.getSig() == null || !page.imgRequestLock.tryLock()) {
             try {
                 page.imgRequestLock.unlock();
-            }
-            catch(Exception ex) {
+            } catch (Exception ex) {
                 return;
             }
             return;
         }
 
-        File outputFile = new File(ExecutionContext.outputDir.getPath() + "\\" + page.getPid() + ".png");
+        File outputFile = new File(ExecutionContext.outputDir.getPath() + "\\" + page.getOrder() + "_" + page.getPid() + ".png");
         if (outputFile.exists())
             return;
 
         InputStream inputStream = null;
         OutputStream outputStream = null;
 
-        HttpClient instance = HttpClients
-                .custom()
-                .setUserAgent(ImageExtractor.USER_AGENT)
-                .setDefaultCookieStore(HttpConnections.INSTANCE.getCookieStore()).build();
+        HttpClientBuilder instanceBuilder = HttpConnections.INSTANCE
+                .getBuilder();
+
+        if (page.getUsedProxy() != null)
+            instanceBuilder.setProxy(page.getUsedProxy());
+
+        HttpClient instance = instanceBuilder.build();
 
         try {
             logger.info(String.format("Started img processing for %s", page.getPid()));
@@ -69,9 +71,8 @@ public class PageImgProcessor implements Runnable {
             while ((read = inputStream.read(bytes)) != -1) {
                 outputStream.write(bytes, 0, read);
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        } finally {
+        } catch (Exception ex) {}
+        finally {
             if (inputStream != null) {
                 try {
                     inputStream.close();

@@ -37,9 +37,7 @@ public class PageSigProcessor implements Runnable {
 
     private void getSigs(HttpHost proxy) {
         HttpClientBuilder instanceBuilder = HttpConnections.INSTANCE
-                .getBuilder()
-                .setUserAgent(ImageExtractor.USER_AGENT)
-                .setDefaultCookieStore(HttpConnections.INSTANCE.getCookieStore());
+                .getBuilder();
 
         if (proxy != null)
             instanceBuilder.setProxy(proxy);
@@ -61,12 +59,17 @@ public class PageSigProcessor implements Runnable {
 
                     _page.setSrc(framePage.getSrc());
 
-                    if (_page.getSig() != null)
+                    if (_page.getSig() != null) {
                         sigFound = true;
+                        _page.setUsedProxy(proxy);
+                    }
                 }
         } catch (JsonParseException jpe) {
 
-        } catch (EOFException eof) {
+        } catch (java.net.SocketTimeoutException ste) {
+
+        }
+        catch (EOFException eof) {
             eof.printStackTrace();
         } catch (Exception ex) {
             ex.printStackTrace();

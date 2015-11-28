@@ -12,6 +12,7 @@ import ru.simpleGBD.App.Logic.DataModel.BookInfo;
 import ru.simpleGBD.App.Logic.DataModel.PageInfo;
 import ru.simpleGBD.App.Logic.DataModel.PagesInfo;
 import ru.simpleGBD.App.Logic.ExecutionContext;
+import ru.simpleGBD.App.Logic.Proxy.IProxyListProvider;
 import ru.simpleGBD.App.Utils.HttpConnections;
 import ru.simpleGBD.App.Utils.Mapper;
 import ru.simpleGBD.App.Utils.Pools;
@@ -47,9 +48,11 @@ public class ImageExtractor {
 
     private static final String OUTPUT_DIR = "C:\\Work\\imgOut";
 
-
     public ImageExtractor(String url) {
         ExecutionContext.baseUrl = url;
+
+        if (IProxyListProvider.getInstance().getProxyList() != null && IProxyListProvider.getInstance().getProxyList().size() > 0)
+            logger.info(String.format("Starting with %s proxies.", IProxyListProvider.getInstance().getProxyList().size()));
     }
 
     private BookInfo getBookInfo() throws IOException {
@@ -115,7 +118,7 @@ public class ImageExtractor {
         try {
             ExecutionContext.bookInfo = getBookInfo();
 
-            ExecutionContext.outputDir = new File(OUTPUT_DIR + "\\" + ExecutionContext.bookInfo.getBookData().getTitle());
+            ExecutionContext.outputDir = new File(OUTPUT_DIR + "\\" + ExecutionContext.bookInfo.getBookData().getTitle() + " " + ExecutionContext.bookInfo.getBookData().getVolumeId());
             if (!ExecutionContext.outputDir.exists())
                 ExecutionContext.outputDir.mkdir();
 

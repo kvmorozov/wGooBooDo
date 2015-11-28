@@ -1,5 +1,6 @@
 package ru.simpleGBD.App.Logic.DataModel;
 
+import org.apache.http.HttpHost;
 import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Logic.Runtime.ImageExtractor;
 
@@ -15,6 +16,7 @@ public class PageInfo {
     private String pid, flags, title, src, uf, sig;
     private int order, h;
     private Object links;
+    private HttpHost usedProxy;
 
     public Lock sigRequestLock = new ReentrantLock();
     public Lock imgRequestLock = new ReentrantLock();
@@ -91,6 +93,14 @@ public class PageInfo {
 
     public void setSigChecked(boolean sigChecked) {
         this.sigChecked = sigChecked;
+    }
+
+    public HttpHost getUsedProxy() {
+        return usedProxy;
+    }
+
+    public void setUsedProxy(HttpHost usedProxy) {
+        this.usedProxy = usedProxy;
     }
 
     public String getSig() {

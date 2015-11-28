@@ -1,7 +1,11 @@
 package ru.simpleGBD.App.Logic.Proxy;
 
 import org.apache.http.HttpHost;
+import org.apache.http.client.methods.HttpGet;
+import ru.simpleGBD.App.Logic.ExecutionContext;
+import ru.simpleGBD.App.Utils.HttpConnections;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -20,14 +24,21 @@ public abstract class AbstractProxyPistProvider implements IProxyListProvider {
         for (String proxyItem : proxyItems) {
             String[] proxyItemArr = proxyItem.split(":");
             HttpHost host = new HttpHost(proxyItemArr[0], Integer.parseInt(proxyItemArr[1]));
-/*            try {
-                if (host.getAddress().isReachable(100)) {*/
-                    proxyList.add(host);
-                    logger.info(String.format("Proxy %s added.", host.toHostString()));
-/*                }
-            } catch (Exception ex) {
+            if (checkProxy(host)) {
+                proxyList.add(host);
+                logger.info(String.format("Proxy %s added.", host.toHostString()));
+            }
+        }
+    }
 
-            }*/
+    private boolean checkProxy(HttpHost proxy) {
+        try {
+            HttpConnections.INSTANCE
+                    .getBuilder().setProxy(proxy).build().execute(new HttpGet(ExecutionContext.baseUrl));
+
+            return true;
+        } catch (IOException e) {
+            return false;
         }
     }
 

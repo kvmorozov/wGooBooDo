@@ -9,7 +9,9 @@ import java.util.List;
  */
 public interface IProxyListProvider {
 
+    static IProxyListProvider INSTANCE = new StaticProxyListProvider();
+
     List<HttpHost> getProxyList();
 
-    static IProxyListProvider getInstance() {return new StaticProxyListProvider();}
+    static IProxyListProvider getInstance() {return INSTANCE;}
 }
