@@ -37,6 +37,10 @@ public class PageImgProcessor implements Runnable {
             return;
         }
 
+        File outputFile = new File(ExecutionContext.outputDir.getPath() + "\\" + page.getPid() + ".png");
+        if (outputFile.exists())
+            return;
+
         InputStream inputStream = null;
         OutputStream outputStream = null;
 
@@ -58,7 +62,7 @@ public class PageImgProcessor implements Runnable {
 
             inputStream = response.getEntity().getContent();
 
-            outputStream = new FileOutputStream(new File(ExecutionContext.outputDir.getPath() + "\\" + page.getPid() + ".png"));
+            outputStream = new FileOutputStream(outputFile);
             int read = 0;
             byte[] bytes = new byte[4096];
 

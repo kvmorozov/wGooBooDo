@@ -1,6 +1,6 @@
 package ru.simpleGBD.App.Logic;
 
-import ru.simpleGBD.App.Logic.DataModel.PagesInfo;
+import ru.simpleGBD.App.Logic.DataModel.BookInfo;
 
 import java.io.File;
 
@@ -10,6 +10,6 @@ import java.io.File;
 public class ExecutionContext {
 
     public static String baseUrl;
-    public static PagesInfo bookInfo;
+    public static BookInfo bookInfo;
     public static File outputDir;
 }

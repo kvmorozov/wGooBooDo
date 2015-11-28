@@ -7,6 +7,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
+import ru.simpleGBD.App.Logic.DataModel.BookData;
+import ru.simpleGBD.App.Logic.DataModel.BookInfo;
 import ru.simpleGBD.App.Logic.DataModel.PageInfo;
 import ru.simpleGBD.App.Logic.DataModel.PagesInfo;
 import ru.simpleGBD.App.Logic.ExecutionContext;
@@ -34,6 +36,7 @@ public class ImageExtractor {
     private static final String ADD_FLAGS_ATTRIBUTE = "_OC_addFlags";
     private static final String OC_RUN_ATTRIBUTE = "_OC_Run";
     private static final String BOOK_INFO_START_TAG = "fullview";
+    private static final String BOOK_INFO_END_TAG = "enableUserFeedbackUI";
 
     public static final String RQ_PG_PLACEHOLDER = "%PG%";
     public static final String RQ_SIG_PLACEHOLDER = "%SIG%";
@@ -47,12 +50,9 @@ public class ImageExtractor {
 
     public ImageExtractor(String url) {
         ExecutionContext.baseUrl = url;
-
-        ExecutionContext.outputDir = new File(OUTPUT_DIR + "\\" + System.currentTimeMillis());
-        ExecutionContext.outputDir.mkdir();
     }
 
-    private PagesInfo getBookInfo() throws IOException {
+    private BookInfo getBookInfo() throws IOException {
         Connection.Response res = Jsoup
                 .connect(ExecutionContext.baseUrl + OPEN_PAGE_ADD_URL)
                 .userAgent(USER_AGENT).method(Connection.Method.GET).execute();
@@ -70,9 +70,13 @@ public class ImageExtractor {
                     return null;
 
                 if (data.startsWith(ADD_FLAGS_ATTRIBUTE) && data.indexOf(OC_RUN_ATTRIBUTE) > 0) {
-                    String jsonData = data.substring(data.indexOf(OC_RUN_ATTRIBUTE) + OC_RUN_ATTRIBUTE.length() + 1, data.lastIndexOf(BOOK_INFO_START_TAG) - 3);
+                    String pagesJsonData = data.substring(data.indexOf(OC_RUN_ATTRIBUTE) + OC_RUN_ATTRIBUTE.length() + 1, data.lastIndexOf(BOOK_INFO_START_TAG) - 3);
+                    PagesInfo pages = Mapper.objectMapper.readValue(pagesJsonData, PagesInfo.class);
 
-                    return Mapper.objectMapper.readValue(jsonData, PagesInfo.class);
+                    String bookJsonData = data.substring(data.indexOf(BOOK_INFO_START_TAG) - 2, data.lastIndexOf(BOOK_INFO_END_TAG) - 3);
+                    BookData bookData = Mapper.objectMapper.readValue(bookJsonData, BookData.class);
+
+                    return new BookInfo(bookData, pages);
                 }
             }
         }
@@ -81,7 +85,7 @@ public class ImageExtractor {
     }
 
     private void getPagesInfo() throws IOException {
-        for (PageInfo page : ExecutionContext.bookInfo.getPages())
+        for (PageInfo page : ExecutionContext.bookInfo.getPages().getPagesArray())
             if (page.getSig() == null && page.sigRequestLock.tryLock()) {
                 logger.finest(String.format("Starting processing for img = %s", page.getPid()));
 
@@ -94,9 +98,9 @@ public class ImageExtractor {
             Pools.sigExecutor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
         } catch (InterruptedException e) {
         }
-        ExecutionContext.bookInfo.exportPagesUrls();
+        ExecutionContext.bookInfo.getPages().exportPagesUrls();
 
-        for (PageInfo page : ExecutionContext.bookInfo.getPages())
+        for (PageInfo page : ExecutionContext.bookInfo.getPages().getPagesArray())
             if (page.getSig() != null)
                 Pools.imgExecutor.execute(new PageImgProcessor(page));
 
@@ -110,7 +114,12 @@ public class ImageExtractor {
     public void process() {
         try {
             ExecutionContext.bookInfo = getBookInfo();
-            ExecutionContext.bookInfo.build();
+
+            ExecutionContext.outputDir = new File(OUTPUT_DIR + "\\" + ExecutionContext.bookInfo.getBookData().getTitle());
+            if (!ExecutionContext.outputDir.exists())
+                ExecutionContext.outputDir.mkdir();
+
+            ExecutionContext.bookInfo.getPages().build();
             getPagesInfo();
 
         } catch (HttpStatusException hse) {
@@ -121,7 +130,7 @@ public class ImageExtractor {
     }
 
     public int getPagesCount() {
-        return ExecutionContext.bookInfo.getPagesCount();
+        return ExecutionContext.bookInfo.getPages().getPagesCount();
     }
 
     public boolean validate() {

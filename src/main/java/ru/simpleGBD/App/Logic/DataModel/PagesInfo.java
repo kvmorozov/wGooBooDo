@@ -24,7 +24,7 @@ public class PagesInfo {
     private Map<String, PageInfo> pagesMap;
     private String prefix;
 
-    public PageInfo[] getPages() {
+    public PageInfo[] getPagesArray() {
         return pages;
     }
 
@@ -44,7 +44,7 @@ public class PagesInfo {
     public int getPagesCount() {return pages.length;}
 
     public void build() {
-        List<PageInfo> _pages = Arrays.asList(getPages());
+        List<PageInfo> _pages = Arrays.asList(getPagesArray());
         pagesMap = new ConcurrentHashMap<String, PageInfo>(_pages.size());
         for(PageInfo page : _pages)
             pagesMap.put(page.getPid(), page);

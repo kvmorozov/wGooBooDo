@@ -55,9 +55,9 @@ public class PageSigProcessor implements Runnable {
             String respStr = IOUtils.toString(response.getEntity().getContent());
             PagesInfo framePages = Mapper.objectMapper.readValue(respStr, PagesInfo.class);
 
-            for (PageInfo framePage : framePages.getPages())
+            for (PageInfo framePage : framePages.getPagesArray())
                 if (framePage.getSrc() != null) {
-                    PageInfo _page = ExecutionContext.bookInfo.getPageByPid(framePage.getPid());
+                    PageInfo _page = ExecutionContext.bookInfo.getPages().getPageByPid(framePage.getPid());
 
                     _page.setSrc(framePage.getSrc());
 
