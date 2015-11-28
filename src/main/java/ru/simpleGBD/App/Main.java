@@ -8,7 +8,7 @@ public class Main {
 
     private static Logger logger = Logger.getLogger(Main.class.getName());
 
-    private static final String TEST_BOOK_URL = "https://books.google.ru/books?id=BEvEV9OVzacC";
+    private static final String TEST_BOOK_URL = "http://74.125.226.3/books?id=BEvEV9OVzacC";
 
     public static void main(String[] args) {
         ImageExtractor extractor = new ImageExtractor(TEST_BOOK_URL);

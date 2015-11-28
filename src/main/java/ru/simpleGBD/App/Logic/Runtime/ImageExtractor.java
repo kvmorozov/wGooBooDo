@@ -21,7 +21,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
@@ -33,7 +32,6 @@ public class ImageExtractor {
 
     private static Logger logger = Logger.getLogger(ImageExtractor.class.getName());
 
-    public static final String USER_AGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.143 Safari/537.36";
     private static final String ADD_FLAGS_ATTRIBUTE = "_OC_addFlags";
     private static final String OC_RUN_ATTRIBUTE = "_OC_Run";
     private static final String BOOK_INFO_START_TAG = "fullview";
@@ -58,7 +56,7 @@ public class ImageExtractor {
     private BookInfo getBookInfo() throws IOException {
         Connection.Response res = Jsoup
                 .connect(ExecutionContext.baseUrl + OPEN_PAGE_ADD_URL)
-                .userAgent(USER_AGENT).method(Connection.Method.GET).execute();
+                .userAgent(HttpConnections.USER_AGENT).method(Connection.Method.GET).execute();
 
         Document doc = res.parse();
         HttpConnections.INSTANCE.setCookies(res.cookies());
@@ -98,7 +96,8 @@ public class ImageExtractor {
 
         Pools.sigExecutor.shutdown();
         try {
-            Pools.sigExecutor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+            Pools.sigExecutor.awaitTermination(1, TimeUnit.MINUTES);
+            HttpConnections.INSTANCE.closeAllConnections();
         } catch (InterruptedException e) {
         }
         ExecutionContext.bookInfo.getPages().exportPagesUrls();

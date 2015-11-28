@@ -6,7 +6,6 @@ import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClientBuilder;
 import ru.simpleGBD.App.Logic.DataModel.PageInfo;
 import ru.simpleGBD.App.Logic.DataModel.PagesInfo;
 import ru.simpleGBD.App.Logic.ExecutionContext;
@@ -36,19 +35,14 @@ public class PageSigProcessor implements Runnable {
     }
 
     private void getSigs(HttpHost proxy) {
-        HttpClientBuilder instanceBuilder = HttpConnections.INSTANCE
-                .getBuilder();
-
-        if (proxy != null)
-            instanceBuilder.setProxy(proxy);
-
-        HttpClient instance = instanceBuilder.build();
+        HttpClient instance = HttpConnections.INSTANCE.getClient(proxy);
         boolean sigFound = false;
+        HttpResponse response;
 
         try {
             logger.finest(String.format("Started sig processing for %s", page.getPid()));
 
-            HttpResponse response = instance.execute(new HttpGet(rqUrl));
+            response = instance.execute(new HttpGet(rqUrl));
 
             String respStr = IOUtils.toString(response.getEntity().getContent());
             PagesInfo framePages = Mapper.objectMapper.readValue(respStr, PagesInfo.class);
@@ -68,8 +62,7 @@ public class PageSigProcessor implements Runnable {
 
         } catch (java.net.SocketTimeoutException ste) {
 
-        }
-        catch (EOFException eof) {
+        } catch (EOFException eof) {
             eof.printStackTrace();
         } catch (Exception ex) {
             ex.printStackTrace();

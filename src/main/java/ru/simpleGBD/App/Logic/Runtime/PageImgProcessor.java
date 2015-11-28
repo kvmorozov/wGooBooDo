@@ -3,7 +3,6 @@ package ru.simpleGBD.App.Logic.Runtime;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClientBuilder;
 import ru.simpleGBD.App.Logic.DataModel.PageInfo;
 import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Utils.HttpConnections;
@@ -42,13 +41,7 @@ public class PageImgProcessor implements Runnable {
         InputStream inputStream = null;
         OutputStream outputStream = null;
 
-        HttpClientBuilder instanceBuilder = HttpConnections.INSTANCE
-                .getBuilder();
-
-        if (page.getUsedProxy() != null)
-            instanceBuilder.setProxy(page.getUsedProxy());
-
-        HttpClient instance = instanceBuilder.build();
+        HttpClient instance = HttpConnections.INSTANCE.getClient(page.getUsedProxy());
 
         try {
             String imgUrl = ExecutionContext.baseUrl + ImageExtractor.IMG_REQUEST_TEMPLATE
