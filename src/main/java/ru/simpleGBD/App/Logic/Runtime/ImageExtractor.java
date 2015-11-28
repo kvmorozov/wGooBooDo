@@ -136,7 +136,7 @@ public class ImageExtractor {
     public boolean validate() {
         try {
             URL bookUrl = new URL(ExecutionContext.baseUrl);
-            URLConnection connection = bookUrl.openConnection();
+            bookUrl.openConnection();
 
             return true;
         } catch (MalformedURLException e) {
