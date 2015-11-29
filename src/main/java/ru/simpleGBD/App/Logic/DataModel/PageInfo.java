@@ -2,6 +2,7 @@ package ru.simpleGBD.App.Logic.DataModel;
 
 import org.apache.http.HttpHost;
 import ru.simpleGBD.App.Logic.ExecutionContext;
+import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
 import ru.simpleGBD.App.Logic.Runtime.ImageExtractor;
 
 import java.util.concurrent.locks.Lock;
@@ -16,7 +17,7 @@ public class PageInfo {
     private String pid, flags, title, src, uf, sig;
     private int order, h;
     private Object links;
-    private HttpHost usedProxy;
+    private HttpHostExt usedProxy;
 
     public Lock sigRequestLock = new ReentrantLock();
     public Lock imgRequestLock = new ReentrantLock();
@@ -96,11 +97,11 @@ public class PageInfo {
         this.sigChecked = sigChecked;
     }
 
-    public HttpHost getUsedProxy() {
+    public HttpHostExt getUsedProxy() {
         return usedProxy;
     }
 
-    public void setUsedProxy(HttpHost usedProxy) {
+    public void setUsedProxy(HttpHostExt usedProxy) {
         this.usedProxy = usedProxy;
     }
 

@@ -5,6 +5,8 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import ru.simpleGBD.App.Logic.DataModel.PageInfo;
 import ru.simpleGBD.App.Logic.ExecutionContext;
+import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
+import ru.simpleGBD.App.Logic.Proxy.IProxyListProvider;
 import ru.simpleGBD.App.Utils.HttpConnections;
 
 import java.io.*;
@@ -95,6 +97,17 @@ public class PageImgProcessor implements Runnable {
         return false;
     }
 
+    private boolean processImageWithProxy(HttpHostExt proxy) {
+        if (processImage(page.getImqRqUrl(
+                ImageExtractor.HTTP_TEMPLATE, ImageExtractor.DEFAULT_PAGE_WIDTH),
+                HttpConnections.INSTANCE.getClient(proxy)))
+            return true;
+        else
+            return processImage(page.getImqRqUrl(
+                    ImageExtractor.HTTPS_TEMPLATE, ImageExtractor.DEFAULT_PAGE_WIDTH),
+                    HttpConnections.INSTANCE.getClient(proxy));
+    }
+
     @Override
     public void run() {
         // Залочено по ошибке, разлочиваем
@@ -107,12 +120,10 @@ public class PageImgProcessor implements Runnable {
             return;
         }
 
-        if (!processImage(page.getImqRqUrl(
-                ImageExtractor.HTTP_TEMPLATE, ImageExtractor.DEFAULT_PAGE_WIDTH),
-                HttpConnections.INSTANCE.getClient(page.getUsedProxy())))
-            processImage(page.getImqRqUrl(
-                    ImageExtractor.HTTPS_TEMPLATE, ImageExtractor.DEFAULT_PAGE_WIDTH),
-                    HttpConnections.INSTANCE.getClient(page.getUsedProxy()));
-
+        if (!processImageWithProxy(page.getUsedProxy()))
+            // Пробуем скачать страницу с другими прокси, если не получилось с той, с помощью которой узнали sig
+            for (HttpHostExt proxy : IProxyListProvider.INSTANCE.getProxyList())
+                if (processImageWithProxy(proxy))
+                    return;
     }
 }

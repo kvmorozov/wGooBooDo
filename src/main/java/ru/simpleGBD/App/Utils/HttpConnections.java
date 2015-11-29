@@ -7,9 +7,9 @@ import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.ssl.SSLContextBuilder;
+import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
 
 import javax.net.ssl.SSLContext;
 import java.io.IOException;
@@ -86,17 +86,17 @@ public class HttpConnections {
         return builderWithTimeout;
     }
 
-    public void initClients(List<HttpHost> proxyList) {
+    public void initClients(List<HttpHostExt> proxyList) {
         noProxyClient = builder.build();
         clientsMap = new HashMap<>();
 
-        for (HttpHost proxy : proxyList)
-            clientsMap.put(proxy, builder.setProxy(proxy).build());
+        for (HttpHostExt proxy : proxyList)
+            clientsMap.put(proxy.getHost(), builder.setProxy(proxy.getHost()).build());
     }
 
-    public HttpClient getClient(HttpHost proxy) {
+    public HttpClient getClient(HttpHostExt proxy) {
         //return proxy == null ? noProxyClient : clientsMap.get(proxy);
-        return proxy == null ? builder.build() : builder.setProxy(proxy).build();
+        return proxy == null ? builder.build() : builder.setProxy(proxy.getHost()).build();
     }
 
     public void closeAllConnections() {

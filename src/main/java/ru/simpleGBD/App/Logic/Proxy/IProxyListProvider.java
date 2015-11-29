@@ -11,7 +11,7 @@ public interface IProxyListProvider {
 
     static IProxyListProvider INSTANCE = new StaticProxyListProvider();
 
-    List<HttpHost> getProxyList();
+    List<HttpHostExt> getProxyList();
 
     static IProxyListProvider getInstance() {return INSTANCE;}
 }

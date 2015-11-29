@@ -17,7 +17,7 @@ public abstract class AbstractProxyPistProvider implements IProxyListProvider {
 
     private static Logger logger = Logger.getLogger("ProxyPistProvider");
 
-    protected List<HttpHost> proxyList;
+    protected List<HttpHostExt> proxyList;
 
     protected void buildFromList(List<String> proxyItems) {
         proxyList = new ArrayList<>(proxyItems.size());
@@ -25,7 +25,7 @@ public abstract class AbstractProxyPistProvider implements IProxyListProvider {
             String[] proxyItemArr = proxyItem.split(":");
             HttpHost host = new HttpHost(proxyItemArr[0], Integer.parseInt(proxyItemArr[1]));
             if (checkProxy(host)) {
-                proxyList.add(host);
+                proxyList.add(new HttpHostExt(host));
                 logger.info(String.format("Proxy %s added.", host.toHostString()));
             }
             else
@@ -47,7 +47,7 @@ public abstract class AbstractProxyPistProvider implements IProxyListProvider {
     }
 
     @Override
-    public List<HttpHost> getProxyList() {
+    public List<HttpHostExt> getProxyList() {
         return proxyList;
     }
 }

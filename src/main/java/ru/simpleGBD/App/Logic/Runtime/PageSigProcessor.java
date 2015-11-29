@@ -2,13 +2,13 @@ package ru.simpleGBD.App.Logic.Runtime;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import ru.simpleGBD.App.Logic.DataModel.PageInfo;
 import ru.simpleGBD.App.Logic.DataModel.PagesInfo;
 import ru.simpleGBD.App.Logic.ExecutionContext;
+import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
 import ru.simpleGBD.App.Logic.Proxy.IProxyListProvider;
 import ru.simpleGBD.App.Utils.HttpConnections;
 import ru.simpleGBD.App.Utils.Mapper;
@@ -34,7 +34,7 @@ public class PageSigProcessor implements Runnable {
         rqUrl = ExecutionContext.baseUrl + ImageExtractor.PAGES_REQUEST_TEMPLATE.replace(ImageExtractor.RQ_PG_PLACEHOLDER, page.getPid());
     }
 
-    private boolean getSigs(HttpHost proxy) {
+    private boolean getSigs(HttpHostExt proxy) {
         HttpClient instance = HttpConnections.INSTANCE.getClient(proxy);
         boolean sigFound = false;
         HttpResponse response;
@@ -61,8 +61,9 @@ public class PageSigProcessor implements Runnable {
                 }
         } catch (JsonParseException jpe) {
 
-        } catch (java.net.SocketTimeoutException ste) {
-
+        } catch (java.net.SocketTimeoutException | java.net.ConnectException ce) {
+            if (proxy != null)
+                proxy.setAvailable(false);
         } catch (EOFException eof) {
             eof.printStackTrace();
         } catch (Exception ex) {
@@ -92,8 +93,8 @@ public class PageSigProcessor implements Runnable {
         if (getSigs(null))
             return;
 
-        for (HttpHost proxy : IProxyListProvider.getInstance().getProxyList())
-            if (proxy.getPort() > 0)
+        for (HttpHostExt proxy : IProxyListProvider.getInstance().getProxyList())
+            if (proxy.isAvailable() && proxy.getHost().getPort() > 0)
                 if (getSigs(proxy))
                     return;
     }

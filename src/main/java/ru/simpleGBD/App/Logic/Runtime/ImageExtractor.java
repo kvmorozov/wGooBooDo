@@ -1,5 +1,6 @@
 package ru.simpleGBD.App.Logic.Runtime;
 
+import org.apache.commons.io.FilenameUtils;
 import org.jsoup.Connection;
 import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
@@ -21,6 +22,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
@@ -33,7 +36,7 @@ public class ImageExtractor {
     private static Logger logger = Logger.getLogger(ImageExtractor.class.getName());
 
     public static final int DEFAULT_PAGE_WIDTH = 800;
-    public static final String HTTP_TEMPLATE  = "http://74.125.226.3/books?id=%BOOK_ID%";
+    public static final String HTTP_TEMPLATE = "http://74.125.226.3/books?id=%BOOK_ID%";
     public static final String HTTPS_TEMPLATE = "https://books.google.ru/books?id=%BOOK_ID%";
 
     private static final String ADD_FLAGS_ATTRIBUTE = "_OC_addFlags";
@@ -53,7 +56,7 @@ public class ImageExtractor {
     private static final String OUTPUT_DIR = "C:\\Work\\imgOut";
 
     public ImageExtractor(String bookId) {
-        ExecutionContext.bookId  = bookId;
+        ExecutionContext.bookId = bookId;
         ExecutionContext.baseUrl = HTTP_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, bookId);
 
         if (IProxyListProvider.getInstance().getProxyList() != null && IProxyListProvider.getInstance().getProxyList().size() > 0)
@@ -94,7 +97,7 @@ public class ImageExtractor {
 
     private void getPagesInfo() throws IOException {
         for (PageInfo page : ExecutionContext.bookInfo.getPages().getPagesArray())
-            if (page.getSig() == null && page.sigRequestLock.tryLock()) {
+            if (!page.isDataProcessed() && page.getSig() == null && page.sigRequestLock.tryLock()) {
                 logger.finest(String.format("Starting processing for img = %s", page.getPid()));
 
                 page.sigRequestLock.lock();
@@ -103,7 +106,7 @@ public class ImageExtractor {
 
         Pools.sigExecutor.shutdown();
         try {
-            Pools.sigExecutor.awaitTermination(1, TimeUnit.MINUTES);
+            Pools.sigExecutor.awaitTermination(100, TimeUnit.MINUTES);
             HttpConnections.INSTANCE.closeAllConnections();
         } catch (InterruptedException e) {
         }
@@ -115,8 +118,25 @@ public class ImageExtractor {
 
         Pools.imgExecutor.shutdown();
         try {
-            Pools.imgExecutor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+            Pools.sigExecutor.awaitTermination(500, TimeUnit.MINUTES);
+            HttpConnections.INSTANCE.closeAllConnections();
         } catch (InterruptedException e) {
+        }
+    }
+
+    private void scanDir() {
+        try {
+            Files.walk(Paths.get(ExecutionContext.outputDir.toURI())).forEach(filePath -> {
+                if (Files.isRegularFile(filePath) && FilenameUtils.getExtension(filePath.toString()).equals("png")) {
+                    String fileName = FilenameUtils.getBaseName(filePath.toString());
+                    String[] nameParts = fileName.split("_");
+                    PageInfo _page = ExecutionContext.bookInfo.getPages().getPageByPid(nameParts[1]);
+                    if (_page != null)
+                        _page.setDataProcessed(true);
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -129,6 +149,8 @@ public class ImageExtractor {
                 ExecutionContext.outputDir.mkdir();
 
             ExecutionContext.bookInfo.getPages().build();
+            scanDir();
+
             getPagesInfo();
 
         } catch (HttpStatusException hse) {
