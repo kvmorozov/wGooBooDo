@@ -69,7 +69,7 @@ public class ImageExtractor {
                 .userAgent(HttpConnections.USER_AGENT).method(Connection.Method.GET).execute();
 
         Document doc = res.parse();
-        HttpConnections.INSTANCE.setCookies(res.cookies());
+        HttpConnections.INSTANCE.setDefaultCookies(res.cookies());
 
         Elements scripts = doc.select("script");
         for (Element script : scripts) {
@@ -113,7 +113,7 @@ public class ImageExtractor {
         ExecutionContext.bookInfo.getPages().exportPagesUrls();
 
         for (PageInfo page : ExecutionContext.bookInfo.getPages().getPagesArray())
-            if (page.getSig() != null)
+            if (!page.isDataProcessed() && page.getSig() != null)
                 Pools.imgExecutor.execute(new PageImgProcessor(page));
 
         Pools.imgExecutor.shutdown();

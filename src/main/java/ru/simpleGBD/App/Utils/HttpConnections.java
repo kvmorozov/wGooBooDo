@@ -73,7 +73,7 @@ public class HttpConnections {
         builderWithTimeout.setDefaultRequestConfig(requestConfig);
     }
 
-    public void setCookies(Map<String, String> cookiesMap) {
+    public void setDefaultCookies(Map<String, String> cookiesMap) {
         for (Map.Entry<String, String> cookieEntry : cookiesMap.entrySet()) {
             BasicClientCookie cookie = new BasicClientCookie(cookieEntry.getKey(), cookieEntry.getValue());
             cookie.setDomain(".google.ru");

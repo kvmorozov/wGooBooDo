@@ -27,7 +27,7 @@ public class PageImgProcessor implements Runnable {
         this.page = page;
     }
 
-    private boolean processImage(String imgUrl, HttpClient instance) {
+    private boolean processImage(String imgUrl, HttpClient instance, HttpHostExt proxy) {
         File outputFile = null;
         InputStream inputStream = null;
         OutputStream outputStream = null;
@@ -48,15 +48,13 @@ public class PageImgProcessor implements Runnable {
                         isPng = true;
                     } else
                         break;
-/*                        outputFile = new File(ExecutionContext
-                                .outputDir.getPath() + "\\" + page.getOrder() + "_" + page.getPid() + "_" + System.currentTimeMillis() + "err.txt");*/
 
                     if (outputFile != null && outputFile.exists())
                         break;
                     else
                         page.setDataProcessed(isPng);
 
-                    logger.info(String.format("Started img processing for %s", page.getPid()));
+                    logger.info(String.format("Started img processing for %s with %s proxy", page.getPid(), proxy.toString()));
                     outputStream = new FileOutputStream(outputFile);
                 }
 
@@ -100,12 +98,12 @@ public class PageImgProcessor implements Runnable {
     private boolean processImageWithProxy(HttpHostExt proxy) {
         if (processImage(page.getImqRqUrl(
                 ImageExtractor.HTTP_TEMPLATE, ImageExtractor.DEFAULT_PAGE_WIDTH),
-                HttpConnections.INSTANCE.getClient(proxy)))
+                HttpConnections.INSTANCE.getClient(proxy), proxy))
             return true;
         else
             return processImage(page.getImqRqUrl(
                     ImageExtractor.HTTPS_TEMPLATE, ImageExtractor.DEFAULT_PAGE_WIDTH),
-                    HttpConnections.INSTANCE.getClient(proxy));
+                    HttpConnections.INSTANCE.getClient(proxy), proxy);
     }
 
     @Override

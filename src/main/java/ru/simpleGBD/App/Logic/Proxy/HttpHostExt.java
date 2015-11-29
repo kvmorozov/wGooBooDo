@@ -35,4 +35,9 @@ public class HttpHostExt {
     public boolean equals(final Object obj) {
         return host.equals(((HttpHostExt) obj).getHost());
     }
+
+    @Override
+    public String toString() {
+        return host == null ? "no" : host.toHostString();
+    }
 }

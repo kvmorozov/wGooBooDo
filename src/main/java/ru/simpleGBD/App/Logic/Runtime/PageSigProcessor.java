@@ -1,8 +1,10 @@
 package ru.simpleGBD.App.Logic.Runtime;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
+import org.apache.http.NoHttpResponseException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import ru.simpleGBD.App.Logic.DataModel.PageInfo;
@@ -16,6 +18,8 @@ import ru.simpleGBD.App.Utils.Mapper;
 import java.io.Closeable;
 import java.io.EOFException;
 import java.io.IOException;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.util.logging.Logger;
 
 /**
@@ -59,13 +63,9 @@ public class PageSigProcessor implements Runnable {
                         _page.setUsedProxy(proxy);
                     }
                 }
-        } catch (JsonParseException jpe) {
-
-        } catch (java.net.SocketTimeoutException | java.net.ConnectException ce) {
+        } catch (JsonParseException | JsonMappingException | SocketTimeoutException | SocketException | NoHttpResponseException ce) {
             if (proxy != null)
                 proxy.setAvailable(false);
-        } catch (EOFException eof) {
-            eof.printStackTrace();
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
