@@ -32,6 +32,7 @@ public class BookData {
     @JsonProperty("publication_date") private String publicationDate;
     @JsonProperty("num_pages") private int numPages;
     @JsonProperty("sample_url") private String sampleUrl;
+    @JsonProperty("synposis") private String synposis;
     @JsonProperty("my_library_url") private String myLibraryUrl;
     @JsonProperty("is_magazine") private boolean magazine;
     @JsonProperty("is_public_domain") private boolean publicDomain;
@@ -274,5 +275,13 @@ public class BookData {
 
     public void setPublicDomain(boolean publicDomain) {
         this.publicDomain = publicDomain;
+    }
+
+    public String getSynposis() {
+        return synposis;
+    }
+
+    public void setSynposis(String synposis) {
+        this.synposis = synposis;
     }
 }
