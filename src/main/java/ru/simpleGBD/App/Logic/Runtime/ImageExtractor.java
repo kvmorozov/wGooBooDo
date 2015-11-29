@@ -32,22 +32,29 @@ public class ImageExtractor {
 
     private static Logger logger = Logger.getLogger(ImageExtractor.class.getName());
 
+    public static final int DEFAULT_PAGE_WIDTH = 800;
+    public static final String HTTP_TEMPLATE  = "http://74.125.226.3/books?id=%BOOK_ID%";
+    public static final String HTTPS_TEMPLATE = "https://books.google.ru/books?id=%BOOK_ID%";
+
     private static final String ADD_FLAGS_ATTRIBUTE = "_OC_addFlags";
     private static final String OC_RUN_ATTRIBUTE = "_OC_Run";
     private static final String BOOK_INFO_START_TAG = "fullview";
     private static final String BOOK_INFO_END_TAG = "enableUserFeedbackUI";
 
+    public static final String BOOK_ID_PLACEHOLDER = "%BOOK_ID%";
     public static final String RQ_PG_PLACEHOLDER = "%PG%";
     public static final String RQ_SIG_PLACEHOLDER = "%SIG%";
     public static final String RQ_WIDTH_PLACEHOLDER = "%WIDTH%";
+
     public static final String PAGES_REQUEST_TEMPLATE = "&lpg=PP1&hl=ru&pg=%PG%&jscmd=click3";
     public static final String IMG_REQUEST_TEMPLATE = "&pg=%PG%&img=1&zoom=3&hl=ru&sig=%SIG%&w=%WIDTH%";
     public static final String OPEN_PAGE_ADD_URL = "&printsec=frontcover&hl=ru#v=onepage&q&f=false";
 
     private static final String OUTPUT_DIR = "C:\\Work\\imgOut";
 
-    public ImageExtractor(String url) {
-        ExecutionContext.baseUrl = url;
+    public ImageExtractor(String bookId) {
+        ExecutionContext.bookId  = bookId;
+        ExecutionContext.baseUrl = HTTP_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, bookId);
 
         if (IProxyListProvider.getInstance().getProxyList() != null && IProxyListProvider.getInstance().getProxyList().size() > 0)
             logger.info(String.format("Starting with %s proxies.", IProxyListProvider.getInstance().getProxyList().size()));

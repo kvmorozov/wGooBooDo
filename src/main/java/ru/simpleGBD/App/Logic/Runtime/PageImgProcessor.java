@@ -25,50 +25,34 @@ public class PageImgProcessor implements Runnable {
         this.page = page;
     }
 
-    @Override
-    public void run() {
-        // Залочено по ошибке, разлочиваем
-        if (page.getSig() == null || !page.imgRequestLock.tryLock()) {
-            try {
-                page.imgRequestLock.unlock();
-            } catch (Exception ex) {
-                return;
-            }
-            return;
-        }
-
+    private boolean processImage(String imgUrl, HttpClient instance) {
         File outputFile = null;
         InputStream inputStream = null;
         OutputStream outputStream = null;
 
-        HttpClient instance = HttpConnections.INSTANCE.getClient(page.getUsedProxy());
-
         try {
-            String imgUrl = ExecutionContext.baseUrl + ImageExtractor.IMG_REQUEST_TEMPLATE
-                    .replace(ImageExtractor.RQ_PG_PLACEHOLDER, page.getPid())
-                    .replace(ImageExtractor.RQ_SIG_PLACEHOLDER, page.getSig())
-                    .replace(ImageExtractor.RQ_WIDTH_PLACEHOLDER, "800");
-
             HttpResponse response = instance.execute(new HttpGet(imgUrl));
 
             inputStream = response.getEntity().getContent();
 
             int read = 0;
             byte[] bytes = new byte[dataChunk];
-            boolean firstChunk = true;
+            boolean firstChunk = true, isPng = false;
 
             while ((read = inputStream.read(bytes)) != -1) {
                 if (firstChunk) {
-                    if (bytes[0] == pngFormat[0] && bytes[1] == pngFormat[1] && bytes[2] == pngFormat[2] && bytes[3] == pngFormat[3])
+                    if (bytes[0] == pngFormat[0] && bytes[1] == pngFormat[1] && bytes[2] == pngFormat[2] && bytes[3] == pngFormat[3]) {
                         outputFile = new File(ExecutionContext.outputDir.getPath() + "\\" + page.getOrder() + "_" + page.getPid() + ".png");
-                    else
-                        outputFile = new File(ExecutionContext
-                                .outputDir.getPath() + "\\" + page.getOrder() + "_" + page.getPid() + "_" + System.currentTimeMillis() + "err.txt");
+                        isPng = true;
+                    } else
+                        break;
+/*                        outputFile = new File(ExecutionContext
+                                .outputDir.getPath() + "\\" + page.getOrder() + "_" + page.getPid() + "_" + System.currentTimeMillis() + "err.txt");*/
 
                     if (outputFile != null && outputFile.exists())
                         break;
                     else
-                        page.setDataProcessed(true);
+                        page.setDataProcessed(isPng);
 
                     logger.info(String.format("Started img processing for %s", page.getPid()));
                     outputStream = new FileOutputStream(outputFile);
@@ -81,6 +65,8 @@ public class PageImgProcessor implements Runnable {
 
             if (page.isDataProcessed())
                 logger.info(String.format("Finished img processing for %s", page.getPid()));
+
+            return isPng;
         } catch (Exception ex) {
         } finally {
             if (inputStream != null) {
@@ -105,5 +91,28 @@ public class PageImgProcessor implements Runnable {
                     e.printStackTrace();
                 }
         }
+
+        return false;
+    }
+
+    @Override
+    public void run() {
+        // Залочено по ошибке, разлочиваем
+        if (page.getSig() == null || !page.imgRequestLock.tryLock()) {
+            try {
+                page.imgRequestLock.unlock();
+            } catch (Exception ex) {
+                return;
+            }
+            return;
+        }
+
+        if (!processImage(page.getImqRqUrl(
+                ImageExtractor.HTTP_TEMPLATE, ImageExtractor.DEFAULT_PAGE_WIDTH),
+                HttpConnections.INSTANCE.getClient(page.getUsedProxy())))
+            processImage(page.getImqRqUrl(
+                    ImageExtractor.HTTPS_TEMPLATE, ImageExtractor.DEFAULT_PAGE_WIDTH),
+                    HttpConnections.INSTANCE.getClient(page.getUsedProxy()));
+
     }
 }

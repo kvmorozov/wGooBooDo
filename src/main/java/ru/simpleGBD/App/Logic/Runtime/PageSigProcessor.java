@@ -34,7 +34,7 @@ public class PageSigProcessor implements Runnable {
         rqUrl = ExecutionContext.baseUrl + ImageExtractor.PAGES_REQUEST_TEMPLATE.replace(ImageExtractor.RQ_PG_PLACEHOLDER, page.getPid());
     }
 
-    private void getSigs(HttpHost proxy) {
+    private boolean getSigs(HttpHost proxy) {
         HttpClient instance = HttpConnections.INSTANCE.getClient(proxy);
         boolean sigFound = false;
         HttpResponse response;
@@ -54,7 +54,8 @@ public class PageSigProcessor implements Runnable {
                     _page.setSrc(framePage.getSrc());
 
                     if (_page.getSig() != null) {
-                        sigFound = true;
+                        if (_page.getPid().equals(page.getPid()))
+                            sigFound = true;
                         _page.setUsedProxy(proxy);
                     }
                 }
@@ -78,15 +79,22 @@ public class PageSigProcessor implements Runnable {
 
             logger.finest(String.format("Finished sig processing for %s; sig %s found.", page.getPid(), sigFound ? "" : " not "));
         }
+
+        return sigFound;
     }
 
     @Override
     public void run() {
+        if (page.getSig() != null)
+            return;
+
         // Без прокси
-        getSigs(null);
+        if (getSigs(null))
+            return;
 
         for (HttpHost proxy : IProxyListProvider.getInstance().getProxyList())
             if (proxy.getPort() > 0)
-                getSigs(proxy);
+                if (getSigs(proxy))
+                    return;
     }
 }

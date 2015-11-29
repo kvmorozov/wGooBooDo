@@ -9,6 +9,7 @@ import java.io.File;
  */
 public class ExecutionContext {
 
+    public static String bookId;
     public static String baseUrl;
     public static BookInfo bookInfo;
     public static File outputDir;

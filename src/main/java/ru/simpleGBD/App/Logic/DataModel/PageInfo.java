@@ -119,6 +119,14 @@ public class PageInfo {
     public String getPageUrl() {
         return ExecutionContext.baseUrl + ImageExtractor.IMG_REQUEST_TEMPLATE
                 .replace(ImageExtractor.RQ_PG_PLACEHOLDER, getPid())
-                .replace(ImageExtractor.RQ_SIG_PLACEHOLDER, getSig());
+                .replace(ImageExtractor.RQ_SIG_PLACEHOLDER, getSig())
+                .replace(ImageExtractor.RQ_WIDTH_PLACEHOLDER, String.valueOf(ImageExtractor.DEFAULT_PAGE_WIDTH));
+    }
+
+    public String getImqRqUrl(String urlTemplate, int width) {
+        return urlTemplate.replace(ImageExtractor.BOOK_ID_PLACEHOLDER, ExecutionContext.bookId) + ImageExtractor.IMG_REQUEST_TEMPLATE
+                .replace(ImageExtractor.RQ_PG_PLACEHOLDER, getPid())
+                .replace(ImageExtractor.RQ_SIG_PLACEHOLDER, getSig())
+                .replace(ImageExtractor.RQ_WIDTH_PLACEHOLDER, String.valueOf(width));
     }
 }
