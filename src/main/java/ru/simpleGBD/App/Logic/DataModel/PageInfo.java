@@ -5,6 +5,7 @@ import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
 import ru.simpleGBD.App.Logic.Runtime.ImageExtractor;
 
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -22,8 +23,8 @@ public class PageInfo {
     public Lock sigRequestLock = new ReentrantLock();
     public Lock imgRequestLock = new ReentrantLock();
 
-    private boolean sigChecked = false;
-    private boolean dataProcessed = false;
+    public AtomicBoolean sigChecked = new AtomicBoolean(false);
+    public AtomicBoolean dataProcessed = new AtomicBoolean(false);;
 
     public String getPid() {
         return pid;
@@ -89,28 +90,12 @@ public class PageInfo {
         this.links = links;
     }
 
-    public boolean isSigChecked() {
-        return sigChecked;
-    }
-
-    public void setSigChecked(boolean sigChecked) {
-        this.sigChecked = sigChecked;
-    }
-
     public HttpHostExt getUsedProxy() {
         return usedProxy;
     }
 
     public void setUsedProxy(HttpHostExt usedProxy) {
         this.usedProxy = usedProxy;
-    }
-
-    public boolean isDataProcessed() {
-        return dataProcessed;
-    }
-
-    public void setDataProcessed(boolean dataProcessed) {
-        this.dataProcessed = dataProcessed;
     }
 
     public String getSig() {

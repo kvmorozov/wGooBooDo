@@ -39,6 +39,9 @@ public class PageSigProcessor implements Runnable {
     }
 
     private boolean getSigs(HttpHostExt proxy) {
+        if (page.sigChecked.get())
+            return true;
+
         HttpClient instance = HttpConnections.INSTANCE.getClient(proxy);
         boolean sigFound = false;
         HttpResponse response;
@@ -61,6 +64,7 @@ public class PageSigProcessor implements Runnable {
                         if (_page.getPid().equals(page.getPid()))
                             sigFound = true;
                         _page.setUsedProxy(proxy);
+                        _page.sigChecked.set(true);
                     }
                 }
         } catch (JsonParseException | JsonMappingException | SocketTimeoutException | SocketException | NoHttpResponseException ce) {
@@ -75,8 +79,6 @@ public class PageSigProcessor implements Runnable {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
-            page.setSigChecked(true);
 
             logger.finest(String.format("Finished sig processing for %s; sig %s found.", page.getPid(), sigFound ? "" : " not "));
         }

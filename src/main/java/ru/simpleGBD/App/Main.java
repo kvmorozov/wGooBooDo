@@ -8,7 +8,7 @@ public class Main {
 
     private static Logger logger = Logger.getLogger(Main.class.getName());
 
-    private static final String TEST_BOOK_ID = "BEvEV9OVzacC";
+    private static final String TEST_BOOK_ID = "pfwAG3-rpzcC";
 
     public static void main(String[] args) {
         ImageExtractor extractor = new ImageExtractor(TEST_BOOK_ID);

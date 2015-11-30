@@ -97,7 +97,7 @@ public class ImageExtractor {
 
     private void getPagesInfo() throws IOException {
         for (PageInfo page : ExecutionContext.bookInfo.getPages().getPagesArray())
-            if (!page.isDataProcessed() && page.getSig() == null && page.sigRequestLock.tryLock()) {
+            if (!page.dataProcessed.get() && page.getSig() == null && page.sigRequestLock.tryLock()) {
                 logger.finest(String.format("Starting processing for img = %s", page.getPid()));
 
                 page.sigRequestLock.lock();
@@ -113,7 +113,7 @@ public class ImageExtractor {
         ExecutionContext.bookInfo.getPages().exportPagesUrls();
 
         for (PageInfo page : ExecutionContext.bookInfo.getPages().getPagesArray())
-            if (!page.isDataProcessed() && page.getSig() != null)
+            if (!page.dataProcessed.get() && page.getSig() != null)
                 Pools.imgExecutor.execute(new PageImgProcessor(page));
 
         Pools.imgExecutor.shutdown();
@@ -132,7 +132,7 @@ public class ImageExtractor {
                     String[] nameParts = fileName.split("_");
                     PageInfo _page = ExecutionContext.bookInfo.getPages().getPageByPid(nameParts[1]);
                     if (_page != null)
-                        _page.setDataProcessed(true);
+                        _page.dataProcessed.set(true);
                 }
             });
         } catch (IOException e) {

@@ -52,9 +52,13 @@ public class PageImgProcessor implements Runnable {
                     if (outputFile != null && outputFile.exists())
                         break;
                     else
-                        page.setDataProcessed(isPng);
+                        page.dataProcessed.set(isPng);
 
-                    logger.info(String.format("Started img processing for %s with %s proxy", page.getPid(), proxy.toString()));
+                    if (proxy != null)
+                        logger.info(String.format("Started img processing for %s with %s proxy", page.getPid(), proxy.toString()));
+                    else
+                        logger.info(String.format("Started img processing for %s without proxy", page.getPid()));
+
                     outputStream = new FileOutputStream(outputFile);
                 }
 
@@ -63,11 +67,12 @@ public class PageImgProcessor implements Runnable {
                 outputStream.write(bytes, 0, read);
             }
 
-            if (page.isDataProcessed())
+            if (page.dataProcessed.get())
                 logger.info(String.format("Finished img processing for %s", page.getPid()));
 
             return isPng;
         } catch (Exception ex) {
+            ex.printStackTrace();
         } finally {
             if (inputStream != null) {
                 try {
