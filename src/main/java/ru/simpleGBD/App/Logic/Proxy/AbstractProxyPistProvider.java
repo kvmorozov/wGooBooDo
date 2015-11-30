@@ -23,6 +23,10 @@ public abstract class AbstractProxyPistProvider implements IProxyListProvider {
         proxyList = new ArrayList<>(proxyItems.size());
         for (String proxyItem : proxyItems) {
             String[] proxyItemArr = proxyItem.split(":");
+
+            if (proxyItemArr == null || proxyItemArr.length != 2)
+                continue;
+
             HttpHost host = new HttpHost(proxyItemArr[0], Integer.parseInt(proxyItemArr[1]));
             if (checkProxy(host)) {
                 proxyList.add(new HttpHostExt(host));
