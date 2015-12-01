@@ -3,7 +3,7 @@ package ru.simpleGBD.App.Config;
 import org.apache.commons.cli.*;
 
 /**
- * Created by sbt-morozov-kv on 01.12.2015.
+ * Created by km on 01.12.2015.
  */
 public class GBDOptions {
 
@@ -43,14 +43,10 @@ public class GBDOptions {
     }
 
     public static GBDOptions getGBDOptions() {
-        if (INSTANCE == null)
+        if (INSTANCE == null || INSTANCE.commandLine == null)
             throw new RuntimeException("Куда-то делись опции!");
 
         return INSTANCE;
-    }
-
-    public boolean optionsValid() {
-        return commandLine != null;
     }
 
     private String getStringOptionValue(String optionName) {
