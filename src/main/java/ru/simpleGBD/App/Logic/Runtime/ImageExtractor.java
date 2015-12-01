@@ -109,9 +109,9 @@ public class ImageExtractor {
             HttpConnections.INSTANCE.closeAllConnections();
         } catch (InterruptedException e) {
         }
-        ExecutionContext.bookInfo.getPages().exportPagesUrls();
+        ExecutionContext.bookInfo.getPagesInfo().exportPagesUrls();
 
-        for (PageInfo page : ExecutionContext.bookInfo.getPages().getPagesArray())
+        for (PageInfo page : ExecutionContext.bookInfo.getPagesInfo().getPages())
             if (!page.dataProcessed.get() && page.getSig() != null)
                 Pools.imgExecutor.execute(new PageImgProcessor(page));
 
@@ -129,7 +129,7 @@ public class ImageExtractor {
                 if (Files.isRegularFile(filePath) && FilenameUtils.getExtension(filePath.toString()).equals("png")) {
                     String fileName = FilenameUtils.getBaseName(filePath.toString());
                     String[] nameParts = fileName.split("_");
-                    PageInfo _page = ExecutionContext.bookInfo.getPages().getPageByPid(nameParts[1]);
+                    PageInfo _page = ExecutionContext.bookInfo.getPagesInfo().getPageByPid(nameParts[1]);
                     if (_page != null)
                         _page.dataProcessed.set(true);
                 }
@@ -158,7 +158,7 @@ public class ImageExtractor {
             if (!ExecutionContext.outputDir.exists())
                 ExecutionContext.outputDir.mkdir();
 
-            ExecutionContext.bookInfo.getPages().build();
+            ExecutionContext.bookInfo.getPagesInfo().build();
             scanDir();
 
             getPagesInfo();
@@ -171,7 +171,7 @@ public class ImageExtractor {
     }
 
     public int getPagesCount() {
-        return ExecutionContext.bookInfo.getPages().getPagesCount();
+        return ExecutionContext.bookInfo.getPagesInfo().getPagesCount();
     }
 
     public boolean validate() {

@@ -18,6 +18,7 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.util.Collection;
 import java.util.logging.Logger;
 
 /**
@@ -34,9 +35,6 @@ public class PageSigProcessor implements Runnable {
     }
 
     private boolean getSig(PageInfo page) {
-        if (page.sigChecked.get() || page.getSig() != null)
-            return true;
-
         boolean sigFound = false;
         HttpResponse response;
         String rqUrl = ExecutionContext.baseUrl + ImageExtractor.PAGES_REQUEST_TEMPLATE.replace(ImageExtractor.RQ_PG_PLACEHOLDER, page.getPid());
@@ -50,11 +48,17 @@ public class PageSigProcessor implements Runnable {
             String respStr = IOUtils.toString(response.getEntity().getContent());
             PagesInfo framePages = Mapper.objectMapper.readValue(respStr, PagesInfo.class);
 
-            for (PageInfo framePage : framePages.getPagesArray())
+            PageInfo[] pages = framePages.getPagesArray();
+            for (PageInfo framePage : pages)
                 if (framePage.getSrc() != null) {
-                    PageInfo _page = ExecutionContext.bookInfo.getPages().getPageByPid(framePage.getPid());
+                    PageInfo _page = ExecutionContext.bookInfo.getPagesInfo().getPageByPid(framePage.getPid());
 
-                    _page.setSrc(framePage.getSrc());
+                    if (_page.dataProcessed.get() || _page.getSig() != null || _page.sigChecked.get())
+                        continue;
+
+                    String _frameSrc = framePage.getSrc();
+                    if (_frameSrc != null)
+                        _page.setSrc(_frameSrc);
 
                     if (_page.getSig() != null) {
                         if (_page.getPid().equals(page.getPid()))
@@ -87,8 +91,11 @@ public class PageSigProcessor implements Runnable {
         if (proxy != null && !proxy.isAvailable())
             return;
 
-        for (PageInfo page : ExecutionContext.bookInfo.getPages().getPagesArray())
-            if (!page.dataProcessed.get() && page.getSig() == null)
+        for (PageInfo page : ExecutionContext.bookInfo.getPagesInfo().getPages())
+            if (!page.dataProcessed.get() && page.getSig() == null && !page.sigChecked.get()) {
+                page.sigRequestLock.lock();
                 getSig(page);
+                page.sigRequestLock.unlock();
+            }
     }
 }

@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,7 +21,7 @@ public class PagesInfo {
 
     private static Logger logger = Logger.getLogger(PagesInfo.class.getName());
 
-    private PageInfo[] pages;
+    @JsonProperty("page") private PageInfo[] pages;
     private Map<String, PageInfo> pagesMap;
     private String prefix;
 
@@ -28,7 +29,6 @@ public class PagesInfo {
         return pages;
     }
 
-    @JsonProperty("page")
     public void setPages(PageInfo[] pages) {
         this.pages = pages;
     }
@@ -45,12 +45,13 @@ public class PagesInfo {
 
     public void build() {
         List<PageInfo> _pages = Arrays.asList(getPagesArray());
-        pagesMap = new ConcurrentHashMap<String, PageInfo>(_pages.size());
+        pagesMap = new ConcurrentHashMap<>(_pages.size());
         for(PageInfo page : _pages)
             pagesMap.put(page.getPid(), page);
     }
 
     public PageInfo getPageByPid(String pid) {return pagesMap.get(pid);}
+    public Collection<PageInfo> getPages() {return pagesMap.values();}
 
     public void exportPagesUrls() throws IOException {
         StringBuffer imgUrlsBuffer = new StringBuffer();
@@ -58,7 +59,7 @@ public class PagesInfo {
 
         int foundPagesCount = 0;
 
-        for(PageInfo page : pages)
+        for(PageInfo page : pagesMap.values())
             if (page.getSig() != null) {
                 foundPagesCount++;
                 imgUrlsBuffer.append(page.getPageUrl()).append(System.getProperty("line.separator"));
@@ -68,6 +69,6 @@ public class PagesInfo {
         bwr.flush();
         bwr.close();
 
-        logger.info(String.format("Found %d pages!", foundPagesCount));
+        logger.info(String.format("Found %d sigs!", foundPagesCount));
     }
 }

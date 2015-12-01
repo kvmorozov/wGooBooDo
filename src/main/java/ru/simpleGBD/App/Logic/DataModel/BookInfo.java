@@ -17,7 +17,7 @@ public class BookInfo {
         return bookData;
     }
 
-    public PagesInfo getPages() {
+    public PagesInfo getPagesInfo() {
         return pages;
     }
 }
