@@ -2,24 +2,29 @@ package ru.simpleGBD.App.Logic.Proxy;
 
 import org.apache.http.HttpHost;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Logger;
+
 /**
  * Created by km on 29.11.2015.
  */
 public class HttpHostExt {
 
+    private static Logger logger = Logger.getLogger(HttpHostExt.class.getName());
+
+    public static final int FAILURES_THRESHOLD = Integer.MAX_VALUE;
+
     private HttpHost host;
-    private boolean available = true;
+    private AtomicBoolean available = new AtomicBoolean(true);
+    private AtomicInteger failureCount = new AtomicInteger(0);
 
     public HttpHostExt(HttpHost host) {
         this.host = host;
     }
 
     public boolean isAvailable() {
-        return available;
-    }
-
-    public void setAvailable(boolean available) {
-        this.available = available;
+        return available.get();
     }
 
     public HttpHost getHost() {
@@ -39,5 +44,13 @@ public class HttpHostExt {
     @Override
     public String toString() {
         return host == null ? "no" : host.toHostString();
+    }
+
+    public void registerFailure() {
+        failureCount.incrementAndGet();
+        if (failureCount.get() > FAILURES_THRESHOLD) {
+            logger.info(String.format("Proxy %s invalidated!", host.toHostString()));
+            available.set(false);
+        }
     }
 }

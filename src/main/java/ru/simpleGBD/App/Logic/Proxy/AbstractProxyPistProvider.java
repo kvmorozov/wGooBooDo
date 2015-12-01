@@ -31,8 +31,7 @@ public abstract class AbstractProxyPistProvider implements IProxyListProvider {
             if (checkProxy(host)) {
                 proxyList.add(new HttpHostExt(host));
                 logger.info(String.format("Proxy %s added.", host.toHostString()));
-            }
-            else
+            } else
                 logger.severe(String.format("Proxy %s NOT added.", host.toHostString()));
         }
 

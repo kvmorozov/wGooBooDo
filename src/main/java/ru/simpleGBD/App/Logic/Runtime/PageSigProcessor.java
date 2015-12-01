@@ -11,12 +11,10 @@ import ru.simpleGBD.App.Logic.DataModel.PageInfo;
 import ru.simpleGBD.App.Logic.DataModel.PagesInfo;
 import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
-import ru.simpleGBD.App.Logic.Proxy.IProxyListProvider;
 import ru.simpleGBD.App.Utils.HttpConnections;
 import ru.simpleGBD.App.Utils.Mapper;
 
 import java.io.Closeable;
-import java.io.EOFException;
 import java.io.IOException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
@@ -29,22 +27,20 @@ public class PageSigProcessor implements Runnable {
 
     private static Logger logger = Logger.getLogger(PageSigProcessor.class.getName());
 
-    private PageInfo page;
-    private String rqUrl;
+    private HttpHostExt proxy;
 
-    public PageSigProcessor(PageInfo page) {
-        this.page = page;
-
-        rqUrl = ExecutionContext.baseUrl + ImageExtractor.PAGES_REQUEST_TEMPLATE.replace(ImageExtractor.RQ_PG_PLACEHOLDER, page.getPid());
+    public PageSigProcessor(HttpHostExt proxy) {
+        this.proxy = proxy;
     }
 
-    private boolean getSigs(HttpHostExt proxy) {
-        if (page.sigChecked.get())
+    private boolean getSig(PageInfo page) {
+        if (page.sigChecked.get() || page.getSig() != null)
             return true;
 
-        HttpClient instance = HttpConnections.INSTANCE.getClient(proxy);
         boolean sigFound = false;
         HttpResponse response;
+        String rqUrl = ExecutionContext.baseUrl + ImageExtractor.PAGES_REQUEST_TEMPLATE.replace(ImageExtractor.RQ_PG_PLACEHOLDER, page.getPid());
+        HttpClient instance = HttpConnections.INSTANCE.getClient(proxy);
 
         try {
             logger.finest(String.format("Started sig processing for %s", page.getPid()));
@@ -69,7 +65,7 @@ public class PageSigProcessor implements Runnable {
                 }
         } catch (JsonParseException | JsonMappingException | SocketTimeoutException | SocketException | NoHttpResponseException ce) {
             if (proxy != null)
-                proxy.setAvailable(false);
+                proxy.registerFailure();
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
@@ -88,16 +84,11 @@ public class PageSigProcessor implements Runnable {
 
     @Override
     public void run() {
-        if (page.getSig() != null)
+        if (proxy != null && !proxy.isAvailable())
             return;
 
-        // Без прокси
-        if (getSigs(null))
-            return;
-
-        for (HttpHostExt proxy : IProxyListProvider.getInstance().getProxyList())
-            if (proxy.isAvailable() && proxy.getHost().getPort() > 0)
-                if (getSigs(proxy))
-                    return;
+        for (PageInfo page : ExecutionContext.bookInfo.getPages().getPagesArray())
+            if (!page.dataProcessed.get() && page.getSig() == null)
+                getSig(page);
     }
 }

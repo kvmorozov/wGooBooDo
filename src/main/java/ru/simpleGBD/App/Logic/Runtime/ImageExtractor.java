@@ -14,6 +14,7 @@ import ru.simpleGBD.App.Logic.DataModel.BookInfo;
 import ru.simpleGBD.App.Logic.DataModel.PageInfo;
 import ru.simpleGBD.App.Logic.DataModel.PagesInfo;
 import ru.simpleGBD.App.Logic.ExecutionContext;
+import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
 import ru.simpleGBD.App.Logic.Proxy.IProxyListProvider;
 import ru.simpleGBD.App.Utils.HttpConnections;
 import ru.simpleGBD.App.Utils.Mapper;
@@ -95,13 +96,12 @@ public class ImageExtractor {
     }
 
     private void getPagesInfo() throws IOException {
-        for (PageInfo page : ExecutionContext.bookInfo.getPages().getPagesArray())
-            if (!page.dataProcessed.get() && page.getSig() == null && page.sigRequestLock.tryLock()) {
-                logger.finest(String.format("Starting processing for img = %s", page.getPid()));
-
-                page.sigRequestLock.lock();
-                Pools.sigExecutor.execute(new PageSigProcessor(page));
-            }
+        // Сначала идём без проксм
+        Pools.sigExecutor.execute(new PageSigProcessor(null));
+        // Потом с проксм
+        for (HttpHostExt proxy : IProxyListProvider.getInstance().getProxyList())
+            if (proxy.isAvailable() && proxy.getHost().getPort() > 0)
+                Pools.sigExecutor.execute(new PageSigProcessor(proxy));
 
         Pools.sigExecutor.shutdown();
         try {

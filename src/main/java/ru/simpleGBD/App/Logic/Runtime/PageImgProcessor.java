@@ -10,6 +10,8 @@ import ru.simpleGBD.App.Logic.Proxy.IProxyListProvider;
 import ru.simpleGBD.App.Utils.HttpConnections;
 
 import java.io.*;
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
 import java.util.logging.Logger;
 
 /**
@@ -71,6 +73,9 @@ public class PageImgProcessor implements Runnable {
                 logger.info(String.format("Finished img processing for %s", page.getPid()));
 
             return isPng;
+        } catch (ConnectException | SocketTimeoutException ce) {
+            if (proxy != null)
+                proxy.registerFailure();
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
@@ -101,6 +106,9 @@ public class PageImgProcessor implements Runnable {
     }
 
     private boolean processImageWithProxy(HttpHostExt proxy) {
+        if (proxy != null && proxy.isAvailable())
+            return false;
+
         if (processImage(page.getImqRqUrl(
                 ImageExtractor.HTTP_TEMPLATE, ImageExtractor.DEFAULT_PAGE_WIDTH),
                 HttpConnections.INSTANCE.getClient(proxy), proxy))

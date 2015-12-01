@@ -1,6 +1,5 @@
 package ru.simpleGBD.App.Logic.DataModel;
 
-import org.apache.http.HttpHost;
 import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
 import ru.simpleGBD.App.Logic.Runtime.ImageExtractor;
@@ -24,7 +23,8 @@ public class PageInfo {
     public Lock imgRequestLock = new ReentrantLock();
 
     public AtomicBoolean sigChecked = new AtomicBoolean(false);
-    public AtomicBoolean dataProcessed = new AtomicBoolean(false);;
+    public AtomicBoolean dataProcessed = new AtomicBoolean(false);
+    ;
 
     public String getPid() {
         return pid;
