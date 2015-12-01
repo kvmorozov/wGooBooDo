@@ -8,6 +8,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
+import ru.simpleGBD.App.Config.GBDOptions;
 import ru.simpleGBD.App.Logic.DataModel.BookData;
 import ru.simpleGBD.App.Logic.DataModel.BookInfo;
 import ru.simpleGBD.App.Logic.DataModel.PageInfo;
@@ -52,8 +53,6 @@ public class ImageExtractor {
     public static final String PAGES_REQUEST_TEMPLATE = "&lpg=PP1&hl=ru&pg=%PG%&jscmd=click3";
     public static final String IMG_REQUEST_TEMPLATE = "&pg=%PG%&img=1&zoom=3&hl=ru&sig=%SIG%&w=%WIDTH%";
     public static final String OPEN_PAGE_ADD_URL = "&printsec=frontcover&hl=ru#v=onepage&q&f=false";
-
-    private static final String OUTPUT_DIR = "C:\\Work\\imgOut";
 
     public ImageExtractor(String bookId) {
         ExecutionContext.bookId = bookId;
@@ -144,7 +143,18 @@ public class ImageExtractor {
         try {
             ExecutionContext.bookInfo = getBookInfo();
 
-            ExecutionContext.outputDir = new File(OUTPUT_DIR + "\\" + ExecutionContext.bookInfo.getBookData().getTitle() + " " + ExecutionContext.bookInfo.getBookData().getVolumeId());
+            String baseOutputDirPath = GBDOptions.getGBDOptions().getOutputDir();
+            if (baseOutputDirPath == null)
+                return;
+
+            File baseOutputDir = new File(baseOutputDirPath);
+            if (!baseOutputDir.exists())
+                baseOutputDir.mkdir();
+
+            ExecutionContext.outputDir =
+                    new File(baseOutputDirPath + "\\" +
+                            ExecutionContext.bookInfo.getBookData().getTitle() +
+                            " " + ExecutionContext.bookInfo.getBookData().getVolumeId());
             if (!ExecutionContext.outputDir.exists())
                 ExecutionContext.outputDir.mkdir();
 
