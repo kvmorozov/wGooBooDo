@@ -93,9 +93,7 @@ public class PageSigProcessor implements Runnable {
 
         for (PageInfo page : ExecutionContext.bookInfo.getPagesInfo().getPages())
             if (!page.dataProcessed.get() && page.getSig() == null && !page.sigChecked.get()) {
-                page.sigRequestLock.lock();
                 getSig(page);
-                page.sigRequestLock.unlock();
             }
     }
 }
