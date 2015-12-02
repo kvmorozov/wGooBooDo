@@ -2,6 +2,7 @@ package ru.simpleGBD.App.Logic.Proxy;
 
 import org.apache.http.HttpHost;
 import org.apache.http.client.methods.HttpGet;
+import ru.simpleGBD.App.Config.GBDOptions;
 import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Utils.HttpConnections;
 
@@ -16,6 +17,8 @@ import java.util.logging.Logger;
 public abstract class AbstractProxyPistProvider implements IProxyListProvider {
 
     private static Logger logger = Logger.getLogger("ProxyPistProvider");
+
+    private static IProxyListProvider INSTANCE;
 
     protected List<HttpHostExt> proxyList;
 
@@ -52,5 +55,12 @@ public abstract class AbstractProxyPistProvider implements IProxyListProvider {
     @Override
     public List<HttpHostExt> getProxyList() {
         return proxyList;
+    }
+
+    public static IProxyListProvider getInstance() {
+        if (INSTANCE == null)
+            INSTANCE = GBDOptions.getGBDOptions().getProxyListFile() == null ? new StaticProxyListProvider() : new FileProxyListProvider();
+
+        return INSTANCE;
     }
 }

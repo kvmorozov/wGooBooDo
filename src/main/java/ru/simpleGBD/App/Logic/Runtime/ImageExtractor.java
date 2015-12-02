@@ -14,8 +14,8 @@ import ru.simpleGBD.App.Logic.DataModel.BookInfo;
 import ru.simpleGBD.App.Logic.DataModel.PageInfo;
 import ru.simpleGBD.App.Logic.DataModel.PagesInfo;
 import ru.simpleGBD.App.Logic.ExecutionContext;
+import ru.simpleGBD.App.Logic.Proxy.AbstractProxyPistProvider;
 import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
-import ru.simpleGBD.App.Logic.Proxy.IProxyListProvider;
 import ru.simpleGBD.App.Utils.HttpConnections;
 import ru.simpleGBD.App.Utils.Mapper;
 import ru.simpleGBD.App.Utils.Pools;
@@ -59,8 +59,9 @@ public class ImageExtractor {
         ExecutionContext.bookId = bookId;
         ExecutionContext.baseUrl = HTTP_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, bookId);
 
-        if (IProxyListProvider.getInstance().getProxyList() != null && IProxyListProvider.getInstance().getProxyList().size() > 0)
-            logger.info(String.format("Starting with %s proxies.", IProxyListProvider.getInstance().getProxyList().size()));
+        List<HttpHostExt> proxyList = AbstractProxyPistProvider.getInstance().getProxyList();
+        if (proxyList != null && proxyList.size() > 0)
+            logger.info(String.format("Starting with %s proxies.", proxyList.size()));
     }
 
     private BookInfo getBookInfo() throws IOException {
@@ -99,7 +100,7 @@ public class ImageExtractor {
         // Сначала идём без проксм
         Pools.sigExecutor.execute(new PageSigProcessor(null));
         // Потом с проксм
-        for (HttpHostExt proxy : IProxyListProvider.getInstance().getProxyList())
+        for (HttpHostExt proxy : AbstractProxyPistProvider.getInstance().getProxyList())
             if (proxy.isAvailable() && proxy.getHost().getPort() > 0)
                 Pools.sigExecutor.execute(new PageSigProcessor(proxy));
 

@@ -18,19 +18,11 @@ public class StaticProxyListProvider extends AbstractProxyPistProvider {
     }
 
     private void buildList() {
-        InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(PROXY_LIST_RES);
-        try {
+        try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(PROXY_LIST_RES);) {
             List<String> lines = IOUtils.readLines(is, "UTF-8");
             buildFromList(lines);
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        finally {
-            try {
-                is.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 }

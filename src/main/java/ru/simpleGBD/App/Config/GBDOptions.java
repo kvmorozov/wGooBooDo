@@ -65,4 +65,5 @@ public class GBDOptions {
 
     public String getBookId() {return getStringOptionValue(OPTION_BOOKID_SHORT);}
     public String getOutputDir() {return getStringOptionValue(OPTION_OUTDIR_SHORT);}
+    public String getProxyListFile() {return getStringOptionValue(OPTION_PROXY_FILE_SHORT);}
 }

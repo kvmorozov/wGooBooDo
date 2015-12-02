@@ -5,8 +5,8 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import ru.simpleGBD.App.Logic.DataModel.PageInfo;
 import ru.simpleGBD.App.Logic.ExecutionContext;
+import ru.simpleGBD.App.Logic.Proxy.AbstractProxyPistProvider;
 import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
-import ru.simpleGBD.App.Logic.Proxy.IProxyListProvider;
 import ru.simpleGBD.App.Utils.HttpConnections;
 
 import java.io.*;
@@ -133,7 +133,7 @@ public class PageImgProcessor implements Runnable {
 
         if (!processImageWithProxy(page.getUsedProxy()))
             // Пробуем скачать страницу с другими прокси, если не получилось с той, с помощью которой узнали sig
-            for (HttpHostExt proxy : IProxyListProvider.INSTANCE.getProxyList())
+            for (HttpHostExt proxy : AbstractProxyPistProvider.getInstance().getProxyList())
                 if (processImageWithProxy(proxy))
                     return;
     }
