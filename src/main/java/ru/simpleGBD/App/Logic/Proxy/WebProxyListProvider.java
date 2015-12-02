@@ -1,6 +1,5 @@
 package ru.simpleGBD.App.Logic.Proxy;
 
-import org.apache.http.HttpHost;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.TextNode;

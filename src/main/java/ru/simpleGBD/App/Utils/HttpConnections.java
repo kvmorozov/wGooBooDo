@@ -95,7 +95,7 @@ public class HttpConnections {
     }
 
     public HttpClient getClient(HttpHostExt proxy) {
-        //return proxy == null ? noProxyClient : clientsMap.get(proxy);
+        //return Proxy == null ? noProxyClient : clientsMap.get(Proxy);
         return proxy == null ? builder.build() : builder.setProxy(proxy.getHost()).build();
     }
 

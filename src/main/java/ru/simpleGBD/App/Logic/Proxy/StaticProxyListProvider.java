@@ -1,7 +1,6 @@
 package ru.simpleGBD.App.Logic.Proxy;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpHost;
 
 import java.io.IOException;
 import java.io.InputStream;

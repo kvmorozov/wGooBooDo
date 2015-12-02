@@ -18,7 +18,6 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
-import java.util.Collection;
 import java.util.logging.Logger;
 
 /**

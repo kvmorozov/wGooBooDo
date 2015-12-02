@@ -11,6 +11,8 @@ public class GBDOptions {
     private static final String OPTION_BOOKID_LONG = "bookId";
     private static final String OPTION_OUTDIR_SHORT = "o";
     private static final String OPTION_OUTDIR_LONG = "out";
+    private static final String OPTION_PROXY_FILE_SHORT = "p";
+    private static final String OPTION_PROXY_FILE_LONG = "proxy";
 
     private static GBDOptions INSTANCE;
     private CommandLine commandLine;
@@ -26,6 +28,12 @@ public class GBDOptions {
         options.addOption(option);
 
         option = new Option(OPTION_OUTDIR_SHORT, OPTION_OUTDIR_LONG, true, "Output dir");
+        option.setArgs(1);
+        option.setOptionalArg(false);
+        option.setArgName("Output directory ");
+        options.addOption(option);
+
+        option = new Option(OPTION_PROXY_FILE_SHORT, OPTION_PROXY_FILE_LONG, true, "Proxy list file");
         option.setArgs(1);
         option.setOptionalArg(false);
         option.setArgName("Output directory ");

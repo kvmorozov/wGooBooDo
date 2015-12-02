@@ -1,7 +1,5 @@
 package ru.simpleGBD.App.Logic.Proxy;
 
-import org.apache.http.HttpHost;
-
 import java.util.List;
 
 /**

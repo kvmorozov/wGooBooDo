@@ -57,9 +57,9 @@ public class PageImgProcessor implements Runnable {
                         page.dataProcessed.set(isPng);
 
                     if (proxy != null)
-                        logger.info(String.format("Started img processing for %s with %s proxy", page.getPid(), proxy.toString()));
+                        logger.info(String.format("Started img processing for %s with %s Proxy", page.getPid(), proxy.toString()));
                     else
-                        logger.info(String.format("Started img processing for %s without proxy", page.getPid()));
+                        logger.info(String.format("Started img processing for %s without Proxy", page.getPid()));
 
                     outputStream = new FileOutputStream(outputFile);
                 }
