@@ -6,7 +6,11 @@ import ru.simpleGBD.App.Logic.Runtime.ImageExtractor;
 public class Main {
 
     public static void main(String[] args) {
-        ImageExtractor extractor = new ImageExtractor(GBDOptions.getGBDOptions(args).getBookId());
+        String bookId = GBDOptions.getGBDOptions(args).getBookId();
+        if (bookId == null || bookId.length() == 0)
+            return;
+
+        ImageExtractor extractor = new ImageExtractor(bookId);
 
         extractor.process();
     }

@@ -14,7 +14,7 @@ public class ExtractorTest {
 
     @Test
     public void testExtractor() {
-        ImageExtractor extractor = new ImageExtractor(TEST_BOOK_URL);
+/*        ImageExtractor extractor = new ImageExtractor(TEST_BOOK_URL);
 
         assertTrue(extractor.validate());
 
@@ -27,6 +27,6 @@ public class ExtractorTest {
                 Thread.sleep(100000);
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 }
