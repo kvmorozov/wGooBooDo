@@ -11,6 +11,7 @@ public class JsonBookInfo {
     @JsonProperty("AboutUrl") private String aboutUrl;
     @JsonProperty("PreviewUrl") private String previewUrl;
     @JsonProperty("allowed_syndication_flags") private SyndicationFlags flags;
+    @JsonProperty("online_access") private OnlineAccess onlineAccess;
     @JsonProperty("TocLine") private TocItem[] toc;
 
     public BuyLink[] getBuyLinks() {
