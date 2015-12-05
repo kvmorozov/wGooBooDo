@@ -1,17 +1,25 @@
 package ru.simpleGBD.App;
 
 import ru.simpleGBD.App.Config.GBDOptions;
+import ru.simpleGBD.App.GUI.MainFrame;
 import ru.simpleGBD.App.Logic.Runtime.ImageExtractor;
 
 public class Main {
 
     public static void main(String[] args) {
-        String bookId = GBDOptions.getGBDOptions(args).getBookId();
-        if (bookId == null || bookId.length() == 0)
-            return;
+        if (args.length > 0) {
 
-        ImageExtractor extractor = new ImageExtractor(bookId);
+            String bookId = GBDOptions.getGBDOptions(args).getBookId();
+            if (bookId == null || bookId.length() == 0)
+                return;
 
-        extractor.process();
+
+            ImageExtractor extractor = new ImageExtractor(bookId);
+
+            extractor.process();
+        }
+        else {
+            (new MainFrame()).setVisible();
+        }
     }
 }

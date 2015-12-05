@@ -11,6 +11,7 @@ public class BuyLink {
     @JsonProperty("Url") private String url;
     @JsonProperty("TrackingUrl") private String trackingUrl;
     @JsonProperty("IsPublisher") private String publisher;
+    @JsonProperty("Price") private String price;
 
     public String getSeller() {
         return seller;
@@ -42,5 +43,13 @@ public class BuyLink {
 
     public void setPublisher(String publisher) {
         this.publisher = publisher;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
     }
 }
