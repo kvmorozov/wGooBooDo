@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class BookData {
 
-    private boolean fullview;
+    @JsonProperty("fullview") private boolean fullview;
     @JsonProperty("page_width") private int pageWidth;
     @JsonProperty("page_height") private int pageHeight;
     @JsonProperty("font_height") private int fontHeight;
@@ -15,7 +15,9 @@ public class BookData {
     @JsonProperty("disable_twopage") private boolean disableTwopage;
     @JsonProperty("initial_zoom_width_override") private int initialZoomWidthOverride;
     @JsonProperty("show_print_pages_button") private boolean showPrintPagesButton;
-    private String title, subtitle, attribution;
+    @JsonProperty("title") private String title;
+    @JsonProperty("subtitle") private String subtitle;
+    @JsonProperty("attribution") private String attribution;
     @JsonProperty("additional_info") private AdditionalInfo additionalInfo;
     @JsonProperty("table_of_contents_page_id") private String tableOfContentsPageId;
     @JsonProperty("max_resolution_image_width") private int maxResolutionImageWidth;
@@ -26,7 +28,7 @@ public class BookData {
     @JsonProperty("permission_info") private String permissionInfo;
     @JsonProperty("is_ebook") private boolean ebook;
     @JsonProperty("volumeresult") private VolumeResultFlags volumeresult;
-    private int rating;
+    @JsonProperty("rating") private int rating;
     @JsonProperty("num_reviews") private int numReviews;
     @JsonProperty("publisher") private String publisher;
     @JsonProperty("publication_date") private String publicationDate;

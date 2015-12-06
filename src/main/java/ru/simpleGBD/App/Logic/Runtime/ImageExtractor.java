@@ -55,9 +55,9 @@ public class ImageExtractor {
     public static final String IMG_REQUEST_TEMPLATE = "&pg=%PG%&img=1&zoom=3&hl=ru&sig=%SIG%&w=%WIDTH%";
     public static final String OPEN_PAGE_ADD_URL = "&printsec=frontcover&hl=ru#v=onepage&q&f=false";
 
-    public ImageExtractor(String bookId) {
-        ExecutionContext.bookId = bookId;
-        ExecutionContext.baseUrl = HTTP_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, bookId);
+    public ImageExtractor() {
+        ExecutionContext.bookId = GBDOptions.getBookId();
+        ExecutionContext.baseUrl = HTTP_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, ExecutionContext.bookId);
 
         List<HttpHostExt> proxyList = AbstractProxyPistProvider.getInstance().getProxyList();
         if (proxyList != null && proxyList.size() > 0)
@@ -143,7 +143,7 @@ public class ImageExtractor {
         try {
             ExecutionContext.bookInfo = getBookInfo();
 
-            String baseOutputDirPath = GBDOptions.getGBDOptions().getOutputDir();
+            String baseOutputDirPath = GBDOptions.getOutputDir();
             if (baseOutputDirPath == null)
                 return;
 

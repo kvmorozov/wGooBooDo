@@ -8,7 +8,7 @@ import javax.swing.*;
 public class MainFrame extends JFrame {
 
     public MainFrame() {
-        super();
+        super("wGooBooDo");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         setContentPane(new MainForm().getMainPanel());

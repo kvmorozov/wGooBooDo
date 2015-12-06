@@ -129,7 +129,7 @@
                   <text value="..."/>
                 </properties>
               </component>
-              <component id="c07f" class="javax.swing.JButton" binding="button1" default-binding="true">
+              <component id="c07f" class="javax.swing.JButton" binding="bProxyList">
                 <constraints>
                   <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>

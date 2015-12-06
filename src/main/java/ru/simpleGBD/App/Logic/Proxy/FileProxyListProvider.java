@@ -19,7 +19,7 @@ public class FileProxyListProvider extends AbstractProxyPistProvider {
     }
 
     private void buildList() {
-        String proxyListFileName = GBDOptions.getGBDOptions().getProxyListFile();
+        String proxyListFileName = GBDOptions.getProxyListFile();
         if (proxyListFileName == null || proxyListFileName.length() == 0)
             return;
 
