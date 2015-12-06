@@ -69,6 +69,7 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
                         _page.setUsedProxy(proxy);
                         _page.sigChecked.set(true);
 
+                        // Если есть возможность - пытаемся грузить страницу сразу
                         if (_page.imgRequestLock.tryLock())
                             Pools.imgExecutor.execute(new PageImgProcessor(_page));
                     }

@@ -127,7 +127,7 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
         if (page.imgRequestLock.tryLock()) {
             // Если почему-то не залочено, лочим
             if (page.dataProcessed.get()) {
-                page.imgRequestLock.unlock();
+                page.imgRequestLock.lock();
                 return;
             }
         }

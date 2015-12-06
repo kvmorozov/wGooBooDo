@@ -13,44 +13,4 @@ public class JsonBookInfo {
     @JsonProperty("allowed_syndication_flags") private SyndicationFlags flags;
     @JsonProperty("online_access") private OnlineAccess onlineAccess;
     @JsonProperty("TocLine") private TocItem[] toc;
-
-    public BuyLink[] getBuyLinks() {
-        return buyLinks;
-    }
-
-    public void setBuyLinks(BuyLink[] buyLinks) {
-        this.buyLinks = buyLinks;
-    }
-
-    public String getAboutUrl() {
-        return aboutUrl;
-    }
-
-    public void setAboutUrl(String aboutUrl) {
-        this.aboutUrl = aboutUrl;
-    }
-
-    public String getPreviewUrl() {
-        return previewUrl;
-    }
-
-    public void setPreviewUrl(String previewUrl) {
-        this.previewUrl = previewUrl;
-    }
-
-    public SyndicationFlags getFlags() {
-        return flags;
-    }
-
-    public void setFlags(SyndicationFlags flags) {
-        this.flags = flags;
-    }
-
-    public TocItem[] getToc() {
-        return toc;
-    }
-
-    public void setToc(TocItem[] toc) {
-        this.toc = toc;
-    }
 }
