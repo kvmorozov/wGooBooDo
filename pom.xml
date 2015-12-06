@@ -6,7 +6,7 @@
 
     <groupId>groupId</groupId>
     <artifactId>simpleGBD</artifactId>
-    <version>1.0-b1</version>
+    <version>1.0-b2</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -77,7 +77,7 @@
                                 <fileDescription>${project.name}</fileDescription>
                                 <copyright>kmorozov</copyright>
                                 <productVersion>1.0.0.0</productVersion>
-                                <txtProductVersion>1.0-b1</txtProductVersion>
+                                <txtProductVersion>1.0-b2</txtProductVersion>
                                 <productName>${project.name}</productName>
                                 <companyName>kmorozov</companyName>
                                 <internalName>wGooBooDo</internalName>
