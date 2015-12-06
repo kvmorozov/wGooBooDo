@@ -13,6 +13,7 @@ import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
 import ru.simpleGBD.App.Utils.HttpConnections;
 import ru.simpleGBD.App.Utils.Mapper;
+import ru.simpleGBD.App.Utils.Pools;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -23,7 +24,7 @@ import java.util.logging.Logger;
 /**
  * Created by km on 21.11.2015.
  */
-public class PageSigProcessor implements Runnable {
+public class PageSigProcessor extends AbstractHttpProcessor implements Runnable {
 
     private static Logger logger = Logger.getLogger(PageSigProcessor.class.getName());
 
@@ -42,7 +43,10 @@ public class PageSigProcessor implements Runnable {
         try {
             logger.finest(String.format("Started sig processing for %s", page.getPid()));
 
-            response = instance.execute(new HttpGet(rqUrl));
+            response = getResponse(instance, new HttpGet(rqUrl));
+
+            if (response == null)
+                return false;
 
             String respStr = IOUtils.toString(response.getEntity().getContent());
             PagesInfo framePages = Mapper.objectMapper.readValue(respStr, PagesInfo.class);
@@ -64,6 +68,9 @@ public class PageSigProcessor implements Runnable {
                             sigFound = true;
                         _page.setUsedProxy(proxy);
                         _page.sigChecked.set(true);
+
+                        if (_page.imgRequestLock.tryLock())
+                            Pools.imgExecutor.execute(new PageImgProcessor(_page));
                     }
                 }
         } catch (JsonParseException | JsonMappingException | SocketTimeoutException | SocketException | NoHttpResponseException ce) {
