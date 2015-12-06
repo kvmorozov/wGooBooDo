@@ -36,4 +36,12 @@ public class BookData {
     @JsonProperty("my_library_url") private String myLibraryUrl;
     @JsonProperty("is_magazine") private boolean magazine;
     @JsonProperty("is_public_domain") private boolean publicDomain;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getVolumeId() {
+        return volumeId;
+    }
 }
