@@ -114,12 +114,12 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
 
         if (processImage(page.getImqRqUrl(
                 ImageExtractor.HTTP_TEMPLATE, ImageExtractor.DEFAULT_PAGE_WIDTH),
-                HttpConnections.INSTANCE.getClient(proxy), proxy))
+                HttpConnections.INSTANCE.getClient(proxy, false), proxy))
             return true;
         else
             return processImage(page.getImqRqUrl(
                     ImageExtractor.HTTPS_TEMPLATE, ImageExtractor.DEFAULT_PAGE_WIDTH),
-                    HttpConnections.INSTANCE.getClient(proxy), proxy);
+                    HttpConnections.INSTANCE.getClient(proxy, false), proxy);
     }
 
     @Override

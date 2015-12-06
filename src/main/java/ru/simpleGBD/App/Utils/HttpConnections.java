@@ -94,9 +94,12 @@ public class HttpConnections {
             clientsMap.put(proxy.getHost(), builder.setProxy(proxy.getHost()).build());
     }
 
-    public HttpClient getClient(HttpHostExt proxy) {
+    public HttpClient getClient(HttpHostExt proxy, boolean withTimeout) {
         //return Proxy == null ? noProxyClient : clientsMap.get(Proxy);
-        return proxy == null ? builder.build() : builder.setProxy(proxy.getHost()).build();
+
+        return withTimeout ?
+                proxy == null ? builder.build() : builder.setProxy(proxy.getHost()).build() :
+                proxy == null ? builderWithTimeout.build() : builderWithTimeout.setProxy(proxy.getHost()).build();
     }
 
     public void closeAllConnections() {

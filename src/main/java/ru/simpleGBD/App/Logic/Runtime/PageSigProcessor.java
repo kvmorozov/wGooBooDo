@@ -38,7 +38,7 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
         boolean sigFound = false;
         HttpResponse response;
         String rqUrl = ExecutionContext.baseUrl + ImageExtractor.PAGES_REQUEST_TEMPLATE.replace(ImageExtractor.RQ_PG_PLACEHOLDER, page.getPid());
-        HttpClient instance = HttpConnections.INSTANCE.getClient(proxy);
+        HttpClient instance = HttpConnections.INSTANCE.getClient(proxy, true);
 
         try {
             logger.finest(String.format("Started sig processing for %s", page.getPid()));
