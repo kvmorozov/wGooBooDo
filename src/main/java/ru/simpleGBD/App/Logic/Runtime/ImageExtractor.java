@@ -110,15 +110,14 @@ public class ImageExtractor {
             HttpConnections.INSTANCE.closeAllConnections();
         } catch (InterruptedException e) {
         }
-        ExecutionContext.bookInfo.getPagesInfo().exportPagesUrls();
 
         for (PageInfo page : ExecutionContext.bookInfo.getPagesInfo().getPages())
-            if (!page.dataProcessed.get() && page.getSig() != null)
+            if (!page.dataProcessed.get() && page.getSig() != null && page.imgRequestLock.tryLock())
                 Pools.imgExecutor.execute(new PageImgProcessor(page));
 
         Pools.imgExecutor.shutdown();
         try {
-            Pools.sigExecutor.awaitTermination(500, TimeUnit.MINUTES);
+            Pools.imgExecutor.awaitTermination(500, TimeUnit.MINUTES);
             HttpConnections.INSTANCE.closeAllConnections();
         } catch (InterruptedException e) {
         }

@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 /**
  * Created by km on 21.11.2015.
  */
-public class PageImgProcessor implements Runnable {
+public class PageImgProcessor extends AbstractHttpProcessor implements Runnable {
 
     private static Logger logger = Logger.getLogger(PageImgProcessor.class.getName());
     private static byte[] pngFormat = {(byte) 0x89, 0x50, 0x4e, 0x47};
@@ -35,7 +35,10 @@ public class PageImgProcessor implements Runnable {
         OutputStream outputStream = null;
 
         try {
-            HttpResponse response = instance.execute(new HttpGet(imgUrl));
+            HttpResponse response = getResponse(instance, new HttpGet(imgUrl));
+
+            if (response == null)
+                return false;
 
             inputStream = response.getEntity().getContent();
 
@@ -111,30 +114,38 @@ public class PageImgProcessor implements Runnable {
 
         if (processImage(page.getImqRqUrl(
                 ImageExtractor.HTTP_TEMPLATE, ImageExtractor.DEFAULT_PAGE_WIDTH),
-                HttpConnections.INSTANCE.getClient(proxy), proxy))
+                HttpConnections.INSTANCE.getClient(proxy, false), proxy))
             return true;
         else
             return processImage(page.getImqRqUrl(
                     ImageExtractor.HTTPS_TEMPLATE, ImageExtractor.DEFAULT_PAGE_WIDTH),
-                    HttpConnections.INSTANCE.getClient(proxy), proxy);
+                    HttpConnections.INSTANCE.getClient(proxy, false), proxy);
     }
 
     @Override
     public void run() {
-        // Залочено по ошибке, разлочиваем
-        if (page.getSig() == null || !page.imgRequestLock.tryLock()) {
-            try {
-                page.imgRequestLock.unlock();
-            } catch (Exception ex) {
+        if (page.imgRequestLock.tryLock()) {
+            // Если почему-то не залочено, лочим
+            if (page.dataProcessed.get()) {
+                page.imgRequestLock.lock();
                 return;
             }
-            return;
         }
 
-        if (!processImageWithProxy(page.getUsedProxy()))
-            // Пробуем скачать страницу с другими прокси, если не получилось с той, с помощью которой узнали sig
-            for (HttpHostExt proxy : AbstractProxyPistProvider.getInstance().getProxyList())
-                if (processImageWithProxy(proxy))
-                    return;
+        try {
+            if (!processImageWithProxy(page.getUsedProxy()))
+                // Пробуем скачать страницу с другими прокси, если не получилось с той, с помощью которой узнали sig
+                for (HttpHostExt proxy : AbstractProxyPistProvider.getInstance().getProxyList())
+                    if (processImageWithProxy(proxy))
+                        return;
+        }
+        finally {
+            try {
+                page.imgRequestLock.unlock();
+            }
+            catch(IllegalMonitorStateException ime) {
+                // Разлочили в другом потоке
+            }
+        }
     }
 }
