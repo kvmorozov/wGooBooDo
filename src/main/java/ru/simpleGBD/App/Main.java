@@ -10,7 +10,7 @@ import ru.simpleGBD.App.Logic.Runtime.ImageExtractor;
 public class Main {
 
     public static void main(String[] args) {
-        if (args.length < 0) {
+        if (args.length > 0) {
 
             GBDOptions.init(new CommandLineOptions(args));
 
