@@ -112,8 +112,8 @@ public class ImageExtractor {
         }
 
         for (PageInfo page : ExecutionContext.bookInfo.getPagesInfo().getPages())
-            if (!page.dataProcessed.get() && page.getSig() != null && page.imgRequestLock.tryLock())
-                Pools.imgExecutor.execute(new PageImgProcessor(page));
+            if (!page.dataProcessed.get() && page.getSig() != null)
+                Pools.imgExecutor.execute(new PageImgProcessor(page, null));
 
         Pools.imgExecutor.shutdown();
         try {
@@ -153,7 +153,7 @@ public class ImageExtractor {
 
             ExecutionContext.outputDir =
                     new File(baseOutputDirPath + "\\" +
-                            ExecutionContext.bookInfo.getBookData().getTitle() +
+                            ExecutionContext.bookInfo.getBookData().getTitle().replace(":", "") +
                             " " + ExecutionContext.bookInfo.getBookData().getVolumeId());
             if (!ExecutionContext.outputDir.exists())
                 ExecutionContext.outputDir.mkdir();

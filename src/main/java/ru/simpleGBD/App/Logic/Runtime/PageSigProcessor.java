@@ -3,10 +3,12 @@ package ru.simpleGBD.App.Logic.Runtime;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.SerializationUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.NoHttpResponseException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import ru.simpleGBD.App.Logic.DataModel.BookInfo;
 import ru.simpleGBD.App.Logic.DataModel.PageInfo;
 import ru.simpleGBD.App.Logic.DataModel.PagesInfo;
 import ru.simpleGBD.App.Logic.ExecutionContext;
@@ -29,6 +31,7 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
     private static Logger logger = Logger.getLogger(PageSigProcessor.class.getName());
 
     private HttpHostExt proxy;
+    private BookInfo bookInfo;
 
     public PageSigProcessor(HttpHostExt proxy) {
         this.proxy = proxy;
@@ -41,7 +44,7 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
         HttpClient instance = HttpConnections.INSTANCE.getClient(proxy, true);
 
         try {
-            logger.finest(String.format("Started sig processing for %s", page.getPid()));
+            logger.finest(String.format("Started sig processing for %s with proxy %s", page.getPid(), proxy == null ? "NO_PROXY" : proxy.toString()));
 
             response = getResponse(instance, new HttpGet(rqUrl));
 
@@ -54,7 +57,7 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
             PageInfo[] pages = framePages.getPagesArray();
             for (PageInfo framePage : pages)
                 if (framePage.getSrc() != null) {
-                    PageInfo _page = ExecutionContext.bookInfo.getPagesInfo().getPageByPid(framePage.getPid());
+                    PageInfo _page = bookInfo.getPagesInfo().getPageByPid(framePage.getPid());
 
                     if (_page.dataProcessed.get() || _page.getSig() != null || _page.sigChecked.get())
                         continue;
@@ -66,12 +69,10 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
                     if (_page.getSig() != null) {
                         if (_page.getPid().equals(page.getPid()))
                             sigFound = true;
-                        _page.setUsedProxy(proxy);
                         _page.sigChecked.set(true);
 
                         // Если есть возможность - пытаемся грузить страницу сразу
-                        if (_page.imgRequestLock.tryLock())
-                            Pools.imgExecutor.execute(new PageImgProcessor(_page));
+                        Pools.imgExecutor.execute(new PageImgProcessor(_page, proxy));
                     }
                 }
         } catch (JsonParseException | JsonMappingException | SocketTimeoutException | SocketException | NoHttpResponseException ce) {
@@ -97,6 +98,8 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
     public void run() {
         if (proxy != null && !proxy.isAvailable())
             return;
+
+        bookInfo = SerializationUtils.clone(ExecutionContext.bookInfo);
 
         for (PageInfo page : ExecutionContext.bookInfo.getPagesInfo().getPages())
             if (!page.dataProcessed.get() && page.getSig() == null && !page.sigChecked.get()) {

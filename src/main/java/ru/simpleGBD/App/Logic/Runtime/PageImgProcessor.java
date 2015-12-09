@@ -24,9 +24,11 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
     private static int dataChunk = 4096;
 
     private PageInfo page;
+    private HttpHostExt usedProxy;
 
-    public PageImgProcessor(PageInfo page) {
+    public PageImgProcessor(PageInfo page, HttpHostExt usedProxy) {
         this.page = page;
+        this.usedProxy = usedProxy;
     }
 
     private boolean processImage(String imgUrl, HttpClient instance, HttpHostExt proxy) {
@@ -50,6 +52,8 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
                 if (firstChunk) {
                     if (bytes[0] == pngFormat[0] && bytes[1] == pngFormat[1] && bytes[2] == pngFormat[2] && bytes[3] == pngFormat[3]) {
                         outputFile = new File(ExecutionContext.outputDir.getPath() + "\\" + page.getOrder() + "_" + page.getPid() + ".png");
+                        if (outputFile.exists())
+                            return true;
                         isPng = true;
                     } else
                         break;
@@ -60,9 +64,9 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
                         page.dataProcessed.set(isPng);
 
                     if (proxy != null)
-                        logger.info(String.format("Started img processing for %s with %s Proxy", page.getPid(), proxy.toString()));
+                        System.out.println(String.format("Started img processing for %s with %s Proxy", page.getPid(), proxy.toString()));
                     else
-                        logger.info(String.format("Started img processing for %s without Proxy", page.getPid()));
+                        System.out.println(String.format("Started img processing for %s without Proxy", page.getPid()));
 
                     outputStream = new FileOutputStream(outputFile);
                 }
@@ -73,7 +77,7 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
             }
 
             if (page.dataProcessed.get())
-                logger.info(String.format("Finished img processing for %s", page.getPid()));
+                System.out.println(String.format("Finished img processing for %s", page.getPid()));
 
             return isPng;
         } catch (ConnectException | SocketTimeoutException ce) {
@@ -124,28 +128,10 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
 
     @Override
     public void run() {
-        if (page.imgRequestLock.tryLock()) {
-            // Если почему-то не залочено, лочим
-            if (page.dataProcessed.get()) {
-                page.imgRequestLock.lock();
-                return;
-            }
-        }
-
-        try {
-            if (!processImageWithProxy(page.getUsedProxy()))
-                // Пробуем скачать страницу с другими прокси, если не получилось с той, с помощью которой узнали sig
-                for (HttpHostExt proxy : AbstractProxyPistProvider.getInstance().getProxyList())
-                    if (processImageWithProxy(proxy))
-                        return;
-        }
-        finally {
-            try {
-                page.imgRequestLock.unlock();
-            }
-            catch(IllegalMonitorStateException ime) {
-                // Разлочили в другом потоке
-            }
-        }
+        if (!processImageWithProxy(usedProxy))
+            // Пробуем скачать страницу с другими прокси, если не получилось с той, с помощью которой узнали sig
+            for (HttpHostExt proxy : AbstractProxyPistProvider.getInstance().getProxyList())
+                if (processImageWithProxy(proxy))
+                    return;
     }
 }
