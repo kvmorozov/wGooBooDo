@@ -3,6 +3,7 @@ package ru.simpleGBD.App.Logic.Runtime;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import ru.simpleGBD.App.Config.GBDOptions;
 import ru.simpleGBD.App.Logic.DataModel.PageInfo;
 import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Logic.Proxy.AbstractProxyPistProvider;
@@ -117,12 +118,12 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
             return false;
 
         if (processImage(page.getImqRqUrl(
-                ImageExtractor.HTTP_TEMPLATE, ImageExtractor.DEFAULT_PAGE_WIDTH),
+                ImageExtractor.HTTP_TEMPLATE, GBDOptions.getImageWidth()),
                 HttpConnections.INSTANCE.getClient(proxy, false), proxy))
             return true;
         else
             return processImage(page.getImqRqUrl(
-                    ImageExtractor.HTTPS_TEMPLATE, ImageExtractor.DEFAULT_PAGE_WIDTH),
+                    ImageExtractor.HTTPS_TEMPLATE, GBDOptions.getImageWidth()),
                     HttpConnections.INSTANCE.getClient(proxy, false), proxy);
     }
 

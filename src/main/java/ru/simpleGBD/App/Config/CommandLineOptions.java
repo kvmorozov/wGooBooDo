@@ -1,6 +1,7 @@
 package ru.simpleGBD.App.Config;
 
 import org.apache.commons.cli.*;
+import ru.simpleGBD.App.Logic.Runtime.ImageExtractor;
 
 /**
  * Created by km on 06.12.2015.
@@ -13,6 +14,8 @@ public class CommandLineOptions implements IGBDOptions {
     private static final String OPTION_OUTDIR_LONG = "out";
     private static final String OPTION_PROXY_FILE_SHORT = "p";
     private static final String OPTION_PROXY_FILE_LONG = "proxy";
+    private static final String OPTION_WIDTH_SHORT = "w";
+    private static final String OPTION_WIDTH_LONG = "width";
 
     private CommandLine commandLine;
 
@@ -38,6 +41,12 @@ public class CommandLineOptions implements IGBDOptions {
         option.setArgName("Output directory ");
         options.addOption(option);
 
+        option = new Option(OPTION_WIDTH_SHORT, OPTION_WIDTH_LONG, true, "Width");
+        option.setArgs(1);
+        option.setOptionalArg(false);
+        option.setArgName("Width ");
+        options.addOption(option);
+
         try {
             commandLine = cmdLineParser.parse(options, commandLineArguments);
         } catch (ParseException e) {
@@ -51,7 +60,29 @@ public class CommandLineOptions implements IGBDOptions {
                 : null;
     }
 
-    @Override public String getBookId() {return getStringOptionValue(OPTION_BOOKID_SHORT);}
-    @Override public String getOutputDir() {return getStringOptionValue(OPTION_OUTDIR_SHORT);}
-    @Override public String getProxyListFile() {return getStringOptionValue(OPTION_PROXY_FILE_SHORT);}
+    private int getIntOptionValue(String optionName) {
+        return commandLine.hasOption(optionName) && commandLine.getOptionValues(optionName).length == 1
+                ? Integer.parseInt(commandLine.getOptionValues(optionName)[0])
+                : ImageExtractor.DEFAULT_PAGE_WIDTH;
+    }
+
+    @Override
+    public String getBookId() {
+        return getStringOptionValue(OPTION_BOOKID_SHORT);
+    }
+
+    @Override
+    public String getOutputDir() {
+        return getStringOptionValue(OPTION_OUTDIR_SHORT);
+    }
+
+    @Override
+    public String getProxyListFile() {
+        return getStringOptionValue(OPTION_PROXY_FILE_SHORT);
+    }
+
+    @Override
+    public int getImageWidth() {
+        return getIntOptionValue(OPTION_WIDTH_SHORT);
+    }
 }

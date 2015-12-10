@@ -14,4 +14,5 @@ public class GBDOptions {
     public static String getBookId() {return INSTANCE.getBookId();}
     public static String getOutputDir() {return INSTANCE.getOutputDir();}
     public static String getProxyListFile() {return INSTANCE.getProxyListFile();}
+    public static int getImageWidth() {return INSTANCE.getImageWidth();}
 }

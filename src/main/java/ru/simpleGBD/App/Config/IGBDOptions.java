@@ -8,4 +8,5 @@ public interface IGBDOptions {
     String getBookId();
     String getOutputDir();
     String getProxyListFile();
+    int getImageWidth();
 }
