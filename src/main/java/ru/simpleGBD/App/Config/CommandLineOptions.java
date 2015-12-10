@@ -100,6 +100,6 @@ public class CommandLineOptions implements IGBDOptions {
 
     @Override
     public boolean reloadImages() {
-        return false;
+        return getBoolOptionValue(OPTION_IMG_RELOAD_SHORT);
     }
 }

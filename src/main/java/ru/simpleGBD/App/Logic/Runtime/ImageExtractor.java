@@ -39,7 +39,7 @@ public class ImageExtractor {
 
     private static Logger logger = Logger.getLogger(ImageExtractor.class.getName());
 
-    public static final int DEFAULT_PAGE_WIDTH = 800;
+    public static final int DEFAULT_PAGE_WIDTH = 1280;
     public static final String HTTP_TEMPLATE = "http://74.125.226.3/books?id=%BOOK_ID%";
     public static final String HTTPS_TEMPLATE = "https://books.google.ru/books?id=%BOOK_ID%";
 
@@ -134,9 +134,13 @@ public class ImageExtractor {
                     PageInfo _page = ExecutionContext.bookInfo.getPagesInfo().getPageByPid(nameParts[1]);
                     if (_page != null) {
                         try {
-                            BufferedImage bimg = ImageIO.read(new File(filePath.toString()));
-                            _page.setWidth(bimg.getWidth());
-                            _page.dataProcessed.set(bimg.getWidth() >= GBDOptions.getImageWidth());
+                            if (GBDOptions.reloadImages()) {
+                                BufferedImage bimg = ImageIO.read(new File(filePath.toString()));
+                                _page.setWidth(bimg.getWidth());
+                                _page.dataProcessed.set(bimg.getWidth() >= GBDOptions.getImageWidth());
+                            }
+                            else
+                                _page.dataProcessed.set(true);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }

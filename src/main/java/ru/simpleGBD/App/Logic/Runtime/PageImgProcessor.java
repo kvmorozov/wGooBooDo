@@ -54,10 +54,7 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
                     if (bytes[0] == pngFormat[0] && bytes[1] == pngFormat[1] && bytes[2] == pngFormat[2] && bytes[3] == pngFormat[3]) {
                         outputFile = new File(ExecutionContext.outputDir.getPath() + "\\" + page.getOrder() + "_" + page.getPid() + ".png");
                         if (outputFile.exists())
-                            if (!GBDOptions.reloadImages() || (page.getWidth() >= GBDOptions.getImageWidth()))
-                                return true;
-                            else
-                                outputFile.delete();
+                            outputFile.delete();
                         isPng = true;
                     } else
                         break;
@@ -121,17 +118,20 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
             return false;
 
         if (processImage(page.getImqRqUrl(
-                        ImageExtractor.HTTP_TEMPLATE, GBDOptions.getImageWidth()),
+                ImageExtractor.HTTP_TEMPLATE, GBDOptions.getImageWidth()),
                 HttpConnections.INSTANCE.getClient(proxy, false), proxy))
             return true;
         else
             return processImage(page.getImqRqUrl(
-                            ImageExtractor.HTTPS_TEMPLATE, GBDOptions.getImageWidth()),
+                    ImageExtractor.HTTPS_TEMPLATE, GBDOptions.getImageWidth()),
                     HttpConnections.INSTANCE.getClient(proxy, false), proxy);
     }
 
     @Override
     public void run() {
+        if (page.dataProcessed.get())
+            return;
+
         if (!processImageWithProxy(usedProxy))
             // Пробуем скачать страницу с другими прокси, если не получилось с той, с помощью которой узнали sig
             for (HttpHostExt proxy : AbstractProxyPistProvider.getInstance().getProxyList())
