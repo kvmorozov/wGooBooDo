@@ -59,7 +59,7 @@ public abstract class AbstractProxyPistProvider implements IProxyListProvider {
 
     public static IProxyListProvider getInstance() {
         if (INSTANCE == null)
-            INSTANCE = GBDOptions.getGBDOptions().getProxyListFile() == null ? new StaticProxyListProvider() : new FileProxyListProvider();
+            INSTANCE = GBDOptions.getProxyListFile() == null ? new StaticProxyListProvider() : new FileProxyListProvider();
 
         return INSTANCE;
     }

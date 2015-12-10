@@ -3,10 +3,7 @@ package ru.simpleGBD.App.Logic.DataModel;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import ru.simpleGBD.App.Logic.ExecutionContext;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -17,7 +14,7 @@ import java.util.logging.Logger;
 /**
  * Created by km on 21.11.2015.
  */
-public class PagesInfo {
+public class PagesInfo implements Serializable {
 
     private static Logger logger = Logger.getLogger(PagesInfo.class.getName());
 

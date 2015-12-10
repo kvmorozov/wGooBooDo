@@ -4,6 +4,7 @@ import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
 import ru.simpleGBD.App.Logic.Runtime.ImageExtractor;
 
+import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -12,15 +13,11 @@ import java.util.concurrent.locks.ReentrantLock;
  * Created by km on 21.11.2015.
  */
 
-public class PageInfo {
+public class PageInfo implements Serializable {
 
     private String pid, flags, title, src, uf, sig;
-    private int order, h;
+    private int order, h, width;
     private Object links;
-    private HttpHostExt usedProxy;
-
-    public Lock sigRequestLock = new ReentrantLock();
-    public Lock imgRequestLock = new ReentrantLock();
 
     public AtomicBoolean sigChecked = new AtomicBoolean(false);
     public AtomicBoolean dataProcessed = new AtomicBoolean(false);
@@ -90,12 +87,12 @@ public class PageInfo {
         this.links = links;
     }
 
-    public HttpHostExt getUsedProxy() {
-        return usedProxy;
+    public int getWidth() {
+        return width;
     }
 
-    public void setUsedProxy(HttpHostExt usedProxy) {
-        this.usedProxy = usedProxy;
+    public void setWidth(int width) {
+        this.width = width;
     }
 
     public String getSig() {

@@ -98,8 +98,8 @@ public class HttpConnections {
         //return Proxy == null ? noProxyClient : clientsMap.get(Proxy);
 
         return withTimeout ?
-                proxy == null ? builder.build() : builder.setProxy(proxy.getHost()).build() :
-                proxy == null ? builderWithTimeout.build() : builderWithTimeout.setProxy(proxy.getHost()).build();
+                proxy == null ? builder.setProxy(null).build() : builder.setProxy(proxy.getHost()).build() :
+                proxy == null ? builderWithTimeout.setProxy(null).build() : builderWithTimeout.setProxy(proxy.getHost()).build();
     }
 
     public void closeAllConnections() {

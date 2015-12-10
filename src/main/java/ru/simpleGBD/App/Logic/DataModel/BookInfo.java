@@ -1,9 +1,11 @@
 package ru.simpleGBD.App.Logic.DataModel;
 
+import java.io.Serializable;
+
 /**
  * Created by km on 28.11.2015.
  */
-public class BookInfo {
+public class BookInfo implements Serializable {
 
     private BookData bookData;
     private PagesInfo pages;

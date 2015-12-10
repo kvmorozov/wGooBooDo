@@ -20,6 +20,8 @@ import ru.simpleGBD.App.Utils.HttpConnections;
 import ru.simpleGBD.App.Utils.Mapper;
 import ru.simpleGBD.App.Utils.Pools;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -37,7 +39,7 @@ public class ImageExtractor {
 
     private static Logger logger = Logger.getLogger(ImageExtractor.class.getName());
 
-    public static final int DEFAULT_PAGE_WIDTH = 800;
+    public static final int DEFAULT_PAGE_WIDTH = 1280;
     public static final String HTTP_TEMPLATE = "http://74.125.226.3/books?id=%BOOK_ID%";
     public static final String HTTPS_TEMPLATE = "https://books.google.ru/books?id=%BOOK_ID%";
 
@@ -55,9 +57,9 @@ public class ImageExtractor {
     public static final String IMG_REQUEST_TEMPLATE = "&pg=%PG%&img=1&zoom=3&hl=ru&sig=%SIG%&w=%WIDTH%";
     public static final String OPEN_PAGE_ADD_URL = "&printsec=frontcover&hl=ru#v=onepage&q&f=false";
 
-    public ImageExtractor(String bookId) {
-        ExecutionContext.bookId = bookId;
-        ExecutionContext.baseUrl = HTTP_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, bookId);
+    public ImageExtractor() {
+        ExecutionContext.bookId = GBDOptions.getBookId();
+        ExecutionContext.baseUrl = HTTP_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, ExecutionContext.bookId);
 
         List<HttpHostExt> proxyList = AbstractProxyPistProvider.getInstance().getProxyList();
         if (proxyList != null && proxyList.size() > 0)
@@ -112,8 +114,8 @@ public class ImageExtractor {
         }
 
         for (PageInfo page : ExecutionContext.bookInfo.getPagesInfo().getPages())
-            if (!page.dataProcessed.get() && page.getSig() != null && page.imgRequestLock.tryLock())
-                Pools.imgExecutor.execute(new PageImgProcessor(page));
+            if (!page.dataProcessed.get() && page.getSig() != null)
+                Pools.imgExecutor.execute(new PageImgProcessor(page, null));
 
         Pools.imgExecutor.shutdown();
         try {
@@ -130,8 +132,19 @@ public class ImageExtractor {
                     String fileName = FilenameUtils.getBaseName(filePath.toString());
                     String[] nameParts = fileName.split("_");
                     PageInfo _page = ExecutionContext.bookInfo.getPagesInfo().getPageByPid(nameParts[1]);
-                    if (_page != null)
-                        _page.dataProcessed.set(true);
+                    if (_page != null) {
+                        try {
+                            if (GBDOptions.reloadImages()) {
+                                BufferedImage bimg = ImageIO.read(new File(filePath.toString()));
+                                _page.setWidth(bimg.getWidth());
+                                _page.dataProcessed.set(bimg.getWidth() >= GBDOptions.getImageWidth());
+                            }
+                            else
+                                _page.dataProcessed.set(true);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
             });
         } catch (IOException e) {
@@ -143,7 +156,7 @@ public class ImageExtractor {
         try {
             ExecutionContext.bookInfo = getBookInfo();
 
-            String baseOutputDirPath = GBDOptions.getGBDOptions().getOutputDir();
+            String baseOutputDirPath = GBDOptions.getOutputDir();
             if (baseOutputDirPath == null)
                 return;
 
@@ -153,7 +166,7 @@ public class ImageExtractor {
 
             ExecutionContext.outputDir =
                     new File(baseOutputDirPath + "\\" +
-                            ExecutionContext.bookInfo.getBookData().getTitle() +
+                            ExecutionContext.bookInfo.getBookData().getTitle().replace(":", "") +
                             " " + ExecutionContext.bookInfo.getBookData().getVolumeId());
             if (!ExecutionContext.outputDir.exists())
                 ExecutionContext.outputDir.mkdir();
