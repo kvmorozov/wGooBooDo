@@ -16,7 +16,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class PageInfo implements Serializable {
 
     private String pid, flags, title, src, uf, sig;
-    private int order, h;
+    private int order, h, width;
     private Object links;
 
     public AtomicBoolean sigChecked = new AtomicBoolean(false);
@@ -85,6 +85,14 @@ public class PageInfo implements Serializable {
 
     public void setLinks(Object links) {
         this.links = links;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
     }
 
     public String getSig() {

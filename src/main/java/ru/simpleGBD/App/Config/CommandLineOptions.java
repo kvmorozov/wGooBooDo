@@ -16,6 +16,8 @@ public class CommandLineOptions implements IGBDOptions {
     private static final String OPTION_PROXY_FILE_LONG = "proxy";
     private static final String OPTION_WIDTH_SHORT = "w";
     private static final String OPTION_WIDTH_LONG = "width";
+    private static final String OPTION_IMG_RELOAD_SHORT = "r";
+    private static final String OPTION_IMG_RELOAD_LONG = "reload";
 
     private CommandLine commandLine;
 
@@ -43,8 +45,14 @@ public class CommandLineOptions implements IGBDOptions {
 
         option = new Option(OPTION_WIDTH_SHORT, OPTION_WIDTH_LONG, true, "Width");
         option.setArgs(1);
-        option.setOptionalArg(false);
+        option.setOptionalArg(true);
         option.setArgName("Width ");
+        options.addOption(option);
+
+        option = new Option(OPTION_IMG_RELOAD_SHORT, OPTION_IMG_RELOAD_LONG, true, "Reload images");
+        option.setArgs(0);
+        option.setOptionalArg(true);
+        option.setArgName("Reload images ");
         options.addOption(option);
 
         try {
@@ -66,6 +74,10 @@ public class CommandLineOptions implements IGBDOptions {
                 : ImageExtractor.DEFAULT_PAGE_WIDTH;
     }
 
+    private boolean getBoolOptionValue(String optionName) {
+        return commandLine.hasOption(optionName);
+    }
+
     @Override
     public String getBookId() {
         return getStringOptionValue(OPTION_BOOKID_SHORT);
@@ -84,5 +96,10 @@ public class CommandLineOptions implements IGBDOptions {
     @Override
     public int getImageWidth() {
         return getIntOptionValue(OPTION_WIDTH_SHORT);
+    }
+
+    @Override
+    public boolean reloadImages() {
+        return false;
     }
 }

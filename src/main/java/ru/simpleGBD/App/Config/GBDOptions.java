@@ -15,4 +15,5 @@ public class GBDOptions {
     public static String getOutputDir() {return INSTANCE.getOutputDir();}
     public static String getProxyListFile() {return INSTANCE.getProxyListFile();}
     public static int getImageWidth() {return INSTANCE.getImageWidth();}
+    public static boolean reloadImages() {return INSTANCE.reloadImages();}
 }

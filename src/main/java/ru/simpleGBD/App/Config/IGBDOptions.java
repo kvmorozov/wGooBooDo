@@ -9,4 +9,5 @@ public interface IGBDOptions {
     String getOutputDir();
     String getProxyListFile();
     int getImageWidth();
+    boolean reloadImages();
 }

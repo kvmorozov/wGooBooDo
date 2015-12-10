@@ -20,6 +20,8 @@ import ru.simpleGBD.App.Utils.HttpConnections;
 import ru.simpleGBD.App.Utils.Mapper;
 import ru.simpleGBD.App.Utils.Pools;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -130,8 +132,15 @@ public class ImageExtractor {
                     String fileName = FilenameUtils.getBaseName(filePath.toString());
                     String[] nameParts = fileName.split("_");
                     PageInfo _page = ExecutionContext.bookInfo.getPagesInfo().getPageByPid(nameParts[1]);
-                    if (_page != null)
-                        _page.dataProcessed.set(true);
+                    if (_page != null) {
+                        try {
+                            BufferedImage bimg = ImageIO.read(new File(filePath.toString()));
+                            _page.setWidth(bimg.getWidth());
+                            _page.dataProcessed.set(bimg.getWidth() >= GBDOptions.getImageWidth());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
             });
         } catch (IOException e) {

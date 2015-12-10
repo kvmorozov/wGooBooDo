@@ -26,4 +26,9 @@ public class LocalSystemOptions implements IGBDOptions {
     public int getImageWidth() {
         return ImageExtractor.DEFAULT_PAGE_WIDTH;
     }
+
+    @Override
+    public boolean reloadImages() {
+        return false;
+    }
 }
