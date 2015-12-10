@@ -24,8 +24,6 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -138,11 +136,12 @@ public class ImageExtractor {
                                 BufferedImage bimg = ImageIO.read(new File(filePath.toString()));
                                 _page.setWidth(bimg.getWidth());
                                 _page.dataProcessed.set(bimg.getWidth() >= GBDOptions.getImageWidth());
-                            }
-                            else
+                            } else
                                 _page.dataProcessed.set(true);
                         } catch (IOException e) {
-                            e.printStackTrace();
+                            // Значит файл с ошибкой
+                            (new File(filePath.toString())).delete();
+                            _page.dataProcessed.set(false);
                         }
                     }
                 }
@@ -179,26 +178,8 @@ public class ImageExtractor {
         } catch (HttpStatusException hse) {
             logger.severe(String.format("Cannot process images: %s (%d)", hse.getMessage(), hse.getStatusCode()));
         } catch (IOException e) {
+            e.printStackTrace();
             logger.severe("Cannot process images!");
-        }
-    }
-
-    public int getPagesCount() {
-        return ExecutionContext.bookInfo.getPagesInfo().getPagesCount();
-    }
-
-    public boolean validate() {
-        try {
-            URL bookUrl = new URL(ExecutionContext.baseUrl);
-            bookUrl.openConnection();
-
-            return true;
-        } catch (MalformedURLException e) {
-            logger.severe("Invalid address!");
-            return false;
-        } catch (IOException e) {
-            logger.severe("Cannot open url!");
-            return false;
         }
     }
 }

@@ -47,13 +47,13 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
 
             int read = 0;
             byte[] bytes = new byte[dataChunk];
-            boolean firstChunk = true, isPng = false;
+            boolean firstChunk = true, isPng = false, reloadFlag = false;
 
             while ((read = inputStream.read(bytes)) != -1) {
                 if (firstChunk) {
                     if (bytes[0] == pngFormat[0] && bytes[1] == pngFormat[1] && bytes[2] == pngFormat[2] && bytes[3] == pngFormat[3]) {
                         outputFile = new File(ExecutionContext.outputDir.getPath() + "\\" + page.getOrder() + "_" + page.getPid() + ".png");
-                        if (outputFile.exists())
+                        if (reloadFlag = outputFile.exists())
                             outputFile.delete();
                         isPng = true;
                     } else
@@ -65,9 +65,11 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
                         page.dataProcessed.set(isPng);
 
                     if (proxy != null)
-                        System.out.println(String.format("Started img processing for %s with %s Proxy", page.getPid(), proxy.toString()));
+                        System.out.println(String.format("Started img %s for %s with %s Proxy",
+                                reloadFlag ? "RELOADING" : "processing", page.getPid(), proxy.toString()));
                     else
-                        System.out.println(String.format("Started img processing for %s without Proxy", page.getPid()));
+                        System.out.println(String.format("Started img %s for %s without Proxy",
+                                reloadFlag ? "RELOADING" : "processing", page.getPid()));
 
                     outputStream = new FileOutputStream(outputFile);
                 }
