@@ -38,8 +38,8 @@ public class ImageExtractor {
     private static Logger logger = Logger.getLogger(ImageExtractor.class.getName());
 
     public static final int DEFAULT_PAGE_WIDTH = 1280;
-    public static final String HTTP_TEMPLATE = "http://74.125.226.3/books?id=%BOOK_ID%";
-    public static final String HTTPS_TEMPLATE = "https://books.google.ru/books?id=%BOOK_ID%";
+    public static final String HTTP_TEMPLATE = "http://books.google.com/books?id=%BOOK_ID%";
+    public static final String HTTPS_TEMPLATE = "https://books.google.com/books?id=%BOOK_ID%";
 
     private static final String ADD_FLAGS_ATTRIBUTE = "_OC_addFlags";
     private static final String OC_RUN_ATTRIBUTE = "_OC_Run";
@@ -57,7 +57,7 @@ public class ImageExtractor {
 
     public ImageExtractor() {
         ExecutionContext.bookId = GBDOptions.getBookId();
-        ExecutionContext.baseUrl = HTTP_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, ExecutionContext.bookId);
+        ExecutionContext.baseUrl = HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, ExecutionContext.bookId);
 
         List<HttpHostExt> proxyList = AbstractProxyPistProvider.getInstance().getProxyList();
         if (proxyList != null && proxyList.size() > 0)

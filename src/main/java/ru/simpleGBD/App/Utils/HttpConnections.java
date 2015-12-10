@@ -25,7 +25,7 @@ import java.util.Map;
 public class HttpConnections {
 
     private static final int HTTP_TIMEOUT = 2000;
-    public static final String USER_AGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.143 Safari/537.36";
+    public static final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0";
 
     public static HttpConnections INSTANCE = new HttpConnections();
 
