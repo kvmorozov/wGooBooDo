@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import ru.simpleGBD.App.Logic.ExecutionContext;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
@@ -20,6 +17,7 @@ public class PagesInfo implements Serializable {
 
     @JsonProperty("page") private PageInfo[] pages;
     private Map<String, PageInfo> pagesMap;
+    private LinkedList<PageInfo> pagesList;
     private String prefix;
 
     public PageInfo[] getPagesArray() {
@@ -41,14 +39,17 @@ public class PagesInfo implements Serializable {
     public int getPagesCount() {return pages.length;}
 
     public void build() {
-        List<PageInfo> _pages = Arrays.asList(getPagesArray());
+        List<PageInfo> _pages = Arrays.asList(pages);
         pagesMap = new ConcurrentHashMap<>(_pages.size());
-        for(PageInfo page : _pages)
+        pagesList = new LinkedList<>();
+        for(PageInfo page : _pages) {
             pagesMap.put(page.getPid(), page);
+            pagesList.add(page);
+        }
     }
 
     public PageInfo getPageByPid(String pid) {return pagesMap.get(pid);}
-    public Collection<PageInfo> getPages() {return pagesMap.values();}
+    public LinkedList<PageInfo> getPages() {return pagesList;}
 
     public void exportPagesUrls() throws IOException {
         StringBuffer imgUrlsBuffer = new StringBuffer();

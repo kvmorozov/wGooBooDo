@@ -45,7 +45,24 @@ public class MainForm {
 
         bLoad.addActionListener(e -> {
             SystemConfigs.setLastBookId(tfBookId.getText());
-            (new ImageExtractor()).process();
+            bLoad.setEnabled(false);
+
+            SwingWorker worker = new SwingWorker<Void, Void>() {
+
+                @Override
+                protected Void doInBackground() throws Exception {
+                    (new ImageExtractor()).process();
+
+                    return null;
+                }
+
+                @Override
+                public void done() {
+                    bLoad.setEnabled(true);
+                }
+            };
+
+            worker.execute();
         });
     }
 

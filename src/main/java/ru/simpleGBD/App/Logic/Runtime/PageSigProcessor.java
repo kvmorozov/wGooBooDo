@@ -21,6 +21,7 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.util.ListIterator;
 import java.util.logging.Logger;
 
 /**
@@ -101,9 +102,13 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
 
         bookInfo = SerializationUtils.clone(ExecutionContext.bookInfo);
 
-        for (PageInfo page : ExecutionContext.bookInfo.getPagesInfo().getPages())
+        ListIterator<PageInfo> itr = ExecutionContext.bookInfo.getPagesInfo().getPages().listIterator();
+
+        while (itr.hasNext()) {
+            PageInfo page = itr.next();
             if (!page.dataProcessed.get() && page.getSig() == null && !page.sigChecked.get()) {
                 getSig(page);
             }
+        }
     }
 }

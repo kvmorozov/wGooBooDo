@@ -13,7 +13,7 @@ public class HttpHostExt {
 
     private static Logger logger = Logger.getLogger(HttpHostExt.class.getName());
 
-    public static final int FAILURES_THRESHOLD = Integer.MAX_VALUE;
+    public static final int FAILURES_THRESHOLD = 5;
 
     private HttpHost host;
     private AtomicBoolean available = new AtomicBoolean(true);
