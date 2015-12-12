@@ -46,6 +46,7 @@ public class PagesInfo implements Serializable {
         List<Pair<PageInfo, PageInfo>> pairs = new ArrayList<>();
 
         PageInfo blockStart = null, prevPage = null, currentPage;
+        int pagesCountByCondition = 0;
 
         ListIterator<PageInfo> itr = pagesList.listIterator();
         while (itr.hasNext()) {
@@ -57,9 +58,13 @@ public class PagesInfo implements Serializable {
                     pairs.add(new ImmutablePair(blockStart, prevPage));
                     blockStart = null;
                 }
-            else if (blockStart == null)
-                blockStart = currentPage;
             else {
+                pagesCountByCondition++;
+
+                if (blockStart == null)
+                    blockStart = currentPage;
+                else {
+                }
             }
 
             if (!itr.hasNext() && blockStart != null)
@@ -75,6 +80,7 @@ public class PagesInfo implements Serializable {
                 bList.append(String.format("%s-%s, ", pair.getLeft().getPid(), pair.getRight().getPid()));
 
         bList.deleteCharAt(bList.length() - 1).deleteCharAt(bList.length() - 1);
+        bList.append(String.format(". Total = %d", pagesCountByCondition));
 
         return bList.toString();
     }
