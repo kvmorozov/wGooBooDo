@@ -79,8 +79,12 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
                 outputStream.write(bytes, 0, read);
             }
 
-            if (page.dataProcessed.get())
+            if (page.dataProcessed.get()) {
                 System.out.println(String.format("Finished img processing for %s", page.getPid()));
+                PageInfo _page = ExecutionContext.bookInfo.getPagesInfo().getPageByPid(page.getPid());
+                _page.dataProcessed.set(true);
+                _page.fileExists.set(true);
+            }
 
             return isPng;
         } catch (ConnectException | SocketTimeoutException ce) {

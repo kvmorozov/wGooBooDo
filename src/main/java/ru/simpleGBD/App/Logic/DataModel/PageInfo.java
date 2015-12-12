@@ -19,9 +19,9 @@ public class PageInfo implements Serializable {
     private int order, h, width;
     private Object links;
 
-    public AtomicBoolean sigChecked = new AtomicBoolean(false);
+    public AtomicBoolean sigChecked    = new AtomicBoolean(false);
     public AtomicBoolean dataProcessed = new AtomicBoolean(false);
-    ;
+    public AtomicBoolean fileExists    = new AtomicBoolean(false);
 
     public String getPid() {
         return pid;

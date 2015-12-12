@@ -143,6 +143,8 @@ public class ImageExtractor {
                             (new File(filePath.toString())).delete();
                             _page.dataProcessed.set(false);
                         }
+
+                        _page.fileExists.set(true);
                     }
                 }
             });

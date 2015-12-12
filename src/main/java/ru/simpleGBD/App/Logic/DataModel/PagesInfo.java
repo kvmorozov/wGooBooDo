@@ -7,6 +7,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
 
 /**
  * Created by km on 21.11.2015.
@@ -42,24 +43,34 @@ public class PagesInfo implements Serializable {
     }
 
     public String getMissingPagesList() {
+        return getListByCondition(pageInfo -> pageInfo.fileExists.get());
+    }
+
+    private String getListByCondition(Predicate<PageInfo> condition) {
         StringBuilder bList = new StringBuilder();
         List<Pair<PageInfo, PageInfo>> pairs = new ArrayList<>();
 
         PageInfo blockStart = null, prevPage = null, currentPage;
+        int pagesCountByCondition = 0, total = 0;
 
         ListIterator<PageInfo> itr = pagesList.listIterator();
         while (itr.hasNext()) {
             currentPage = itr.next();
+            total++;
 
-            if (currentPage.dataProcessed.get())
+            if (condition.test(currentPage))
                 if (blockStart == null) {
                 } else {
                     pairs.add(new ImmutablePair(blockStart, prevPage));
                     blockStart = null;
                 }
-            else if (blockStart == null)
-                blockStart = currentPage;
             else {
+                pagesCountByCondition++;
+
+                if (blockStart == null)
+                    blockStart = currentPage;
+                else {
+                }
             }
 
             if (!itr.hasNext() && blockStart != null)
@@ -75,6 +86,7 @@ public class PagesInfo implements Serializable {
                 bList.append(String.format("%s-%s, ", pair.getLeft().getPid(), pair.getRight().getPid()));
 
         bList.deleteCharAt(bList.length() - 1).deleteCharAt(bList.length() - 1);
+        bList.append(String.format(". Total = %d/%d", pagesCountByCondition, total));
 
         return bList.toString();
     }
