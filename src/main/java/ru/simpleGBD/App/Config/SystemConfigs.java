@@ -13,6 +13,8 @@ public class SystemConfigs {
     private static final String KEY_ROOT_DIR = "out.root.dir";
     private static final String KEY_PROXY_LIST_FILE = "proxy.list.file";
     private static final String KEY_LAST_BOOK_ID = "last.book.id";
+    private static final String KEY_RESOLUTION = "resolution";
+    private static final String KEY_RELOAD = "reload";
 
     private static Preferences preferences = Preferences.userRoot().node(PREFERENCES_NODE);
 
@@ -22,6 +24,9 @@ public class SystemConfigs {
     private static int getIntProperty(String propKey) {return  preferences.getInt(propKey, 0);}
     private static void setIntProperty(String propKey, int value) {preferences.putInt(propKey, value);}
 
+    private static boolean getBoolProperty(String propKey) {return  preferences.getBoolean(propKey, false);}
+    private static void setBoolProperty(String propKey, boolean value) {preferences.putBoolean(propKey, value);}
+
     public static String getRootDir() {return getStringProperty(KEY_ROOT_DIR);}
     public static void setRootDir(String value) {setStringProperty(KEY_ROOT_DIR, value);}
 
@@ -30,4 +35,10 @@ public class SystemConfigs {
 
     public static String getLastBookId() {return getStringProperty(KEY_LAST_BOOK_ID);}
     public static void setLastBookId(String value) {setStringProperty(KEY_LAST_BOOK_ID, value);}
+
+    public static int getResolution() {return getIntProperty(KEY_RESOLUTION);}
+    public static void setResolution(int value) {setIntProperty(KEY_RESOLUTION, value);}
+
+    public static boolean getReload() {return getBoolProperty(KEY_RELOAD);}
+    public static void setReload(boolean value) {setBoolProperty(KEY_RELOAD, value);}
 }

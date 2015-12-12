@@ -24,11 +24,11 @@ public class LocalSystemOptions implements IGBDOptions {
 
     @Override
     public int getImageWidth() {
-        return ImageExtractor.DEFAULT_PAGE_WIDTH;
+        return SystemConfigs.getResolution();
     }
 
     @Override
     public boolean reloadImages() {
-        return false;
+        return SystemConfigs.getReload();
     }
 }
