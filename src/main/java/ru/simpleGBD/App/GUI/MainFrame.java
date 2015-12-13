@@ -12,7 +12,7 @@ public class MainFrame extends JFrame {
         super("wGooBooDo");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        setContentPane(new MainForm().getMainPanel());
+        setContentPane(new MainBookForm().getMainPanel());
         pack();
 
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();

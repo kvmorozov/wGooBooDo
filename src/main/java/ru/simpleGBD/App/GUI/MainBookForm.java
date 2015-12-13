@@ -2,6 +2,7 @@ package ru.simpleGBD.App.GUI;
 
 import ru.simpleGBD.App.Config.SystemConfigs;
 import ru.simpleGBD.App.Logic.DataModel.Resolutions;
+import ru.simpleGBD.App.Logic.Output.SwingBookInfoOutput;
 import ru.simpleGBD.App.Logic.Runtime.ImageExtractor;
 
 import javax.swing.*;
@@ -9,7 +10,7 @@ import javax.swing.*;
 /**
  * Created by km on 05.12.2015.
  */
-public class MainForm {
+public class MainBookForm {
     private JTabbedPane tabbedPane1;
     private JPanel mainPanel;
     private JTextField tfBookId;
@@ -18,9 +19,15 @@ public class MainForm {
     private JButton bRootOutDir, bProxyList;
     private JComboBox cbResolution;
     private JCheckBox cbReload;
+    private JTabbedPane tpBookInfo;
+    private JTextField tfBookTitle;
     private SwingWorker worker;
 
-    public MainForm() {
+    private final MainBookForm _mainForm;
+
+    public MainBookForm() {
+        _mainForm = this;
+
         tfRootOutDir.setText(SystemConfigs.getRootDir());
         tfProxyListFile.setText(SystemConfigs.getProxyListFile());
         tfBookId.setText(SystemConfigs.getLastBookId());
@@ -58,7 +65,7 @@ public class MainForm {
 
                 @Override
                 protected Void doInBackground() throws Exception {
-                    (new ImageExtractor()).process();
+                    (new ImageExtractor(new SwingBookInfoOutput(_mainForm))).process();
 
                     return null;
                 }
@@ -83,5 +90,9 @@ public class MainForm {
 
     public JPanel getMainPanel() {
         return mainPanel;
+    }
+
+    public JTextField getTfBookTitle() {
+        return tfBookTitle;
     }
 }

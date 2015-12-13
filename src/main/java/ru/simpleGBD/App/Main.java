@@ -5,6 +5,7 @@ import ru.simpleGBD.App.Config.GBDOptions;
 import ru.simpleGBD.App.Config.IGBDOptions;
 import ru.simpleGBD.App.Config.LocalSystemOptions;
 import ru.simpleGBD.App.GUI.MainFrame;
+import ru.simpleGBD.App.Logic.Output.DummyBookInfoOutput;
 import ru.simpleGBD.App.Logic.Runtime.ImageExtractor;
 
 public class Main {
@@ -18,7 +19,7 @@ public class Main {
             if (bookId == null || bookId.length() == 0)
                 return;
 
-            (new ImageExtractor()).process();
+            (new ImageExtractor(new DummyBookInfoOutput())).process();
         }
         else {
             GBDOptions.init(new LocalSystemOptions());

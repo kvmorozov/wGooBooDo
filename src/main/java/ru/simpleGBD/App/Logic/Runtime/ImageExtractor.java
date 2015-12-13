@@ -14,6 +14,7 @@ import ru.simpleGBD.App.Logic.DataModel.BookInfo;
 import ru.simpleGBD.App.Logic.DataModel.PageInfo;
 import ru.simpleGBD.App.Logic.DataModel.PagesInfo;
 import ru.simpleGBD.App.Logic.ExecutionContext;
+import ru.simpleGBD.App.Logic.Output.IBookInfoOutput;
 import ru.simpleGBD.App.Logic.Proxy.AbstractProxyPistProvider;
 import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
 import ru.simpleGBD.App.Utils.HttpConnections;
@@ -55,9 +56,13 @@ public class ImageExtractor {
     public static final String IMG_REQUEST_TEMPLATE = "&pg=%PG%&img=1&zoom=3&hl=ru&sig=%SIG%&w=%WIDTH%";
     public static final String OPEN_PAGE_ADD_URL = "&printsec=frontcover&hl=ru#v=onepage&q&f=false";
 
-    public ImageExtractor() {
+    private IBookInfoOutput output;
+
+    public ImageExtractor(IBookInfoOutput output) {
         ExecutionContext.bookId = GBDOptions.getBookId();
         ExecutionContext.baseUrl = HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, ExecutionContext.bookId);
+
+        this.output = output;
 
         List<HttpHostExt> proxyList = AbstractProxyPistProvider.getInstance().getProxyList();
         if (proxyList != null && proxyList.size() > 0)
@@ -156,6 +161,7 @@ public class ImageExtractor {
     public void process() {
         try {
             ExecutionContext.bookInfo = getBookInfo();
+            output.receiveBookInfo(ExecutionContext.bookInfo);
 
             String baseOutputDirPath = GBDOptions.getOutputDir();
             if (baseOutputDirPath == null)
