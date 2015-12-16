@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by km on 27.11.2015.
  */
-public class StaticProxyListProvider extends AbstractProxyPistProvider {
+public class StaticProxyListProvider extends AbstractProxyListProvider {
 
     private static final String PROXY_LIST_RES = "proxy/list1";
 

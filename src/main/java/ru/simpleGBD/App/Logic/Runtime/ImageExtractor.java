@@ -14,10 +14,11 @@ import ru.simpleGBD.App.Logic.DataModel.BookInfo;
 import ru.simpleGBD.App.Logic.DataModel.PageInfo;
 import ru.simpleGBD.App.Logic.DataModel.PagesInfo;
 import ru.simpleGBD.App.Logic.ExecutionContext;
-import ru.simpleGBD.App.Logic.Output.IBookInfoOutput;
-import ru.simpleGBD.App.Logic.Proxy.AbstractProxyPistProvider;
+import ru.simpleGBD.App.Logic.Output.consumers.AbstractOutput;
+import ru.simpleGBD.App.Logic.Proxy.AbstractProxyListProvider;
 import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
 import ru.simpleGBD.App.Utils.HttpConnections;
+import ru.simpleGBD.App.Utils.Logger;
 import ru.simpleGBD.App.Utils.Mapper;
 import ru.simpleGBD.App.Utils.Pools;
 
@@ -29,14 +30,13 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
 /**
  * Created by km on 21.11.2015.
  */
 public class ImageExtractor {
 
-    private static Logger logger = Logger.getLogger(ImageExtractor.class.getName());
+    private static Logger logger = Logger.getLogger(ExecutionContext.output, ImageExtractor.class.getName());
 
     public static final int DEFAULT_PAGE_WIDTH = 1280;
     public static final String HTTP_TEMPLATE = "http://books.google.com/books?id=%BOOK_ID%";
@@ -56,15 +56,15 @@ public class ImageExtractor {
     public static final String IMG_REQUEST_TEMPLATE = "&pg=%PG%&img=1&zoom=3&hl=ru&sig=%SIG%&w=%WIDTH%";
     public static final String OPEN_PAGE_ADD_URL = "&printsec=frontcover&hl=ru#v=onepage&q&f=false";
 
-    private IBookInfoOutput output;
+    private AbstractOutput output;
 
-    public ImageExtractor(IBookInfoOutput output) {
+    public ImageExtractor() {
         ExecutionContext.bookId = GBDOptions.getBookId();
         ExecutionContext.baseUrl = HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, ExecutionContext.bookId);
 
-        this.output = output;
+        this.output = ExecutionContext.output;
 
-        List<HttpHostExt> proxyList = AbstractProxyPistProvider.getInstance().getProxyList();
+        List<HttpHostExt> proxyList = AbstractProxyListProvider.getInstance().getProxyList();
         if (proxyList != null && proxyList.size() > 0)
             logger.info(String.format("Starting with %s proxies.", proxyList.size()));
     }
@@ -105,7 +105,7 @@ public class ImageExtractor {
         // Сначала идём без проксм
         Pools.sigExecutor.execute(new PageSigProcessor(null));
         // Потом с проксм
-        for (HttpHostExt proxy : AbstractProxyPistProvider.getInstance().getProxyList())
+        for (HttpHostExt proxy : AbstractProxyListProvider.getInstance().getProxyList())
             if (proxy.isAvailable() && proxy.getHost().getPort() > 0)
                 Pools.sigExecutor.execute(new PageSigProcessor(proxy));
 

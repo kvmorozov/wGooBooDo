@@ -1,6 +1,7 @@
 package ru.simpleGBD.App.Logic;
 
 import ru.simpleGBD.App.Logic.DataModel.BookInfo;
+import ru.simpleGBD.App.Logic.Output.consumers.AbstractOutput;
 
 import java.io.File;
 
@@ -13,4 +14,5 @@ public class ExecutionContext {
     public static String baseUrl;
     public static BookInfo bookInfo;
     public static File outputDir;
+    public static AbstractOutput output;
 }

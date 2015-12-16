@@ -2,7 +2,8 @@ package ru.simpleGBD.App.GUI;
 
 import ru.simpleGBD.App.Config.SystemConfigs;
 import ru.simpleGBD.App.Logic.DataModel.Resolutions;
-import ru.simpleGBD.App.Logic.Output.SwingBookInfoOutput;
+import ru.simpleGBD.App.Logic.ExecutionContext;
+import ru.simpleGBD.App.Logic.Output.consumers.SwingBookInfoOutput;
 import ru.simpleGBD.App.Logic.Runtime.ImageExtractor;
 
 import javax.swing.*;
@@ -23,10 +24,8 @@ public class MainBookForm {
     private JTextField tfBookTitle;
     private SwingWorker worker;
 
-    private final MainBookForm _mainForm;
-
     public MainBookForm() {
-        _mainForm = this;
+        ExecutionContext.output = new SwingBookInfoOutput(this);
 
         tfRootOutDir.setText(SystemConfigs.getRootDir());
         tfProxyListFile.setText(SystemConfigs.getProxyListFile());
@@ -65,7 +64,7 @@ public class MainBookForm {
 
                 @Override
                 protected Void doInBackground() throws Exception {
-                    (new ImageExtractor(new SwingBookInfoOutput(_mainForm))).process();
+                    (new ImageExtractor()).process();
 
                     return null;
                 }
@@ -83,8 +82,8 @@ public class MainBookForm {
         cbReload.addChangeListener(event -> SystemConfigs.setReload(((AbstractButton) event.getSource()).getModel().isSelected()));
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-           if (worker != null && worker.getState() == SwingWorker.StateValue.STARTED)
-               worker.cancel(true);
+            if (worker != null && worker.getState() == SwingWorker.StateValue.STARTED)
+                worker.cancel(true);
         }));
     }
 

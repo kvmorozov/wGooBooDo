@@ -5,18 +5,18 @@ import org.apache.http.client.methods.HttpGet;
 import ru.simpleGBD.App.Config.GBDOptions;
 import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Utils.HttpConnections;
+import ru.simpleGBD.App.Utils.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * Created by km on 27.11.2015.
  */
-public abstract class AbstractProxyPistProvider implements IProxyListProvider {
+public abstract class AbstractProxyListProvider implements IProxyListProvider {
 
-    private static Logger logger = Logger.getLogger("ProxyPistProvider");
+    private static Logger logger = logger = Logger.getLogger(ExecutionContext.output, "ProxyPistProvider");
 
     private static IProxyListProvider INSTANCE;
 

@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by km on 23.11.2015.
  */
-public class WebProxyListProvider extends AbstractProxyPistProvider {
+public class WebProxyListProvider extends AbstractProxyListProvider {
 
 
     private static final String PROXY_LIST_URL = "http://webanetlabs.net/freeproxy/proxylist_at_24.11.2015.txt";

@@ -6,21 +6,19 @@ import org.apache.http.client.methods.HttpGet;
 import ru.simpleGBD.App.Config.GBDOptions;
 import ru.simpleGBD.App.Logic.DataModel.PageInfo;
 import ru.simpleGBD.App.Logic.ExecutionContext;
-import ru.simpleGBD.App.Logic.Proxy.AbstractProxyPistProvider;
+import ru.simpleGBD.App.Logic.Proxy.AbstractProxyListProvider;
 import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
 import ru.simpleGBD.App.Utils.HttpConnections;
 
 import java.io.*;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
-import java.util.logging.Logger;
 
 /**
  * Created by km on 21.11.2015.
  */
 public class PageImgProcessor extends AbstractHttpProcessor implements Runnable {
 
-    private static Logger logger = Logger.getLogger(PageImgProcessor.class.getName());
     private static byte[] pngFormat = {(byte) 0x89, 0x50, 0x4e, 0x47};
     private static int dataChunk = 4096;
 
@@ -135,7 +133,7 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
 
         if (!processImageWithProxy(usedProxy))
             // Пробуем скачать страницу с другими прокси, если не получилось с той, с помощью которой узнали sig
-            for (HttpHostExt proxy : AbstractProxyPistProvider.getInstance().getProxyList())
+            for (HttpHostExt proxy : AbstractProxyListProvider.getInstance().getProxyList())
                 if (processImageWithProxy(proxy))
                     return;
     }

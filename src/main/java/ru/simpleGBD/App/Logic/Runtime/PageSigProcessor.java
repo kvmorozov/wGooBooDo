@@ -14,6 +14,7 @@ import ru.simpleGBD.App.Logic.DataModel.PagesInfo;
 import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
 import ru.simpleGBD.App.Utils.HttpConnections;
+import ru.simpleGBD.App.Utils.Logger;
 import ru.simpleGBD.App.Utils.Mapper;
 import ru.simpleGBD.App.Utils.Pools;
 
@@ -22,14 +23,13 @@ import java.io.IOException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.ListIterator;
-import java.util.logging.Logger;
 
 /**
  * Created by km on 21.11.2015.
  */
 public class PageSigProcessor extends AbstractHttpProcessor implements Runnable {
 
-    private static Logger logger = Logger.getLogger(PageSigProcessor.class.getName());
+    private static Logger logger = Logger.getLogger(ExecutionContext.output, PageSigProcessor.class.getName());
 
     private HttpHostExt proxy;
     private BookInfo bookInfo;

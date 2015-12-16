@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by sbt-morozov-kv on 02.12.2015.
  */
-public class FileProxyListProvider extends AbstractProxyPistProvider {
+public class FileProxyListProvider extends AbstractProxyListProvider {
 
     FileProxyListProvider() {
         buildList();

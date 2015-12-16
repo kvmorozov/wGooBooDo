@@ -1,4 +1,4 @@
-package ru.simpleGBD.App.Logic.Output;
+package ru.simpleGBD.App.Logic.Output.consumers;
 
 import ru.simpleGBD.App.Logic.DataModel.BookInfo;
 

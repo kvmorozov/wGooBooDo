@@ -1,17 +1,18 @@
 package ru.simpleGBD.App.Logic.Proxy;
 
 import org.apache.http.HttpHost;
+import ru.simpleGBD.App.Logic.ExecutionContext;
+import ru.simpleGBD.App.Utils.Logger;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Logger;
 
 /**
  * Created by km on 29.11.2015.
  */
 public class HttpHostExt {
 
-    private static Logger logger = Logger.getLogger(HttpHostExt.class.getName());
+    private static Logger logger = Logger.getLogger(ExecutionContext.output, HttpHostExt.class.getName());
 
     public static final int FAILURES_THRESHOLD = 5;
 
