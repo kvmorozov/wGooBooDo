@@ -1,4 +1,4 @@
-package ru.simpleGBD.App.Logic.Runtime;
+package ru.simpleGBD.App.Logic.extractors;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;

@@ -1,4 +1,4 @@
-package ru.simpleGBD.App.Logic.Runtime;
+package ru.simpleGBD.App.Logic.extractors;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;

@@ -3,11 +3,10 @@ package ru.simpleGBD.App;
 import ru.simpleGBD.App.Config.CommandLineOptions;
 import ru.simpleGBD.App.Config.GBDOptions;
 import ru.simpleGBD.App.Config.LocalSystemOptions;
-import ru.simpleGBD.App.GUI.MainBookForm;
 import ru.simpleGBD.App.GUI.MainFrame;
 import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Logic.Output.consumers.DummyBookInfoOutput;
-import ru.simpleGBD.App.Logic.Runtime.ImageExtractor;
+import ru.simpleGBD.App.Logic.extractors.ImageExtractor;
 
 public class Main {
 

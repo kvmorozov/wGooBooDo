@@ -4,7 +4,8 @@ import ru.simpleGBD.App.Config.SystemConfigs;
 import ru.simpleGBD.App.Logic.DataModel.Resolutions;
 import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Logic.Output.consumers.SwingBookInfoOutput;
-import ru.simpleGBD.App.Logic.Runtime.ImageExtractor;
+import ru.simpleGBD.App.Logic.extractors.ImageExtractor;
+import ru.simpleGBD.App.pdf.PdfMaker;
 
 import javax.swing.*;
 
@@ -15,14 +16,13 @@ public class MainBookForm {
     private JTabbedPane tabbedPane1;
     private JPanel mainPanel;
     private JTextField tfBookId;
-    private JButton bLoad;
     private JTextField tfRootOutDir, tfProxyListFile;
-    private JButton bRootOutDir, bProxyList;
+    private JButton bRootOutDir, bProxyList, bLoad, bMakeBook;
     private JComboBox cbResolution;
     private JCheckBox cbReload;
     private JTabbedPane tpBookInfo;
     private JTextField tfBookTitle;
-    private SwingWorker worker;
+    private SwingWorker workerExtractor, workerPdfmaker;
 
     public MainBookForm() {
         ExecutionContext.output = new SwingBookInfoOutput(this);
@@ -59,8 +59,9 @@ public class MainBookForm {
         bLoad.addActionListener(e -> {
             SystemConfigs.setLastBookId(tfBookId.getText());
             bLoad.setEnabled(false);
+            bMakeBook.setEnabled(false);
 
-            worker = new SwingWorker<Void, Void>() {
+            workerExtractor = new SwingWorker<Void, Void>() {
 
                 @Override
                 protected Void doInBackground() throws Exception {
@@ -72,19 +73,43 @@ public class MainBookForm {
                 @Override
                 public void done() {
                     bLoad.setEnabled(true);
+                    bMakeBook.setEnabled(true);
                 }
             };
 
-            worker.execute();
+            workerExtractor.execute();
         });
 
         cbResolution.addItemListener(event -> SystemConfigs.setResolution(((Resolutions) event.getItem()).getResolution()));
         cbReload.addChangeListener(event -> SystemConfigs.setReload(((AbstractButton) event.getSource()).getModel().isSelected()));
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            if (worker != null && worker.getState() == SwingWorker.StateValue.STARTED)
-                worker.cancel(true);
+            if (workerExtractor != null && workerExtractor.getState() == SwingWorker.StateValue.STARTED)
+                workerExtractor.cancel(true);
         }));
+
+        bMakeBook.addActionListener(e -> {
+            bLoad.setEnabled(false);
+            bMakeBook.setEnabled(false);
+
+            workerPdfmaker = new SwingWorker<Void, Void>() {
+
+                @Override
+                protected Void doInBackground() throws Exception {
+                    (new PdfMaker()).make();
+
+                    return null;
+                }
+
+                @Override
+                public void done() {
+                    bLoad.setEnabled(true);
+                    bMakeBook.setEnabled(true);
+                }
+            };
+
+            workerPdfmaker.execute();
+        });
     }
 
     public JPanel getMainPanel() {

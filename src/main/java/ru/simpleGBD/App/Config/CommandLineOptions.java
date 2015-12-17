@@ -1,7 +1,7 @@
 package ru.simpleGBD.App.Config;
 
 import org.apache.commons.cli.*;
-import ru.simpleGBD.App.Logic.Runtime.ImageExtractor;
+import ru.simpleGBD.App.Logic.extractors.ImageExtractor;
 
 /**
  * Created by km on 06.12.2015.

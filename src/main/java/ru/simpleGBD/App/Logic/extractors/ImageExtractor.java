@@ -1,4 +1,4 @@
-package ru.simpleGBD.App.Logic.Runtime;
+package ru.simpleGBD.App.Logic.extractors;
 
 import org.apache.commons.io.FilenameUtils;
 import org.jsoup.Connection;

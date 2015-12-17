@@ -1,13 +1,10 @@
 package ru.simpleGBD.App.Logic.DataModel;
 
 import ru.simpleGBD.App.Logic.ExecutionContext;
-import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
-import ru.simpleGBD.App.Logic.Runtime.ImageExtractor;
+import ru.simpleGBD.App.Logic.extractors.ImageExtractor;
 
 import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by km on 21.11.2015.
