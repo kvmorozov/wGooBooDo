@@ -10,7 +10,7 @@ import java.util.logging.Logger;
  */
 public class DummyLogEventListener extends AbstractLogEventListener {
 
-    private static Logger logger = Logger.getLogger("");
+    private static Logger logger = Logger.getLogger("log");
 
     @Override
     public void receiveEvent(BaseEvent event) {
