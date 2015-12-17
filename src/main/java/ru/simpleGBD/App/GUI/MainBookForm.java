@@ -1,10 +1,11 @@
 package ru.simpleGBD.App.GUI;
 
 import ru.simpleGBD.App.Config.SystemConfigs;
-import ru.simpleGBD.App.Logic.DataModel.Resolutions;
+import ru.simpleGBD.App.Logic.model.book.Resolutions;
 import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Logic.Output.consumers.SwingBookInfoOutput;
 import ru.simpleGBD.App.Logic.extractors.ImageExtractor;
+import ru.simpleGBD.App.Logic.model.log.LogTableModel;
 import ru.simpleGBD.App.pdf.PdfMaker;
 
 import javax.swing.*;
@@ -22,9 +23,14 @@ public class MainBookForm {
     private JCheckBox cbReload;
     private JTabbedPane tpBookInfo;
     private JTextField tfBookTitle;
+    private JTable tLog;
     private SwingWorker workerExtractor, workerPdfmaker;
 
+    private static MainBookForm INSTANCE;
+
     public MainBookForm() {
+        INSTANCE = this;
+
         ExecutionContext.output = new SwingBookInfoOutput(this);
 
         tfRootOutDir.setText(SystemConfigs.getRootDir());
@@ -110,6 +116,8 @@ public class MainBookForm {
 
             workerPdfmaker.execute();
         });
+
+        tLog.setModel(LogTableModel.INSTANCE);
     }
 
     public JPanel getMainPanel() {
@@ -118,5 +126,9 @@ public class MainBookForm {
 
     public JTextField getTfBookTitle() {
         return tfBookTitle;
+    }
+
+    public static MainBookForm getINSTANCE() {
+        return INSTANCE;
     }
 }

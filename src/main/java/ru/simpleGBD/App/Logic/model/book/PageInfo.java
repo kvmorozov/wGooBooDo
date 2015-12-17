@@ -1,4 +1,4 @@
-package ru.simpleGBD.App.Logic.DataModel;
+package ru.simpleGBD.App.Logic.model.book;
 
 import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Logic.extractors.ImageExtractor;

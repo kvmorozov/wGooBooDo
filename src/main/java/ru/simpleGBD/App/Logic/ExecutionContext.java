@@ -1,6 +1,6 @@
 package ru.simpleGBD.App.Logic;
 
-import ru.simpleGBD.App.Logic.DataModel.BookInfo;
+import ru.simpleGBD.App.Logic.model.book.BookInfo;
 import ru.simpleGBD.App.Logic.Output.consumers.AbstractOutput;
 
 import java.io.File;
