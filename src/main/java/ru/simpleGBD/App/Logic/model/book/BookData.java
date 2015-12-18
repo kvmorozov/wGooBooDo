@@ -40,7 +40,7 @@ public class BookData implements Serializable {
     @JsonProperty("my_library_url") private String myLibraryUrl;
     @JsonProperty("is_magazine") private boolean magazine;
     @JsonProperty("is_public_domain") private boolean publicDomain;
-    @JsonProperty("last_page") private boolean lastPage;
+    @JsonProperty("last_page") private PageInfo lastPage;
 
     public String getTitle() {
         return title;
