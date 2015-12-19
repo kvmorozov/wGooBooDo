@@ -5,6 +5,7 @@ import ru.simpleGBD.App.Logic.model.book.Resolutions;
 import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Logic.Output.consumers.SwingBookInfoOutput;
 import ru.simpleGBD.App.Logic.extractors.ImageExtractor;
+import ru.simpleGBD.App.Logic.model.log.LogIconColumnRenderer;
 import ru.simpleGBD.App.Logic.model.log.LogTableModel;
 import ru.simpleGBD.App.pdf.PdfMaker;
 
@@ -118,6 +119,8 @@ public class MainBookForm {
         });
 
         tLog.setModel(LogTableModel.INSTANCE);
+        tLog.getColumnModel().getColumn(0).setCellRenderer(new LogIconColumnRenderer());
+        tLog.getColumnModel().getColumn(0).setMaxWidth(20);
     }
 
     public JPanel getMainPanel() {

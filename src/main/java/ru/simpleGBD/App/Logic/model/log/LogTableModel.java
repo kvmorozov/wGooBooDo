@@ -16,10 +16,8 @@ public class LogTableModel extends AbstractTableModel {
     public static final LogTableModel INSTANCE = new LogTableModel();
 
     private List<LogEvent> logEvents = Collections.synchronizedList(new ArrayList<>());
-    ;
 
-    private LogTableModel() {
-    }
+    private LogTableModel() {}
 
     @Override
     public int getRowCount() {
@@ -37,7 +35,7 @@ public class LogTableModel extends AbstractTableModel {
 
         switch (columnIndex) {
             case 0:
-                return 1;
+                return logEntry.getLevel();
             case 1:
                 return logEntry.getEventInfo();
             default:
@@ -58,10 +56,19 @@ public class LogTableModel extends AbstractTableModel {
     }
 
     public void addEvent(LogEvent event) {
-        if (!SwingUtilities.isEventDispatchThread()) {
-            SwingUtilities.invokeLater(() -> {
-                logEvents.add(event);
-            });
+        logEvents.add(event);
+        fireTableDataChanged();
+    }
+
+    @Override
+    public Class<?> getColumnClass(int columnIndex) {
+        switch (columnIndex) {
+            case 0:
+                return JLabel.class;
+            case 1:
+                return String.class;
+            default:
+                return super.getColumnClass(columnIndex);
         }
     }
 }
