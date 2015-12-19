@@ -182,7 +182,7 @@ public class ImageExtractor {
             scanDir();
 
             getPagesInfo();
-            System.out.println(ExecutionContext.bookInfo.getPagesInfo().getMissingPagesList());
+            logger.info(ExecutionContext.bookInfo.getPagesInfo().getMissingPagesList());
         } catch (HttpStatusException hse) {
             logger.severe(String.format("Cannot process images: %s (%d)", hse.getMessage(), hse.getStatusCode()));
         } catch (IOException e) {

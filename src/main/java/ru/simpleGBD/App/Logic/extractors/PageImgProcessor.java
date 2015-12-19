@@ -4,11 +4,12 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import ru.simpleGBD.App.Config.GBDOptions;
-import ru.simpleGBD.App.Logic.model.book.PageInfo;
 import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Logic.Proxy.AbstractProxyListProvider;
 import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
+import ru.simpleGBD.App.Logic.model.book.PageInfo;
 import ru.simpleGBD.App.Utils.HttpConnections;
+import ru.simpleGBD.App.Utils.Logger;
 
 import java.io.*;
 import java.net.ConnectException;
@@ -18,6 +19,8 @@ import java.net.SocketTimeoutException;
  * Created by km on 21.11.2015.
  */
 public class PageImgProcessor extends AbstractHttpProcessor implements Runnable {
+
+    private static Logger logger = Logger.getLogger(ExecutionContext.output, PageImgProcessor.class.getName());
 
     private static byte[] pngFormat = {(byte) 0x89, 0x50, 0x4e, 0x47};
     private static int dataChunk = 4096;
@@ -63,10 +66,10 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
                         page.dataProcessed.set(isPng);
 
                     if (proxy != null)
-                        System.out.println(String.format("Started img %s for %s with %s Proxy",
+                        logger.info(String.format("Started img %s for %s with %s Proxy",
                                 reloadFlag ? "RELOADING" : "processing", page.getPid(), proxy.toString()));
                     else
-                        System.out.println(String.format("Started img %s for %s without Proxy",
+                        logger.info(String.format("Started img %s for %s without Proxy",
                                 reloadFlag ? "RELOADING" : "processing", page.getPid()));
 
                     outputStream = new FileOutputStream(outputFile);
@@ -78,7 +81,7 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
             }
 
             if (page.dataProcessed.get()) {
-                System.out.println(String.format("Finished img processing for %s", page.getPid()));
+                logger.info(String.format("Finished img processing for %s", page.getPid()));
                 PageInfo _page = ExecutionContext.bookInfo.getPagesInfo().getPageByPid(page.getPid());
                 _page.dataProcessed.set(true);
                 _page.fileExists.set(true);
