@@ -48,7 +48,7 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
 
             int read = 0;
             byte[] bytes = new byte[dataChunk];
-            boolean firstChunk = true, isPng = false, reloadFlag = false;
+            boolean firstChunk = true, isPng = false, reloadFlag;
 
             while ((read = inputStream.read(bytes)) != -1) {
                 if (firstChunk) {
@@ -115,6 +115,9 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+
+            if (!page.dataProcessed.get() && outputFile != null)
+                outputFile.delete();
         }
 
         return false;
