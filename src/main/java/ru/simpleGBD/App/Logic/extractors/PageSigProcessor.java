@@ -45,7 +45,7 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
         HttpClient instance = HttpConnections.INSTANCE.getClient(proxy, true);
 
         try {
-            logger.finest(String.format("Started sig processing for %s with proxy %s", page.getPid(), proxy == null ? "NO_PROXY" : proxy.toString()));
+//            logger.finest(String.format("Started sig processing for %s with proxy %s", page.getPid(), proxy == null ? "NO_PROXY" : proxy.toString()));
 
             response = getResponse(instance, new HttpGet(rqUrl));
 
@@ -89,7 +89,7 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
                     e.printStackTrace();
                 }
 
-            logger.finest(String.format("Finished sig processing for %s; sig %s found.", page.getPid(), sigFound ? "" : " not "));
+//            logger.finest(String.format("Finished sig processing for %s; sig %s found.", page.getPid(), sigFound ? "" : " not "));
         }
 
         return sigFound;

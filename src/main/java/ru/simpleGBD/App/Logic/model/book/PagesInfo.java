@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import ru.simpleGBD.App.Config.GBDOptions;
+import ru.simpleGBD.App.Logic.ExecutionContext;
+import ru.simpleGBD.App.Utils.Logger;
 
 import java.io.Serializable;
 import java.util.*;
@@ -14,6 +16,8 @@ import java.util.function.Predicate;
  * Created by km on 21.11.2015.
  */
 public class PagesInfo implements Serializable {
+
+    private static Logger logger = Logger.getLogger(ExecutionContext.output, PagesInfo.class.getName());
 
     @JsonProperty("page") private PageInfo[] pages;
     @JsonProperty("prefix") private String prefix;
@@ -45,7 +49,16 @@ public class PagesInfo implements Serializable {
     private void fillGap(PageInfo beginGap, PageInfo endGap) {
         String beginPagePrefix = beginGap.getPid().substring(0, 2);
         String endPagePrefix   = endGap.getPid().substring(0, 2);
-        int beginPageNum = Integer.parseInt(beginGap.getPid().substring(2));
+
+        int beginPageNum = -1;
+
+        try {
+            beginPageNum = Integer.parseInt(beginGap.getPid().substring(2));
+        }
+        catch(NumberFormatException nfe) {
+            logger.severe(String.format("Wrong page pid = %s", beginGap.getPid()));
+            return;
+        }
 
         if (beginPagePrefix.equals(endPagePrefix)) {
             for(int index = beginGap.getOrder() + 1; index < endGap.getOrder(); index++) {
