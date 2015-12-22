@@ -1,7 +1,5 @@
 package ru.simpleGBD.App.Config;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.prefs.Preferences;
 
 /**
@@ -15,6 +13,7 @@ public class SystemConfigs {
     private static final String KEY_LAST_BOOK_ID = "last.book.id";
     private static final String KEY_RESOLUTION = "resolution";
     private static final String KEY_RELOAD = "reload";
+    private static final String KEY_FILL_GAPS = "fill.gaps";
 
     private static Preferences preferences = Preferences.userRoot().node(PREFERENCES_NODE);
 
@@ -41,4 +40,7 @@ public class SystemConfigs {
 
     public static boolean getReload() {return getBoolProperty(KEY_RELOAD);}
     public static void setReload(boolean value) {setBoolProperty(KEY_RELOAD, value);}
+
+    public static boolean getFillGaps() {return getBoolProperty(KEY_FILL_GAPS);}
+    public static void setFillGaps(boolean value) {setBoolProperty(KEY_FILL_GAPS, value);}
 }

@@ -29,4 +29,9 @@ public class LocalSystemOptions implements IGBDOptions {
     public boolean reloadImages() {
         return SystemConfigs.getReload();
     }
+
+    @Override
+    public boolean fillGaps() {
+        return false;
+    }
 }

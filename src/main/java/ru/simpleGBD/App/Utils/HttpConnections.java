@@ -59,6 +59,7 @@ public class HttpConnections {
                 }
             }).build();
             builder.setSSLContext(sslContext);
+            builderWithTimeout.setSSLContext(sslContext);
 
         } catch (Exception ex) {
             ex.printStackTrace();

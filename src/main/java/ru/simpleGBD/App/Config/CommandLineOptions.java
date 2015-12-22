@@ -18,6 +18,8 @@ public class CommandLineOptions implements IGBDOptions {
     private static final String OPTION_WIDTH_LONG = "width";
     private static final String OPTION_IMG_RELOAD_SHORT = "r";
     private static final String OPTION_IMG_RELOAD_LONG = "reload";
+    private static final String OPTION_FILL_GAPS_SHORT = "g";
+    private static final String OPTION_FILL_GAPS_LONG = "gaps";
 
     private CommandLine commandLine;
 
@@ -53,6 +55,12 @@ public class CommandLineOptions implements IGBDOptions {
         option.setArgs(0);
         option.setOptionalArg(true);
         option.setArgName("Reload images ");
+        options.addOption(option);
+
+        option = new Option(OPTION_FILL_GAPS_SHORT, OPTION_FILL_GAPS_LONG, true, "Fill gaps");
+        option.setArgs(0);
+        option.setOptionalArg(true);
+        option.setArgName("Fill gaps ");
         options.addOption(option);
 
         try {
@@ -101,5 +109,10 @@ public class CommandLineOptions implements IGBDOptions {
     @Override
     public boolean reloadImages() {
         return getBoolOptionValue(OPTION_IMG_RELOAD_SHORT);
+    }
+
+    @Override
+    public boolean fillGaps() {
+        return getBoolOptionValue(OPTION_FILL_GAPS_SHORT);
     }
 }

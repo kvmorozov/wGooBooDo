@@ -3,6 +3,7 @@ package ru.simpleGBD.App.Logic.model.book;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import ru.simpleGBD.App.Config.GBDOptions;
 
 import java.io.Serializable;
 import java.util.*;
@@ -28,9 +29,30 @@ public class PagesInfo implements Serializable {
         List<PageInfo> _pages = Arrays.asList(pages);
         pagesMap = new ConcurrentHashMap<>(_pages.size());
         pagesList = new LinkedList<>();
+
+        PageInfo prevPage = null;
         for (PageInfo page : _pages) {
             pagesMap.put(page.getPid(), page);
             pagesList.add(page);
+
+            if (prevPage != null && page.getOrder() - prevPage.getOrder() > 1 && GBDOptions.fillGaps())
+                fillGap(prevPage, page);
+
+            prevPage = page;
+        }
+    }
+
+    private void fillGap(PageInfo beginGap, PageInfo endGap) {
+        String beginPagePrefix = beginGap.getPid().substring(0, 2);
+        String endPagePrefix   = endGap.getPid().substring(0, 2);
+        int beginPageNum = Integer.parseInt(beginGap.getPid().substring(2));
+
+        if (beginPagePrefix.equals(endPagePrefix)) {
+            for(int index = beginGap.getOrder() + 1; index < endGap.getOrder(); index++) {
+                PageInfo gapPage = new PageInfo(beginPagePrefix + (beginPageNum + index - beginGap.getOrder()), index);
+                pagesMap.put(gapPage.getPid(), gapPage);
+                pagesList.add(gapPage);
+            }
         }
     }
 

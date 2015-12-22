@@ -70,9 +70,21 @@ public class ImageExtractor {
     }
 
     private BookInfo getBookInfo() throws IOException {
-        Connection.Response res = Jsoup
-                .connect(ExecutionContext.baseUrl + OPEN_PAGE_ADD_URL)
-                .userAgent(HttpConnections.USER_AGENT).method(Connection.Method.GET).execute();
+        Connection.Response res = null;
+
+        try {
+            res = Jsoup
+                    .connect(HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, ExecutionContext.bookId) + OPEN_PAGE_ADD_URL)
+                    .userAgent(HttpConnections.USER_AGENT).method(Connection.Method.GET).execute();
+        } catch (Exception ex) {
+            try {
+                res = Jsoup
+                        .connect(HTTP_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, ExecutionContext.bookId) + OPEN_PAGE_ADD_URL)
+                        .userAgent(HttpConnections.USER_AGENT).method(Connection.Method.GET).execute();
+            } catch (Exception ex1) {
+                throw new RuntimeException(ex1);
+            }
+        }
 
         Document doc = res.parse();
         HttpConnections.INSTANCE.setDefaultCookies(res.cookies());

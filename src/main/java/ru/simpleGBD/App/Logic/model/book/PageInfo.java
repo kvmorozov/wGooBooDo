@@ -23,8 +23,17 @@ public class PageInfo implements Serializable {
     @JsonProperty("order") private int order;
     @JsonProperty("h") private int h;
     private int width;
+    @JsonProperty("links") private Object links;
 
-    private Object links;
+    private boolean isGapPage = false;
+
+    // Создание страниц для заполнения разрыва
+    public PageInfo(String pid, int order) {
+        this.pid = pid;
+        this.order = order;
+
+        isGapPage = true;
+    }
 
     public AtomicBoolean sigChecked    = new AtomicBoolean(false);
     public AtomicBoolean dataProcessed = new AtomicBoolean(false);
@@ -52,6 +61,10 @@ public class PageInfo implements Serializable {
 
     public String getSig() {
         return src == null ? null : sig == null ? sig = src.substring(src.indexOf("sig=") + 4) : sig;
+    }
+
+    public boolean isGapPage() {
+        return isGapPage;
     }
 
     public String getPageUrl() {
