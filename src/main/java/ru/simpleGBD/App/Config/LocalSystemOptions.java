@@ -32,6 +32,6 @@ public class LocalSystemOptions implements IGBDOptions {
 
     @Override
     public boolean fillGaps() {
-        return false;
+        return SystemConfigs.getFillGaps();
     }
 }

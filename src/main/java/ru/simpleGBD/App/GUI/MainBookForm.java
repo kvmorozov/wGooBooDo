@@ -21,7 +21,7 @@ public class MainBookForm {
     private JTextField tfRootOutDir, tfProxyListFile;
     private JButton bRootOutDir, bProxyList, bLoad, bMakeBook;
     private JComboBox cbResolution;
-    private JCheckBox cbReload;
+    private JCheckBox cbReload, cbFillGaps;
     private JTabbedPane tpBookInfo;
     private JTextField tfBookTitle;
     private JTable tLog;
@@ -39,6 +39,7 @@ public class MainBookForm {
         tfBookId.setText(SystemConfigs.getLastBookId());
         cbResolution.setModel(new DefaultComboBoxModel<>(Resolutions.values()));
         cbReload.setSelected(SystemConfigs.getReload());
+        cbFillGaps.setSelected(SystemConfigs.getFillGaps());
 
         if (SystemConfigs.getResolution() > 0)
             cbResolution.setSelectedItem(Resolutions.getEnum(SystemConfigs.getResolution()));
@@ -89,6 +90,7 @@ public class MainBookForm {
 
         cbResolution.addItemListener(event -> SystemConfigs.setResolution(((Resolutions) event.getItem()).getResolution()));
         cbReload.addChangeListener(event -> SystemConfigs.setReload(((AbstractButton) event.getSource()).getModel().isSelected()));
+        cbFillGaps.addChangeListener(event -> SystemConfigs.setFillGaps(((AbstractButton) event.getSource()).getModel().isSelected()));
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             if (workerExtractor != null && workerExtractor.getState() == SwingWorker.StateValue.STARTED)
