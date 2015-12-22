@@ -81,7 +81,7 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
             }
 
             if (page.dataProcessed.get()) {
-                logger.info(String.format("Finished img processing for %s", page.getPid()));
+                logger.info(String.format("Finished img processing for %s%s", page.getPid(), page.isGapPage() ? " with gap" : ""));
                 PageInfo _page = ExecutionContext.bookInfo.getPagesInfo().getPageByPid(page.getPid());
                 _page.dataProcessed.set(true);
                 _page.fileExists.set(true);

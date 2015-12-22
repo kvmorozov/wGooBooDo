@@ -27,6 +27,8 @@ public class PageInfo implements Serializable {
 
     private boolean isGapPage = false;
 
+    public PageInfo() {}
+
     // Создание страниц для заполнения разрыва
     public PageInfo(String pid, int order) {
         this.pid = pid;
