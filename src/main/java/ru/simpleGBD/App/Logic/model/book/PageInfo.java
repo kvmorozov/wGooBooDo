@@ -45,7 +45,7 @@ public class PageInfo implements Serializable {
         return pid;
     }
 
-    public int getOrder() {
+    public Integer getOrder() {
         return order;
     }
 

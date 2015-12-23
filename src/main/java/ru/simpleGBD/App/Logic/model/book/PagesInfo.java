@@ -67,6 +67,8 @@ public class PagesInfo implements Serializable {
                 pagesList.add(gapPage);
             }
         }
+
+        pagesList.sort((o1, o2) -> o1.getOrder().compareTo(o2.getOrder()));
     }
 
     public PageInfo getPageByPid(String pid) {

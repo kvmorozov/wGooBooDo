@@ -153,12 +153,20 @@ public class ImageExtractor {
                                 BufferedImage bimg = ImageIO.read(new File(filePath.toString()));
                                 _page.setWidth(bimg.getWidth());
                                 _page.dataProcessed.set(bimg.getWidth() >= GBDOptions.getImageWidth());
+
+                                // 1.4 - эмпирически, высота переменная
+                                if (bimg.getWidth() * 1.4 > bimg.getHeight()) {
+                                    (new File(filePath.toString())).delete();
+                                    _page.dataProcessed.set(false);
+                                    logger.severe(String.format("Page %s deleted!", _page.getPid()));
+                                }
                             } else
                                 _page.dataProcessed.set(true);
                         } catch (IOException e) {
                             // Значит файл с ошибкой
                             (new File(filePath.toString())).delete();
                             _page.dataProcessed.set(false);
+                            logger.severe(String.format("Page %s deleted!", _page.getPid()));
                         }
 
                         _page.fileExists.set(true);
