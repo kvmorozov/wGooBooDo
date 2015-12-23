@@ -8,11 +8,11 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NoHttpResponseException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import ru.simpleGBD.App.Logic.ExecutionContext;
+import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
 import ru.simpleGBD.App.Logic.model.book.BookInfo;
 import ru.simpleGBD.App.Logic.model.book.PageInfo;
 import ru.simpleGBD.App.Logic.model.book.PagesInfo;
-import ru.simpleGBD.App.Logic.ExecutionContext;
-import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
 import ru.simpleGBD.App.Utils.HttpConnections;
 import ru.simpleGBD.App.Utils.Logger;
 import ru.simpleGBD.App.Utils.Mapper;
@@ -22,7 +22,6 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
-import java.util.ListIterator;
 
 /**
  * Created by km on 21.11.2015.
@@ -39,6 +38,9 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
     }
 
     private boolean getSig(PageInfo page) {
+        if (page.dataProcessed.get() || page.getSig() != null || page.sigChecked.get())
+            return false;
+
         boolean sigFound = false;
         HttpResponse response;
         String rqUrl = ExecutionContext.baseUrl + ImageExtractor.PAGES_REQUEST_TEMPLATE.replace(ImageExtractor.RQ_PG_PLACEHOLDER, page.getPid());
@@ -57,7 +59,7 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
 
             PageInfo[] pages = framePages.getPagesArray();
             for (PageInfo framePage : pages)
-                if (framePage.getSrc() != null) {
+                if (framePage.getOrder() >= page.getOrder() && framePage.getSrc() != null) {
                     PageInfo _page = bookInfo.getPagesInfo().getPageByPid(framePage.getPid());
 
                     if (_page.dataProcessed.get() || _page.getSig() != null || _page.sigChecked.get())
@@ -89,7 +91,7 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
                     e.printStackTrace();
                 }
 
-//            logger.finest(String.format("Finished sig processing for %s; sig %s found.", page.getPid(), sigFound ? "" : " not "));
+            logger.finest(String.format("Finished sig processing for %s; sig %s found.", page.getPid(), sigFound ? "" : " not "));
         }
 
         return sigFound;
@@ -102,13 +104,6 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
 
         bookInfo = SerializationUtils.clone(ExecutionContext.bookInfo);
 
-        ListIterator<PageInfo> itr = ExecutionContext.bookInfo.getPagesInfo().getPages().listIterator();
-
-        while (itr.hasNext()) {
-            PageInfo page = itr.next();
-            if (!page.dataProcessed.get() && page.getSig() == null && !page.sigChecked.get()) {
-                getSig(page);
-            }
-        }
+        ExecutionContext.bookInfo.getPagesInfo().getPages().parallelStream().forEach(page -> getSig(page));
     }
 }
