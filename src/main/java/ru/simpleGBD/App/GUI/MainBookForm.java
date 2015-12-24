@@ -16,20 +16,21 @@ import javax.swing.*;
  */
 public class MainBookForm {
     private JTabbedPane tabbedPane1;
-    private JPanel mainPanel;
-    private JTextField tfBookId;
-    private JTextField tfRootOutDir, tfProxyListFile;
+    private JPanel mainPanel, pProgress;
+    private JTextField tfBookId, tfRootOutDir, tfProxyListFile, tfBookTitle;
     private JButton bRootOutDir, bProxyList, bLoad, bMakeBook;
     private JComboBox cbResolution;
     private JCheckBox cbReload, cbFillGaps;
     private JTabbedPane tpBookInfo;
-    private JTextField tfBookTitle;
     private JTable tLog;
     private SwingWorker workerExtractor, workerPdfmaker;
 
     private static MainBookForm INSTANCE;
 
     public MainBookForm() {
+        if (INSTANCE != null)
+            return;
+
         INSTANCE = this;
 
         ExecutionContext.output = new SwingBookInfoOutput(this);
@@ -131,6 +132,10 @@ public class MainBookForm {
 
     public JTextField getTfBookTitle() {
         return tfBookTitle;
+    }
+
+    public JPanel getProgressPanel() {
+        return pProgress;
     }
 
     public static MainBookForm getINSTANCE() {

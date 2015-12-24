@@ -9,23 +9,27 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 import ru.simpleGBD.App.Config.GBDOptions;
+import ru.simpleGBD.App.GUI.MainFrame;
+import ru.simpleGBD.App.Logic.ExecutionContext;
+import ru.simpleGBD.App.Logic.Output.consumers.AbstractOutput;
+import ru.simpleGBD.App.Logic.Output.progress.ProcessStatus;
+import ru.simpleGBD.App.Logic.Proxy.AbstractProxyListProvider;
+import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
 import ru.simpleGBD.App.Logic.model.book.BookData;
 import ru.simpleGBD.App.Logic.model.book.BookInfo;
 import ru.simpleGBD.App.Logic.model.book.PageInfo;
 import ru.simpleGBD.App.Logic.model.book.PagesInfo;
-import ru.simpleGBD.App.Logic.ExecutionContext;
-import ru.simpleGBD.App.Logic.Output.consumers.AbstractOutput;
-import ru.simpleGBD.App.Logic.Proxy.AbstractProxyListProvider;
-import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
 import ru.simpleGBD.App.Utils.HttpConnections;
 import ru.simpleGBD.App.Utils.Logger;
 import ru.simpleGBD.App.Utils.Mapper;
 import ru.simpleGBD.App.Utils.Pools;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -76,6 +80,8 @@ public class ImageExtractor {
             res = Jsoup
                     .connect(HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, ExecutionContext.bookId) + OPEN_PAGE_ADD_URL)
                     .userAgent(HttpConnections.USER_AGENT).method(Connection.Method.GET).execute();
+        } catch (UnknownHostException uhe) {
+            JOptionPane.showMessageDialog(MainFrame.getINSTANCE(), "Not connected to Internet!", "wGooBooDo error", JOptionPane.ERROR_MESSAGE);
         } catch (Exception ex) {
             try {
                 res = Jsoup
@@ -141,8 +147,12 @@ public class ImageExtractor {
     }
 
     private void scanDir() {
+        final ProcessStatus psScan = new ProcessStatus(ExecutionContext.outputDir.listFiles().length);
+
         try {
             Files.walk(Paths.get(ExecutionContext.outputDir.toURI())).forEach(filePath -> {
+                psScan.inc();
+
                 if (Files.isRegularFile(filePath) && FilenameUtils.getExtension(filePath.toString()).equals("png")) {
                     String fileName = FilenameUtils.getBaseName(filePath.toString());
                     String[] nameParts = fileName.split("_");
@@ -173,8 +183,11 @@ public class ImageExtractor {
                     }
                 }
             });
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (psScan != null)
+                psScan.finish();
         }
     }
 

@@ -9,6 +9,7 @@ import org.apache.http.NoHttpResponseException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import ru.simpleGBD.App.Logic.ExecutionContext;
+import ru.simpleGBD.App.Logic.Output.progress.ProcessStatus;
 import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
 import ru.simpleGBD.App.Logic.model.book.BookInfo;
 import ru.simpleGBD.App.Logic.model.book.PageInfo;
@@ -91,7 +92,7 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
                     e.printStackTrace();
                 }
 
-            logger.finest(String.format("Finished sig processing for %s; sig %s found.", page.getPid(), sigFound ? "" : " not "));
+//            logger.finest(String.format("Finished sig processing for %s; sig %s found.", page.getPid(), sigFound ? "" : " not "));
         }
 
         return sigFound;
@@ -104,6 +105,14 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
 
         bookInfo = SerializationUtils.clone(ExecutionContext.bookInfo);
 
-        ExecutionContext.bookInfo.getPagesInfo().getPages().parallelStream().forEach(page -> getSig(page));
+        final ProcessStatus psSigs = new ProcessStatus(bookInfo.getPagesInfo().getPages().size());
+
+        ExecutionContext.bookInfo.getPagesInfo().getPages().parallelStream()
+                .forEach(page -> {
+                        psSigs.inc();
+                        getSig(page);
+                });
+
+        psSigs.finish();
     }
 }

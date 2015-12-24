@@ -8,8 +8,16 @@ import java.awt.*;
  */
 public class MainFrame extends JFrame {
 
+    private static MainFrame INSTANCE;
+
     public MainFrame() {
         super("wGooBooDo");
+
+        if (INSTANCE != null)
+            return;
+
+        INSTANCE = this;
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         setContentPane(new MainBookForm().getMainPanel());
@@ -23,5 +31,9 @@ public class MainFrame extends JFrame {
 
     public void setVisible() {
         setVisible(true);
+    }
+
+    public static MainFrame getINSTANCE() {
+        return INSTANCE;
     }
 }
