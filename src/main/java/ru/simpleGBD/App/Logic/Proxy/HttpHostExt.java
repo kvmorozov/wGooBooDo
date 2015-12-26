@@ -4,6 +4,7 @@ import org.apache.http.HttpHost;
 import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Utils.Logger;
 
+import java.net.Proxy;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -15,6 +16,7 @@ public class HttpHostExt {
     private static Logger logger = Logger.getLogger(ExecutionContext.output, HttpHostExt.class.getName());
 
     public static final int FAILURES_THRESHOLD = 5;
+    public static final String NO_PROXY = "NO_PROXY";
 
     private HttpHost host;
     private AtomicBoolean available = new AtomicBoolean(true);
@@ -44,7 +46,7 @@ public class HttpHostExt {
 
     @Override
     public String toString() {
-        return host == null ? "NO_PROXY" : host.toHostString();
+        return host == null ? NO_PROXY : host.toHostString();
     }
 
     public void registerFailure() {

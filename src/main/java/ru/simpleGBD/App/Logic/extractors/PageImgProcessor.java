@@ -1,14 +1,10 @@
 package ru.simpleGBD.App.Logic.extractors;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
 import ru.simpleGBD.App.Config.GBDOptions;
 import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Logic.Proxy.AbstractProxyListProvider;
 import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
 import ru.simpleGBD.App.Logic.model.book.PageInfo;
-import ru.simpleGBD.App.Utils.HttpConnections;
 import ru.simpleGBD.App.Utils.Logger;
 
 import java.io.*;
@@ -33,18 +29,13 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
         this.usedProxy = usedProxy;
     }
 
-    private boolean processImage(String imgUrl, HttpClient instance, HttpHostExt proxy) {
+    private boolean processImage(String imgUrl, HttpHostExt proxy) {
         File outputFile = null;
         InputStream inputStream = null;
         OutputStream outputStream = null;
 
         try {
-            HttpResponse response = getResponse(instance, new HttpGet(imgUrl));
-
-            if (response == null)
-                return false;
-
-            inputStream = response.getEntity().getContent();
+            inputStream = getContent(imgUrl, proxy, false);
 
             int read = 0;
             byte[] bytes = new byte[dataChunk];
@@ -111,13 +102,6 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
                 }
             }
 
-            if (instance instanceof Closeable)
-                try {
-                    ((Closeable) instance).close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
             if (!page.dataProcessed.get() && outputFile != null) {
                 logger.info(String.format("Loading page %s failed!", page.getPid()));
                 outputFile.delete();
@@ -132,8 +116,7 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
             return false;
 
         return processImage(page.getImqRqUrl(
-                ImageExtractor.HTTPS_TEMPLATE, GBDOptions.getImageWidth()),
-                HttpConnections.INSTANCE.getClient(proxy, false), proxy);
+                ImageExtractor.HTTPS_TEMPLATE, GBDOptions.getImageWidth()), proxy);
     }
 
     @Override

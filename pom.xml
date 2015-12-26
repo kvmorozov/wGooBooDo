@@ -144,7 +144,11 @@
             <version>LATEST</version>
         </dependency>
 
-
+        <dependency>
+            <groupId>com.google.http-client</groupId>
+            <artifactId>google-http-client</artifactId>
+            <version>LATEST</version>
+        </dependency>
 
     </dependencies>
 

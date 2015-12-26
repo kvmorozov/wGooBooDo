@@ -16,7 +16,7 @@ import java.util.List;
  */
 public abstract class AbstractProxyListProvider implements IProxyListProvider {
 
-    private static Logger logger = logger = Logger.getLogger(ExecutionContext.output, "ProxyPistProvider");
+    private static Logger logger = Logger.getLogger(ExecutionContext.output, "ProxyPistProvider");
 
     private static IProxyListProvider INSTANCE;
 
@@ -35,7 +35,7 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
                 proxyList.add(new HttpHostExt(host));
                 logger.info(String.format("Proxy %s added.", host.toHostString()));
             } else
-                logger.severe(String.format("Proxy %s NOT added.", host.toHostString()));
+                logger.info(String.format("Proxy %s NOT added.", host.toHostString()));
         }
 
         HttpConnections.INSTANCE.initClients(proxyList);
