@@ -1,22 +1,26 @@
 package ru.simpleGBD.App.GUI;
 
 import ru.simpleGBD.App.Config.SystemConfigs;
-import ru.simpleGBD.App.Logic.model.book.Resolutions;
 import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Logic.Output.consumers.SwingBookInfoOutput;
+import ru.simpleGBD.App.Logic.Output.events.AbstractEventSource;
+import ru.simpleGBD.App.Logic.Output.progress.ProcessStatus;
 import ru.simpleGBD.App.Logic.extractors.ImageExtractor;
+import ru.simpleGBD.App.Logic.model.book.Resolutions;
 import ru.simpleGBD.App.Logic.model.log.LogIconColumnRenderer;
 import ru.simpleGBD.App.Logic.model.log.LogTableModel;
 import ru.simpleGBD.App.pdf.PdfMaker;
 
 import javax.swing.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 /**
  * Created by km on 05.12.2015.
  */
 public class MainBookForm {
     private JTabbedPane tabbedPane1;
-    private JPanel mainPanel, pProgress;
+    private JPanel mainPanel, pProgress, pFooter;
     private JTextField tfBookId, tfRootOutDir, tfProxyListFile, tfBookTitle;
     private JButton bRootOutDir, bProxyList, bLoad, bMakeBook;
     private JComboBox cbResolution;
@@ -70,14 +74,7 @@ public class MainBookForm {
             bLoad.setEnabled(false);
             bMakeBook.setEnabled(false);
 
-            workerExtractor = new SwingWorker<Void, Void>() {
-
-                @Override
-                protected Void doInBackground() throws Exception {
-                    (new ImageExtractor()).process();
-
-                    return null;
-                }
+            workerExtractor = new ImageExtractor() {
 
                 @Override
                 public void done() {
@@ -85,6 +82,13 @@ public class MainBookForm {
                     bMakeBook.setEnabled(true);
                 }
             };
+
+            workerExtractor.addPropertyChangeListener(event -> {
+                if ("progress".equals(event.getPropertyName()) && event.getSource() instanceof AbstractEventSource) {
+                    ProcessStatus status = ((AbstractEventSource) event.getSource()).getProcessStatus();
+                    status.getProgressBar().setValue(status.get());
+                }
+            });
 
             workerExtractor.execute();
         });

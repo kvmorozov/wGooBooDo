@@ -9,9 +9,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 import ru.simpleGBD.App.Config.GBDOptions;
-import ru.simpleGBD.App.GUI.MainFrame;
 import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Logic.Output.consumers.AbstractOutput;
+import ru.simpleGBD.App.Logic.Output.events.AbstractEventSource;
 import ru.simpleGBD.App.Logic.Output.progress.ProcessStatus;
 import ru.simpleGBD.App.Logic.Proxy.AbstractProxyListProvider;
 import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
@@ -25,7 +25,6 @@ import ru.simpleGBD.App.Utils.Mapper;
 import ru.simpleGBD.App.Utils.Pools;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -38,7 +37,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by km on 21.11.2015.
  */
-public class ImageExtractor {
+public class ImageExtractor extends AbstractEventSource {
 
     private static Logger logger = Logger.getLogger(ExecutionContext.output, ImageExtractor.class.getName());
 
@@ -73,6 +72,13 @@ public class ImageExtractor {
             logger.info(String.format("Starting with %s proxies.", proxyList.size()));
     }
 
+    @Override
+    protected Void doInBackground() throws Exception {
+        process();
+
+        return null;
+    }
+
     private BookInfo getBookInfo() throws IOException {
         Connection.Response res = null;
 
@@ -81,7 +87,7 @@ public class ImageExtractor {
                     .connect(HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, ExecutionContext.bookId) + OPEN_PAGE_ADD_URL)
                     .userAgent(HttpConnections.USER_AGENT).method(Connection.Method.GET).execute();
         } catch (UnknownHostException uhe) {
-            JOptionPane.showMessageDialog(MainFrame.getINSTANCE(), "Not connected to Internet!", "wGooBooDo error", JOptionPane.ERROR_MESSAGE);
+            logger.severe("Not connected to Internet!");
         } catch (Exception ex) {
             try {
                 res = Jsoup
@@ -148,10 +154,11 @@ public class ImageExtractor {
 
     private void scanDir() {
         final ProcessStatus psScan = new ProcessStatus(ExecutionContext.outputDir.listFiles().length);
+        setProcessStatus(psScan);
 
         try {
             Files.walk(Paths.get(ExecutionContext.outputDir.toURI())).forEach(filePath -> {
-                psScan.inc();
+                setProgress(psScan.incrementAndProgress());
 
                 if (Files.isRegularFile(filePath) && FilenameUtils.getExtension(filePath.toString()).equals("png")) {
                     String fileName = FilenameUtils.getBaseName(filePath.toString());

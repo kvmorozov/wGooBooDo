@@ -1,5 +1,6 @@
 package ru.simpleGBD.App.Logic.Output.listeners;
 
+import ru.simpleGBD.App.GUI.MainFrame;
 import ru.simpleGBD.App.Logic.Output.events.BaseEvent;
 import ru.simpleGBD.App.Logic.Output.events.LogEvent;
 import ru.simpleGBD.App.Logic.model.log.LogTableModel;
@@ -16,6 +17,7 @@ public class SwingLogEventListener extends AbstractLogEventListener {
         if (!SwingUtilities.isEventDispatchThread()) {
             SwingUtilities.invokeLater(() -> {
                 LogTableModel.INSTANCE.addEvent((LogEvent) event);
+                JOptionPane.showMessageDialog(MainFrame.getINSTANCE(), event.getEventInfo(), "wGooBooDo error", JOptionPane.ERROR_MESSAGE);
             });
         }
     }

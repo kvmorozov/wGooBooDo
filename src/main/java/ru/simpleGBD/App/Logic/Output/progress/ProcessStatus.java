@@ -1,10 +1,9 @@
 package ru.simpleGBD.App.Logic.Output.progress;
 
+import ru.simpleGBD.App.Config.SystemConfigs;
 import ru.simpleGBD.App.GUI.MainBookForm;
-import ru.simpleGBD.App.GUI.MainFrame;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -22,30 +21,44 @@ public class ProcessStatus {
         start();
     }
 
-    public void inc() {
-        SwingUtilities.invokeLater(() -> {
-            prBar.setValue(value.incrementAndGet());
+    public int inc() {
+        return value.incrementAndGet();
+    }
 
-//            MainFrame.getINSTANCE().repaint();
-            MainBookForm.getINSTANCE().getProgressPanel().repaint();
-        });
+    public int get() {
+        return value.get();
+    }
+
+    public int incrementAndProgress() {
+        return Math.round(inc() * 100 / maxValue);
     }
 
     private void start() {
+        if (!SystemConfigs.isGuiMode())
+            return;
+
         prBar = new JProgressBar();
         prBar.setMinimum(0);
         prBar.setMinimum(maxValue);
+        prBar.setIndeterminate(false);
 
         SwingUtilities.invokeLater(() -> {
             MainBookForm.getINSTANCE().getProgressPanel().add(prBar);
-            MainBookForm.getINSTANCE().getProgressPanel().repaint();
+            SwingUtilities.updateComponentTreeUI(MainBookForm.getINSTANCE().getProgressPanel());
         });
     }
 
     public void finish() {
+        if (!SystemConfigs.isGuiMode())
+            return;
+
         SwingUtilities.invokeLater(() -> {
             MainBookForm.getINSTANCE().getProgressPanel().remove(prBar);
-            MainBookForm.getINSTANCE().getProgressPanel().repaint();
+            SwingUtilities.updateComponentTreeUI(MainBookForm.getINSTANCE().getProgressPanel());
         });
+    }
+
+    public JProgressBar getProgressBar() {
+        return prBar;
     }
 }

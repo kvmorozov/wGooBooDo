@@ -1,5 +1,7 @@
 package ru.simpleGBD.App.Config;
 
+import ru.simpleGBD.App.GUI.MainBookForm;
+
 import java.util.prefs.Preferences;
 
 /**
@@ -43,4 +45,6 @@ public class SystemConfigs {
 
     public static boolean getFillGaps() {return getBoolProperty(KEY_FILL_GAPS);}
     public static void setFillGaps(boolean value) {setBoolProperty(KEY_FILL_GAPS, value);}
+
+    public static boolean isGuiMode() {return MainBookForm.getINSTANCE() != null;}
 }
