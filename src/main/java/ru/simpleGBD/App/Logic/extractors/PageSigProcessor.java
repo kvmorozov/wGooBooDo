@@ -80,8 +80,10 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
                     }
                 }
         } catch (JsonParseException | JsonMappingException | SocketTimeoutException | SocketException | NoHttpResponseException ce) {
-            if (proxy != null)
+            if (proxy != null) {
                 proxy.registerFailure();
+                logger.info(String.format("Proxy %s failed!", proxy.toString()));
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
@@ -109,8 +111,8 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
 
         ExecutionContext.bookInfo.getPagesInfo().getPages().parallelStream()
                 .forEach(page -> {
-                        psSigs.inc();
-                        getSig(page);
+                    psSigs.inc();
+                    getSig(page);
                 });
 
         psSigs.finish();

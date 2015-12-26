@@ -89,8 +89,10 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
 
             return isPng;
         } catch (ConnectException | SocketTimeoutException ce) {
-            if (proxy != null)
+            if (proxy != null) {
                 proxy.registerFailure();
+                logger.info(String.format("Proxy %s failed!", proxy.toString()));
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
@@ -116,8 +118,10 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
                     e.printStackTrace();
                 }
 
-            if (!page.dataProcessed.get() && outputFile != null)
+            if (!page.dataProcessed.get() && outputFile != null) {
+                logger.info(String.format("Loading page %s failed!", page.getPid()));
                 outputFile.delete();
+            }
         }
 
         return false;

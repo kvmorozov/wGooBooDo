@@ -44,7 +44,7 @@ public class HttpHostExt {
 
     @Override
     public String toString() {
-        return host == null ? "no" : host.toHostString();
+        return host == null ? "NO_PROXY" : host.toHostString();
     }
 
     public void registerFailure() {
