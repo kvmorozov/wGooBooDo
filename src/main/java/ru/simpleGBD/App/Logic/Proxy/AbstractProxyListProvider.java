@@ -1,13 +1,16 @@
 package ru.simpleGBD.App.Logic.Proxy;
 
+import com.google.api.client.http.GenericUrl;
+import com.google.api.client.http.javanet.NetHttpTransport;
 import org.apache.http.HttpHost;
-import org.apache.http.client.methods.HttpGet;
 import ru.simpleGBD.App.Config.GBDOptions;
 import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Utils.HttpConnections;
 import ru.simpleGBD.App.Utils.Logger;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,8 +46,9 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
 
     private boolean checkProxy(HttpHost proxy) {
         try {
-            HttpConnections.INSTANCE
-                    .getBuilderWithTimeout().setProxy(proxy).build().execute(new HttpGet(ExecutionContext.baseUrl));
+            new NetHttpTransport.Builder().
+                    setProxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxy.getHostName(), proxy.getPort()))).
+                    build().createRequestFactory().buildGetRequest(new GenericUrl(ExecutionContext.baseUrl)).execute();
 
             return true;
         } catch (IOException e) {

@@ -10,6 +10,7 @@ import ru.simpleGBD.App.Utils.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.Proxy;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -32,9 +33,8 @@ public class AbstractHttpProcessor {
 
         if (requestFactory == null)
             synchronized (key) {
-                requestFactory = proxy == null ?
-                        new NetHttpTransport().createRequestFactory() :
-                        null;
+                requestFactory = new NetHttpTransport.Builder().
+                        setProxy(proxy == null ? Proxy.NO_PROXY : proxy.getProxy()).build().createRequestFactory();
 
                 httpFactoryMap.put(key, requestFactory);
             }
@@ -50,7 +50,7 @@ public class AbstractHttpProcessor {
         } catch (Exception e) {
             for (int i = 1; i <= MAX_RETRY_COUNT; i++) {
                 try {
-                    logger.finest(String.format("Try %n get url %s", i, rqUrl));
+                    logger.finest(String.format("Try %d get url %s", i, rqUrl));
                     return getContent(url, proxy);
                 } catch (Exception ex) {
                     try {

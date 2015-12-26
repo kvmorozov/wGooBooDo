@@ -30,7 +30,7 @@ public class ProcessStatus {
     }
 
     public int incrementAndProgress() {
-        return Math.round(inc() * 100 / maxValue);
+        return maxValue == 0 ? 0 : Math.round(inc() * 100 / maxValue);
     }
 
     private void start() {

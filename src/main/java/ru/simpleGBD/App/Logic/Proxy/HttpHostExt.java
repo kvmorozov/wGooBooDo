@@ -4,6 +4,7 @@ import org.apache.http.HttpHost;
 import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Utils.Logger;
 
+import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -19,6 +20,7 @@ public class HttpHostExt {
     public static final String NO_PROXY = "NO_PROXY";
 
     private HttpHost host;
+    private Proxy proxy;
     private AtomicBoolean available = new AtomicBoolean(true);
     private AtomicInteger failureCount = new AtomicInteger(0);
 
@@ -55,5 +57,12 @@ public class HttpHostExt {
             logger.info(String.format("Proxy %s invalidated!", host.toHostString()));
             available.set(false);
         }
+    }
+
+    public Proxy getProxy() {
+        if (proxy == null)
+            proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(host.getHostName(), host.getPort()));
+
+        return proxy;
     }
 }
