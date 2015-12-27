@@ -28,7 +28,7 @@ public class AbstractHttpProcessor {
     private static Map<String, HttpRequestFactory> httpFactoryMap = new ConcurrentHashMap<>();
 
     private HttpRequestFactory getFactory(HttpHostExt proxy) {
-        String key = proxy == null ? HttpHostExt.NO_PROXY : HttpHostExt.NO_PROXY;
+        String key = proxy == null ? HttpHostExt.NO_PROXY : proxy.toString();
 
         HttpRequestFactory requestFactory = httpFactoryMap.get(key);
 

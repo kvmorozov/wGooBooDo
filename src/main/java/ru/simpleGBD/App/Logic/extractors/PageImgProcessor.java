@@ -37,6 +37,9 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
         try {
             inputStream = getContent(imgUrl, proxy, false);
 
+            if (inputStream == null)
+                return false;
+
             int read = 0;
             byte[] bytes = new byte[dataChunk];
             boolean firstChunk = true, isPng = false, reloadFlag;
@@ -112,7 +115,7 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
     }
 
     private boolean processImageWithProxy(HttpHostExt proxy) {
-        if (proxy != null && proxy.isAvailable())
+        if (proxy != null && !proxy.isAvailable())
             return false;
 
         return processImage(page.getImqRqUrl(
@@ -127,7 +130,7 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
         if (!processImageWithProxy(usedProxy))
             // Пробуем скачать страницу с другими прокси, если не получилось с той, с помощью которой узнали sig
             for (HttpHostExt proxy : AbstractProxyListProvider.getInstance().getProxyList())
-                if (processImageWithProxy(proxy))
+                if (proxy != usedProxy && processImageWithProxy(proxy))
                     return;
     }
 }
