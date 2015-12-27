@@ -19,10 +19,7 @@ import ru.simpleGBD.App.Logic.model.book.BookData;
 import ru.simpleGBD.App.Logic.model.book.BookInfo;
 import ru.simpleGBD.App.Logic.model.book.PageInfo;
 import ru.simpleGBD.App.Logic.model.book.PagesInfo;
-import ru.simpleGBD.App.Utils.HttpConnections;
-import ru.simpleGBD.App.Utils.Logger;
-import ru.simpleGBD.App.Utils.Mapper;
-import ru.simpleGBD.App.Utils.Pools;
+import ru.simpleGBD.App.Utils.*;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -160,7 +157,7 @@ public class ImageExtractor extends AbstractEventSource {
             Files.walk(Paths.get(ExecutionContext.outputDir.toURI())).forEach(filePath -> {
                 setProgress(psScan.incrementAndProgress());
 
-                if (Files.isRegularFile(filePath) && FilenameUtils.getExtension(filePath.toString()).equals("png")) {
+                if (Images.isImageFile(filePath)) {
                     String fileName = FilenameUtils.getBaseName(filePath.toString());
                     String[] nameParts = fileName.split("_");
                     PageInfo _page = ExecutionContext.bookInfo.getPagesInfo().getPageByPid(nameParts[1]);

@@ -43,7 +43,7 @@ public class AbstractHttpProcessor {
         return requestFactory;
     }
 
-    protected InputStream getContent(String rqUrl, HttpHostExt proxy, boolean withTimeout) {
+    protected HttpResponse getContent(String rqUrl, HttpHostExt proxy, boolean withTimeout) {
         GenericUrl url = new GenericUrl(rqUrl);
 
         try {
@@ -65,9 +65,7 @@ public class AbstractHttpProcessor {
         return null;
     }
 
-    private InputStream getContent(GenericUrl url, HttpHostExt proxy) throws IOException {
-        HttpResponse response = getFactory(proxy).buildGetRequest(url).setHeaders(HttpConnections.INSTANCE.getHeaders()).execute();
-
-        return response == null ? null : response.getContent();
+    private HttpResponse getContent(GenericUrl url, HttpHostExt proxy) throws IOException {
+        return getFactory(proxy).buildGetRequest(url).setHeaders(HttpConnections.INSTANCE.getHeaders()).execute();
     }
 }

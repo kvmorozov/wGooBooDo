@@ -1,10 +1,12 @@
 package ru.simpleGBD.App.Logic.extractors;
 
+import com.google.api.client.http.HttpResponse;
 import ru.simpleGBD.App.Config.GBDOptions;
 import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Logic.Proxy.AbstractProxyListProvider;
 import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
 import ru.simpleGBD.App.Logic.model.book.PageInfo;
+import ru.simpleGBD.App.Utils.Images;
 import ru.simpleGBD.App.Utils.Logger;
 
 import java.io.*;
@@ -18,7 +20,6 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
 
     private static Logger logger = Logger.getLogger(ExecutionContext.output, PageImgProcessor.class.getName());
 
-    private static byte[] pngFormat = {(byte) 0x89, 0x50, 0x4e, 0x47};
     private static int dataChunk = 4096;
 
     private PageInfo page;
@@ -35,7 +36,8 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
         OutputStream outputStream = null;
 
         try {
-            inputStream = getContent(imgUrl, proxy, false);
+            HttpResponse resp = getContent(imgUrl, proxy, false);
+            inputStream = resp == null ? null : resp.getContent();
 
             if (inputStream == null)
                 return false;
@@ -46,8 +48,9 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
 
             while ((read = inputStream.read(bytes)) != -1) {
                 if (firstChunk) {
-                    if (bytes[0] == pngFormat[0] && bytes[1] == pngFormat[1] && bytes[2] == pngFormat[2] && bytes[3] == pngFormat[3]) {
-                        outputFile = new File(ExecutionContext.outputDir.getPath() + "\\" + page.getOrder() + "_" + page.getPid() + ".png");
+                    String imgFormat = Images.getImageFormat(resp);
+                    if (imgFormat != null) {
+                        outputFile = new File(ExecutionContext.outputDir.getPath() + "\\" + page.getOrder() + "_" + page.getPid() + "." + imgFormat);
                         if (reloadFlag = outputFile.exists())
                             outputFile.delete();
                         isPng = true;
@@ -128,9 +131,12 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
             return;
 
         if (!processImageWithProxy(usedProxy))
-            // Пробуем скачать страницу с другими прокси, если не получилось с той, с помощью которой узнали sig
-            for (HttpHostExt proxy : AbstractProxyListProvider.getInstance().getProxyList())
-                if (proxy != usedProxy && processImageWithProxy(proxy))
-                    return;
+            // Пробуем скачать страницу с без прокси, если не получилось с той прокси, с помощью которой узнали sig
+            if (usedProxy != null)
+                processImageWithProxy(null);
+        // Пробуем скачать страницу с другими прокси, если не получилось с той, с помощью которой узнали sig
+        for (HttpHostExt proxy : AbstractProxyListProvider.getInstance().getProxyList())
+            if (proxy != usedProxy && processImageWithProxy(proxy))
+                return;
     }
 }

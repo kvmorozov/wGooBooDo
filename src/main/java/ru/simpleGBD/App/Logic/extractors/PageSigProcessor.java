@@ -39,7 +39,7 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
         try {
 //            logger.finest(String.format("Started sig processing for %s with proxy %s", page.getPid(), proxy == null ? HttpHostExt.NO_PROXY : proxy.toString()));
 
-            String respStr = IOUtils.toString(getContent(rqUrl, proxy, true));
+            String respStr = IOUtils.toString(getContent(rqUrl, proxy, true).getContent());
             PagesInfo framePages = Mapper.objectMapper.readValue(respStr, PagesInfo.class);
 
             PageInfo[] pages = framePages.getPagesArray();
