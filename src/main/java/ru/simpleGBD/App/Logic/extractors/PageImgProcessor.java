@@ -44,7 +44,7 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
 
             int read = 0;
             byte[] bytes = new byte[dataChunk];
-            boolean firstChunk = true, isPng = false, reloadFlag;
+            boolean firstChunk = true, reloadFlag;
 
             while ((read = inputStream.read(bytes)) != -1) {
                 if (firstChunk) {
@@ -53,14 +53,11 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
                         outputFile = new File(ExecutionContext.outputDir.getPath() + "\\" + page.getOrder() + "_" + page.getPid() + "." + imgFormat);
                         if (reloadFlag = outputFile.exists())
                             outputFile.delete();
-                        isPng = true;
                     } else
                         break;
 
                     if (outputFile != null && outputFile.exists())
                         break;
-                    else
-                        page.dataProcessed.set(isPng);
 
                     if (proxy != null)
                         logger.info(String.format("Started img %s for %s with %s Proxy",
@@ -84,7 +81,8 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
                 _page.fileExists.set(true);
             }
 
-            return isPng;
+            page.dataProcessed.set(true);
+            return true;
         } catch (ConnectException | SocketTimeoutException ce) {
             if (proxy != null) {
                 proxy.registerFailure();

@@ -2,6 +2,7 @@ package ru.simpleGBD.App.Logic.extractors;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.google.api.client.http.HttpResponse;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.http.NoHttpResponseException;
@@ -39,7 +40,11 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
         try {
 //            logger.finest(String.format("Started sig processing for %s with proxy %s", page.getPid(), proxy == null ? HttpHostExt.NO_PROXY : proxy.toString()));
 
-            String respStr = IOUtils.toString(getContent(rqUrl, proxy, true).getContent());
+            HttpResponse resp = getContent(rqUrl, proxy, false);
+            if (resp == null)
+                return false;
+
+            String respStr = IOUtils.toString(resp.getContent());
             PagesInfo framePages = Mapper.objectMapper.readValue(respStr, PagesInfo.class);
 
             PageInfo[] pages = framePages.getPagesArray();
