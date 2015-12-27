@@ -133,7 +133,6 @@ public class ImageExtractor extends AbstractEventSource {
         Pools.sigExecutor.shutdown();
         try {
             Pools.sigExecutor.awaitTermination(100, TimeUnit.MINUTES);
-            HttpConnections.INSTANCE.closeAllConnections();
         } catch (InterruptedException e) {
         }
 
@@ -144,7 +143,6 @@ public class ImageExtractor extends AbstractEventSource {
         Pools.imgExecutor.shutdown();
         try {
             Pools.imgExecutor.awaitTermination(500, TimeUnit.MINUTES);
-            HttpConnections.INSTANCE.closeAllConnections();
         } catch (InterruptedException e) {
         }
     }

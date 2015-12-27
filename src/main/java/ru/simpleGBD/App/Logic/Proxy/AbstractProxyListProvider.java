@@ -5,7 +5,6 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import org.apache.http.HttpHost;
 import ru.simpleGBD.App.Config.GBDOptions;
 import ru.simpleGBD.App.Logic.ExecutionContext;
-import ru.simpleGBD.App.Utils.HttpConnections;
 import ru.simpleGBD.App.Utils.Logger;
 
 import java.io.IOException;
@@ -39,8 +38,6 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
             } else
                 logger.info(String.format("Proxy %s NOT added.", host.toHostString()));
         }
-
-        HttpConnections.INSTANCE.initClients(proxyList);
     }
 
     private boolean checkProxy(HttpHost proxy) {
