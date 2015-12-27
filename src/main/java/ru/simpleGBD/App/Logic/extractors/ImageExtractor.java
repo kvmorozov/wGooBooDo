@@ -42,8 +42,8 @@ public class ImageExtractor extends AbstractEventSource {
     private static Logger logger = Logger.getLogger(ExecutionContext.output, ImageExtractor.class.getName());
 
     public static final int DEFAULT_PAGE_WIDTH = 1280;
-    public static final String HTTP_TEMPLATE = "http://books.google.com/books?id=%BOOK_ID%";
-    public static final String HTTPS_TEMPLATE = "https://books.google.com/books?id=%BOOK_ID%";
+    public static final String HTTP_TEMPLATE = "http://books.google.ru/books?id=%BOOK_ID%";
+    public static final String HTTPS_TEMPLATE = "https://books.google.ru/books?id=%BOOK_ID%";
 
     private static final String ADD_FLAGS_ATTRIBUTE = "_OC_addFlags";
     private static final String OC_RUN_ATTRIBUTE = "_OC_Run";

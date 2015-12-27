@@ -6,6 +6,7 @@ import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
+import ru.simpleGBD.App.Utils.HttpConnections;
 import ru.simpleGBD.App.Utils.Logger;
 
 import java.io.IOException;
@@ -65,7 +66,7 @@ public class AbstractHttpProcessor {
     }
 
     private InputStream getContent(GenericUrl url, HttpHostExt proxy) throws IOException {
-        HttpResponse response = getFactory(proxy).buildGetRequest(url).execute();
+        HttpResponse response = getFactory(proxy).buildGetRequest(url).setHeaders(HttpConnections.INSTANCE.getHeaders()).execute();
 
         return response == null ? null : response.getContent();
     }
