@@ -23,10 +23,9 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
 
     private static IProxyListProvider INSTANCE;
 
-    protected List<HttpHostExt> proxyList;
+    protected List<HttpHostExt> proxyList = new ArrayList<>();
 
     protected void buildFromList(List<String> proxyItems) {
-        proxyList = new ArrayList<>(proxyItems.size());
         for (String proxyItem : proxyItems) {
             String[] proxyItemArr = proxyItem.split(":");
 
