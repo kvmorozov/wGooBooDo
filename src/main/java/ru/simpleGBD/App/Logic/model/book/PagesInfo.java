@@ -19,8 +19,10 @@ public class PagesInfo implements Serializable {
 
     private static Logger logger = Logger.getLogger(ExecutionContext.output, PagesInfo.class.getName());
 
-    @JsonProperty("page") private PageInfo[] pages;
-    @JsonProperty("prefix") private String prefix;
+    @JsonProperty("page")
+    private PageInfo[] pages;
+    @JsonProperty("prefix")
+    private String prefix;
 
     private Map<String, PageInfo> pagesMap;
     private LinkedList<PageInfo> pagesList;
@@ -48,21 +50,40 @@ public class PagesInfo implements Serializable {
 
     private void fillGap(PageInfo beginGap, PageInfo endGap) {
         String beginPagePrefix = beginGap.getPid().substring(0, 2);
-        String endPagePrefix   = endGap.getPid().substring(0, 2);
+        String endPagePrefix = endGap.getPid().substring(0, 2);
 
-        int beginPageNum = -1;
+        int beginPageNum = -1, endPageNum = -1;
 
         try {
             beginPageNum = Integer.parseInt(beginGap.getPid().substring(2));
-        }
-        catch(NumberFormatException nfe) {
+        } catch (NumberFormatException nfe) {
             logger.severe(String.format("Wrong page pid = %s", beginGap.getPid()));
             return;
         }
 
-        if (beginPagePrefix.equals(endPagePrefix)) {
-            for(int index = beginGap.getOrder() + 1; index < endGap.getOrder(); index++) {
+        try {
+            endPageNum = Integer.parseInt(endGap.getPid().substring(2));
+        } catch (NumberFormatException nfe) {
+            logger.severe(String.format("Wrong page pid = %s", endGap.getPid()));
+            return;
+        }
+
+        if (beginPagePrefix.equals(endPagePrefix))
+            for (int index = beginGap.getOrder() + 1; index < endGap.getOrder(); index++) {
                 PageInfo gapPage = new PageInfo(beginPagePrefix + (beginPageNum + index - beginGap.getOrder()), index);
+                pagesMap.put(gapPage.getPid(), gapPage);
+                pagesList.add(gapPage);
+            }
+        else {
+            if (endPageNum > 1)
+                for (int index = endGap.getOrder() - 1; endPageNum + index - endGap.getOrder() > 0; index--) {
+                    PageInfo gapPage = new PageInfo(endPagePrefix + (endPageNum + index - endGap.getOrder()), index);
+                    pagesMap.put(gapPage.getPid(), gapPage);
+                    pagesList.add(gapPage);
+                }
+
+            for (int index = beginGap.getOrder() + 1; index < endGap.getOrder() - endPageNum ; index++) {
+                PageInfo gapPage = new PageInfo(beginPagePrefix + String.valueOf(index + 1), index);
                 pagesMap.put(gapPage.getPid(), gapPage);
                 pagesList.add(gapPage);
             }
