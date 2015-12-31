@@ -17,7 +17,7 @@ public class SwingLogEventListener extends AbstractLogEventListener {
         if (!SwingUtilities.isEventDispatchThread()) {
             SwingUtilities.invokeLater(() -> {
                 LogTableModel.INSTANCE.addEvent((LogEvent) event);
-                JOptionPane.showMessageDialog(MainFrame.getINSTANCE(), event.getEventInfo(), "wGooBooDo error", JOptionPane.ERROR_MESSAGE);
+//                JOptionPane.showMessageDialog(MainFrame.getINSTANCE(), event.getEventInfo(), "wGooBooDo error", JOptionPane.ERROR_MESSAGE);
             });
         }
     }
