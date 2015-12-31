@@ -23,6 +23,8 @@ import java.net.SocketTimeoutException;
  */
 public class PageSigProcessor extends AbstractHttpProcessor implements Runnable {
 
+    private static final String SIG_ERROR_TEMPLATE = "No sig at %s";
+
     private HttpHostExt proxy;
     private BookInfo bookInfo;
 
@@ -41,8 +43,10 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
 //            logger.finest(String.format("Started sig processing for %s with proxy %s", page.getPid(), proxy == null ? HttpHostExt.NO_PROXY : proxy.toString()));
 
             HttpResponse resp = getContent(rqUrl, proxy, false);
-            if (resp == null)
+            if (resp == null) {
+                logger.info(String.format(SIG_ERROR_TEMPLATE, rqUrl));
                 return false;
+            }
 
             String respStr = IOUtils.toString(resp.getContent());
             PagesInfo framePages = Mapper.objectMapper.readValue(respStr, PagesInfo.class);
@@ -67,6 +71,9 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
                         // Если есть возможность - пытаемся грузить страницу сразу
                         Pools.imgExecutor.execute(new PageImgProcessor(_page, proxy));
                     }
+
+                    if (_page.getSrc() != null && _page.getSig() == null)
+                        logger.info(String.format(SIG_ERROR_TEMPLATE, rqUrl));
                 }
         } catch (JsonParseException | JsonMappingException | SocketTimeoutException | SocketException | NoHttpResponseException ce) {
             if (proxy != null) {

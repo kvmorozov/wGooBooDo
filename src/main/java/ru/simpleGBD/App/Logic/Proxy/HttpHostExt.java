@@ -21,11 +21,13 @@ public class HttpHostExt {
 
     private HttpHost host;
     private Proxy proxy;
+    private String cookie;
     private AtomicBoolean available = new AtomicBoolean(true);
     private AtomicInteger failureCount = new AtomicInteger(0);
 
-    public HttpHostExt(HttpHost host) {
+    public HttpHostExt(HttpHost host, String cookie) {
         this.host = host;
+        this.cookie = cookie;
     }
 
     public boolean isAvailable() {
@@ -64,5 +66,9 @@ public class HttpHostExt {
             proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(host.getHostName(), host.getPort()));
 
         return proxy;
+    }
+
+    public String getCookie() {
+        return cookie;
     }
 }

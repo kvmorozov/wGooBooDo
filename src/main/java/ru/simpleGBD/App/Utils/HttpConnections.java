@@ -1,6 +1,7 @@
 package ru.simpleGBD.App.Utils;
 
 import com.google.api.client.http.HttpHeaders;
+import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
 
 import java.util.Map;
 
@@ -14,6 +15,7 @@ public class HttpConnections {
 
     public static HttpConnections INSTANCE = new HttpConnections();
 
+    // Default cookie for NO_PROXY
     private String cookieString;
     private HttpHeaders headers;
 
@@ -30,19 +32,13 @@ public class HttpConnections {
         cookieString = cookieBuilder.toString();
     }
 
-    public HttpHeaders getHeaders() {
+    public HttpHeaders getHeaders(HttpHostExt proxy) {
         if (headers == null) {
             headers = new HttpHeaders();
             headers.setUserAgent(USER_AGENT);
-//            headers.setCookie(cookieString);
-//            headers.set("Referer", "https://books.google.ru/books?id=BEvEV9OVzacC&printsec=frontcover&hl=ru&redir_esc=y");
-//            headers.set("Proxy-Authorization", "475453b13f6162d37f933a2ae9468823d00a288854a11d138c2a02f4f1cc0970fbd7c79fb02230c6");
+            headers.setCookie(proxy == null ? cookieString : proxy.getCookie());
         }
 
         return headers;
-    }
-
-    public String getCookieString() {
-        return cookieString;
     }
 }

@@ -1,6 +1,7 @@
 package ru.simpleGBD.App.Logic.Proxy;
 
 import com.google.api.client.http.GenericUrl;
+import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import org.apache.http.HttpHost;
 import ru.simpleGBD.App.Config.GBDOptions;
@@ -32,23 +33,24 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
                 continue;
 
             HttpHost host = new HttpHost(proxyItemArr[0], Integer.parseInt(proxyItemArr[1]));
-            if (checkProxy(host)) {
-                proxyList.add(new HttpHostExt(host));
+            String cookie = getCookie(host);
+            if (cookie != null) {
+                proxyList.add(new HttpHostExt(host, cookie));
                 logger.info(String.format("Proxy %s added.", host.toHostString()));
             } else
                 logger.info(String.format("Proxy %s NOT added.", host.toHostString()));
         }
     }
 
-    private boolean checkProxy(HttpHost proxy) {
+    private String getCookie(HttpHost proxy) {
         try {
-            new NetHttpTransport.Builder().
+            HttpResponse resp = new NetHttpTransport.Builder().
                     setProxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxy.getHostName(), proxy.getPort()))).
                     build().createRequestFactory().buildGetRequest(new GenericUrl(ExecutionContext.baseUrl)).execute();
 
-            return true;
+            return ((ArrayList) resp.getHeaders().get("set-cookie")).get(0).toString();
         } catch (IOException e) {
-            return false;
+            return null;
         }
     }
 

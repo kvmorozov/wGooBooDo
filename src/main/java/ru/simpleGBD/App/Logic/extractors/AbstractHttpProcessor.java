@@ -66,6 +66,6 @@ public class AbstractHttpProcessor {
     }
 
     private HttpResponse getContent(GenericUrl url, HttpHostExt proxy) throws IOException {
-        return getFactory(proxy).buildGetRequest(url).setHeaders(HttpConnections.INSTANCE.getHeaders()).execute();
+        return getFactory(proxy).buildGetRequest(url).setHeaders(HttpConnections.INSTANCE.getHeaders(proxy)).execute();
     }
 }
