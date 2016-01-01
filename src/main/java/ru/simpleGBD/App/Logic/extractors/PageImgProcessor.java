@@ -78,14 +78,13 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
                 outputStream.write(bytes, 0, read);
             }
 
-            if (page.dataProcessed.get()) {
-                logger.info(String.format("Finished img processing for %s%s", page.getPid(), page.isGapPage() ? " with gap" : ""));
-                PageInfo _page = ExecutionContext.bookInfo.getPagesInfo().getPageByPid(page.getPid());
-                _page.dataProcessed.set(true);
-                _page.fileExists.set(true);
-            }
-
             page.dataProcessed.set(true);
+
+            logger.info(String.format("Finished img processing for %s%s", page.getPid(), page.isGapPage() ? " with gap" : ""));
+            PageInfo _page = ExecutionContext.bookInfo.getPagesInfo().getPageByPid(page.getPid());
+            _page.dataProcessed.set(true);
+            _page.fileExists.set(true);
+
             return true;
         } catch (ConnectException | SocketTimeoutException ce) {
             if (proxy != null) {
