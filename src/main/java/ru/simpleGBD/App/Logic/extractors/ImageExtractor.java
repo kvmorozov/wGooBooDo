@@ -208,10 +208,17 @@ public class ImageExtractor extends AbstractEventSource {
 
             ExecutionContext.outputDir =
                     new File(baseOutputDirPath + "\\" +
-                            ExecutionContext.bookInfo.getBookData().getTitle().replace(":", "") +
+                            ExecutionContext.bookInfo.getBookData().getTitle()
+                                    .replace(":", "")
+                                    .replace("/", ".") +
                             " " + ExecutionContext.bookInfo.getBookData().getVolumeId());
-            if (!ExecutionContext.outputDir.exists())
-                ExecutionContext.outputDir.mkdir();
+            if (!ExecutionContext.outputDir.exists()) {
+                boolean dirResult = ExecutionContext.outputDir.mkdir();
+                if (!dirResult) {
+                    logger.severe(String.format("Invalid book title: %s", ExecutionContext.bookInfo.getBookData().getTitle()));
+                    return;
+                }
+            }
 
             ExecutionContext.bookInfo.getPagesInfo().build();
             scanDir();
