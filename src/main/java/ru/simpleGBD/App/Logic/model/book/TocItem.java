@@ -12,4 +12,5 @@ public class TocItem implements Serializable {
     @JsonProperty("Title") private String title;
     @JsonProperty("Pid") private String pid;
     @JsonProperty("PgNum") private String pgNum;
+    @JsonProperty("Order") private int order;
 }
