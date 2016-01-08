@@ -121,7 +121,7 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
                 }
             }
 
-            if (!page.dataProcessed.get() && outputFile != null) {
+            if (!_page.dataProcessed.get() && outputFile != null) {
                 logger.info(String.format("Loading page %s failed!", page.getPid()));
                 outputFile.delete();
             }

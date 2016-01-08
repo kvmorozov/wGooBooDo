@@ -49,7 +49,7 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
                     build().createRequestFactory().buildGetRequest(new GenericUrl(ExecutionContext.baseUrl)).execute();
 
             return ((ArrayList) resp.getHeaders().get("set-cookie")).get(0).toString();
-        } catch (IOException e) {
+        } catch (Exception e) {
             return null;
         }
     }

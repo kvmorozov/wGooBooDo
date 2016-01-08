@@ -28,8 +28,12 @@ public class AbstractHttpProcessor {
 
     private static Map<String, HttpRequestFactory> httpFactoryMap = new ConcurrentHashMap<>();
 
+    private String getProxyKey(HttpHostExt proxy) {
+        return proxy == null ? HttpHostExt.NO_PROXY : proxy.toString();
+    }
+
     private HttpRequestFactory getFactory(HttpHostExt proxy) {
-        String key = proxy == null ? HttpHostExt.NO_PROXY : proxy.toString();
+        String key = getProxyKey(proxy);
 
         HttpRequestFactory requestFactory = httpFactoryMap.get(key);
 
@@ -44,7 +48,11 @@ public class AbstractHttpProcessor {
         return requestFactory;
     }
 
-    protected HttpResponse getContent(String rqUrl, HttpHostExt proxy, boolean withTimeout) {
+    private void resetFactory(HttpHostExt proxy) {
+        httpFactoryMap.remove(getProxyKey(proxy));
+    }
+
+    protected HttpResponse getContent(String rqUrl, HttpHostExt proxy, boolean withTimeout) throws IOException {
         GenericUrl url = new GenericUrl(rqUrl);
 
         try {
@@ -52,7 +60,8 @@ public class AbstractHttpProcessor {
         } catch (SocketTimeoutException e) {
             for (int i = 1; i <= MAX_RETRY_COUNT; i++) {
                 try {
-                    logger.finest(String.format("Try %d get url %s", i, rqUrl));
+                    resetFactory(proxy);
+                    logger.finest(String.format("Try %d get url %s with proxy %s", i, rqUrl, proxy.toString()));
                     return getContent(url, proxy, withTimeout);
                 } catch (Exception ex) {
                     try {
@@ -61,17 +70,20 @@ public class AbstractHttpProcessor {
                     }
                 }
             }
+
+            if (proxy != null)
+                proxy.registerFailure();
         } catch (IOException ioe) {
             if (proxy != null)
                 proxy.registerFailure();
 
-            return null;
+            return proxy == null ? null : getContent(url, null, withTimeout);
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;
         }
 
-        return null;
+        return proxy == null ? null : getContent(url, null, withTimeout);
     }
 
     private HttpResponse getContent(GenericUrl url, HttpHostExt proxy, boolean withTimeout) throws IOException {
