@@ -37,9 +37,10 @@ public class PageInfo implements Serializable {
         isGapPage = true;
     }
 
-    public AtomicBoolean sigChecked    = new AtomicBoolean(false);
-    public AtomicBoolean dataProcessed = new AtomicBoolean(false);
-    public AtomicBoolean fileExists    = new AtomicBoolean(false);
+    public AtomicBoolean sigChecked     = new AtomicBoolean(false);
+    public AtomicBoolean dataProcessed  = new AtomicBoolean(false);
+    public AtomicBoolean fileExists     = new AtomicBoolean(false);
+    public AtomicBoolean loadingStarted = new AtomicBoolean(false);
 
     public String getPid() {
         return pid;

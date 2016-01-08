@@ -19,8 +19,10 @@ public class PagesInfo implements Serializable {
 
     private static Logger logger = Logger.getLogger(ExecutionContext.output, PagesInfo.class.getName());
 
-    @JsonProperty("page") private PageInfo[] pages;
-    @JsonProperty("prefix") private String prefix;
+    @JsonProperty("page")
+    private PageInfo[] pages;
+    @JsonProperty("prefix")
+    private String prefix;
 
     private Map<String, PageInfo> pagesMap;
     private LinkedList<PageInfo> pagesList;
@@ -80,15 +82,16 @@ public class PagesInfo implements Serializable {
                     PageInfo gapPage = new PageInfo(endPagePrefix + (endPageNum + index - endGap.getOrder()), index);
                     addPage(gapPage);
                 }
+            } else if (beginPageNum > 1 && endPageNum < 0) {
+                logger.severe(String.format("Cannot fill gap between pages %s(order=%s) and %s(order=%s)",
+                        beginGap.getPid(), beginGap.getOrder(), endGap.getPid(), endGap.getOrder()));
+            }
 
+            if (beginPageNum > 0 && endPageNum > 0)
                 for (int index = beginGap.getOrder() + 1; index < endGap.getOrder() - endPageNum; index++) {
                     PageInfo gapPage = new PageInfo(beginPagePrefix + String.valueOf(index + 1), index);
                     addPage(gapPage);
                 }
-            } else if (beginPageNum > 1) {
-                logger.severe(String.format("Cannot fill gap between pages %s(order=%s) and %s(order=%s)",
-                        beginGap.getPid(), beginGap.getOrder(), endGap.getPid(), endGap.getOrder()));
-            }
         }
 
         pagesList.sort((o1, o2) -> o1.getOrder().compareTo(o2.getOrder()));

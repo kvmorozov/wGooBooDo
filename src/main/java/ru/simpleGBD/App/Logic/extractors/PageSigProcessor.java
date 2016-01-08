@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.google.api.client.http.HttpResponse;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.SerializationUtils;
 import org.apache.http.NoHttpResponseException;
 import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Logic.Output.progress.ProcessStatus;
@@ -33,16 +32,14 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
     }
 
     private boolean getSig(PageInfo page) {
-        if (page.dataProcessed.get() || page.getSig() != null || page.sigChecked.get())
+        if (page.dataProcessed.get() || page.getSig() != null || page.sigChecked.get() || page.loadingStarted.get())
             return false;
 
         boolean sigFound = false;
         String rqUrl = ExecutionContext.baseUrl + ImageExtractor.PAGES_REQUEST_TEMPLATE.replace(ImageExtractor.RQ_PG_PLACEHOLDER, page.getPid());
 
         try {
-//            logger.finest(String.format("Started sig processing for %s with proxy %s", page.getPid(), proxy == null ? HttpHostExt.NO_PROXY : proxy.toString()));
-
-            HttpResponse resp = getContent(rqUrl, proxy, false);
+            HttpResponse resp = getContent(rqUrl, proxy, true);
             if (resp == null) {
                 logger.info(String.format(SIG_ERROR_TEMPLATE, rqUrl));
                 return false;
@@ -73,7 +70,7 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
                     }
 
                     if (_page.getSrc() != null && _page.getSig() == null)
-                        logger.info(String.format(SIG_ERROR_TEMPLATE, rqUrl));
+                        logger.finest(String.format(SIG_ERROR_TEMPLATE, rqUrl));
                 }
         } catch (JsonParseException | JsonMappingException | SocketTimeoutException | SocketException | NoHttpResponseException ce) {
             if (proxy != null) {
@@ -84,8 +81,6 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
             ex.printStackTrace();
         }
 
-        //            logger.finest(String.format("Finished sig processing for %s; sig %s found.", page.getPid(), sigFound ? "" : " not "));
-
         return sigFound;
     }
 
@@ -94,7 +89,7 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
         if (proxy != null && !proxy.isAvailable())
             return;
 
-        bookInfo = SerializationUtils.clone(ExecutionContext.bookInfo);
+        bookInfo = ExecutionContext.bookInfo;
 
         final ProcessStatus psSigs = new ProcessStatus(bookInfo.getPagesInfo().getPages().size());
 
