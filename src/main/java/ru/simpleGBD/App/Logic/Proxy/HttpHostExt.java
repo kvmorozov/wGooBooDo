@@ -54,6 +54,9 @@ public class HttpHostExt {
     }
 
     public void registerFailure() {
+        if (!isAvailable())
+            return;
+
         failureCount.incrementAndGet();
         if (failureCount.get() > FAILURES_THRESHOLD) {
             logger.info(String.format("Proxy %s invalidated!", host.toHostString()));

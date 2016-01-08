@@ -36,6 +36,10 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
         File outputFile = null;
         InputStream inputStream = null;
         OutputStream outputStream = null;
+        PageInfo _page = ExecutionContext.bookInfo.getPagesInfo().getPageByPid(page.getPid());
+
+        if (_page.loadingStarted.get())
+            return false;
 
         try {
             HttpResponse resp = getContent(imgUrl, proxy, false);
@@ -54,9 +58,18 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
                 if (firstChunk) {
                     String imgFormat = Images.getImageFormat(resp);
                     if (imgFormat != null) {
+
+                        if (_page.loadingStarted.get())
+                            return false;
+
+                        _page.loadingStarted.set(true);
                         outputFile = new File(ExecutionContext.outputDir.getPath() + "\\" + page.getOrder() + "_" + page.getPid() + "." + imgFormat);
+
                         if (reloadFlag = outputFile.exists())
-                            outputFile.delete();
+                            if (GBDOptions.reloadImages())
+                                outputFile.delete();
+                            else
+                                return false;
                     } else
                         break;
 
@@ -81,7 +94,6 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
             page.dataProcessed.set(true);
 
             logger.info(String.format("Finished img processing for %s%s", page.getPid(), page.isGapPage() ? " with gap" : ""));
-            PageInfo _page = ExecutionContext.bookInfo.getPagesInfo().getPageByPid(page.getPid());
             _page.dataProcessed.set(true);
             _page.fileExists.set(true);
 

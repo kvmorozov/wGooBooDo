@@ -10,8 +10,8 @@ import ru.simpleGBD.App.Utils.HttpConnections;
 import ru.simpleGBD.App.Utils.Logger;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.Proxy;
+import java.net.SocketTimeoutException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -24,6 +24,7 @@ public class AbstractHttpProcessor {
 
     private static int MAX_RETRY_COUNT = 2;
     private static int SLEEP_TIME = 100;
+    private static int CONNECT_TIMEOUT = 2000;
 
     private static Map<String, HttpRequestFactory> httpFactoryMap = new ConcurrentHashMap<>();
 
@@ -47,12 +48,12 @@ public class AbstractHttpProcessor {
         GenericUrl url = new GenericUrl(rqUrl);
 
         try {
-            return getContent(url, proxy);
-        } catch (Exception e) {
+            return getContent(url, proxy, withTimeout);
+        } catch (SocketTimeoutException e) {
             for (int i = 1; i <= MAX_RETRY_COUNT; i++) {
                 try {
                     logger.finest(String.format("Try %d get url %s", i, rqUrl));
-                    return getContent(url, proxy);
+                    return getContent(url, proxy, withTimeout);
                 } catch (Exception ex) {
                     try {
                         Thread.sleep(SLEEP_TIME * i);
@@ -60,12 +61,20 @@ public class AbstractHttpProcessor {
                     }
                 }
             }
+        } catch (IOException ioe) {
+            if (proxy != null)
+                proxy.registerFailure();
+
+            return null;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
         }
 
         return null;
     }
 
-    private HttpResponse getContent(GenericUrl url, HttpHostExt proxy) throws IOException {
-        return getFactory(proxy).buildGetRequest(url).setHeaders(HttpConnections.INSTANCE.getHeaders(proxy)).execute();
+    private HttpResponse getContent(GenericUrl url, HttpHostExt proxy, boolean withTimeout) throws IOException {
+        return getFactory(proxy).buildGetRequest(url).setConnectTimeout(withTimeout ? CONNECT_TIMEOUT : 0).setHeaders(HttpConnections.INSTANCE.getHeaders(proxy)).execute();
     }
 }

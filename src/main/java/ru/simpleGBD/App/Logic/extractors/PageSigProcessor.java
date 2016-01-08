@@ -42,7 +42,7 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
         try {
 //            logger.finest(String.format("Started sig processing for %s with proxy %s", page.getPid(), proxy == null ? HttpHostExt.NO_PROXY : proxy.toString()));
 
-            HttpResponse resp = getContent(rqUrl, proxy, false);
+            HttpResponse resp = getContent(rqUrl, proxy, true);
             if (resp == null) {
                 logger.info(String.format(SIG_ERROR_TEMPLATE, rqUrl));
                 return false;
@@ -73,7 +73,7 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
                     }
 
                     if (_page.getSrc() != null && _page.getSig() == null)
-                        logger.info(String.format(SIG_ERROR_TEMPLATE, rqUrl));
+                        logger.finest(String.format(SIG_ERROR_TEMPLATE, rqUrl));
                 }
         } catch (JsonParseException | JsonMappingException | SocketTimeoutException | SocketException | NoHttpResponseException ce) {
             if (proxy != null) {
