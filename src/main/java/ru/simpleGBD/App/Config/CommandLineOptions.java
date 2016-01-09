@@ -20,6 +20,8 @@ public class CommandLineOptions implements IGBDOptions {
     private static final String OPTION_IMG_RELOAD_LONG = "reload";
     private static final String OPTION_FILL_GAPS_SHORT = "g";
     private static final String OPTION_FILL_GAPS_LONG = "gaps";
+    private static final String OPTION_SECURE_MODE_SHORT = "s";
+    private static final String OPTION_SECURE_MODE_LONG = "secure";
 
     private CommandLine commandLine;
 
@@ -61,6 +63,12 @@ public class CommandLineOptions implements IGBDOptions {
         option.setArgs(0);
         option.setOptionalArg(true);
         option.setArgName("Fill gaps ");
+        options.addOption(option);
+
+        option = new Option(OPTION_SECURE_MODE_SHORT, OPTION_SECURE_MODE_LONG, true, "Secure mode");
+        option.setArgs(0);
+        option.setOptionalArg(true);
+        option.setArgName("Secure mode ");
         options.addOption(option);
 
         try {
@@ -114,5 +122,10 @@ public class CommandLineOptions implements IGBDOptions {
     @Override
     public boolean fillGaps() {
         return getBoolOptionValue(OPTION_FILL_GAPS_SHORT);
+    }
+
+    @Override
+    public boolean secureMode() {
+        return getBoolOptionValue(OPTION_SECURE_MODE_SHORT);
     }
 }

@@ -33,6 +33,9 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
     }
 
     private boolean processImage(String imgUrl, HttpHostExt proxy) {
+        if (GBDOptions.secureMode() && proxy == null)
+            return false;
+
         File outputFile = null;
         InputStream inputStream = null;
         OutputStream outputStream = null;

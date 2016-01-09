@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.google.api.client.http.HttpResponse;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.NoHttpResponseException;
+import ru.simpleGBD.App.Config.GBDOptions;
 import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Logic.Output.progress.ProcessStatus;
 import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
@@ -86,6 +87,9 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
 
     @Override
     public void run() {
+        if (GBDOptions.secureMode() && proxy == null)
+            return;
+
         if (proxy != null && !proxy.isAvailable())
             return;
 
