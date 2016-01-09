@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.google.api.client.http.HttpResponse;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.NoHttpResponseException;
+import ru.simpleGBD.App.Config.GBDOptions;
 import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Logic.Output.progress.ProcessStatus;
 import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
@@ -22,7 +23,7 @@ import java.net.SocketTimeoutException;
  */
 public class PageSigProcessor extends AbstractHttpProcessor implements Runnable {
 
-    private static final String SIG_ERROR_TEMPLATE = "No sig at %s";
+    private static final String SIG_ERROR_TEMPLATE = "No sig at %s with proxy %s";
 
     private HttpHostExt proxy;
     private BookInfo bookInfo;
@@ -32,6 +33,9 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
     }
 
     private boolean getSig(PageInfo page) {
+        if (proxy != null && !proxy.isAvailable())
+            return false;
+
         if (page.dataProcessed.get() || page.getSig() != null || page.sigChecked.get() || page.loadingStarted.get())
             return false;
 
@@ -41,7 +45,7 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
         try {
             HttpResponse resp = getContent(rqUrl, proxy, true);
             if (resp == null) {
-                logger.info(String.format(SIG_ERROR_TEMPLATE, rqUrl));
+                logger.info(String.format(SIG_ERROR_TEMPLATE, rqUrl, proxy.toString()));
                 return false;
             }
 
@@ -65,12 +69,15 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
                             sigFound = true;
                         _page.sigChecked.set(true);
 
+                        if (proxy != null)
+                            proxy.promoteProxy();
+
                         // Если есть возможность - пытаемся грузить страницу сразу
                         Pools.imgExecutor.execute(new PageImgProcessor(_page, proxy));
                     }
 
                     if (_page.getSrc() != null && _page.getSig() == null)
-                        logger.finest(String.format(SIG_ERROR_TEMPLATE, rqUrl));
+                        logger.finest(String.format(SIG_ERROR_TEMPLATE, rqUrl, proxy.toString()));
                 }
         } catch (JsonParseException | JsonMappingException | SocketTimeoutException | SocketException | NoHttpResponseException ce) {
             if (proxy != null) {
@@ -86,6 +93,9 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
 
     @Override
     public void run() {
+        if (GBDOptions.secureMode() && proxy == null)
+            return;
+
         if (proxy != null && !proxy.isAvailable())
             return;
 

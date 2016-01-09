@@ -16,6 +16,7 @@ public class SystemConfigs {
     private static final String KEY_RESOLUTION = "resolution";
     private static final String KEY_RELOAD = "reload";
     private static final String KEY_FILL_GAPS = "fill.gaps";
+    private static final String KEY_SECURE_MODE = "secure.mode";
 
     private static Preferences preferences = Preferences.userRoot().node(PREFERENCES_NODE);
 
@@ -45,6 +46,9 @@ public class SystemConfigs {
 
     public static boolean getFillGaps() {return getBoolProperty(KEY_FILL_GAPS);}
     public static void setFillGaps(boolean value) {setBoolProperty(KEY_FILL_GAPS, value);}
+
+    public static boolean getSecureMode() {return getBoolProperty(KEY_SECURE_MODE);}
+    public static void setSecureMode(boolean value) {setBoolProperty(KEY_SECURE_MODE, value);}
 
     public static boolean isGuiMode() {return MainBookForm.getINSTANCE() != null;}
 }

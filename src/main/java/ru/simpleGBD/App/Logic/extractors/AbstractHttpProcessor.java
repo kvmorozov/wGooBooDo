@@ -4,6 +4,7 @@ import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.javanet.NetHttpTransport;
+import ru.simpleGBD.App.Config.GBDOptions;
 import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
 import ru.simpleGBD.App.Utils.HttpConnections;
@@ -87,6 +88,13 @@ public class AbstractHttpProcessor {
     }
 
     private HttpResponse getContent(GenericUrl url, HttpHostExt proxy, boolean withTimeout) throws IOException {
-        return getFactory(proxy).buildGetRequest(url).setConnectTimeout(withTimeout ? CONNECT_TIMEOUT : CONNECT_TIMEOUT * 10).setHeaders(HttpConnections.INSTANCE.getHeaders(proxy)).execute();
+        if (GBDOptions.secureMode() && proxy == null)
+            return null;
+
+        HttpResponse resp = getFactory(proxy).buildGetRequest(url)
+                .setConnectTimeout(withTimeout ? CONNECT_TIMEOUT : CONNECT_TIMEOUT * 10)
+                .setHeaders(HttpConnections.INSTANCE.getHeaders(proxy)).execute();
+
+        return resp;
     }
 }

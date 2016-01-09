@@ -33,6 +33,9 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
     }
 
     private boolean processImage(String imgUrl, HttpHostExt proxy) {
+        if (GBDOptions.secureMode() && proxy == null)
+            return false;
+
         File outputFile = null;
         InputStream inputStream = null;
         OutputStream outputStream = null;
@@ -92,6 +95,9 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
             }
 
             page.dataProcessed.set(true);
+
+            if (proxy != null)
+                proxy.promoteProxy();
 
             logger.info(String.format("Finished img processing for %s%s", page.getPid(), page.isGapPage() ? " with gap" : ""));
             _page.dataProcessed.set(true);

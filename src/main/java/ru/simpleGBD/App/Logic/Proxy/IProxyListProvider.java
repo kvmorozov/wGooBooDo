@@ -8,4 +8,5 @@ import java.util.List;
 public interface IProxyListProvider {
 
     List<HttpHostExt> getProxyList();
+    public void invalidatedProxyListener();
 }

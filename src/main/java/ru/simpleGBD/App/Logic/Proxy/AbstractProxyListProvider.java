@@ -35,8 +35,16 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
             HttpHost host = new HttpHost(proxyItemArr[0], Integer.parseInt(proxyItemArr[1]));
             String cookie = getCookie(host);
             if (cookie != null) {
-                proxyList.add(new HttpHostExt(host, cookie));
-                logger.info(String.format("Proxy %s added.", host.toHostString()));
+                HttpHostExt proxy = new HttpHostExt(host, cookie);
+
+                if (GBDOptions.secureMode() && proxy.isSecure()) {
+                    proxyList.add(proxy);
+                    logger.info(String.format("%sroxy %s added.",
+                            GBDOptions.secureMode() ? proxy.isSecure() ? "Secure p" : "NOT secure p" : "P",
+                            host.toHostString()));
+                }
+                else
+                    logger.info(String.format("NOT secure proxy %s NOT added.", host.toHostString()));
             } else
                 logger.info(String.format("Proxy %s NOT added.", host.toHostString()));
         }
@@ -64,5 +72,12 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
             INSTANCE = GBDOptions.getProxyListFile() == null ? new StaticProxyListProvider() : new FileProxyListProvider();
 
         return INSTANCE;
+    }
+
+    @Override
+    public void invalidatedProxyListener() {
+        long liveproxyCount = proxyList.stream().filter(p -> p.isAvailable()).count();
+        if (liveproxyCount == 0 && GBDOptions.secureMode())
+            throw new RuntimeException("No more proxies!");
     }
 }

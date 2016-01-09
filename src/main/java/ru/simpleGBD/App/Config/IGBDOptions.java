@@ -11,4 +11,5 @@ public interface IGBDOptions {
     int getImageWidth();
     boolean reloadImages();
     boolean fillGaps();
+    boolean secureMode();
 }

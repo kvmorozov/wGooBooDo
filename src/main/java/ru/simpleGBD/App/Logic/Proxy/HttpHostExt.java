@@ -1,9 +1,17 @@
 package ru.simpleGBD.App.Logic.Proxy;
 
+import com.google.api.client.http.GenericUrl;
+import com.google.api.client.http.HttpRequestFactory;
+import com.google.api.client.http.HttpResponse;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpHost;
+import ru.simpleGBD.App.Config.GBDOptions;
 import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Utils.Logger;
 
+import java.io.IOException;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -16,6 +24,8 @@ public class HttpHostExt {
 
     private static Logger logger = Logger.getLogger(ExecutionContext.output, HttpHostExt.class.getName());
 
+    private static final GenericUrl checkProxyUrl = new GenericUrl("http://mxtoolbox.com/WhatIsMyIP/");
+
     public static final int FAILURES_THRESHOLD = 5;
     public static final String NO_PROXY = "NO_PROXY";
 
@@ -24,10 +34,30 @@ public class HttpHostExt {
     private String cookie;
     private AtomicBoolean available = new AtomicBoolean(true);
     private AtomicInteger failureCount = new AtomicInteger(0);
+    private boolean isSecure = true;
 
     public HttpHostExt(HttpHost host, String cookie) {
         this.host = host;
         this.cookie = cookie;
+
+        if (GBDOptions.secureMode())
+            isSecure = checkSecurity();
+    }
+
+    private boolean checkSecurity() {
+        HttpRequestFactory requestFactory = new NetHttpTransport.Builder().setProxy(this.getProxy()).build().createRequestFactory();
+
+        try {
+            HttpResponse resp = requestFactory.buildGetRequest(checkProxyUrl).execute();
+            if (resp != null && resp.getContent() != null) {
+                String respStr = IOUtils.toString(resp.getContent());
+                return !respStr.contains(InetAddress.getLocalHost().getHostName());
+            }
+        } catch (IOException e) {
+            return false;
+        }
+
+        return false;
     }
 
     public boolean isAvailable() {
@@ -50,7 +80,7 @@ public class HttpHostExt {
 
     @Override
     public String toString() {
-        return host == null ? NO_PROXY : host.toHostString();
+        return host == null ? NO_PROXY : String.format("%s (%d)", host.toHostString(), failureCount.get());
     }
 
     public void registerFailure() {
@@ -61,7 +91,12 @@ public class HttpHostExt {
         if (failureCount.get() > FAILURES_THRESHOLD) {
             logger.info(String.format("Proxy %s invalidated!", host.toHostString()));
             available.set(false);
+            AbstractProxyListProvider.getInstance().invalidatedProxyListener();
         }
+    }
+
+    public void promoteProxy() {
+        failureCount.decrementAndGet();
     }
 
     public Proxy getProxy() {
@@ -73,5 +108,9 @@ public class HttpHostExt {
 
     public String getCookie() {
         return cookie;
+    }
+
+    public boolean isSecure() {
+        return isSecure;
     }
 }
