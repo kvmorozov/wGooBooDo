@@ -69,8 +69,7 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
                             sigFound = true;
                         _page.sigChecked.set(true);
 
-                        if (!proxy.isLocal())
-                            proxy.promoteProxy();
+                        proxy.promoteProxy();
 
                         // Если есть возможность - пытаемся грузить страницу сразу
                         Pools.imgExecutor.execute(new PageImgProcessor(_page, proxy));

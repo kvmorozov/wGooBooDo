@@ -96,8 +96,7 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
 
             page.dataProcessed.set(true);
 
-            if (!proxy.isLocal())
-                proxy.promoteProxy();
+            proxy.promoteProxy();
 
             logger.info(String.format("Finished img processing for %s%s", page.getPid(), page.isGapPage() ? " with gap" : ""));
             _page.dataProcessed.set(true);

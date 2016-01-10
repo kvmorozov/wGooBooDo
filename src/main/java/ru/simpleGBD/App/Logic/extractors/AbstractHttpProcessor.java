@@ -72,8 +72,7 @@ public class AbstractHttpProcessor {
 
             proxy.registerFailure();
         } catch (IOException ioe) {
-            if (!proxy.isLocal())
-                proxy.registerFailure();
+            proxy.registerFailure();
 
             return proxy.isLocal() ? null : getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout);
         } catch (Exception ex) {
