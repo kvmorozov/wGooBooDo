@@ -33,7 +33,7 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
     }
 
     private boolean getSig(PageInfo page) {
-        if (proxy != null && !proxy.isAvailable())
+        if (!proxy.isLocal() && !proxy.isAvailable())
             return false;
 
         if (page.dataProcessed.get() || page.getSig() != null || page.sigChecked.get() || page.loadingStarted.get())
@@ -69,7 +69,7 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
                             sigFound = true;
                         _page.sigChecked.set(true);
 
-                        if (proxy != null)
+                        if (!proxy.isLocal())
                             proxy.promoteProxy();
 
                         // Если есть возможность - пытаемся грузить страницу сразу
@@ -80,7 +80,7 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
                         logger.finest(String.format(SIG_ERROR_TEMPLATE, rqUrl, proxy.toString()));
                 }
         } catch (JsonParseException | JsonMappingException | SocketTimeoutException | SocketException | NoHttpResponseException ce) {
-            if (proxy != null) {
+            if (!proxy.isLocal()) {
                 proxy.registerFailure();
                 logger.info(String.format("Proxy %s failed!", proxy.toString()));
             }
@@ -93,10 +93,10 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
 
     @Override
     public void run() {
-        if (GBDOptions.secureMode() && proxy == null)
+        if (GBDOptions.secureMode() && proxy.isLocal())
             return;
 
-        if (proxy != null && !proxy.isAvailable())
+        if (!proxy.isLocal() && !proxy.isAvailable())
             return;
 
         bookInfo = ExecutionContext.bookInfo;

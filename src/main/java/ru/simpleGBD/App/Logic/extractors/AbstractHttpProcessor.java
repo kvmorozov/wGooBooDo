@@ -11,7 +11,6 @@ import ru.simpleGBD.App.Utils.HttpConnections;
 import ru.simpleGBD.App.Utils.Logger;
 
 import java.io.IOException;
-import java.net.Proxy;
 import java.net.SocketTimeoutException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -23,14 +22,14 @@ public class AbstractHttpProcessor {
 
     protected static Logger logger = Logger.getLogger(ExecutionContext.output, AbstractHttpProcessor.class.getName());
 
-    private static int MAX_RETRY_COUNT = 2;
-    private static int SLEEP_TIME = 100;
+    private static int MAX_RETRY_COUNT = 3;
+    private static int SLEEP_TIME = 1000;
     private static int CONNECT_TIMEOUT = 2000;
 
     private static Map<String, HttpRequestFactory> httpFactoryMap = new ConcurrentHashMap<>();
 
     private String getProxyKey(HttpHostExt proxy) {
-        return proxy == null ? HttpHostExt.NO_PROXY : proxy.toString();
+        return proxy.toString();
     }
 
     private HttpRequestFactory getFactory(HttpHostExt proxy) {
@@ -41,7 +40,7 @@ public class AbstractHttpProcessor {
         if (requestFactory == null)
             synchronized (key) {
                 requestFactory = new NetHttpTransport.Builder().
-                        setProxy(proxy == null ? Proxy.NO_PROXY : proxy.getProxy()).build().createRequestFactory();
+                        setProxy(proxy.getProxy()).build().createRequestFactory();
 
                 httpFactoryMap.put(key, requestFactory);
             }
@@ -58,13 +57,13 @@ public class AbstractHttpProcessor {
 
         try {
             return getContent(url, proxy, withTimeout);
-        } catch (SocketTimeoutException e) {
+        } catch (SocketTimeoutException ste1) {
             for (int i = 1; i <= MAX_RETRY_COUNT; i++) {
                 try {
                     resetFactory(proxy);
                     logger.finest(String.format("Try %d get url %s with proxy %s", i, rqUrl, proxy.toString()));
                     return getContent(url, proxy, withTimeout);
-                } catch (Exception ex) {
+                } catch (SocketTimeoutException ste2) {
                     try {
                         Thread.sleep(SLEEP_TIME * i);
                     } catch (InterruptedException ie) {
@@ -72,23 +71,22 @@ public class AbstractHttpProcessor {
                 }
             }
 
-            if (proxy != null)
-                proxy.registerFailure();
+            proxy.registerFailure();
         } catch (IOException ioe) {
-            if (proxy != null)
+            if (!proxy.isLocal())
                 proxy.registerFailure();
 
-            return proxy == null ? null : getContent(url, null, withTimeout);
+            return proxy.isLocal() ? null : getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout);
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;
         }
 
-        return proxy == null ? null : getContent(url, null, withTimeout);
+        return proxy.isLocal() ? null : getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout);
     }
 
     private HttpResponse getContent(GenericUrl url, HttpHostExt proxy, boolean withTimeout) throws IOException {
-        if (GBDOptions.secureMode() && proxy == null)
+        if (GBDOptions.secureMode() && proxy.isLocal())
             return null;
 
         HttpResponse resp = getFactory(proxy).buildGetRequest(url)

@@ -33,7 +33,7 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
     }
 
     private boolean processImage(String imgUrl, HttpHostExt proxy) {
-        if (GBDOptions.secureMode() && proxy == null)
+        if (GBDOptions.secureMode() && proxy.isLocal())
             return false;
 
         File outputFile = null;
@@ -79,7 +79,7 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
                     if (outputFile != null && outputFile.exists())
                         break;
 
-                    if (proxy != null)
+                    if (!proxy.isLocal())
                         logger.info(String.format("Started img %s for %s with %s Proxy",
                                 reloadFlag ? "RELOADING" : "processing", page.getPid(), proxy.toString()));
                     else
@@ -96,7 +96,7 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
 
             page.dataProcessed.set(true);
 
-            if (proxy != null)
+            if (!proxy.isLocal())
                 proxy.promoteProxy();
 
             logger.info(String.format("Finished img processing for %s%s", page.getPid(), page.isGapPage() ? " with gap" : ""));
@@ -105,7 +105,7 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
 
             return true;
         } catch (ConnectException | SocketTimeoutException ce) {
-            if (proxy != null) {
+            if (!proxy.isLocal()) {
                 proxy.registerFailure();
                 logger.info(String.format("Proxy %s failed!", proxy.toString()));
             }
@@ -137,7 +137,7 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
     }
 
     private boolean processImageWithProxy(HttpHostExt proxy) {
-        if (proxy != null && !proxy.isAvailable())
+        if (!proxy.isLocal() && !proxy.isAvailable())
             return false;
 
         return processImage(page.getImqRqUrl(
@@ -151,8 +151,8 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
 
         if (!processImageWithProxy(usedProxy))
             // Пробуем скачать страницу с без прокси, если не получилось с той прокси, с помощью которой узнали sig
-            if (usedProxy != null)
-                processImageWithProxy(null);
+            if (!usedProxy.isLocal())
+                processImageWithProxy(HttpHostExt.NO_PROXY);
         // Пробуем скачать страницу с другими прокси, если не получилось с той, с помощью которой узнали sig
         for (HttpHostExt proxy : AbstractProxyListProvider.getInstance().getProxyList())
             if (proxy != usedProxy && processImageWithProxy(proxy))

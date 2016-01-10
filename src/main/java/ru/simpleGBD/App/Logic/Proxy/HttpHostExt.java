@@ -27,7 +27,8 @@ public class HttpHostExt {
     private static final GenericUrl checkProxyUrl = new GenericUrl("http://mxtoolbox.com/WhatIsMyIP/");
 
     public static final int FAILURES_THRESHOLD = 5;
-    public static final String NO_PROXY = "NO_PROXY";
+    public static final HttpHostExt NO_PROXY = new HttpHostExt();
+    public static final String NO_PROXY_STR = "NO_PROXY";
 
     private HttpHost host;
     private Proxy proxy;
@@ -42,6 +43,10 @@ public class HttpHostExt {
 
         if (GBDOptions.secureMode())
             isSecure = checkSecurity();
+    }
+
+    private HttpHostExt() {
+        proxy = Proxy.NO_PROXY;
     }
 
     private boolean checkSecurity() {
@@ -80,7 +85,7 @@ public class HttpHostExt {
 
     @Override
     public String toString() {
-        return host == null ? NO_PROXY : String.format("%s (%d)", host.toHostString(), failureCount.get());
+        return host == null ? NO_PROXY_STR : String.format("%s (%d)", host.toHostString(), -1 * failureCount.get());
     }
 
     public void registerFailure() {
@@ -110,7 +115,13 @@ public class HttpHostExt {
         return cookie;
     }
 
+    public void setCookie(String cookie) {
+        this.cookie = cookie;
+    }
+
     public boolean isSecure() {
         return isSecure;
     }
+
+    public boolean isLocal() {return this == HttpHostExt.NO_PROXY;}
 }

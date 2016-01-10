@@ -124,7 +124,7 @@ public class ImageExtractor extends AbstractEventSource {
 
     private void getPagesInfo() throws IOException {
         // Сначала идём без проксм
-        Pools.sigExecutor.execute(new PageSigProcessor(null));
+        Pools.sigExecutor.execute(new PageSigProcessor(HttpHostExt.NO_PROXY));
         // Потом с прокси
         for (HttpHostExt proxy : AbstractProxyListProvider.getInstance().getProxyList())
             if (proxy.isAvailable() && proxy.getHost().getPort() > 0)
