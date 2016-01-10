@@ -17,6 +17,9 @@ import ru.simpleGBD.App.Utils.Pools;
 
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by km on 21.11.2015.
@@ -69,15 +72,14 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
                             sigFound = true;
                         _page.sigChecked.set(true);
 
-                        if (!proxy.isLocal())
-                            proxy.promoteProxy();
+                        proxy.promoteProxy();
 
                         // Если есть возможность - пытаемся грузить страницу сразу
                         Pools.imgExecutor.execute(new PageImgProcessor(_page, proxy));
                     }
 
                     if (_page.getSrc() != null && _page.getSig() == null)
-                        logger.finest(String.format(SIG_ERROR_TEMPLATE, rqUrl, proxy.toString()));
+                        logger.finest(String.format(SIG_ERROR_TEMPLATE, _page.getSrc(), proxy.toString()));
                 }
         } catch (JsonParseException | JsonMappingException | SocketTimeoutException | SocketException | NoHttpResponseException ce) {
             if (!proxy.isLocal()) {
@@ -103,11 +105,18 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
 
         final ProcessStatus psSigs = new ProcessStatus(bookInfo.getPagesInfo().getPages().size());
 
-        ExecutionContext.bookInfo.getPagesInfo().getPages().parallelStream()
+        ExecutorService sigPool = Executors.newCachedThreadPool();
+        sigPool.submit(() -> ExecutionContext.bookInfo.getPagesInfo().getPages().parallelStream()
                 .forEach(page -> {
                     psSigs.inc();
                     getSig(page);
-                });
+                }));
+
+        sigPool.shutdown();
+        try {
+            sigPool.awaitTermination(100, TimeUnit.MINUTES);
+        } catch (InterruptedException e) {
+        }
 
         psSigs.finish();
     }

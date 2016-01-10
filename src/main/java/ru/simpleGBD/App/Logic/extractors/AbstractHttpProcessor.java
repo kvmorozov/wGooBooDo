@@ -22,8 +22,8 @@ public class AbstractHttpProcessor {
 
     protected static Logger logger = Logger.getLogger(ExecutionContext.output, AbstractHttpProcessor.class.getName());
 
-    private static int MAX_RETRY_COUNT = 3;
-    private static int SLEEP_TIME = 1000;
+    private static int MAX_RETRY_COUNT = 2;
+    private static int SLEEP_TIME = 500;
     private static int CONNECT_TIMEOUT = 2000;
 
     private static Map<String, HttpRequestFactory> httpFactoryMap = new ConcurrentHashMap<>();
@@ -72,8 +72,7 @@ public class AbstractHttpProcessor {
 
             proxy.registerFailure();
         } catch (IOException ioe) {
-            if (!proxy.isLocal())
-                proxy.registerFailure();
+            proxy.registerFailure();
 
             return proxy.isLocal() ? null : getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout);
         } catch (Exception ex) {

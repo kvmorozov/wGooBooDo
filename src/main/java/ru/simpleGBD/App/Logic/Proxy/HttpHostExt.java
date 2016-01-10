@@ -89,7 +89,7 @@ public class HttpHostExt {
     }
 
     public void registerFailure() {
-        if (!isAvailable())
+        if (isLocal() || !isAvailable())
             return;
 
         failureCount.incrementAndGet();
@@ -101,7 +101,8 @@ public class HttpHostExt {
     }
 
     public void promoteProxy() {
-        failureCount.decrementAndGet();
+        if (!isLocal())
+            failureCount.decrementAndGet();
     }
 
     public Proxy getProxy() {
