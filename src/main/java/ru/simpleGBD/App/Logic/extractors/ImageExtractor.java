@@ -138,7 +138,7 @@ public class ImageExtractor extends AbstractEventSource {
 
         for (PageInfo page : ExecutionContext.bookInfo.getPagesInfo().getPages())
             if (!page.dataProcessed.get() && page.getSig() != null)
-                Pools.imgExecutor.execute(new PageImgProcessor(page, null));
+                Pools.imgExecutor.execute(new PageImgProcessor(page, HttpHostExt.NO_PROXY));
 
         Pools.imgExecutor.shutdown();
         try {
