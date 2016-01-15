@@ -1,6 +1,7 @@
 package ru.simpleGBD.App.Logic.extractors;
 
 import com.google.api.client.http.GenericUrl;
+import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.javanet.NetHttpTransport;
@@ -48,29 +49,12 @@ public class AbstractHttpProcessor {
         return requestFactory;
     }
 
-    private void resetFactory(HttpHostExt proxy) {
-        httpFactoryMap.remove(getProxyKey(proxy));
-    }
-
-    protected HttpResponse getContent(String rqUrl, HttpHostExt proxy, boolean withTimeout) throws IOException {
+    protected HttpResponse getContent(String rqUrl, HttpHostExt proxy, boolean withTimeout) {
         GenericUrl url = new GenericUrl(rqUrl);
 
         try {
-            return getContent(url, proxy, withTimeout);
-        } catch (SocketTimeoutException ste1) {
-            for (int i = 1; i <= MAX_RETRY_COUNT; i++)
-                try {
-                    resetFactory(proxy);
-                    logger.finest(String.format("Try %d get url %s with proxy %s", i, rqUrl, proxy.toString()));
-                    return getContent(url, proxy, withTimeout);
-                } catch (SocketTimeoutException ste2) {
-                    try {
-                        Thread.sleep(SLEEP_TIME * i);
-                    } catch (InterruptedException ie) {
-                    }
-                }
-
-            proxy.registerFailure();
+            HttpResponse resp = getContent(url, proxy, withTimeout);
+            return proxy.isLocal() ? resp : resp == null ? getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout) : resp;
         } catch (IOException ioe) {
             proxy.registerFailure();
 
@@ -79,21 +63,36 @@ public class AbstractHttpProcessor {
             ex.printStackTrace();
             return null;
         }
-
-        return proxy.isLocal() ? null : getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout);
     }
 
     private HttpResponse getContent(GenericUrl url, HttpHostExt proxy, boolean withTimeout) throws IOException {
         if ((GBDOptions.secureMode() && proxy.isLocal()) || !proxy.isAvailable())
             return null;
 
-        HttpResponse resp = getFactory(proxy).buildGetRequest(url)
+        HttpRequest req = getFactory(proxy).buildGetRequest(url)
                 .setConnectTimeout(withTimeout ? CONNECT_TIMEOUT : CONNECT_TIMEOUT * 10)
-                .setHeaders(HttpConnections.getHeaders(proxy)).execute();
+                .setHeaders(HttpConnections.getHeaders(proxy));
+        HttpResponse resp = getContent(req, proxy, 0);
 
         if (resp == null)
             logger.finest(String.format("No response at url %s with proxy %s", url.toString(), proxy.toString()));
 
         return resp;
+    }
+
+    private HttpResponse getContent(HttpRequest req, HttpHostExt proxy, int attempt) throws IOException {
+        if (attempt > 0)
+            try {
+                logger.finest(String.format("Attempt %d with %s url", attempt, req.getUrl().toString()));
+                Thread.sleep(SLEEP_TIME * attempt);
+            } catch (InterruptedException ie) {
+            }
+
+        try {
+            return req.execute();
+        } catch (SocketTimeoutException ste1) {
+            proxy.registerFailure();
+            return getContent(req, proxy, attempt++);
+        }
     }
 }

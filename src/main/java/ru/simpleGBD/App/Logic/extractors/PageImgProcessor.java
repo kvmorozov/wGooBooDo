@@ -10,8 +10,6 @@ import ru.simpleGBD.App.Utils.Images;
 import ru.simpleGBD.App.Utils.Logger;
 
 import java.io.*;
-import java.net.ConnectException;
-import java.net.SocketTimeoutException;
 
 /**
  * Created by km on 21.11.2015.
@@ -102,11 +100,6 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
             page.fileExists.set(true);
 
             return true;
-        } catch (ConnectException | SocketTimeoutException ce) {
-            if (!proxy.isLocal()) {
-                proxy.registerFailure();
-                logger.info(String.format("Proxy %s failed!", proxy.toString()));
-            }
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
@@ -150,11 +143,12 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
         if (!processImageWithProxy(usedProxy)) {
             // Пробуем скачать страницу с без прокси, если не получилось с той прокси, с помощью которой узнали sig
             if (!usedProxy.isLocal())
-                processImageWithProxy(HttpHostExt.NO_PROXY);
-            // Пробуем скачать страницу с другими прокси, если не получилось с той, с помощью которой узнали sig
-            for (HttpHostExt proxy : AbstractProxyListProvider.getInstance().getProxyList())
-                if (proxy != usedProxy && processImageWithProxy(proxy))
-                    return;
+                if (!processImageWithProxy(HttpHostExt.NO_PROXY))
+                    // Пробуем скачать страницу с другими прокси, если не получилось с той, с помощью которой узнали sig
+                    for (HttpHostExt proxy : AbstractProxyListProvider.getInstance().getProxyList())
+                        if (proxy != usedProxy)
+                            if (processImageWithProxy(proxy))
+                                return;
         }
     }
 }

@@ -86,19 +86,23 @@ public class HttpHostExt {
 
     @Override
     public String toString() {
-        return host == null ? NO_PROXY_STR : String.format("%s (%d)", host.toHostString(), -1 * failureCount.get());
+        return String.format("%s (%d)", host == null ? NO_PROXY_STR : host.toHostString(), -1 * failureCount.get());
     }
 
     public void registerFailure() {
-        if (isLocal() || !isAvailable())
+        if (!isAvailable())
             return;
 
         failureCount.incrementAndGet();
         if (failureCount.get() > (isLocal() ? LOCAL_FAILURES_THRESHOLD : REMOTE_FAILURES_THRESHOLD)) {
-            logger.info(String.format("Proxy %s invalidated!", host.toHostString()));
+            logger.info(String.format("Proxy %s invalidated!", host == null ? NO_PROXY_STR : host.toHostString()));
             available.set(false);
             AbstractProxyListProvider.getInstance().invalidatedProxyListener();
         }
+    }
+
+    public void forceInvalidate() {
+        available.set(false);
     }
 
     public void promoteProxy() {
