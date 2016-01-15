@@ -9,7 +9,6 @@ import ru.simpleGBD.App.Config.GBDOptions;
 import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Logic.Output.progress.ProcessStatus;
 import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
-import ru.simpleGBD.App.Logic.model.book.BookInfo;
 import ru.simpleGBD.App.Logic.model.book.PageInfo;
 import ru.simpleGBD.App.Logic.model.book.PagesInfo;
 import ru.simpleGBD.App.Utils.Mapper;
@@ -29,14 +28,13 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
     private static final String SIG_ERROR_TEMPLATE = "No sig at %s with proxy %s";
 
     private HttpHostExt proxy;
-    private BookInfo bookInfo;
 
     public PageSigProcessor(HttpHostExt proxy) {
         this.proxy = proxy;
     }
 
     private boolean getSig(PageInfo page) {
-        if (!proxy.isLocal() && !proxy.isAvailable())
+        if (!proxy.isAvailable())
             return false;
 
         if (page.dataProcessed.get() || page.getSig() != null || page.sigChecked.get() || page.loadingStarted.get())
@@ -58,7 +56,7 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
             PageInfo[] pages = framePages.getPagesArray();
             for (PageInfo framePage : pages)
                 if (framePage.getOrder() >= page.getOrder() && framePage.getSrc() != null) {
-                    PageInfo _page = bookInfo.getPagesInfo().getPageByPid(framePage.getPid());
+                    PageInfo _page = ExecutionContext.bookInfo.getPagesInfo().getPageByPid(framePage.getPid());
 
                     if (_page.dataProcessed.get() || _page.getSig() != null || _page.sigChecked.get())
                         continue;
@@ -86,6 +84,8 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
                 proxy.registerFailure();
                 logger.info(String.format("Proxy %s failed!", proxy.toString()));
             }
+
+            ce.printStackTrace();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -95,15 +95,10 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
 
     @Override
     public void run() {
-        if (GBDOptions.secureMode() && proxy.isLocal())
+        if ((GBDOptions.secureMode() && proxy.isLocal()) || !proxy.isAvailable())
             return;
 
-        if (!proxy.isLocal() && !proxy.isAvailable())
-            return;
-
-        bookInfo = ExecutionContext.bookInfo;
-
-        final ProcessStatus psSigs = new ProcessStatus(bookInfo.getPagesInfo().getPages().size());
+        final ProcessStatus psSigs = new ProcessStatus(ExecutionContext.bookInfo.getPagesInfo().getPages().size());
 
         ExecutorService sigPool = Executors.newCachedThreadPool();
         sigPool.submit(() -> ExecutionContext.bookInfo.getPagesInfo().getPages().parallelStream()

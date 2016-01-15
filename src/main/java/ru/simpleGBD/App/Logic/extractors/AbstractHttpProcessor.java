@@ -84,12 +84,15 @@ public class AbstractHttpProcessor {
     }
 
     private HttpResponse getContent(GenericUrl url, HttpHostExt proxy, boolean withTimeout) throws IOException {
-        if (GBDOptions.secureMode() && proxy.isLocal())
+        if ((GBDOptions.secureMode() && proxy.isLocal()) || !proxy.isAvailable())
             return null;
 
         HttpResponse resp = getFactory(proxy).buildGetRequest(url)
                 .setConnectTimeout(withTimeout ? CONNECT_TIMEOUT : CONNECT_TIMEOUT * 10)
-                .setHeaders(HttpConnections.INSTANCE.getHeaders(proxy)).execute();
+                .setHeaders(HttpConnections.getHeaders(proxy)).execute();
+
+        if (resp == null)
+            logger.finest(String.format("No response at url %s with proxy %s", url.toString(), proxy.toString()));
 
         return resp;
     }

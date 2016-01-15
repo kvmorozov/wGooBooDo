@@ -101,8 +101,8 @@ public class PagesInfo implements Serializable {
         return pagesMap.get(pid);
     }
 
-    public LinkedList<PageInfo> getPages() {
-        return pagesList;
+    public Collection<PageInfo> getPages() {
+        return pagesMap.values();
     }
 
     public String getMissingPagesList() {

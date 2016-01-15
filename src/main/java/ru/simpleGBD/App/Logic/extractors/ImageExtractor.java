@@ -82,7 +82,7 @@ public class ImageExtractor extends AbstractEventSource {
         try {
             res = Jsoup
                     .connect(HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, ExecutionContext.bookId) + OPEN_PAGE_ADD_URL)
-                    .userAgent(HttpConnections.USER_AGENT).method(Connection.Method.GET).execute();
+                    .userAgent(HttpConnections.USER_AGENT).followRedirects(false).method(Connection.Method.GET).execute();
         } catch (UnknownHostException uhe) {
             logger.severe("Not connected to Internet!");
         } catch (Exception ex) {
@@ -96,7 +96,7 @@ public class ImageExtractor extends AbstractEventSource {
         }
 
         Document doc = res.parse();
-        HttpConnections.INSTANCE.setDefaultCookies(res.cookies());
+        HttpConnections.setDefaultCookies(res.cookies());
 
         Elements scripts = doc.select("script");
         for (Element script : scripts) {
@@ -108,7 +108,13 @@ public class ImageExtractor extends AbstractEventSource {
                     return null;
 
                 if (data.startsWith(ADD_FLAGS_ATTRIBUTE) && data.indexOf(OC_RUN_ATTRIBUTE) > 0) {
-                    String pagesJsonData = data.substring(data.indexOf(OC_RUN_ATTRIBUTE) + OC_RUN_ATTRIBUTE.length() + 1, data.lastIndexOf(BOOK_INFO_START_TAG) - 3);
+                    int jsonStart = data.indexOf(OC_RUN_ATTRIBUTE) + OC_RUN_ATTRIBUTE.length() + 1;
+                    int jsonEnd = data.lastIndexOf(BOOK_INFO_START_TAG) - 3;
+
+                    if (jsonStart <= 0 || jsonEnd <= 0)
+                        return null;
+
+                    String pagesJsonData = data.substring(jsonStart, jsonEnd);
                     PagesInfo pages = Mapper.objectMapper.readValue(pagesJsonData, PagesInfo.class);
 
                     String bookJsonData = data.substring(data.indexOf(BOOK_INFO_START_TAG) - 2, data.lastIndexOf(BOOK_INFO_END_TAG) - 3);
@@ -196,6 +202,10 @@ public class ImageExtractor extends AbstractEventSource {
     public void process() {
         try {
             ExecutionContext.bookInfo = getBookInfo();
+
+            if (ExecutionContext.bookInfo == null)
+                throw new RuntimeException("No book info!");
+
             output.receiveBookInfo(ExecutionContext.bookInfo);
 
             String baseOutputDirPath = GBDOptions.getOutputDir();
@@ -205,6 +215,8 @@ public class ImageExtractor extends AbstractEventSource {
             File baseOutputDir = new File(baseOutputDirPath);
             if (!baseOutputDir.exists())
                 baseOutputDir.mkdir();
+
+            logger.info(String.format("Working with %s", ExecutionContext.bookInfo.getBookData().getTitle()));
 
             ExecutionContext.outputDir =
                     new File(baseOutputDirPath + "\\" +

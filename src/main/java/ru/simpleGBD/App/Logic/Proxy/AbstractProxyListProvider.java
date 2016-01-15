@@ -1,16 +1,13 @@
 package ru.simpleGBD.App.Logic.Proxy;
 
-import com.google.api.client.http.GenericUrl;
+import com.google.api.client.http.HttpHeaders;
 import com.google.api.client.http.HttpResponse;
-import com.google.api.client.http.javanet.NetHttpTransport;
 import org.apache.http.HttpHost;
 import ru.simpleGBD.App.Config.GBDOptions;
 import ru.simpleGBD.App.Logic.ExecutionContext;
+import ru.simpleGBD.App.Utils.HttpConnections;
 import ru.simpleGBD.App.Utils.Logger;
 
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.Proxy;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +19,7 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
     private static Logger logger = Logger.getLogger(ExecutionContext.output, "ProxyPistProvider");
 
     private static IProxyListProvider INSTANCE;
+    private HttpHeaders headers = new HttpHeaders().setUserAgent(HttpConnections.USER_AGENT);
 
     protected List<HttpHostExt> proxyList = new ArrayList<>();
 
@@ -42,8 +40,7 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
                     logger.info(String.format("%sroxy %s added.",
                             GBDOptions.secureMode() ? proxy.isSecure() ? "Secure p" : "NOT secure p" : "P",
                             host.toHostString()));
-                }
-                else
+                } else
                     logger.info(String.format("NOT secure proxy %s NOT added.", host.toHostString()));
             } else
                 logger.info(String.format("Proxy %s NOT added.", host.toHostString()));
@@ -52,11 +49,9 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
 
     private String getCookie(HttpHost proxy) {
         try {
-            HttpResponse resp = new NetHttpTransport.Builder().
-                    setProxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxy.getHostName(), proxy.getPort()))).
-                    build().createRequestFactory().buildGetRequest(new GenericUrl(ExecutionContext.baseUrl)).execute();
+            HttpResponse resp = HttpConnections.getResponse(proxy, headers);
 
-            return ((ArrayList) resp.getHeaders().get("set-cookie")).get(0).toString();
+            return ((ArrayList) resp.getHeaders().get("set-cookie")).get(0).toString().split(";")[0];
         } catch (Exception e) {
             return null;
         }

@@ -39,9 +39,8 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
         File outputFile = null;
         InputStream inputStream = null;
         OutputStream outputStream = null;
-        PageInfo _page = ExecutionContext.bookInfo.getPagesInfo().getPageByPid(page.getPid());
 
-        if (_page.loadingStarted.get())
+        if (page.loadingStarted.get())
             return false;
 
         try {
@@ -62,10 +61,10 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
                     String imgFormat = Images.getImageFormat(resp);
                     if (imgFormat != null) {
 
-                        if (_page.loadingStarted.get())
+                        if (page.loadingStarted.get())
                             return false;
 
-                        _page.loadingStarted.set(true);
+                        page.loadingStarted.set(true);
                         outputFile = new File(ExecutionContext.outputDir.getPath() + "\\" + page.getOrder() + "_" + page.getPid() + "." + imgFormat);
 
                         if (reloadFlag = outputFile.exists())
@@ -99,8 +98,8 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
             proxy.promoteProxy();
 
             logger.info(String.format("Finished img processing for %s%s", page.getPid(), page.isGapPage() ? " with gap" : ""));
-            _page.dataProcessed.set(true);
-            _page.fileExists.set(true);
+            page.dataProcessed.set(true);
+            page.fileExists.set(true);
 
             return true;
         } catch (ConnectException | SocketTimeoutException ce) {
@@ -126,7 +125,7 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
                 }
             }
 
-            if (!_page.dataProcessed.get() && outputFile != null) {
+            if (!page.dataProcessed.get() && outputFile != null) {
                 logger.info(String.format("Loading page %s failed!", page.getPid()));
                 outputFile.delete();
             }
@@ -148,13 +147,14 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
         if (page.dataProcessed.get())
             return;
 
-        if (!processImageWithProxy(usedProxy))
+        if (!processImageWithProxy(usedProxy)) {
             // Пробуем скачать страницу с без прокси, если не получилось с той прокси, с помощью которой узнали sig
             if (!usedProxy.isLocal())
                 processImageWithProxy(HttpHostExt.NO_PROXY);
-        // Пробуем скачать страницу с другими прокси, если не получилось с той, с помощью которой узнали sig
-        for (HttpHostExt proxy : AbstractProxyListProvider.getInstance().getProxyList())
-            if (proxy != usedProxy && processImageWithProxy(proxy))
-                return;
+            // Пробуем скачать страницу с другими прокси, если не получилось с той, с помощью которой узнали sig
+            for (HttpHostExt proxy : AbstractProxyListProvider.getInstance().getProxyList())
+                if (proxy != usedProxy && processImageWithProxy(proxy))
+                    return;
+        }
     }
 }
