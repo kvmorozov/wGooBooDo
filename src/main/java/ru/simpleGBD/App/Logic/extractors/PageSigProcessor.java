@@ -26,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 public class PageSigProcessor extends AbstractHttpProcessor implements Runnable {
 
     private static final String SIG_ERROR_TEMPLATE = "No sig at %s with proxy %s";
+    private static final String SIG_WRONG_FORMAT = "Wrong sig format: %s";
 
     private HttpHostExt proxy;
 
@@ -77,7 +78,7 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
                     }
 
                     if (_page.getSrc() != null && _page.getSig() == null)
-                        logger.finest(String.format(SIG_ERROR_TEMPLATE, _page.getSrc(), proxy.toString()));
+                        logger.finest(String.format(SIG_WRONG_FORMAT, _page.getSrc()));
                 }
         } catch (JsonParseException | JsonMappingException | SocketTimeoutException | SocketException | NoHttpResponseException ce) {
             if (!proxy.isLocal()) {
