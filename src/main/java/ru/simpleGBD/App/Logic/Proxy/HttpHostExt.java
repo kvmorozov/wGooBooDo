@@ -95,14 +95,19 @@ public class HttpHostExt {
 
         failureCount.incrementAndGet();
         if (failureCount.get() > (isLocal() ? LOCAL_FAILURES_THRESHOLD : REMOTE_FAILURES_THRESHOLD)) {
-            logger.info(String.format("Proxy %s invalidated!", host == null ? NO_PROXY_STR : host.toHostString()));
-            available.set(false);
-            AbstractProxyListProvider.getInstance().invalidatedProxyListener();
+            synchronized (this) {
+                if (isAvailable()) {
+                    logger.info(String.format("Proxy %s invalidated!", host == null ? NO_PROXY_STR : host.toHostString()));
+                    available.set(false);
+                    AbstractProxyListProvider.getInstance().invalidatedProxyListener();
+                }
+            }
         }
     }
 
     public void forceInvalidate() {
         available.set(false);
+        logger.info(String.format("Proxy %s force-invalidated!", host == null ? NO_PROXY_STR : host.toHostString()));
     }
 
     public void promoteProxy() {

@@ -1,9 +1,6 @@
 package ru.simpleGBD.App.Logic.extractors;
 
-import com.google.api.client.http.GenericUrl;
-import com.google.api.client.http.HttpRequest;
-import com.google.api.client.http.HttpRequestFactory;
-import com.google.api.client.http.HttpResponse;
+import com.google.api.client.http.*;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import ru.simpleGBD.App.Config.GBDOptions;
 import ru.simpleGBD.App.Logic.ExecutionContext;
@@ -55,8 +52,17 @@ public class AbstractHttpProcessor {
         try {
             HttpResponse resp = getContent(url, proxy, withTimeout);
             return proxy.isLocal() ? resp : resp == null ? getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout) : resp;
+        } catch (HttpResponseException hre) {
+            if (hre.getStatusCode() == HttpStatusCodes.STATUS_CODE_SERVICE_UNAVAILABLE)
+                proxy.forceInvalidate();
+            else
+                hre.printStackTrace();
+
+            return proxy.isLocal() ? null : getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout);
         } catch (IOException ioe) {
             proxy.registerFailure();
+
+            ioe.printStackTrace();
 
             return proxy.isLocal() ? null : getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout);
         } catch (Exception ex) {
@@ -81,6 +87,9 @@ public class AbstractHttpProcessor {
     }
 
     private HttpResponse getContent(HttpRequest req, HttpHostExt proxy, int attempt) throws IOException {
+        if (attempt >= MAX_RETRY_COUNT)
+            return null;
+
         if (attempt > 0)
             try {
                 logger.finest(String.format("Attempt %d with %s url", attempt, req.getUrl().toString()));
