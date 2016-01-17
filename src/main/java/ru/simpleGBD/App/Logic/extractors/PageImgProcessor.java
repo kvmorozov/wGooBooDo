@@ -18,7 +18,7 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
 
     private static Logger logger = Logger.getLogger(ExecutionContext.output, PageImgProcessor.class.getName());
 
-    private static final String IMG_ERROR_TEMPLATE = "No img at %s";
+    private static final String IMG_ERROR_TEMPLATE = "No img at %s with proxy %s";
 
     private static int dataChunk = 4096;
 
@@ -46,7 +46,7 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
             inputStream = resp == null ? null : resp.getContent();
 
             if (inputStream == null) {
-                logger.info(String.format(IMG_ERROR_TEMPLATE, imgUrl));
+                logger.info(String.format(IMG_ERROR_TEMPLATE, imgUrl, proxy.toString()));
                 return false;
             }
 

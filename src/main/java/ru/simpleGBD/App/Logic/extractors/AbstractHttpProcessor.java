@@ -8,7 +8,11 @@ import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
 import ru.simpleGBD.App.Utils.HttpConnections;
 import ru.simpleGBD.App.Utils.Logger;
 
+import javax.net.ssl.SSLException;
+import javax.net.ssl.SSLHandshakeException;
 import java.io.IOException;
+import java.net.ConnectException;
+import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -53,16 +57,29 @@ public class AbstractHttpProcessor {
             HttpResponse resp = getContent(url, proxy, withTimeout);
             return proxy.isLocal() ? resp : resp == null ? getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout) : resp;
         } catch (HttpResponseException hre) {
-            if (hre.getStatusCode() == HttpStatusCodes.STATUS_CODE_SERVICE_UNAVAILABLE)
-                proxy.forceInvalidate();
-            else
-                hre.printStackTrace();
+            switch(hre.getStatusCode()) {
+                case HttpStatusCodes.STATUS_CODE_SERVICE_UNAVAILABLE :
+                    proxy.forceInvalidate();
+                    break;
+                case HttpStatusCodes.STATUS_CODE_NOT_FOUND :
+                case HttpStatusCodes.STATUS_CODE_BAD_GATEWAY :
+                    proxy.registerFailure();
+                    break;
+                default:
+                    hre.printStackTrace();
+            }
 
             return proxy.isLocal() ? null : getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout);
-        } catch (IOException ioe) {
+        } catch (SocketException | SSLException se) {
+            proxy.registerFailure();
+            return proxy.isLocal() ? null : getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout);
+        }
+        catch (IOException ioe) {
             proxy.registerFailure();
 
-            ioe.printStackTrace();
+            // Если что-то более специфическое
+            if (!ioe.getClass().getName().equals(IOException.class.getName()))
+                ioe.printStackTrace();
 
             return proxy.isLocal() ? null : getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout);
         } catch (Exception ex) {

@@ -106,8 +106,12 @@ public class HttpHostExt {
     }
 
     public void forceInvalidate() {
-        available.set(false);
-        logger.info(String.format("Proxy %s force-invalidated!", host == null ? NO_PROXY_STR : host.toHostString()));
+        synchronized (this) {
+            if (isAvailable()) {
+                available.set(false);
+                logger.info(String.format("Proxy %s force-invalidated!", host == null ? NO_PROXY_STR : host.toHostString()));
+            }
+        }
     }
 
     public void promoteProxy() {
