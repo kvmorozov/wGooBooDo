@@ -156,8 +156,10 @@ public class PagesInfo implements Serializable {
             else
                 bList.append(String.format("%s-%s, ", pair.getLeft().getPid(), pair.getRight().getPid()));
 
-        bList.deleteCharAt(bList.length() - 1).deleteCharAt(bList.length() - 1);
-        bList.append(String.format(". Total = %d/%d", pagesCountByCondition, total));
+        if (bList.length() > 0) {
+            bList.deleteCharAt(bList.length() - 1).deleteCharAt(bList.length() - 1);
+            bList.append(String.format(". Total = %d/%d", pagesCountByCondition, total));
+        }
 
         return bList.toString();
     }
