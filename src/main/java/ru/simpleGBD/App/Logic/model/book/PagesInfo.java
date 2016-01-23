@@ -68,6 +68,10 @@ public class PagesInfo implements Serializable {
         } catch (NumberFormatException nfe) {
         }
 
+        if (beginPageNum >= endPageNum && endPageNum > 1 && beginPagePrefix.equals(endPagePrefix))
+            logger.severe(String.format("Cannot fill gap between pages %s(order=%s) and %s(order=%s)",
+                    beginGap.getPid(), beginGap.getOrder(), endGap.getPid(), endGap.getOrder()));
+
         if (beginPagePrefix.equals(endPagePrefix))
             for (int index = beginGap.getOrder() + 1; index < endGap.getOrder(); index++) {
                 String pid = beginPageNum > 0 ?
