@@ -68,6 +68,10 @@ public class PagesInfo implements Serializable {
         } catch (NumberFormatException nfe) {
         }
 
+        if (beginPageNum >= endPageNum && endPageNum > 1 && beginPagePrefix.equals(endPagePrefix))
+            logger.severe(String.format("Cannot fill gap between pages %s(order=%s) and %s(order=%s)",
+                    beginGap.getPid(), beginGap.getOrder(), endGap.getPid(), endGap.getOrder()));
+
         if (beginPagePrefix.equals(endPagePrefix))
             for (int index = beginGap.getOrder() + 1; index < endGap.getOrder(); index++) {
                 String pid = beginPageNum > 0 ?
@@ -109,6 +113,10 @@ public class PagesInfo implements Serializable {
         return getListByCondition(pageInfo -> pageInfo.fileExists.get());
     }
 
+    private Pair<PageInfo, PageInfo> createPair(PageInfo p1, PageInfo p2) {
+        return p1.getOrder() < p2.getOrder() ? new ImmutablePair(p1, p2) : new ImmutablePair(p2, p1);
+    }
+
     private String getListByCondition(Predicate<PageInfo> condition) {
         StringBuilder bList = new StringBuilder();
         List<Pair<PageInfo, PageInfo>> pairs = new ArrayList<>();
@@ -124,7 +132,7 @@ public class PagesInfo implements Serializable {
             if (condition.test(currentPage))
                 if (blockStart == null) {
                 } else {
-                    pairs.add(new ImmutablePair(blockStart, prevPage));
+                    pairs.add(createPair(blockStart, prevPage));
                     blockStart = null;
                 }
             else {
@@ -137,7 +145,7 @@ public class PagesInfo implements Serializable {
             }
 
             if (!itr.hasNext() && blockStart != null)
-                pairs.add(new ImmutablePair(blockStart, currentPage));
+                pairs.add(createPair(blockStart, currentPage));
 
             prevPage = currentPage;
         }
