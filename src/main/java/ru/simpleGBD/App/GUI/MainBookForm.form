@@ -42,24 +42,6 @@
                     <properties/>
                     <border type="none"/>
                     <children>
-                      <component id="12133" class="javax.swing.JLabel">
-                        <constraints>
-                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <text resource-bundle="bundles/gui" key="bookTitle"/>
-                        </properties>
-                      </component>
-                      <component id="b5276" class="javax.swing.JTextField" binding="tfBookTitle">
-                        <constraints>
-                          <grid row="0" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                            <preferred-size width="150" height="-1"/>
-                          </grid>
-                        </constraints>
-                        <properties>
-                          <editable value="false"/>
-                        </properties>
-                      </component>
                       <grid id="dd82b" binding="pProgress" layout-manager="GridBagLayout">
                         <constraints>
                           <grid row="1" column="0" row-span="1" col-span="3" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="true"/>
@@ -97,6 +79,24 @@
                           </vspacer>
                         </children>
                       </grid>
+                      <component id="12133" class="javax.swing.JLabel">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text resource-bundle="bundles/gui" key="bookTitle"/>
+                        </properties>
+                      </component>
+                      <component id="b5276" class="javax.swing.JTextField" binding="tfBookTitle">
+                        <constraints>
+                          <grid row="0" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                            <preferred-size width="150" height="-1"/>
+                          </grid>
+                        </constraints>
+                        <properties>
+                          <editable value="false"/>
+                        </properties>
+                      </component>
                     </children>
                   </grid>
                   <grid id="1f0d7" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
