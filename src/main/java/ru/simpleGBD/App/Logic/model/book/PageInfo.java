@@ -1,6 +1,7 @@
 package ru.simpleGBD.App.Logic.model.book;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.api.client.repackaged.com.google.common.base.Strings;
 import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Logic.extractors.ImageExtractor;
 
@@ -13,21 +14,32 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class PageInfo implements Serializable {
 
-    @JsonProperty("pid") private String pid;
-    @JsonProperty("flags") private String flags;
-    @JsonProperty("title") private String title;
+    @JsonProperty("pid")
+    private String pid;
+    @JsonProperty("flags")
+    private String flags;
+    @JsonProperty("title")
+    private String title;
     private String src;
-    @JsonProperty("uf") private String uf;
+    @JsonProperty("uf")
+    private String uf;
     private String sig;
 
-    @JsonProperty("order") private int order;
-    @JsonProperty("h") private int h;
+    @JsonProperty("order")
+    private int order;
+    @JsonProperty("h")
+    private int h;
     private int width;
-    @JsonProperty("links") private Object links;
+    @JsonProperty("links")
+    private Object links;
+
+    private String prefix;
+    private int pageNum = -1;
 
     private boolean isGapPage = false;
 
-    public PageInfo() {}
+    public PageInfo() {
+    }
 
     // Создание страниц для заполнения разрыва
     public PageInfo(String pid, int order) {
@@ -37,9 +49,9 @@ public class PageInfo implements Serializable {
         isGapPage = true;
     }
 
-    public AtomicBoolean sigChecked     = new AtomicBoolean(false);
-    public AtomicBoolean dataProcessed  = new AtomicBoolean(false);
-    public AtomicBoolean fileExists     = new AtomicBoolean(false);
+    public AtomicBoolean sigChecked = new AtomicBoolean(false);
+    public AtomicBoolean dataProcessed = new AtomicBoolean(false);
+    public AtomicBoolean fileExists = new AtomicBoolean(false);
     public AtomicBoolean loadingStarted = new AtomicBoolean(false);
 
     public String getPid() {
@@ -82,5 +94,38 @@ public class PageInfo implements Serializable {
                 .replace(ImageExtractor.RQ_PG_PLACEHOLDER, getPid())
                 .replace(ImageExtractor.RQ_SIG_PLACEHOLDER, getSig())
                 .replace(ImageExtractor.RQ_WIDTH_PLACEHOLDER, String.valueOf(width));
+    }
+
+    public String getPrefix() {
+        if (Strings.isNullOrEmpty(prefix))
+            parsePageNum();
+
+        return prefix;
+    }
+
+    public int getPageNum() {
+        return pageNum;
+    }
+
+    private void parsePageNum() {
+        boolean numFound = false;
+        prefix = "";
+        String strNum = "";
+        for (int i = pid.length() - 1; i >= 0; i--) {
+            char ch = pid.charAt(i);
+            if (!numFound && Character.isDigit(ch))
+                strNum = ch + strNum;
+            else if (!numFound && !Character.isDigit(ch)) {
+                numFound = true;
+                prefix = ch + prefix;
+            }
+            else
+                prefix = ch + prefix;
+        }
+
+        try {
+            pageNum = Integer.parseInt(strNum);
+        } catch (NumberFormatException nfe) {
+        }
     }
 }

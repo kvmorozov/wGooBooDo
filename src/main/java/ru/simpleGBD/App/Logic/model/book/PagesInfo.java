@@ -53,20 +53,11 @@ public class PagesInfo implements Serializable {
     }
 
     private void fillGap(PageInfo beginGap, PageInfo endGap) {
-        String beginPagePrefix = beginGap.getPid().substring(0, 2);
-        String endPagePrefix = endGap.getPid().substring(0, 2);
+        String beginPagePrefix = beginGap.getPrefix();
+        String endPagePrefix = endGap.getPrefix();
 
-        int beginPageNum = -1, endPageNum = -1;
-
-        try {
-            beginPageNum = Integer.parseInt(beginGap.getPid().substring(2));
-        } catch (NumberFormatException nfe) {
-        }
-
-        try {
-            endPageNum = Integer.parseInt(endGap.getPid().substring(2));
-        } catch (NumberFormatException nfe) {
-        }
+        int beginPageNum = beginGap.getPageNum();
+        int endPageNum = endGap.getPageNum();
 
         if (beginPageNum >= endPageNum && endPageNum > 1 && beginPagePrefix.equals(endPagePrefix))
             logger.severe(String.format("Cannot fill gap between pages %s(order=%s) and %s(order=%s)",
