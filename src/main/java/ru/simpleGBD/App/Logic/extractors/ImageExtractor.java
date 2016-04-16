@@ -222,6 +222,8 @@ public class ImageExtractor extends AbstractEventSource {
                     new File(baseOutputDirPath + "\\" +
                             ExecutionContext.bookInfo.getBookData().getTitle()
                                     .replace(":", "")
+                                    .replace("<", "")
+                                    .replace(">", "")
                                     .replace("/", ".") +
                             " " + ExecutionContext.bookInfo.getBookData().getVolumeId());
             if (!ExecutionContext.outputDir.exists()) {
