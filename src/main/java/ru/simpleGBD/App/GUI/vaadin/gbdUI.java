@@ -7,6 +7,8 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 import ru.simpleGBD.App.Config.GBDOptions;
 import ru.simpleGBD.App.Config.LocalSystemOptions;
+import ru.simpleGBD.App.Logic.ExecutionContext;
+import ru.simpleGBD.App.Logic.Output.consumers.DummyBookInfoOutput;
 
 import javax.servlet.annotation.WebServlet;
 import java.util.Locale;
@@ -26,11 +28,16 @@ public class gbdUI extends UI {
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
-        GBDOptions.init(new LocalSystemOptions());
+        appInit();
 
         updateLocale();
 
         updateContent();
+    }
+
+    private void appInit() {
+        GBDOptions.init(new LocalSystemOptions());
+        ExecutionContext.output = new DummyBookInfoOutput();
     }
 
     private void updateContent() {
