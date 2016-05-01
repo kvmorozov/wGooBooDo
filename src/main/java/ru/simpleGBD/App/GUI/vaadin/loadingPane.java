@@ -30,7 +30,14 @@ public class LoadingPane extends HorizontalLayout {
             SystemConfigs.setLastBookId(tfBookId.getValue());
             bLoad.setEnabled(false);
 
-            workerExtractor = new ImageExtractor();
+            workerExtractor = new ImageExtractor() {
+
+                @Override
+                public void done() {
+                    bLoad.setEnabled(true);
+                }
+            };
+
             workerExtractor.execute();
         });
         addComponent(bLoad);
