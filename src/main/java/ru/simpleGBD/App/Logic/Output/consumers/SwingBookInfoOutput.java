@@ -1,6 +1,6 @@
 package ru.simpleGBD.App.Logic.Output.consumers;
 
-import ru.simpleGBD.App.GUI.MainBookForm;
+import ru.simpleGBD.App.GUI.swing.MainBookForm;
 import ru.simpleGBD.App.Logic.model.book.BookInfo;
 import ru.simpleGBD.App.Logic.Output.listeners.SwingLogEventListener;
 

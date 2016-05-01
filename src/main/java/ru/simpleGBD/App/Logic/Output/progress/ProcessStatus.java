@@ -1,7 +1,7 @@
 package ru.simpleGBD.App.Logic.Output.progress;
 
 import ru.simpleGBD.App.Config.SystemConfigs;
-import ru.simpleGBD.App.GUI.MainBookForm;
+import ru.simpleGBD.App.GUI.swing.MainBookForm;
 
 import javax.swing.*;
 import java.util.concurrent.atomic.AtomicInteger;

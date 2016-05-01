@@ -1,4 +1,4 @@
-package ru.simpleGBD.App.GUI;
+package ru.simpleGBD.App.GUI.swing;
 
 import javax.swing.*;
 import java.awt.*;

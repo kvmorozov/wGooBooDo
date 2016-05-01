@@ -1,6 +1,6 @@
 package ru.simpleGBD.App.Config;
 
-import ru.simpleGBD.App.GUI.MainBookForm;
+import ru.simpleGBD.App.GUI.swing.MainBookForm;
 
 import java.util.prefs.Preferences;
 
