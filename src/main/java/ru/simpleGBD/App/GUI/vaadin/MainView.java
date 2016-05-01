@@ -12,8 +12,8 @@ public class MainView extends HorizontalLayout {
 
     MainView() {
         TabSheet tabs = new TabSheet();
-        tabs.addTab(new LoadingPane(), i18n.getString("load"));
-        tabs.addTab(new SettingsPane(), i18n.getString("properties"));
+        tabs.addTab(new LoadingTab(), i18n.getString("load"));
+        tabs.addTab(new SettingsTab(), i18n.getString("properties"));
 
         tabs.setSelectedTab(0);
 

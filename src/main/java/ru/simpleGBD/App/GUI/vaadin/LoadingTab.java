@@ -14,11 +14,11 @@ import static ru.simpleGBD.App.GUI.vaadin.gbdUI.i18n;
 /**
  * Created by km on 01.05.2016.
  */
-public class LoadingPane extends HorizontalLayout {
+public class LoadingTab extends HorizontalLayout {
 
     private SwingWorker workerExtractor;
 
-    LoadingPane() {
+    LoadingTab() {
         addComponent(new Label(i18n.getString("bookId")));
 
         TextField tfBookId = new TextField();
