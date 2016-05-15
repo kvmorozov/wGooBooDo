@@ -16,6 +16,8 @@ import java.util.List;
  */
 public abstract class AbstractProxyListProvider implements IProxyListProvider {
 
+    protected static final String DEFAULT_PROXY_DELIMITER = ":";
+
     private static Logger logger = Logger.getLogger(ExecutionContext.output, "ProxyPistProvider");
 
     private static IProxyListProvider INSTANCE;
@@ -25,9 +27,9 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
 
     protected void buildFromList(List<String> proxyItems) {
         for (String proxyItem : proxyItems) {
-            String[] proxyItemArr = proxyItem.split(":");
+            String[] proxyItemArr = splitItems(proxyItem);
 
-            if (proxyItemArr == null || proxyItemArr.length != 2)
+            if (proxyItemArr == null || proxyItemArr.length < 2)
                 continue;
 
             HttpHost host = new HttpHost(proxyItemArr[0], Integer.parseInt(proxyItemArr[1]));
@@ -44,6 +46,20 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
                     logger.info(String.format("NOT secure proxy %s NOT added.", host.toHostString()));
             } else
                 logger.info(String.format("Proxy %s NOT added.", host.toHostString()));
+        }
+    }
+
+    protected String[] splitItems(String proxyItem, String delimiter) {
+        return  proxyItem.split(delimiter);
+    }
+
+    protected String[] splitItems(String proxyItem) {
+        String[] tmpItems = splitItems(proxyItem, DEFAULT_PROXY_DELIMITER);
+        if (tmpItems != null && tmpItems.length >= 2)
+            return tmpItems;
+        else {
+            tmpItems = splitItems(proxyItem, "\\s+");
+            return tmpItems != null && tmpItems.length >= 2 ? tmpItems : null;
         }
     }
 
