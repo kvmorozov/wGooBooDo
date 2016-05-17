@@ -2,13 +2,13 @@ package ru.simpleGBD.App.Logic.extractors;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.google.api.client.http.HttpResponse;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.NoHttpResponseException;
 import ru.simpleGBD.App.Config.GBDOptions;
 import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Logic.Output.progress.ProcessStatus;
 import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
+import ru.simpleGBD.App.Logic.connectors.Response;
 import ru.simpleGBD.App.Logic.model.book.PageInfo;
 import ru.simpleGBD.App.Logic.model.book.PagesInfo;
 import ru.simpleGBD.App.Utils.Mapper;
@@ -45,7 +45,7 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
         String rqUrl = ExecutionContext.baseUrl + ImageExtractor.PAGES_REQUEST_TEMPLATE.replace(ImageExtractor.RQ_PG_PLACEHOLDER, page.getPid());
 
         try {
-            HttpResponse resp = getContent(rqUrl, proxy, true);
+            Response resp = getContent(rqUrl, proxy, true);
             if (resp == null) {
                 logger.info(String.format(SIG_ERROR_TEMPLATE, rqUrl, proxy.toString()));
                 return false;

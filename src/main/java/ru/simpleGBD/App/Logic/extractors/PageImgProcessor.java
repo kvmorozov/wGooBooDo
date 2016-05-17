@@ -1,10 +1,10 @@
 package ru.simpleGBD.App.Logic.extractors;
 
-import com.google.api.client.http.HttpResponse;
 import ru.simpleGBD.App.Config.GBDOptions;
 import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Logic.Proxy.AbstractProxyListProvider;
 import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
+import ru.simpleGBD.App.Logic.connectors.Response;
 import ru.simpleGBD.App.Logic.model.book.PageInfo;
 import ru.simpleGBD.App.Utils.Images;
 import ru.simpleGBD.App.Utils.Logger;
@@ -42,7 +42,7 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
             return false;
 
         try {
-            HttpResponse resp = getContent(imgUrl, proxy, false);
+            Response resp = getContent(imgUrl, proxy, false);
             inputStream = resp == null ? null : resp.getContent();
 
             if (inputStream == null) {

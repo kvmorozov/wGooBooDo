@@ -1,8 +1,8 @@
 package ru.simpleGBD.App.Utils;
 
-import com.google.api.client.http.HttpResponse;
 import org.apache.commons.io.FilenameUtils;
 import ru.simpleGBD.App.Logic.ExecutionContext;
+import ru.simpleGBD.App.Logic.connectors.Response;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
@@ -64,7 +64,7 @@ public class Images {
         return null;
     }
 
-    public static String getImageFormat(HttpResponse response) {
-        return response.getMediaType().getSubType();
+    public static String getImageFormat(Response response) {
+        return response.getImageFormat();
     }
 }
