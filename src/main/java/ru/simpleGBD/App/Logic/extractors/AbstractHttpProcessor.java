@@ -7,6 +7,7 @@ import ru.simpleGBD.App.Logic.connectors.HttpConnector;
 import ru.simpleGBD.App.Logic.connectors.Response;
 import ru.simpleGBD.App.Logic.connectors.ResponseException;
 import ru.simpleGBD.App.Logic.connectors.google.GoogleHttpConnector;
+import ru.simpleGBD.App.Logic.connectors.ok.OkHttpConnector;
 import ru.simpleGBD.App.Utils.Logger;
 
 import javax.net.ssl.SSLException;

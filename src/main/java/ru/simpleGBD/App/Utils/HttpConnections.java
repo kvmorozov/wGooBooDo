@@ -47,10 +47,6 @@ public class HttpConnections {
         return headers;
     }
 
-    private HttpResponse _getResponse(HttpHostExt proxy) {
-        return _getResponse(proxy.getProxy(), _getHeaders(proxy));
-    }
-
     private HttpResponse _getResponse(Proxy proxy, HttpHeaders _headers) {
         try {
             return new NetHttpTransport.Builder().
@@ -66,9 +62,15 @@ public class HttpConnections {
         return new Proxy(Proxy.Type.HTTP, new InetSocketAddress(host.getHostName(), host.getPort()));
     }
 
-    public static HttpResponse getResponse(HttpHostExt proxy) {return INSTANCE._getResponse(proxy);}
-    public static HttpResponse getResponse(HttpHostExt proxy, HttpHeaders _headers) {return INSTANCE._getResponse(proxy.getProxy(), _headers);}
-    public static HttpResponse getResponse(HttpHost host, HttpHeaders _headers) {return INSTANCE._getResponse(hostToProxy(host), _headers);}
-    public static HttpHeaders getHeaders(HttpHostExt proxy) {return INSTANCE._getHeaders(proxy);}
-    public static void setDefaultCookies(Map<String, String> cookiesMap) {INSTANCE._setDefaultCookies(cookiesMap);}
+    public static HttpResponse getResponse(HttpHost host, HttpHeaders _headers) {
+        return INSTANCE._getResponse(hostToProxy(host), _headers);
+    }
+
+    public static HttpHeaders getHeaders(HttpHostExt proxy) {
+        return INSTANCE._getHeaders(proxy);
+    }
+
+    public static void setDefaultCookies(Map<String, String> cookiesMap) {
+        INSTANCE._setDefaultCookies(cookiesMap);
+    }
 }
