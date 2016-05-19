@@ -51,8 +51,7 @@ public class GoogleHttpConnector extends HttpConnector {
                 logger.finest(String.format("No response at url %s with proxy %s", url.toString(), proxy.toString()));
 
             return new GoogleResponse(resp);
-        }
-        catch(HttpResponseException hre) {
+        } catch (HttpResponseException hre) {
             throw new GoogleResponseException(hre);
         }
     }

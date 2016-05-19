@@ -35,6 +35,7 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
             return false;
 
         File outputFile = null;
+        Response resp = null;
         InputStream inputStream = null;
         OutputStream outputStream = null;
 
@@ -42,7 +43,7 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
             return false;
 
         try {
-            Response resp = getContent(imgUrl, proxy, false);
+            resp = getContent(imgUrl, proxy, false);
             inputStream = resp == null ? null : resp.getContent();
 
             if (inputStream == null) {
@@ -121,6 +122,12 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
             if (!page.dataProcessed.get() && outputFile != null) {
                 logger.info(String.format("Loading page %s failed!", page.getPid()));
                 outputFile.delete();
+            }
+
+            try {
+                resp.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
 

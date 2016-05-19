@@ -26,4 +26,9 @@ public class GoogleResponse implements Response {
     public String getImageFormat() {
         return resp.getMediaType().getSubType();
     }
+
+    @Override
+    public void close() {
+
+    }
 }

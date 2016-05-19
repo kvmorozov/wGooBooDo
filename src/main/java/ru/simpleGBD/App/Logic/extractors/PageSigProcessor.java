@@ -14,6 +14,7 @@ import ru.simpleGBD.App.Logic.model.book.PagesInfo;
 import ru.simpleGBD.App.Utils.Mapper;
 import ru.simpleGBD.App.Utils.Pools;
 
+import java.io.IOException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.concurrent.ExecutorService;
@@ -42,10 +43,11 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
             return false;
 
         boolean sigFound = false;
+        Response resp = null;
         String rqUrl = ExecutionContext.baseUrl + ImageExtractor.PAGES_REQUEST_TEMPLATE.replace(ImageExtractor.RQ_PG_PLACEHOLDER, page.getPid());
 
         try {
-            Response resp = getContent(rqUrl, proxy, true);
+            resp = getContent(rqUrl, proxy, true);
             if (resp == null) {
                 logger.info(String.format(SIG_ERROR_TEMPLATE, rqUrl, proxy.toString()));
                 return false;
@@ -89,6 +91,13 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
             ce.printStackTrace();
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+        finally {
+            try {
+                resp.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         return sigFound;

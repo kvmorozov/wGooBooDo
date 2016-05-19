@@ -25,4 +25,9 @@ public class OkResponse implements Response {
     public String getImageFormat() {
         return resp.body().contentType().subtype();
     }
+
+    @Override
+    public void close() {
+        resp.body().close();
+    }
 }
