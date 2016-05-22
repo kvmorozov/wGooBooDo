@@ -51,9 +51,9 @@ public class OkHttpConnector extends HttpConnector {
         if ((GBDOptions.secureMode() && proxy.isLocal()) || !proxy.isAvailable())
             return null;
 
-        HttpHeaders googleHeader = HttpConnections.getHeaders(proxy);
+        HttpHeaders googleHeaders = HttpConnections.getHeaders(proxy);
         List<String> headerItems = new ArrayList<>();
-        for(Map.Entry<String, Object> headerItem : googleHeader.entrySet()) {
+        for(Map.Entry<String, Object> headerItem : googleHeaders.entrySet()) {
             headerItems.add(headerItem.getKey());
             headerItems.add(headerItem.getValue().toString());
         }

@@ -125,7 +125,8 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
             }
 
             try {
-                resp.close();
+                if (resp != null)
+                    resp.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }

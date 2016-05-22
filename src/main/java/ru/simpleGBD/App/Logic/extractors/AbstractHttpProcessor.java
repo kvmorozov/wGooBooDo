@@ -6,8 +6,7 @@ import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
 import ru.simpleGBD.App.Logic.connectors.HttpConnector;
 import ru.simpleGBD.App.Logic.connectors.Response;
 import ru.simpleGBD.App.Logic.connectors.ResponseException;
-import ru.simpleGBD.App.Logic.connectors.google.GoogleHttpConnector;
-import ru.simpleGBD.App.Logic.connectors.ok.OkHttpConnector;
+import ru.simpleGBD.App.Logic.connectors.apache.ApacheHttpConnector;
 import ru.simpleGBD.App.Utils.Logger;
 
 import javax.net.ssl.SSLException;
@@ -21,7 +20,7 @@ public class AbstractHttpProcessor {
 
     protected static Logger logger = Logger.getLogger(ExecutionContext.output, AbstractHttpProcessor.class.getName());
 
-    private static final HttpConnector connector = new GoogleHttpConnector();
+    private static final HttpConnector connector = new ApacheHttpConnector();
 
     protected Response getContent(String rqUrl, HttpHostExt proxy, boolean withTimeout) {
         try {

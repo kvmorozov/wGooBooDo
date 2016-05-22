@@ -22,6 +22,8 @@ public class HttpConnections {
 
     private static HttpConnections INSTANCE = new HttpConnections();
 
+    private static Map<String, String> cookiesMap;
+
     private HttpHeaders headers;
 
     private HttpConnections() {
@@ -70,7 +72,13 @@ public class HttpConnections {
         return INSTANCE._getHeaders(proxy);
     }
 
-    public static void setDefaultCookies(Map<String, String> cookiesMap) {
+    public static void setDefaultCookies(Map<String, String> _cookiesMap) {
+        cookiesMap = _cookiesMap;
+
         INSTANCE._setDefaultCookies(cookiesMap);
+    }
+
+    public static Map<String, String> getCookiesMap() {
+        return cookiesMap;
     }
 }

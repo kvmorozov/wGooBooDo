@@ -15,7 +15,7 @@ public abstract class HttpConnector {
 
     protected static int MAX_RETRY_COUNT = 2;
     protected static int SLEEP_TIME = 500;
-    protected static int CONNECT_TIMEOUT = 2000;
+    public static int CONNECT_TIMEOUT = 2000;
 
     protected String getProxyKey(HttpHostExt proxy) {
         return proxy.toString();
