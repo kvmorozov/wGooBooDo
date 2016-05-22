@@ -44,7 +44,7 @@ public class FileProxyListProvider extends AbstractProxyListProvider {
 
         try (OutputStream os = new FileOutputStream(proxyListFile, false)) {
             for (HttpHostExt proxy : proxyList)
-                if (!proxy.isLocal())
+                if (!proxy.isLocal() && proxy.isAvailable())
                     IOUtils.write(String.format("%s %s\n", proxy.getHost().getHostName(), proxy.getHost().getPort()), os, "UTF-8");
         } catch (IOException e) {
             e.printStackTrace();
