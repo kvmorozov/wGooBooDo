@@ -26,31 +26,34 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
     protected List<HttpHostExt> proxyList = new ArrayList<>();
 
     protected void buildFromList(List<String> proxyItems) {
-        for (String proxyItem : proxyItems) {
-            String[] proxyItemArr = splitItems(proxyItem);
+        for (String proxyItem : proxyItems)
+            try {
+                String[] proxyItemArr = splitItems(proxyItem);
 
-            if (proxyItemArr == null || proxyItemArr.length < 2)
-                continue;
+                if (proxyItemArr == null || proxyItemArr.length < 2)
+                    continue;
 
-            HttpHost host = new HttpHost(proxyItemArr[0], Integer.parseInt(proxyItemArr[1]));
-            String cookie = getCookie(host);
-            if (cookie != null) {
-                HttpHostExt proxy = new HttpHostExt(host, cookie);
+                HttpHost host = new HttpHost(proxyItemArr[0], Integer.parseInt(proxyItemArr[1]));
+                String cookie = getCookie(host);
+                if (cookie != null) {
+                    HttpHostExt proxy = new HttpHostExt(host, cookie);
 
-                if ((GBDOptions.secureMode() && proxy.isSecure()) || !GBDOptions.secureMode()) {
-                    proxyList.add(proxy);
-                    logger.info(String.format("%sroxy %s added.",
-                            GBDOptions.secureMode() ? proxy.isSecure() ? "Secure p" : "NOT secure p" : "P",
-                            host.toHostString()));
+                    if ((GBDOptions.secureMode() && proxy.isSecure()) || !GBDOptions.secureMode()) {
+                        proxyList.add(proxy);
+                        logger.info(String.format("%sroxy %s added.",
+                                GBDOptions.secureMode() ? proxy.isSecure() ? "Secure p" : "NOT secure p" : "P",
+                                host.toHostString()));
+                    } else
+                        logger.info(String.format("NOT secure proxy %s NOT added.", host.toHostString()));
                 } else
-                    logger.info(String.format("NOT secure proxy %s NOT added.", host.toHostString()));
-            } else
-                logger.info(String.format("Proxy %s NOT added.", host.toHostString()));
-        }
+                    logger.info(String.format("Proxy %s NOT added.", host.toHostString()));
+            } catch (Exception ex) {
+                logger.info(String.format("Not valid proxy string %s.", proxyItem));
+            }
     }
 
     protected String[] splitItems(String proxyItem, String delimiter) {
-        return  proxyItem.split(delimiter);
+        return proxyItem.split(delimiter);
     }
 
     protected String[] splitItems(String proxyItem) {

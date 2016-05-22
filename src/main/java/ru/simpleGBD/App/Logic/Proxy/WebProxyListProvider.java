@@ -13,7 +13,6 @@ import java.util.List;
  */
 public class WebProxyListProvider extends AbstractProxyListProvider {
 
-
     private static final String PROXY_LIST_URL = "http://webanetlabs.net/freeproxy/proxylist_at_24.11.2015.txt";
 
     WebProxyListProvider() {
@@ -32,5 +31,10 @@ public class WebProxyListProvider extends AbstractProxyListProvider {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void updateProxyList() {
+
     }
 }

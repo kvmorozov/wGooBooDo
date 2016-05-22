@@ -25,4 +25,9 @@ public class StaticProxyListProvider extends AbstractProxyListProvider {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void updateProxyList() {
+
+    }
 }

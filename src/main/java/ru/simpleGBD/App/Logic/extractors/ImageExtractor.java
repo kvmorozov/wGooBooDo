@@ -151,6 +151,8 @@ public class ImageExtractor extends AbstractEventSource {
             Pools.imgExecutor.awaitTermination(500, TimeUnit.MINUTES);
         } catch (InterruptedException e) {
         }
+
+        AbstractProxyListProvider.getInstance().updateProxyList();
     }
 
     private void scanDir() {
