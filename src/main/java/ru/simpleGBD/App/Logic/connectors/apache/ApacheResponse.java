@@ -25,7 +25,9 @@ public class ApacheResponse implements Response {
 
     @Override
     public String getImageFormat() {
-        return response.getEntity().getContentType().toString();
+        String contentType = response.getEntity().getContentType().toString();
+
+        return contentType.startsWith("image/")? contentType.split("/")[1] : null;
     }
 
     @Override
