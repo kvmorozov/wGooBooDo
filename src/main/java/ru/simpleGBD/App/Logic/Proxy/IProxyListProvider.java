@@ -1,13 +1,13 @@
 package ru.simpleGBD.App.Logic.Proxy;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * Created by km on 27.11.2015.
  */
 public interface IProxyListProvider {
 
-    List<HttpHostExt> getProxyList();
+    Set<HttpHostExt> getProxyList();
     void invalidatedProxyListener();
     void updateProxyList();
 }

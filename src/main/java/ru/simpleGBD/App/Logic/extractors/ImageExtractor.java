@@ -29,6 +29,7 @@ import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -64,7 +65,7 @@ public class ImageExtractor extends AbstractEventSource {
 
         this.output = ExecutionContext.output;
 
-        List<HttpHostExt> proxyList = AbstractProxyListProvider.getInstance().getProxyList();
+        Set<HttpHostExt> proxyList = AbstractProxyListProvider.getInstance().getProxyList();
         if (proxyList != null && proxyList.size() > 0)
             logger.info(String.format("Starting with %s proxies.", proxyList.size()));
     }

@@ -9,7 +9,9 @@ import ru.simpleGBD.App.Utils.HttpConnections;
 import ru.simpleGBD.App.Utils.Logger;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by km on 27.11.2015.
@@ -23,7 +25,7 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
     private static IProxyListProvider INSTANCE;
     private HttpHeaders headers = new HttpHeaders().setUserAgent(HttpConnections.USER_AGENT);
 
-    protected List<HttpHostExt> proxyList = new ArrayList<>();
+    protected Set<HttpHostExt> proxyList = new HashSet<>();
 
     protected void buildFromList(List<String> proxyItems) {
         for (String proxyItem : proxyItems)
@@ -77,7 +79,7 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
     }
 
     @Override
-    public List<HttpHostExt> getProxyList() {
+    public Set<HttpHostExt> getProxyList() {
         return proxyList;
     }
 
@@ -90,8 +92,8 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
 
     @Override
     public void invalidatedProxyListener() {
-        long liveproxyCount = proxyList.stream().filter(p -> p.isAvailable()).count();
-        if (liveproxyCount == 0 && GBDOptions.secureMode())
+        long liveProxyCount = proxyList.stream().filter(p -> p.isAvailable()).count();
+        if (liveProxyCount == 0 && GBDOptions.secureMode())
             throw new RuntimeException("No more proxies!");
     }
 }
