@@ -130,8 +130,11 @@ public class ImageExtractor extends AbstractEventSource {
         Pools.sigExecutor.execute(new PageSigProcessor(HttpHostExt.NO_PROXY));
         // Потом с прокси
         Iterator<HttpHostExt> hostIterator = AbstractProxyListProvider.getInstance().getProxyList();
-        while (hostIterator.hasNext())
-            Pools.sigExecutor.execute(new PageSigProcessor(hostIterator.next()));
+        while (hostIterator.hasNext()) {
+            HttpHostExt proxy = hostIterator.next();
+            if (proxy != null)
+                Pools.sigExecutor.execute(new PageSigProcessor(proxy));
+        }
 
         Pools.sigExecutor.shutdown();
         try {
