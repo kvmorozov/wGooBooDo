@@ -91,8 +91,7 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
             ce.printStackTrace();
         } catch (Exception ex) {
             ex.printStackTrace();
-        }
-        finally {
+        } finally {
             try {
                 resp.close();
             } catch (IOException e) {
@@ -106,6 +105,9 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
     @Override
     public void run() {
         if ((GBDOptions.secureMode() && proxy.isLocal()) || !proxy.isAvailable())
+            return;
+
+        if (!proxy.isLocal() && !(proxy.isAvailable() && proxy.getHost().getPort() > 0))
             return;
 
         final ProcessStatus psSigs = new ProcessStatus(ExecutionContext.bookInfo.getPagesInfo().getPages().size());

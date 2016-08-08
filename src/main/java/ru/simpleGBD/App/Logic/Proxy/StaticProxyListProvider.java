@@ -20,7 +20,7 @@ public class StaticProxyListProvider extends AbstractProxyListProvider {
     private void buildList() {
         try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(PROXY_LIST_RES);) {
             List<String> lines = IOUtils.readLines(is, "UTF-8");
-            buildFromList(lines);
+            this.proxyItems = lines;
         } catch (IOException e) {
             e.printStackTrace();
         }

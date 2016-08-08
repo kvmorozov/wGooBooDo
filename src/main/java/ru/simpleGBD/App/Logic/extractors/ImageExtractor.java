@@ -28,8 +28,8 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -64,10 +64,6 @@ public class ImageExtractor extends AbstractEventSource {
         ExecutionContext.baseUrl = HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, ExecutionContext.bookId);
 
         this.output = ExecutionContext.output;
-
-        Set<HttpHostExt> proxyList = AbstractProxyListProvider.getInstance().getProxyList();
-        if (proxyList != null && proxyList.size() > 0)
-            logger.info(String.format("Starting with %s proxies.", proxyList.size()));
     }
 
     @Override
@@ -133,9 +129,9 @@ public class ImageExtractor extends AbstractEventSource {
         // Сначала идём без проксм
         Pools.sigExecutor.execute(new PageSigProcessor(HttpHostExt.NO_PROXY));
         // Потом с прокси
-        for (HttpHostExt proxy : AbstractProxyListProvider.getInstance().getProxyList())
-            if (proxy.isAvailable() && proxy.getHost().getPort() > 0)
-                Pools.sigExecutor.execute(new PageSigProcessor(proxy));
+        Iterator<HttpHostExt> hostIterator = AbstractProxyListProvider.getInstance().getProxyList();
+        while (hostIterator.hasNext())
+            Pools.sigExecutor.execute(new PageSigProcessor(hostIterator.next()));
 
         Pools.sigExecutor.shutdown();
         try {

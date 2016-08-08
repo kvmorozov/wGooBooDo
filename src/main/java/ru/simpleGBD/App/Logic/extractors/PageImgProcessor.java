@@ -153,10 +153,11 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
             if (!usedProxy.isLocal())
                 if (!processImageWithProxy(HttpHostExt.NO_PROXY))
                     // Пробуем скачать страницу с другими прокси, если не получилось с той, с помощью которой узнали sig
-                    for (HttpHostExt proxy : AbstractProxyListProvider.getInstance().getProxyList())
+                    AbstractProxyListProvider.getInstance().getParallelProxyStream().forEach(proxy -> {
                         if (proxy != usedProxy)
                             if (processImageWithProxy(proxy))
                                 return;
+                    });
         }
     }
 }

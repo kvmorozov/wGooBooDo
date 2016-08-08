@@ -8,10 +8,9 @@ import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Utils.HttpConnections;
 import ru.simpleGBD.App.Utils.Logger;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * Created by km on 27.11.2015.
@@ -26,32 +25,37 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
     private HttpHeaders headers = new HttpHeaders().setUserAgent(HttpConnections.USER_AGENT);
 
     protected Set<HttpHostExt> proxyList = new HashSet<>();
+    private boolean proxyListCompleted = false;
+    protected List<String> proxyItems;
 
-    protected void buildFromList(List<String> proxyItems) {
-        for (String proxyItem : proxyItems)
-            try {
-                String[] proxyItemArr = splitItems(proxyItem);
+    private HttpHostExt processProxyItem(String proxyItem) {
+        HttpHostExt proxy = null;
 
-                if (proxyItemArr == null || proxyItemArr.length < 2)
-                    continue;
+        try {
+            String[] proxyItemArr = splitItems(proxyItem);
 
-                HttpHost host = new HttpHost(proxyItemArr[0], Integer.parseInt(proxyItemArr[1]));
-                String cookie = getCookie(host);
-                if (cookie != null) {
-                    HttpHostExt proxy = new HttpHostExt(host, cookie);
+            if (proxyItemArr == null || proxyItemArr.length < 2)
+                return null;
 
-                    if ((GBDOptions.secureMode() && proxy.isSecure()) || !GBDOptions.secureMode()) {
-                        proxyList.add(proxy);
-                        logger.info(String.format("%sroxy %s added.",
-                                GBDOptions.secureMode() ? proxy.isSecure() ? "Secure p" : "NOT secure p" : "P",
-                                host.toHostString()));
-                    } else
-                        logger.info(String.format("NOT secure proxy %s NOT added.", host.toHostString()));
+            HttpHost host = new HttpHost(proxyItemArr[0], Integer.parseInt(proxyItemArr[1]));
+            String cookie = getCookie(host);
+            if (cookie != null) {
+                proxy = new HttpHostExt(host, cookie);
+
+                if ((GBDOptions.secureMode() && proxy.isSecure()) || !GBDOptions.secureMode()) {
+                    proxyList.add(proxy);
+                    logger.info(String.format("%sroxy %s added.",
+                            GBDOptions.secureMode() ? proxy.isSecure() ? "Secure p" : "NOT secure p" : "P",
+                            host.toHostString()));
                 } else
-                    logger.info(String.format("Proxy %s NOT added.", host.toHostString()));
-            } catch (Exception ex) {
-                logger.info(String.format("Not valid proxy string %s.", proxyItem));
-            }
+                    logger.info(String.format("NOT secure proxy %s NOT added.", host.toHostString()));
+            } else
+                logger.info(String.format("Proxy %s NOT added.", host.toHostString()));
+        } catch (Exception ex) {
+            logger.info(String.format("Not valid proxy string %s.", proxyItem));
+        }
+
+        return proxy;
     }
 
     protected String[] splitItems(String proxyItem, String delimiter) {
@@ -78,9 +82,30 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
         }
     }
 
+    class InternalProxyIterator implements Iterator<HttpHostExt> {
+
+        private Iterator<String> itr;
+
+        private InternalProxyIterator() {
+            itr = proxyItems.iterator();
+
+            proxyListCompleted = true;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return itr.hasNext();
+        }
+
+        @Override
+        public HttpHostExt next() {
+            return processProxyItem(itr.next());
+        }
+    }
+
     @Override
-    public Set<HttpHostExt> getProxyList() {
-        return proxyList;
+    public Iterator<HttpHostExt> getProxyList() {
+        return proxyListCompleted ? proxyList.iterator() : new InternalProxyIterator();
     }
 
     public static IProxyListProvider getInstance() {
@@ -95,5 +120,12 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
         long liveProxyCount = proxyList.stream().filter(p -> p.isAvailable()).count();
         if (liveProxyCount == 0 && GBDOptions.secureMode())
             throw new RuntimeException("No more proxies!");
+    }
+
+    @Override
+    public Stream<HttpHostExt> getParallelProxyStream() {
+        Iterator<HttpHostExt> hostIterator = getProxyList();
+        Iterable<HttpHostExt> iterable = () -> hostIterator;
+        return StreamSupport.stream(iterable.spliterator(), true);
     }
 }

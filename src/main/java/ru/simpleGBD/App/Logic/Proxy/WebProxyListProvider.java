@@ -26,7 +26,7 @@ public class WebProxyListProvider extends AbstractProxyListProvider {
                     .get();
 
             List<String> proxyItems = Arrays.asList(((TextNode) doc.child(0).child(1).childNode(0)).getWholeText().split("\\r\\n"));
-            buildFromList(proxyItems);
+            this.proxyItems = proxyItems;
 
         } catch (IOException e) {
             e.printStackTrace();
