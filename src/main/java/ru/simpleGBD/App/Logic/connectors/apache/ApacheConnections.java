@@ -1,6 +1,5 @@
 package ru.simpleGBD.App.Logic.connectors.apache;
 
-import org.apache.http.HttpHeaders;
 import org.apache.http.HttpHost;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
@@ -16,8 +15,6 @@ import ru.simpleGBD.App.Utils.HttpConnections;
 
 import javax.net.ssl.SSLContext;
 import java.io.IOException;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -29,15 +26,16 @@ import static ru.simpleGBD.App.Utils.HttpConnections.USER_AGENT;
  */
 public class ApacheConnections {
 
-    private BasicCookieStore cookieStore;
-    private HttpClientBuilder builder, builderWithTimeout;
+    private final HttpClientBuilder builder;
+    private final HttpClientBuilder builderWithTimeout;
     private HttpClient noProxyClient;
-    private Map<HttpHost, HttpClient> clientsMap = new ConcurrentHashMap<>(), withTimeoutClientsMap = new ConcurrentHashMap<>();
+    private final Map<HttpHost, HttpClient> clientsMap = new ConcurrentHashMap<>();
+    private final Map<HttpHost, HttpClient> withTimeoutClientsMap = new ConcurrentHashMap<>();
 
-    public static ApacheConnections INSTANCE = new ApacheConnections();
+    public static final ApacheConnections INSTANCE = new ApacheConnections();
 
     private ApacheConnections() {
-        cookieStore = new BasicCookieStore();
+        BasicCookieStore cookieStore = new BasicCookieStore();
 
         StringBuilder cookieBuilder = new StringBuilder();
 
@@ -47,7 +45,7 @@ public class ApacheConnections {
             cookie.setPath("/");
             cookieStore.addCookie(cookie);
 
-            cookieBuilder.append(cookieEntry.getKey() + "=" + cookieEntry.getValue() + "; ");
+            cookieBuilder.append(cookieEntry.getKey()).append("=").append(cookieEntry.getValue()).append("; ");
         }
 
         PoolingHttpClientConnectionManager connPool = new PoolingHttpClientConnectionManager();
@@ -68,11 +66,7 @@ public class ApacheConnections {
                 .setDefaultCookieStore(cookieStore);
 
         try {
-            SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, new TrustStrategy() {
-                public boolean isTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
-                    return true;
-                }
-            }).build();
+            SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, (TrustStrategy) (arg0, arg1) -> true).build();
             builder.setSSLContext(sslContext);
             builderWithTimeout.setSSLContext(sslContext);
 

@@ -14,16 +14,16 @@ import java.io.*;
 /**
  * Created by km on 21.11.2015.
  */
-public class PageImgProcessor extends AbstractHttpProcessor implements Runnable {
+class PageImgProcessor extends AbstractHttpProcessor implements Runnable {
 
-    private static Logger logger = Logger.getLogger(ExecutionContext.output, PageImgProcessor.class.getName());
+    private static final Logger logger = Logger.getLogger(ExecutionContext.output, PageImgProcessor.class.getName());
 
     private static final String IMG_ERROR_TEMPLATE = "No img at %s with proxy %s";
 
-    private static int dataChunk = 4096;
+    private static final int dataChunk = 4096;
 
-    private PageInfo page;
-    private HttpHostExt usedProxy;
+    private final PageInfo page;
+    private final HttpHostExt usedProxy;
 
     public PageImgProcessor(PageInfo page, HttpHostExt usedProxy) {
         this.page = page;
@@ -136,11 +136,7 @@ public class PageImgProcessor extends AbstractHttpProcessor implements Runnable 
     }
 
     private boolean processImageWithProxy(HttpHostExt proxy) {
-        if (!proxy.isLocal() && !proxy.isAvailable())
-            return false;
-
-        return processImage(page.getImqRqUrl(
-                ImageExtractor.HTTPS_TEMPLATE, GBDOptions.getImageWidth()), proxy);
+        return !(!proxy.isLocal() && !proxy.isAvailable()) && processImage(page.getImqRqUrl(ImageExtractor.HTTPS_TEMPLATE, GBDOptions.getImageWidth()), proxy);
     }
 
     @Override

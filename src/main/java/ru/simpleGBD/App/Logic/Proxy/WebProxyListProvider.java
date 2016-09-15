@@ -7,7 +7,6 @@ import org.jsoup.nodes.TextNode;
 import ru.simpleGBD.App.Utils.HttpConnections;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -28,10 +27,8 @@ public class WebProxyListProvider extends AbstractProxyListProvider {
                     .userAgent(HttpConnections.USER_AGENT)
                     .get();
 
-            List<String> proxyItems =
-                    doc.getElementById("proxylisttable").getElementsByTag("tbody").get(0).getElementsByTag("tr")
-                            .stream().map(element -> extractProxyData(element)).limit(20).collect(Collectors.toList());
-            this.proxyItems = proxyItems;
+            this.proxyItems = doc.getElementById("proxylisttable").getElementsByTag("tbody").get(0).getElementsByTag("tr")
+                    .stream().map(this::extractProxyData).limit(20).collect(Collectors.toList());
 
         } catch (IOException e) {
             e.printStackTrace();

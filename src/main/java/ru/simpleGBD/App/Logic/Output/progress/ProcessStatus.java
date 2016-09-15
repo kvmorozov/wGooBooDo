@@ -11,9 +11,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class ProcessStatus {
 
-    private AtomicInteger value = new AtomicInteger(0);
+    private final AtomicInteger value = new AtomicInteger(0);
     private JProgressBar prBar;
-    private int maxValue;
+    private final int maxValue;
 
     public ProcessStatus(int maxValue) {
         this.maxValue = maxValue;

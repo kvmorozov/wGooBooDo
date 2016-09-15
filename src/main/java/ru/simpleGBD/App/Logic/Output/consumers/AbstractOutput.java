@@ -11,7 +11,7 @@ import java.util.List;
  */
 public abstract class AbstractOutput implements IBookInfoOutput, IEventConsumer {
 
-    private List<IEventListener> listeners = new ArrayList<IEventListener>();
+    private final List<IEventListener> listeners = new ArrayList<>();
 
     @Override
     public void addListener(IEventListener listener) {
@@ -20,8 +20,6 @@ public abstract class AbstractOutput implements IBookInfoOutput, IEventConsumer 
 
     @Override
     public void consumeEvent(BaseEvent event) {
-        for (IEventListener listener : listeners)
-            if (listener.eventMatched(event))
-                listener.receiveEvent(event);
+        listeners.stream().filter(listener -> listener.eventMatched(event)).forEachOrdered(listener -> listener.receiveEvent(event));
     }
 }

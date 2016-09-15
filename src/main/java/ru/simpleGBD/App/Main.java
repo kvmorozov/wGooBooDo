@@ -8,7 +8,7 @@ import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Logic.Output.consumers.DummyBookInfoOutput;
 import ru.simpleGBD.App.Logic.extractors.ImageExtractor;
 
-public class Main {
+class Main {
 
     public static void main(String[] args) {
         if (args.length > 0) {

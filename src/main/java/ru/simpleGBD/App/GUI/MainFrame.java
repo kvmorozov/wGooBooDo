@@ -18,7 +18,7 @@ public class MainFrame extends JFrame {
 
         INSTANCE = this;
 
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         setContentPane(new MainBookForm().getMainPanel());
         pack();

@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Created by km on 28.11.2015.
  */
-public class VolumeResultFlags implements Serializable {
+class VolumeResultFlags implements Serializable {
 
     @JsonProperty("has_flowing_text") private boolean hasFlowingText;
     @JsonProperty("has_scanned_text") private boolean hasScannedText;

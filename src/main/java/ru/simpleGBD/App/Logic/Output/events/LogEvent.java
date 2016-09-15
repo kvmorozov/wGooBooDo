@@ -7,7 +7,7 @@ import java.util.logging.Level;
  */
 public class LogEvent extends BaseEvent {
 
-    private Level level;
+    private final Level level;
 
     public LogEvent(Level level, String eventInfo) {
         super(eventInfo);

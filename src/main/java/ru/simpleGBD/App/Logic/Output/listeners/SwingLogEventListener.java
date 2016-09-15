@@ -1,6 +1,5 @@
 package ru.simpleGBD.App.Logic.Output.listeners;
 
-import ru.simpleGBD.App.GUI.MainFrame;
 import ru.simpleGBD.App.Logic.Output.events.BaseEvent;
 import ru.simpleGBD.App.Logic.Output.events.LogEvent;
 import ru.simpleGBD.App.Logic.model.log.LogTableModel;

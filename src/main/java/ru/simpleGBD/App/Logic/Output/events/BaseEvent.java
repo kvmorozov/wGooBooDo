@@ -5,9 +5,9 @@ package ru.simpleGBD.App.Logic.Output.events;
  */
 public class BaseEvent {
 
-    protected String eventInfo;
+    private final String eventInfo;
 
-    public BaseEvent(String eventInfo) {
+    BaseEvent(String eventInfo) {
         this.eventInfo = eventInfo;
     }
 

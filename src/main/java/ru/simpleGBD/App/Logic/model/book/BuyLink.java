@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Created by km on 28.11.2015.
  */
-public class BuyLink implements Serializable {
+class BuyLink implements Serializable {
 
     @JsonProperty("Seller") private String seller;
     @JsonProperty("Url") private String url;

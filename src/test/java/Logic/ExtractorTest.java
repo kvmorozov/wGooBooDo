@@ -2,8 +2,6 @@ package Logic;
 
 import org.junit.Test;
 
-import static junit.framework.TestCase.assertTrue;
-
 /**
  * Created by km on 21.11.2015.
  */

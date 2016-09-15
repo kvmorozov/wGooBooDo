@@ -17,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class GoogleHttpConnector extends HttpConnector {
 
-    private static Map<String, HttpRequestFactory> httpFactoryMap = new ConcurrentHashMap<>();
+    private static final Map<String, HttpRequestFactory> httpFactoryMap = new ConcurrentHashMap<>();
 
     private HttpRequestFactory getFactory(HttpHostExt proxy) {
         String key = getProxyKey(proxy);
@@ -64,7 +64,7 @@ public class GoogleHttpConnector extends HttpConnector {
             try {
                 logger.finest(String.format("Attempt %d with %s url", attempt, req.getUrl().toString()));
                 Thread.sleep(SLEEP_TIME * attempt);
-            } catch (InterruptedException ie) {
+            } catch (InterruptedException ignored) {
             }
 
         try {

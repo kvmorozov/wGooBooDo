@@ -37,10 +37,10 @@ import java.util.concurrent.TimeUnit;
  */
 public class ImageExtractor extends AbstractEventSource {
 
-    private static Logger logger = Logger.getLogger(ExecutionContext.output, ImageExtractor.class.getName());
+    private static final Logger logger = Logger.getLogger(ExecutionContext.output, ImageExtractor.class.getName());
 
     public static final int DEFAULT_PAGE_WIDTH = 1280;
-    public static final String HTTP_TEMPLATE = "http://books.google.ru/books?id=%BOOK_ID%";
+    private static final String HTTP_TEMPLATE = "http://books.google.ru/books?id=%BOOK_ID%";
     public static final String HTTPS_TEMPLATE = "https://books.google.ru/books?id=%BOOK_ID%";
 
     private static final String ADD_FLAGS_ATTRIBUTE = "_OC_addFlags";
@@ -55,9 +55,9 @@ public class ImageExtractor extends AbstractEventSource {
 
     public static final String PAGES_REQUEST_TEMPLATE = "&lpg=PP1&hl=ru&pg=%PG%&jscmd=click3";
     public static final String IMG_REQUEST_TEMPLATE = "&pg=%PG%&img=1&zoom=3&hl=ru&sig=%SIG%&w=%WIDTH%";
-    public static final String OPEN_PAGE_ADD_URL = "&printsec=frontcover&hl=ru#v=onepage&q&f=false";
+    private static final String OPEN_PAGE_ADD_URL = "&printsec=frontcover&hl=ru#v=onepage&q&f=false";
 
-    private AbstractOutput output;
+    private final AbstractOutput output;
 
     public ImageExtractor() {
         ExecutionContext.bookId = GBDOptions.getBookId();
@@ -125,7 +125,7 @@ public class ImageExtractor extends AbstractEventSource {
         return null;
     }
 
-    private void getPagesInfo() throws IOException {
+    private void getPagesInfo() {
         // Сначала идём без проксм
         Pools.sigExecutor.execute(new PageSigProcessor(HttpHostExt.NO_PROXY));
         // Потом с прокси
@@ -139,17 +139,18 @@ public class ImageExtractor extends AbstractEventSource {
         Pools.sigExecutor.shutdown();
         try {
             Pools.sigExecutor.awaitTermination(100, TimeUnit.MINUTES);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
         }
 
-        for (PageInfo page : ExecutionContext.bookInfo.getPagesInfo().getPages())
-            if (!page.dataProcessed.get() && page.getSig() != null)
-                Pools.imgExecutor.execute(new PageImgProcessor(page, HttpHostExt.NO_PROXY));
+        ExecutionContext.bookInfo.getPagesInfo().getPages()
+                .stream()
+                .filter(page -> !page.dataProcessed.get() && page.getSig() != null)
+                .forEach(page -> Pools.imgExecutor.execute(new PageImgProcessor(page, HttpHostExt.NO_PROXY)));
 
         Pools.imgExecutor.shutdown();
         try {
             Pools.imgExecutor.awaitTermination(500, TimeUnit.MINUTES);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
         }
 
         AbstractProxyListProvider.getInstance().updateProxyList();

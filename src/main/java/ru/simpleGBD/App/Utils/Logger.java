@@ -1,7 +1,6 @@
 package ru.simpleGBD.App.Utils;
 
 import ru.simpleGBD.App.Logic.Output.consumers.IEventConsumer;
-import ru.simpleGBD.App.Logic.Output.events.BaseEvent;
 import ru.simpleGBD.App.Logic.Output.events.LogEvent;
 
 import java.util.logging.Level;
@@ -11,7 +10,7 @@ import java.util.logging.Level;
  */
 public class Logger {
 
-    private IEventConsumer eventConsumer;
+    private final IEventConsumer eventConsumer;
     private String name;
 
     private Logger (IEventConsumer eventConsumer, String name) {

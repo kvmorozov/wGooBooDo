@@ -24,12 +24,12 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by km on 21.11.2015.
  */
-public class PageSigProcessor extends AbstractHttpProcessor implements Runnable {
+class PageSigProcessor extends AbstractHttpProcessor implements Runnable {
 
     private static final String SIG_ERROR_TEMPLATE = "No sig at %s with proxy %s";
     private static final String SIG_WRONG_FORMAT = "Wrong sig format: %s";
 
-    private HttpHostExt proxy;
+    private final HttpHostExt proxy;
 
     public PageSigProcessor(HttpHostExt proxy) {
         this.proxy = proxy;
@@ -122,7 +122,7 @@ public class PageSigProcessor extends AbstractHttpProcessor implements Runnable 
         sigPool.shutdown();
         try {
             sigPool.awaitTermination(100, TimeUnit.MINUTES);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
         }
 
         psSigs.finish();

@@ -7,8 +7,8 @@ import java.io.Serializable;
  */
 public class BookInfo implements Serializable {
 
-    private BookData bookData;
-    private PagesInfo pages;
+    private final BookData bookData;
+    private final PagesInfo pages;
 
     public BookInfo(BookData bookData, PagesInfo pages) {
         this.bookData = bookData;

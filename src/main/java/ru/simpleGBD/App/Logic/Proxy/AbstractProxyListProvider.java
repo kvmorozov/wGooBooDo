@@ -15,18 +15,19 @@ import java.util.stream.StreamSupport;
 /**
  * Created by km on 27.11.2015.
  */
+@SuppressWarnings("ALL")
 public abstract class AbstractProxyListProvider implements IProxyListProvider {
 
-    protected static final String DEFAULT_PROXY_DELIMITER = ":";
+    private static final String DEFAULT_PROXY_DELIMITER = ":";
 
-    private static Logger logger = Logger.getLogger(ExecutionContext.output, "ProxyPistProvider");
+    private static final Logger logger = Logger.getLogger(ExecutionContext.output, "ProxyPistProvider");
 
     private static IProxyListProvider INSTANCE;
-    private HttpHeaders headers = new HttpHeaders().setUserAgent(HttpConnections.USER_AGENT);
+    private final HttpHeaders headers = new HttpHeaders().setUserAgent(HttpConnections.USER_AGENT);
 
-    protected Set<HttpHostExt> proxyList = new HashSet<>();
+    final Set<HttpHostExt> proxyList = new HashSet<>();
     private boolean proxyListCompleted = false;
-    protected List<String> proxyItems;
+    List<String> proxyItems;
 
     private HttpHostExt processProxyItem(String proxyItem) {
         HttpHostExt proxy = null;
@@ -58,11 +59,11 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
         return proxy;
     }
 
-    protected String[] splitItems(String proxyItem, String delimiter) {
+    private String[] splitItems(String proxyItem, String delimiter) {
         return proxyItem.split(delimiter);
     }
 
-    protected String[] splitItems(String proxyItem) {
+    private String[] splitItems(String proxyItem) {
         String[] tmpItems = splitItems(proxyItem, DEFAULT_PROXY_DELIMITER);
         if (tmpItems != null && tmpItems.length >= 2)
             return tmpItems;
@@ -84,7 +85,7 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
 
     class InternalProxyIterator implements Iterator<HttpHostExt> {
 
-        private Iterator<String> itr;
+        private final Iterator<String> itr;
 
         private InternalProxyIterator() {
             itr = proxyItems.iterator();

@@ -22,7 +22,7 @@ public class ApacheHttpConnector extends HttpConnector {
         HttpResponse response = getContent(ApacheConnections.INSTANCE.getClient(proxy, withTimeout), new HttpGet(rqUrl), proxy, 0);
 
         if (response == null)
-            logger.finest(String.format("No response at url %s with proxy %s", rqUrl.toString(), proxy.toString()));
+            logger.finest(String.format("No response at url %s with proxy %s", rqUrl, proxy.toString()));
 
         return new ApacheResponse(response);
     }
@@ -35,7 +35,7 @@ public class ApacheHttpConnector extends HttpConnector {
             try {
                 logger.finest(String.format("Attempt %d with %s url", attempt, req.getURI().toString()));
                 Thread.sleep(SLEEP_TIME * attempt);
-            } catch (InterruptedException ie) {
+            } catch (InterruptedException ignored) {
             }
 
         try {

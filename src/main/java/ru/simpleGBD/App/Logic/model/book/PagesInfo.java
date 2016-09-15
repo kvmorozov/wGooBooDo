@@ -17,10 +17,10 @@ import java.util.function.Predicate;
  */
 public class PagesInfo implements Serializable {
 
-    private static Logger logger = Logger.getLogger(ExecutionContext.output, PagesInfo.class.getName());
+    private static final Logger logger = Logger.getLogger(ExecutionContext.output, PagesInfo.class.getName());
 
     @JsonProperty("page")
-    private PageInfo[] pages;
+    private final PageInfo[] pages;
     @JsonProperty("prefix")
     private String prefix;
 

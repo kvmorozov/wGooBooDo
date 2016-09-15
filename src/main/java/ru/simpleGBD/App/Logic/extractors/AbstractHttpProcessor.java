@@ -16,13 +16,13 @@ import java.net.SocketException;
 /**
  * Created by km on 05.12.2015.
  */
-public class AbstractHttpProcessor {
+class AbstractHttpProcessor {
 
-    protected static Logger logger = Logger.getLogger(ExecutionContext.output, AbstractHttpProcessor.class.getName());
+    static final Logger logger = Logger.getLogger(ExecutionContext.output, AbstractHttpProcessor.class.getName());
 
     private static final HttpConnector connector = new GoogleHttpConnector();
 
-    protected Response getContent(String rqUrl, HttpHostExt proxy, boolean withTimeout) {
+    Response getContent(String rqUrl, HttpHostExt proxy, boolean withTimeout) {
         try {
             Response resp = connector.getContent(rqUrl, proxy, withTimeout);
             return proxy.isLocal() ? resp : resp == null ? getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout) : resp;

@@ -15,7 +15,7 @@ public class LogTableModel extends AbstractTableModel {
 
     public static final LogTableModel INSTANCE = new LogTableModel();
 
-    private List<LogEvent> logEvents = Collections.synchronizedList(new ArrayList<>());
+    private final List<LogEvent> logEvents = Collections.synchronizedList(new ArrayList<>());
 
     private LogTableModel() {}
 

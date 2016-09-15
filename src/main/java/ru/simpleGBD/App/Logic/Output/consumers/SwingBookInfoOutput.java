@@ -18,9 +18,7 @@ public class SwingBookInfoOutput extends AbstractOutput {
     @Override
     public void receiveBookInfo(BookInfo bookInfo) {
         if (!SwingUtilities.isEventDispatchThread()) {
-            SwingUtilities.invokeLater(() -> {
-                MainBookForm.getINSTANCE().getTfBookTitle().setText(bookInfo.getBookData().getTitle());
-            });
+            SwingUtilities.invokeLater(() -> MainBookForm.getINSTANCE().getTfBookTitle().setText(bookInfo.getBookData().getTitle()));
         }
     }
 }

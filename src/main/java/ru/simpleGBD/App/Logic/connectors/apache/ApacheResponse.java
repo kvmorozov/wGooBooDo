@@ -12,7 +12,7 @@ import java.io.InputStream;
  */
 public class ApacheResponse implements Response {
 
-    private HttpResponse response;
+    private final HttpResponse response;
 
     public ApacheResponse(HttpResponse response) {
         this.response = response;

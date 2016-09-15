@@ -11,7 +11,7 @@ public abstract class AbstractEventSource extends SwingWorker<Void, Void> implem
 
     private ProcessStatus _processStatus;
 
-    public void setProcessStatus(ProcessStatus processStatus) {
+    protected void setProcessStatus(ProcessStatus processStatus) {
         this._processStatus = processStatus;
     }
 

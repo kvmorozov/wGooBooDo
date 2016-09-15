@@ -20,7 +20,7 @@ public class HttpConnections {
 
     public static final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0";
 
-    private static HttpConnections INSTANCE = new HttpConnections();
+    private static final HttpConnections INSTANCE = new HttpConnections();
 
     private static Map<String, String> cookiesMap;
 
@@ -33,7 +33,7 @@ public class HttpConnections {
         StringBuilder cookieBuilder = new StringBuilder();
 
         for (Map.Entry<String, String> cookieEntry : cookiesMap.entrySet()) {
-            cookieBuilder.append(cookieEntry.getKey() + "=" + cookieEntry.getValue() + "; ");
+            cookieBuilder.append(cookieEntry.getKey()).append("=").append(cookieEntry.getValue()).append("; ");
         }
 
         HttpHostExt.NO_PROXY.setCookie(cookieBuilder.toString());
@@ -60,7 +60,7 @@ public class HttpConnections {
         }
     }
 
-    public static Proxy hostToProxy(HttpHost host) {
+    private static Proxy hostToProxy(HttpHost host) {
         return new Proxy(Proxy.Type.HTTP, new InetSocketAddress(host.getHostName(), host.getPort()));
     }
 

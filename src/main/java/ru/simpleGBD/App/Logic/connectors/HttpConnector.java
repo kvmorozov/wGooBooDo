@@ -11,11 +11,11 @@ import java.io.IOException;
  */
 public abstract class HttpConnector {
 
-    protected static Logger logger = Logger.getLogger(ExecutionContext.output, HttpConnector.class.getName());
+    protected static final Logger logger = Logger.getLogger(ExecutionContext.output, HttpConnector.class.getName());
 
-    protected static int MAX_RETRY_COUNT = 2;
-    protected static int SLEEP_TIME = 500;
-    public static int CONNECT_TIMEOUT = 2000;
+    protected static final int MAX_RETRY_COUNT = 2;
+    protected static final int SLEEP_TIME = 500;
+    public static final int CONNECT_TIMEOUT = 2000;
 
     protected String getProxyKey(HttpHostExt proxy) {
         return proxy.toString();

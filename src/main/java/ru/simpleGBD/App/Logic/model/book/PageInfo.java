@@ -49,10 +49,10 @@ public class PageInfo implements Serializable {
         isGapPage = true;
     }
 
-    public AtomicBoolean sigChecked = new AtomicBoolean(false);
-    public AtomicBoolean dataProcessed = new AtomicBoolean(false);
-    public AtomicBoolean fileExists = new AtomicBoolean(false);
-    public AtomicBoolean loadingStarted = new AtomicBoolean(false);
+    public final AtomicBoolean sigChecked = new AtomicBoolean(false);
+    public final AtomicBoolean dataProcessed = new AtomicBoolean(false);
+    public final AtomicBoolean fileExists = new AtomicBoolean(false);
+    public final AtomicBoolean loadingStarted = new AtomicBoolean(false);
 
     public String getPid() {
         return pid;
@@ -125,7 +125,7 @@ public class PageInfo implements Serializable {
 
         try {
             pageNum = Integer.parseInt(strNum);
-        } catch (NumberFormatException nfe) {
+        } catch (NumberFormatException ignored) {
         }
     }
 }

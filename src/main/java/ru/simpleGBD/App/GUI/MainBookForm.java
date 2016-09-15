@@ -12,8 +12,6 @@ import ru.simpleGBD.App.Logic.model.log.LogTableModel;
 import ru.simpleGBD.App.pdf.PdfMaker;
 
 import javax.swing.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 /**
  * Created by km on 05.12.2015.

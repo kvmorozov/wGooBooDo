@@ -11,7 +11,7 @@ import java.io.InputStream;
  */
 public class GoogleResponse implements Response {
 
-    private HttpResponse resp;
+    private final HttpResponse resp;
 
     public GoogleResponse (HttpResponse resp) {
         this.resp = resp;

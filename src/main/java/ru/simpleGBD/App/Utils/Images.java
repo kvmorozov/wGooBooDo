@@ -18,7 +18,7 @@ import java.util.Iterator;
  */
 public class Images {
 
-    private static Logger logger = Logger.getLogger(ExecutionContext.output, Images.class.getName());
+    private static final Logger logger = Logger.getLogger(ExecutionContext.output, Images.class.getName());
 
     public static boolean isImageFile(Path filePath) {
         if (!Files.isRegularFile(filePath))
@@ -46,7 +46,7 @@ public class Images {
             Iterator<ImageReader> imageReaders = ImageIO.getImageReaders(iis);
 
             while (imageReaders.hasNext()) {
-                ImageReader reader = (ImageReader) imageReaders.next();
+                ImageReader reader = imageReaders.next();
                 System.out.printf("formatName: %s%n", reader.getFormatName());
             }
         } catch (Exception ex) {

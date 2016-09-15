@@ -10,7 +10,7 @@ import java.io.InputStream;
  */
 public class OkResponse implements Response {
 
-    private okhttp3.Response resp;
+    private final okhttp3.Response resp;
 
     public OkResponse(okhttp3.Response resp) {
         this.resp = resp;

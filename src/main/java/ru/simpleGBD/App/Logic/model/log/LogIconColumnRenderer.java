@@ -10,9 +10,9 @@ import java.util.logging.Level;
  */
 public class LogIconColumnRenderer extends DefaultTableCellRenderer {
 
-    private JLabel labelInfo = new JLabel(null, new ImageIcon(getClass().getResource("/images/icons/info.png")), JLabel.CENTER);
-    private JLabel labelSevere = new JLabel(null, new ImageIcon(getClass().getResource("/images/icons/error.png")), JLabel.CENTER);
-    private JLabel labelFinest = new JLabel(null, new ImageIcon(getClass().getResource("/images/icons/warning.png")), JLabel.CENTER);
+    private final JLabel labelInfo = new JLabel(null, new ImageIcon(getClass().getResource("/images/icons/info.png")), JLabel.CENTER);
+    private final JLabel labelSevere = new JLabel(null, new ImageIcon(getClass().getResource("/images/icons/error.png")), JLabel.CENTER);
+    private final JLabel labelFinest = new JLabel(null, new ImageIcon(getClass().getResource("/images/icons/warning.png")), JLabel.CENTER);
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {

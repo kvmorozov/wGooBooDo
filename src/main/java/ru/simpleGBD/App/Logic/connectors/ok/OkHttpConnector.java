@@ -23,8 +23,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class OkHttpConnector extends HttpConnector {
 
-    private static Map<String, OkHttpClient> httpFactoryMap = new ConcurrentHashMap<>();
-    private static Map<String, OkHttpClient> httpFactoryMapWithTimeout = new ConcurrentHashMap<>();
+    private static final Map<String, OkHttpClient> httpFactoryMap = new ConcurrentHashMap<>();
+    private static final Map<String, OkHttpClient> httpFactoryMapWithTimeout = new ConcurrentHashMap<>();
 
     private OkHttpClient getFactory(HttpHostExt proxy, boolean withTimeout) {
         String key = getProxyKey(proxy);
@@ -75,7 +75,7 @@ public class OkHttpConnector extends HttpConnector {
             try {
                 logger.finest(String.format("Attempt %d with %s url", attempt, request.url().toString()));
                 Thread.sleep(SLEEP_TIME * attempt);
-            } catch (InterruptedException ie) {
+            } catch (InterruptedException ignored) {
             }
 
         try {

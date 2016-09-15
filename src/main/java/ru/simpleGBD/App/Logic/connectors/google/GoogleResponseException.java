@@ -8,7 +8,7 @@ import ru.simpleGBD.App.Logic.connectors.ResponseException;
  */
 public class GoogleResponseException extends ResponseException {
 
-    private HttpResponseException hre;
+    private final HttpResponseException hre;
 
     public GoogleResponseException(HttpResponseException hre) {
         this.hre = hre;

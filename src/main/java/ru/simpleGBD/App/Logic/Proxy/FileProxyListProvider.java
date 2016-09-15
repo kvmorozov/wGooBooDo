@@ -4,7 +4,6 @@ import org.apache.commons.io.IOUtils;
 import ru.simpleGBD.App.Config.GBDOptions;
 
 import java.io.*;
-import java.util.List;
 
 /**
  * Created by sbt-morozov-kv on 02.12.2015.
@@ -25,8 +24,7 @@ public class FileProxyListProvider extends AbstractProxyListProvider {
             return;
 
         try (InputStream is = new FileInputStream(proxyListFile)) {
-            List<String> lines = IOUtils.readLines(is, "UTF-8");
-            this.proxyItems = lines;
+            this.proxyItems = IOUtils.readLines(is, "UTF-8");
         } catch (IOException e) {
             e.printStackTrace();
         }

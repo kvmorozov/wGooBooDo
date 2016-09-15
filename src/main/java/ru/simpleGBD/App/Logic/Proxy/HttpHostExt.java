@@ -22,20 +22,20 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class HttpHostExt {
 
-    private static Logger logger = Logger.getLogger(ExecutionContext.output, HttpHostExt.class.getName());
+    private static final Logger logger = Logger.getLogger(ExecutionContext.output, HttpHostExt.class.getName());
 
     private static final GenericUrl checkProxyUrl = new GenericUrl("http://mxtoolbox.com/WhatIsMyIP/");
 
     private static final int REMOTE_FAILURES_THRESHOLD = 5;
     private static final int LOCAL_FAILURES_THRESHOLD = 50;
     public static final HttpHostExt NO_PROXY = new HttpHostExt();
-    public static final String NO_PROXY_STR = "NO_PROXY";
+    private static final String NO_PROXY_STR = "NO_PROXY";
 
     private HttpHost host;
     private Proxy proxy;
     private String cookie;
-    private AtomicBoolean available = new AtomicBoolean(true);
-    private AtomicInteger failureCount = new AtomicInteger(0);
+    private final AtomicBoolean available = new AtomicBoolean(true);
+    private final AtomicInteger failureCount = new AtomicInteger(0);
     private boolean isSecure = true;
 
     public HttpHostExt(HttpHost host, String cookie) {
@@ -81,7 +81,7 @@ public class HttpHostExt {
 
     @Override
     public boolean equals(final Object obj) {
-        return obj == null ? false : host.equals(((HttpHostExt) obj).getHost());
+        return obj != null && host.equals(((HttpHostExt) obj).getHost());
     }
 
     @Override
