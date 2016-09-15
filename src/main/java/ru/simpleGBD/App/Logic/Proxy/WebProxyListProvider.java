@@ -2,18 +2,20 @@ package ru.simpleGBD.App.Logic.Proxy;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.nodes.TextNode;
+import ru.simpleGBD.App.Utils.HttpConnections;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by km on 23.11.2015.
  */
 public class WebProxyListProvider extends AbstractProxyListProvider {
 
-    private static final String PROXY_LIST_URL = "http://webanetlabs.net/freeproxy/proxylist_at_24.11.2015.txt";
+    private static final String PROXY_LIST_URL = "http://www.sslproxies.org/";
 
     WebProxyListProvider() {
         buildList();
@@ -23,14 +25,21 @@ public class WebProxyListProvider extends AbstractProxyListProvider {
         try {
             Document doc = Jsoup
                     .connect(PROXY_LIST_URL)
+                    .userAgent(HttpConnections.USER_AGENT)
                     .get();
 
-            List<String> proxyItems = Arrays.asList(((TextNode) doc.child(0).child(1).childNode(0)).getWholeText().split("\\r\\n"));
+            List<String> proxyItems =
+                    doc.getElementById("proxylisttable").getElementsByTag("tbody").get(0).getElementsByTag("tr")
+                            .stream().map(element -> extractProxyData(element)).limit(20).collect(Collectors.toList());
             this.proxyItems = proxyItems;
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private String extractProxyData(Element element) {
+        return ((TextNode) element.childNode(0).childNode(0)).getWholeText() + ":" + ((TextNode) element.childNode(1).childNode(0)).getWholeText();
     }
 
     @Override

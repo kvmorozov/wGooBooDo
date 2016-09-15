@@ -110,7 +110,7 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
 
     public static IProxyListProvider getInstance() {
         if (INSTANCE == null)
-            INSTANCE = GBDOptions.getProxyListFile() == null ? new StaticProxyListProvider() : new FileProxyListProvider();
+            INSTANCE = GBDOptions.getProxyListFile() == null ? new StaticProxyListProvider() : new WebProxyListProvider();
 
         return INSTANCE;
     }
