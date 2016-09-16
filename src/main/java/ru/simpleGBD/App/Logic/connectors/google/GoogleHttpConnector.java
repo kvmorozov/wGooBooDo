@@ -26,8 +26,10 @@ public class GoogleHttpConnector extends HttpConnector {
 
         if (requestFactory == null)
             synchronized (key) {
-                requestFactory = new NetHttpTransport.Builder().
-                        setProxy(proxy.getProxy()).build().createRequestFactory();
+                requestFactory = new NetHttpTransport.Builder()
+                        .setProxy(proxy.getProxy())
+                        .build()
+                        .createRequestFactory();
 
                 httpFactoryMap.put(key, requestFactory);
             }
@@ -42,7 +44,8 @@ public class GoogleHttpConnector extends HttpConnector {
             if ((GBDOptions.secureMode() && proxy.isLocal()) || !proxy.isAvailable())
                 return null;
 
-            HttpRequest req = getFactory(proxy).buildGetRequest(url)
+            HttpRequest req = getFactory(proxy)
+                    .buildGetRequest(url)
                     .setConnectTimeout(withTimeout ? CONNECT_TIMEOUT : CONNECT_TIMEOUT * 10)
                     .setHeaders(HttpConnections.getHeaders(proxy));
             HttpResponse resp = getContent(req, proxy, 0);

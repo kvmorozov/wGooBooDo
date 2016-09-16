@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by km on 22.11.2015.
@@ -24,7 +25,7 @@ public class HttpConnections {
 
     private static Map<String, String> cookiesMap;
 
-    private HttpHeaders headers;
+    private Map<HttpHostExt, HttpHeaders> headersMap = new ConcurrentHashMap<>();
 
     private HttpConnections() {
     }
@@ -40,10 +41,14 @@ public class HttpConnections {
     }
 
     private HttpHeaders _getHeaders(HttpHostExt proxy) {
+        HttpHeaders headers = headersMap.get(proxy);
+
         if (headers == null) {
             headers = new HttpHeaders();
             headers.setUserAgent(USER_AGENT);
             headers.setCookie(proxy.getCookie());
+
+            headersMap.put(proxy, headers);
         }
 
         return headers;

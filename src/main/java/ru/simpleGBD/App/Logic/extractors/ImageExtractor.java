@@ -53,7 +53,7 @@ public class ImageExtractor extends AbstractEventSource {
     public static final String RQ_SIG_PLACEHOLDER = "%SIG%";
     public static final String RQ_WIDTH_PLACEHOLDER = "%WIDTH%";
 
-    public static final String PAGES_REQUEST_TEMPLATE = "&lpg=PP1&hl=ru&pg=%PG%&jscmd=click3";
+    public static final String PAGES_REQUEST_TEMPLATE = "&lpg=PP1&hl=en&pg=%PG%&jscmd=click3";
     public static final String IMG_REQUEST_TEMPLATE = "&pg=%PG%&img=1&zoom=3&hl=ru&sig=%SIG%&w=%WIDTH%";
     private static final String OPEN_PAGE_ADD_URL = "&printsec=frontcover&hl=ru#v=onepage&q&f=false";
 

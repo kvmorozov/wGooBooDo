@@ -17,6 +17,7 @@ import ru.simpleGBD.App.Utils.Pools;
 import java.io.IOException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.nio.charset.Charset;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -53,7 +54,7 @@ class PageSigProcessor extends AbstractHttpProcessor implements Runnable {
                 return false;
             }
 
-            String respStr = IOUtils.toString(resp.getContent());
+            String respStr = IOUtils.toString(resp.getContent(), Charset.defaultCharset());
             PagesInfo framePages = Mapper.objectMapper.readValue(respStr, PagesInfo.class);
 
             PageInfo[] pages = framePages.getPagesArray();

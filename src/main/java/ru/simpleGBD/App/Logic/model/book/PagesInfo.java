@@ -20,7 +20,7 @@ public class PagesInfo implements Serializable {
     private static final Logger logger = Logger.getLogger(ExecutionContext.output, PagesInfo.class.getName());
 
     @JsonProperty("page")
-    private final PageInfo[] pages;
+    private PageInfo[] pages;
     @JsonProperty("prefix")
     private String prefix;
 

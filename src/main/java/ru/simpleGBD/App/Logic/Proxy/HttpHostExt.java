@@ -76,7 +76,7 @@ public class HttpHostExt {
 
     @Override
     public int hashCode() {
-        return host.hashCode();
+        return host == null ? -1 : host.hashCode();
     }
 
     @Override
@@ -138,5 +138,7 @@ public class HttpHostExt {
         return isSecure;
     }
 
-    public boolean isLocal() {return this == HttpHostExt.NO_PROXY;}
+    public boolean isLocal() {
+        return this == HttpHostExt.NO_PROXY;
+    }
 }

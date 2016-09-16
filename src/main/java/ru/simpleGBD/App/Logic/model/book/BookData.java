@@ -17,7 +17,7 @@ public class BookData implements Serializable {
     @JsonProperty("disable_twopage") private boolean disableTwopage;
     @JsonProperty("initial_zoom_width_override") private int initialZoomWidthOverride;
     @JsonProperty("show_print_pages_button") private boolean showPrintPagesButton;
-    @JsonProperty("title") private final String title;
+    @JsonProperty("title") private String title;
     @JsonProperty("subtitle") private String subtitle;
     @JsonProperty("attribution") private String attribution;
     @JsonProperty("additional_info") private AdditionalInfo additionalInfo;
@@ -26,7 +26,7 @@ public class BookData implements Serializable {
     @JsonProperty("max_resolution_image_height") private int maxResolutionImageHeight;
     @JsonProperty("num_toc_pages") private int numTocPages;
     @JsonProperty("quality_info") private String qualityInfo;
-    @JsonProperty("volume_id") private final String volumeId;
+    @JsonProperty("volume_id") private String volumeId;
     @JsonProperty("permission_info") private String permissionInfo;
     @JsonProperty("is_ebook") private boolean ebook;
     @JsonProperty("volumeresult") private VolumeResultFlags volumeresult;
