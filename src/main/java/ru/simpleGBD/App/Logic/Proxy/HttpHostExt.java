@@ -5,7 +5,6 @@ import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpHost;
 import ru.simpleGBD.App.Config.GBDOptions;
 import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Utils.Logger;
@@ -31,14 +30,14 @@ public class HttpHostExt {
     public static final HttpHostExt NO_PROXY = new HttpHostExt();
     private static final String NO_PROXY_STR = "NO_PROXY";
 
-    private HttpHost host;
+    private InetSocketAddress host;
     private Proxy proxy;
     private String cookie;
     private final AtomicBoolean available = new AtomicBoolean(true);
     private final AtomicInteger failureCount = new AtomicInteger(0);
     private boolean isSecure = true;
 
-    public HttpHostExt(HttpHost host, String cookie) {
+    public HttpHostExt(InetSocketAddress host, String cookie) {
         this.host = host;
         this.cookie = cookie;
 
@@ -70,7 +69,7 @@ public class HttpHostExt {
         return available.get();
     }
 
-    public HttpHost getHost() {
+    public InetSocketAddress getHost() {
         return host;
     }
 
@@ -86,7 +85,7 @@ public class HttpHostExt {
 
     @Override
     public String toString() {
-        return String.format("%s (%d)", host == null ? NO_PROXY_STR : host.toHostString(), -1 * failureCount.get());
+        return String.format("%s (%d)", host == null ? NO_PROXY_STR : host.toString(), -1 * failureCount.get());
     }
 
     public void registerFailure() {
@@ -97,7 +96,7 @@ public class HttpHostExt {
         if (failureCount.get() > (isLocal() ? LOCAL_FAILURES_THRESHOLD : REMOTE_FAILURES_THRESHOLD)) {
             synchronized (this) {
                 if (isAvailable()) {
-                    logger.info(String.format("Proxy %s invalidated!", host == null ? NO_PROXY_STR : host.toHostString()));
+                    logger.info(String.format("Proxy %s invalidated!", host == null ? NO_PROXY_STR : host.toString()));
                     available.set(false);
                     AbstractProxyListProvider.getInstance().invalidatedProxyListener();
                 }
@@ -109,7 +108,7 @@ public class HttpHostExt {
         synchronized (this) {
             if (isAvailable()) {
                 available.set(false);
-                logger.info(String.format("Proxy %s force-invalidated!", host == null ? NO_PROXY_STR : host.toHostString()));
+                logger.info(String.format("Proxy %s force-invalidated!", host == null ? NO_PROXY_STR : host.toString()));
             }
         }
     }

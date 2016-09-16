@@ -94,9 +94,11 @@ public class ApacheConnections {
         } else {
             Map<HttpHost, HttpClient> _map = withTimeout ? withTimeoutClientsMap : clientsMap;
 
+            HttpHost host = new HttpHost(proxy.getHost().getAddress());
+
             if (!_map.containsKey(proxy.getHost())) {
-                HttpClient client = _builder.setProxy(proxy.getHost()).build();
-                _map.put(proxy.getHost(), client);
+                HttpClient client = _builder.setProxy(host).build();
+                _map.put(host, client);
             }
 
             return _map.get(proxy.getHost());

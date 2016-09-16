@@ -4,7 +4,6 @@ import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpHeaders;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.javanet.NetHttpTransport;
-import org.apache.http.HttpHost;
 import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
 
@@ -20,6 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class HttpConnections {
 
     public static final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0";
+    private static final HttpHeaders headers = new HttpHeaders().setUserAgent(USER_AGENT);
 
     private static final HttpConnections INSTANCE = new HttpConnections();
 
@@ -54,23 +54,23 @@ public class HttpConnections {
         return headers;
     }
 
-    private HttpResponse _getResponse(Proxy proxy, HttpHeaders _headers) {
+    private HttpResponse _getResponse(Proxy proxy) {
         try {
             return new NetHttpTransport.Builder().
                     setProxy(proxy).
                     build().createRequestFactory().buildGetRequest(new GenericUrl(ExecutionContext.baseUrl)).
-                    setHeaders(_headers).execute();
+                    setHeaders(headers).execute();
         } catch (IOException e) {
             return null;
         }
     }
 
-    private static Proxy hostToProxy(HttpHost host) {
-        return new Proxy(Proxy.Type.HTTP, new InetSocketAddress(host.getHostName(), host.getPort()));
+    private static Proxy hostToProxy(InetSocketAddress host) {
+        return new Proxy(Proxy.Type.HTTP, host);
     }
 
-    public static HttpResponse getResponse(HttpHost host, HttpHeaders _headers) {
-        return INSTANCE._getResponse(hostToProxy(host), _headers);
+    public static HttpResponse getResponse(InetSocketAddress host) {
+        return INSTANCE._getResponse(hostToProxy(host));
     }
 
     public static HttpHeaders getHeaders(HttpHostExt proxy) {

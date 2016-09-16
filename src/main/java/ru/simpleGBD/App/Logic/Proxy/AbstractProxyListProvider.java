@@ -1,13 +1,12 @@
 package ru.simpleGBD.App.Logic.Proxy;
 
-import com.google.api.client.http.HttpHeaders;
 import com.google.api.client.http.HttpResponse;
-import org.apache.http.HttpHost;
 import ru.simpleGBD.App.Config.GBDOptions;
 import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Utils.HttpConnections;
 import ru.simpleGBD.App.Utils.Logger;
 
+import java.net.InetSocketAddress;
 import java.util.*;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -23,7 +22,6 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
     private static final Logger logger = Logger.getLogger(ExecutionContext.output, "ProxyPistProvider");
 
     private static IProxyListProvider INSTANCE;
-    private final HttpHeaders headers = new HttpHeaders().setUserAgent(HttpConnections.USER_AGENT);
 
     final Set<HttpHostExt> proxyList = new HashSet<>();
     private boolean proxyListCompleted = false;
@@ -38,7 +36,7 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
             if (proxyItemArr == null || proxyItemArr.length < 2)
                 return null;
 
-            HttpHost host = new HttpHost(proxyItemArr[0], Integer.parseInt(proxyItemArr[1]));
+            InetSocketAddress host = new InetSocketAddress(proxyItemArr[0], Integer.parseInt(proxyItemArr[1]));
             String cookie = getCookie(host);
             if (cookie != null) {
                 proxy = new HttpHostExt(host, cookie);
@@ -47,11 +45,11 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
                     proxyList.add(proxy);
                     logger.info(String.format("%sroxy %s added.",
                             GBDOptions.secureMode() ? proxy.isSecure() ? "Secure p" : "NOT secure p" : "P",
-                            host.toHostString()));
+                            host.toString()));
                 } else
-                    logger.info(String.format("NOT secure proxy %s NOT added.", host.toHostString()));
+                    logger.info(String.format("NOT secure proxy %s NOT added.", host.toString()));
             } else
-                logger.info(String.format("Proxy %s NOT added.", host.toHostString()));
+                logger.info(String.format("Proxy %s NOT added.", host.toString()));
         } catch (Exception ex) {
             logger.info(String.format("Not valid proxy string %s.", proxyItem));
         }
@@ -73,9 +71,9 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
         }
     }
 
-    private String getCookie(HttpHost proxy) {
+    private String getCookie(InetSocketAddress proxy) {
         try {
-            HttpResponse resp = HttpConnections.getResponse(proxy, headers);
+            HttpResponse resp = HttpConnections.getResponse(proxy);
 
             return ((ArrayList) resp.getHeaders().get("set-cookie")).get(0).toString().split(";")[0];
         } catch (Exception e) {
