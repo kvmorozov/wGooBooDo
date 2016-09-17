@@ -20,19 +20,19 @@ class AbstractHttpProcessor {
 
     static final Logger logger = Logger.getLogger(ExecutionContext.output, AbstractHttpProcessor.class.getName());
 
-    private static final HttpConnector connector = new GoogleHttpConnector();
+    public static final HttpConnector connector = new GoogleHttpConnector();
 
     Response getContent(String rqUrl, HttpHostExt proxy, boolean withTimeout) {
         try {
             Response resp = connector.getContent(rqUrl, proxy, withTimeout);
             return proxy.isLocal() ? resp : resp == null ? getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout) : resp;
         } catch (ResponseException re) {
-            switch(re.getStatusCode()) {
-                case HttpStatusCodes.STATUS_CODE_SERVICE_UNAVAILABLE :
+            switch (re.getStatusCode()) {
+                case HttpStatusCodes.STATUS_CODE_SERVICE_UNAVAILABLE:
                     proxy.forceInvalidate();
                     break;
-                case HttpStatusCodes.STATUS_CODE_NOT_FOUND :
-                case HttpStatusCodes.STATUS_CODE_BAD_GATEWAY :
+                case HttpStatusCodes.STATUS_CODE_NOT_FOUND:
+                case HttpStatusCodes.STATUS_CODE_BAD_GATEWAY:
                     proxy.registerFailure();
                     break;
                 default:
@@ -43,8 +43,7 @@ class AbstractHttpProcessor {
         } catch (SocketException | SSLException se) {
             proxy.registerFailure();
             return proxy.isLocal() ? null : getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout);
-        }
-        catch (IOException ioe) {
+        } catch (IOException ioe) {
             proxy.registerFailure();
 
             // Если что-то более специфическое

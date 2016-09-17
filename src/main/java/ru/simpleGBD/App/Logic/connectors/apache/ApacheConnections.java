@@ -1,15 +1,15 @@
 package ru.simpleGBD.App.Logic.connectors.apache;
 
-import org.apache.http.HttpHost;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.conn.ssl.TrustStrategy;
-import org.apache.http.impl.client.BasicCookieStore;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
-import org.apache.http.impl.cookie.BasicClientCookie;
-import org.apache.http.ssl.SSLContextBuilder;
+import org.apache.hc.client5.http.config.RequestConfig;
+import org.apache.hc.client5.http.cookie.BasicCookieStore;
+import org.apache.hc.client5.http.impl.cookie.BasicClientCookie;
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
+import org.apache.hc.client5.http.impl.sync.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.sync.HttpClientBuilder;
+import org.apache.hc.client5.http.sync.HttpClient;
+import org.apache.hc.core5.http.HttpHost;
+import org.apache.hc.core5.ssl.SSLContextBuilder;
+import org.apache.hc.core5.ssl.TrustStrategy;
 import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
 import ru.simpleGBD.App.Utils.HttpConnections;
 
@@ -28,7 +28,7 @@ public class ApacheConnections {
 
     private final HttpClientBuilder builder;
     private final HttpClientBuilder builderWithTimeout;
-    private HttpClient noProxyClient;
+    private CloseableHttpClient noProxyClient;
     private final Map<HttpHost, HttpClient> clientsMap = new ConcurrentHashMap<>();
     private final Map<HttpHost, HttpClient> withTimeoutClientsMap = new ConcurrentHashMap<>();
 
@@ -95,13 +95,13 @@ public class ApacheConnections {
             Map<HttpHost, HttpClient> _map = withTimeout ? withTimeoutClientsMap : clientsMap;
 
             HttpHost host = new HttpHost(proxy.getHost().getAddress());
-
-            if (!_map.containsKey(proxy.getHost())) {
-                HttpClient client = _builder.setProxy(host).build();
+            HttpClient client = _map.get(host);
+            if (client == null) {
+                client = _builder.setProxy(host).build();
                 _map.put(host, client);
             }
 
-            return _map.get(proxy.getHost());
+            return client;
         }
     }
 

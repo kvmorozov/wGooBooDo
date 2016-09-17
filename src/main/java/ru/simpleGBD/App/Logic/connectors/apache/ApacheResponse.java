@@ -1,7 +1,7 @@
 package ru.simpleGBD.App.Logic.connectors.apache;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.util.EntityUtils;
+import org.apache.hc.core5.http.HttpResponse;
+import org.apache.hc.core5.http.entity.EntityUtils;
 import ru.simpleGBD.App.Logic.connectors.Response;
 
 import java.io.IOException;

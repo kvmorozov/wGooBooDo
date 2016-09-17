@@ -51,7 +51,7 @@ class PageImgProcessor extends AbstractHttpProcessor implements Runnable {
                 return false;
             }
 
-            int read = 0;
+            int read;
             byte[] bytes = new byte[dataChunk];
             boolean firstChunk = true, reloadFlag;
 

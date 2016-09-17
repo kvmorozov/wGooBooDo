@@ -1,8 +1,8 @@
 package ru.simpleGBD.App.Logic.connectors.apache;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
+import org.apache.hc.client5.http.methods.HttpGet;
+import org.apache.hc.client5.http.sync.HttpClient;
+import org.apache.hc.core5.http.HttpResponse;
 import ru.simpleGBD.App.Config.GBDOptions;
 import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
 import ru.simpleGBD.App.Logic.connectors.HttpConnector;

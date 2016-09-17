@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
+import java.nio.charset.Charset;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -55,7 +56,7 @@ public class HttpHostExt {
         try {
             HttpResponse resp = requestFactory.buildGetRequest(checkProxyUrl).execute();
             if (resp != null && resp.getContent() != null) {
-                String respStr = IOUtils.toString(resp.getContent());
+                String respStr = IOUtils.toString(resp.getContent(), Charset.defaultCharset());
                 return !respStr.contains(InetAddress.getLocalHost().getHostName());
             }
         } catch (IOException e) {
