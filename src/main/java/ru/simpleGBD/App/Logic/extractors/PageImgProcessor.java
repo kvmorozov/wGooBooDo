@@ -151,8 +151,8 @@ class PageImgProcessor extends AbstractHttpProcessor implements Runnable {
                     // Пробуем скачать страницу с другими прокси, если не получилось с той, с помощью которой узнали sig
                     AbstractProxyListProvider.getInstance().getParallelProxyStream().forEach(proxy -> {
                         if (proxy != usedProxy)
-                            if (processImageWithProxy(proxy))
-                                return;
+                            if (processImageWithProxy(proxy)) {
+                            }
                     });
         }
     }

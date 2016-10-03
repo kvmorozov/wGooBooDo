@@ -66,7 +66,7 @@ public class ApacheConnections {
                 .setDefaultCookieStore(cookieStore);
 
         try {
-            SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, (TrustStrategy) (arg0, arg1) -> true).build();
+            SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, (arg0, arg1) -> true).build();
             builder.setSSLContext(sslContext);
             builderWithTimeout.setSSLContext(sslContext);
 
@@ -108,7 +108,7 @@ public class ApacheConnections {
     public void closeAllConnections() {
         try {
             if (noProxyClient != null)
-                ((CloseableHttpClient) noProxyClient).close();
+                noProxyClient.close();
 
             if (clientsMap != null)
                 for (HttpClient client : clientsMap.values())

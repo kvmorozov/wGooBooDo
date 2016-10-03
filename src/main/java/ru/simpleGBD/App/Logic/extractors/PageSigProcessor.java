@@ -36,12 +36,12 @@ class PageSigProcessor extends AbstractHttpProcessor implements Runnable {
         this.proxy = proxy;
     }
 
-    private boolean getSig(PageInfo page) {
+    private void getSig(PageInfo page) {
         if (!proxy.isAvailable())
-            return false;
+            return;
 
         if (page.dataProcessed.get() || page.getSig() != null || page.sigChecked.get() || page.loadingStarted.get())
-            return false;
+            return;
 
         boolean sigFound = false;
         Response resp = null;
@@ -51,7 +51,7 @@ class PageSigProcessor extends AbstractHttpProcessor implements Runnable {
             resp = getContent(rqUrl, proxy, true);
             if (resp == null) {
                 logger.info(String.format(SIG_ERROR_TEMPLATE, rqUrl, proxy.toString()));
-                return false;
+                return;
             }
 
             String respStr = IOUtils.toString(resp.getContent(), Charset.defaultCharset());
@@ -89,7 +89,8 @@ class PageSigProcessor extends AbstractHttpProcessor implements Runnable {
                 logger.info(String.format("Proxy %s failed!", proxy.toString()));
             }
 
-            ce.printStackTrace();
+            if (!(ce instanceof SocketTimeoutException))
+                ce.printStackTrace();
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
@@ -100,7 +101,7 @@ class PageSigProcessor extends AbstractHttpProcessor implements Runnable {
             }
         }
 
-        return sigFound;
+        if (sigFound);
     }
 
     @Override

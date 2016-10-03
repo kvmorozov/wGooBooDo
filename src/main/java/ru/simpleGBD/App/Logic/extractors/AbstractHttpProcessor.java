@@ -20,7 +20,7 @@ class AbstractHttpProcessor {
 
     static final Logger logger = Logger.getLogger(ExecutionContext.output, AbstractHttpProcessor.class.getName());
 
-    public static final HttpConnector connector = new GoogleHttpConnector();
+    private static final HttpConnector connector = new GoogleHttpConnector();
 
     Response getContent(String rqUrl, HttpHostExt proxy, boolean withTimeout) {
         try {

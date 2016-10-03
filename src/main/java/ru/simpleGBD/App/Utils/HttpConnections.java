@@ -26,7 +26,7 @@ public class HttpConnections {
 
     private static Map<String, String> cookiesMap;
 
-    private Map<HttpHostExt, HttpHeaders> headersMap = new ConcurrentHashMap<>();
+    private final Map<HttpHostExt, HttpHeaders> headersMap = new ConcurrentHashMap<>();
 
     private HttpConnections() {
     }
