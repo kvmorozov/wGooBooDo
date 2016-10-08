@@ -119,7 +119,7 @@ public class BookInfoExtractor extends AbstractHttpProcessor {
         return doc;
     }
 
-    public BookInfo extractBookInfo(Document doc) throws IOException {
+    private BookInfo extractBookInfo(Document doc) throws IOException {
         if (doc == null)
             return null;
 
