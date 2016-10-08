@@ -1,13 +1,6 @@
 package ru.simpleGBD.App.Logic.extractors;
 
 import org.apache.commons.io.FilenameUtils;
-import org.jsoup.Connection;
-import org.jsoup.HttpStatusException;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
-import org.jsoup.select.Elements;
 import ru.simpleGBD.App.Config.GBDOptions;
 import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Logic.Output.consumers.AbstractOutput;
@@ -15,21 +8,18 @@ import ru.simpleGBD.App.Logic.Output.events.AbstractEventSource;
 import ru.simpleGBD.App.Logic.Output.progress.ProcessStatus;
 import ru.simpleGBD.App.Logic.Proxy.AbstractProxyListProvider;
 import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
-import ru.simpleGBD.App.Logic.model.book.BookData;
-import ru.simpleGBD.App.Logic.model.book.BookInfo;
 import ru.simpleGBD.App.Logic.model.book.PageInfo;
-import ru.simpleGBD.App.Logic.model.book.PagesInfo;
-import ru.simpleGBD.App.Utils.*;
+import ru.simpleGBD.App.Utils.Images;
+import ru.simpleGBD.App.Utils.Logger;
+import ru.simpleGBD.App.Utils.Pools;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Iterator;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -40,13 +30,8 @@ public class ImageExtractor extends AbstractEventSource {
     private static final Logger logger = Logger.getLogger(ExecutionContext.output, ImageExtractor.class.getName());
 
     public static final int DEFAULT_PAGE_WIDTH = 1280;
-    private static final String HTTP_TEMPLATE = "http://books.google.ru/books?id=%BOOK_ID%";
+    public static final String HTTP_TEMPLATE = "http://books.google.ru/books?id=%BOOK_ID%";
     public static final String HTTPS_TEMPLATE = "https://books.google.ru/books?id=%BOOK_ID%";
-
-    private static final String ADD_FLAGS_ATTRIBUTE = "_OC_addFlags";
-    private static final String OC_RUN_ATTRIBUTE = "_OC_Run";
-    private static final String BOOK_INFO_START_TAG = "fullview";
-    private static final String BOOK_INFO_END_TAG = "enableUserFeedbackUI";
 
     public static final String BOOK_ID_PLACEHOLDER = "%BOOK_ID%";
     public static final String RQ_PG_PLACEHOLDER = "%PG%";
@@ -55,7 +40,6 @@ public class ImageExtractor extends AbstractEventSource {
 
     public static final String PAGES_REQUEST_TEMPLATE = "&lpg=PP1&hl=en&pg=%PG%&jscmd=click3";
     public static final String IMG_REQUEST_TEMPLATE = "&pg=%PG%&img=1&zoom=3&hl=ru&sig=%SIG%&w=%WIDTH%";
-    private static final String OPEN_PAGE_ADD_URL = "&printsec=frontcover&hl=ru#v=onepage&q&f=false";
 
     private final AbstractOutput output;
 
@@ -69,58 +53,6 @@ public class ImageExtractor extends AbstractEventSource {
     @Override
     protected Void doInBackground() throws Exception {
         process();
-
-        return null;
-    }
-
-    private BookInfo getBookInfo() throws IOException {
-        Connection.Response res = null;
-
-        try {
-            res = Jsoup
-                    .connect(HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, ExecutionContext.bookId) + OPEN_PAGE_ADD_URL)
-                    .userAgent(HttpConnections.USER_AGENT).followRedirects(false).method(Connection.Method.GET).execute();
-        } catch (UnknownHostException uhe) {
-            logger.severe("Not connected to Internet!");
-        } catch (Exception ex) {
-            try {
-                res = Jsoup
-                        .connect(HTTP_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, ExecutionContext.bookId) + OPEN_PAGE_ADD_URL)
-                        .userAgent(HttpConnections.USER_AGENT).method(Connection.Method.GET).execute();
-            } catch (Exception ex1) {
-                throw new RuntimeException(ex1);
-            }
-        }
-
-        Document doc = res.parse();
-        HttpConnections.setDefaultCookies(res.cookies());
-
-        Elements scripts = doc.select("script");
-        for (Element script : scripts) {
-            List<Node> childs = script.childNodes();
-            if (childs != null && childs.size() > 0) {
-                String data = childs.get(0).attr("data");
-
-                if (data == null || data.length() == 0)
-                    return null;
-
-                if (data.startsWith(ADD_FLAGS_ATTRIBUTE) && data.indexOf(OC_RUN_ATTRIBUTE) > 0) {
-                    int jsonStart = data.indexOf(OC_RUN_ATTRIBUTE) + OC_RUN_ATTRIBUTE.length() + 1;
-                    int jsonEnd = data.lastIndexOf(BOOK_INFO_START_TAG) - 3;
-
-                    if (jsonStart <= 0 || jsonEnd <= 0)
-                        return null;
-
-                    String pagesJsonData = data.substring(jsonStart, jsonEnd);
-                    PagesInfo pages = Mapper.objectMapper.readValue(pagesJsonData, PagesInfo.class);
-
-                    String bookJsonData = data.substring(data.indexOf(BOOK_INFO_START_TAG) - 2, data.lastIndexOf(BOOK_INFO_END_TAG) - 3);
-                    BookData bookData = Mapper.objectMapper.readValue(bookJsonData, BookData.class);
-
-                    return new BookInfo(bookData, pages);
-                }
-            }
-        }
 
         return null;
     }
@@ -203,50 +135,43 @@ public class ImageExtractor extends AbstractEventSource {
     }
 
     public void process() {
-        try {
-            ExecutionContext.bookInfo = getBookInfo();
+        ExecutionContext.bookInfo = (new BookInfoExtractor()).getBookInfo();
 
-            if (ExecutionContext.bookInfo == null)
-                throw new RuntimeException("No book info!");
+        if (ExecutionContext.bookInfo == null)
+            throw new RuntimeException("No book info!");
 
-            output.receiveBookInfo(ExecutionContext.bookInfo);
+        output.receiveBookInfo(ExecutionContext.bookInfo);
 
-            String baseOutputDirPath = GBDOptions.getOutputDir();
-            if (baseOutputDirPath == null)
+        String baseOutputDirPath = GBDOptions.getOutputDir();
+        if (baseOutputDirPath == null)
+            return;
+
+        File baseOutputDir = new File(baseOutputDirPath);
+        if (!baseOutputDir.exists())
+            baseOutputDir.mkdir();
+
+        logger.info(String.format("Working with %s", ExecutionContext.bookInfo.getBookData().getTitle()));
+
+        ExecutionContext.outputDir =
+                new File(baseOutputDirPath + "\\" +
+                        ExecutionContext.bookInfo.getBookData().getTitle()
+                                .replace(":", "")
+                                .replace("<", "")
+                                .replace(">", "")
+                                .replace("/", ".") +
+                        " " + ExecutionContext.bookInfo.getBookData().getVolumeId());
+        if (!ExecutionContext.outputDir.exists()) {
+            boolean dirResult = ExecutionContext.outputDir.mkdir();
+            if (!dirResult) {
+                logger.severe(String.format("Invalid book title: %s", ExecutionContext.bookInfo.getBookData().getTitle()));
                 return;
-
-            File baseOutputDir = new File(baseOutputDirPath);
-            if (!baseOutputDir.exists())
-                baseOutputDir.mkdir();
-
-            logger.info(String.format("Working with %s", ExecutionContext.bookInfo.getBookData().getTitle()));
-
-            ExecutionContext.outputDir =
-                    new File(baseOutputDirPath + "\\" +
-                            ExecutionContext.bookInfo.getBookData().getTitle()
-                                    .replace(":", "")
-                                    .replace("<", "")
-                                    .replace(">", "")
-                                    .replace("/", ".") +
-                            " " + ExecutionContext.bookInfo.getBookData().getVolumeId());
-            if (!ExecutionContext.outputDir.exists()) {
-                boolean dirResult = ExecutionContext.outputDir.mkdir();
-                if (!dirResult) {
-                    logger.severe(String.format("Invalid book title: %s", ExecutionContext.bookInfo.getBookData().getTitle()));
-                    return;
-                }
             }
-
-            ExecutionContext.bookInfo.getPagesInfo().build();
-            scanDir();
-
-            getPagesInfo();
-            logger.info(ExecutionContext.bookInfo.getPagesInfo().getMissingPagesList());
-        } catch (HttpStatusException hse) {
-            logger.severe(String.format("Cannot process images: %s (%d)", hse.getMessage(), hse.getStatusCode()));
-        } catch (IOException e) {
-            e.printStackTrace();
-            logger.severe("Cannot process images!");
         }
+
+        ExecutionContext.bookInfo.getPagesInfo().build();
+        scanDir();
+
+        getPagesInfo();
+        logger.info(ExecutionContext.bookInfo.getPagesInfo().getMissingPagesList());
     }
 }
