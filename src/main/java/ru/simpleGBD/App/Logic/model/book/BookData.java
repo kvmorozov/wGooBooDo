@@ -49,4 +49,8 @@ public class BookData implements Serializable {
     public String getVolumeId() {
         return volumeId;
     }
+
+    public VolumeResultFlags getFlags() {
+        return volumeresult;
+    }
 }

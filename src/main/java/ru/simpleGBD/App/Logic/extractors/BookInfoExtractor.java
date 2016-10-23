@@ -70,7 +70,8 @@ public class BookInfoExtractor extends AbstractHttpProcessor {
                 }
             } else
                 bookInfo = defaultBookInfo;
-        } catch (IOException e) {
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

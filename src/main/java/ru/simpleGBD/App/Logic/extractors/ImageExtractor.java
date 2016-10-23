@@ -1,5 +1,6 @@
 package ru.simpleGBD.App.Logic.extractors;
 
+import com.google.api.client.repackaged.com.google.common.base.Strings;
 import org.apache.commons.io.FilenameUtils;
 import ru.simpleGBD.App.Config.GBDOptions;
 import ru.simpleGBD.App.Logic.ExecutionContext;
@@ -133,6 +134,8 @@ public class ImageExtractor extends AbstractEventSource {
         ExecutionContext.bookInfo = (new BookInfoExtractor()).getBookInfo();
 
         if (ExecutionContext.bookInfo == null) throw new RuntimeException("No book info!");
+        if (!Strings.isNullOrEmpty(ExecutionContext.bookInfo.getBookData().getFlags().getDownloadPdfUrl()))
+            throw new RuntimeException("There is direct url to download book. DIY!");
 
         output.receiveBookInfo(ExecutionContext.bookInfo);
 
