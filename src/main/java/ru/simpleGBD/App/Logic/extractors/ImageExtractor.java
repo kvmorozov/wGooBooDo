@@ -12,6 +12,7 @@ import ru.simpleGBD.App.Logic.model.book.PageInfo;
 import ru.simpleGBD.App.Utils.Images;
 import ru.simpleGBD.App.Utils.Logger;
 import ru.simpleGBD.App.Utils.Pools;
+import ru.simpleGBD.App.pdf.PdfMaker;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -64,8 +65,7 @@ public class ImageExtractor extends AbstractEventSource {
         Iterator<HttpHostExt> hostIterator = AbstractProxyListProvider.getInstance().getProxyList();
         while (hostIterator.hasNext()) {
             HttpHostExt proxy = hostIterator.next();
-            if (proxy != null)
-                Pools.sigExecutor.execute(new PageSigProcessor(proxy));
+            if (proxy != null) Pools.sigExecutor.execute(new PageSigProcessor(proxy));
         }
 
         Pools.sigExecutor.shutdown();
@@ -74,10 +74,7 @@ public class ImageExtractor extends AbstractEventSource {
         } catch (InterruptedException ignored) {
         }
 
-        ExecutionContext.bookInfo.getPagesInfo().getPages()
-                .stream()
-                .filter(page -> !page.dataProcessed.get() && page.getSig() != null)
-                .forEach(page -> Pools.imgExecutor.execute(new PageImgProcessor(page, HttpHostExt.NO_PROXY)));
+        ExecutionContext.bookInfo.getPagesInfo().getPages().stream().filter(page -> !page.dataProcessed.get() && page.getSig() != null).forEach(page -> Pools.imgExecutor.execute(new PageImgProcessor(page, HttpHostExt.NO_PROXY)));
 
         Pools.imgExecutor.shutdown();
         try {
@@ -113,8 +110,7 @@ public class ImageExtractor extends AbstractEventSource {
                                     _page.dataProcessed.set(false);
                                     logger.severe(String.format("Page %s deleted!", _page.getPid()));
                                 }
-                            } else
-                                _page.dataProcessed.set(true);
+                            } else _page.dataProcessed.set(true);
                         } catch (IOException e) {
                             // Значит файл с ошибкой
                             (new File(filePath.toString())).delete();
@@ -129,37 +125,26 @@ public class ImageExtractor extends AbstractEventSource {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (psScan != null)
-                psScan.finish();
+            if (psScan != null) psScan.finish();
         }
     }
 
     public void process() {
         ExecutionContext.bookInfo = (new BookInfoExtractor()).getBookInfo();
 
-        if (ExecutionContext.bookInfo == null)
-            throw new RuntimeException("No book info!");
+        if (ExecutionContext.bookInfo == null) throw new RuntimeException("No book info!");
 
         output.receiveBookInfo(ExecutionContext.bookInfo);
 
         String baseOutputDirPath = GBDOptions.getOutputDir();
-        if (baseOutputDirPath == null)
-            return;
+        if (baseOutputDirPath == null) return;
 
         File baseOutputDir = new File(baseOutputDirPath);
-        if (!baseOutputDir.exists())
-            baseOutputDir.mkdir();
+        if (!baseOutputDir.exists()) baseOutputDir.mkdir();
 
         logger.info(String.format("Working with %s", ExecutionContext.bookInfo.getBookData().getTitle()));
 
-        ExecutionContext.outputDir =
-                new File(baseOutputDirPath + "\\" +
-                        ExecutionContext.bookInfo.getBookData().getTitle()
-                                .replace(":", "")
-                                .replace("<", "")
-                                .replace(">", "")
-                                .replace("/", ".") +
-                        " " + ExecutionContext.bookInfo.getBookData().getVolumeId());
+        ExecutionContext.outputDir = new File(baseOutputDirPath + "\\" + ExecutionContext.bookInfo.getBookData().getTitle().replace(":", "").replace("<", "").replace(">", "").replace("/", ".") + " " + ExecutionContext.bookInfo.getBookData().getVolumeId());
         if (!ExecutionContext.outputDir.exists()) {
             boolean dirResult = ExecutionContext.outputDir.mkdir();
             if (!dirResult) {
@@ -173,5 +158,8 @@ public class ImageExtractor extends AbstractEventSource {
 
         getPagesInfo();
         logger.info(ExecutionContext.bookInfo.getPagesInfo().getMissingPagesList());
+
+        PdfMaker pdfMaker = new PdfMaker(ExecutionContext.outputDir, ExecutionContext.bookInfo);
+        pdfMaker.make();
     }
 }

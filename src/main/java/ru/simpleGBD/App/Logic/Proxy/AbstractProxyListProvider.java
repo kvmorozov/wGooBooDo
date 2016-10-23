@@ -33,8 +33,7 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
         try {
             String[] proxyItemArr = splitItems(proxyItem);
 
-            if (proxyItemArr == null || proxyItemArr.length < 2)
-                return null;
+            if (proxyItemArr == null || proxyItemArr.length < 2) return null;
 
             InetSocketAddress host = new InetSocketAddress(proxyItemArr[0], Integer.parseInt(proxyItemArr[1]));
             String cookie = getCookie(host);
@@ -43,13 +42,9 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
 
                 if ((GBDOptions.secureMode() && proxy.isSecure()) || !GBDOptions.secureMode()) {
                     proxyList.add(proxy);
-                    logger.info(String.format("%sroxy %s added.",
-                            GBDOptions.secureMode() ? proxy.isSecure() ? "Secure p" : "NOT secure p" : "P",
-                            host.toString()));
-                } else
-                    logger.info(String.format("NOT secure proxy %s NOT added.", host.toString()));
-            } else
-                logger.info(String.format("Proxy %s NOT added.", host.toString()));
+                    logger.info(String.format("%sroxy %s added.", GBDOptions.secureMode() ? proxy.isSecure() ? "Secure p" : "NOT secure p" : "P", host.toString()));
+                } else logger.info(String.format("NOT secure proxy %s NOT added.", host.toString()));
+            } else logger.info(String.format("Proxy %s NOT added.", host.toString()));
         } catch (Exception ex) {
             logger.info(String.format("Not valid proxy string %s.", proxyItem));
         }
@@ -63,8 +58,7 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
 
     private String[] splitItems(String proxyItem) {
         String[] tmpItems = splitItems(proxyItem, DEFAULT_PROXY_DELIMITER);
-        if (tmpItems != null && tmpItems.length >= 2)
-            return tmpItems;
+        if (tmpItems != null && tmpItems.length >= 2) return tmpItems;
         else {
             tmpItems = splitItems(proxyItem, "\\s+");
             return tmpItems != null && tmpItems.length >= 2 ? tmpItems : null;
@@ -109,7 +103,7 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
 
     public static IProxyListProvider getInstance() {
         if (INSTANCE == null)
-            INSTANCE = GBDOptions.getProxyListFile() == null ? new StaticProxyListProvider() : new WebProxyListProvider();
+            INSTANCE = GBDOptions.getProxyListFile() == null ? new WebProxyListProvider() : new FileProxyListProvider();
 
         return INSTANCE;
     }
@@ -117,8 +111,7 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
     @Override
     public void invalidatedProxyListener() {
         long liveProxyCount = proxyList.stream().filter(p -> p.isAvailable()).count();
-        if (liveProxyCount == 0 && GBDOptions.secureMode())
-            throw new RuntimeException("No more proxies!");
+        if (liveProxyCount == 0 && GBDOptions.secureMode()) throw new RuntimeException("No more proxies!");
     }
 
     @Override
