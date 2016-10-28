@@ -109,7 +109,7 @@ public class MainBookForm {
 
                 @Override
                 protected Void doInBackground() throws Exception {
-                    (new PdfMaker(ExecutionContext.outputDir, ExecutionContext.bookInfo)).make();
+                    (new PdfMaker(ExecutionContext.outputDir, ExecutionContext.bookInfo)).make(true);
 
                     return null;
                 }

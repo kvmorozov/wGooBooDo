@@ -34,24 +34,38 @@ public class PdfMaker {
         this.bookInfo = bookInfo;
     }
 
-    public void make() {
+    public void make(boolean dataChanged) {
+        File pdfFile = new File(imgDir.getPath() + File.separator + bookInfo.getBookData().getTitle() + ".pdf");
+        try {
+            if (Files.exists(pdfFile.toPath())) if (!dataChanged) return;
+            else {
+            }
+            else pdfFile.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
         logger.info("Starting making pdf file...");
         try (PDDocument document = new PDDocument()) {
             try {
-                Files.list(imgDir.toPath()).sorted((o1, o2) -> getPagenum(o1).compareTo(getPagenum(o2))).forEach(filePath -> {
-                    if (Images.isImageFile(filePath)) {
-                        try (InputStream in = new FileInputStream(filePath.toFile())) {
-                            BufferedImage bimg = ImageIO.read(in);
-                            float width = bimg.getWidth();
-                            float height = bimg.getHeight();
-                            PDPage page = new PDPage(new PDRectangle(width, height));
-                            document.addPage(page);
-                            PDImageXObject img = PDImageXObject.createFromFile(filePath.toString(), document);
-                            PDPageContentStream contentStream = new PDPageContentStream(document, page);
-                            contentStream.drawImage(img, 0, 0);
-                            contentStream.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                Files.list(imgDir.toPath()).filter(Images::isImageFile).sorted((o1, o2) -> getPagenum(o1).compareTo(getPagenum(o2))).forEach(filePath -> {
+                    try (InputStream in = new FileInputStream(filePath.toFile())) {
+                        BufferedImage bimg = ImageIO.read(in);
+                        float width = bimg.getWidth();
+                        float height = bimg.getHeight();
+                        PDPage page = new PDPage(new PDRectangle(width, height));
+                        document.addPage(page);
+                        PDImageXObject img = PDImageXObject.createFromFile(filePath.toString(), document);
+                        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+                        contentStream.drawImage(img, 0, 0);
+                        contentStream.close();
+                    } catch (IOException e) {
+                        try {
+                            Files.delete(filePath);
+                            logger.severe(String.format("Image %s was deleted!", filePath.getFileName()));
+                        } catch (IOException ioe) {
+                            ioe.printStackTrace();
                         }
                     }
                 });
@@ -59,8 +73,6 @@ public class PdfMaker {
                 e.printStackTrace();
             }
 
-            File pdfFile = new File(imgDir.getPath() + File.separator + bookInfo.getBookData().getTitle() + ".pdf");
-            pdfFile.createNewFile();
             document.save(pdfFile);
         } catch (IOException e) {
             e.printStackTrace();

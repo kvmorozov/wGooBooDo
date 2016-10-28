@@ -31,6 +31,8 @@ public class Images {
             case "jpg":
             case "jpeg":
                 return true;
+            case "pdf":
+                return false;
             default:
                 logger.severe(String.format("Unknown img format = %s", ext));
                 return false;

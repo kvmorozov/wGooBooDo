@@ -159,10 +159,16 @@ public class ImageExtractor extends AbstractEventSource {
         ExecutionContext.bookInfo.getPagesInfo().build();
         scanDir();
 
+        long pagesBefore = ExecutionContext.bookInfo.getPagesInfo().getPages().stream().filter(pageInfo -> pageInfo.dataProcessed.get()).count();
+
         getPagesInfo();
         logger.info(ExecutionContext.bookInfo.getPagesInfo().getMissingPagesList());
 
+        long pagesAfter = ExecutionContext.bookInfo.getPagesInfo().getPages().stream().filter(pageInfo -> pageInfo.dataProcessed.get()).count();
+
+        logger.info(String.format("Processed %s pages", pagesAfter - pagesBefore));
+
         PdfMaker pdfMaker = new PdfMaker(ExecutionContext.outputDir, ExecutionContext.bookInfo);
-        pdfMaker.make();
+        pdfMaker.make(pagesAfter > pagesBefore);
     }
 }
