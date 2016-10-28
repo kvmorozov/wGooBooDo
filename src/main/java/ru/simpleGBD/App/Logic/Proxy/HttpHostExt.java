@@ -81,7 +81,10 @@ public class HttpHostExt {
 
     @Override
     public boolean equals(final Object obj) {
-        return obj != null && host.equals(((HttpHostExt) obj).getHost());
+        if (obj == null || !(obj instanceof HttpHostExt))
+            return false;
+
+        return host.equals(((HttpHostExt) obj).getHost());
     }
 
     @Override

@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -133,17 +134,16 @@ public class ImageExtractor extends AbstractEventSource {
     public void process() {
         ExecutionContext.bookInfo = (new BookInfoExtractor()).getBookInfo();
 
-        if (ExecutionContext.bookInfo == null) throw new RuntimeException("No book info!");
         if (!Strings.isNullOrEmpty(ExecutionContext.bookInfo.getBookData().getFlags().getDownloadPdfUrl()))
             throw new RuntimeException("There is direct url to download book. DIY!");
 
-        output.receiveBookInfo(ExecutionContext.bookInfo);
+        output.receiveBookInfo(Objects.requireNonNull(ExecutionContext.bookInfo));
 
         String baseOutputDirPath = GBDOptions.getOutputDir();
         if (baseOutputDirPath == null) return;
 
         File baseOutputDir = new File(baseOutputDirPath);
-        if (!baseOutputDir.exists()) baseOutputDir.mkdir();
+        if (!baseOutputDir.exists()) if (!baseOutputDir.mkdir()) return;
 
         logger.info(String.format("Working with %s", ExecutionContext.bookInfo.getBookData().getTitle()));
 

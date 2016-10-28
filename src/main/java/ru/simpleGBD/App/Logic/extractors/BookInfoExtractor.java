@@ -57,19 +57,16 @@ public class BookInfoExtractor extends AbstractHttpProcessor {
                 Iterator<HttpHostExt> hostIterator = AbstractProxyListProvider.getInstance().getProxyList();
                 while (hostIterator.hasNext()) {
                     HttpHostExt proxy = hostIterator.next();
-                    if (proxy == null)
-                        continue;
+                    if (proxy == null) continue;
 
                     BookInfo proxyBookInfo = extractBookInfo(getDocumentWithProxy(proxy));
-                    if (proxyBookInfo == null)
-                        proxy.forceInvalidate();
+                    if (proxyBookInfo == null) proxy.forceInvalidate();
                     else {
                         bookInfo = proxyBookInfo;
                         break;
                     }
                 }
-            } else
-                bookInfo = defaultBookInfo;
+            } else bookInfo = defaultBookInfo;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -78,8 +75,7 @@ public class BookInfoExtractor extends AbstractHttpProcessor {
     private Document getDocumentWithProxy(HttpHostExt proxy) {
         Response resp = getContent(bookUrl, proxy, true);
 
-        if (resp == null)
-            return null;
+        if (resp == null) return null;
         else {
             try {
                 String respStr = IOUtils.toString(resp.getContent(), Charset.defaultCharset());
@@ -95,24 +91,22 @@ public class BookInfoExtractor extends AbstractHttpProcessor {
         Document doc = null;
 
         try {
-            res = Jsoup
-                    .connect(bookUrl)
-                    .userAgent(HttpConnections.USER_AGENT).followRedirects(false).method(Connection.Method.GET).execute();
+            res = Jsoup.connect(bookUrl).userAgent(HttpConnections.USER_AGENT).followRedirects(false).method(Connection.Method.GET).execute();
         } catch (UnknownHostException uhe) {
             logger.severe("Not connected to Internet!");
         } catch (Exception ex) {
             try {
-                res = Jsoup
-                        .connect(HTTP_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, ExecutionContext.bookId) + OPEN_PAGE_ADD_URL)
-                        .userAgent(HttpConnections.USER_AGENT).method(Connection.Method.GET).execute();
+                res = Jsoup.connect(HTTP_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, ExecutionContext.bookId) + OPEN_PAGE_ADD_URL).userAgent(HttpConnections.USER_AGENT).method(Connection.Method.GET).execute();
             } catch (Exception ex1) {
                 throw new RuntimeException(ex1);
             }
         }
 
         try {
-            doc = res.parse();
-            HttpConnections.setDefaultCookies(res.cookies());
+            if (res != null) {
+                doc = res.parse();
+                HttpConnections.setDefaultCookies(res.cookies());
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -121,8 +115,7 @@ public class BookInfoExtractor extends AbstractHttpProcessor {
     }
 
     private BookInfo extractBookInfo(Document doc) throws IOException {
-        if (doc == null)
-            return null;
+        if (doc == null) return null;
 
         Elements scripts = doc.select("script");
         for (Element script : scripts) {
@@ -130,15 +123,13 @@ public class BookInfoExtractor extends AbstractHttpProcessor {
             if (childs != null && childs.size() > 0) {
                 String data = childs.get(0).attr("data");
 
-                if (data == null || data.length() == 0)
-                    return null;
+                if (data == null || data.length() == 0) return null;
 
                 if (data.startsWith(ADD_FLAGS_ATTRIBUTE) && data.indexOf(OC_RUN_ATTRIBUTE) > 0) {
                     int jsonStart = data.indexOf(OC_RUN_ATTRIBUTE) + OC_RUN_ATTRIBUTE.length() + 1;
                     int jsonEnd = data.lastIndexOf(BOOK_INFO_START_TAG) - 3;
 
-                    if (jsonStart <= 0 || jsonEnd <= 0)
-                        return null;
+                    if (jsonStart <= 0 || jsonEnd <= 0) return null;
 
                     String pagesJsonData = data.substring(jsonStart, jsonEnd);
                     PagesInfo pages = Mapper.objectMapper.readValue(pagesJsonData, PagesInfo.class);

@@ -37,8 +37,7 @@ class PageSigProcessor extends AbstractHttpProcessor implements Runnable {
     }
 
     private void getSig(PageInfo page) {
-        if (!proxy.isAvailable())
-            return;
+        if (!proxy.isAvailable()) return;
 
         if (page.dataProcessed.get() || page.getSig() != null || page.sigChecked.get() || page.loadingStarted.get())
             return;
@@ -62,16 +61,13 @@ class PageSigProcessor extends AbstractHttpProcessor implements Runnable {
                 if (framePage.getOrder() >= page.getOrder() && framePage.getSrc() != null) {
                     PageInfo _page = ExecutionContext.bookInfo.getPagesInfo().getPageByPid(framePage.getPid());
 
-                    if (_page.dataProcessed.get() || _page.getSig() != null || _page.sigChecked.get())
-                        continue;
+                    if (_page.dataProcessed.get() || _page.getSig() != null || _page.sigChecked.get()) continue;
 
                     String _frameSrc = framePage.getSrc();
-                    if (_frameSrc != null)
-                        _page.setSrc(_frameSrc);
+                    if (_frameSrc != null) _page.setSrc(_frameSrc);
 
                     if (_page.getSig() != null) {
-                        if (_page.getPid().equals(page.getPid()))
-                            sigFound = true;
+                        if (_page.getPid().equals(page.getPid())) sigFound = true;
                         _page.sigChecked.set(true);
 
                         proxy.promoteProxy();
@@ -89,37 +85,31 @@ class PageSigProcessor extends AbstractHttpProcessor implements Runnable {
                 logger.info(String.format("Proxy %s failed!", proxy.toString()));
             }
 
-            if (!(ce instanceof SocketTimeoutException))
-                ce.printStackTrace();
+            if (!(ce instanceof SocketTimeoutException)) ce.printStackTrace();
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
             try {
-                resp.close();
+                if (resp != null) resp.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-
-        if (sigFound);
     }
 
     @Override
     public void run() {
-        if ((GBDOptions.secureMode() && proxy.isLocal()) || !proxy.isAvailable())
-            return;
+        if ((GBDOptions.secureMode() && proxy.isLocal()) || !proxy.isAvailable()) return;
 
-        if (!proxy.isLocal() && !(proxy.isAvailable() && proxy.getHost().getPort() > 0))
-            return;
+        if (!proxy.isLocal() && !(proxy.isAvailable() && proxy.getHost().getPort() > 0)) return;
 
         final ProcessStatus psSigs = new ProcessStatus(ExecutionContext.bookInfo.getPagesInfo().getPages().size());
 
         ExecutorService sigPool = Executors.newCachedThreadPool();
-        sigPool.submit(() -> ExecutionContext.bookInfo.getPagesInfo().getPages().parallelStream()
-                .forEach(page -> {
-                    psSigs.inc();
-                    getSig(page);
-                }));
+        sigPool.submit(() -> ExecutionContext.bookInfo.getPagesInfo().getPages().parallelStream().forEach(page -> {
+            psSigs.inc();
+            getSig(page);
+        }));
 
         sigPool.shutdown();
         try {
