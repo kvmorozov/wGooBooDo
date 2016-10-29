@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class HttpHostExt {
 
-    private static final Logger logger = Logger.getLogger(ExecutionContext.output, HttpHostExt.class.getName());
+    private static final Logger logger = Logger.getLogger(ExecutionContext.INSTANCE.getOutput(), HttpHostExt.class.getName());
 
     private static final GenericUrl checkProxyUrl = new GenericUrl("http://mxtoolbox.com/WhatIsMyIP/");
 

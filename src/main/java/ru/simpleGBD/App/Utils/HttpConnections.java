@@ -20,7 +20,7 @@ public class HttpConnections {
 
     public static final String USER_AGENT = "Mozilla/5.0 (Windows; U; Windows NT 6.1; zh_CN) AppleWebKit/534.7 (KHTML, like Gecko) Chrome/7.0 baidubrowser/1.x Safari/534.7";
     private static final HttpHeaders headers = new HttpHeaders().setUserAgent(USER_AGENT);
-    private static final GenericUrl baseUrl = new GenericUrl(ExecutionContext.baseUrl);
+    private static final GenericUrl baseUrl = new GenericUrl(ExecutionContext.INSTANCE.getBaseUrl());
 
     private static final HttpConnections INSTANCE = new HttpConnections();
 

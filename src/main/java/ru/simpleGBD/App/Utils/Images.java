@@ -1,7 +1,6 @@
 package ru.simpleGBD.App.Utils;
 
 import org.apache.commons.io.FilenameUtils;
-import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Logic.connectors.Response;
 
 import javax.imageio.ImageIO;
@@ -13,12 +12,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Iterator;
 
+import static ru.simpleGBD.App.Logic.ExecutionContext.INSTANCE;
+
 /**
  * Created by km on 27.12.2015.
  */
 public class Images {
 
-    private static final Logger logger = Logger.getLogger(ExecutionContext.output, Images.class.getName());
+    private static final Logger logger = Logger.getLogger(INSTANCE.getOutput(), Images.class.getName());
 
     public static boolean isImageFile(Path filePath) {
         if (!Files.isRegularFile(filePath))

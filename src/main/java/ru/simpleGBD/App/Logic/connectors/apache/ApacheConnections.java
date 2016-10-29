@@ -9,7 +9,6 @@ import org.apache.hc.client5.http.impl.sync.HttpClientBuilder;
 import org.apache.hc.client5.http.sync.HttpClient;
 import org.apache.hc.core5.http.HttpHost;
 import org.apache.hc.core5.ssl.SSLContextBuilder;
-import org.apache.hc.core5.ssl.TrustStrategy;
 import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
 import ru.simpleGBD.App.Utils.HttpConnections;
 

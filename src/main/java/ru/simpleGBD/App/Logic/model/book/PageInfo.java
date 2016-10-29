@@ -2,11 +2,12 @@ package ru.simpleGBD.App.Logic.model.book;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.api.client.repackaged.com.google.common.base.Strings;
-import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Logic.extractors.ImageExtractor;
 
 import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import static ru.simpleGBD.App.Logic.ExecutionContext.INSTANCE;
 
 /**
  * Created by km on 21.11.2015.
@@ -83,14 +84,14 @@ public class PageInfo implements Serializable {
     }
 
     public String getPageUrl() {
-        return ExecutionContext.baseUrl + ImageExtractor.IMG_REQUEST_TEMPLATE
+        return INSTANCE.getBaseUrl() + ImageExtractor.IMG_REQUEST_TEMPLATE
                 .replace(ImageExtractor.RQ_PG_PLACEHOLDER, getPid())
                 .replace(ImageExtractor.RQ_SIG_PLACEHOLDER, getSig())
                 .replace(ImageExtractor.RQ_WIDTH_PLACEHOLDER, String.valueOf(ImageExtractor.DEFAULT_PAGE_WIDTH));
     }
 
     public String getImqRqUrl(String urlTemplate, int width) {
-        return urlTemplate.replace(ImageExtractor.BOOK_ID_PLACEHOLDER, ExecutionContext.bookId) + ImageExtractor.IMG_REQUEST_TEMPLATE
+        return urlTemplate.replace(ImageExtractor.BOOK_ID_PLACEHOLDER, INSTANCE.getBookId()) + ImageExtractor.IMG_REQUEST_TEMPLATE
                 .replace(ImageExtractor.RQ_PG_PLACEHOLDER, getPid())
                 .replace(ImageExtractor.RQ_SIG_PLACEHOLDER, getSig())
                 .replace(ImageExtractor.RQ_WIDTH_PLACEHOLDER, String.valueOf(width));

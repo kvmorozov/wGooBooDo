@@ -3,7 +3,6 @@ package ru.simpleGBD.App.Logic.extractors;
 import com.google.api.client.repackaged.com.google.common.base.Strings;
 import org.apache.commons.io.FilenameUtils;
 import ru.simpleGBD.App.Config.GBDOptions;
-import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Logic.Output.consumers.AbstractOutput;
 import ru.simpleGBD.App.Logic.Output.events.AbstractEventSource;
 import ru.simpleGBD.App.Logic.Output.progress.ProcessStatus;
@@ -25,12 +24,14 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
+import static ru.simpleGBD.App.Logic.ExecutionContext.INSTANCE;
+
 /**
  * Created by km on 21.11.2015.
  */
 public class ImageExtractor extends AbstractEventSource {
 
-    private static final Logger logger = Logger.getLogger(ExecutionContext.output, ImageExtractor.class.getName());
+    private static final Logger logger = Logger.getLogger(INSTANCE.getOutput(), ImageExtractor.class.getName());
 
     public static final int DEFAULT_PAGE_WIDTH = 1280;
     public static final String HTTP_TEMPLATE = "http://books.google.ru/books?id=%BOOK_ID%";
@@ -47,10 +48,10 @@ public class ImageExtractor extends AbstractEventSource {
     private final AbstractOutput output;
 
     public ImageExtractor() {
-        ExecutionContext.bookId = GBDOptions.getBookId();
-        ExecutionContext.baseUrl = HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, ExecutionContext.bookId);
+        INSTANCE.setBookId(GBDOptions.getBookId());
+        INSTANCE.setBaseUrl(HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, INSTANCE.getBookId()));
 
-        this.output = ExecutionContext.output;
+        this.output = INSTANCE.getOutput();
     }
 
     @Override
@@ -76,7 +77,7 @@ public class ImageExtractor extends AbstractEventSource {
         } catch (InterruptedException ignored) {
         }
 
-        ExecutionContext.bookInfo.getPagesInfo().getPages().stream().filter(page -> !page.dataProcessed.get() && page.getSig() != null).forEach(page -> Pools.imgExecutor.execute(new PageImgProcessor(page, HttpHostExt.NO_PROXY)));
+        INSTANCE.getBookInfo().getPagesInfo().getPages().stream().filter(page -> !page.dataProcessed.get() && page.getSig() != null).forEach(page -> Pools.imgExecutor.execute(new PageImgProcessor(page, HttpHostExt.NO_PROXY)));
 
         Pools.imgExecutor.shutdown();
         try {
@@ -88,17 +89,17 @@ public class ImageExtractor extends AbstractEventSource {
     }
 
     private void scanDir() {
-        final ProcessStatus psScan = new ProcessStatus(ExecutionContext.outputDir.listFiles().length);
+        final ProcessStatus psScan = new ProcessStatus(INSTANCE.getOutputDir().listFiles().length);
         setProcessStatus(psScan);
 
         try {
-            Files.walk(Paths.get(ExecutionContext.outputDir.toURI())).forEach(filePath -> {
+            Files.walk(Paths.get(INSTANCE.getOutputDir().toURI())).forEach(filePath -> {
                 setProgress(psScan.incrementAndProgress());
 
                 if (Images.isImageFile(filePath)) {
                     String fileName = FilenameUtils.getBaseName(filePath.toString());
                     String[] nameParts = fileName.split("_");
-                    PageInfo _page = ExecutionContext.bookInfo.getPagesInfo().getPageByPid(nameParts[1]);
+                    PageInfo _page = INSTANCE.getBookInfo().getPagesInfo().getPageByPid(nameParts[1]);
                     if (_page != null) {
                         try {
                             if (GBDOptions.reloadImages()) {
@@ -132,12 +133,12 @@ public class ImageExtractor extends AbstractEventSource {
     }
 
     public void process() {
-        ExecutionContext.bookInfo = (new BookInfoExtractor()).getBookInfo();
+        INSTANCE.setBookInfo((new BookInfoExtractor()).getBookInfo());
 
-        if (!Strings.isNullOrEmpty(ExecutionContext.bookInfo.getBookData().getFlags().getDownloadPdfUrl()))
+        if (!Strings.isNullOrEmpty(INSTANCE.getBookInfo().getBookData().getFlags().getDownloadPdfUrl()))
             throw new RuntimeException("There is direct url to download book. DIY!");
 
-        output.receiveBookInfo(Objects.requireNonNull(ExecutionContext.bookInfo));
+        output.receiveBookInfo(Objects.requireNonNull(INSTANCE.getBookInfo()));
 
         String baseOutputDirPath = GBDOptions.getOutputDir();
         if (baseOutputDirPath == null) return;
@@ -145,30 +146,30 @@ public class ImageExtractor extends AbstractEventSource {
         File baseOutputDir = new File(baseOutputDirPath);
         if (!baseOutputDir.exists()) if (!baseOutputDir.mkdir()) return;
 
-        logger.info(String.format("Working with %s", ExecutionContext.bookInfo.getBookData().getTitle()));
+        logger.info(String.format("Working with %s", INSTANCE.getBookInfo().getBookData().getTitle()));
 
-        ExecutionContext.outputDir = new File(baseOutputDirPath + "\\" + ExecutionContext.bookInfo.getBookData().getTitle().replace(":", "").replace("<", "").replace(">", "").replace("/", ".") + " " + ExecutionContext.bookInfo.getBookData().getVolumeId());
-        if (!ExecutionContext.outputDir.exists()) {
-            boolean dirResult = ExecutionContext.outputDir.mkdir();
+        INSTANCE.setOutputDir(new File(baseOutputDirPath + "\\" + INSTANCE.getBookInfo().getBookData().getTitle().replace(":", "").replace("<", "").replace(">", "").replace("/", ".") + " " + INSTANCE.getBookInfo().getBookData().getVolumeId()));
+        if (!INSTANCE.getOutputDir().exists()) {
+            boolean dirResult = INSTANCE.getOutputDir().mkdir();
             if (!dirResult) {
-                logger.severe(String.format("Invalid book title: %s", ExecutionContext.bookInfo.getBookData().getTitle()));
+                logger.severe(String.format("Invalid book title: %s", INSTANCE.getBookInfo().getBookData().getTitle()));
                 return;
             }
         }
 
-        ExecutionContext.bookInfo.getPagesInfo().build();
+        INSTANCE.getBookInfo().getPagesInfo().build();
         scanDir();
 
-        long pagesBefore = ExecutionContext.bookInfo.getPagesInfo().getPages().stream().filter(pageInfo -> pageInfo.dataProcessed.get()).count();
+        long pagesBefore = INSTANCE.getBookInfo().getPagesInfo().getPages().stream().filter(pageInfo -> pageInfo.dataProcessed.get()).count();
 
         getPagesInfo();
-        logger.info(ExecutionContext.bookInfo.getPagesInfo().getMissingPagesList());
+        logger.info(INSTANCE.getBookInfo().getPagesInfo().getMissingPagesList());
 
-        long pagesAfter = ExecutionContext.bookInfo.getPagesInfo().getPages().stream().filter(pageInfo -> pageInfo.dataProcessed.get()).count();
+        long pagesAfter = INSTANCE.getBookInfo().getPagesInfo().getPages().stream().filter(pageInfo -> pageInfo.dataProcessed.get()).count();
 
         logger.info(String.format("Processed %s pages", pagesAfter - pagesBefore));
 
-        PdfMaker pdfMaker = new PdfMaker(ExecutionContext.outputDir, ExecutionContext.bookInfo);
+        PdfMaker pdfMaker = new PdfMaker(INSTANCE.getOutputDir(), INSTANCE.getBookInfo());
         pdfMaker.make(pagesAfter > pagesBefore);
     }
 }

@@ -35,7 +35,7 @@ public class MainBookForm {
 
         INSTANCE = this;
 
-        ExecutionContext.output = new SwingBookInfoOutput(this);
+        ExecutionContext.INSTANCE.setOutput(new SwingBookInfoOutput(this));
 
         tfRootOutDir.setText(SystemConfigs.getRootDir());
         tfProxyListFile.setText(SystemConfigs.getProxyListFile());
@@ -109,7 +109,7 @@ public class MainBookForm {
 
                 @Override
                 protected Void doInBackground() throws Exception {
-                    (new PdfMaker(ExecutionContext.outputDir, ExecutionContext.bookInfo)).make(true);
+                    (new PdfMaker(ExecutionContext.INSTANCE.getOutputDir(), ExecutionContext.INSTANCE.getBookInfo())).make(true);
 
                     return null;
                 }

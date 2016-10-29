@@ -10,9 +10,53 @@ import java.io.File;
  */
 public class ExecutionContext {
 
-    public static String bookId;
-    public static String baseUrl;
-    public static BookInfo bookInfo;
-    public static File outputDir;
-    public static AbstractOutput output;
+    public static final ExecutionContext INSTANCE = new ExecutionContext();
+
+    private ExecutionContext() {}
+
+    private String bookId;
+    private String baseUrl;
+    private BookInfo bookInfo;
+    private File outputDir;
+    private AbstractOutput output;
+
+    public String getBookId() {
+        return bookId;
+    }
+
+    public void setBookId(String bookId) {
+        this.bookId = bookId;
+    }
+
+    public String getBaseUrl() {
+        return baseUrl;
+    }
+
+    public void setBaseUrl(String baseUrl) {
+        this.baseUrl = baseUrl;
+    }
+
+    public BookInfo getBookInfo() {
+        return bookInfo;
+    }
+
+    public void setBookInfo(BookInfo bookInfo) {
+        this.bookInfo = bookInfo;
+    }
+
+    public File getOutputDir() {
+        return outputDir;
+    }
+
+    public void setOutputDir(File outputDir) {
+        this.outputDir = outputDir;
+    }
+
+    public AbstractOutput getOutput() {
+        return output;
+    }
+
+    public void setOutput(AbstractOutput output) {
+        this.output = output;
+    }
 }

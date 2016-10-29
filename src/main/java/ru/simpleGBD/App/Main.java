@@ -19,7 +19,7 @@ class Main {
             if (bookId == null || bookId.length() == 0)
                 return;
 
-            ExecutionContext.output = new DummyBookInfoOutput();
+            ExecutionContext.INSTANCE.setOutput(new DummyBookInfoOutput());
             (new ImageExtractor()).process();
         }
         else {

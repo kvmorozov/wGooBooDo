@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import ru.simpleGBD.App.Config.GBDOptions;
-import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Utils.Logger;
 
 import java.io.Serializable;
@@ -12,12 +11,14 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 
+import static ru.simpleGBD.App.Logic.ExecutionContext.INSTANCE;
+
 /**
  * Created by km on 21.11.2015.
  */
 public class PagesInfo implements Serializable {
 
-    private static final Logger logger = Logger.getLogger(ExecutionContext.output, PagesInfo.class.getName());
+    private static final Logger logger = Logger.getLogger(INSTANCE.getOutput(), PagesInfo.class.getName());
 
     @JsonProperty("page")
     private PageInfo[] pages;

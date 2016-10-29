@@ -5,7 +5,6 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
-import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Logic.model.book.BookInfo;
 import ru.simpleGBD.App.Utils.Images;
 import ru.simpleGBD.App.Utils.Logger;
@@ -19,12 +18,14 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import static ru.simpleGBD.App.Logic.ExecutionContext.INSTANCE;
+
 /**
  * Created by km on 17.12.2015.
  */
 public class PdfMaker {
 
-    private static final Logger logger = Logger.getLogger(ExecutionContext.output, PdfMaker.class.getName());
+    private static final Logger logger = Logger.getLogger(INSTANCE.getOutput(), PdfMaker.class.getName());
 
     private File imgDir;
     private BookInfo bookInfo;
@@ -35,7 +36,7 @@ public class PdfMaker {
     }
 
     public void make(boolean dataChanged) {
-        File pdfFile = new File(imgDir.getPath() + File.separator + bookInfo.getBookData().getTitle() + ".pdf");
+        File pdfFile = new File(imgDir.getPath() + File.separator + bookInfo.getBookData().getTitle().replaceAll("[^a-zA-Z0-9.-]", "_") + ".pdf");
         try {
             if (Files.exists(pdfFile.toPath())) if (!dataChanged) return;
             else {

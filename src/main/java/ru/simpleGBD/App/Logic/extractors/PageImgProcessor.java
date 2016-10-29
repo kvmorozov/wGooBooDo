@@ -1,7 +1,6 @@
 package ru.simpleGBD.App.Logic.extractors;
 
 import ru.simpleGBD.App.Config.GBDOptions;
-import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Logic.Proxy.AbstractProxyListProvider;
 import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
 import ru.simpleGBD.App.Logic.connectors.Response;
@@ -12,12 +11,14 @@ import ru.simpleGBD.App.Utils.Logger;
 import java.io.*;
 import java.net.SocketTimeoutException;
 
+import static ru.simpleGBD.App.Logic.ExecutionContext.INSTANCE;
+
 /**
  * Created by km on 21.11.2015.
  */
 class PageImgProcessor extends AbstractHttpProcessor implements Runnable {
 
-    private static final Logger logger = Logger.getLogger(ExecutionContext.output, PageImgProcessor.class.getName());
+    private static final Logger logger = Logger.getLogger(INSTANCE.getOutput(), PageImgProcessor.class.getName());
 
     private static final String IMG_ERROR_TEMPLATE = "No img at %s with proxy %s";
 
@@ -65,7 +66,7 @@ class PageImgProcessor extends AbstractHttpProcessor implements Runnable {
                             return false;
 
                         page.loadingStarted.set(true);
-                        outputFile = new File(ExecutionContext.outputDir.getPath() + "\\" + page.getOrder() + "_" + page.getPid() + "." + imgFormat);
+                        outputFile = new File(INSTANCE.getOutputDir().getPath() + "\\" + page.getOrder() + "_" + page.getPid() + "." + imgFormat);
 
                         if (reloadFlag = outputFile.exists())
                             if (GBDOptions.reloadImages())

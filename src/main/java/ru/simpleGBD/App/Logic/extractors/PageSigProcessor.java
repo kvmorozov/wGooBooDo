@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.NoHttpResponseException;
 import ru.simpleGBD.App.Config.GBDOptions;
-import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Logic.Output.progress.ProcessStatus;
 import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
 import ru.simpleGBD.App.Logic.connectors.Response;
@@ -21,6 +20,8 @@ import java.nio.charset.Charset;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+
+import static ru.simpleGBD.App.Logic.ExecutionContext.INSTANCE;
 
 /**
  * Created by km on 21.11.2015.
@@ -44,7 +45,7 @@ class PageSigProcessor extends AbstractHttpProcessor implements Runnable {
 
         boolean sigFound = false;
         Response resp = null;
-        String rqUrl = ExecutionContext.baseUrl + ImageExtractor.PAGES_REQUEST_TEMPLATE.replace(ImageExtractor.RQ_PG_PLACEHOLDER, page.getPid());
+        String rqUrl = INSTANCE.getBaseUrl() + ImageExtractor.PAGES_REQUEST_TEMPLATE.replace(ImageExtractor.RQ_PG_PLACEHOLDER, page.getPid());
 
         try {
             resp = getContent(rqUrl, proxy, true);
@@ -59,7 +60,7 @@ class PageSigProcessor extends AbstractHttpProcessor implements Runnable {
             PageInfo[] pages = framePages.getPagesArray();
             for (PageInfo framePage : pages)
                 if (framePage.getOrder() >= page.getOrder() && framePage.getSrc() != null) {
-                    PageInfo _page = ExecutionContext.bookInfo.getPagesInfo().getPageByPid(framePage.getPid());
+                    PageInfo _page = INSTANCE.getBookInfo().getPagesInfo().getPageByPid(framePage.getPid());
 
                     if (_page.dataProcessed.get() || _page.getSig() != null || _page.sigChecked.get()) continue;
 
@@ -103,10 +104,10 @@ class PageSigProcessor extends AbstractHttpProcessor implements Runnable {
 
         if (!proxy.isLocal() && !(proxy.isAvailable() && proxy.getHost().getPort() > 0)) return;
 
-        final ProcessStatus psSigs = new ProcessStatus(ExecutionContext.bookInfo.getPagesInfo().getPages().size());
+        final ProcessStatus psSigs = new ProcessStatus(INSTANCE.getBookInfo().getPagesInfo().getPages().size());
 
         ExecutorService sigPool = Executors.newCachedThreadPool();
-        sigPool.submit(() -> ExecutionContext.bookInfo.getPagesInfo().getPages().parallelStream().forEach(page -> {
+        sigPool.submit(() -> INSTANCE.getBookInfo().getPagesInfo().getPages().parallelStream().forEach(page -> {
             psSigs.inc();
             getSig(page);
         }));

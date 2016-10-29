@@ -1,7 +1,6 @@
 package ru.simpleGBD.App.Logic.extractors;
 
 import com.google.api.client.http.HttpStatusCodes;
-import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
 import ru.simpleGBD.App.Logic.connectors.HttpConnector;
 import ru.simpleGBD.App.Logic.connectors.Response;
@@ -13,12 +12,14 @@ import javax.net.ssl.SSLException;
 import java.io.IOException;
 import java.net.SocketException;
 
+import static ru.simpleGBD.App.Logic.ExecutionContext.INSTANCE;
+
 /**
  * Created by km on 05.12.2015.
  */
 class AbstractHttpProcessor {
 
-    static final Logger logger = Logger.getLogger(ExecutionContext.output, AbstractHttpProcessor.class.getName());
+    static final Logger logger = Logger.getLogger(INSTANCE.getOutput(), AbstractHttpProcessor.class.getName());
 
     private static final HttpConnector connector = new GoogleHttpConnector();
 

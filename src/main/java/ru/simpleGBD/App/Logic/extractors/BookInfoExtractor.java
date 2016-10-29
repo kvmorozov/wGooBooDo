@@ -7,7 +7,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
-import ru.simpleGBD.App.Logic.ExecutionContext;
 import ru.simpleGBD.App.Logic.Proxy.AbstractProxyListProvider;
 import ru.simpleGBD.App.Logic.Proxy.HttpHostExt;
 import ru.simpleGBD.App.Logic.connectors.Response;
@@ -24,6 +23,7 @@ import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.List;
 
+import static ru.simpleGBD.App.Logic.ExecutionContext.INSTANCE;
 import static ru.simpleGBD.App.Logic.extractors.ImageExtractor.*;
 
 /**
@@ -31,7 +31,7 @@ import static ru.simpleGBD.App.Logic.extractors.ImageExtractor.*;
  */
 public class BookInfoExtractor extends AbstractHttpProcessor {
 
-    private static final Logger logger = Logger.getLogger(ExecutionContext.output, ImageExtractor.class.getName());
+    private static final Logger logger = Logger.getLogger(INSTANCE.getOutput(), ImageExtractor.class.getName());
 
     private static final String ADD_FLAGS_ATTRIBUTE = "_OC_addFlags";
     private static final String OC_RUN_ATTRIBUTE = "_OC_Run";
@@ -43,7 +43,7 @@ public class BookInfoExtractor extends AbstractHttpProcessor {
     private String bookUrl;
 
     public BookInfoExtractor() {
-        bookUrl = HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, ExecutionContext.bookId) + OPEN_PAGE_ADD_URL;
+        bookUrl = HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, INSTANCE.getBookId()) + OPEN_PAGE_ADD_URL;
         findBookInfo();
     }
 
@@ -96,7 +96,7 @@ public class BookInfoExtractor extends AbstractHttpProcessor {
             logger.severe("Not connected to Internet!");
         } catch (Exception ex) {
             try {
-                res = Jsoup.connect(HTTP_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, ExecutionContext.bookId) + OPEN_PAGE_ADD_URL).userAgent(HttpConnections.USER_AGENT).method(Connection.Method.GET).execute();
+                res = Jsoup.connect(HTTP_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, INSTANCE.getBookId()) + OPEN_PAGE_ADD_URL).userAgent(HttpConnections.USER_AGENT).method(Connection.Method.GET).execute();
             } catch (Exception ex1) {
                 throw new RuntimeException(ex1);
             }

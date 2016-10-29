@@ -19,7 +19,7 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
 
     private static final String DEFAULT_PROXY_DELIMITER = ":";
 
-    private static final Logger logger = Logger.getLogger(ExecutionContext.output, "ProxyPistProvider");
+    private static final Logger logger = Logger.getLogger(ExecutionContext.INSTANCE.getOutput(), "ProxyPistProvider");
 
     private static IProxyListProvider INSTANCE;
 
@@ -119,5 +119,9 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
         Iterator<HttpHostExt> hostIterator = getProxyList();
         Iterable<HttpHostExt> iterable = () -> hostIterator;
         return StreamSupport.stream(iterable.spliterator(), true);
+    }
+
+    protected boolean notBlacklisted(String proxyStr) {
+        return true;
     }
 }
