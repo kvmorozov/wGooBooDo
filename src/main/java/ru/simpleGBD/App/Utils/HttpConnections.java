@@ -57,12 +57,13 @@ public class HttpConnections {
 
     private HttpResponse _getResponse(Proxy proxy) {
         try {
-            return new NetHttpTransport.Builder().
-                    setProxy(proxy)
+            return new NetHttpTransport.Builder()
+                    .setProxy(proxy)
                     .build()
                     .createRequestFactory()
-                    .buildGetRequest(baseUrl).
-                            setHeaders(headers)
+                    .buildGetRequest(baseUrl)
+                    .setHeaders(headers)
+                    .setConnectTimeout(10000)
                     .execute();
         } catch (IOException e) {
             return null;
