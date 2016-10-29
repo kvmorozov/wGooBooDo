@@ -55,7 +55,7 @@ public class ProxyBlacklistHolder {
             HttpHostExt proxyInList;
             if (proxyInListOpt.isPresent()) {
                 proxyInList = proxyInListOpt.get();
-                proxyInList.update(proxy);
+                proxy.update(proxyInList);
             } else {
                 storedHosts.add(proxy);
             }

@@ -27,7 +27,7 @@ public class HttpHostExt {
 
     private static final GenericUrl checkProxyUrl = new GenericUrl("http://mxtoolbox.com/WhatIsMyIP/");
 
-    private static final int REMOTE_FAILURES_THRESHOLD = 5;
+    private static final int REMOTE_FAILURES_THRESHOLD = 15;
     private static final int LOCAL_FAILURES_THRESHOLD = 50;
     public static final HttpHostExt NO_PROXY = new HttpHostExt();
     private static final String NO_PROXY_STR = "NO_PROXY";
