@@ -52,7 +52,7 @@ public class BookInfoExtractor extends AbstractHttpProcessor {
         try {
             BookInfo defaultBookInfo = extractBookInfo(defaultDocument);
             if (defaultBookInfo == null) {
-                HttpHostExt.NO_PROXY.forceInvalidate();
+                HttpHostExt.NO_PROXY.forceInvalidate(false);
 
                 Iterator<HttpHostExt> hostIterator = AbstractProxyListProvider.getInstance().getProxyList();
                 while (hostIterator.hasNext()) {
@@ -60,7 +60,7 @@ public class BookInfoExtractor extends AbstractHttpProcessor {
                     if (proxy == null) continue;
 
                     BookInfo proxyBookInfo = extractBookInfo(getDocumentWithProxy(proxy));
-                    if (proxyBookInfo == null) proxy.forceInvalidate();
+                    if (proxyBookInfo == null) proxy.forceInvalidate(true);
                     else {
                         bookInfo = proxyBookInfo;
                         break;

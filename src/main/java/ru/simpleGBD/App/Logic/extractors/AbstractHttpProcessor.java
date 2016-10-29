@@ -30,7 +30,7 @@ class AbstractHttpProcessor {
         } catch (ResponseException re) {
             switch (re.getStatusCode()) {
                 case HttpStatusCodes.STATUS_CODE_SERVICE_UNAVAILABLE:
-                    proxy.forceInvalidate();
+                    proxy.forceInvalidate(true);
                     break;
                 case HttpStatusCodes.STATUS_CODE_NOT_FOUND:
                 case HttpStatusCodes.STATUS_CODE_BAD_GATEWAY:

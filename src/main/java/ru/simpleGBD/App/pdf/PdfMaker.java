@@ -36,7 +36,7 @@ public class PdfMaker {
     }
 
     public void make(boolean dataChanged) {
-        File pdfFile = new File(imgDir.getPath() + File.separator + bookInfo.getBookData().getTitle().replaceAll("[^a-zA-Z0-9.-]", "_") + ".pdf");
+        File pdfFile = new File(imgDir.getPath() + File.separator + bookInfo.getBookData().getTitle().replaceAll("[^А-Яа-яa-zA-Z0-9.-]", " ") + ".pdf");
         try {
             if (Files.exists(pdfFile.toPath())) if (!dataChanged) return;
             else {

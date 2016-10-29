@@ -4,6 +4,7 @@ import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.repackaged.com.google.common.base.Strings;
 import org.apache.commons.io.IOUtils;
 import ru.simpleGBD.App.Config.GBDOptions;
 import ru.simpleGBD.App.Logic.ExecutionContext;
@@ -34,20 +35,31 @@ public class HttpHostExt {
     private InetSocketAddress host;
     private Proxy proxy;
     private String cookie;
-    private final AtomicBoolean available = new AtomicBoolean(true);
-    private final AtomicInteger failureCount = new AtomicInteger(0);
+    private final AtomicBoolean available;
+    private final AtomicInteger failureCount;
     private boolean isSecure = true;
 
     public HttpHostExt(InetSocketAddress host, String cookie) {
         this.host = host;
         this.cookie = cookie;
 
-        if (GBDOptions.secureMode())
-            isSecure = checkSecurity();
+        if (GBDOptions.secureMode()) isSecure = checkSecurity();
+
+        failureCount = new AtomicInteger(0);
+        available = new AtomicBoolean(true);
+    }
+
+    HttpHostExt(InetSocketAddress host, int failureCount) {
+        this.host = host;
+        this.failureCount = new AtomicInteger(failureCount);
+
+        available = new AtomicBoolean(failureCount <= REMOTE_FAILURES_THRESHOLD);
     }
 
     private HttpHostExt() {
         proxy = Proxy.NO_PROXY;
+        failureCount = new AtomicInteger(0);
+        available = new AtomicBoolean(true);
     }
 
     private boolean checkSecurity() {
@@ -70,6 +82,10 @@ public class HttpHostExt {
         return available.get();
     }
 
+    public boolean isNotAvailable() {
+        return !available.get();
+    }
+
     public InetSocketAddress getHost() {
         return host;
     }
@@ -81,8 +97,7 @@ public class HttpHostExt {
 
     @Override
     public boolean equals(final Object obj) {
-        if (obj == null || !(obj instanceof HttpHostExt))
-            return false;
+        if (obj == null || !(obj instanceof HttpHostExt)) return false;
 
         return host.equals(((HttpHostExt) obj).getHost());
     }
@@ -93,8 +108,7 @@ public class HttpHostExt {
     }
 
     public void registerFailure() {
-        if (!isAvailable())
-            return;
+        if (!isAvailable()) return;
 
         failureCount.incrementAndGet();
         if (failureCount.get() > (isLocal() ? LOCAL_FAILURES_THRESHOLD : REMOTE_FAILURES_THRESHOLD)) {
@@ -108,18 +122,19 @@ public class HttpHostExt {
         }
     }
 
-    public void forceInvalidate() {
+    public void forceInvalidate(boolean reportFailure) {
         synchronized (this) {
             if (isAvailable()) {
+                failureCount.set(REMOTE_FAILURES_THRESHOLD + 1);
                 available.set(false);
-                logger.info(String.format("Proxy %s force-invalidated!", host == null ? NO_PROXY_STR : host.toString()));
+                if (reportFailure)
+                    logger.info(String.format("Proxy %s force-invalidated!", host == null ? NO_PROXY_STR : host.toString()));
             }
         }
     }
 
     public void promoteProxy() {
-        if (!isLocal())
-            failureCount.decrementAndGet();
+        if (!isLocal()) failureCount.decrementAndGet();
     }
 
     public Proxy getProxy() {
@@ -143,5 +158,28 @@ public class HttpHostExt {
 
     public boolean isLocal() {
         return this == HttpHostExt.NO_PROXY;
+    }
+
+    public boolean isSameAsStr(String proxyStr) {
+        if (Strings.isNullOrEmpty(proxyStr)) return false;
+
+        return proxyStr.equals(getProxyStringShort());
+    }
+
+    public void update(HttpHostExt anotherHost) {
+        failureCount.set(anotherHost.failureCount.get());
+    }
+
+    public String getProxyString() {
+        return host.getAddress().getHostAddress() + ";" + host.getPort() + ";" + failureCount.get();
+    }
+
+    public String getProxyStringShort() {
+        return host.getAddress().getHostAddress() + ":" + host.getPort();
+    }
+
+    public static HttpHostExt getProxyFromString(String proxyStr) {
+        String[] proxyVars = proxyStr.split(";");
+        return new HttpHostExt(new InetSocketAddress(proxyVars[0], Integer.parseInt(proxyVars[1])), Integer.parseInt(proxyVars[2]));
     }
 }

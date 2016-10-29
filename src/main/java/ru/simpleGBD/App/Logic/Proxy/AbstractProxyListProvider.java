@@ -14,12 +14,12 @@ import java.util.stream.StreamSupport;
 /**
  * Created by km on 27.11.2015.
  */
-@SuppressWarnings("ALL")
+
 public abstract class AbstractProxyListProvider implements IProxyListProvider {
 
     private static final String DEFAULT_PROXY_DELIMITER = ":";
 
-    private static final Logger logger = Logger.getLogger(ExecutionContext.INSTANCE.getOutput(), "ProxyPistProvider");
+    private static final Logger logger = Logger.getLogger(ExecutionContext.INSTANCE.getOutput(), "ProxyListProvider");
 
     private static IProxyListProvider INSTANCE;
 
@@ -37,17 +37,23 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
 
             InetSocketAddress host = new InetSocketAddress(proxyItemArr[0], Integer.parseInt(proxyItemArr[1]));
             String cookie = getCookie(host);
+            proxy = new HttpHostExt(host, cookie);
             if (cookie != null) {
-                proxy = new HttpHostExt(host, cookie);
-
                 if ((GBDOptions.secureMode() && proxy.isSecure()) || !GBDOptions.secureMode()) {
-                    proxyList.add(proxy);
                     logger.info(String.format("%sroxy %s added.", GBDOptions.secureMode() ? proxy.isSecure() ? "Secure p" : "NOT secure p" : "P", host.toString()));
-                } else logger.info(String.format("NOT secure proxy %s NOT added.", host.toString()));
-            } else logger.info(String.format("Proxy %s NOT added.", host.toString()));
+                } else {
+                    logger.info(String.format("NOT secure proxy %s NOT added.", host.toString()));
+                    proxy.forceInvalidate(false);
+                }
+            } else {
+                logger.info(String.format("Proxy %s NOT added.", host.toString()));
+                proxy.forceInvalidate(false);
+            }
         } catch (Exception ex) {
             logger.info(String.format("Not valid proxy string %s.", proxyItem));
         }
+
+        proxyList.add(proxy);
 
         return proxy;
     }
@@ -122,6 +128,10 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
     }
 
     protected boolean notBlacklisted(String proxyStr) {
-        return true;
+        return !ProxyBlacklistHolder.BLACKLIST.isProxyInBlacklist(proxyStr);
+    }
+
+    public static void updateBlacklist() {
+        ProxyBlacklistHolder.BLACKLIST.updateBlacklist(((AbstractProxyListProvider)INSTANCE).proxyList);
     }
 }

@@ -169,6 +169,8 @@ public class ImageExtractor extends AbstractEventSource {
 
         logger.info(String.format("Processed %s pages", pagesAfter - pagesBefore));
 
+        AbstractProxyListProvider.updateBlacklist();
+
         PdfMaker pdfMaker = new PdfMaker(INSTANCE.getOutputDir(), INSTANCE.getBookInfo());
         pdfMaker.make(pagesAfter > pagesBefore);
     }
