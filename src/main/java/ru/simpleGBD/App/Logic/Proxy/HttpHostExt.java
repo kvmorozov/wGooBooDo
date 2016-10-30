@@ -125,7 +125,7 @@ public class HttpHostExt {
     public void forceInvalidate(boolean reportFailure) {
         synchronized (this) {
             if (isAvailable()) {
-                failureCount.set(REMOTE_FAILURES_THRESHOLD + 1);
+                failureCount.incrementAndGet();
                 available.set(false);
                 if (reportFailure)
                     logger.info(String.format("Proxy %s force-invalidated!", host == null ? NO_PROXY_STR : host.toString()));
@@ -167,7 +167,7 @@ public class HttpHostExt {
     }
 
     public void update(HttpHostExt anotherHost) {
-        failureCount.set(anotherHost.failureCount.get());
+        failureCount.set(failureCount.get() + anotherHost.failureCount.get());
     }
 
     public String getProxyString() {
