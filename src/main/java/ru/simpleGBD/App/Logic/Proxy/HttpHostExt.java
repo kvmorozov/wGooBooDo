@@ -125,7 +125,7 @@ public class HttpHostExt {
     public void forceInvalidate(boolean reportFailure) {
         synchronized (this) {
             if (isAvailable()) {
-                failureCount.incrementAndGet();
+                failureCount.addAndGet(5);
                 available.set(false);
                 if (reportFailure)
                     logger.info(String.format("Proxy %s force-invalidated!", host == null ? NO_PROXY_STR : host.toString()));
