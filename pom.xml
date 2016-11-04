@@ -6,7 +6,7 @@
 
     <groupId>groupId</groupId>
     <artifactId>simpleGBD</artifactId>
-    <version>2.0</version>
+    <version>2.1-b1</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -139,8 +139,8 @@
             <version>LATEST</version>
             <exclusions>
                 <exclusion>
-                    <artifactId>org.apache.httpcomponents</artifactId>
-                    <groupId>httpclient</groupId>
+                    <artifactId>*</artifactId>
+                    <groupId>*</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
