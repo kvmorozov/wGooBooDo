@@ -61,26 +61,37 @@ public class PagesInfo implements Serializable {
         int endPageNum = endGap.getPageNum();
 
         if (beginPageNum >= endPageNum && endPageNum > 1 && beginPagePrefix.equals(endPagePrefix))
-            logger.severe(String.format("Cannot fill gap between pages %s(order=%s) and %s(order=%s)",
-                    beginGap.getPid(), beginGap.getOrder(), endGap.getPid(), endGap.getOrder()));
+            logger.severe(String.format("Cannot fill gap between pages %s(order=%s) and %s(order=%s)", beginGap.getPid(), beginGap.getOrder(), endGap.getPid(), endGap.getOrder()));
 
         if (beginPagePrefix.equals(endPagePrefix))
             for (int index = beginGap.getOrder() + 1; index < endGap.getOrder(); index++) {
-                String pid = beginPageNum > 0 ?
-                        beginPagePrefix + (beginPageNum + index - beginGap.getOrder()) :
-                        beginGap.getPid() + "_" + index;
+                String pid = beginPageNum > 0 ? beginPagePrefix + (beginPageNum + index - beginGap.getOrder()) : beginGap.getPid() + "_" + index;
                 PageInfo gapPage = new PageInfo(pid, index);
                 addPage(gapPage);
             }
         else {
             if (endPageNum > 1) {
-                for (int index = endGap.getOrder() - 1; endPageNum + index - endGap.getOrder() > 0; index--) {
-                    PageInfo gapPage = new PageInfo(endPagePrefix + (endPageNum + index - endGap.getOrder()), index);
-                    addPage(gapPage);
+                int pagesToCreate = endGap.getOrder() - beginGap.getOrder() - 1;
+                int pagesCreated = 0;
+                for (int index = 1; index <= pagesToCreate; index++) {
+                    if (endPageNum - index < 1) break;
+                    String newPagePidFromEnd = endPagePrefix + (endPageNum - index);
+                    if (!pagesMap.containsKey(newPagePidFromEnd) && !beginPagePrefix.contains(newPagePidFromEnd)) {
+                        PageInfo gapPage = new PageInfo(newPagePidFromEnd, endGap.getOrder() - index);
+                        addPage(gapPage);
+                        pagesCreated++;
+                    } else break;
+                }
+                if (pagesCreated < pagesToCreate) {
+                    pagesToCreate = pagesToCreate - pagesCreated;
+                    for (int index = 1; index <= pagesToCreate; index++) {
+                        String newPagePidFromBegin = beginPagePrefix + (beginPageNum + index);
+                        PageInfo gapPage = new PageInfo(newPagePidFromBegin, beginGap.getOrder() + index);
+                        addPage(gapPage);
+                    }
                 }
             } else if (beginPageNum > 1 && endPageNum < 0) {
-                logger.severe(String.format("Cannot fill gap between pages %s(order=%s) and %s(order=%s)",
-                        beginGap.getPid(), beginGap.getOrder(), endGap.getPid(), endGap.getOrder()));
+                logger.severe(String.format("Cannot fill gap between pages %s(order=%s) and %s(order=%s)", beginGap.getPid(), beginGap.getOrder(), endGap.getPid(), endGap.getOrder()));
             }
 
             if (beginPageNum > 0 && endPageNum > 0)
@@ -121,32 +132,27 @@ public class PagesInfo implements Serializable {
             currentPage = itr.next();
             total++;
 
-            if (condition.test(currentPage))
-                if (blockStart == null) {
-                } else {
-                    pairs.add(createPair(blockStart, prevPage));
-                    blockStart = null;
-                }
+            if (condition.test(currentPage)) if (blockStart == null) {
+            } else {
+                pairs.add(createPair(blockStart, prevPage));
+                blockStart = null;
+            }
             else {
                 pagesCountByCondition++;
 
-                if (blockStart == null)
-                    blockStart = currentPage;
+                if (blockStart == null) blockStart = currentPage;
                 else {
                 }
             }
 
-            if (!itr.hasNext() && blockStart != null)
-                pairs.add(createPair(blockStart, currentPage));
+            if (!itr.hasNext() && blockStart != null) pairs.add(createPair(blockStart, currentPage));
 
             prevPage = currentPage;
         }
 
         for (Pair<PageInfo, PageInfo> pair : pairs)
-            if (pair.getLeft() == pair.getRight())
-                bList.append(String.format("%s, ", pair.getLeft().getPid()));
-            else
-                bList.append(String.format("%s-%s, ", pair.getLeft().getPid(), pair.getRight().getPid()));
+            if (pair.getLeft() == pair.getRight()) bList.append(String.format("%s, ", pair.getLeft().getPid()));
+            else bList.append(String.format("%s-%s, ", pair.getLeft().getPid(), pair.getRight().getPid()));
 
         if (bList.length() > 0) {
             bList.deleteCharAt(bList.length() - 1).deleteCharAt(bList.length() - 1);
