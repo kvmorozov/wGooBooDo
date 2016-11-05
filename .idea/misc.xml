@@ -33,6 +33,8 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/ru.kmorozov.gbd.core/pom.xml" />
+        <option value="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/pom.xml" />
       </list>
     </option>
   </component>

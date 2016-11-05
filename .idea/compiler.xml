@@ -22,10 +22,14 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
+        <module name="ru.kmorozov.gbd.core" />
+        <module name="ru.kmorozov.gbd.desktop" />
         <module name="simpleGBD" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="ru.kmorozov.gbd.core" target="1.8" />
+      <module name="ru.kmorozov.gbd.desktop" target="1.8" />
       <module name="simpleGBD" target="1.8" />
     </bytecodeTargetLevel>
   </component>
