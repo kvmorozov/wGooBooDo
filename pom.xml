@@ -12,6 +12,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <modules>
+        <module>ru.kmorozov.gbd.core</module>
+        <module>ru.kmorozov.gbd.desktop</module>
+    </modules>
+
     <build>
         <plugins>
             <plugin>
