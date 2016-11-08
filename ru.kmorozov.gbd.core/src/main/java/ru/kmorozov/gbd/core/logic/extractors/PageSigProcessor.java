@@ -7,6 +7,7 @@ import org.apache.hc.core5.http.NoHttpResponseException;
 import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.connectors.Response;
+import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.model.book.PageInfo;
 import ru.kmorozov.gbd.core.logic.model.book.PagesInfo;
 import ru.kmorozov.gbd.core.logic.progress.IProgress;
@@ -21,8 +22,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import static ru.kmorozov.gbd.core.logic.ExecutionContext.INSTANCE;
-
 /**
  * Created by km on 21.11.2015.
  */
@@ -33,8 +32,10 @@ class PageSigProcessor extends AbstractHttpProcessor implements Runnable {
 
     private final HttpHostExt proxy;
     private final IProgress progress;
+    private final BookContext bookContext;
 
-    public PageSigProcessor(HttpHostExt proxy, IProgress progress) {
+    public PageSigProcessor(BookContext bookContext, HttpHostExt proxy, IProgress progress) {
+        this.bookContext = bookContext;
         this.proxy = proxy;
         this.progress = progress;
     }
@@ -47,7 +48,7 @@ class PageSigProcessor extends AbstractHttpProcessor implements Runnable {
 
         boolean sigFound = false;
         Response resp = null;
-        String rqUrl = INSTANCE.getBaseUrl() + ImageExtractor.PAGES_REQUEST_TEMPLATE.replace(ImageExtractor.RQ_PG_PLACEHOLDER, page.getPid());
+        String rqUrl = bookContext.getBaseUrl() + ImageExtractor.PAGES_REQUEST_TEMPLATE.replace(ImageExtractor.RQ_PG_PLACEHOLDER, page.getPid());
 
         try {
             resp = getContent(rqUrl, proxy, true);
@@ -62,7 +63,7 @@ class PageSigProcessor extends AbstractHttpProcessor implements Runnable {
             PageInfo[] pages = framePages.getPagesArray();
             for (PageInfo framePage : pages)
                 if (framePage.getOrder() >= page.getOrder() && framePage.getSrc() != null) {
-                    PageInfo _page = INSTANCE.getBookInfo().getPagesInfo().getPageByPid(framePage.getPid());
+                    PageInfo _page = bookContext.getBookInfo().getPagesInfo().getPageByPid(framePage.getPid());
 
                     if (_page.dataProcessed.get() || _page.getSig() != null || _page.sigChecked.get()) continue;
 
@@ -76,7 +77,7 @@ class PageSigProcessor extends AbstractHttpProcessor implements Runnable {
                         proxy.promoteProxy();
 
                         // Если есть возможность - пытаемся грузить страницу сразу
-                        Pools.imgExecutor.execute(new PageImgProcessor(_page, proxy));
+                        Pools.imgExecutor.execute(new PageImgProcessor(bookContext, _page, proxy));
                     }
 
                     if (_page.getSrc() != null && _page.getSig() == null)
@@ -106,10 +107,10 @@ class PageSigProcessor extends AbstractHttpProcessor implements Runnable {
 
         if (!proxy.isLocal() && !(proxy.isAvailable() && proxy.getHost().getPort() > 0)) return;
 
-        final IProgress psSigs = progress.getSubProgress(INSTANCE.getBookInfo().getPagesInfo().getPages().size());
+        final IProgress psSigs = progress.getSubProgress(bookContext.getBookInfo().getPagesInfo().getPages().size());
 
         ExecutorService sigPool = Executors.newCachedThreadPool();
-        sigPool.submit(() -> INSTANCE.getBookInfo().getPagesInfo().getPages().parallelStream().forEach(page -> {
+        sigPool.submit(() -> bookContext.getBookInfo().getPagesInfo().getPages().parallelStream().forEach(page -> {
             psSigs.inc();
             getSig(page);
         }));

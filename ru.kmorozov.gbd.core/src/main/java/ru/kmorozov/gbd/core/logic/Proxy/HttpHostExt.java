@@ -7,7 +7,7 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.repackaged.com.google.common.base.Strings;
 import org.apache.commons.io.IOUtils;
 import ru.kmorozov.gbd.core.config.GBDOptions;
-import ru.kmorozov.gbd.core.logic.ExecutionContext;
+import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.utils.Logger;
 
 import java.io.IOException;
@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class HttpHostExt {
 
-    private static final Logger logger = Logger.getLogger(ExecutionContext.INSTANCE.getOutput(), HttpHostExt.class.getName());
+    private static final Logger logger = ExecutionContext.INSTANCE.getLogger(HttpHostExt.class);
 
     private static final GenericUrl checkProxyUrl = new GenericUrl("http://mxtoolbox.com/WhatIsMyIP/");
 

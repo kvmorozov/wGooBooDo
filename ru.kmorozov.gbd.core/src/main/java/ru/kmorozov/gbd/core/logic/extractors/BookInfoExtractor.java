@@ -23,7 +23,7 @@ import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.List;
 
-import static ru.kmorozov.gbd.core.logic.ExecutionContext.INSTANCE;
+import static ru.kmorozov.gbd.core.logic.context.ExecutionContext.INSTANCE;
 import static ru.kmorozov.gbd.core.logic.extractors.ImageExtractor.*;
 
 /**
@@ -31,7 +31,7 @@ import static ru.kmorozov.gbd.core.logic.extractors.ImageExtractor.*;
  */
 public class BookInfoExtractor extends AbstractHttpProcessor {
 
-    private static final Logger logger = Logger.getLogger(INSTANCE.getOutput(), ImageExtractor.class.getName());
+    private static final Logger logger = INSTANCE.getLogger(ImageExtractor.class);
 
     private static final String ADD_FLAGS_ATTRIBUTE = "_OC_addFlags";
     private static final String OC_RUN_ATTRIBUTE = "_OC_Run";
@@ -41,9 +41,11 @@ public class BookInfoExtractor extends AbstractHttpProcessor {
 
     private BookInfo bookInfo;
     private String bookUrl;
+    private final String bookId;
 
-    public BookInfoExtractor() {
-        bookUrl = HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, INSTANCE.getBookId()) + OPEN_PAGE_ADD_URL;
+    public BookInfoExtractor(String bookId) {
+        this.bookId = bookId;
+        bookUrl = HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, bookId) + OPEN_PAGE_ADD_URL;
         findBookInfo();
     }
 
@@ -96,7 +98,7 @@ public class BookInfoExtractor extends AbstractHttpProcessor {
             logger.severe("Not connected to Internet!");
         } catch (Exception ex) {
             try {
-                res = Jsoup.connect(HTTP_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, INSTANCE.getBookId()) + OPEN_PAGE_ADD_URL).userAgent(HttpConnections.USER_AGENT).method(Connection.Method.GET).execute();
+                res = Jsoup.connect(HTTP_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, bookId) + OPEN_PAGE_ADD_URL).userAgent(HttpConnections.USER_AGENT).method(Connection.Method.GET).execute();
             } catch (Exception ex1) {
                 throw new RuntimeException(ex1);
             }
@@ -137,7 +139,7 @@ public class BookInfoExtractor extends AbstractHttpProcessor {
                     String bookJsonData = data.substring(data.indexOf(BOOK_INFO_START_TAG) - 2, data.lastIndexOf(BOOK_INFO_END_TAG) - 3);
                     BookData bookData = Mapper.objectMapper.readValue(bookJsonData, BookData.class);
 
-                    return new BookInfo(bookData, pages);
+                    return new BookInfo(bookData, pages, bookId);
                 }
             }
         }

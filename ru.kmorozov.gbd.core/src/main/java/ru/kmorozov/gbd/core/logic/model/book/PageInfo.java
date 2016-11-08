@@ -7,8 +7,6 @@ import ru.kmorozov.gbd.core.logic.extractors.ImageExtractor;
 import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static ru.kmorozov.gbd.core.logic.ExecutionContext.INSTANCE;
-
 /**
  * Created by km on 21.11.2015.
  */
@@ -83,23 +81,12 @@ public class PageInfo implements Serializable {
         return isGapPage;
     }
 
-    public String getPageUrl() {
-        return INSTANCE.getBaseUrl() + ImageExtractor.IMG_REQUEST_TEMPLATE
-                .replace(ImageExtractor.RQ_PG_PLACEHOLDER, getPid())
-                .replace(ImageExtractor.RQ_SIG_PLACEHOLDER, getSig())
-                .replace(ImageExtractor.RQ_WIDTH_PLACEHOLDER, String.valueOf(ImageExtractor.DEFAULT_PAGE_WIDTH));
-    }
-
-    public String getImqRqUrl(String urlTemplate, int width) {
-        return urlTemplate.replace(ImageExtractor.BOOK_ID_PLACEHOLDER, INSTANCE.getBookId()) + ImageExtractor.IMG_REQUEST_TEMPLATE
-                .replace(ImageExtractor.RQ_PG_PLACEHOLDER, getPid())
-                .replace(ImageExtractor.RQ_SIG_PLACEHOLDER, getSig())
-                .replace(ImageExtractor.RQ_WIDTH_PLACEHOLDER, String.valueOf(width));
+    public String getImqRqUrl(String bookId, String urlTemplate, int width) {
+        return urlTemplate.replace(ImageExtractor.BOOK_ID_PLACEHOLDER, bookId) + ImageExtractor.IMG_REQUEST_TEMPLATE.replace(ImageExtractor.RQ_PG_PLACEHOLDER, getPid()).replace(ImageExtractor.RQ_SIG_PLACEHOLDER, getSig()).replace(ImageExtractor.RQ_WIDTH_PLACEHOLDER, String.valueOf(width));
     }
 
     public String getPrefix() {
-        if (Strings.isNullOrEmpty(prefix))
-            parsePageNum();
+        if (Strings.isNullOrEmpty(prefix)) parsePageNum();
 
         return prefix;
     }
@@ -114,14 +101,11 @@ public class PageInfo implements Serializable {
         String strNum = "";
         for (int i = pid.length() - 1; i >= 0; i--) {
             char ch = pid.charAt(i);
-            if (!numFound && Character.isDigit(ch))
-                strNum = ch + strNum;
+            if (!numFound && Character.isDigit(ch)) strNum = ch + strNum;
             else if (!numFound && !Character.isDigit(ch)) {
                 numFound = true;
                 prefix = ch + prefix;
-            }
-            else
-                prefix = ch + prefix;
+            } else prefix = ch + prefix;
         }
 
         try {

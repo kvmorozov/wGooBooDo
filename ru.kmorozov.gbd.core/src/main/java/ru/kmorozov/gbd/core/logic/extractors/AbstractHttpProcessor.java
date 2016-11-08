@@ -12,14 +12,14 @@ import javax.net.ssl.SSLException;
 import java.io.IOException;
 import java.net.SocketException;
 
-import static ru.kmorozov.gbd.core.logic.ExecutionContext.INSTANCE;
+import static ru.kmorozov.gbd.core.logic.context.ExecutionContext.INSTANCE;
 
 /**
  * Created by km on 05.12.2015.
  */
 class AbstractHttpProcessor {
 
-    static final Logger logger = Logger.getLogger(INSTANCE.getOutput(), AbstractHttpProcessor.class.getName());
+    static final Logger logger = INSTANCE.getLogger(AbstractHttpProcessor.class);
 
     private static final HttpConnector connector = new GoogleHttpConnector();
 
@@ -48,8 +48,7 @@ class AbstractHttpProcessor {
             proxy.registerFailure();
 
             // Если что-то более специфическое
-            if (!ioe.getClass().getName().equals(IOException.class.getName()))
-                ioe.printStackTrace();
+            if (!ioe.getClass().getName().equals(IOException.class.getName())) ioe.printStackTrace();
 
             return proxy.isLocal() ? null : getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout);
         } catch (Exception ex) {

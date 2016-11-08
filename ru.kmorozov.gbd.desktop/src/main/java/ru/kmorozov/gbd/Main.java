@@ -3,16 +3,15 @@ package ru.kmorozov.gbd;
 import ru.kmorozov.gbd.core.config.CommandLineOptions;
 import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.config.LocalSystemOptions;
-import ru.kmorozov.gbd.core.logic.ExecutionContext;
+import ru.kmorozov.gbd.core.logic.context.BookContext;
+import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.extractors.ImageExtractor;
 import ru.kmorozov.gbd.core.logic.output.consumers.DummyBookInfoOutput;
 import ru.kmorozov.gbd.desktop.gui.MainFrame;
 import ru.kmorozov.gbd.desktop.output.progress.ProcessStatus;
 import ru.kmorozov.gbd.pdf.PdfMaker;
 
-import static ru.kmorozov.gbd.core.logic.ExecutionContext.INSTANCE;
-import static ru.kmorozov.gbd.core.logic.extractors.ImageExtractor.BOOK_ID_PLACEHOLDER;
-import static ru.kmorozov.gbd.core.logic.extractors.ImageExtractor.HTTPS_TEMPLATE;
+import static ru.kmorozov.gbd.core.logic.context.ExecutionContext.INSTANCE;
 
 class Main {
 
@@ -24,12 +23,11 @@ class Main {
             String bookId = GBDOptions.getBookId();
             if (bookId == null || bookId.length() == 0) return;
 
-            INSTANCE.setBookId(GBDOptions.getBookId());
-            INSTANCE.setBaseUrl(HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, INSTANCE.getBookId()));
+            ExecutionContext.initContext(new DummyBookInfoOutput(), true);
+            BookContext bookContext = INSTANCE.getBookContext(GBDOptions.getBookId());
 
-            ExecutionContext.INSTANCE.setOutput(new DummyBookInfoOutput());
-            long pagesProcessed = (new ImageExtractor(new ProcessStatus())).process();
-            PdfMaker pdfMaker = new PdfMaker(INSTANCE.getOutputDir(), INSTANCE.getBookInfo());
+            long pagesProcessed = (new ImageExtractor(bookContext, new ProcessStatus())).process();
+            PdfMaker pdfMaker = new PdfMaker(bookContext.getOutputDir(), bookContext.getBookInfo());
             pdfMaker.make(pagesProcessed > 0);
         } else {
             GBDOptions.init(new LocalSystemOptions());

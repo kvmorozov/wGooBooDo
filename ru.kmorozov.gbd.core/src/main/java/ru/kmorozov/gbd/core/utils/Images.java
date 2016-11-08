@@ -1,8 +1,8 @@
 package ru.kmorozov.gbd.core.utils;
 
 import org.apache.commons.io.FilenameUtils;
-import ru.kmorozov.gbd.core.logic.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.connectors.Response;
+import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
@@ -18,7 +18,7 @@ import java.util.Iterator;
  */
 public class Images {
 
-    private static final Logger logger = Logger.getLogger(ExecutionContext.INSTANCE.getOutput(), Images.class.getName());
+    private static final Logger logger = ExecutionContext.INSTANCE.getLogger(Images.class);
 
     public static boolean isImageFile(Path filePath) {
         if (!Files.isRegularFile(filePath))

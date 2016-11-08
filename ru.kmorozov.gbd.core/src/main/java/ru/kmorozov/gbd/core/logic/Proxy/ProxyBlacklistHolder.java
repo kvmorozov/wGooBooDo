@@ -41,7 +41,7 @@ public class ProxyBlacklistHolder {
                 storedHosts.add(HttpHostExt.getProxyFromString(line));
             }
         } catch (IOException e) {
-            System.err.println(e);
+            e.printStackTrace();
         }
     }
 

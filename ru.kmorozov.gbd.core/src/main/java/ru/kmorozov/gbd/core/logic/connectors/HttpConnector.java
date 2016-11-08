@@ -5,14 +5,14 @@ import ru.kmorozov.gbd.core.utils.Logger;
 
 import java.io.IOException;
 
-import static ru.kmorozov.gbd.core.logic.ExecutionContext.INSTANCE;
+import static ru.kmorozov.gbd.core.logic.context.ExecutionContext.INSTANCE;
 
 /**
  * Created by km on 17.05.2016.
  */
 public abstract class HttpConnector {
 
-    protected static final Logger logger = Logger.getLogger(INSTANCE.getOutput(), HttpConnector.class.getName());
+    protected static final Logger logger = INSTANCE.getLogger(HttpConnector.class);
 
     protected static final int MAX_RETRY_COUNT = 2;
     protected static final int SLEEP_TIME = 500;

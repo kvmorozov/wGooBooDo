@@ -18,14 +18,14 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static ru.kmorozov.gbd.core.logic.ExecutionContext.INSTANCE;
+import static ru.kmorozov.gbd.core.logic.context.ExecutionContext.INSTANCE;
 
 /**
  * Created by km on 17.12.2015.
  */
 public class PdfMaker {
 
-    private static final Logger logger = Logger.getLogger(INSTANCE.getOutput(), PdfMaker.class.getName());
+    private static final Logger logger = INSTANCE.getLogger(PdfMaker.class);
 
     private File imgDir;
     private BookInfo bookInfo;

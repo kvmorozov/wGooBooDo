@@ -11,26 +11,27 @@ import java.util.logging.Level;
 public class Logger {
 
     private final IEventConsumer eventConsumer;
-    private String name;
+    private final String name, prefix;
 
-    private Logger (IEventConsumer eventConsumer, String name) {
+    private Logger (IEventConsumer eventConsumer, String name, String prefix) {
         this.eventConsumer = eventConsumer;
         this.name = name;
+        this.prefix = prefix;
     }
 
-    public static Logger getLogger(IEventConsumer eventConsumer, String name) {
-        return new Logger(eventConsumer, name);
+    public static Logger getLogger(IEventConsumer eventConsumer, String name, String prefix) {
+        return new Logger(eventConsumer, name, prefix);
     }
 
     public void info(String msg) {
-        eventConsumer.consumeEvent(new LogEvent(Level.INFO, msg));
+        eventConsumer.consumeEvent(new LogEvent(Level.INFO, prefix + msg));
     }
 
     public void severe(String msg) {
-        eventConsumer.consumeEvent(new LogEvent(Level.SEVERE, msg));
+        eventConsumer.consumeEvent(new LogEvent(Level.SEVERE, prefix + msg));
     }
 
     public void finest(String msg) {
-        eventConsumer.consumeEvent(new LogEvent(Level.FINEST, msg));
+        eventConsumer.consumeEvent(new LogEvent(Level.FINEST, prefix + msg));
     }
 }

@@ -11,14 +11,14 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 
-import static ru.kmorozov.gbd.core.logic.ExecutionContext.INSTANCE;
+import static ru.kmorozov.gbd.core.logic.context.ExecutionContext.INSTANCE;
 
 /**
  * Created by km on 21.11.2015.
  */
 public class PagesInfo implements Serializable {
 
-    private static final Logger logger = Logger.getLogger(INSTANCE.getOutput(), PagesInfo.class.getName());
+    private static final Logger logger = INSTANCE.getLogger(PagesInfo.class);
 
     @JsonProperty("page")
     private PageInfo[] pages;

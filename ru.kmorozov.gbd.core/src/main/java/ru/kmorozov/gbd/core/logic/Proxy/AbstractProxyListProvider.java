@@ -2,7 +2,7 @@ package ru.kmorozov.gbd.core.logic.Proxy;
 
 import com.google.api.client.http.HttpResponse;
 import ru.kmorozov.gbd.core.config.GBDOptions;
-import ru.kmorozov.gbd.core.logic.ExecutionContext;
+import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.utils.HttpConnections;
 import ru.kmorozov.gbd.core.utils.Logger;
 
@@ -19,7 +19,7 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
 
     private static final String DEFAULT_PROXY_DELIMITER = ":";
 
-    private static final Logger logger = Logger.getLogger(ExecutionContext.INSTANCE.getOutput(), "ProxyListProvider");
+    private static final Logger logger = ExecutionContext.INSTANCE.getLogger("ProxyListProvider");
 
     private static IProxyListProvider INSTANCE;
 
@@ -116,7 +116,7 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
 
     @Override
     public void invalidatedProxyListener() {
-        long liveProxyCount = proxyList.stream().filter(p -> p.isAvailable()).count();
+        long liveProxyCount = proxyList.stream().filter(HttpHostExt::isAvailable).count();
         if (liveProxyCount == 0 && GBDOptions.secureMode()) throw new RuntimeException("No more proxies!");
     }
 

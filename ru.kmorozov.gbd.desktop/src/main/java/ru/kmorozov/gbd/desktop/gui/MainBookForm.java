@@ -1,7 +1,8 @@
 package ru.kmorozov.gbd.desktop.gui;
 
 import ru.kmorozov.gbd.core.config.SystemConfigs;
-import ru.kmorozov.gbd.core.logic.ExecutionContext;
+import ru.kmorozov.gbd.core.logic.context.BookContext;
+import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.extractors.ImageExtractor;
 import ru.kmorozov.gbd.core.logic.model.book.Resolutions;
 import ru.kmorozov.gbd.core.logic.model.log.LogIconColumnRenderer;
@@ -30,12 +31,11 @@ public class MainBookForm {
     private static MainBookForm INSTANCE;
 
     public MainBookForm() {
-        if (INSTANCE != null)
-            return;
+        if (INSTANCE != null) return;
 
         INSTANCE = this;
 
-        ExecutionContext.INSTANCE.setOutput(new SwingBookInfoOutput(this));
+        ExecutionContext.initContext(new SwingBookInfoOutput(this), true);
 
         tfRootOutDir.setText(SystemConfigs.getRootDir());
         tfProxyListFile.setText(SystemConfigs.getProxyListFile());
@@ -73,7 +73,8 @@ public class MainBookForm {
             bLoad.setEnabled(false);
             bMakeBook.setEnabled(false);
 
-            workerExtractor = new ImageExtractor(new ProcessStatus(ExecutionContext.INSTANCE.getOutputDir().listFiles().length)) {
+            BookContext bookContext = ExecutionContext.INSTANCE.getBookContext(tfBookId.getText());
+            workerExtractor = new ImageExtractor(bookContext, new ProcessStatus(bookContext.getOutputDir().listFiles().length)) {
 
                 @Override
                 public void done() {
@@ -84,7 +85,7 @@ public class MainBookForm {
 
             workerExtractor.addPropertyChangeListener(event -> {
                 if ("progress".equals(event.getPropertyName()) && event.getSource() instanceof AbstractEventSource) {
-                    ProcessStatus status = (ProcessStatus)((AbstractEventSource) event.getSource()).getProcessStatus();
+                    ProcessStatus status = (ProcessStatus) ((AbstractEventSource) event.getSource()).getProcessStatus();
                     status.getProgressBar().setValue(status.get());
                 }
             });
@@ -109,7 +110,8 @@ public class MainBookForm {
 
                 @Override
                 protected Void doInBackground() throws Exception {
-                    (new PdfMaker(ExecutionContext.INSTANCE.getOutputDir(), ExecutionContext.INSTANCE.getBookInfo())).make(true);
+                    BookContext bookContext = ExecutionContext.INSTANCE.getBookContext(tfBookId.getText());
+                    (new PdfMaker(bookContext.getOutputDir(), bookContext.getBookInfo())).make(true);
 
                     return null;
                 }

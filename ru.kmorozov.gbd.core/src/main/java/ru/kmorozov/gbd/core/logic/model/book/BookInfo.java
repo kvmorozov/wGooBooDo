@@ -9,10 +9,12 @@ public class BookInfo implements Serializable {
 
     private final BookData bookData;
     private final PagesInfo pages;
+    private final String bookId;
 
-    public BookInfo(BookData bookData, PagesInfo pages) {
+    public BookInfo(BookData bookData, PagesInfo pages, String bookId) {
         this.bookData = bookData;
         this.pages = pages;
+        this.bookId = bookId;
     }
 
     public BookData getBookData() {
@@ -21,5 +23,9 @@ public class BookInfo implements Serializable {
 
     public PagesInfo getPagesInfo() {
         return pages;
+    }
+
+    public String getBookId() {
+        return bookId;
     }
 }

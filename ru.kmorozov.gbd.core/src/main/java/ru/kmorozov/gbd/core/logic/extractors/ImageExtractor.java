@@ -5,6 +5,7 @@ import org.apache.commons.io.FilenameUtils;
 import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.logic.Proxy.AbstractProxyListProvider;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
+import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.model.book.PageInfo;
 import ru.kmorozov.gbd.core.logic.output.consumers.AbstractOutput;
 import ru.kmorozov.gbd.core.logic.output.events.AbstractEventSource;
@@ -23,14 +24,14 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-import static ru.kmorozov.gbd.core.logic.ExecutionContext.INSTANCE;
+import static ru.kmorozov.gbd.core.logic.context.ExecutionContext.INSTANCE;
 
 /**
  * Created by km on 21.11.2015.
  */
 public class ImageExtractor extends AbstractEventSource {
 
-    private static final Logger logger = Logger.getLogger(INSTANCE.getOutput(), ImageExtractor.class.getName());
+    private final Logger logger;
 
     public static final int DEFAULT_PAGE_WIDTH = 1280;
     public static final String HTTP_TEMPLATE = "http://books.google.ru/books?id=%BOOK_ID%";
@@ -46,11 +47,14 @@ public class ImageExtractor extends AbstractEventSource {
 
     private final AbstractOutput output;
     private final IProgress psScan;
+    private final BookContext bookContext;
 
-    public ImageExtractor(IProgress psScan) {
+    public ImageExtractor(BookContext bookContext, IProgress psScan) {
         this.psScan = psScan;
         setProcessStatus(psScan);
+        this.bookContext = bookContext;
 
+        logger = INSTANCE.getLogger(ImageExtractor.class, bookContext);
         this.output = INSTANCE.getOutput();
     }
 
@@ -63,12 +67,12 @@ public class ImageExtractor extends AbstractEventSource {
 
     private void getPagesInfo() {
         // Сначала идём без проксм
-        Pools.sigExecutor.execute(new PageSigProcessor(HttpHostExt.NO_PROXY, psScan));
+        Pools.sigExecutor.execute(new PageSigProcessor(bookContext, HttpHostExt.NO_PROXY, psScan));
         // Потом с прокси
         Iterator<HttpHostExt> hostIterator = AbstractProxyListProvider.getInstance().getProxyList();
         while (hostIterator.hasNext()) {
             HttpHostExt proxy = hostIterator.next();
-            if (proxy != null) Pools.sigExecutor.execute(new PageSigProcessor(proxy, psScan));
+            if (proxy != null) Pools.sigExecutor.execute(new PageSigProcessor(bookContext, proxy, psScan));
         }
 
         Pools.sigExecutor.shutdown();
@@ -77,7 +81,7 @@ public class ImageExtractor extends AbstractEventSource {
         } catch (InterruptedException ignored) {
         }
 
-        INSTANCE.getBookInfo().getPagesInfo().getPages().stream().filter(page -> !page.dataProcessed.get() && page.getSig() != null).forEach(page -> Pools.imgExecutor.execute(new PageImgProcessor(page, HttpHostExt.NO_PROXY)));
+        bookContext.getBookInfo().getPagesInfo().getPages().stream().filter(page -> !page.dataProcessed.get() && page.getSig() != null).forEach(page -> Pools.imgExecutor.execute(new PageImgProcessor(bookContext, page, HttpHostExt.NO_PROXY)));
 
         Pools.imgExecutor.shutdown();
         try {
@@ -90,13 +94,13 @@ public class ImageExtractor extends AbstractEventSource {
 
     private void scanDir() {
         try {
-            Files.walk(Paths.get(INSTANCE.getOutputDir().toURI())).forEach(filePath -> {
+            Files.walk(Paths.get(bookContext.getOutputDir().toURI())).forEach(filePath -> {
                 setProgress(psScan.incrementAndProgress());
 
                 if (Images.isImageFile(filePath)) {
                     String fileName = FilenameUtils.getBaseName(filePath.toString());
                     String[] nameParts = fileName.split("_");
-                    PageInfo _page = INSTANCE.getBookInfo().getPagesInfo().getPageByPid(nameParts[1]);
+                    PageInfo _page = bookContext.getBookInfo().getPagesInfo().getPageByPid(nameParts[1]);
                     if (_page != null) {
                         try {
                             if (GBDOptions.reloadImages()) {
@@ -130,12 +134,10 @@ public class ImageExtractor extends AbstractEventSource {
     }
 
     public long process() {
-        INSTANCE.setBookInfo((new BookInfoExtractor()).getBookInfo());
-
-        if (!Strings.isNullOrEmpty(INSTANCE.getBookInfo().getBookData().getFlags().getDownloadPdfUrl()))
+        if (!Strings.isNullOrEmpty(bookContext.getBookInfo().getBookData().getFlags().getDownloadPdfUrl()))
             throw new RuntimeException("There is direct url to download book. DIY!");
 
-        output.receiveBookInfo(Objects.requireNonNull(INSTANCE.getBookInfo()));
+        output.receiveBookInfo(Objects.requireNonNull(bookContext.getBookInfo()));
 
         String baseOutputDirPath = GBDOptions.getOutputDir();
         if (baseOutputDirPath == null) return 0l;
@@ -143,28 +145,28 @@ public class ImageExtractor extends AbstractEventSource {
         File baseOutputDir = new File(baseOutputDirPath);
         if (!baseOutputDir.exists()) if (!baseOutputDir.mkdir()) return 0l;
 
-        logger.info(String.format("Working with %s", INSTANCE.getBookInfo().getBookData().getTitle()));
+        logger.info(String.format("Working with %s", bookContext.getBookInfo().getBookData().getTitle()));
 
-        INSTANCE.setOutputDir(new File(baseOutputDirPath + "\\" + INSTANCE.getBookInfo().getBookData().getTitle().replace(":", "").replace("<", "").replace(">", "").replace("/", ".") + " " + INSTANCE.getBookInfo().getBookData().getVolumeId()));
-        psScan.resetMaxValue(INSTANCE.getOutputDir().listFiles().length);
+        bookContext.setOutputDir(new File(baseOutputDirPath + "\\" + bookContext.getBookInfo().getBookData().getTitle().replace(":", "").replace("<", "").replace(">", "").replace("/", ".") + " " + bookContext.getBookInfo().getBookData().getVolumeId()));
+        psScan.resetMaxValue(bookContext.getOutputDir().listFiles().length);
 
-        if (!INSTANCE.getOutputDir().exists()) {
-            boolean dirResult = INSTANCE.getOutputDir().mkdir();
+        if (!bookContext.getOutputDir().exists()) {
+            boolean dirResult = bookContext.getOutputDir().mkdir();
             if (!dirResult) {
-                logger.severe(String.format("Invalid book title: %s", INSTANCE.getBookInfo().getBookData().getTitle()));
+                logger.severe(String.format("Invalid book title: %s", bookContext.getBookInfo().getBookData().getTitle()));
                 return 0l;
             }
         }
 
-        INSTANCE.getBookInfo().getPagesInfo().build();
+        bookContext.getBookInfo().getPagesInfo().build();
         scanDir();
 
-        long pagesBefore = INSTANCE.getBookInfo().getPagesInfo().getPages().stream().filter(pageInfo -> pageInfo.dataProcessed.get()).count();
+        long pagesBefore = bookContext.getBookInfo().getPagesInfo().getPages().stream().filter(pageInfo -> pageInfo.dataProcessed.get()).count();
 
         getPagesInfo();
-        logger.info(INSTANCE.getBookInfo().getPagesInfo().getMissingPagesList());
+        logger.info(bookContext.getBookInfo().getPagesInfo().getMissingPagesList());
 
-        long pagesAfter = INSTANCE.getBookInfo().getPagesInfo().getPages().stream().filter(pageInfo -> pageInfo.dataProcessed.get()).count();
+        long pagesAfter = bookContext.getBookInfo().getPagesInfo().getPages().stream().filter(pageInfo -> pageInfo.dataProcessed.get()).count();
 
         logger.info(String.format("Processed %s pages", pagesAfter - pagesBefore));
 
