@@ -74,7 +74,7 @@ public class MainBookForm {
             bMakeBook.setEnabled(false);
 
             BookContext bookContext = ExecutionContext.INSTANCE.getBookContext(tfBookId.getText());
-            workerExtractor = new ImageExtractor(bookContext, new ProcessStatus(bookContext.getOutputDir().listFiles().length)) {
+            workerExtractor = new ImageExtractor(bookContext, new ProcessStatus(bookContext.getOutputDir().listFiles().length), new PdfMaker(bookContext)) {
 
                 @Override
                 public void done() {
@@ -111,7 +111,7 @@ public class MainBookForm {
                 @Override
                 protected Void doInBackground() throws Exception {
                     BookContext bookContext = ExecutionContext.INSTANCE.getBookContext(tfBookId.getText());
-                    (new PdfMaker(bookContext.getOutputDir(), bookContext.getBookInfo())).make(true);
+                    (new PdfMaker(bookContext)).make(true);
 
                     return null;
                 }
