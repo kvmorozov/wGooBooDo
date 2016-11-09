@@ -48,7 +48,7 @@ public class ProcessStatus implements IProgress {
     }
 
     private void start() {
-        if (!SystemConfigs.isGuiMode())
+        if (SystemConfigs.isConsoleMode())
             return;
 
         prBar = new JProgressBar();
@@ -64,7 +64,7 @@ public class ProcessStatus implements IProgress {
 
     @Override
     public void finish() {
-        if (!SystemConfigs.isGuiMode())
+        if (SystemConfigs.isConsoleMode())
             return;
 
         SwingUtilities.invokeLater(() -> {

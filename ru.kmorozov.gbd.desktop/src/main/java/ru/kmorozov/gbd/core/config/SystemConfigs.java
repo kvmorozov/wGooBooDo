@@ -100,7 +100,7 @@ public class SystemConfigs {
         setBoolProperty(KEY_SECURE_MODE, value);
     }
 
-    public static boolean isGuiMode() {
-        return MainBookForm.getINSTANCE() != null;
+    public static boolean isConsoleMode() {
+        return MainBookForm.getINSTANCE() == null;
     }
 }

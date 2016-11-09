@@ -39,7 +39,7 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
             String cookie = getCookie(host);
             proxy = new HttpHostExt(host, cookie);
             if (cookie != null) {
-                if ((GBDOptions.secureMode() && proxy.isSecure()) || !GBDOptions.secureMode()) {
+                if (!GBDOptions.secureMode() || proxy.isSecure()) {
                     logger.info(String.format("%sroxy %s added.", GBDOptions.secureMode() ? proxy.isSecure() ? "Secure p" : "NOT secure p" : "P", host.toString()));
                 } else {
                     logger.info(String.format("NOT secure proxy %s NOT added.", host.toString()));
