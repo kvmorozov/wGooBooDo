@@ -48,11 +48,13 @@ public class ImageExtractor extends AbstractEventSource {
     private final AbstractOutput output;
     private final IProgress psScan;
     private final BookContext bookContext;
+    private final IPostProcessor postProcessor;
 
-    public ImageExtractor(BookContext bookContext, IProgress psScan) {
+    public ImageExtractor(BookContext bookContext, IProgress psScan, IPostProcessor postProcessor) {
         this.psScan = psScan;
         setProcessStatus(psScan);
         this.bookContext = bookContext;
+        this.postProcessor = postProcessor;
 
         logger = INSTANCE.getLogger(ImageExtractor.class, bookContext);
         this.output = INSTANCE.getOutput();
@@ -133,17 +135,17 @@ public class ImageExtractor extends AbstractEventSource {
         }
     }
 
-    public long process() {
+    public void process() {
         if (!Strings.isNullOrEmpty(bookContext.getBookInfo().getBookData().getFlags().getDownloadPdfUrl()))
             throw new RuntimeException("There is direct url to download book. DIY!");
 
         output.receiveBookInfo(Objects.requireNonNull(bookContext.getBookInfo()));
 
         String baseOutputDirPath = GBDOptions.getOutputDir();
-        if (baseOutputDirPath == null) return 0l;
+        if (baseOutputDirPath == null) return;
 
         File baseOutputDir = new File(baseOutputDirPath);
-        if (!baseOutputDir.exists()) if (!baseOutputDir.mkdir()) return 0l;
+        if (!baseOutputDir.exists()) if (!baseOutputDir.mkdir()) return;
 
         logger.info(String.format("Working with %s", bookContext.getBookInfo().getBookData().getTitle()));
 
@@ -154,7 +156,7 @@ public class ImageExtractor extends AbstractEventSource {
             boolean dirResult = bookContext.getOutputDir().mkdir();
             if (!dirResult) {
                 logger.severe(String.format("Invalid book title: %s", bookContext.getBookInfo().getBookData().getTitle()));
-                return 0l;
+                return;
             }
         }
 
@@ -172,6 +174,6 @@ public class ImageExtractor extends AbstractEventSource {
 
         AbstractProxyListProvider.updateBlacklist();
 
-        return pagesAfter - pagesBefore;
+        postProcessor.make(pagesAfter - pagesBefore > 0);
     }
 }

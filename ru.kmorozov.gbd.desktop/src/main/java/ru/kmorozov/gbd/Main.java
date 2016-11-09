@@ -26,9 +26,7 @@ class Main {
             ExecutionContext.initContext(new DummyBookInfoOutput(), true);
             BookContext bookContext = INSTANCE.getBookContext(GBDOptions.getBookId());
 
-            long pagesProcessed = (new ImageExtractor(bookContext, new ProcessStatus())).process();
-            PdfMaker pdfMaker = new PdfMaker(bookContext.getOutputDir(), bookContext.getBookInfo());
-            pdfMaker.make(pagesProcessed > 0);
+            (new ImageExtractor(bookContext, new ProcessStatus(), new PdfMaker(bookContext))).process();
         } else {
             GBDOptions.init(new LocalSystemOptions());
             (new MainFrame()).setVisible();

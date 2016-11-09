@@ -5,6 +5,8 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import ru.kmorozov.gbd.core.logic.context.BookContext;
+import ru.kmorozov.gbd.core.logic.extractors.IPostProcessor;
 import ru.kmorozov.gbd.core.logic.model.book.BookInfo;
 import ru.kmorozov.gbd.core.utils.Images;
 import ru.kmorozov.gbd.core.utils.Logger;
@@ -23,18 +25,19 @@ import static ru.kmorozov.gbd.core.logic.context.ExecutionContext.INSTANCE;
 /**
  * Created by km on 17.12.2015.
  */
-public class PdfMaker {
+public class PdfMaker implements IPostProcessor {
 
     private static final Logger logger = INSTANCE.getLogger(PdfMaker.class);
 
     private File imgDir;
     private BookInfo bookInfo;
 
-    public PdfMaker(File imgDir, BookInfo bookInfo) {
-        this.imgDir = imgDir;
-        this.bookInfo = bookInfo;
+    public PdfMaker(BookContext bookContext) {
+        this.imgDir = bookContext.getOutputDir();
+        this.bookInfo = bookContext.getBookInfo();
     }
 
+    @Override
     public void make(boolean dataChanged) {
         File pdfFile = new File(imgDir.getPath() + File.separator + bookInfo.getBookData().getTitle().replaceAll("[^А-Яа-яa-zA-Z0-9.-]", " ") + ".pdf");
         try {
