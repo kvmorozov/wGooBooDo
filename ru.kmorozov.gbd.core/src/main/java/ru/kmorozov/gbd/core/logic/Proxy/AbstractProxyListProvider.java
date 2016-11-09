@@ -23,9 +23,9 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
 
     private static IProxyListProvider INSTANCE;
 
-    final Set<HttpHostExt> proxyList = new HashSet<>();
+    protected final Set<HttpHostExt> proxyList = new HashSet<>();
     private boolean proxyListCompleted = false;
-    List<String> proxyItems;
+    protected List<String> proxyItems;
 
     private HttpHostExt processProxyItem(String proxyItem) {
         HttpHostExt proxy = null;
@@ -85,10 +85,9 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
 
         private final Iterator<String> itr;
 
+
         private InternalProxyIterator() {
             itr = proxyItems.iterator();
-
-            proxyListCompleted = true;
         }
 
         @Override
@@ -98,7 +97,9 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
 
         @Override
         public HttpHostExt next() {
-            return processProxyItem(itr.next());
+            HttpHostExt host = processProxyItem(itr.next());
+            proxyListCompleted = itr.hasNext();
+            return host;
         }
     }
 
@@ -132,6 +133,6 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
     }
 
     public static void updateBlacklist() {
-        ProxyBlacklistHolder.BLACKLIST.updateBlacklist(((AbstractProxyListProvider)INSTANCE).proxyList);
+        ProxyBlacklistHolder.BLACKLIST.updateBlacklist(((AbstractProxyListProvider) INSTANCE).proxyList);
     }
 }

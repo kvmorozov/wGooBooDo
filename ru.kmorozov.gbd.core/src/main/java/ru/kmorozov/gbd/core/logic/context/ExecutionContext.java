@@ -1,9 +1,12 @@
 package ru.kmorozov.gbd.core.logic.context;
 
+import ru.kmorozov.gbd.core.logic.Proxy.AbstractProxyListProvider;
+import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.output.consumers.AbstractOutput;
 import ru.kmorozov.gbd.core.utils.Logger;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -60,5 +63,9 @@ public class ExecutionContext {
             baseUrl = bookContextMap.values().stream().findAny().get().getBaseUrl();
 
         return baseUrl;
+    }
+
+    public Iterator<HttpHostExt> getProxyList() {
+        return AbstractProxyListProvider.getInstance().getProxyList();
     }
 }
