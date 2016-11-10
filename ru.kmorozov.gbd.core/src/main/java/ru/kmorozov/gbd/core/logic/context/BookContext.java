@@ -1,6 +1,7 @@
 package ru.kmorozov.gbd.core.logic.context;
 
 import ru.kmorozov.gbd.core.logic.extractors.BookInfoExtractor;
+import ru.kmorozov.gbd.core.logic.extractors.ImageExtractor;
 import ru.kmorozov.gbd.core.logic.model.book.BookInfo;
 
 import java.io.File;
@@ -21,6 +22,7 @@ public class BookContext {
     private String baseUrl;
     private final BookInfo bookInfo;
     private File outputDir;
+    private ImageExtractor extractor;
 
     BookContext(String bookId) {
         this.bookInfo = (new BookInfoExtractor(bookId)).getBookInfo();
@@ -46,5 +48,13 @@ public class BookContext {
 
     public void setOutputDir(File outputDir) {
         this.outputDir = outputDir;
+    }
+
+    public ImageExtractor getExtractor() {
+        return extractor;
+    }
+
+    public void setExtractor(ImageExtractor extractor) {
+        this.extractor = extractor;
     }
 }

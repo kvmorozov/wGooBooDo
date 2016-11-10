@@ -45,7 +45,6 @@ class PageSigProcessor extends AbstractHttpProcessor implements Runnable {
         if (page.dataProcessed.get() || page.getSig() != null || page.sigChecked.get() || page.loadingStarted.get())
             return;
 
-        boolean sigFound = false;
         Response resp = null;
         String rqUrl = bookContext.getBaseUrl() + ImageExtractor.PAGES_REQUEST_TEMPLATE.replace(ImageExtractor.RQ_PG_PLACEHOLDER, page.getPid());
 
@@ -70,13 +69,14 @@ class PageSigProcessor extends AbstractHttpProcessor implements Runnable {
                     if (_frameSrc != null) _page.setSrc(_frameSrc);
 
                     if (_page.getSig() != null) {
-                        if (_page.getPid().equals(page.getPid())) sigFound = true;
-                        _page.sigChecked.set(true);
+                        if (_page.getPid().equals(page.getPid())) {
+                            _page.sigChecked.set(true);
 
-                        proxy.promoteProxy();
+                            proxy.promoteProxy();
 
-                        // Если есть возможность - пытаемся грузить страницу сразу
-                        bookContext.imgExecutor.execute(new PageImgProcessor(bookContext, _page, proxy));
+                            // Если есть возможность - пытаемся грузить страницу сразу
+                            bookContext.imgExecutor.execute(new PageImgProcessor(bookContext, _page, proxy));
+                        }
                     }
 
                     if (_page.getSrc() != null && _page.getSig() == null)

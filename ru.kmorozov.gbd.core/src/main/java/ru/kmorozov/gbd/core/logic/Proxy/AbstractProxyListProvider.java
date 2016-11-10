@@ -21,7 +21,7 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
 
     private static final Logger logger = ExecutionContext.INSTANCE.getLogger("ProxyListProvider");
 
-    private static IProxyListProvider INSTANCE;
+    private static AbstractProxyListProvider INSTANCE;
 
     protected final Set<HttpHostExt> proxyList = new HashSet<>();
     private boolean proxyListCompleted = false;
@@ -108,7 +108,7 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
         return proxyListCompleted ? proxyList.iterator() : new InternalProxyIterator();
     }
 
-    public static IProxyListProvider getInstance() {
+    public static AbstractProxyListProvider getInstance() {
         if (INSTANCE == null)
             INSTANCE = GBDOptions.getProxyListFile() == null ? new WebProxyListProvider() : new FileProxyListProvider();
 
@@ -134,5 +134,9 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
 
     public static void updateBlacklist() {
         ProxyBlacklistHolder.BLACKLIST.updateBlacklist(((AbstractProxyListProvider) INSTANCE).proxyList);
+    }
+
+    public int getProxyCount() {
+        return proxyItems.size();
     }
 }

@@ -19,9 +19,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Iterator;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static ru.kmorozov.gbd.core.logic.context.ExecutionContext.INSTANCE;
 
@@ -49,6 +49,9 @@ public class ImageExtractor extends AbstractEventSource {
     private final BookContext bookContext;
     private final IPostProcessor postProcessor;
 
+    private final AtomicInteger proxyReceived = new AtomicInteger(0);
+    private long pagesBefore = 0l;
+
     public ImageExtractor(BookContext bookContext, IProgress psScan, IPostProcessor postProcessor) {
         this.psScan = psScan;
         setProcessStatus(psScan);
@@ -57,6 +60,7 @@ public class ImageExtractor extends AbstractEventSource {
 
         logger = INSTANCE.getLogger(ImageExtractor.class, bookContext);
         this.output = INSTANCE.getOutput();
+        bookContext.setExtractor(this);
     }
 
     @Override
@@ -64,33 +68,6 @@ public class ImageExtractor extends AbstractEventSource {
         process();
 
         return null;
-    }
-
-    private void getPagesInfo() {
-        // Сначала идём без проксм
-        bookContext.sigExecutor.execute(new PageSigProcessor(bookContext, HttpHostExt.NO_PROXY, psScan));
-        // Потом с прокси
-        Iterator<HttpHostExt> hostIterator = INSTANCE.getProxyList();
-        while (hostIterator.hasNext()) {
-            HttpHostExt proxy = hostIterator.next();
-            if (proxy != null) bookContext.sigExecutor.execute(new PageSigProcessor(bookContext, proxy, psScan));
-        }
-
-        bookContext.sigExecutor.shutdown();
-        try {
-            bookContext.sigExecutor.awaitTermination(100, TimeUnit.MINUTES);
-        } catch (InterruptedException ignored) {
-        }
-
-        bookContext.getBookInfo().getPagesInfo().getPages().stream().filter(page -> !page.dataProcessed.get() && page.getSig() != null).forEach(page -> bookContext.imgExecutor.execute(new PageImgProcessor(bookContext, page, HttpHostExt.NO_PROXY)));
-
-        bookContext.imgExecutor.shutdown();
-        try {
-            bookContext.imgExecutor.awaitTermination(500, TimeUnit.MINUTES);
-        } catch (InterruptedException ignored) {
-        }
-
-        AbstractProxyListProvider.getInstance().updateProxyList();
     }
 
     private void scanDir() {
@@ -149,7 +126,8 @@ public class ImageExtractor extends AbstractEventSource {
         logger.info(String.format("Working with %s", bookContext.getBookInfo().getBookData().getTitle()));
 
         bookContext.setOutputDir(new File(baseOutputDirPath + "\\" + bookContext.getBookInfo().getBookData().getTitle().replace(":", "").replace("<", "").replace(">", "").replace("/", ".") + " " + bookContext.getBookInfo().getBookData().getVolumeId()));
-        psScan.resetMaxValue(bookContext.getOutputDir().listFiles().length);
+        File[] files = bookContext.getOutputDir().listFiles();
+        psScan.resetMaxValue(files == null ? 0 : files.length);
 
         if (!bookContext.getOutputDir().exists()) {
             boolean dirResult = bookContext.getOutputDir().mkdir();
@@ -162,17 +140,39 @@ public class ImageExtractor extends AbstractEventSource {
         bookContext.getBookInfo().getPagesInfo().build();
         scanDir();
 
-        long pagesBefore = bookContext.getBookInfo().getPagesInfo().getPages().stream().filter(pageInfo -> pageInfo.dataProcessed.get()).count();
+        pagesBefore = bookContext.getBookInfo().getPagesInfo().getPages().stream().filter(pageInfo -> pageInfo.dataProcessed.get()).count();
+    }
 
-        getPagesInfo();
-        logger.info(bookContext.getBookInfo().getPagesInfo().getMissingPagesList());
+    public void newProxyEvent(HttpHostExt proxy) {
+        bookContext.sigExecutor.execute(new PageSigProcessor(bookContext, proxy, psScan));
+        if (proxyReceived.incrementAndGet() >= INSTANCE.getProxyCount()) {
+            synchronized (this) {
+                bookContext.sigExecutor.shutdown();
+                try {
+                    bookContext.sigExecutor.awaitTermination(100, TimeUnit.MINUTES);
+                } catch (InterruptedException ignored) {
+                }
 
-        long pagesAfter = bookContext.getBookInfo().getPagesInfo().getPages().stream().filter(pageInfo -> pageInfo.dataProcessed.get()).count();
+                bookContext.getBookInfo().getPagesInfo().getPages().stream().filter(page -> !page.dataProcessed.get() && page.getSig() != null).forEach(page -> bookContext.imgExecutor.execute(new PageImgProcessor(bookContext, page, HttpHostExt.NO_PROXY)));
 
-        logger.info(String.format("Processed %s pages", pagesAfter - pagesBefore));
+                bookContext.imgExecutor.shutdown();
+                try {
+                    bookContext.imgExecutor.awaitTermination(500, TimeUnit.MINUTES);
+                } catch (InterruptedException ignored) {
+                }
 
-        AbstractProxyListProvider.updateBlacklist();
+                INSTANCE.updateProxyList();
 
-        postProcessor.make(pagesAfter - pagesBefore > 0);
+                logger.info(bookContext.getBookInfo().getPagesInfo().getMissingPagesList());
+
+                long pagesAfter = bookContext.getBookInfo().getPagesInfo().getPages().stream().filter(pageInfo -> pageInfo.dataProcessed.get()).count();
+
+                logger.info(String.format("Processed %s pages", pagesAfter - pagesBefore));
+
+                AbstractProxyListProvider.updateBlacklist();
+
+                postProcessor.make(pagesAfter - pagesBefore > 0);
+            }
+        }
     }
 }

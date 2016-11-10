@@ -2,7 +2,10 @@ package ru.kmorozov.gbd.core.logic.context;
 
 import ru.kmorozov.gbd.core.logic.Proxy.AbstractProxyListProvider;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
+import ru.kmorozov.gbd.core.logic.extractors.IPostProcessor;
+import ru.kmorozov.gbd.core.logic.extractors.ImageExtractor;
 import ru.kmorozov.gbd.core.logic.output.consumers.AbstractOutput;
+import ru.kmorozov.gbd.core.logic.progress.IProgress;
 import ru.kmorozov.gbd.core.utils.Logger;
 
 import java.util.HashMap;
@@ -59,13 +62,28 @@ public class ExecutionContext {
     }
 
     public String getBaseUrl() {
-        if (baseUrl == null)
-            baseUrl = bookContextMap.values().stream().findAny().get().getBaseUrl();
+        if (baseUrl == null) baseUrl = bookContextMap.values().stream().findAny().get().getBaseUrl();
 
         return baseUrl;
     }
 
-    public Iterator<HttpHostExt> getProxyList() {
-        return AbstractProxyListProvider.getInstance().getProxyList();
+    public int getProxyCount() {
+        return AbstractProxyListProvider.getInstance().getProxyCount();
+    }
+
+    public synchronized void updateProxyList() {
+        AbstractProxyListProvider.getInstance().updateProxyList();
+    }
+
+    public void execute(IProgress progress, IPostProcessor postProcessor) {
+        for (BookContext bookContext : bookContextMap.values()) {
+            ImageExtractor extractor = new ImageExtractor(bookContext, progress, postProcessor);
+            extractor.process();
+            extractor.newProxyEvent(HttpHostExt.NO_PROXY);
+        }
+
+        Iterator<HttpHostExt> proxyIterator = AbstractProxyListProvider.getInstance().getProxyList();
+        while (proxyIterator.hasNext()) for (BookContext bookContext : bookContextMap.values())
+            bookContext.getExtractor().newProxyEvent(proxyIterator.next());
     }
 }

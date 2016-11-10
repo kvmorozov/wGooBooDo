@@ -5,7 +5,6 @@ import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.config.LocalSystemOptions;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
-import ru.kmorozov.gbd.core.logic.extractors.ImageExtractor;
 import ru.kmorozov.gbd.core.logic.output.consumers.DummyBookInfoOutput;
 import ru.kmorozov.gbd.desktop.gui.MainFrame;
 import ru.kmorozov.gbd.desktop.output.progress.ProcessStatus;
@@ -26,7 +25,7 @@ class Main {
             ExecutionContext.initContext(new DummyBookInfoOutput(), true);
             BookContext bookContext = INSTANCE.getBookContext(GBDOptions.getBookId());
 
-            (new ImageExtractor(bookContext, new ProcessStatus(), new PdfMaker(bookContext))).process();
+            INSTANCE.execute(new ProcessStatus(), new PdfMaker(bookContext));
         } else {
             GBDOptions.init(new LocalSystemOptions());
             (new MainFrame()).setVisible();
