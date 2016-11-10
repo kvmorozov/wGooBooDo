@@ -12,7 +12,6 @@ import ru.kmorozov.gbd.core.logic.output.events.AbstractEventSource;
 import ru.kmorozov.gbd.core.logic.progress.IProgress;
 import ru.kmorozov.gbd.core.utils.Images;
 import ru.kmorozov.gbd.core.utils.Logger;
-import ru.kmorozov.gbd.core.utils.Pools;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -69,25 +68,25 @@ public class ImageExtractor extends AbstractEventSource {
 
     private void getPagesInfo() {
         // Сначала идём без проксм
-        Pools.sigExecutor.execute(new PageSigProcessor(bookContext, HttpHostExt.NO_PROXY, psScan));
+        bookContext.sigExecutor.execute(new PageSigProcessor(bookContext, HttpHostExt.NO_PROXY, psScan));
         // Потом с прокси
         Iterator<HttpHostExt> hostIterator = INSTANCE.getProxyList();
         while (hostIterator.hasNext()) {
             HttpHostExt proxy = hostIterator.next();
-            if (proxy != null) Pools.sigExecutor.execute(new PageSigProcessor(bookContext, proxy, psScan));
+            if (proxy != null) bookContext.sigExecutor.execute(new PageSigProcessor(bookContext, proxy, psScan));
         }
 
-        Pools.sigExecutor.shutdown();
+        bookContext.sigExecutor.shutdown();
         try {
-            Pools.sigExecutor.awaitTermination(100, TimeUnit.MINUTES);
+            bookContext.sigExecutor.awaitTermination(100, TimeUnit.MINUTES);
         } catch (InterruptedException ignored) {
         }
 
-        bookContext.getBookInfo().getPagesInfo().getPages().stream().filter(page -> !page.dataProcessed.get() && page.getSig() != null).forEach(page -> Pools.imgExecutor.execute(new PageImgProcessor(bookContext, page, HttpHostExt.NO_PROXY)));
+        bookContext.getBookInfo().getPagesInfo().getPages().stream().filter(page -> !page.dataProcessed.get() && page.getSig() != null).forEach(page -> bookContext.imgExecutor.execute(new PageImgProcessor(bookContext, page, HttpHostExt.NO_PROXY)));
 
-        Pools.imgExecutor.shutdown();
+        bookContext.imgExecutor.shutdown();
         try {
-            Pools.imgExecutor.awaitTermination(500, TimeUnit.MINUTES);
+            bookContext.imgExecutor.awaitTermination(500, TimeUnit.MINUTES);
         } catch (InterruptedException ignored) {
         }
 

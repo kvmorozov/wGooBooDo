@@ -12,7 +12,6 @@ import ru.kmorozov.gbd.core.logic.model.book.PageInfo;
 import ru.kmorozov.gbd.core.logic.model.book.PagesInfo;
 import ru.kmorozov.gbd.core.logic.progress.IProgress;
 import ru.kmorozov.gbd.core.utils.Mapper;
-import ru.kmorozov.gbd.core.utils.Pools;
 
 import java.io.IOException;
 import java.net.SocketException;
@@ -77,7 +76,7 @@ class PageSigProcessor extends AbstractHttpProcessor implements Runnable {
                         proxy.promoteProxy();
 
                         // Если есть возможность - пытаемся грузить страницу сразу
-                        Pools.imgExecutor.execute(new PageImgProcessor(bookContext, _page, proxy));
+                        bookContext.imgExecutor.execute(new PageImgProcessor(bookContext, _page, proxy));
                     }
 
                     if (_page.getSrc() != null && _page.getSig() == null)

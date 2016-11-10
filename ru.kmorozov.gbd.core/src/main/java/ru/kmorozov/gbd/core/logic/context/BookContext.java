@@ -4,6 +4,8 @@ import ru.kmorozov.gbd.core.logic.extractors.BookInfoExtractor;
 import ru.kmorozov.gbd.core.logic.model.book.BookInfo;
 
 import java.io.File;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static ru.kmorozov.gbd.core.logic.extractors.ImageExtractor.BOOK_ID_PLACEHOLDER;
 import static ru.kmorozov.gbd.core.logic.extractors.ImageExtractor.HTTPS_TEMPLATE;
@@ -12,6 +14,9 @@ import static ru.kmorozov.gbd.core.logic.extractors.ImageExtractor.HTTPS_TEMPLAT
  * Created by km on 08.11.2016.
  */
 public class BookContext {
+
+    public final ExecutorService sigExecutor = Executors.newFixedThreadPool(10);
+    public final ExecutorService imgExecutor = Executors.newFixedThreadPool(10);
 
     private String baseUrl;
     private final BookInfo bookInfo;
