@@ -110,8 +110,10 @@ public class ImageExtractor extends AbstractEventSource implements Runnable {
     }
 
     public void process() {
-        if (!Strings.isNullOrEmpty(bookContext.getBookInfo().getBookData().getFlags().getDownloadPdfUrl()))
-            throw new RuntimeException("There is direct url to download book. DIY!");
+        if (!Strings.isNullOrEmpty(bookContext.getBookInfo().getBookData().getFlags().getDownloadPdfUrl())) {
+            logger.severe("There is direct url to download book. DIY!");
+            return;
+        }
 
         output.receiveBookInfo(Objects.requireNonNull(bookContext.getBookInfo()));
 
@@ -179,7 +181,7 @@ public class ImageExtractor extends AbstractEventSource implements Runnable {
 
                 AbstractProxyListProvider.updateBlacklist();
 
-                bookContext.getPostProcessor().make(bookContext, pagesAfter - pagesBefore > 0);
+                bookContext.getPostProcessor().make(bookContext);
             }
         }
     }

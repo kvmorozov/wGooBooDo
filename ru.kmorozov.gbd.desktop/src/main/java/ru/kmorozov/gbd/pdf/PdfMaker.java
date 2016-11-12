@@ -30,14 +30,14 @@ public class PdfMaker implements IPostProcessor {
     private static final Logger logger = INSTANCE.getLogger(PdfMaker.class);
 
     @Override
-    public void make(BookContext bookContext, boolean dataChanged) {
+    public void make(BookContext bookContext) {
         File imgDir = bookContext.getOutputDir();
+        int existPages = 0;
         BookInfo bookInfo = bookContext.getBookInfo();
         File pdfFile = new File(imgDir.getPath() + File.separator + bookInfo.getBookData().getTitle().replaceAll("[^А-Яа-яa-zA-Z0-9.-]", " ") + ".pdf");
         try {
-            if (Files.exists(pdfFile.toPath())) if (!dataChanged) return;
-            else {
-            }
+            if (Files.exists(pdfFile.toPath()))
+                existPages = PDDocument.load(pdfFile).getNumberOfPages();
             else pdfFile.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
@@ -47,6 +47,12 @@ public class PdfMaker implements IPostProcessor {
         logger.info("Starting making pdf file...");
         try (PDDocument document = new PDDocument()) {
             try {
+                long imgCount = Files.list(imgDir.toPath()).filter(Images::isImageFile).count();
+                if (imgCount <= existPages) {
+                    logger.info("No new pages, exiting...");
+                    return;
+                }
+
                 Files.list(imgDir.toPath()).filter(Images::isImageFile).sorted((o1, o2) -> getPagenum(o1).compareTo(getPagenum(o2))).forEach(filePath -> {
                     try (InputStream in = new FileInputStream(filePath.toFile())) {
                         BufferedImage bimg = ImageIO.read(in);

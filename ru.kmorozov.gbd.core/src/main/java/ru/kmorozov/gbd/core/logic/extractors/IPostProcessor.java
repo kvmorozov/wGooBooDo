@@ -7,5 +7,5 @@ import ru.kmorozov.gbd.core.logic.context.BookContext;
  */
 public interface IPostProcessor {
 
-    void make(BookContext bookContext, boolean dataChanged);
+    void make(BookContext bookContext);
 }
