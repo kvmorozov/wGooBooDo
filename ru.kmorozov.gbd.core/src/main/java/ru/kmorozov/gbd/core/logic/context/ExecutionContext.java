@@ -11,6 +11,8 @@ import ru.kmorozov.gbd.core.utils.Logger;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by km on 22.11.2015.
@@ -20,6 +22,8 @@ public class ExecutionContext {
     public static ExecutionContext INSTANCE;
 
     private static final String EMPTY = "";
+
+    public final ExecutorService bookExecutor = Executors.newFixedThreadPool(15);
 
     private final boolean singleMode;
     private final AbstractOutput output;
@@ -47,10 +51,10 @@ public class ExecutionContext {
         return Logger.getLogger(output, location, EMPTY);
     }
 
-    public BookContext getBookContext(String bookId) {
+    public BookContext addAndGetBookContext(String bookId, IProgress progress, IPostProcessor postProcessor) {
         BookContext bookContext = bookContextMap.get(bookId);
         if (bookContext == null) {
-            bookContext = new BookContext(bookId);
+            bookContext = new BookContext(bookId, progress, postProcessor);
             bookContextMap.put(bookId, bookContext);
         }
 
@@ -75,10 +79,10 @@ public class ExecutionContext {
         AbstractProxyListProvider.getInstance().updateProxyList();
     }
 
-    public void execute(IProgress progress, IPostProcessor postProcessor) {
+    public void execute() {
         for (BookContext bookContext : bookContextMap.values()) {
-            ImageExtractor extractor = new ImageExtractor(bookContext, progress, postProcessor);
-            extractor.process();
+            ImageExtractor extractor = new ImageExtractor(bookContext);
+            bookExecutor.execute(extractor);
             extractor.newProxyEvent(HttpHostExt.NO_PROXY);
         }
 

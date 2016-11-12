@@ -1,8 +1,10 @@
 package ru.kmorozov.gbd.core.logic.context;
 
 import ru.kmorozov.gbd.core.logic.extractors.BookInfoExtractor;
+import ru.kmorozov.gbd.core.logic.extractors.IPostProcessor;
 import ru.kmorozov.gbd.core.logic.extractors.ImageExtractor;
 import ru.kmorozov.gbd.core.logic.model.book.BookInfo;
+import ru.kmorozov.gbd.core.logic.progress.IProgress;
 
 import java.io.File;
 import java.util.concurrent.ExecutorService;
@@ -23,9 +25,13 @@ public class BookContext {
     private final BookInfo bookInfo;
     private File outputDir;
     private ImageExtractor extractor;
+    private final IProgress progress;
+    private final IPostProcessor postProcessor;
 
-    BookContext(String bookId) {
+    BookContext(String bookId, IProgress progress, IPostProcessor postProcessor) {
         this.bookInfo = (new BookInfoExtractor(bookId)).getBookInfo();
+        this.progress = progress;
+        this.postProcessor = postProcessor;
 
         baseUrl = HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, bookInfo.getBookId());
     }
@@ -56,5 +62,13 @@ public class BookContext {
 
     public void setExtractor(ImageExtractor extractor) {
         this.extractor = extractor;
+    }
+
+    public IProgress getProgress() {
+        return progress;
+    }
+
+    public IPostProcessor getPostProcessor() {
+        return postProcessor;
     }
 }

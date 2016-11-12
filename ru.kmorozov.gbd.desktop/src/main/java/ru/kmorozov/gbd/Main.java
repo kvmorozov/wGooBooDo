@@ -23,9 +23,9 @@ class Main {
             if (bookId == null || bookId.length() == 0) return;
 
             ExecutionContext.initContext(new DummyBookInfoOutput(), true);
-            BookContext bookContext = INSTANCE.getBookContext(GBDOptions.getBookId());
+            INSTANCE.addAndGetBookContext(GBDOptions.getBookId(), new ProcessStatus(), new PdfMaker());
 
-            INSTANCE.execute(new ProcessStatus(), new PdfMaker(bookContext));
+            INSTANCE.execute();
         } else {
             GBDOptions.init(new LocalSystemOptions());
             (new MainFrame()).setVisible();

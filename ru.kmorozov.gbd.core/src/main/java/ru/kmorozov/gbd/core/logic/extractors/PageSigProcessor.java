@@ -30,13 +30,11 @@ class PageSigProcessor extends AbstractHttpProcessor implements Runnable {
     private static final String SIG_WRONG_FORMAT = "Wrong sig format: %s";
 
     private final HttpHostExt proxy;
-    private final IProgress progress;
     private final BookContext bookContext;
 
-    public PageSigProcessor(BookContext bookContext, HttpHostExt proxy, IProgress progress) {
+    public PageSigProcessor(BookContext bookContext, HttpHostExt proxy) {
         this.bookContext = bookContext;
         this.proxy = proxy;
-        this.progress = progress;
     }
 
     private void getSig(PageInfo page) {
@@ -106,7 +104,7 @@ class PageSigProcessor extends AbstractHttpProcessor implements Runnable {
 
         if (!proxy.isLocal() && !(proxy.isAvailable() && proxy.getHost().getPort() > 0)) return;
 
-        final IProgress psSigs = progress.getSubProgress(bookContext.getBookInfo().getPagesInfo().getPages().size());
+        final IProgress psSigs = bookContext.getProgress().getSubProgress(bookContext.getBookInfo().getPagesInfo().getPages().size());
 
         ExecutorService sigPool = Executors.newCachedThreadPool();
         sigPool.submit(() -> bookContext.getBookInfo().getPagesInfo().getPages().parallelStream().forEach(page -> {

@@ -8,6 +8,7 @@ import ru.kmorozov.gbd.core.logic.model.book.Resolutions;
 import ru.kmorozov.gbd.core.logic.model.log.LogIconColumnRenderer;
 import ru.kmorozov.gbd.core.logic.model.log.LogTableModel;
 import ru.kmorozov.gbd.core.logic.output.events.AbstractEventSource;
+import ru.kmorozov.gbd.core.logic.output.events.ImageExtractorWorker;
 import ru.kmorozov.gbd.desktop.output.consumers.SwingBookInfoOutput;
 import ru.kmorozov.gbd.desktop.output.progress.ProcessStatus;
 import ru.kmorozov.gbd.pdf.PdfMaker;
@@ -73,8 +74,8 @@ public class MainBookForm {
             bLoad.setEnabled(false);
             bMakeBook.setEnabled(false);
 
-            BookContext bookContext = ExecutionContext.INSTANCE.getBookContext(tfBookId.getText());
-            workerExtractor = new ImageExtractor(bookContext, new ProcessStatus(bookContext.getOutputDir().listFiles().length), new PdfMaker(bookContext)) {
+            BookContext bookContext = ExecutionContext.INSTANCE.addAndGetBookContext(tfBookId.getText(), new ProcessStatus(), new PdfMaker());
+            workerExtractor = new ImageExtractorWorker(new ImageExtractor(bookContext)) {
 
                 @Override
                 public void done() {
@@ -110,8 +111,8 @@ public class MainBookForm {
 
                 @Override
                 protected Void doInBackground() throws Exception {
-                    BookContext bookContext = ExecutionContext.INSTANCE.getBookContext(tfBookId.getText());
-                    (new PdfMaker(bookContext)).make(true);
+                    BookContext bookContext = ExecutionContext.INSTANCE.addAndGetBookContext(tfBookId.getText(), new ProcessStatus(), new PdfMaker());
+                    (new PdfMaker()).make(bookContext, true);
 
                     return null;
                 }

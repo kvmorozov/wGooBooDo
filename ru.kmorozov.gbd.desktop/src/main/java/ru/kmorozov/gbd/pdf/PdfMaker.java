@@ -29,14 +29,8 @@ public class PdfMaker implements IPostProcessor {
 
     private static final Logger logger = INSTANCE.getLogger(PdfMaker.class);
 
-    private BookContext bookContext;
-
-    public PdfMaker(BookContext bookContext) {
-        this.bookContext = bookContext;
-    }
-
     @Override
-    public void make(boolean dataChanged) {
+    public void make(BookContext bookContext, boolean dataChanged) {
         File imgDir = bookContext.getOutputDir();
         BookInfo bookInfo = bookContext.getBookInfo();
         File pdfFile = new File(imgDir.getPath() + File.separator + bookInfo.getBookData().getTitle().replaceAll("[^А-Яа-яa-zA-Z0-9.-]", " ") + ".pdf");
