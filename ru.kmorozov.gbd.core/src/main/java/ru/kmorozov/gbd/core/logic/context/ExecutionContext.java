@@ -89,7 +89,10 @@ public class ExecutionContext {
         }
 
         Iterator<HttpHostExt> proxyIterator = AbstractProxyListProvider.getInstance().getProxyList();
-        while (proxyIterator.hasNext()) for (BookContext bookContext : bookContextMap.values())
-            bookContext.getExtractor().newProxyEvent(proxyIterator.next());
+        while (proxyIterator.hasNext()) {
+            HttpHostExt proxy = proxyIterator.next();
+            for (BookContext bookContext : bookContextMap.values())
+                bookContext.getExtractor().newProxyEvent(proxy);
+        }
     }
 }

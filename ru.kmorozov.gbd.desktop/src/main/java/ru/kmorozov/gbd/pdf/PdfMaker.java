@@ -27,17 +27,18 @@ import static ru.kmorozov.gbd.core.logic.context.ExecutionContext.INSTANCE;
  */
 public class PdfMaker implements IPostProcessor {
 
-    private static final Logger logger = INSTANCE.getLogger(PdfMaker.class);
-
     @Override
     public void make(BookContext bookContext) {
+        Logger logger = INSTANCE.getLogger(PdfMaker.class, bookContext);
+
         File imgDir = bookContext.getOutputDir();
         int existPages = 0;
         BookInfo bookInfo = bookContext.getBookInfo();
         File pdfFile = new File(imgDir.getPath() + File.separator + bookInfo.getBookData().getTitle().replaceAll("[^А-Яа-яa-zA-Z0-9.-]", " ") + ".pdf");
         try {
-            if (Files.exists(pdfFile.toPath()))
-                existPages = PDDocument.load(pdfFile).getNumberOfPages();
+            if (Files.exists(pdfFile.toPath())) try (PDDocument existDocument = PDDocument.load(pdfFile)) {
+                existPages = existDocument.getNumberOfPages();
+            }
             else pdfFile.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();

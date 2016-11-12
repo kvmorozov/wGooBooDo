@@ -159,15 +159,16 @@ public class ImageExtractor extends AbstractEventSource implements Runnable {
             synchronized (this) {
                 bookContext.sigExecutor.shutdown();
                 try {
-                    bookContext.sigExecutor.awaitTermination(100, TimeUnit.MINUTES);
+                    bookContext.sigExecutor.awaitTermination(1, TimeUnit.MINUTES);
                 } catch (InterruptedException ignored) {
+                    bookContext.sigExecutor.shutdownNow();
                 }
 
                 bookContext.getBookInfo().getPagesInfo().getPages().stream().filter(page -> !page.dataProcessed.get() && page.getSig() != null).forEach(page -> bookContext.imgExecutor.execute(new PageImgProcessor(bookContext, page, HttpHostExt.NO_PROXY)));
 
                 bookContext.imgExecutor.shutdown();
                 try {
-                    bookContext.imgExecutor.awaitTermination(500, TimeUnit.MINUTES);
+                    bookContext.imgExecutor.awaitTermination(2, TimeUnit.MINUTES);
                 } catch (InterruptedException ignored) {
                 }
 
