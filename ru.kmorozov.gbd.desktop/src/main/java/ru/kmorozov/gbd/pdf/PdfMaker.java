@@ -27,8 +27,16 @@ import static ru.kmorozov.gbd.core.logic.context.ExecutionContext.INSTANCE;
  */
 public class PdfMaker implements IPostProcessor {
 
+    private BookContext bookContext;
+
+    public PdfMaker(BookContext bookContext) {
+        setBookContext(bookContext);
+    }
+
+    public PdfMaker() {}
+
     @Override
-    public void make(BookContext bookContext) {
+    public void make() {
         Logger logger = INSTANCE.getLogger(PdfMaker.class, bookContext);
 
         File imgDir = bookContext.getOutputDir();
@@ -96,5 +104,15 @@ public class PdfMaker implements IPostProcessor {
         } catch (NumberFormatException nfe) {
             return -1;
         }
+    }
+
+    @Override
+    public void setBookContext(BookContext bookContext) {
+        this.bookContext = bookContext;
+    }
+
+    @Override
+    public void run() {
+        make();
     }
 }

@@ -7,10 +7,9 @@ import ru.kmorozov.gbd.core.logic.extractors.ImageExtractor;
 import ru.kmorozov.gbd.core.logic.output.consumers.AbstractOutput;
 import ru.kmorozov.gbd.core.logic.progress.IProgress;
 import ru.kmorozov.gbd.core.utils.Logger;
+import ru.kmorozov.gbd.core.utils.QueuedThreadPoolExecutor;
 
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -22,7 +21,8 @@ public class ExecutionContext {
 
     private static final String EMPTY = "";
 
-    public final ExecutorService bookExecutor = Executors.newFixedThreadPool(150);
+    public final QueuedThreadPoolExecutor bookExecutor = new QueuedThreadPoolExecutor(150);
+    public final QueuedThreadPoolExecutor pdfExecutor = new QueuedThreadPoolExecutor(5);
 
     private final boolean singleMode;
     private final AbstractOutput output;
@@ -62,8 +62,7 @@ public class ExecutionContext {
 
     public List<BookContext> getContexts(boolean shuffle) {
         List<BookContext> contexts = Arrays.asList(bookContextMap.values().toArray(new BookContext[bookContextMap.values().size()]));
-        if (shuffle)
-            Collections.shuffle(contexts);
+        if (shuffle) Collections.shuffle(contexts);
         return contexts;
     }
 
@@ -96,18 +95,22 @@ public class ExecutionContext {
             extractor.newProxyEvent(HttpHostExt.NO_PROXY);
         }
 
-        Iterator<HttpHostExt> proxyIterator = AbstractProxyListProvider.getInstance().getProxyList();
-        while (proxyIterator.hasNext()) {
-            HttpHostExt proxy = proxyIterator.next();
-            for (BookContext bookContext : getContexts(true))
-                bookContext.getExtractor().newProxyEvent(proxy);
-        }
+        AbstractProxyListProvider.getInstance().processProxyList();
 
-        bookExecutor.shutdown();
-        try {
-            bookExecutor.awaitTermination(10, TimeUnit.MINUTES);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        bookExecutor.terminate(1, TimeUnit.HOURS);
+        pdfExecutor.terminate(1, TimeUnit.HOURS);
+    }
+
+    public void newProxyEvent(HttpHostExt proxy) {
+        for (BookContext bookContext : getContexts(true))
+            bookContext.getExtractor().newProxyEvent(proxy);
+    }
+
+    public void postProcessBook(BookContext bookContext) {
+        pdfExecutor.execute(bookContext.getPostProcessor());
+    }
+
+    public boolean isSingleMode() {
+        return singleMode;
     }
 }

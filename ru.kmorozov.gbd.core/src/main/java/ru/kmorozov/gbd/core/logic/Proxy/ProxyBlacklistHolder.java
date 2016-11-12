@@ -3,10 +3,10 @@ package ru.kmorozov.gbd.core.logic.Proxy;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 /**
@@ -20,7 +20,7 @@ public class ProxyBlacklistHolder {
     public static final ProxyBlacklistHolder BLACKLIST = new ProxyBlacklistHolder();
 
     private File blacklistFile;
-    private List<HttpHostExt> storedHosts = new ArrayList<>();
+    private List<HttpHostExt> storedHosts = new CopyOnWriteArrayList<>();
 
     private ProxyBlacklistHolder() {
         init();

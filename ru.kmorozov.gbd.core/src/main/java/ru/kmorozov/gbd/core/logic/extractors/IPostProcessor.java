@@ -5,7 +5,9 @@ import ru.kmorozov.gbd.core.logic.context.BookContext;
 /**
  * Created by km on 09.11.2016.
  */
-public interface IPostProcessor {
+public interface IPostProcessor extends Runnable {
 
-    void make(BookContext bookContext);
+    void setBookContext(BookContext bookContext);
+
+    void make();
 }

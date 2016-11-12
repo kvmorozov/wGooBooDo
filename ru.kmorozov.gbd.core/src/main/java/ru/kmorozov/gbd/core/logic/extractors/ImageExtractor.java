@@ -54,6 +54,10 @@ public class ImageExtractor extends AbstractEventSource implements Runnable {
     private List<HttpHostExt> waitingProxy = new ArrayList<>();
 
     public ImageExtractor(BookContext bookContext) {
+        if (bookContext.started.get()) throw new RuntimeException();
+
+        bookContext.started.set(true);
+
         setProcessStatus(bookContext.getProgress());
         this.bookContext = bookContext;
 
@@ -125,7 +129,7 @@ public class ImageExtractor extends AbstractEventSource implements Runnable {
         File baseOutputDir = new File(baseOutputDirPath);
         if (!baseOutputDir.exists()) if (!baseOutputDir.mkdir()) return;
 
-        logger.info(String.format("Working with %s", bookContext.getBookInfo().getBookData().getTitle()));
+        logger.info(INSTANCE.isSingleMode() ? String.format("Working with %s", bookContext.getBookInfo().getBookData().getTitle()) : "Starting...");
 
         bookContext.setOutputDir(new File(baseOutputDirPath + "\\" + bookContext.getBookInfo().getBookData().getTitle().replace(":", "").replace("<", "").replace(">", "").replace("/", ".") + " " + bookContext.getBookInfo().getBookData().getVolumeId()));
         File[] files = bookContext.getOutputDir().listFiles();
@@ -165,24 +169,16 @@ public class ImageExtractor extends AbstractEventSource implements Runnable {
                 return;
             }
 
-            bookContext.sigExecutor.execute(new PageSigProcessor(bookContext, proxy));
+            if (proxy.isAvailable()) bookContext.sigExecutor.execute(new PageSigProcessor(bookContext, proxy));
+
             if (proxyReceived.incrementAndGet() >= INSTANCE.getProxyCount()) {
                 INSTANCE.updateBlacklist();
 
-                bookContext.sigExecutor.shutdown();
-                try {
-                    bookContext.sigExecutor.awaitTermination(10, TimeUnit.MINUTES);
-                } catch (InterruptedException ignored) {
-                    bookContext.sigExecutor.shutdownNow();
-                }
+                bookContext.sigExecutor.terminate(10, TimeUnit.MINUTES);
 
                 bookContext.getBookInfo().getPagesInfo().getPages().stream().filter(page -> !page.dataProcessed.get() && page.getSig() != null).forEach(page -> bookContext.imgExecutor.execute(new PageImgProcessor(bookContext, page, HttpHostExt.NO_PROXY)));
 
-                bookContext.imgExecutor.shutdown();
-                try {
-                    bookContext.imgExecutor.awaitTermination(20, TimeUnit.MINUTES);
-                } catch (InterruptedException ignored) {
-                }
+                bookContext.imgExecutor.terminate(20, TimeUnit.MINUTES);
 
                 INSTANCE.updateProxyList();
 
@@ -192,7 +188,7 @@ public class ImageExtractor extends AbstractEventSource implements Runnable {
 
                 logger.info(String.format("Processed %s pages", pagesAfter - pagesBefore));
 
-                bookContext.getPostProcessor().make(bookContext);
+                INSTANCE.postProcessBook(bookContext);
             }
         }
     }

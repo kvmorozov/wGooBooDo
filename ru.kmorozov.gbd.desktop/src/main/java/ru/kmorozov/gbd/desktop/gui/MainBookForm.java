@@ -112,7 +112,7 @@ public class MainBookForm {
                 @Override
                 protected Void doInBackground() throws Exception {
                     ExecutionContext.INSTANCE.addBookContext(new SingleBookProducer(tfBookId.getText()), new ProcessStatus(), new PdfMaker());
-                    (new PdfMaker()).make(ExecutionContext.INSTANCE.getContexts(false).get(0));
+                    (new PdfMaker(ExecutionContext.INSTANCE.getContexts(false).get(0))).make();
 
                     return null;
                 }

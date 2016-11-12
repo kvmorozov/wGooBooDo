@@ -5,10 +5,10 @@ import ru.kmorozov.gbd.core.logic.extractors.IPostProcessor;
 import ru.kmorozov.gbd.core.logic.extractors.ImageExtractor;
 import ru.kmorozov.gbd.core.logic.model.book.BookInfo;
 import ru.kmorozov.gbd.core.logic.progress.IProgress;
+import ru.kmorozov.gbd.core.utils.QueuedThreadPoolExecutor;
 
 import java.io.File;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static ru.kmorozov.gbd.core.logic.extractors.ImageExtractor.BOOK_ID_PLACEHOLDER;
 import static ru.kmorozov.gbd.core.logic.extractors.ImageExtractor.HTTPS_TEMPLATE;
@@ -18,8 +18,10 @@ import static ru.kmorozov.gbd.core.logic.extractors.ImageExtractor.HTTPS_TEMPLAT
  */
 public class BookContext {
 
-    public final ExecutorService sigExecutor = Executors.newFixedThreadPool(10);
-    public final ExecutorService imgExecutor = Executors.newFixedThreadPool(10);
+    public final QueuedThreadPoolExecutor sigExecutor = new QueuedThreadPoolExecutor();
+    public final QueuedThreadPoolExecutor imgExecutor = new QueuedThreadPoolExecutor();
+
+    public AtomicBoolean started = new AtomicBoolean(false);
 
     private String baseUrl;
     private final BookInfo bookInfo;
@@ -69,6 +71,7 @@ public class BookContext {
     }
 
     public IPostProcessor getPostProcessor() {
+        postProcessor.setBookContext(this);
         return postProcessor;
     }
 }
