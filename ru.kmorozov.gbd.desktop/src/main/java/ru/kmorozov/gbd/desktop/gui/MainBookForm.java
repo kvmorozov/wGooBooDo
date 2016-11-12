@@ -1,7 +1,6 @@
 package ru.kmorozov.gbd.desktop.gui;
 
 import ru.kmorozov.gbd.core.config.SystemConfigs;
-import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.extractors.ImageExtractor;
 import ru.kmorozov.gbd.core.logic.model.book.Resolutions;
@@ -9,6 +8,7 @@ import ru.kmorozov.gbd.core.logic.model.log.LogIconColumnRenderer;
 import ru.kmorozov.gbd.core.logic.model.log.LogTableModel;
 import ru.kmorozov.gbd.core.logic.output.events.AbstractEventSource;
 import ru.kmorozov.gbd.core.logic.output.events.ImageExtractorWorker;
+import ru.kmorozov.gbd.desktop.library.SingleBookProducer;
 import ru.kmorozov.gbd.desktop.output.consumers.SwingBookInfoOutput;
 import ru.kmorozov.gbd.desktop.output.progress.ProcessStatus;
 import ru.kmorozov.gbd.pdf.PdfMaker;
@@ -74,8 +74,8 @@ public class MainBookForm {
             bLoad.setEnabled(false);
             bMakeBook.setEnabled(false);
 
-            BookContext bookContext = ExecutionContext.INSTANCE.addAndGetBookContext(tfBookId.getText(), new ProcessStatus(), new PdfMaker());
-            workerExtractor = new ImageExtractorWorker(new ImageExtractor(bookContext)) {
+            ExecutionContext.INSTANCE.addBookContext(new SingleBookProducer(tfBookId.getText()), new ProcessStatus(), new PdfMaker());
+            workerExtractor = new ImageExtractorWorker(new ImageExtractor(ExecutionContext.INSTANCE.getContexts().get(0))) {
 
                 @Override
                 public void done() {
@@ -111,8 +111,8 @@ public class MainBookForm {
 
                 @Override
                 protected Void doInBackground() throws Exception {
-                    BookContext bookContext = ExecutionContext.INSTANCE.addAndGetBookContext(tfBookId.getText(), new ProcessStatus(), new PdfMaker());
-                    (new PdfMaker()).make(bookContext, true);
+                    ExecutionContext.INSTANCE.addBookContext(new SingleBookProducer(tfBookId.getText()), new ProcessStatus(), new PdfMaker());
+                    (new PdfMaker()).make(ExecutionContext.INSTANCE.getContexts().get(0), true);
 
                     return null;
                 }

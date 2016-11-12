@@ -8,9 +8,7 @@ import ru.kmorozov.gbd.core.logic.output.consumers.AbstractOutput;
 import ru.kmorozov.gbd.core.logic.progress.IProgress;
 import ru.kmorozov.gbd.core.utils.Logger;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -51,14 +49,18 @@ public class ExecutionContext {
         return Logger.getLogger(output, location, EMPTY);
     }
 
-    public BookContext addAndGetBookContext(String bookId, IProgress progress, IPostProcessor postProcessor) {
-        BookContext bookContext = bookContextMap.get(bookId);
-        if (bookContext == null) {
-            bookContext = new BookContext(bookId, progress, postProcessor);
-            bookContextMap.put(bookId, bookContext);
+    public void addBookContext(IBookListProducer idsProducer, IProgress progress, IPostProcessor postProcessor) {
+        for (String bookId : idsProducer.getBookIds()) {
+            BookContext bookContext = bookContextMap.get(bookId);
+            if (bookContext == null) {
+                bookContext = new BookContext(bookId, progress, postProcessor);
+                bookContextMap.put(bookId, bookContext);
+            }
         }
+    }
 
-        return bookContext;
+    public List<BookContext> getContexts() {
+        return Arrays.asList(bookContextMap.values().toArray(new BookContext[bookContextMap.values().size()]));
     }
 
     public AbstractOutput getOutput() {
