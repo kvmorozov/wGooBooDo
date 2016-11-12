@@ -11,6 +11,7 @@ import ru.kmorozov.gbd.core.utils.Logger;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by km on 22.11.2015.
@@ -21,7 +22,7 @@ public class ExecutionContext {
 
     private static final String EMPTY = "";
 
-    public final ExecutorService bookExecutor = Executors.newFixedThreadPool(15);
+    public final ExecutorService bookExecutor = Executors.newFixedThreadPool(150);
 
     private final boolean singleMode;
     private final AbstractOutput output;
@@ -100,6 +101,13 @@ public class ExecutionContext {
             HttpHostExt proxy = proxyIterator.next();
             for (BookContext bookContext : getContexts(true))
                 bookContext.getExtractor().newProxyEvent(proxy);
+        }
+
+        bookExecutor.shutdown();
+        try {
+            bookExecutor.awaitTermination(10, TimeUnit.MINUTES);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }
