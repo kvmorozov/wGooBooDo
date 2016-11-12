@@ -50,18 +50,16 @@ public class ImageExtractor extends AbstractEventSource implements Runnable {
 
     private final AtomicInteger proxyReceived = new AtomicInteger(0);
     private final AtomicBoolean initComplete = new AtomicBoolean(false);
+    private final AtomicBoolean processingStarted = new AtomicBoolean(false);
     private long pagesBefore = 0l;
     private List<HttpHostExt> waitingProxy = new ArrayList<>();
 
     public ImageExtractor(BookContext bookContext) {
-        if (bookContext.started.get()) throw new RuntimeException();
-
-        bookContext.started.set(true);
+        logger = INSTANCE.getLogger(ImageExtractor.class, bookContext);
 
         setProcessStatus(bookContext.getProgress());
         this.bookContext = bookContext;
 
-        logger = INSTANCE.getLogger(ImageExtractor.class, bookContext);
         this.output = INSTANCE.getOutput();
         bookContext.setExtractor(this);
     }
@@ -116,6 +114,8 @@ public class ImageExtractor extends AbstractEventSource implements Runnable {
     }
 
     public void process() {
+        if (!bookContext.started.compareAndSet(false, true)) return;
+
         if (!Strings.isNullOrEmpty(bookContext.getBookInfo().getBookData().getFlags().getDownloadPdfUrl())) {
             logger.severe("There is direct url to download book. DIY!");
             return;
@@ -171,7 +171,11 @@ public class ImageExtractor extends AbstractEventSource implements Runnable {
 
             if (proxy.isAvailable()) bookContext.sigExecutor.execute(new PageSigProcessor(bookContext, proxy));
 
-            if (proxyReceived.incrementAndGet() >= INSTANCE.getProxyCount()) {
+            int proxyNeeded = INSTANCE.getProxyCount() - proxyReceived.incrementAndGet();
+
+            if (proxyNeeded <= 0) {
+                if (!processingStarted.compareAndSet(false, true)) return;
+
                 INSTANCE.updateBlacklist();
 
                 bookContext.sigExecutor.terminate(10, TimeUnit.MINUTES);
@@ -188,8 +192,10 @@ public class ImageExtractor extends AbstractEventSource implements Runnable {
 
                 logger.info(String.format("Processed %s pages", pagesAfter - pagesBefore));
 
-                INSTANCE.postProcessBook(bookContext);
-            }
+                synchronized (bookContext) {
+                    INSTANCE.postProcessBook(bookContext);
+                }
+            } else logger.finest(String.format("Waiting for %s more proxy", proxyNeeded));
         }
     }
 

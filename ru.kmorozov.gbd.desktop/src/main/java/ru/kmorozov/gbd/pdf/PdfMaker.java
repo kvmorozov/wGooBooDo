@@ -33,11 +33,14 @@ public class PdfMaker implements IPostProcessor {
         setBookContext(bookContext);
     }
 
-    public PdfMaker() {}
+    public PdfMaker() {
+    }
 
     @Override
     public void make() {
         Logger logger = INSTANCE.getLogger(PdfMaker.class, bookContext);
+
+        if (!bookContext.pdfCompleted.compareAndSet(false, true)) return;
 
         File imgDir = bookContext.getOutputDir();
         int existPages = 0;

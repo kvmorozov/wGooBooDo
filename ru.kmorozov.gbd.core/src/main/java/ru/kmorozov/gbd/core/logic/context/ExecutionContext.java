@@ -21,8 +21,8 @@ public class ExecutionContext {
 
     private static final String EMPTY = "";
 
-    public final QueuedThreadPoolExecutor bookExecutor = new QueuedThreadPoolExecutor(150);
-    public final QueuedThreadPoolExecutor pdfExecutor = new QueuedThreadPoolExecutor(5);
+    public QueuedThreadPoolExecutor bookExecutor;
+    public QueuedThreadPoolExecutor pdfExecutor;
 
     private final boolean singleMode;
     private final AbstractOutput output;
@@ -89,6 +89,9 @@ public class ExecutionContext {
     }
 
     public void execute() {
+        bookExecutor = new QueuedThreadPoolExecutor(bookContextMap.size(), 150);
+        pdfExecutor = new QueuedThreadPoolExecutor(bookContextMap.size(), 5);
+
         for (BookContext bookContext : getContexts(true)) {
             ImageExtractor extractor = new ImageExtractor(bookContext);
             bookExecutor.execute(extractor);

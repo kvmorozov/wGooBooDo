@@ -12,16 +12,18 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static ru.kmorozov.gbd.core.logic.extractors.ImageExtractor.BOOK_ID_PLACEHOLDER;
 import static ru.kmorozov.gbd.core.logic.extractors.ImageExtractor.HTTPS_TEMPLATE;
+import static ru.kmorozov.gbd.core.utils.QueuedThreadPoolExecutor.THREAD_POOL_SIZE;
 
 /**
  * Created by km on 08.11.2016.
  */
 public class BookContext {
 
-    public final QueuedThreadPoolExecutor sigExecutor = new QueuedThreadPoolExecutor();
-    public final QueuedThreadPoolExecutor imgExecutor = new QueuedThreadPoolExecutor();
+    public final QueuedThreadPoolExecutor sigExecutor = new QueuedThreadPoolExecutor(-1, THREAD_POOL_SIZE);
+    public final QueuedThreadPoolExecutor imgExecutor = new QueuedThreadPoolExecutor(-1, THREAD_POOL_SIZE);
 
     public AtomicBoolean started = new AtomicBoolean(false);
+    public AtomicBoolean pdfCompleted = new AtomicBoolean(false);
 
     private String baseUrl;
     private final BookInfo bookInfo;

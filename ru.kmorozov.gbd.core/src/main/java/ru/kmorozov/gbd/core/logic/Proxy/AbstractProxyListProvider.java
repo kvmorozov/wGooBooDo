@@ -139,7 +139,7 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
     }
 
     public static void updateBlacklist() {
-        ProxyBlacklistHolder.BLACKLIST.updateBlacklist(((AbstractProxyListProvider) INSTANCE).proxyList);
+        ProxyBlacklistHolder.BLACKLIST.updateBlacklist(INSTANCE.proxyList);
     }
 
     public int getProxyCount() {
