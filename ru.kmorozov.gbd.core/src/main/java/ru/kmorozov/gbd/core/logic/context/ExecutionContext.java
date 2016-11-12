@@ -59,8 +59,11 @@ public class ExecutionContext {
         }
     }
 
-    public List<BookContext> getContexts() {
-        return Arrays.asList(bookContextMap.values().toArray(new BookContext[bookContextMap.values().size()]));
+    public List<BookContext> getContexts(boolean shuffle) {
+        List<BookContext> contexts = Arrays.asList(bookContextMap.values().toArray(new BookContext[bookContextMap.values().size()]));
+        if (shuffle)
+            Collections.shuffle(contexts);
+        return contexts;
     }
 
     public AbstractOutput getOutput() {
@@ -81,8 +84,12 @@ public class ExecutionContext {
         AbstractProxyListProvider.getInstance().updateProxyList();
     }
 
+    public synchronized void updateBlacklist() {
+        AbstractProxyListProvider.updateBlacklist();
+    }
+
     public void execute() {
-        for (BookContext bookContext : bookContextMap.values()) {
+        for (BookContext bookContext : getContexts(true)) {
             ImageExtractor extractor = new ImageExtractor(bookContext);
             bookExecutor.execute(extractor);
             extractor.newProxyEvent(HttpHostExt.NO_PROXY);
@@ -91,7 +98,7 @@ public class ExecutionContext {
         Iterator<HttpHostExt> proxyIterator = AbstractProxyListProvider.getInstance().getProxyList();
         while (proxyIterator.hasNext()) {
             HttpHostExt proxy = proxyIterator.next();
-            for (BookContext bookContext : bookContextMap.values())
+            for (BookContext bookContext : getContexts(true))
                 bookContext.getExtractor().newProxyEvent(proxy);
         }
     }

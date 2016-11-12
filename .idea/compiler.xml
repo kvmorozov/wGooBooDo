@@ -24,7 +24,6 @@
         <processorPath useClasspath="true" />
         <module name="ru.kmorozov.gbd.core" />
         <module name="ru.kmorozov.gbd.desktop" />
-        <module name="simpleGBD" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

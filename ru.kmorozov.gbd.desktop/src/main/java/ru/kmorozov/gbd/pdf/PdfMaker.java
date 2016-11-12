@@ -36,10 +36,13 @@ public class PdfMaker implements IPostProcessor {
         BookInfo bookInfo = bookContext.getBookInfo();
         File pdfFile = new File(imgDir.getPath() + File.separator + bookInfo.getBookData().getTitle().replaceAll("[^А-Яа-яa-zA-Z0-9.-]", " ") + ".pdf");
         try {
-            if (Files.exists(pdfFile.toPath())) try (PDDocument existDocument = PDDocument.load(pdfFile)) {
-                existPages = existDocument.getNumberOfPages();
-            }
-            else pdfFile.createNewFile();
+            if (Files.exists(pdfFile.toPath())) {
+                try (PDDocument existDocument = PDDocument.load(pdfFile)) {
+                    existPages = existDocument.getNumberOfPages();
+                } catch (Exception ex) {
+                    pdfFile.createNewFile();
+                }
+            } else pdfFile.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
             return;
