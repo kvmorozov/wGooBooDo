@@ -49,7 +49,7 @@ public class PdfMaker implements IPostProcessor {
         try (PDDocument document = new PDDocument()) {
             try {
                 long imgCount = Files.list(imgDir.toPath()).filter(Images::isImageFile).count();
-                if (imgCount <= existPages) {
+                if (imgCount == existPages) {
                     logger.info("No new pages, exiting...");
                     return;
                 }
