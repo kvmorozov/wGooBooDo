@@ -20,6 +20,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -29,7 +30,7 @@ import static ru.kmorozov.gbd.core.logic.context.ExecutionContext.INSTANCE;
 /**
  * Created by km on 21.11.2015.
  */
-public class ImageExtractor extends AbstractEventSource implements Runnable {
+public class ImageExtractor extends AbstractEventSource implements IUniqueRunnable<BookContext> {
 
     private final Logger logger;
 
@@ -52,7 +53,7 @@ public class ImageExtractor extends AbstractEventSource implements Runnable {
     private final AtomicBoolean initComplete = new AtomicBoolean(false);
     private final AtomicBoolean processingStarted = new AtomicBoolean(false);
     private long pagesBefore = 0l;
-    private List<HttpHostExt> waitingProxy = new ArrayList<>();
+    private List<HttpHostExt> waitingProxy = new CopyOnWriteArrayList<>();
 
     public ImageExtractor(BookContext bookContext) {
         logger = INSTANCE.getLogger(ImageExtractor.class, bookContext);
@@ -195,11 +196,16 @@ public class ImageExtractor extends AbstractEventSource implements Runnable {
                 synchronized (bookContext) {
                     INSTANCE.postProcessBook(bookContext);
                 }
-            } else logger.finest(String.format("Waiting for %s more proxy", proxyNeeded));
+            } //else logger.finest(String.format("Waiting for %s more proxy", proxyNeeded));
         }
     }
 
     public void newProxyEvent(HttpHostExt proxy) {
         (new Thread(new EventProcessor(proxy))).start();
+    }
+
+    @Override
+    public BookContext getUniqueObject() {
+        return bookContext;
     }
 }

@@ -89,13 +89,13 @@ public class ExecutionContext {
     }
 
     public void execute() {
-        bookExecutor = new QueuedThreadPoolExecutor(bookContextMap.size(), 150);
-        pdfExecutor = new QueuedThreadPoolExecutor(bookContextMap.size(), 5);
+        bookExecutor = new QueuedThreadPoolExecutor<>(bookContextMap.size(), 5, BookContext::isImgStarted);
+        pdfExecutor = new QueuedThreadPoolExecutor<>(bookContextMap.size(), 5, BookContext::isPdfCompleted);
 
         for (BookContext bookContext : getContexts(true)) {
             ImageExtractor extractor = new ImageExtractor(bookContext);
-            bookExecutor.execute(extractor);
             extractor.newProxyEvent(HttpHostExt.NO_PROXY);
+            bookExecutor.execute(extractor);
         }
 
         AbstractProxyListProvider.getInstance().processProxyList();

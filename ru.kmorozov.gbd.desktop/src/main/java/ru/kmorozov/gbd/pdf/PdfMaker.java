@@ -118,4 +118,9 @@ public class PdfMaker implements IPostProcessor {
     public void run() {
         make();
     }
+
+    @Override
+    public BookContext getUniqueObject() {
+        return bookContext;
+    }
 }

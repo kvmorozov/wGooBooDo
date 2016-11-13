@@ -19,8 +19,8 @@ import static ru.kmorozov.gbd.core.utils.QueuedThreadPoolExecutor.THREAD_POOL_SI
  */
 public class BookContext {
 
-    public final QueuedThreadPoolExecutor sigExecutor = new QueuedThreadPoolExecutor(-1, THREAD_POOL_SIZE);
-    public final QueuedThreadPoolExecutor imgExecutor = new QueuedThreadPoolExecutor(-1, THREAD_POOL_SIZE);
+    public final QueuedThreadPoolExecutor sigExecutor = new QueuedThreadPoolExecutor(-1, THREAD_POOL_SIZE, x -> true);
+    public final QueuedThreadPoolExecutor imgExecutor = new QueuedThreadPoolExecutor(-1, THREAD_POOL_SIZE, x -> true);
 
     public AtomicBoolean started = new AtomicBoolean(false);
     public AtomicBoolean pdfCompleted = new AtomicBoolean(false);
@@ -75,5 +75,13 @@ public class BookContext {
     public IPostProcessor getPostProcessor() {
         postProcessor.setBookContext(this);
         return postProcessor;
+    }
+
+    public boolean isPdfCompleted() {
+        return pdfCompleted.get();
+    }
+
+    public boolean isImgStarted() {
+        return started.get();
     }
 }

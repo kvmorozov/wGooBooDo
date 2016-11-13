@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by km on 21.11.2015.
  */
-class PageSigProcessor extends AbstractHttpProcessor implements Runnable {
+class PageSigProcessor extends AbstractHttpProcessor implements IUniqueRunnable<BookContext> {
 
     private static final String SIG_ERROR_TEMPLATE = "No sig at %s with proxy %s";
     private static final String SIG_WRONG_FORMAT = "Wrong sig format: %s";
@@ -119,5 +119,10 @@ class PageSigProcessor extends AbstractHttpProcessor implements Runnable {
         }
 
         psSigs.finish();
+    }
+
+    @Override
+    public BookContext getUniqueObject() {
+        return bookContext;
     }
 }

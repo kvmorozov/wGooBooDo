@@ -17,7 +17,7 @@ import static ru.kmorozov.gbd.core.logic.context.ExecutionContext.INSTANCE;
 /**
  * Created by km on 21.11.2015.
  */
-class PageImgProcessor extends AbstractHttpProcessor implements Runnable {
+class PageImgProcessor extends AbstractHttpProcessor implements IUniqueRunnable<PageInfo> {
 
     private static final String IMG_ERROR_TEMPLATE = "No img at %s with proxy %s";
 
@@ -148,5 +148,10 @@ class PageImgProcessor extends AbstractHttpProcessor implements Runnable {
                     }
                 });
         }
+    }
+
+    @Override
+    public PageInfo getUniqueObject() {
+        return page;
     }
 }
