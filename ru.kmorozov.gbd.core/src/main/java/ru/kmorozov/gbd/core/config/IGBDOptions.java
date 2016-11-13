@@ -10,6 +10,5 @@ interface IGBDOptions {
     String getProxyListFile();
     int getImageWidth();
     boolean reloadImages();
-    boolean fillGaps();
     boolean secureMode();
 }

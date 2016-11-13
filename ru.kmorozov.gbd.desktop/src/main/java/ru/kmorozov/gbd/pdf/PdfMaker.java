@@ -64,7 +64,7 @@ public class PdfMaker implements IPostProcessor {
             try {
                 long imgCount = Files.list(imgDir.toPath()).filter(Images::isImageFile).count();
                 if (imgCount == existPages) {
-                    logger.info("No new pages, exiting...");
+                    logger.finest("No new pages, exiting...");
                     return;
                 }
 
@@ -97,7 +97,7 @@ public class PdfMaker implements IPostProcessor {
             e.printStackTrace();
         }
 
-        logger.info("Pdf completed...");
+        logger.info("Pdf completed.");
     }
 
     private Integer getPagenum(Path pagePath) {

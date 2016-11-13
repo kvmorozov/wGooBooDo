@@ -46,7 +46,7 @@ public class PagesInfo implements Serializable {
         for (PageInfo page : _pages) {
             addPage(page);
 
-            if (prevPage != null && page.getOrder() - prevPage.getOrder() > 1 && GBDOptions.fillGaps())
+            if (prevPage != null && page.getOrder() - prevPage.getOrder() > 1)
                 fillGap(prevPage, page);
 
             prevPage = page;

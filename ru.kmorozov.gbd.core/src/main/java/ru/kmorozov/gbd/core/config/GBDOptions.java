@@ -16,6 +16,5 @@ public class GBDOptions {
     public static String getProxyListFile() {return INSTANCE.getProxyListFile();}
     public static int getImageWidth() {return INSTANCE.getImageWidth();}
     public static boolean reloadImages() {return INSTANCE.reloadImages();}
-    public static boolean fillGaps() {return INSTANCE.fillGaps();}
     public static boolean secureMode() {return INSTANCE.secureMode();}
 }

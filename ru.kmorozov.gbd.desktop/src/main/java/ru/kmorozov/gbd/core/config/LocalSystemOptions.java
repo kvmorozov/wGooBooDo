@@ -31,11 +31,6 @@ public class LocalSystemOptions implements IGBDOptions {
     }
 
     @Override
-    public boolean fillGaps() {
-        return SystemConfigs.getFillGaps();
-    }
-
-    @Override
     public boolean secureMode() {
         return SystemConfigs.getSecureMode();
     }
