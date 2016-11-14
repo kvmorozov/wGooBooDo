@@ -56,10 +56,10 @@ class PageSigProcessor extends AbstractHttpProcessor implements IUniqueRunnable<
             String respStr = IOUtils.toString(resp.getContent(), Charset.defaultCharset());
             PagesInfo framePages = Mapper.objectMapper.readValue(respStr, PagesInfo.class);
 
-            PageInfo[] pages = framePages.getPagesArray();
+            PageInfo[] pages = framePages.getPages();
             for (PageInfo framePage : pages)
                 if (framePage.getOrder() >= page.getOrder() && framePage.getSrc() != null) {
-                    PageInfo _page = bookContext.getBookInfo().getPagesInfo().getPageByPid(framePage.getPid());
+                    PageInfo _page = bookContext.getBookInfo().getPages().getPageByPid(framePage.getPid());
 
                     if (_page.dataProcessed.get() || _page.getSig() != null || _page.sigChecked.get()) continue;
 
@@ -104,10 +104,10 @@ class PageSigProcessor extends AbstractHttpProcessor implements IUniqueRunnable<
 
         if (!proxy.isLocal() && !(proxy.isAvailable() && proxy.getHost().getPort() > 0)) return;
 
-        final IProgress psSigs = bookContext.getProgress().getSubProgress(bookContext.getBookInfo().getPagesInfo().getPages().size());
+        final IProgress psSigs = bookContext.getProgress().getSubProgress(bookContext.getBookInfo().getPages().getPages().length);
 
         ExecutorService sigPool = Executors.newCachedThreadPool();
-        sigPool.submit(() -> bookContext.getBookInfo().getPagesInfo().getPages().parallelStream().forEach(page -> {
+        sigPool.submit(() -> bookContext.getPagesParallelStream().forEach(page -> {
             psSigs.inc();
             getSig(page);
         }));

@@ -4,11 +4,14 @@ import ru.kmorozov.gbd.core.logic.extractors.BookInfoExtractor;
 import ru.kmorozov.gbd.core.logic.extractors.IPostProcessor;
 import ru.kmorozov.gbd.core.logic.extractors.ImageExtractor;
 import ru.kmorozov.gbd.core.logic.model.book.BookInfo;
+import ru.kmorozov.gbd.core.logic.model.book.PageInfo;
 import ru.kmorozov.gbd.core.logic.progress.IProgress;
 import ru.kmorozov.gbd.core.utils.QueuedThreadPoolExecutor;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Stream;
 
 import static ru.kmorozov.gbd.core.logic.extractors.ImageExtractor.BOOK_ID_PLACEHOLDER;
 import static ru.kmorozov.gbd.core.logic.extractors.ImageExtractor.HTTPS_TEMPLATE;
@@ -31,6 +34,7 @@ public class BookContext {
     private ImageExtractor extractor;
     private final IProgress progress;
     private final IPostProcessor postProcessor;
+    private long pagesBefore;
 
     BookContext(String bookId, IProgress progress, IPostProcessor postProcessor) {
         this.bookInfo = (new BookInfoExtractor(bookId)).getBookInfo();
@@ -83,5 +87,19 @@ public class BookContext {
 
     public boolean isImgStarted() {
         return started.get();
+    }
+
+    public long getPagesBefore() {
+        if (pagesBefore == 0l)
+            pagesBefore = getPagesStream().filter(pageInfo -> pageInfo.dataProcessed.get()).count();
+        return pagesBefore;
+    }
+
+    public Stream<PageInfo> getPagesStream() {
+        return Arrays.asList(bookInfo.getPages().getPages()).stream();
+    }
+
+    public Stream<PageInfo> getPagesParallelStream() {
+        return Arrays.asList(bookInfo.getPages().getPages()).parallelStream();
     }
 }

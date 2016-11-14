@@ -17,7 +17,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -52,7 +51,6 @@ public class ImageExtractor extends AbstractEventSource implements IUniqueRunnab
     private final AtomicInteger proxyReceived = new AtomicInteger(0);
     private final AtomicBoolean initComplete = new AtomicBoolean(false);
     private final AtomicBoolean processingStarted = new AtomicBoolean(false);
-    private long pagesBefore = 0l;
     private List<HttpHostExt> waitingProxy = new CopyOnWriteArrayList<>();
 
     public ImageExtractor(BookContext bookContext) {
@@ -73,7 +71,7 @@ public class ImageExtractor extends AbstractEventSource implements IUniqueRunnab
                 if (Images.isImageFile(filePath)) {
                     String fileName = FilenameUtils.getBaseName(filePath.toString());
                     String[] nameParts = fileName.split("_");
-                    PageInfo _page = bookContext.getBookInfo().getPagesInfo().getPageByPid(nameParts[1]);
+                    PageInfo _page = bookContext.getBookInfo().getPages().getPageByPid(nameParts[1]);
                     if (_page != null) {
                         try {
                             if (GBDOptions.reloadImages()) {
@@ -144,10 +142,8 @@ public class ImageExtractor extends AbstractEventSource implements IUniqueRunnab
             }
         }
 
-        bookContext.getBookInfo().getPagesInfo().build();
+        bookContext.getBookInfo().getPages().build();
         scanDir();
-
-        pagesBefore = bookContext.getBookInfo().getPagesInfo().getPages().stream().filter(pageInfo -> pageInfo.dataProcessed.get()).count();
 
         for (HttpHostExt proxy : waitingProxy)
             newProxyEvent(proxy);
@@ -181,17 +177,17 @@ public class ImageExtractor extends AbstractEventSource implements IUniqueRunnab
 
                 bookContext.sigExecutor.terminate(10, TimeUnit.MINUTES);
 
-                bookContext.getBookInfo().getPagesInfo().getPages().stream().filter(page -> !page.dataProcessed.get() && page.getSig() != null).forEach(page -> bookContext.imgExecutor.execute(new PageImgProcessor(bookContext, page, HttpHostExt.NO_PROXY)));
+                bookContext.getPagesStream().filter(page -> !page.dataProcessed.get() && page.getSig() != null).forEach(page -> bookContext.imgExecutor.execute(new PageImgProcessor(bookContext, page, HttpHostExt.NO_PROXY)));
 
                 bookContext.imgExecutor.terminate(20, TimeUnit.MINUTES);
 
                 INSTANCE.updateProxyList();
 
-                logger.info(bookContext.getBookInfo().getPagesInfo().getMissingPagesList());
+                logger.info(bookContext.getBookInfo().getPages().getMissingPagesList());
 
-                long pagesAfter = bookContext.getBookInfo().getPagesInfo().getPages().stream().filter(pageInfo -> pageInfo.dataProcessed.get()).count();
+                long pagesAfter = bookContext.getPagesStream().filter(pageInfo -> pageInfo.dataProcessed.get()).count();
 
-                logger.info(String.format("Processed %s pages", pagesAfter - pagesBefore));
+                logger.info(String.format("Processed %s pages", pagesAfter - bookContext.getPagesBefore()));
 
                 synchronized (bookContext) {
                     INSTANCE.postProcessBook(bookContext);

@@ -23,6 +23,7 @@ import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.List;
 
+import static ru.kmorozov.gbd.core.config.storage.BookContextLoader.BOOK_CTX_LOADER;
 import static ru.kmorozov.gbd.core.logic.context.ExecutionContext.INSTANCE;
 import static ru.kmorozov.gbd.core.logic.extractors.ImageExtractor.*;
 
@@ -46,10 +47,12 @@ public class BookInfoExtractor extends AbstractHttpProcessor {
     public BookInfoExtractor(String bookId) {
         this.bookId = bookId;
         bookUrl = HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, bookId) + OPEN_PAGE_ADD_URL;
-        findBookInfo();
+
+        BookInfo storedBookInfo = BOOK_CTX_LOADER.getBookInfo(bookId);
+        bookInfo = storedBookInfo == null ? findBookInfo() : storedBookInfo;
     }
 
-    private void findBookInfo() {
+    private BookInfo findBookInfo() {
         Document defaultDocument = getDocumentWithoutProxy();
         try {
             BookInfo defaultBookInfo = extractBookInfo(defaultDocument);
@@ -63,15 +66,15 @@ public class BookInfoExtractor extends AbstractHttpProcessor {
 
                     BookInfo proxyBookInfo = extractBookInfo(getDocumentWithProxy(proxy));
                     if (proxyBookInfo == null) proxy.forceInvalidate(true);
-                    else {
-                        bookInfo = proxyBookInfo;
-                        break;
-                    }
+                    else
+                        return proxyBookInfo;
                 }
-            } else bookInfo = defaultBookInfo;
+            } else return defaultBookInfo;
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        return null;
     }
 
     private Document getDocumentWithProxy(HttpHostExt proxy) {

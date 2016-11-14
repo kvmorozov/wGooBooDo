@@ -1,5 +1,6 @@
 package ru.kmorozov.gbd.core.logic.model.book;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
@@ -50,6 +51,7 @@ public class BookData implements Serializable {
         return volumeId;
     }
 
+    @JsonIgnore
     public VolumeResultFlags getFlags() {
         return volumeresult;
     }

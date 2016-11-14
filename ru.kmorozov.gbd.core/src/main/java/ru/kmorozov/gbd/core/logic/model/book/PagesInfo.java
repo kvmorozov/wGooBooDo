@@ -1,9 +1,9 @@
 package ru.kmorozov.gbd.core.logic.model.book;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.utils.Logger;
 
 import java.io.Serializable;
@@ -28,10 +28,6 @@ public class PagesInfo implements Serializable {
     private Map<String, PageInfo> pagesMap;
     private LinkedList<PageInfo> pagesList;
 
-    public PageInfo[] getPagesArray() {
-        return pages;
-    }
-
     private void addPage(PageInfo page) {
         pagesMap.put(page.getPid(), page);
         pagesList.add(page);
@@ -46,8 +42,7 @@ public class PagesInfo implements Serializable {
         for (PageInfo page : _pages) {
             addPage(page);
 
-            if (prevPage != null && page.getOrder() - prevPage.getOrder() > 1)
-                fillGap(prevPage, page);
+            if (prevPage != null && page.getOrder() - prevPage.getOrder() > 1) fillGap(prevPage, page);
 
             prevPage = page;
         }
@@ -108,10 +103,19 @@ public class PagesInfo implements Serializable {
         return pagesMap.get(pid);
     }
 
-    public Collection<PageInfo> getPages() {
-        return pagesMap.values();
+    public PageInfo[] getPages() {
+        return pagesMap.values().toArray(new PageInfo[pagesMap.size()]);
     }
 
+    public void setPages(PageInfo[] pages) {
+        this.pages = pages;
+        this.pagesMap = new HashMap<>();
+
+        if (pages != null) for (PageInfo page : pages)
+            pagesMap.put(page.getPid(), page);
+    }
+
+    @JsonIgnore
     public String getMissingPagesList() {
         return getListByCondition(pageInfo -> pageInfo.fileExists.get());
     }

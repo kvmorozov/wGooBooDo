@@ -1,5 +1,6 @@
 package ru.kmorozov.gbd.core.logic.model.book;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.api.client.repackaged.com.google.common.base.Strings;
 import ru.kmorozov.gbd.core.logic.extractors.ImageExtractor;
@@ -35,7 +36,8 @@ public class PageInfo implements Serializable {
     private String prefix;
     private int pageNum = -1;
 
-    private boolean isGapPage = false;
+    @JsonIgnore
+    private boolean gapPage = false;
 
     public PageInfo() {
     }
@@ -45,7 +47,7 @@ public class PageInfo implements Serializable {
         this.pid = pid;
         this.order = order;
 
-        isGapPage = true;
+        gapPage = true;
     }
 
     public final AtomicBoolean sigChecked = new AtomicBoolean(false);
@@ -78,7 +80,7 @@ public class PageInfo implements Serializable {
     }
 
     public boolean isGapPage() {
-        return isGapPage;
+        return gapPage;
     }
 
     public String getImqRqUrl(String bookId, String urlTemplate, int width) {

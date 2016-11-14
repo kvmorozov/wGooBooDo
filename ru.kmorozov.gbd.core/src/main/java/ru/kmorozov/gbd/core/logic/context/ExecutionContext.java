@@ -12,6 +12,9 @@ import ru.kmorozov.gbd.core.utils.QueuedThreadPoolExecutor;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+import static ru.kmorozov.gbd.core.config.storage.BookContextLoader.BOOK_CTX_LOADER;
+import static ru.kmorozov.gbd.core.config.storage.BookListLoader.BOOK_LIST_LOADER;
+
 /**
  * Created by km on 22.11.2015.
  */
@@ -102,6 +105,9 @@ public class ExecutionContext {
 
         bookExecutor.terminate(1, TimeUnit.HOURS);
         pdfExecutor.terminate(1, TimeUnit.HOURS);
+
+        BOOK_LIST_LOADER.updateIndex();
+        BOOK_CTX_LOADER.updateContext();
     }
 
     public void newProxyEvent(HttpHostExt proxy) {
@@ -115,5 +121,9 @@ public class ExecutionContext {
 
     public boolean isSingleMode() {
         return singleMode;
+    }
+
+    public Collection<String> getBookIds() {
+        return bookContextMap.keySet();
     }
 }
