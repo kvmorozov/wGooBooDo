@@ -1,4 +1,4 @@
-package ru.kmorozov.gbd.core.logic.extractors;
+package ru.kmorozov.gbd.core.logic.extractors.google;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -8,6 +8,8 @@ import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.connectors.Response;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
+import ru.kmorozov.gbd.core.logic.extractors.AbstractHttpProcessor;
+import ru.kmorozov.gbd.core.logic.extractors.IUniqueRunnable;
 import ru.kmorozov.gbd.core.logic.model.book.PageInfo;
 import ru.kmorozov.gbd.core.logic.model.book.PagesInfo;
 import ru.kmorozov.gbd.core.logic.progress.IProgress;
@@ -24,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by km on 21.11.2015.
  */
-class PageSigProcessor extends AbstractHttpProcessor implements IUniqueRunnable<BookContext> {
+class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRunnable<BookContext> {
 
     private static final String SIG_ERROR_TEMPLATE = "No sig at %s with proxy %s";
     private static final String SIG_WRONG_FORMAT = "Wrong sig format: %s";
@@ -32,7 +34,7 @@ class PageSigProcessor extends AbstractHttpProcessor implements IUniqueRunnable<
     private final HttpHostExt proxy;
     private final BookContext bookContext;
 
-    public PageSigProcessor(BookContext bookContext, HttpHostExt proxy) {
+    public GooglePageSigProcessor(BookContext bookContext, HttpHostExt proxy) {
         this.bookContext = bookContext;
         this.proxy = proxy;
     }
@@ -44,7 +46,7 @@ class PageSigProcessor extends AbstractHttpProcessor implements IUniqueRunnable<
             return;
 
         Response resp = null;
-        String rqUrl = bookContext.getBaseUrl() + ImageExtractor.PAGES_REQUEST_TEMPLATE.replace(ImageExtractor.RQ_PG_PLACEHOLDER, page.getPid());
+        String rqUrl = bookContext.getBaseUrl() + GoogleImageExtractor.PAGES_REQUEST_TEMPLATE.replace(GoogleImageExtractor.RQ_PG_PLACEHOLDER, page.getPid());
 
         try {
             resp = getContent(rqUrl, proxy, true);
@@ -73,7 +75,7 @@ class PageSigProcessor extends AbstractHttpProcessor implements IUniqueRunnable<
                             proxy.promoteProxy();
 
                             // Если есть возможность - пытаемся грузить страницу сразу
-                            bookContext.imgExecutor.execute(new PageImgProcessor(bookContext, _page, proxy));
+                            bookContext.imgExecutor.execute(new GooglePageImgProcessor(bookContext, _page, proxy));
                         }
                     }
 
@@ -124,5 +126,10 @@ class PageSigProcessor extends AbstractHttpProcessor implements IUniqueRunnable<
     @Override
     public BookContext getUniqueObject() {
         return bookContext;
+    }
+
+    @Override
+    public String toString() {
+        return "Sig processor:" + bookContext.toString();
     }
 }

@@ -10,6 +10,7 @@ import org.jsoup.select.Elements;
 import ru.kmorozov.gbd.core.logic.Proxy.AbstractProxyListProvider;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.connectors.Response;
+import ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor;
 import ru.kmorozov.gbd.core.logic.model.book.BookData;
 import ru.kmorozov.gbd.core.logic.model.book.BookInfo;
 import ru.kmorozov.gbd.core.logic.model.book.PagesInfo;
@@ -25,14 +26,14 @@ import java.util.List;
 
 import static ru.kmorozov.gbd.core.config.storage.BookContextLoader.BOOK_CTX_LOADER;
 import static ru.kmorozov.gbd.core.logic.context.ExecutionContext.INSTANCE;
-import static ru.kmorozov.gbd.core.logic.extractors.ImageExtractor.*;
+import static ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor.*;
 
 /**
  * Created by km on 08.10.2016.
  */
 public class BookInfoExtractor extends AbstractHttpProcessor {
 
-    private static final Logger logger = INSTANCE.getLogger(ImageExtractor.class);
+    private static final Logger logger = INSTANCE.getLogger(GoogleImageExtractor.class);
 
     private static final String ADD_FLAGS_ATTRIBUTE = "_OC_addFlags";
     private static final String OC_RUN_ATTRIBUTE = "_OC_Run";

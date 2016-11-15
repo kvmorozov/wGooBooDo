@@ -2,7 +2,9 @@ package ru.kmorozov.gbd.core.logic.context;
 
 import ru.kmorozov.gbd.core.logic.extractors.BookInfoExtractor;
 import ru.kmorozov.gbd.core.logic.extractors.IPostProcessor;
-import ru.kmorozov.gbd.core.logic.extractors.ImageExtractor;
+import ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor;
+import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata;
+import ru.kmorozov.gbd.core.logic.library.LibraryFactory;
 import ru.kmorozov.gbd.core.logic.model.book.BookInfo;
 import ru.kmorozov.gbd.core.logic.model.book.PageInfo;
 import ru.kmorozov.gbd.core.logic.progress.IProgress;
@@ -13,8 +15,8 @@ import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
 
-import static ru.kmorozov.gbd.core.logic.extractors.ImageExtractor.BOOK_ID_PLACEHOLDER;
-import static ru.kmorozov.gbd.core.logic.extractors.ImageExtractor.HTTPS_TEMPLATE;
+import static ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor.BOOK_ID_PLACEHOLDER;
+import static ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor.HTTPS_TEMPLATE;
 import static ru.kmorozov.gbd.core.utils.QueuedThreadPoolExecutor.THREAD_POOL_SIZE;
 
 /**
@@ -31,15 +33,17 @@ public class BookContext {
     private String baseUrl;
     private final BookInfo bookInfo;
     private File outputDir;
-    private ImageExtractor extractor;
+    private GoogleImageExtractor extractor;
     private final IProgress progress;
     private final IPostProcessor postProcessor;
     private long pagesBefore;
+    private final ILibraryMetadata metadata;
 
     BookContext(String bookId, IProgress progress, IPostProcessor postProcessor) {
         this.bookInfo = (new BookInfoExtractor(bookId)).getBookInfo();
         this.progress = progress;
         this.postProcessor = postProcessor;
+        this.metadata = LibraryFactory.getMetadata(bookId);
 
         baseUrl = HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, bookInfo.getBookId());
     }
@@ -62,14 +66,6 @@ public class BookContext {
 
     public void setOutputDir(File outputDir) {
         this.outputDir = outputDir;
-    }
-
-    public ImageExtractor getExtractor() {
-        return extractor;
-    }
-
-    public void setExtractor(ImageExtractor extractor) {
-        this.extractor = extractor;
     }
 
     public IProgress getProgress() {
@@ -101,5 +97,17 @@ public class BookContext {
 
     public Stream<PageInfo> getPagesParallelStream() {
         return Arrays.asList(bookInfo.getPages().getPages()).parallelStream();
+    }
+
+    @Override
+    public String toString() {
+        return bookInfo.getBookId() + " " + bookInfo.getBookData().getTitle();
+    }
+
+    public GoogleImageExtractor getExtractor() {
+        if (extractor == null)
+            extractor = (GoogleImageExtractor) metadata.getExtractor(this);
+
+        return extractor;
     }
 }

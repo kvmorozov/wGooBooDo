@@ -17,13 +17,13 @@ import static ru.kmorozov.gbd.core.logic.context.ExecutionContext.INSTANCE;
 /**
  * Created by km on 05.12.2015.
  */
-class AbstractHttpProcessor {
+public class AbstractHttpProcessor {
 
-    static final Logger logger = INSTANCE.getLogger(AbstractHttpProcessor.class);
+    protected static final Logger logger = INSTANCE.getLogger(AbstractHttpProcessor.class);
 
     private static final HttpConnector connector = new GoogleHttpConnector();
 
-    Response getContent(String rqUrl, HttpHostExt proxy, boolean withTimeout) {
+    protected Response getContent(String rqUrl, HttpHostExt proxy, boolean withTimeout) {
         try {
             Response resp = connector.getContent(rqUrl, proxy, withTimeout);
             return proxy.isLocal() ? resp : resp == null ? getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout) : resp;

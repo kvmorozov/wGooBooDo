@@ -1,6 +1,6 @@
 package ru.kmorozov.gbd.core.logic.output.events;
 
-import ru.kmorozov.gbd.core.logic.extractors.ImageExtractor;
+import ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor;
 import ru.kmorozov.gbd.core.logic.progress.IProgress;
 
 import javax.swing.*;
@@ -10,11 +10,11 @@ import javax.swing.*;
  */
 public class ImageExtractorWorker extends SwingWorker<Void, Void> implements IEventSource {
 
-    private final ImageExtractor extractor;
+    private final GoogleImageExtractor extractor;
 
     private IProgress _processStatus;
 
-    public ImageExtractorWorker(ImageExtractor extractor) {
+    public ImageExtractorWorker(GoogleImageExtractor extractor) {
         this.extractor = extractor;
     }
 

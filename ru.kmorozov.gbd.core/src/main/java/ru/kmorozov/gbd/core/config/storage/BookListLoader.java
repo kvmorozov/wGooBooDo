@@ -1,6 +1,7 @@
 package ru.kmorozov.gbd.core.config.storage;
 
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
+import ru.kmorozov.gbd.core.logic.library.LibraryFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -67,8 +68,8 @@ public class BookListLoader extends BaseLoader {
         return bookIdsList;
     }
 
-    public boolean isValidId(String bookId) {
-        return bookId != null && bookId.length() == 12;
+    private boolean isValidId(String bookId) {
+        return LibraryFactory.isValidId(bookId);
     }
 
     public void updateIndex() {

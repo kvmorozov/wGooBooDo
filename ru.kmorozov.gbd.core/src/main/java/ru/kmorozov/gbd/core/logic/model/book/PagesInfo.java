@@ -38,6 +38,8 @@ public class PagesInfo implements Serializable {
         pagesMap = new ConcurrentHashMap<>(_pages.size());
         pagesList = new LinkedList<>();
 
+        _pages.sort((o1, o2) -> o1.getOrder().compareTo(o2.getOrder()));
+
         PageInfo prevPage = null;
         for (PageInfo page : _pages) {
             addPage(page);

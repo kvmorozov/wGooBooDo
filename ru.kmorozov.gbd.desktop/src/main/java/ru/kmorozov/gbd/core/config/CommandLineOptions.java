@@ -1,7 +1,7 @@
 package ru.kmorozov.gbd.core.config;
 
 import org.apache.commons.cli.*;
-import ru.kmorozov.gbd.core.logic.extractors.ImageExtractor;
+import ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor;
 
 /**
  * Created by km on 06.12.2015.
@@ -79,7 +79,7 @@ public class CommandLineOptions implements IGBDOptions {
     private int getIntOptionValue(String optionName) {
         return commandLine.hasOption(optionName) && commandLine.getOptionValues(optionName).length == 1
                 ? Integer.parseInt(commandLine.getOptionValues(optionName)[0])
-                : ImageExtractor.DEFAULT_PAGE_WIDTH;
+                : GoogleImageExtractor.DEFAULT_PAGE_WIDTH;
     }
 
     private boolean getBoolOptionValue(String optionName) {

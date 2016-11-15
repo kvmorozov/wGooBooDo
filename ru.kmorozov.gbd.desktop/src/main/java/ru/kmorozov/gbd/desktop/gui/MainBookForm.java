@@ -2,7 +2,7 @@ package ru.kmorozov.gbd.desktop.gui;
 
 import ru.kmorozov.gbd.core.config.SystemConfigs;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
-import ru.kmorozov.gbd.core.logic.extractors.ImageExtractor;
+import ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor;
 import ru.kmorozov.gbd.core.logic.model.book.Resolutions;
 import ru.kmorozov.gbd.core.logic.model.log.LogIconColumnRenderer;
 import ru.kmorozov.gbd.core.logic.model.log.LogTableModel;
@@ -74,7 +74,7 @@ public class MainBookForm {
             bMakeBook.setEnabled(false);
 
             ExecutionContext.INSTANCE.addBookContext(new SingleBookProducer(tfBookId.getText()), new ProcessStatus(), new PdfMaker());
-            workerExtractor = new ImageExtractorWorker(new ImageExtractor(ExecutionContext.INSTANCE.getContexts(false).get(0))) {
+            workerExtractor = new ImageExtractorWorker(new GoogleImageExtractor(ExecutionContext.INSTANCE.getContexts(false).get(0))) {
 
                 @Override
                 public void done() {

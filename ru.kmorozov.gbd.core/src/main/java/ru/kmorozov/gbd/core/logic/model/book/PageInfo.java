@@ -3,7 +3,7 @@ package ru.kmorozov.gbd.core.logic.model.book;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.api.client.repackaged.com.google.common.base.Strings;
-import ru.kmorozov.gbd.core.logic.extractors.ImageExtractor;
+import ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor;
 
 import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -84,7 +84,7 @@ public class PageInfo implements Serializable {
     }
 
     public String getImqRqUrl(String bookId, String urlTemplate, int width) {
-        return urlTemplate.replace(ImageExtractor.BOOK_ID_PLACEHOLDER, bookId) + ImageExtractor.IMG_REQUEST_TEMPLATE.replace(ImageExtractor.RQ_PG_PLACEHOLDER, getPid()).replace(ImageExtractor.RQ_SIG_PLACEHOLDER, getSig()).replace(ImageExtractor.RQ_WIDTH_PLACEHOLDER, String.valueOf(width));
+        return urlTemplate.replace(GoogleImageExtractor.BOOK_ID_PLACEHOLDER, bookId) + GoogleImageExtractor.IMG_REQUEST_TEMPLATE.replace(GoogleImageExtractor.RQ_PG_PLACEHOLDER, getPid()).replace(GoogleImageExtractor.RQ_SIG_PLACEHOLDER, getSig()).replace(GoogleImageExtractor.RQ_WIDTH_PLACEHOLDER, String.valueOf(width));
     }
 
     public String getPrefix() {

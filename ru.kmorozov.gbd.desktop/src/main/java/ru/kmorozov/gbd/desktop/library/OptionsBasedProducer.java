@@ -2,6 +2,7 @@ package ru.kmorozov.gbd.desktop.library;
 
 import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.logic.context.IBookListProducer;
+import ru.kmorozov.gbd.core.logic.library.LibraryFactory;
 
 import java.util.Collections;
 import java.util.List;
@@ -19,7 +20,7 @@ public class OptionsBasedProducer implements IBookListProducer {
         String bookId = GBDOptions.getBookId();
         String bookDirName = GBDOptions.getOutputDir();
 
-        if (bookId != null && bookId.length() > 0 && BOOK_LIST_LOADER.isValidId(bookId))
+        if (bookId != null && bookId.length() > 0 && LibraryFactory.isValidId(bookId))
             bookIdsList = Collections.singletonList(bookId);
         else if (bookDirName != null && bookDirName.length() > 0) {
             if (BOOK_LIST_LOADER.isValidDirectory()) {

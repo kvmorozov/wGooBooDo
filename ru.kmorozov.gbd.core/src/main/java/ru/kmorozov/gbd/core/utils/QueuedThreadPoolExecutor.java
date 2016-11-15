@@ -1,5 +1,6 @@
 package ru.kmorozov.gbd.core.utils;
 
+import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.extractors.IUniqueRunnable;
 
 import java.util.Map;
@@ -13,6 +14,8 @@ import java.util.function.Predicate;
  * Created by km on 12.11.2016.
  */
 public class QueuedThreadPoolExecutor<T> extends ThreadPoolExecutor {
+
+    private final static Logger logger = ExecutionContext.INSTANCE.getLogger("Executor");
 
     private final int needProcessCount;
     private final long timeStart;
@@ -40,28 +43,31 @@ public class QueuedThreadPoolExecutor<T> extends ThreadPoolExecutor {
     }
 
     public void terminate(long timeout, TimeUnit unit) {
-        while (uniqueMap.keySet().stream().filter(completeChecker).count() < needProcessCount && System.currentTimeMillis() - timeStart < MAX_LIVE_TIME)
+        Long liveTime = Math.min(unit.toMillis(timeout), MAX_LIVE_TIME);
+        while (uniqueMap.keySet().stream().filter(completeChecker).count() < needProcessCount && System.currentTimeMillis() - timeStart < liveTime)
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
-        shutdown();
-        try {
-            awaitTermination(timeout, unit);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        shutdownNow();
 
         uniqueMap.clear();
     }
 
     @Override
-    public void execute(Runnable command) {
+    public void execute(final Runnable command) {
         if (command instanceof IUniqueRunnable) synchronized (this) {
             T uniqueObj = (T) ((IUniqueRunnable) command).getUniqueObject();
-            if (uniqueMap.put(uniqueObj, (IUniqueRunnable<T>) command) == null) super.execute(command);
+            if (uniqueMap.put(uniqueObj, (IUniqueRunnable<T>) command) == null) super.execute(new Thread(command) {
+
+                @Override
+                public void interrupt() {
+                    logger.severe("Interrupted thread " + command.toString());
+                    super.interrupt();
+                }
+            });
         }
         else super.execute(command);
     }

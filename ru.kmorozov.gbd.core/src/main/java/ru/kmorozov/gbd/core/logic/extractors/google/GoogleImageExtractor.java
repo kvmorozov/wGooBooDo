@@ -1,10 +1,12 @@
-package ru.kmorozov.gbd.core.logic.extractors;
+package ru.kmorozov.gbd.core.logic.extractors.google;
 
 import com.google.api.client.repackaged.com.google.common.base.Strings;
 import org.apache.commons.io.FilenameUtils;
 import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
+import ru.kmorozov.gbd.core.logic.extractors.IImageExtractor;
+import ru.kmorozov.gbd.core.logic.extractors.IUniqueRunnable;
 import ru.kmorozov.gbd.core.logic.model.book.PageInfo;
 import ru.kmorozov.gbd.core.logic.output.consumers.AbstractOutput;
 import ru.kmorozov.gbd.core.logic.output.events.AbstractEventSource;
@@ -29,7 +31,7 @@ import static ru.kmorozov.gbd.core.logic.context.ExecutionContext.INSTANCE;
 /**
  * Created by km on 21.11.2015.
  */
-public class ImageExtractor extends AbstractEventSource implements IUniqueRunnable<BookContext> {
+public class GoogleImageExtractor extends AbstractEventSource implements IUniqueRunnable<BookContext>, IImageExtractor {
 
     private final Logger logger;
 
@@ -53,14 +55,13 @@ public class ImageExtractor extends AbstractEventSource implements IUniqueRunnab
     private final AtomicBoolean processingStarted = new AtomicBoolean(false);
     private List<HttpHostExt> waitingProxy = new CopyOnWriteArrayList<>();
 
-    public ImageExtractor(BookContext bookContext) {
-        logger = INSTANCE.getLogger(ImageExtractor.class, bookContext);
+    public GoogleImageExtractor(BookContext bookContext) {
+        logger = INSTANCE.getLogger(GoogleImageExtractor.class, bookContext);
 
         setProcessStatus(bookContext.getProgress());
         this.bookContext = bookContext;
 
         this.output = INSTANCE.getOutput();
-        bookContext.setExtractor(this);
     }
 
     private void scanDir() {
@@ -166,7 +167,7 @@ public class ImageExtractor extends AbstractEventSource implements IUniqueRunnab
                 return;
             }
 
-            if (proxy.isAvailable()) bookContext.sigExecutor.execute(new PageSigProcessor(bookContext, proxy));
+            if (proxy.isAvailable()) bookContext.sigExecutor.execute(new GooglePageSigProcessor(bookContext, proxy));
 
             int proxyNeeded = INSTANCE.getProxyCount() - proxyReceived.incrementAndGet();
 
@@ -177,7 +178,7 @@ public class ImageExtractor extends AbstractEventSource implements IUniqueRunnab
 
                 bookContext.sigExecutor.terminate(10, TimeUnit.MINUTES);
 
-                bookContext.getPagesStream().filter(page -> !page.dataProcessed.get() && page.getSig() != null).forEach(page -> bookContext.imgExecutor.execute(new PageImgProcessor(bookContext, page, HttpHostExt.NO_PROXY)));
+                bookContext.getPagesStream().filter(page -> !page.dataProcessed.get() && page.getSig() != null).forEach(page -> bookContext.imgExecutor.execute(new GooglePageImgProcessor(bookContext, page, HttpHostExt.NO_PROXY)));
 
                 bookContext.imgExecutor.terminate(20, TimeUnit.MINUTES);
 
@@ -203,5 +204,10 @@ public class ImageExtractor extends AbstractEventSource implements IUniqueRunnab
     @Override
     public BookContext getUniqueObject() {
         return bookContext;
+    }
+
+    @Override
+    public String toString() {
+        return "Extractor:" + bookContext.toString();
     }
 }

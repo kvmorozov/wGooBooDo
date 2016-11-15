@@ -1,10 +1,12 @@
-package ru.kmorozov.gbd.core.logic.extractors;
+package ru.kmorozov.gbd.core.logic.extractors.google;
 
 import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.logic.Proxy.AbstractProxyListProvider;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.connectors.Response;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
+import ru.kmorozov.gbd.core.logic.extractors.AbstractHttpProcessor;
+import ru.kmorozov.gbd.core.logic.extractors.IUniqueRunnable;
 import ru.kmorozov.gbd.core.logic.model.book.PageInfo;
 import ru.kmorozov.gbd.core.utils.Images;
 import ru.kmorozov.gbd.core.utils.Logger;
@@ -17,7 +19,7 @@ import static ru.kmorozov.gbd.core.logic.context.ExecutionContext.INSTANCE;
 /**
  * Created by km on 21.11.2015.
  */
-class PageImgProcessor extends AbstractHttpProcessor implements IUniqueRunnable<PageInfo> {
+class GooglePageImgProcessor extends AbstractHttpProcessor implements IUniqueRunnable<PageInfo> {
 
     private static final String IMG_ERROR_TEMPLATE = "No img at %s with proxy %s";
 
@@ -28,11 +30,11 @@ class PageImgProcessor extends AbstractHttpProcessor implements IUniqueRunnable<
     private final BookContext bookContext;
     private final Logger logger;
 
-    public PageImgProcessor(BookContext bookContext, PageInfo page, HttpHostExt usedProxy) {
+    public GooglePageImgProcessor(BookContext bookContext, PageInfo page, HttpHostExt usedProxy) {
         this.bookContext = bookContext;
         this.page = page;
         this.usedProxy = usedProxy;
-        this.logger = INSTANCE.getLogger(PageImgProcessor.class, bookContext);
+        this.logger = INSTANCE.getLogger(GooglePageImgProcessor.class, bookContext);
     }
 
     private boolean processImage(String imgUrl, HttpHostExt proxy) {
@@ -132,7 +134,7 @@ class PageImgProcessor extends AbstractHttpProcessor implements IUniqueRunnable<
     }
 
     private boolean processImageWithProxy(HttpHostExt proxy) {
-        return !(!proxy.isLocal() && !proxy.isAvailable()) && processImage(page.getImqRqUrl(bookContext.getBookInfo().getBookId(), ImageExtractor.HTTPS_TEMPLATE, GBDOptions.getImageWidth()), proxy);
+        return !(!proxy.isLocal() && !proxy.isAvailable()) && processImage(page.getImqRqUrl(bookContext.getBookInfo().getBookId(), GoogleImageExtractor.HTTPS_TEMPLATE, GBDOptions.getImageWidth()), proxy);
     }
 
     @Override
@@ -153,5 +155,10 @@ class PageImgProcessor extends AbstractHttpProcessor implements IUniqueRunnable<
     @Override
     public PageInfo getUniqueObject() {
         return page;
+    }
+
+    @Override
+    public String toString() {
+        return "Page processor:" + bookContext.toString();
     }
 }

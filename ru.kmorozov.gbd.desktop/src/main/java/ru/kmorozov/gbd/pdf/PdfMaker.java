@@ -127,4 +127,9 @@ public class PdfMaker implements IPostProcessor {
     public BookContext getUniqueObject() {
         return bookContext;
     }
+
+    @Override
+    public String toString() {
+        return "Pdf maker:" + bookContext.toString();
+    }
 }
