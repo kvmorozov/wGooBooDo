@@ -1,14 +1,15 @@
-package ru.kmorozov.gbd.core.logic.model.book;
+package ru.kmorozov.gbd.core.logic.model.book.google;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import ru.kmorozov.gbd.core.logic.model.book.base.IBookData;
 
 import java.io.Serializable;
 
 /**
  * Created by km on 28.11.2015.
  */
-public class BookData implements Serializable {
+public class BookData implements IBookData, Serializable {
 
     @JsonProperty("fullview") private boolean fullview;
     @JsonProperty("page_width") private int pageWidth;
@@ -41,12 +42,14 @@ public class BookData implements Serializable {
     @JsonProperty("my_library_url") private String myLibraryUrl;
     @JsonProperty("is_magazine") private boolean magazine;
     @JsonProperty("is_public_domain") private boolean publicDomain;
-    @JsonProperty("last_page") private PageInfo lastPage;
+    @JsonProperty("last_page") private GogglePageInfo lastPage;
 
+    @Override
     public String getTitle() {
         return title;
     }
 
+    @Override
     public String getVolumeId() {
         return volumeId;
     }

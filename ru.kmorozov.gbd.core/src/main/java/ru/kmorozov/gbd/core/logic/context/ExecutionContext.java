@@ -2,8 +2,8 @@ package ru.kmorozov.gbd.core.logic.context;
 
 import ru.kmorozov.gbd.core.logic.Proxy.AbstractProxyListProvider;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
-import ru.kmorozov.gbd.core.logic.extractors.IPostProcessor;
-import ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor;
+import ru.kmorozov.gbd.core.logic.extractors.base.IImageExtractor;
+import ru.kmorozov.gbd.core.logic.extractors.base.IPostProcessor;
 import ru.kmorozov.gbd.core.logic.output.consumers.AbstractOutput;
 import ru.kmorozov.gbd.core.logic.progress.IProgress;
 import ru.kmorozov.gbd.core.utils.Logger;
@@ -96,15 +96,15 @@ public class ExecutionContext {
         pdfExecutor = new QueuedThreadPoolExecutor<>(bookContextMap.size(), 5, BookContext::isPdfCompleted);
 
         for (BookContext bookContext : getContexts(true)) {
-            GoogleImageExtractor extractor = bookContext.getExtractor();
+            IImageExtractor extractor = bookContext.getExtractor();
             extractor.newProxyEvent(HttpHostExt.NO_PROXY);
             bookExecutor.execute(extractor);
         }
 
         AbstractProxyListProvider.getInstance().processProxyList();
 
-        bookExecutor.terminate(1, TimeUnit.HOURS);
-        pdfExecutor.terminate(1, TimeUnit.HOURS);
+        bookExecutor.terminate(10, TimeUnit.MINUTES);
+        pdfExecutor.terminate(10, TimeUnit.MINUTES);
 
         BOOK_LIST_LOADER.updateIndex();
         BOOK_CTX_LOADER.updateContext();

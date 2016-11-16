@@ -8,10 +8,10 @@ import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.connectors.Response;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
-import ru.kmorozov.gbd.core.logic.extractors.AbstractHttpProcessor;
-import ru.kmorozov.gbd.core.logic.extractors.IUniqueRunnable;
-import ru.kmorozov.gbd.core.logic.model.book.PageInfo;
-import ru.kmorozov.gbd.core.logic.model.book.PagesInfo;
+import ru.kmorozov.gbd.core.logic.extractors.base.AbstractHttpProcessor;
+import ru.kmorozov.gbd.core.logic.extractors.base.IUniqueRunnable;
+import ru.kmorozov.gbd.core.logic.model.book.google.GogglePageInfo;
+import ru.kmorozov.gbd.core.logic.model.book.google.GogglePagesInfo;
 import ru.kmorozov.gbd.core.logic.progress.IProgress;
 import ru.kmorozov.gbd.core.utils.Mapper;
 
@@ -39,7 +39,7 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
         this.proxy = proxy;
     }
 
-    private void getSig(PageInfo page) {
+    private void getSig(GogglePageInfo page) {
         if (!proxy.isAvailable()) return;
 
         if (page.dataProcessed.get() || page.getSig() != null || page.sigChecked.get() || page.loadingStarted.get())
@@ -56,12 +56,12 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
             }
 
             String respStr = IOUtils.toString(resp.getContent(), Charset.defaultCharset());
-            PagesInfo framePages = Mapper.objectMapper.readValue(respStr, PagesInfo.class);
+            GogglePagesInfo framePages = Mapper.objectMapper.readValue(respStr, GogglePagesInfo.class);
 
-            PageInfo[] pages = framePages.getPages();
-            for (PageInfo framePage : pages)
+            GogglePageInfo[] pages = framePages.getPages();
+            for (GogglePageInfo framePage : pages)
                 if (framePage.getOrder() >= page.getOrder() && framePage.getSrc() != null) {
-                    PageInfo _page = bookContext.getBookInfo().getPages().getPageByPid(framePage.getPid());
+                    GogglePageInfo _page = bookContext.getBookInfo().getPages().getPageByPid(framePage.getPid());
 
                     if (_page.dataProcessed.get() || _page.getSig() != null || _page.sigChecked.get()) continue;
 

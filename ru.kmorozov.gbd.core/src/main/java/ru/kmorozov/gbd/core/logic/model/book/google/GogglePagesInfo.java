@@ -1,9 +1,10 @@
-package ru.kmorozov.gbd.core.logic.model.book;
+package ru.kmorozov.gbd.core.logic.model.book.google;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import ru.kmorozov.gbd.core.logic.model.book.base.IPagesInfo;
 import ru.kmorozov.gbd.core.utils.Logger;
 
 import java.io.Serializable;
@@ -16,32 +17,33 @@ import static ru.kmorozov.gbd.core.logic.context.ExecutionContext.INSTANCE;
 /**
  * Created by km on 21.11.2015.
  */
-public class PagesInfo implements Serializable {
+public class GogglePagesInfo implements IPagesInfo, Serializable {
 
-    private static final Logger logger = INSTANCE.getLogger(PagesInfo.class);
+    private static final Logger logger = INSTANCE.getLogger(GogglePagesInfo.class);
 
     @JsonProperty("page")
-    private PageInfo[] pages;
+    private GogglePageInfo[] pages;
     @JsonProperty("prefix")
     private String prefix;
 
-    private Map<String, PageInfo> pagesMap;
-    private LinkedList<PageInfo> pagesList;
+    private Map<String, GogglePageInfo> pagesMap;
+    private LinkedList<GogglePageInfo> pagesList;
 
-    private void addPage(PageInfo page) {
+    private void addPage(GogglePageInfo page) {
         pagesMap.put(page.getPid(), page);
         pagesList.add(page);
     }
 
+    @Override
     public void build() {
-        List<PageInfo> _pages = Arrays.asList(pages);
+        List<GogglePageInfo> _pages = Arrays.asList(pages);
         pagesMap = new ConcurrentHashMap<>(_pages.size());
         pagesList = new LinkedList<>();
 
-        _pages.sort((o1, o2) -> o1.getOrder().compareTo(o2.getOrder()));
+        _pages.sort(GogglePageInfo::compareTo);
 
-        PageInfo prevPage = null;
-        for (PageInfo page : _pages) {
+        GogglePageInfo prevPage = null;
+        for (GogglePageInfo page : _pages) {
             addPage(page);
 
             if (prevPage != null && page.getOrder() - prevPage.getOrder() > 1) fillGap(prevPage, page);
@@ -50,7 +52,7 @@ public class PagesInfo implements Serializable {
         }
     }
 
-    private void fillGap(PageInfo beginGap, PageInfo endGap) {
+    private void fillGap(GogglePageInfo beginGap, GogglePageInfo endGap) {
         String beginPagePrefix = beginGap.getPrefix();
         String endPagePrefix = endGap.getPrefix();
 
@@ -63,7 +65,7 @@ public class PagesInfo implements Serializable {
         if (beginPagePrefix.equals(endPagePrefix))
             for (int index = beginGap.getOrder() + 1; index < endGap.getOrder(); index++) {
                 String pid = beginPageNum > 0 ? beginPagePrefix + (beginPageNum + index - beginGap.getOrder()) : beginGap.getPid() + "_" + index;
-                PageInfo gapPage = new PageInfo(pid, index);
+                GogglePageInfo gapPage = new GogglePageInfo(pid, index);
                 addPage(gapPage);
             }
         else {
@@ -74,7 +76,7 @@ public class PagesInfo implements Serializable {
                     if (endPageNum - index < 1) break;
                     String newPagePidFromEnd = endPagePrefix + (endPageNum - index);
                     if (!pagesMap.containsKey(newPagePidFromEnd) && !beginPagePrefix.contains(newPagePidFromEnd)) {
-                        PageInfo gapPage = new PageInfo(newPagePidFromEnd, endGap.getOrder() - index);
+                        GogglePageInfo gapPage = new GogglePageInfo(newPagePidFromEnd, endGap.getOrder() - index);
                         addPage(gapPage);
                         pagesCreated++;
                     } else break;
@@ -83,7 +85,7 @@ public class PagesInfo implements Serializable {
                     pagesToCreate = pagesToCreate - pagesCreated;
                     for (int index = 1; index <= pagesToCreate; index++) {
                         String newPagePidFromBegin = beginPagePrefix + (beginPageNum + index);
-                        PageInfo gapPage = new PageInfo(newPagePidFromBegin, beginGap.getOrder() + index);
+                        GogglePageInfo gapPage = new GogglePageInfo(newPagePidFromBegin, beginGap.getOrder() + index);
                         addPage(gapPage);
                     }
                 }
@@ -93,76 +95,76 @@ public class PagesInfo implements Serializable {
 
             if (beginPageNum > 0 && endPageNum > 0)
                 for (int index = beginGap.getOrder() + 1; index < endGap.getOrder() - endPageNum; index++) {
-                    PageInfo gapPage = new PageInfo(beginPagePrefix + String.valueOf(index + 1), index);
+                    GogglePageInfo gapPage = new GogglePageInfo(beginPagePrefix + String.valueOf(index + 1), index);
                     addPage(gapPage);
                 }
         }
 
-        pagesList.sort((o1, o2) -> o1.getOrder().compareTo(o2.getOrder()));
+        pagesList.sort(GogglePageInfo::compareTo);
     }
 
-    public PageInfo getPageByPid(String pid) {
+    @Override
+    public GogglePageInfo getPageByPid(String pid) {
         return pagesMap.get(pid);
     }
 
-    public PageInfo[] getPages() {
-        return pagesMap.values().toArray(new PageInfo[pagesMap.size()]);
+    @Override
+    public GogglePageInfo[] getPages() {
+        return pagesMap.values().toArray(new GogglePageInfo[pagesMap.size()]);
     }
 
-    public void setPages(PageInfo[] pages) {
+    public void setPages(GogglePageInfo[] pages) {
         this.pages = pages;
         this.pagesMap = new HashMap<>();
 
-        if (pages != null) for (PageInfo page : pages)
+        if (pages != null) for (GogglePageInfo page : pages)
             pagesMap.put(page.getPid(), page);
     }
 
     @JsonIgnore
+    @Override
     public String getMissingPagesList() {
-        return getListByCondition(pageInfo -> pageInfo.fileExists.get());
+        Predicate<GogglePageInfo> predicate = pageInfo -> !pageInfo.fileExists.get();
+        return getListByCondition(predicate);
     }
 
-    private Pair<PageInfo, PageInfo> createPair(PageInfo p1, PageInfo p2) {
+    private Pair<GogglePageInfo, GogglePageInfo> createPair(GogglePageInfo p1, GogglePageInfo p2) {
         return p1.getOrder() < p2.getOrder() ? new ImmutablePair(p1, p2) : new ImmutablePair(p2, p1);
     }
 
-    private String getListByCondition(Predicate<PageInfo> condition) {
+    private String getListByCondition(Predicate<GogglePageInfo> condition) {
         StringBuilder bList = new StringBuilder();
-        List<Pair<PageInfo, PageInfo>> pairs = new ArrayList<>();
+        List<Pair<GogglePageInfo, GogglePageInfo>> pairs = new ArrayList<>();
 
-        PageInfo blockStart = null, prevPage = null, currentPage;
-        int pagesCountByCondition = 0, total = 0;
+        GogglePageInfo blockStart = null, prevPage = null;
 
-        ListIterator<PageInfo> itr = pagesList.listIterator();
-        while (itr.hasNext()) {
-            currentPage = itr.next();
-            total++;
+        long filteredCount = pagesList.stream().filter(condition).count();
+        GogglePageInfo lastPage = pagesList.getLast();
 
+        for (GogglePageInfo currentPage : pagesList) {
             if (condition.test(currentPage)) if (blockStart == null) {
             } else {
                 pairs.add(createPair(blockStart, prevPage));
                 blockStart = null;
             }
             else {
-                pagesCountByCondition++;
-
                 if (blockStart == null) blockStart = currentPage;
                 else {
                 }
             }
 
-            if (!itr.hasNext() && blockStart != null) pairs.add(createPair(blockStart, currentPage));
+            if (currentPage.equals(lastPage) && blockStart != null) pairs.add(createPair(blockStart, currentPage));
 
             prevPage = currentPage;
         }
 
-        for (Pair<PageInfo, PageInfo> pair : pairs)
+        for (Pair<GogglePageInfo, GogglePageInfo> pair : pairs)
             if (pair.getLeft() == pair.getRight()) bList.append(String.format("%s, ", pair.getLeft().getPid()));
             else bList.append(String.format("%s-%s, ", pair.getLeft().getPid(), pair.getRight().getPid()));
 
         if (bList.length() > 0) {
             bList.deleteCharAt(bList.length() - 1).deleteCharAt(bList.length() - 1);
-            bList.append(String.format(". Total = %d/%d", pagesCountByCondition, total));
+            bList.append(String.format(". Total = %d/%d", filteredCount, pagesList.size()));
         }
 
         return bList.toString();

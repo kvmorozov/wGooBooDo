@@ -1,4 +1,4 @@
-package ru.kmorozov.gbd.core.logic.extractors;
+package ru.kmorozov.gbd.core.logic.extractors.base;
 
 import ru.kmorozov.gbd.core.logic.context.BookContext;
 

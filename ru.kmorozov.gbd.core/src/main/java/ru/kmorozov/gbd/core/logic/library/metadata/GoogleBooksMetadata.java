@@ -1,7 +1,7 @@
 package ru.kmorozov.gbd.core.logic.library.metadata;
 
 import ru.kmorozov.gbd.core.logic.context.BookContext;
-import ru.kmorozov.gbd.core.logic.extractors.IImageExtractor;
+import ru.kmorozov.gbd.core.logic.extractors.base.IImageExtractor;
 import ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor;
 import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata;
 

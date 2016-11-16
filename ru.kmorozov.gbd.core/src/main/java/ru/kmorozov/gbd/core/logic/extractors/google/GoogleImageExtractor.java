@@ -5,13 +5,10 @@ import org.apache.commons.io.FilenameUtils;
 import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
-import ru.kmorozov.gbd.core.logic.extractors.IImageExtractor;
-import ru.kmorozov.gbd.core.logic.extractors.IUniqueRunnable;
-import ru.kmorozov.gbd.core.logic.model.book.PageInfo;
-import ru.kmorozov.gbd.core.logic.output.consumers.AbstractOutput;
-import ru.kmorozov.gbd.core.logic.output.events.AbstractEventSource;
+import ru.kmorozov.gbd.core.logic.extractors.base.AbstractImageExtractor;
+import ru.kmorozov.gbd.core.logic.model.book.google.BookData;
+import ru.kmorozov.gbd.core.logic.model.book.google.GogglePageInfo;
 import ru.kmorozov.gbd.core.utils.Images;
-import ru.kmorozov.gbd.core.utils.Logger;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -19,9 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -31,9 +26,7 @@ import static ru.kmorozov.gbd.core.logic.context.ExecutionContext.INSTANCE;
 /**
  * Created by km on 21.11.2015.
  */
-public class GoogleImageExtractor extends AbstractEventSource implements IUniqueRunnable<BookContext>, IImageExtractor {
-
-    private final Logger logger;
+public class GoogleImageExtractor extends AbstractImageExtractor {
 
     public static final int DEFAULT_PAGE_WIDTH = 1280;
     public static final String HTTP_TEMPLATE = "http://books.google.ru/books?id=%BOOK_ID%";
@@ -47,21 +40,12 @@ public class GoogleImageExtractor extends AbstractEventSource implements IUnique
     public static final String PAGES_REQUEST_TEMPLATE = "&lpg=PP1&hl=en&pg=%PG%&jscmd=click3";
     public static final String IMG_REQUEST_TEMPLATE = "&pg=%PG%&img=1&zoom=3&hl=ru&sig=%SIG%&w=%WIDTH%";
 
-    private final AbstractOutput output;
-    private final BookContext bookContext;
-
     private final AtomicInteger proxyReceived = new AtomicInteger(0);
-    private final AtomicBoolean initComplete = new AtomicBoolean(false);
     private final AtomicBoolean processingStarted = new AtomicBoolean(false);
-    private List<HttpHostExt> waitingProxy = new CopyOnWriteArrayList<>();
 
     public GoogleImageExtractor(BookContext bookContext) {
+        super(bookContext);
         logger = INSTANCE.getLogger(GoogleImageExtractor.class, bookContext);
-
-        setProcessStatus(bookContext.getProgress());
-        this.bookContext = bookContext;
-
-        this.output = INSTANCE.getOutput();
     }
 
     private void scanDir() {
@@ -72,7 +56,7 @@ public class GoogleImageExtractor extends AbstractEventSource implements IUnique
                 if (Images.isImageFile(filePath)) {
                     String fileName = FilenameUtils.getBaseName(filePath.toString());
                     String[] nameParts = fileName.split("_");
-                    PageInfo _page = bookContext.getBookInfo().getPages().getPageByPid(nameParts[1]);
+                    GogglePageInfo _page = bookContext.getBookInfo().getPages().getPageByPid(nameParts[1]);
                     if (_page != null) {
                         try {
                             if (GBDOptions.reloadImages()) {
@@ -109,39 +93,17 @@ public class GoogleImageExtractor extends AbstractEventSource implements IUnique
     }
 
     @Override
-    public void run() {
-        process();
-    }
-
     public void process() {
         if (!bookContext.started.compareAndSet(false, true)) return;
 
-        if (!Strings.isNullOrEmpty(bookContext.getBookInfo().getBookData().getFlags().getDownloadPdfUrl())) {
+        if (!Strings.isNullOrEmpty(((BookData) bookContext.getBookInfo().getBookData()).getFlags().getDownloadPdfUrl())) {
             logger.severe("There is direct url to download book. DIY!");
             return;
         }
 
         output.receiveBookInfo(Objects.requireNonNull(bookContext.getBookInfo()));
 
-        String baseOutputDirPath = GBDOptions.getOutputDir();
-        if (baseOutputDirPath == null) return;
-
-        File baseOutputDir = new File(baseOutputDirPath);
-        if (!baseOutputDir.exists()) if (!baseOutputDir.mkdir()) return;
-
-        logger.info(INSTANCE.isSingleMode() ? String.format("Working with %s", bookContext.getBookInfo().getBookData().getTitle()) : "Starting...");
-
-        bookContext.setOutputDir(new File(baseOutputDirPath + "\\" + bookContext.getBookInfo().getBookData().getTitle().replace(":", "").replace("<", "").replace(">", "").replace("/", ".") + " " + bookContext.getBookInfo().getBookData().getVolumeId()));
-        File[] files = bookContext.getOutputDir().listFiles();
-        bookContext.getProgress().resetMaxValue(files == null ? 0 : files.length);
-
-        if (!bookContext.getOutputDir().exists()) {
-            boolean dirResult = bookContext.getOutputDir().mkdir();
-            if (!dirResult) {
-                logger.severe(String.format("Invalid book title: %s", bookContext.getBookInfo().getBookData().getTitle()));
-                return;
-            }
-        }
+        prepareDirectory();
 
         bookContext.getBookInfo().getPages().build();
         scanDir();
@@ -176,11 +138,11 @@ public class GoogleImageExtractor extends AbstractEventSource implements IUnique
 
                 INSTANCE.updateBlacklist();
 
-                bookContext.sigExecutor.terminate(10, TimeUnit.MINUTES);
+                bookContext.sigExecutor.terminate(3, TimeUnit.MINUTES);
 
                 bookContext.getPagesStream().filter(page -> !page.dataProcessed.get() && page.getSig() != null).forEach(page -> bookContext.imgExecutor.execute(new GooglePageImgProcessor(bookContext, page, HttpHostExt.NO_PROXY)));
 
-                bookContext.imgExecutor.terminate(20, TimeUnit.MINUTES);
+                bookContext.imgExecutor.terminate(5, TimeUnit.MINUTES);
 
                 INSTANCE.updateProxyList();
 
@@ -197,17 +159,8 @@ public class GoogleImageExtractor extends AbstractEventSource implements IUnique
         }
     }
 
+    @Override
     public void newProxyEvent(HttpHostExt proxy) {
         (new Thread(new EventProcessor(proxy))).start();
-    }
-
-    @Override
-    public BookContext getUniqueObject() {
-        return bookContext;
-    }
-
-    @Override
-    public String toString() {
-        return "Extractor:" + bookContext.toString();
     }
 }

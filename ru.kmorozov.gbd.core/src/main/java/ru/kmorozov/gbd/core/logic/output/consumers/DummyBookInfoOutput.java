@@ -1,6 +1,6 @@
 package ru.kmorozov.gbd.core.logic.output.consumers;
 
-import ru.kmorozov.gbd.core.logic.model.book.BookInfo;
+import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
 import ru.kmorozov.gbd.core.logic.output.listeners.DummyLogEventListener;
 
 /**

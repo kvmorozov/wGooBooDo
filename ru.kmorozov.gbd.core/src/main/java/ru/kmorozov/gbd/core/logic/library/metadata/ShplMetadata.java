@@ -1,7 +1,8 @@
 package ru.kmorozov.gbd.core.logic.library.metadata;
 
 import ru.kmorozov.gbd.core.logic.context.BookContext;
-import ru.kmorozov.gbd.core.logic.extractors.IImageExtractor;
+import ru.kmorozov.gbd.core.logic.extractors.base.IImageExtractor;
+import ru.kmorozov.gbd.core.logic.extractors.shpl.ShplImageExtractor;
 import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata;
 
 /**
@@ -21,6 +22,6 @@ public class ShplMetadata implements ILibraryMetadata {
 
     @Override
     public IImageExtractor getExtractor(BookContext bookContext) {
-        return null;
+        return new ShplImageExtractor(bookContext);
     }
 }

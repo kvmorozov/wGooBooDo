@@ -1,4 +1,4 @@
-package ru.kmorozov.gbd.core.logic.model.book;
+package ru.kmorozov.gbd.core.logic.model.book.google;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

@@ -1,4 +1,4 @@
-package ru.kmorozov.gbd.core.logic.extractors;
+package ru.kmorozov.gbd.core.logic.extractors.base;
 
 import com.google.api.client.http.HttpStatusCodes;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;

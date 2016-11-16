@@ -1,12 +1,12 @@
 package ru.kmorozov.gbd.core.logic.context;
 
-import ru.kmorozov.gbd.core.logic.extractors.BookInfoExtractor;
-import ru.kmorozov.gbd.core.logic.extractors.IPostProcessor;
-import ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor;
+import ru.kmorozov.gbd.core.logic.extractors.google.GoogleBookInfoExtractor;
+import ru.kmorozov.gbd.core.logic.extractors.base.IImageExtractor;
+import ru.kmorozov.gbd.core.logic.extractors.base.IPostProcessor;
 import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata;
 import ru.kmorozov.gbd.core.logic.library.LibraryFactory;
-import ru.kmorozov.gbd.core.logic.model.book.BookInfo;
-import ru.kmorozov.gbd.core.logic.model.book.PageInfo;
+import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
+import ru.kmorozov.gbd.core.logic.model.book.google.GogglePageInfo;
 import ru.kmorozov.gbd.core.logic.progress.IProgress;
 import ru.kmorozov.gbd.core.utils.QueuedThreadPoolExecutor;
 
@@ -33,14 +33,14 @@ public class BookContext {
     private String baseUrl;
     private final BookInfo bookInfo;
     private File outputDir;
-    private GoogleImageExtractor extractor;
+    private IImageExtractor extractor;
     private final IProgress progress;
     private final IPostProcessor postProcessor;
     private long pagesBefore;
     private final ILibraryMetadata metadata;
 
     BookContext(String bookId, IProgress progress, IPostProcessor postProcessor) {
-        this.bookInfo = (new BookInfoExtractor(bookId)).getBookInfo();
+        this.bookInfo = (new GoogleBookInfoExtractor(bookId)).getBookInfo();
         this.progress = progress;
         this.postProcessor = postProcessor;
         this.metadata = LibraryFactory.getMetadata(bookId);
@@ -91,11 +91,11 @@ public class BookContext {
         return pagesBefore;
     }
 
-    public Stream<PageInfo> getPagesStream() {
+    public Stream<GogglePageInfo> getPagesStream() {
         return Arrays.asList(bookInfo.getPages().getPages()).stream();
     }
 
-    public Stream<PageInfo> getPagesParallelStream() {
+    public Stream<GogglePageInfo> getPagesParallelStream() {
         return Arrays.asList(bookInfo.getPages().getPages()).parallelStream();
     }
 
@@ -104,9 +104,9 @@ public class BookContext {
         return bookInfo.getBookId() + " " + bookInfo.getBookData().getTitle();
     }
 
-    public GoogleImageExtractor getExtractor() {
+    public IImageExtractor getExtractor() {
         if (extractor == null)
-            extractor = (GoogleImageExtractor) metadata.getExtractor(this);
+            extractor = metadata.getExtractor(this);
 
         return extractor;
     }

@@ -1,7 +1,7 @@
 package ru.kmorozov.gbd.core.utils;
 
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
-import ru.kmorozov.gbd.core.logic.extractors.IUniqueRunnable;
+import ru.kmorozov.gbd.core.logic.extractors.base.IUniqueRunnable;
 
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -44,12 +44,13 @@ public class QueuedThreadPoolExecutor<T> extends ThreadPoolExecutor {
 
     public void terminate(long timeout, TimeUnit unit) {
         Long liveTime = Math.min(unit.toMillis(timeout), MAX_LIVE_TIME);
-        while (uniqueMap.keySet().stream().filter(completeChecker).count() < needProcessCount && System.currentTimeMillis() - timeStart < liveTime)
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        while (true) try {
+            if (uniqueMap.keySet().stream().filter(completeChecker).count() >= needProcessCount || System.currentTimeMillis() - timeStart > liveTime)
+                break;
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         shutdownNow();
 

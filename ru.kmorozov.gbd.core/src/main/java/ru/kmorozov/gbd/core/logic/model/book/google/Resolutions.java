@@ -1,4 +1,4 @@
-package ru.kmorozov.gbd.core.logic.model.book;
+package ru.kmorozov.gbd.core.logic.model.book.google;
 
 /**
  * Created by km on 12.12.2015.

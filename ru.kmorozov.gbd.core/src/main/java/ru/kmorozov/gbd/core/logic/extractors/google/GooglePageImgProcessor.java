@@ -5,9 +5,9 @@ import ru.kmorozov.gbd.core.logic.Proxy.AbstractProxyListProvider;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.connectors.Response;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
-import ru.kmorozov.gbd.core.logic.extractors.AbstractHttpProcessor;
-import ru.kmorozov.gbd.core.logic.extractors.IUniqueRunnable;
-import ru.kmorozov.gbd.core.logic.model.book.PageInfo;
+import ru.kmorozov.gbd.core.logic.extractors.base.AbstractHttpProcessor;
+import ru.kmorozov.gbd.core.logic.extractors.base.IUniqueRunnable;
+import ru.kmorozov.gbd.core.logic.model.book.google.GogglePageInfo;
 import ru.kmorozov.gbd.core.utils.Images;
 import ru.kmorozov.gbd.core.utils.Logger;
 
@@ -19,18 +19,18 @@ import static ru.kmorozov.gbd.core.logic.context.ExecutionContext.INSTANCE;
 /**
  * Created by km on 21.11.2015.
  */
-class GooglePageImgProcessor extends AbstractHttpProcessor implements IUniqueRunnable<PageInfo> {
+class GooglePageImgProcessor extends AbstractHttpProcessor implements IUniqueRunnable<GogglePageInfo> {
 
     private static final String IMG_ERROR_TEMPLATE = "No img at %s with proxy %s";
 
     private static final int dataChunk = 4096;
 
-    private final PageInfo page;
+    private final GogglePageInfo page;
     private final HttpHostExt usedProxy;
     private final BookContext bookContext;
     private final Logger logger;
 
-    public GooglePageImgProcessor(BookContext bookContext, PageInfo page, HttpHostExt usedProxy) {
+    public GooglePageImgProcessor(BookContext bookContext, GogglePageInfo page, HttpHostExt usedProxy) {
         this.bookContext = bookContext;
         this.page = page;
         this.usedProxy = usedProxy;
@@ -153,7 +153,7 @@ class GooglePageImgProcessor extends AbstractHttpProcessor implements IUniqueRun
     }
 
     @Override
-    public PageInfo getUniqueObject() {
+    public GogglePageInfo getUniqueObject() {
         return page;
     }
 

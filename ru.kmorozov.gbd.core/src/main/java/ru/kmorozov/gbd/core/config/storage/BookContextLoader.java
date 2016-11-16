@@ -2,7 +2,7 @@ package ru.kmorozov.gbd.core.config.storage;
 
 import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
-import ru.kmorozov.gbd.core.logic.model.book.BookInfo;
+import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
 import ru.kmorozov.gbd.core.utils.Mapper;
 
 import java.io.File;

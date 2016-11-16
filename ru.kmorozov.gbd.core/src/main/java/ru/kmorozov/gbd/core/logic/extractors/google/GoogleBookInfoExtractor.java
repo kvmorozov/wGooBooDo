@@ -1,37 +1,29 @@
-package ru.kmorozov.gbd.core.logic.extractors;
+package ru.kmorozov.gbd.core.logic.extractors.google;
 
-import org.apache.commons.io.IOUtils;
-import org.jsoup.Connection;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 import ru.kmorozov.gbd.core.logic.Proxy.AbstractProxyListProvider;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
-import ru.kmorozov.gbd.core.logic.connectors.Response;
-import ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor;
-import ru.kmorozov.gbd.core.logic.model.book.BookData;
-import ru.kmorozov.gbd.core.logic.model.book.BookInfo;
-import ru.kmorozov.gbd.core.logic.model.book.PagesInfo;
-import ru.kmorozov.gbd.core.utils.HttpConnections;
+import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookExtractor;
+import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
+import ru.kmorozov.gbd.core.logic.model.book.google.BookData;
+import ru.kmorozov.gbd.core.logic.model.book.google.GogglePagesInfo;
 import ru.kmorozov.gbd.core.utils.Logger;
 import ru.kmorozov.gbd.core.utils.Mapper;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
-import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.List;
 
-import static ru.kmorozov.gbd.core.config.storage.BookContextLoader.BOOK_CTX_LOADER;
 import static ru.kmorozov.gbd.core.logic.context.ExecutionContext.INSTANCE;
 import static ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor.*;
 
 /**
  * Created by km on 08.10.2016.
  */
-public class BookInfoExtractor extends AbstractHttpProcessor {
+public class GoogleBookInfoExtractor extends AbstractBookExtractor {
 
     private static final Logger logger = INSTANCE.getLogger(GoogleImageExtractor.class);
 
@@ -41,19 +33,22 @@ public class BookInfoExtractor extends AbstractHttpProcessor {
     private static final String BOOK_INFO_END_TAG = "enableUserFeedbackUI";
     private static final String OPEN_PAGE_ADD_URL = "&printsec=frontcover&hl=ru#v=onepage&q&f=false";
 
-    private BookInfo bookInfo;
-    private String bookUrl;
-    private final String bookId;
-
-    public BookInfoExtractor(String bookId) {
-        this.bookId = bookId;
-        bookUrl = HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, bookId) + OPEN_PAGE_ADD_URL;
-
-        BookInfo storedBookInfo = BOOK_CTX_LOADER.getBookInfo(bookId);
-        bookInfo = storedBookInfo == null ? findBookInfo() : storedBookInfo;
+    public GoogleBookInfoExtractor(String bookId) {
+        super(bookId);
     }
 
-    private BookInfo findBookInfo() {
+    @Override
+    protected String getBookUrl() {
+        return HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, bookId) + OPEN_PAGE_ADD_URL;
+    }
+
+    @Override
+    protected String getReserveBookUrl() {
+        return HTTP_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, bookId) + OPEN_PAGE_ADD_URL;
+    }
+
+    @Override
+    protected BookInfo findBookInfo() {
         Document defaultDocument = getDocumentWithoutProxy();
         try {
             BookInfo defaultBookInfo = extractBookInfo(defaultDocument);
@@ -78,48 +73,6 @@ public class BookInfoExtractor extends AbstractHttpProcessor {
         return null;
     }
 
-    private Document getDocumentWithProxy(HttpHostExt proxy) {
-        Response resp = getContent(bookUrl, proxy, true);
-
-        if (resp == null) return null;
-        else {
-            try {
-                String respStr = IOUtils.toString(resp.getContent(), Charset.defaultCharset());
-                return Jsoup.parse(respStr);
-            } catch (IOException e) {
-                return null;
-            }
-        }
-    }
-
-    private Document getDocumentWithoutProxy() {
-        Connection.Response res = null;
-        Document doc = null;
-
-        try {
-            res = Jsoup.connect(bookUrl).userAgent(HttpConnections.USER_AGENT).followRedirects(false).method(Connection.Method.GET).execute();
-        } catch (UnknownHostException uhe) {
-            logger.severe("Not connected to Internet!");
-        } catch (Exception ex) {
-            try {
-                res = Jsoup.connect(HTTP_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, bookId) + OPEN_PAGE_ADD_URL).userAgent(HttpConnections.USER_AGENT).method(Connection.Method.GET).execute();
-            } catch (Exception ex1) {
-                throw new RuntimeException(ex1);
-            }
-        }
-
-        try {
-            if (res != null) {
-                doc = res.parse();
-                HttpConnections.setDefaultCookies(res.cookies());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return doc;
-    }
-
     private BookInfo extractBookInfo(Document doc) throws IOException {
         if (doc == null) return null;
 
@@ -138,7 +91,7 @@ public class BookInfoExtractor extends AbstractHttpProcessor {
                     if (jsonStart <= 0 || jsonEnd <= 0) return null;
 
                     String pagesJsonData = data.substring(jsonStart, jsonEnd);
-                    PagesInfo pages = Mapper.objectMapper.readValue(pagesJsonData, PagesInfo.class);
+                    GogglePagesInfo pages = Mapper.objectMapper.readValue(pagesJsonData, GogglePagesInfo.class);
 
                     String bookJsonData = data.substring(data.indexOf(BOOK_INFO_START_TAG) - 2, data.lastIndexOf(BOOK_INFO_END_TAG) - 3);
                     BookData bookData = Mapper.objectMapper.readValue(bookJsonData, BookData.class);
@@ -151,7 +104,8 @@ public class BookInfoExtractor extends AbstractHttpProcessor {
         return null;
     }
 
+    @Override
     public BookInfo getBookInfo() {
-        return bookInfo;
+        return (BookInfo) bookInfo;
     }
 }
