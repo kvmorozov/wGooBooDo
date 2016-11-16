@@ -62,19 +62,19 @@ public class GogglePagesInfo implements IPagesInfo, Serializable {
         if (beginPageNum >= endPageNum && endPageNum > 1 && beginPagePrefix.equals(endPagePrefix))
             logger.severe(String.format("Cannot fill gap between pages %s(order=%s) and %s(order=%s)", beginGap.getPid(), beginGap.getOrder(), endGap.getPid(), endGap.getOrder()));
 
-        if (beginPagePrefix.equals(endPagePrefix))
+        if (beginPagePrefix.equals(endPagePrefix)) {
             for (int index = beginGap.getOrder() + 1; index < endGap.getOrder(); index++) {
                 String pid = beginPageNum > 0 ? beginPagePrefix + (beginPageNum + index - beginGap.getOrder()) : beginGap.getPid() + "_" + index;
                 GogglePageInfo gapPage = new GogglePageInfo(pid, index);
                 addPage(gapPage);
             }
 
-        if (beginPageNum > 0 && endPageNum > 0)
-            for (int index = beginGap.getOrder() + 1; index < endGap.getOrder() - endPageNum; index++) {
-                GogglePageInfo gapPage = new GogglePageInfo(beginPagePrefix + String.valueOf(index + 1), index);
-                addPage(gapPage);
-            }
-        else {
+            if (beginPageNum > 0 && endPageNum > 0)
+                for (int index = beginGap.getOrder() + 1; index < endGap.getOrder() - endPageNum; index++) {
+                    GogglePageInfo gapPage = new GogglePageInfo(beginPagePrefix + String.valueOf(index + 1), index);
+                    addPage(gapPage);
+                }
+        } else {
             if (endPageNum > 1) {
                 int pagesToCreate = endGap.getOrder() - beginGap.getOrder() - 1;
                 int pagesCreated = 0;
