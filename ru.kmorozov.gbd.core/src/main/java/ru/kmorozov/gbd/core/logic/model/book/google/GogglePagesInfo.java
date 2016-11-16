@@ -68,6 +68,12 @@ public class GogglePagesInfo implements IPagesInfo, Serializable {
                 GogglePageInfo gapPage = new GogglePageInfo(pid, index);
                 addPage(gapPage);
             }
+
+        if (beginPageNum > 0 && endPageNum > 0)
+            for (int index = beginGap.getOrder() + 1; index < endGap.getOrder() - endPageNum; index++) {
+                GogglePageInfo gapPage = new GogglePageInfo(beginPagePrefix + String.valueOf(index + 1), index);
+                addPage(gapPage);
+            }
         else {
             if (endPageNum > 1) {
                 int pagesToCreate = endGap.getOrder() - beginGap.getOrder() - 1;
@@ -92,12 +98,6 @@ public class GogglePagesInfo implements IPagesInfo, Serializable {
             } else if (beginPageNum > 1 && endPageNum < 0) {
                 logger.severe(String.format("Cannot fill gap between pages %s(order=%s) and %s(order=%s)", beginGap.getPid(), beginGap.getOrder(), endGap.getPid(), endGap.getOrder()));
             }
-
-            if (beginPageNum > 0 && endPageNum > 0)
-                for (int index = beginGap.getOrder() + 1; index < endGap.getOrder() - endPageNum; index++) {
-                    GogglePageInfo gapPage = new GogglePageInfo(beginPagePrefix + String.valueOf(index + 1), index);
-                    addPage(gapPage);
-                }
         }
 
         pagesList.sort(GogglePageInfo::compareTo);
@@ -143,13 +143,14 @@ public class GogglePagesInfo implements IPagesInfo, Serializable {
 
         for (GogglePageInfo currentPage : pagesList) {
             if (condition.test(currentPage)) if (blockStart == null) {
+                blockStart = currentPage;
             } else {
-                pairs.add(createPair(blockStart, prevPage));
-                blockStart = null;
             }
             else {
-                if (blockStart == null) blockStart = currentPage;
-                else {
+                if (blockStart == null) {
+                } else {
+                    pairs.add(createPair(blockStart, prevPage));
+                    blockStart = null;
                 }
             }
 
