@@ -6,7 +6,7 @@ import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractImageExtractor;
-import ru.kmorozov.gbd.core.logic.model.book.google.BookData;
+import ru.kmorozov.gbd.core.logic.model.book.google.GoogleBookData;
 import ru.kmorozov.gbd.core.logic.model.book.google.GogglePageInfo;
 import ru.kmorozov.gbd.core.utils.Images;
 
@@ -56,7 +56,7 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
                 if (Images.isImageFile(filePath)) {
                     String fileName = FilenameUtils.getBaseName(filePath.toString());
                     String[] nameParts = fileName.split("_");
-                    GogglePageInfo _page = bookContext.getBookInfo().getPages().getPageByPid(nameParts[1]);
+                    GogglePageInfo _page = (GogglePageInfo) bookContext.getBookInfo().getPages().getPageByPid(nameParts[1]);
                     if (_page != null) {
                         try {
                             if (GBDOptions.reloadImages()) {
@@ -96,7 +96,7 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
     public void process() {
         if (!bookContext.started.compareAndSet(false, true)) return;
 
-        if (!Strings.isNullOrEmpty(((BookData) bookContext.getBookInfo().getBookData()).getFlags().getDownloadPdfUrl())) {
+        if (!Strings.isNullOrEmpty(((GoogleBookData) bookContext.getBookInfo().getBookData()).getFlags().getDownloadPdfUrl())) {
             logger.severe("There is direct url to download book. DIY!");
             return;
         }
@@ -140,7 +140,9 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
 
                 bookContext.sigExecutor.terminate(3, TimeUnit.MINUTES);
 
-                bookContext.getPagesStream().filter(page -> !page.dataProcessed.get() && page.getSig() != null).forEach(page -> bookContext.imgExecutor.execute(new GooglePageImgProcessor(bookContext, page, HttpHostExt.NO_PROXY)));
+                bookContext.getPagesStream()
+                        .filter(page -> !page.dataProcessed.get() && ((GogglePageInfo) page).getSig() != null)
+                        .forEach(page -> bookContext.imgExecutor.execute(new GooglePageImgProcessor(bookContext, (GogglePageInfo) page, HttpHostExt.NO_PROXY)));
 
                 bookContext.imgExecutor.terminate(5, TimeUnit.MINUTES);
 

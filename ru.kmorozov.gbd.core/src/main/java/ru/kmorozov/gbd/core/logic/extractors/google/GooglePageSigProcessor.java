@@ -1,7 +1,6 @@
 package ru.kmorozov.gbd.core.logic.extractors.google;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
+import com.google.gson.JsonParseException;
 import org.apache.commons.io.IOUtils;
 import org.apache.hc.core5.http.NoHttpResponseException;
 import ru.kmorozov.gbd.core.config.GBDOptions;
@@ -13,7 +12,7 @@ import ru.kmorozov.gbd.core.logic.extractors.base.IUniqueRunnable;
 import ru.kmorozov.gbd.core.logic.model.book.google.GogglePageInfo;
 import ru.kmorozov.gbd.core.logic.model.book.google.GogglePagesInfo;
 import ru.kmorozov.gbd.core.logic.progress.IProgress;
-import ru.kmorozov.gbd.core.utils.Mapper;
+import ru.kmorozov.gbd.core.utils.gson.Mapper;
 
 import java.io.IOException;
 import java.net.SocketException;
@@ -56,12 +55,12 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
             }
 
             String respStr = IOUtils.toString(resp.getContent(), Charset.defaultCharset());
-            GogglePagesInfo framePages = Mapper.objectMapper.readValue(respStr, GogglePagesInfo.class);
+            GogglePagesInfo framePages = Mapper.getGson().fromJson(respStr, GogglePagesInfo.class);
 
             GogglePageInfo[] pages = framePages.getPages();
             for (GogglePageInfo framePage : pages)
                 if (framePage.getOrder() >= page.getOrder() && framePage.getSrc() != null) {
-                    GogglePageInfo _page = bookContext.getBookInfo().getPages().getPageByPid(framePage.getPid());
+                    GogglePageInfo _page = (GogglePageInfo) bookContext.getBookInfo().getPages().getPageByPid(framePage.getPid());
 
                     if (_page.dataProcessed.get() || _page.getSig() != null || _page.sigChecked.get()) continue;
 
@@ -82,7 +81,7 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
                     if (_page.getSrc() != null && _page.getSig() == null)
                         logger.finest(String.format(SIG_WRONG_FORMAT, _page.getSrc()));
                 }
-        } catch (JsonParseException | JsonMappingException | SocketTimeoutException | SocketException | NoHttpResponseException ce) {
+        } catch (JsonParseException | SocketTimeoutException | SocketException | NoHttpResponseException ce) {
             if (!proxy.isLocal()) {
                 proxy.registerFailure();
                 logger.info(String.format("Proxy %s failed!", proxy.toString()));
@@ -111,7 +110,7 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
         ExecutorService sigPool = Executors.newCachedThreadPool();
         sigPool.submit(() -> bookContext.getPagesParallelStream().forEach(page -> {
             psSigs.inc();
-            getSig(page);
+            getSig((GogglePageInfo) page);
         }));
 
         sigPool.shutdown();

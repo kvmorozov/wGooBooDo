@@ -1,6 +1,6 @@
 package ru.kmorozov.gbd.core.logic.model.book.google;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
@@ -9,13 +9,13 @@ import java.io.Serializable;
  */
 public class VolumeResultFlags implements Serializable {
 
-    @JsonProperty("has_flowing_text") private boolean hasFlowingText;
-    @JsonProperty("has_scanned_text") private boolean hasScannedText;
-    @JsonProperty("can_download_pdf") private boolean canDownloadPdf;
-    @JsonProperty("can_download_epub") private boolean canDownloadEpub;
-    @JsonProperty("is_pdf_drm_enabled") private boolean pdfDrmEnabled;
-    @JsonProperty("is_epub_drm_enabled") private boolean epubDrmEnabled;
-    @JsonProperty("download_pdf_url") private String downloadPdfUrl;
+    @SerializedName("has_flowing_text") private boolean hasFlowingText;
+    @SerializedName("has_scanned_text") private boolean hasScannedText;
+    @SerializedName("can_download_pdf") private boolean canDownloadPdf;
+    @SerializedName("can_download_epub") private boolean canDownloadEpub;
+    @SerializedName("is_pdf_drm_enabled") private boolean pdfDrmEnabled;
+    @SerializedName("is_epub_drm_enabled") private boolean epubDrmEnabled;
+    @SerializedName("download_pdf_url") private String downloadPdfUrl;
 
     public String getDownloadPdfUrl() {
         return downloadPdfUrl;

@@ -1,7 +1,6 @@
 package ru.kmorozov.gbd.core.logic.model.book.google;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import ru.kmorozov.gbd.core.logic.model.book.base.IPagesInfo;
@@ -21,13 +20,13 @@ public class GogglePagesInfo implements IPagesInfo, Serializable {
 
     private static final Logger logger = INSTANCE.getLogger(GogglePagesInfo.class);
 
-    @JsonProperty("page")
+    @SerializedName("page")
     private GogglePageInfo[] pages;
-    @JsonProperty("prefix")
+    @SerializedName("prefix")
     private String prefix;
 
-    private Map<String, GogglePageInfo> pagesMap;
-    private LinkedList<GogglePageInfo> pagesList;
+    private transient Map<String, GogglePageInfo> pagesMap;
+    private transient LinkedList<GogglePageInfo> pagesList;
 
     private void addPage(GogglePageInfo page) {
         pagesMap.put(page.getPid(), page);
@@ -121,7 +120,6 @@ public class GogglePagesInfo implements IPagesInfo, Serializable {
             pagesMap.put(page.getPid(), page);
     }
 
-    @JsonIgnore
     @Override
     public String getMissingPagesList() {
         Predicate<GogglePageInfo> predicate = pageInfo -> !pageInfo.fileExists.get();

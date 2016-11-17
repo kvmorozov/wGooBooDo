@@ -12,6 +12,8 @@ import ru.kmorozov.gbd.core.config.IGBDOptions;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.extractors.shpl.ShplBookExtractor;
 import ru.kmorozov.gbd.core.logic.output.consumers.DummyBookInfoOutput;
+import ru.kmorozov.gbd.desktop.library.OptionsBasedProducer;
+import ru.kmorozov.gbd.desktop.library.SingleBookProducer;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -21,8 +23,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static ru.kmorozov.gbd.core.config.storage.BookContextLoader.BOOK_CTX_LOADER;
@@ -39,6 +40,7 @@ public class ShplExtractorTest {
         ExecutionContext.initContext(new DummyBookInfoOutput(), true);
         IGBDOptions mockOptions = mock(IGBDOptions.class);
         when(mockOptions.getOutputDir()).thenReturn("E:\\Work\\gbd\\");
+        when(mockOptions.getProxyListFile()).thenReturn("E:\\Work\\gbd\\proxy.txt");
         GBDOptions.init(mockOptions);
 
         Server server = new Server(80);
@@ -71,6 +73,16 @@ public class ShplExtractorTest {
 
     @Test
     public void bookContextLoadTest() {
-        assertTrue(BOOK_CTX_LOADER.getContextSize() > 0);
+        int ctxSizeBefore = BOOK_CTX_LOADER.getContextSize();
+        assertTrue(ctxSizeBefore > 0);
+
+        ExecutionContext.INSTANCE.addBookContext(new OptionsBasedProducer(), null, null);
+        ExecutionContext.INSTANCE.addBookContext(new SingleBookProducer("http://localhost/elib.shpl.ru"), null, null);
+
+        BOOK_CTX_LOADER.updateContext();
+        BOOK_CTX_LOADER.refreshContext();
+
+        int ctxSizeAfter = BOOK_CTX_LOADER.getContextSize();
+        assertEquals(ctxSizeBefore + 1, ctxSizeAfter);
     }
 }

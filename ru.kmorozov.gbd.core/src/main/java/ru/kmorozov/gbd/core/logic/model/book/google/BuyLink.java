@@ -1,6 +1,6 @@
 package ru.kmorozov.gbd.core.logic.model.book.google;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
@@ -9,9 +9,9 @@ import java.io.Serializable;
  */
 class BuyLink implements Serializable {
 
-    @JsonProperty("Seller") private String seller;
-    @JsonProperty("Url") private String url;
-    @JsonProperty("TrackingUrl") private String trackingUrl;
-    @JsonProperty("IsPublisher") private String publisher;
-    @JsonProperty("Price") private String price;
+    @SerializedName("Seller") private String seller;
+    @SerializedName("Url") private String url;
+    @SerializedName("TrackingUrl") private String trackingUrl;
+    @SerializedName("IsPublisher") private String publisher;
+    @SerializedName("Price") private String price;
 }

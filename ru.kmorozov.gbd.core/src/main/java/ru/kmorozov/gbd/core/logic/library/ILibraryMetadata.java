@@ -1,6 +1,7 @@
 package ru.kmorozov.gbd.core.logic.library;
 
 import ru.kmorozov.gbd.core.logic.context.BookContext;
+import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookExtractor;
 import ru.kmorozov.gbd.core.logic.extractors.base.IImageExtractor;
 
 /**
@@ -11,4 +12,6 @@ public interface ILibraryMetadata {
     boolean isValidId(String bookId);
 
     IImageExtractor getExtractor(BookContext bookContext);
+
+    AbstractBookExtractor getBookExtractor(String bookId);
 }

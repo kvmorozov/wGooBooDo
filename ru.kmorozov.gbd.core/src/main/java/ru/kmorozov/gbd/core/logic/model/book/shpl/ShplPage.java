@@ -1,18 +1,24 @@
 package ru.kmorozov.gbd.core.logic.model.book.shpl;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
+import ru.kmorozov.gbd.core.logic.model.book.base.IPage;
 
 /**
  * Created by sbt-morozov-kv on 16.11.2016.
  */
-public class ShplPage {
+public class ShplPage implements IPage {
 
-    @JsonProperty("id")
+    @SerializedName("id")
     private String id;
-    @JsonProperty("w")
+    @SerializedName("w")
     private Integer width;
-    @JsonProperty("h")
+    @SerializedName("h")
     private Integer height;
-    @JsonProperty("downloadUrl")
+    @SerializedName("downloadUrl")
     private String downloadUrl;
+
+    @Override
+    public String getPid() {
+        return id;
+    }
 }

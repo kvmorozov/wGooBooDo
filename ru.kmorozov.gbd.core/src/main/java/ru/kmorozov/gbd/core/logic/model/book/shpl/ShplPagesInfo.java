@@ -1,5 +1,6 @@
 package ru.kmorozov.gbd.core.logic.model.book.shpl;
 
+import com.google.gson.annotations.SerializedName;
 import ru.kmorozov.gbd.core.logic.model.book.base.IPagesInfo;
 import ru.kmorozov.gbd.core.logic.model.book.google.GogglePageInfo;
 
@@ -8,6 +9,7 @@ import ru.kmorozov.gbd.core.logic.model.book.google.GogglePageInfo;
  */
 public class ShplPagesInfo implements IPagesInfo {
 
+    @SerializedName("page")
     private ShplPage[] pages;
 
     public ShplPagesInfo(ShplPage[] pages) {

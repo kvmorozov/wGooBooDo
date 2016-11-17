@@ -1,6 +1,6 @@
 package ru.kmorozov.gbd.core.logic.model.book.google;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
@@ -9,5 +9,5 @@ import java.io.Serializable;
  */
 class AdditionalInfo implements Serializable {
 
-    @JsonProperty("[JsonBookInfo]") private JsonBookInfo jsonBookInfo;
+    @SerializedName("[JsonBookInfo]") private JsonBookInfo jsonBookInfo;
 }

@@ -1,43 +1,41 @@
 package ru.kmorozov.gbd.core.logic.model.book.google;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.api.client.repackaged.com.google.common.base.Strings;
+import com.google.gson.annotations.SerializedName;
 import ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor;
+import ru.kmorozov.gbd.core.logic.model.book.base.IPage;
 
 import java.io.Serializable;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by km on 21.11.2015.
  */
 
-public class GogglePageInfo implements Serializable, Comparable<GogglePageInfo> {
+public class GogglePageInfo implements IPage, Serializable, Comparable<GogglePageInfo> {
 
-    @JsonProperty("pid")
+    @SerializedName("pid")
     private String pid;
-    @JsonProperty("flags")
+    @SerializedName("flags")
     private String flags;
-    @JsonProperty("title")
+    @SerializedName("title")
     private String title;
     private String src;
-    @JsonProperty("uf")
+    @SerializedName("uf")
     private String uf;
     private String sig;
 
-    @JsonProperty("order")
+    @SerializedName("order")
     private int order;
-    @JsonProperty("h")
+    @SerializedName("h")
     private int h;
     private int width;
-    @JsonProperty("links")
+    @SerializedName("links")
     private Object links;
 
     private String prefix;
     private int pageNum = -1;
 
-    @JsonIgnore
-    private boolean gapPage = false;
+    private transient boolean gapPage = false;
 
     public GogglePageInfo() {
     }
@@ -50,11 +48,7 @@ public class GogglePageInfo implements Serializable, Comparable<GogglePageInfo> 
         gapPage = true;
     }
 
-    public final AtomicBoolean sigChecked = new AtomicBoolean(false);
-    public final AtomicBoolean dataProcessed = new AtomicBoolean(false);
-    public final AtomicBoolean fileExists = new AtomicBoolean(false);
-    public final AtomicBoolean loadingStarted = new AtomicBoolean(false);
-
+    @Override
     public String getPid() {
         return pid;
     }

@@ -10,9 +10,8 @@ import ru.kmorozov.gbd.core.logic.model.book.base.IBookData;
 import ru.kmorozov.gbd.core.logic.model.book.shpl.ShplBookData;
 import ru.kmorozov.gbd.core.logic.model.book.shpl.ShplPage;
 import ru.kmorozov.gbd.core.logic.model.book.shpl.ShplPagesInfo;
-import ru.kmorozov.gbd.core.utils.Mapper;
+import ru.kmorozov.gbd.core.utils.gson.Mapper;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -65,13 +64,9 @@ public class ShplBookExtractor extends AbstractBookExtractor {
                 if (data.contains(JSON_TAG_PAGES)) {
                     String pagesData = "[" + data.split("[|]")[2].split("\\[|\\]")[3] + "]";
 
-                    try {
-                        ShplPage[] pages = Mapper.objectMapper.readValue(pagesData, ShplPage[].class);
-                        pagesInfo = new ShplPagesInfo(pages);
-                        break;
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    ShplPage[] pages = Mapper.getGson().fromJson(pagesData, ShplPage[].class);
+                    pagesInfo = new ShplPagesInfo(pages);
+                    break;
                 }
             }
         }

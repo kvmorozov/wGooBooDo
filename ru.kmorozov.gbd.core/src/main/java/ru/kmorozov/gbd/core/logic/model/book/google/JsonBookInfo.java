@@ -1,6 +1,6 @@
 package ru.kmorozov.gbd.core.logic.model.book.google;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
@@ -9,10 +9,10 @@ import java.io.Serializable;
  */
 class JsonBookInfo implements Serializable {
 
-    @JsonProperty("BuyLinks") private BuyLink[] buyLinks;
-    @JsonProperty("AboutUrl") private String aboutUrl;
-    @JsonProperty("PreviewUrl") private String previewUrl;
-    @JsonProperty("allowed_syndication_flags") private SyndicationFlags flags;
-    @JsonProperty("online_access") private OnlineAccess onlineAccess;
-    @JsonProperty("TocLine") private TocItem[] toc;
+    @SerializedName("BuyLinks") private BuyLink[] buyLinks;
+    @SerializedName("AboutUrl") private String aboutUrl;
+    @SerializedName("PreviewUrl") private String previewUrl;
+    @SerializedName("allowed_syndication_flags") private SyndicationFlags flags;
+    @SerializedName("online_access") private OnlineAccess onlineAccess;
+    @SerializedName("TocLine") private TocItem[] toc;
 }

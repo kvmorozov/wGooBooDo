@@ -3,9 +3,11 @@ package ru.kmorozov.gbd.core.config.storage;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
-import ru.kmorozov.gbd.core.utils.Mapper;
+import ru.kmorozov.gbd.core.utils.gson.Mapper;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +43,9 @@ public class BookContextLoader extends BaseLoader {
             booksInfo.put(bookInfo.getBookId(), bookInfo);
 
         try {
-            Mapper.objectMapper.writeValue(getFileToLoad(true), new ArrayList(booksInfo.values()));
+            try (FileWriter writer = new FileWriter(getFileToLoad(true))) {
+                Mapper.getGson().toJson(new ArrayList(booksInfo.values()), writer);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -51,12 +55,27 @@ public class BookContextLoader extends BaseLoader {
         if (!isValidDirectory())
             return;
 
+        refreshContext();
+    }
+
+    public BookInfo getBookInfo(String bookId) {
+        return booksInfo.get(bookId);
+    }
+
+    public int getContextSize() {
+        return booksInfo.size();
+    }
+
+    public void refreshContext() {
         File contextFile = getFileToLoad(false);
         if (contextFile == null)
             return;
 
         try {
-            BookInfo[] ctxObjArr = Mapper.objectMapper.readValue(contextFile, BookInfo[].class);
+            BookInfo[] ctxObjArr;
+            try (FileReader reader = new FileReader(contextFile)) {
+                ctxObjArr = Mapper.getGson().fromJson(reader, BookInfo[].class);
+            }
             for (Object ctxObj : ctxObjArr)
                 if (ctxObj instanceof BookInfo) {
                     BookInfo bookInfo = (BookInfo) ctxObj;
@@ -65,9 +84,5 @@ public class BookContextLoader extends BaseLoader {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public BookInfo getBookInfo(String bookId) {
-        return booksInfo.get(bookId);
     }
 }

@@ -1,12 +1,11 @@
 package ru.kmorozov.gbd.core.logic.context;
 
-import ru.kmorozov.gbd.core.logic.extractors.google.GoogleBookInfoExtractor;
 import ru.kmorozov.gbd.core.logic.extractors.base.IImageExtractor;
 import ru.kmorozov.gbd.core.logic.extractors.base.IPostProcessor;
 import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata;
 import ru.kmorozov.gbd.core.logic.library.LibraryFactory;
 import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
-import ru.kmorozov.gbd.core.logic.model.book.google.GogglePageInfo;
+import ru.kmorozov.gbd.core.logic.model.book.base.IPage;
 import ru.kmorozov.gbd.core.logic.progress.IProgress;
 import ru.kmorozov.gbd.core.utils.QueuedThreadPoolExecutor;
 
@@ -40,7 +39,7 @@ public class BookContext {
     private final ILibraryMetadata metadata;
 
     BookContext(String bookId, IProgress progress, IPostProcessor postProcessor) {
-        this.bookInfo = (new GoogleBookInfoExtractor(bookId)).getBookInfo();
+        this.bookInfo = LibraryFactory.getMetadata(bookId).getBookExtractor(bookId).getBookInfo();
         this.progress = progress;
         this.postProcessor = postProcessor;
         this.metadata = LibraryFactory.getMetadata(bookId);
@@ -91,11 +90,11 @@ public class BookContext {
         return pagesBefore;
     }
 
-    public Stream<GogglePageInfo> getPagesStream() {
+    public Stream<IPage> getPagesStream() {
         return Arrays.asList(bookInfo.getPages().getPages()).stream();
     }
 
-    public Stream<GogglePageInfo> getPagesParallelStream() {
+    public Stream<IPage> getPagesParallelStream() {
         return Arrays.asList(bookInfo.getPages().getPages()).parallelStream();
     }
 

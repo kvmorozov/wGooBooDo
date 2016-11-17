@@ -1,6 +1,6 @@
 package ru.kmorozov.gbd.core.logic.model.book.google;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
@@ -9,8 +9,8 @@ import java.io.Serializable;
  */
 class TocItem implements Serializable {
 
-    @JsonProperty("Title") private String title;
-    @JsonProperty("Pid") private String pid;
-    @JsonProperty("PgNum") private String pgNum;
-    @JsonProperty("Order") private int order;
+    @SerializedName("Title") private String title;
+    @SerializedName("Pid") private String pid;
+    @SerializedName("PgNum") private String pgNum;
+    @SerializedName("Order") private int order;
 }

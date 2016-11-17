@@ -8,10 +8,10 @@ import ru.kmorozov.gbd.core.logic.Proxy.AbstractProxyListProvider;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookExtractor;
 import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
-import ru.kmorozov.gbd.core.logic.model.book.google.BookData;
 import ru.kmorozov.gbd.core.logic.model.book.google.GogglePagesInfo;
+import ru.kmorozov.gbd.core.logic.model.book.google.GoogleBookData;
 import ru.kmorozov.gbd.core.utils.Logger;
-import ru.kmorozov.gbd.core.utils.Mapper;
+import ru.kmorozov.gbd.core.utils.gson.Mapper;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -91,10 +91,10 @@ public class GoogleBookInfoExtractor extends AbstractBookExtractor {
                     if (jsonStart <= 0 || jsonEnd <= 0) return null;
 
                     String pagesJsonData = data.substring(jsonStart, jsonEnd);
-                    GogglePagesInfo pages = Mapper.objectMapper.readValue(pagesJsonData, GogglePagesInfo.class);
+                    GogglePagesInfo pages = Mapper.getGson().fromJson(pagesJsonData, GogglePagesInfo.class);
 
                     String bookJsonData = data.substring(data.indexOf(BOOK_INFO_START_TAG) - 2, data.lastIndexOf(BOOK_INFO_END_TAG) - 3);
-                    BookData bookData = Mapper.objectMapper.readValue(bookJsonData, BookData.class);
+                    GoogleBookData bookData = Mapper.getGson().fromJson(bookJsonData, GoogleBookData.class);
 
                     return new BookInfo(bookData, pages, bookId);
                 }

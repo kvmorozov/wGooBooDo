@@ -7,11 +7,11 @@ import ru.kmorozov.gbd.core.logic.model.book.google.GogglePageInfo;
  */
 public interface IPagesInfo {
 
-    GogglePageInfo[] getPages();
+    IPage[] getPages();
 
     String getMissingPagesList();
 
     void build();
 
-    GogglePageInfo getPageByPid(String pid);
+    IPage getPageByPid(String pid);
 }
