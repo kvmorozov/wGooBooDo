@@ -3,6 +3,8 @@ package ru.kmorozov.gbd.core.logic.extractors.shpl;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractImageExtractor;
+import ru.kmorozov.gbd.core.logic.model.book.base.IPage;
+import ru.kmorozov.gbd.core.logic.model.book.shpl.ShplPage;
 
 import java.util.concurrent.TimeUnit;
 
@@ -19,10 +21,8 @@ public class ShplImageExtractor extends AbstractImageExtractor {
     }
 
     @Override
-    protected void process() {
-        if (!bookContext.started.compareAndSet(false, true)) return;
-
-        prepareDirectory();
+    protected boolean preCheck() {
+        return true;
     }
 
     private class EventProcessor implements Runnable {
@@ -39,6 +39,9 @@ public class ShplImageExtractor extends AbstractImageExtractor {
                 waitingProxy.add(proxy);
                 return;
             }
+
+            for (IPage page : bookContext.getBookInfo().getPages().getPages())
+                bookContext.imgExecutor.execute(new ShplPageImgProcessor(bookContext, (ShplPage) page, HttpHostExt.NO_PROXY));
 
             bookContext.imgExecutor.terminate(20, TimeUnit.MINUTES);
 

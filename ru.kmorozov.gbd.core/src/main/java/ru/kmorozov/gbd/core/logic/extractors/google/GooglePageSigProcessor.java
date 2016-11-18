@@ -22,6 +22,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import static ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor.BOOK_ID_PLACEHOLDER;
+import static ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor.HTTPS_TEMPLATE;
+
 /**
  * Created by km on 21.11.2015.
  */
@@ -45,7 +48,8 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
             return;
 
         Response resp = null;
-        String rqUrl = bookContext.getBaseUrl() + GoogleImageExtractor.PAGES_REQUEST_TEMPLATE.replace(GoogleImageExtractor.RQ_PG_PLACEHOLDER, page.getPid());
+        String baseUrl = HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, bookContext.getBookInfo().getBookId());
+        String rqUrl = baseUrl + GoogleImageExtractor.PAGES_REQUEST_TEMPLATE.replace(GoogleImageExtractor.RQ_PG_PLACEHOLDER, page.getPid());
 
         try {
             resp = getContent(rqUrl, proxy, true);

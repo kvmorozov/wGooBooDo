@@ -6,6 +6,7 @@ import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
+import ru.kmorozov.gbd.core.logic.model.book.google.GoogleBookData;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -56,7 +57,14 @@ public class HttpConnections {
     }
 
     private HttpResponse _getResponse(Proxy proxy) {
-        if (baseUrl == null) baseUrl = new GenericUrl(ExecutionContext.INSTANCE.getBaseUrl());
+        if (baseUrl == null) {
+            ExecutionContext
+                    .INSTANCE
+                    .getContexts(false)
+                    .stream()
+                    .filter(bookContext -> bookContext.getBookInfo().getBookData() instanceof GoogleBookData)
+                    .forEach(bookContext -> baseUrl = new GenericUrl(((GoogleBookData) bookContext.getBookInfo().getBookData()).getBaseUrl()));
+        }
 
         try {
             return new NetHttpTransport.Builder().setProxy(proxy).build().createRequestFactory().buildGetRequest(baseUrl).setHeaders(headers).setConnectTimeout(10000).execute();

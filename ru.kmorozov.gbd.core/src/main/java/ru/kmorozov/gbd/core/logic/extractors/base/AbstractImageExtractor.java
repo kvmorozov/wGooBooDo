@@ -45,7 +45,18 @@ public abstract class AbstractImageExtractor extends AbstractEventSource impleme
         return "Extractor:" + bookContext.toString();
     }
 
-    protected abstract void process();
+    public final void process() {
+        if (!bookContext.started.compareAndSet(false, true)) return;
+
+        if (!preCheck())
+            return;
+
+        prepareDirectory();
+
+        initComplete.set(true);
+    }
+
+    protected abstract boolean preCheck();
 
     @Override
     public void run() {

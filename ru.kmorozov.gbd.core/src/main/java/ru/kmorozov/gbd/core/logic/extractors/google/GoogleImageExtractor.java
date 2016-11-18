@@ -6,8 +6,8 @@ import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractImageExtractor;
-import ru.kmorozov.gbd.core.logic.model.book.google.GoogleBookData;
 import ru.kmorozov.gbd.core.logic.model.book.google.GogglePageInfo;
+import ru.kmorozov.gbd.core.logic.model.book.google.GoogleBookData;
 import ru.kmorozov.gbd.core.utils.Images;
 
 import javax.imageio.ImageIO;
@@ -16,7 +16,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -93,25 +92,22 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
     }
 
     @Override
-    public void process() {
-        if (!bookContext.started.compareAndSet(false, true)) return;
-
+    protected boolean preCheck() {
         if (!Strings.isNullOrEmpty(((GoogleBookData) bookContext.getBookInfo().getBookData()).getFlags().getDownloadPdfUrl())) {
             logger.severe("There is direct url to download book. DIY!");
-            return;
+            return false;
         }
+        else
+            return true;
+    }
 
-        output.receiveBookInfo(Objects.requireNonNull(bookContext.getBookInfo()));
-
-        prepareDirectory();
-
+    @Override
+    protected void prepareDirectory() {
+        super.prepareDirectory();
         bookContext.getBookInfo().getPages().build();
         scanDir();
 
-        for (HttpHostExt proxy : waitingProxy)
-            newProxyEvent(proxy);
-
-        initComplete.set(true);
+        waitingProxy.forEach(this::newProxyEvent);
     }
 
     private class EventProcessor implements Runnable {

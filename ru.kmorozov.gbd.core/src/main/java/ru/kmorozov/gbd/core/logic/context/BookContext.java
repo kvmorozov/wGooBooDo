@@ -4,6 +4,7 @@ import ru.kmorozov.gbd.core.logic.extractors.base.IImageExtractor;
 import ru.kmorozov.gbd.core.logic.extractors.base.IPostProcessor;
 import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata;
 import ru.kmorozov.gbd.core.logic.library.LibraryFactory;
+import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage;
 import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
 import ru.kmorozov.gbd.core.logic.model.book.base.IPage;
 import ru.kmorozov.gbd.core.logic.progress.IProgress;
@@ -14,8 +15,6 @@ import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
 
-import static ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor.BOOK_ID_PLACEHOLDER;
-import static ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor.HTTPS_TEMPLATE;
 import static ru.kmorozov.gbd.core.utils.QueuedThreadPoolExecutor.THREAD_POOL_SIZE;
 
 /**
@@ -23,13 +22,12 @@ import static ru.kmorozov.gbd.core.utils.QueuedThreadPoolExecutor.THREAD_POOL_SI
  */
 public class BookContext {
 
-    public final QueuedThreadPoolExecutor sigExecutor = new QueuedThreadPoolExecutor(-1, THREAD_POOL_SIZE, x -> true);
+    public final QueuedThreadPoolExecutor sigExecutor = new QueuedThreadPoolExecutor(1, THREAD_POOL_SIZE, x -> true);
     public final QueuedThreadPoolExecutor imgExecutor = new QueuedThreadPoolExecutor(-1, THREAD_POOL_SIZE, x -> true);
 
     public AtomicBoolean started = new AtomicBoolean(false);
     public AtomicBoolean pdfCompleted = new AtomicBoolean(false);
 
-    private String baseUrl;
     private final BookInfo bookInfo;
     private File outputDir;
     private IImageExtractor extractor;
@@ -44,15 +42,10 @@ public class BookContext {
         this.postProcessor = postProcessor;
         this.metadata = LibraryFactory.getMetadata(bookId);
 
-        baseUrl = HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, bookInfo.getBookId());
     }
 
     public String getBookId() {
         return bookInfo.getBookId();
-    }
-
-    public String getBaseUrl() {
-        return baseUrl;
     }
 
     public BookInfo getBookInfo() {
@@ -90,11 +83,11 @@ public class BookContext {
         return pagesBefore;
     }
 
-    public Stream<IPage> getPagesStream() {
+    public Stream<AbstractPage> getPagesStream() {
         return Arrays.asList(bookInfo.getPages().getPages()).stream();
     }
 
-    public Stream<IPage> getPagesParallelStream() {
+    public Stream<AbstractPage> getPagesParallelStream() {
         return Arrays.asList(bookInfo.getPages().getPages()).parallelStream();
     }
 

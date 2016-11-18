@@ -10,7 +10,9 @@ import org.junit.Test;
 import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.config.IGBDOptions;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
+import ru.kmorozov.gbd.core.logic.extractors.google.GoogleBookInfoExtractor;
 import ru.kmorozov.gbd.core.logic.extractors.shpl.ShplBookExtractor;
+import ru.kmorozov.gbd.core.logic.library.metadata.ShplMetadata;
 import ru.kmorozov.gbd.core.logic.output.consumers.DummyBookInfoOutput;
 import ru.kmorozov.gbd.desktop.library.OptionsBasedProducer;
 import ru.kmorozov.gbd.desktop.library.SingleBookProducer;
@@ -31,9 +33,10 @@ import static ru.kmorozov.gbd.core.config.storage.BookContextLoader.BOOK_CTX_LOA
 /**
  * Created by sbt-morozov-kv on 16.11.2016.
  */
-public class ShplExtractorTest {
+public class ExtractorTest {
 
     private static final String SHPL_HTML_RESOURCE = "shpl/book.html";
+    private static final String GOOGLE_HTML_RESOURCE = "google/book.html";
 
     @Before
     public void initServer() {
@@ -51,7 +54,16 @@ public class ShplExtractorTest {
                 response.setStatus(200);
                 response.setContentType(MimeTypes.Type.TEXT_HTML.toString());
 
-                File res = new File(getClass().getClassLoader().getResource(SHPL_HTML_RESOURCE).getFile());
+                String resFileName = null;
+                if (request.getRequestURI().contains(ShplMetadata.SHPL_BASE_URL))
+                    resFileName = SHPL_HTML_RESOURCE;
+                else if (request.getRequestURI().contains("google"))
+                    resFileName = GOOGLE_HTML_RESOURCE;
+
+                if (resFileName == null)
+                    return;
+
+                File res = new File(getClass().getClassLoader().getResource(resFileName).getFile());
                 String data = IOUtils.toString(new FileInputStream(res), Charset.forName("UTF-8"));
                 response.getOutputStream().write(data.getBytes());
             }
@@ -84,5 +96,17 @@ public class ShplExtractorTest {
 
         int ctxSizeAfter = BOOK_CTX_LOADER.getContextSize();
         assertEquals(ctxSizeBefore + 1, ctxSizeAfter);
+    }
+
+    @Test
+    public void googleExtractorTest() {
+        GoogleBookInfoExtractor extractor = new GoogleBookInfoExtractor("test") {
+            @Override
+            protected String getBookUrl() {
+                return "http://localhost/google";
+            }
+        };
+
+        assertNotNull(extractor.getBookInfo());
     }
 }

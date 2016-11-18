@@ -5,6 +5,9 @@ import ru.kmorozov.gbd.core.logic.model.book.base.IBookData;
 
 import java.io.Serializable;
 
+import static ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor.BOOK_ID_PLACEHOLDER;
+import static ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor.HTTPS_TEMPLATE;
+
 /**
  * Created by km on 28.11.2015.
  */
@@ -87,5 +90,9 @@ public class GoogleBookData implements IBookData, Serializable {
 
     public VolumeResultFlags getFlags() {
         return volumeresult;
+    }
+
+    public String getBaseUrl() {
+        return HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, volumeId);
     }
 }

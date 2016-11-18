@@ -12,6 +12,8 @@ import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata;
  */
 public class ShplMetadata implements ILibraryMetadata {
 
+    public static final String SHPL_BASE_URL = "elib.shpl.ru";
+
     public static final ILibraryMetadata SHPL_METADATA = new ShplMetadata();
 
     private ShplMetadata() {
@@ -19,7 +21,7 @@ public class ShplMetadata implements ILibraryMetadata {
 
     @Override
     public boolean isValidId(String bookId) {
-        return bookId != null && bookId.contains("elib.shpl.ru");
+        return bookId != null && bookId.contains(SHPL_BASE_URL);
     }
 
     @Override

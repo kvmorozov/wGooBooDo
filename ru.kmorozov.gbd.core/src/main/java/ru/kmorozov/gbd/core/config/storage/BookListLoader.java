@@ -77,8 +77,7 @@ public class BookListLoader extends BaseLoader {
             return;
 
         try (PrintWriter writer = new PrintWriter(getFileToLoad(true))) {
-            for (String bookId : ExecutionContext.INSTANCE.getBookIds())
-                writer.println(bookId);
+            ExecutionContext.INSTANCE.getBookIds().forEach(writer::println);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

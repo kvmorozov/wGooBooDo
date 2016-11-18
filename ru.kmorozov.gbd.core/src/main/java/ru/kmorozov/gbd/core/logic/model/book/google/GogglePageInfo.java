@@ -3,6 +3,7 @@ package ru.kmorozov.gbd.core.logic.model.book.google;
 import com.google.api.client.repackaged.com.google.common.base.Strings;
 import com.google.gson.annotations.SerializedName;
 import ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor;
+import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage;
 import ru.kmorozov.gbd.core.logic.model.book.base.IPage;
 
 import java.io.Serializable;
@@ -11,7 +12,7 @@ import java.io.Serializable;
  * Created by km on 21.11.2015.
  */
 
-public class GogglePageInfo implements IPage, Serializable, Comparable<GogglePageInfo> {
+public class GogglePageInfo extends AbstractPage implements Serializable, Comparable<GogglePageInfo> {
 
     @SerializedName("pid")
     private String pid;
@@ -53,6 +54,7 @@ public class GogglePageInfo implements IPage, Serializable, Comparable<GogglePag
         return pid;
     }
 
+    @Override
     public Integer getOrder() {
         return order;
     }

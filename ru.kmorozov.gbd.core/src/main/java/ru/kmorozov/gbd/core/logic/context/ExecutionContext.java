@@ -30,7 +30,6 @@ public class ExecutionContext {
     private final boolean singleMode;
     private final AbstractOutput output;
     private final Map<String, BookContext> bookContextMap = new HashMap<>();
-    private String baseUrl;
 
     private ExecutionContext(AbstractOutput output, boolean singleMode) {
         this.output = output;
@@ -71,12 +70,6 @@ public class ExecutionContext {
 
     public AbstractOutput getOutput() {
         return output;
-    }
-
-    public String getBaseUrl() {
-        if (baseUrl == null) baseUrl = bookContextMap.values().stream().findAny().get().getBaseUrl();
-
-        return baseUrl;
     }
 
     public int getProxyCount() {
