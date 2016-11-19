@@ -15,7 +15,7 @@ public class ShplBookData implements IBookData {
 
     @Override
     public String getTitle() {
-        return title;
+        return title.trim();
     }
 
     @Override

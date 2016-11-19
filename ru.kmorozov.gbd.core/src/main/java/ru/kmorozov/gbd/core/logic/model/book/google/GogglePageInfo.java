@@ -116,4 +116,6 @@ public class GogglePageInfo extends AbstractPage implements Serializable, Compar
     public int compareTo(GogglePageInfo anotherPage) {
         return this.getOrder().compareTo(anotherPage.getOrder());
     }
+
+    public boolean isSigChecked() {return sigChecked.get();}
 }

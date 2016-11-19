@@ -13,6 +13,7 @@ import ru.kmorozov.gbd.core.utils.QueuedThreadPoolExecutor;
 import java.io.File;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static ru.kmorozov.gbd.core.utils.QueuedThreadPoolExecutor.THREAD_POOL_SIZE;
@@ -22,8 +23,8 @@ import static ru.kmorozov.gbd.core.utils.QueuedThreadPoolExecutor.THREAD_POOL_SI
  */
 public class BookContext {
 
-    public final QueuedThreadPoolExecutor sigExecutor = new QueuedThreadPoolExecutor(1, THREAD_POOL_SIZE, x -> true);
-    public final QueuedThreadPoolExecutor imgExecutor = new QueuedThreadPoolExecutor(-1, THREAD_POOL_SIZE, x -> true);
+    public final QueuedThreadPoolExecutor<BookContext> sigExecutor = new QueuedThreadPoolExecutor(1, THREAD_POOL_SIZE, x -> true);
+    public final QueuedThreadPoolExecutor<AbstractPage> imgExecutor;
 
     public AtomicBoolean started = new AtomicBoolean(false);
     public AtomicBoolean pdfCompleted = new AtomicBoolean(false);
@@ -42,6 +43,9 @@ public class BookContext {
         this.postProcessor = postProcessor;
         this.metadata = LibraryFactory.getMetadata(bookId);
 
+        Predicate<AbstractPage> pagePredicate = AbstractPage::isDataProcessed;
+        long pagesToProcess = Arrays.asList(bookInfo.getPages().getPages()).stream().filter(pagePredicate.negate()).count();
+        imgExecutor = new QueuedThreadPoolExecutor(pagesToProcess, THREAD_POOL_SIZE, pagePredicate);
     }
 
     public String getBookId() {
@@ -85,10 +89,6 @@ public class BookContext {
 
     public Stream<AbstractPage> getPagesStream() {
         return Arrays.asList(bookInfo.getPages().getPages()).stream();
-    }
-
-    public Stream<AbstractPage> getPagesParallelStream() {
-        return Arrays.asList(bookInfo.getPages().getPages()).parallelStream();
     }
 
     @Override

@@ -17,8 +17,8 @@ public class ShplPagesInfo implements IPagesInfo {
     }
 
     @Override
-    public GogglePageInfo[] getPages() {
-        return new GogglePageInfo[0];
+    public ShplPage[] getPages() {
+        return pages;
     }
 
     @Override

@@ -17,7 +17,7 @@ public class QueuedThreadPoolExecutor<T> extends ThreadPoolExecutor {
 
     private final static Logger logger = ExecutionContext.INSTANCE.getLogger("Executor");
 
-    private final int needProcessCount;
+    private final long needProcessCount;
     private final long timeStart;
 
     public static final int THREAD_POOL_SIZE = 10;
@@ -27,7 +27,7 @@ public class QueuedThreadPoolExecutor<T> extends ThreadPoolExecutor {
     private final Map<T, IUniqueRunnable<T>> uniqueMap = new ConcurrentHashMap<>();
     private final Predicate<T> completeChecker;
 
-    public QueuedThreadPoolExecutor(int needProcessCount, int threadPoolSize, Predicate<T> completeChecker) {
+    public QueuedThreadPoolExecutor(long needProcessCount, int threadPoolSize, Predicate<T> completeChecker) {
         super(threadPoolSize, threadPoolSize, 0, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(RETENTION_QUEUE_SIZE));
         this.needProcessCount = needProcessCount;
         this.timeStart = System.currentTimeMillis();

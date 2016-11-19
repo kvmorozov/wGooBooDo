@@ -106,8 +106,6 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
         super.prepareDirectory();
         bookContext.getBookInfo().getPages().build();
         scanDir();
-
-        waitingProxy.forEach(this::newProxyEvent);
     }
 
     private class EventProcessor implements Runnable {

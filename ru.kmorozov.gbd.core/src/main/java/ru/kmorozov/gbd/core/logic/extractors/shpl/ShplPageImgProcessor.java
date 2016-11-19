@@ -21,7 +21,7 @@ public class ShplPageImgProcessor extends AbstractPageImgProcessor<ShplPage> {
 
     @Override
     protected String getSuccessMsg() {
-        return null;
+        return String.format("Finished img processing for %s", page.getPid());
     }
 
     @Override

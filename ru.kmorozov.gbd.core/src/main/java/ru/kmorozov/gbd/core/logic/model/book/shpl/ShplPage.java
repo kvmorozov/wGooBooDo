@@ -39,4 +39,8 @@ public class ShplPage extends AbstractPage {
     public String getImgUrl() {
         return String.format("http://elib.shpl.ru/pages/%s/zooms/%s", id, 7);
     }
+
+    public void setOrder(Integer order) {
+        this.order = order;
+    }
 }
