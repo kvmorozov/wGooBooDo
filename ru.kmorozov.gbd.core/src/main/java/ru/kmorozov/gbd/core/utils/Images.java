@@ -39,6 +39,15 @@ public class Images {
         }
     }
 
+    public static boolean isPdfFile(Path filePath) {
+        if (!Files.isRegularFile(filePath))
+            return false;
+
+        String ext = FilenameUtils.getExtension(filePath.toString()).toLowerCase();
+
+        return "pdf".equals(ext);
+    }
+
     public static String getImageFormat(InputStream inputStream) {
         ImageInputStream iis = null;
 

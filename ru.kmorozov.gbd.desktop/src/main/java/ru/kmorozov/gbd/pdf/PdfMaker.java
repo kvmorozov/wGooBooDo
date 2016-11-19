@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static ru.kmorozov.gbd.core.logic.context.ExecutionContext.INSTANCE;
 
@@ -45,18 +47,26 @@ public class PdfMaker implements IPostProcessor {
         File imgDir = bookContext.getOutputDir();
         long existPages = 0;
         BookInfo bookInfo = bookContext.getBookInfo();
-        File pdfFile = new File(imgDir.getPath() + File.separator + bookInfo.getBookData().getTitle().replaceAll("[^А-Яа-яa-zA-Z0-9-]", " ") + ".pdf");
+
+        File pdfFile = null;
+        try {
+            List<Path> pdfFiles = Files.list(imgDir.toPath()).filter(Images::isPdfFile).collect(Collectors.toList());
+            if (pdfFiles != null && pdfFiles.size() == 1) pdfFile = pdfFiles.get(0).toFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (pdfFile == null)
+            pdfFile = new File(imgDir.getPath() + File.separator + bookInfo.getBookData().getTitle().replaceAll("[^А-Яа-яa-zA-Z0-9-]", " ") + ".pdf");
         try {
             if (Files.exists(pdfFile.toPath())) {
-                if (pdfFile.lastModified() < bookInfo.getLastPdfChecked())
-                    existPages = bookContext.getPagesBefore();
-                else
-                    try (PDDocument existDocument = PDDocument.load(pdfFile)) {
-                        existPages = existDocument.getNumberOfPages();
-                        bookInfo.setLastPdfChecked(System.currentTimeMillis());
-                    } catch (Exception ex) {
-                        pdfFile.createNewFile();
-                    }
+                if (pdfFile.lastModified() < bookInfo.getLastPdfChecked()) existPages = bookContext.getPagesBefore();
+                else try (PDDocument existDocument = PDDocument.load(pdfFile)) {
+                    existPages = existDocument.getNumberOfPages();
+                    bookInfo.setLastPdfChecked(System.currentTimeMillis());
+                } catch (Exception ex) {
+                    pdfFile.createNewFile();
+                }
             } else pdfFile.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
