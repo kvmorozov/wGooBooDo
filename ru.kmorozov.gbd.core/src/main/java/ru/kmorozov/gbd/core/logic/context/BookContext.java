@@ -6,7 +6,6 @@ import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata;
 import ru.kmorozov.gbd.core.logic.library.LibraryFactory;
 import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage;
 import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
-import ru.kmorozov.gbd.core.logic.model.book.base.IPage;
 import ru.kmorozov.gbd.core.logic.progress.IProgress;
 import ru.kmorozov.gbd.core.utils.QueuedThreadPoolExecutor;
 
@@ -82,8 +81,7 @@ public class BookContext {
     }
 
     public long getPagesBefore() {
-        if (pagesBefore == 0l)
-            pagesBefore = getPagesStream().filter(pageInfo -> pageInfo.dataProcessed.get()).count();
+        if (pagesBefore == 0l) pagesBefore = getPagesStream().filter(pageInfo -> pageInfo.dataProcessed.get()).count();
         return pagesBefore;
     }
 
@@ -97,8 +95,7 @@ public class BookContext {
     }
 
     public IImageExtractor getExtractor() {
-        if (extractor == null)
-            extractor = metadata.getExtractor(this);
+        if (extractor == null) extractor = metadata.getExtractor(this);
 
         return extractor;
     }

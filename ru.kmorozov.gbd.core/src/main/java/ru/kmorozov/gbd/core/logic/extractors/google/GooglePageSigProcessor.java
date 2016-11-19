@@ -10,7 +10,7 @@ import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractHttpProcessor;
 import ru.kmorozov.gbd.core.logic.extractors.base.IUniqueRunnable;
 import ru.kmorozov.gbd.core.logic.model.book.google.GogglePageInfo;
-import ru.kmorozov.gbd.core.logic.model.book.google.GogglePagesInfo;
+import ru.kmorozov.gbd.core.logic.model.book.google.GooglePagesInfo;
 import ru.kmorozov.gbd.core.logic.progress.IProgress;
 import ru.kmorozov.gbd.core.utils.QueuedThreadPoolExecutor;
 import ru.kmorozov.gbd.core.utils.gson.Mapper;
@@ -70,9 +70,8 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
                 }
 
                 String respStr = IOUtils.toString(resp.getContent(), Charset.defaultCharset());
-                GogglePagesInfo framePages = Mapper.getGson().fromJson(respStr, GogglePagesInfo.class);
+                GooglePagesInfo framePages = Mapper.getGson().fromJson(respStr, GooglePagesInfo.class);
 
-                framePages.build();
                 GogglePageInfo[] pages = framePages.getPages();
                 for (GogglePageInfo framePage : pages)
                     if (framePage.getOrder() >= page.getOrder() && framePage.getSrc() != null) {

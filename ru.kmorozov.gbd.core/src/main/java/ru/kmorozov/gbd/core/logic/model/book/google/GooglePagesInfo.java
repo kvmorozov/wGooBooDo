@@ -16,9 +16,9 @@ import static ru.kmorozov.gbd.core.logic.context.ExecutionContext.INSTANCE;
 /**
  * Created by km on 21.11.2015.
  */
-public class GogglePagesInfo implements IPagesInfo, Serializable {
+public class GooglePagesInfo implements IPagesInfo, Serializable {
 
-    private static final Logger logger = INSTANCE.getLogger(GogglePagesInfo.class);
+    private static final Logger logger = INSTANCE.getLogger(GooglePagesInfo.class);
 
     @SerializedName("page")
     private GogglePageInfo[] pages;
@@ -52,6 +52,9 @@ public class GogglePagesInfo implements IPagesInfo, Serializable {
     }
 
     private void fillGap(GogglePageInfo beginGap, GogglePageInfo endGap) {
+        if (beginGap.isGapPage() || endGap.isGapPage())
+            return;
+
         String beginPagePrefix = beginGap.getPrefix();
         String endPagePrefix = endGap.getPrefix();
 
@@ -109,7 +112,7 @@ public class GogglePagesInfo implements IPagesInfo, Serializable {
 
     @Override
     public GogglePageInfo[] getPages() {
-        return pagesMap.values().toArray(new GogglePageInfo[pagesMap.size()]);
+        return pages;
     }
 
     public void setPages(GogglePageInfo[] pages) {

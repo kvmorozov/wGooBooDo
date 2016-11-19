@@ -151,7 +151,7 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
                 synchronized (bookContext) {
                     INSTANCE.postProcessBook(bookContext);
                 }
-            } //else logger.finest(String.format("Waiting for %s more proxy", proxyNeeded));
+            }
         }
     }
 

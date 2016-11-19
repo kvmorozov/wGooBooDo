@@ -8,8 +8,8 @@ import ru.kmorozov.gbd.core.logic.Proxy.AbstractProxyListProvider;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookExtractor;
 import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
-import ru.kmorozov.gbd.core.logic.model.book.google.GogglePagesInfo;
 import ru.kmorozov.gbd.core.logic.model.book.google.GoogleBookData;
+import ru.kmorozov.gbd.core.logic.model.book.google.GooglePagesInfo;
 import ru.kmorozov.gbd.core.utils.Logger;
 import ru.kmorozov.gbd.core.utils.gson.Mapper;
 
@@ -91,7 +91,7 @@ public class GoogleBookInfoExtractor extends AbstractBookExtractor {
                     if (jsonStart <= 0 || jsonEnd <= 0) return null;
 
                     String pagesJsonData = data.substring(jsonStart, jsonEnd);
-                    GogglePagesInfo pages = Mapper.getGson().fromJson(pagesJsonData, GogglePagesInfo.class);
+                    GooglePagesInfo pages = Mapper.getGson().fromJson(pagesJsonData, GooglePagesInfo.class);
 
                     String bookJsonData = data.substring(data.indexOf(BOOK_INFO_START_TAG) - 2, data.lastIndexOf(BOOK_INFO_END_TAG) - 3);
                     GoogleBookData bookData = Mapper.getGson().fromJson(bookJsonData, GoogleBookData.class);
