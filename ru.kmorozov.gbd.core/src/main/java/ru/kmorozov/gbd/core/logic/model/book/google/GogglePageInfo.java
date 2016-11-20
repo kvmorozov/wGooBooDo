@@ -4,7 +4,6 @@ import com.google.api.client.repackaged.com.google.common.base.Strings;
 import com.google.gson.annotations.SerializedName;
 import ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor;
 import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage;
-import ru.kmorozov.gbd.core.logic.model.book.base.IPage;
 
 import java.io.Serializable;
 

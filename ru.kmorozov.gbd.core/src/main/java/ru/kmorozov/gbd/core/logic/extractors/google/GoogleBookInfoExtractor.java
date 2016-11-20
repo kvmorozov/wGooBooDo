@@ -55,15 +55,12 @@ public class GoogleBookInfoExtractor extends AbstractBookExtractor {
             if (defaultBookInfo == null) {
                 HttpHostExt.NO_PROXY.forceInvalidate(false);
 
-                Iterator<HttpHostExt> hostIterator = AbstractProxyListProvider.getInstance().getProxyList().iterator();
-                while (hostIterator.hasNext()) {
-                    HttpHostExt proxy = hostIterator.next();
+                for (HttpHostExt proxy : AbstractProxyListProvider.getInstance().getProxyList()) {
                     if (proxy == null) continue;
 
                     BookInfo proxyBookInfo = extractBookInfo(getDocumentWithProxy(proxy));
                     if (proxyBookInfo == null) proxy.forceInvalidate(true);
-                    else
-                        return proxyBookInfo;
+                    else return proxyBookInfo;
                 }
             } else return defaultBookInfo;
         } catch (Exception e) {
