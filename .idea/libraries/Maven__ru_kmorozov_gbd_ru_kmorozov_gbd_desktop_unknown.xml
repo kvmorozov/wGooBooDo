@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: ru.kmorozov.gbd:ru.kmorozov.gbd.desktop:unknown">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/ru/kmorozov/gbd/ru.kmorozov.gbd.desktop/unknown/ru.kmorozov.gbd.desktop-unknown.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/ru/kmorozov/gbd/ru.kmorozov.gbd.desktop/unknown/ru.kmorozov.gbd.desktop-unknown-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/ru/kmorozov/gbd/ru.kmorozov.gbd.desktop/unknown/ru.kmorozov.gbd.desktop-unknown-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

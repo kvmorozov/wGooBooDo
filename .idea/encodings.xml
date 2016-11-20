@@ -4,9 +4,9 @@
     <file url="file://$PROJECT_DIR$" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ru.kmorozov.gbd.core" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ru.kmorozov.gbd.desktop" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ru.kmorozov.gbd.desktop.app" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/resources/gui.properties" charset="ISO-8859-1" />
     <file url="file://$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/resources/gui_ru.properties" charset="ISO-8859-1" />
-    <file url="file://$PROJECT_DIR$/src/main/resources/bundles" charset="ISO-8859-1" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>
