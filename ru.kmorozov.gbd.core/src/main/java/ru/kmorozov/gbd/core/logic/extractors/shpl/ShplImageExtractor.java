@@ -15,6 +15,8 @@ import static ru.kmorozov.gbd.core.logic.context.ExecutionContext.INSTANCE;
  */
 public class ShplImageExtractor extends AbstractImageExtractor {
 
+    public static final int DEFAULT_PAGE_WIDTH = 7;
+
     public ShplImageExtractor(BookContext bookContext) {
         super(bookContext);
         logger = INSTANCE.getLogger(ShplImageExtractor.class, bookContext);

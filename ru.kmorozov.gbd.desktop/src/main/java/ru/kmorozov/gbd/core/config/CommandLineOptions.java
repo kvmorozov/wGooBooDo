@@ -79,7 +79,7 @@ public class CommandLineOptions implements IGBDOptions {
     private int getIntOptionValue(String optionName) {
         return commandLine.hasOption(optionName) && commandLine.getOptionValues(optionName).length == 1
                 ? Integer.parseInt(commandLine.getOptionValues(optionName)[0])
-                : GoogleImageExtractor.DEFAULT_PAGE_WIDTH;
+                : 0;
     }
 
     private boolean getBoolOptionValue(String optionName) {

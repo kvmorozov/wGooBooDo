@@ -48,6 +48,8 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
     }
 
     private void scanDir() {
+        int imgWidth = GBDOptions.getImageWidth() == 0 ? GoogleImageExtractor.DEFAULT_PAGE_WIDTH : GBDOptions.getImageWidth();
+
         try {
             Files.walk(Paths.get(bookContext.getOutputDir().toURI())).forEach(filePath -> {
                 setProgress(bookContext.getProgress().incrementAndProgress());
@@ -61,7 +63,7 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
                             if (GBDOptions.reloadImages()) {
                                 BufferedImage bimg = ImageIO.read(new File(filePath.toString()));
                                 _page.setWidth(bimg.getWidth());
-                                _page.dataProcessed.set(bimg.getWidth() >= GBDOptions.getImageWidth());
+                                _page.dataProcessed.set(bimg.getWidth() >= imgWidth);
 
                                 // 1.4 - эмпирически, высота переменная
                                 if (bimg.getWidth() * 1.4 > bimg.getHeight()) {

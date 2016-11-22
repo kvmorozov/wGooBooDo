@@ -19,7 +19,8 @@ class GooglePageImgProcessor extends AbstractPageImgProcessor<GogglePageInfo> {
     }
 
     private boolean processImageWithProxy(HttpHostExt proxy) {
-        return !(!proxy.isLocal() && !proxy.isAvailable()) && processImage(page.getImqRqUrl(bookContext.getBookInfo().getBookId(), GoogleImageExtractor.HTTPS_TEMPLATE, GBDOptions.getImageWidth()), proxy);
+        int imgWidth = GBDOptions.getImageWidth() == 0 ? GoogleImageExtractor.DEFAULT_PAGE_WIDTH : GBDOptions.getImageWidth();
+        return !(!proxy.isLocal() && !proxy.isAvailable()) && processImage(page.getImqRqUrl(bookContext.getBookInfo().getBookId(), GoogleImageExtractor.HTTPS_TEMPLATE, imgWidth), proxy);
     }
 
     @Override

@@ -1,6 +1,8 @@
 package ru.kmorozov.gbd.core.logic.model.book.shpl;
 
 import com.google.gson.annotations.SerializedName;
+import ru.kmorozov.gbd.core.config.GBDOptions;
+import ru.kmorozov.gbd.core.logic.extractors.shpl.ShplImageExtractor;
 import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage;
 
 /**
@@ -37,7 +39,7 @@ public class ShplPage extends AbstractPage {
     }
 
     public String getImgUrl() {
-        return String.format("http://elib.shpl.ru/pages/%s/zooms/%s", id, 7);
+        return String.format("http://elib.shpl.ru/pages/%s/zooms/%s", id, GBDOptions.getImageWidth(ShplImageExtractor.DEFAULT_PAGE_WIDTH));
     }
 
     public void setOrder(Integer order) {

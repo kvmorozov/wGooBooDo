@@ -12,6 +12,8 @@ import ru.kmorozov.gbd.core.utils.HttpConnections;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
 
 import static ru.kmorozov.gbd.core.config.storage.BookContextLoader.BOOK_CTX_LOADER;
 
@@ -41,7 +43,7 @@ public abstract class AbstractBookExtractor extends AbstractHttpProcessor {
         Document doc = null;
 
         try {
-            res = Jsoup.connect(getBookUrl()).userAgent(HttpConnections.USER_AGENT).followRedirects(false).method(Connection.Method.GET).execute();
+            res = Jsoup.connect(getBookUrl()).userAgent(HttpConnections.USER_AGENT).followRedirects(false).timeout(20000).method(Connection.Method.GET).execute();
         } catch (UnknownHostException uhe) {
             logger.severe("Not connected to Internet!");
         } catch (Exception ex) {

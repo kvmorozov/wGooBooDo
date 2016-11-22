@@ -17,4 +17,6 @@ public class GBDOptions {
     public static int getImageWidth() {return INSTANCE.getImageWidth();}
     public static boolean reloadImages() {return INSTANCE.reloadImages();}
     public static boolean secureMode() {return INSTANCE.secureMode();}
+
+    public static int getImageWidth(int defaultValue) {return INSTANCE.getImageWidth() == 0 ? defaultValue : INSTANCE.getImageWidth();}
 }
