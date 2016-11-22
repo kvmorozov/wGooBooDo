@@ -34,7 +34,7 @@ public class OkHttpConnector extends HttpConnector {
         OkHttpClient requestFactory = factoryMap.get(key);
 
         if (requestFactory == null)
-            synchronized (key) {
+            synchronized (proxy) {
                 requestFactory = new OkHttpClient.Builder()
                         .proxy(proxy.getProxy())
                         .connectTimeout(withTimeout ? CONNECT_TIMEOUT : CONNECT_TIMEOUT * 10, TimeUnit.MILLISECONDS)

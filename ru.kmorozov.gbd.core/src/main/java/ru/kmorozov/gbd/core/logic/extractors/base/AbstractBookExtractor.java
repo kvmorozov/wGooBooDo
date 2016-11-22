@@ -12,8 +12,6 @@ import ru.kmorozov.gbd.core.utils.HttpConnections;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.Map;
 
 import static ru.kmorozov.gbd.core.config.storage.BookContextLoader.BOOK_CTX_LOADER;
 

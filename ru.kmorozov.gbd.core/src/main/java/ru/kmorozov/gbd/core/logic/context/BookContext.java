@@ -43,7 +43,7 @@ public class BookContext {
         this.metadata = LibraryFactory.getMetadata(bookId);
 
         Predicate<AbstractPage> pagePredicate = AbstractPage::isDataProcessed;
-        long pagesToProcess = Arrays.asList(bookInfo.getPages().getPages()).stream().filter(pagePredicate.negate()).count();
+        long pagesToProcess = Arrays.stream(bookInfo.getPages().getPages()).filter(pagePredicate.negate()).count();
         imgExecutor = new QueuedThreadPoolExecutor(pagesToProcess, THREAD_POOL_SIZE, pagePredicate);
     }
 
@@ -81,12 +81,12 @@ public class BookContext {
     }
 
     public long getPagesBefore() {
-        if (pagesBefore == 0l) pagesBefore = getPagesStream().filter(pageInfo -> pageInfo.dataProcessed.get()).count();
+        if (pagesBefore == 0L) pagesBefore = getPagesStream().filter(pageInfo -> pageInfo.dataProcessed.get()).count();
         return pagesBefore;
     }
 
     public Stream<AbstractPage> getPagesStream() {
-        return Arrays.asList(bookInfo.getPages().getPages()).stream();
+        return Arrays.stream(bookInfo.getPages().getPages());
     }
 
     @Override

@@ -24,7 +24,7 @@ public class GoogleHttpConnector extends HttpConnector {
 
         HttpRequestFactory requestFactory = httpFactoryMap.get(key);
 
-        if (requestFactory == null) synchronized (key) {
+        if (requestFactory == null) synchronized (proxy) {
             requestFactory = new NetHttpTransport.Builder().setProxy(proxy.getProxy()).build().createRequestFactory();
 
             httpFactoryMap.put(key, requestFactory);

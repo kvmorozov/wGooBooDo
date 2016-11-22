@@ -1,7 +1,6 @@
 package ru.kmorozov.gbd.core.config;
 
 import org.apache.commons.cli.*;
-import ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor;
 
 /**
  * Created by km on 06.12.2015.

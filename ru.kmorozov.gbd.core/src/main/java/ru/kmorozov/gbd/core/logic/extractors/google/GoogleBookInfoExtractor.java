@@ -13,8 +13,6 @@ import ru.kmorozov.gbd.core.logic.model.book.google.GooglePagesInfo;
 import ru.kmorozov.gbd.core.utils.Logger;
 import ru.kmorozov.gbd.core.utils.gson.Mapper;
 
-import java.io.IOException;
-import java.util.Iterator;
 import java.util.List;
 
 import static ru.kmorozov.gbd.core.logic.context.ExecutionContext.INSTANCE;
@@ -70,7 +68,7 @@ public class GoogleBookInfoExtractor extends AbstractBookExtractor {
         return null;
     }
 
-    private BookInfo extractBookInfo(Document doc) throws IOException {
+    private BookInfo extractBookInfo(Document doc) {
         if (doc == null) return null;
 
         Elements scripts = doc.select("script");
@@ -103,6 +101,6 @@ public class GoogleBookInfoExtractor extends AbstractBookExtractor {
 
     @Override
     public BookInfo getBookInfo() {
-        return (BookInfo) bookInfo;
+        return bookInfo;
     }
 }
