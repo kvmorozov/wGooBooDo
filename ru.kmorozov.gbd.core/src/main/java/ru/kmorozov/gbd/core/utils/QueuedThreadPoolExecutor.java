@@ -35,7 +35,11 @@ public class QueuedThreadPoolExecutor<T> extends ThreadPoolExecutor {
 
         setRejectedExecutionHandler((r, executor) -> {
             try {
-                getQueue().put(r);
+                if (r instanceof IUniqueRunnable) {
+                    synchronized (((IUniqueRunnable) r).getUniqueObject()) {
+                        if (!completeChecker.test((T) r)) getQueue().put(r);
+                    }
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

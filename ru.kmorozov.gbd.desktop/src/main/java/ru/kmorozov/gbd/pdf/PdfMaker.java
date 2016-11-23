@@ -63,7 +63,6 @@ public class PdfMaker implements IPostProcessor {
                 if (pdfFile.lastModified() < bookInfo.getLastPdfChecked()) existPages = bookContext.getPagesBefore();
                 else try (PDDocument existDocument = PDDocument.load(pdfFile)) {
                     existPages = existDocument.getNumberOfPages();
-                    bookInfo.setLastPdfChecked(System.currentTimeMillis());
                 } catch (Exception ex) {
                     pdfFile.createNewFile();
                 }
@@ -107,6 +106,7 @@ public class PdfMaker implements IPostProcessor {
             }
 
             document.save(pdfFile);
+            bookInfo.setLastPdfChecked(System.currentTimeMillis());
         } catch (IOException e) {
             e.printStackTrace();
         }
