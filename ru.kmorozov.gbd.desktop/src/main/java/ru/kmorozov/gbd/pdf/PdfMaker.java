@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -81,7 +82,7 @@ public class PdfMaker implements IPostProcessor {
                     return;
                 }
 
-                Files.list(imgDir.toPath()).filter(Images::isImageFile).sorted((o1, o2) -> getPagenum(o1).compareTo(getPagenum(o2))).forEach(filePath -> {
+                Files.list(imgDir.toPath()).filter(Images::isImageFile).sorted(Comparator.comparing(this::getPagenum)).forEach(filePath -> {
                     try (InputStream in = new FileInputStream(filePath.toFile())) {
                         BufferedImage bimg = ImageIO.read(in);
                         float width = bimg.getWidth();

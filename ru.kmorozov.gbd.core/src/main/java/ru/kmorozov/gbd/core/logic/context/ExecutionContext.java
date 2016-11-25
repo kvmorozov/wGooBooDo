@@ -54,11 +54,7 @@ public class ExecutionContext {
 
     public void addBookContext(IBookListProducer idsProducer, IProgress progress, IPostProcessor postProcessor) {
         for (String bookId : idsProducer.getBookIds()) {
-            BookContext bookContext = bookContextMap.get(bookId);
-            if (bookContext == null) {
-                bookContext = new BookContext(bookId, progress, postProcessor);
-                bookContextMap.put(bookId, bookContext);
-            }
+            bookContextMap.computeIfAbsent(bookId, k -> new BookContext(bookId, progress, postProcessor));
         }
     }
 

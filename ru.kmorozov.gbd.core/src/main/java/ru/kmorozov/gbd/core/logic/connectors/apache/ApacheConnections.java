@@ -94,11 +94,7 @@ public class ApacheConnections {
             Map<HttpHost, HttpClient> _map = withTimeout ? withTimeoutClientsMap : clientsMap;
 
             HttpHost host = new HttpHost(proxy.getHost().getAddress());
-            HttpClient client = _map.get(host);
-            if (client == null) {
-                client = _builder.setProxy(host).build();
-                _map.put(host, client);
-            }
+            HttpClient client = _map.computeIfAbsent(host, k -> _builder.setProxy(host).build());
 
             return client;
         }

@@ -1,6 +1,7 @@
 package ru.kmorozov.gbd.core.logic.Proxy;
 
 import com.google.api.client.http.HttpResponse;
+import org.apache.commons.lang3.StringUtils;
 import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.utils.HttpConnections;
@@ -44,13 +45,7 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
     }
 
     private String getCookie(InetSocketAddress proxy) {
-        try {
-            HttpResponse resp = HttpConnections.getResponse(proxy);
-
-            return ((ArrayList) resp.getHeaders().get("set-cookie")).get(0).toString().split(";")[0];
-        } catch (Exception e) {
-            return null;
-        }
+        return HttpConnections.getCookieString(proxy);
     }
 
     private class ProxyChecker implements Runnable {
@@ -78,7 +73,7 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
                 InetSocketAddress host = new InetSocketAddress(proxyItemArr[0], Integer.parseInt(proxyItemArr[1]));
                 String cookie = getCookie(host);
                 proxy = new HttpHostExt(host, cookie);
-                if (cookie != null) {
+                if (!StringUtils.isEmpty(cookie)) {
                     if (!GBDOptions.secureMode() || proxy.isSecure()) {
                         logger.info(String.format("%sroxy %s added.", GBDOptions.secureMode() ? proxy.isSecure() ? "Secure p" : "NOT secure p" : "P", host.toString()));
                     } else {

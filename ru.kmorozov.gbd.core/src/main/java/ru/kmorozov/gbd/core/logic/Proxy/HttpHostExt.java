@@ -1,6 +1,7 @@
 package ru.kmorozov.gbd.core.logic.Proxy;
 
 import com.google.api.client.http.GenericUrl;
+import com.google.api.client.http.HttpHeaders;
 import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.javanet.NetHttpTransport;
@@ -8,6 +9,7 @@ import com.google.api.client.repackaged.com.google.common.base.Strings;
 import org.apache.commons.io.IOUtils;
 import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
+import ru.kmorozov.gbd.core.utils.HttpConnections;
 import ru.kmorozov.gbd.core.utils.Logger;
 
 import java.io.IOException;
@@ -38,6 +40,7 @@ public class HttpHostExt {
     private final AtomicBoolean available;
     private final AtomicInteger failureCount;
     private boolean isSecure = true;
+    private volatile HttpHeaders headers;
 
     public HttpHostExt(InetSocketAddress host, String cookie) {
         this.host = host;
@@ -181,5 +184,18 @@ public class HttpHostExt {
     public static HttpHostExt getProxyFromString(String proxyStr) {
         String[] proxyVars = proxyStr.split(";");
         return new HttpHostExt(new InetSocketAddress(proxyVars[0], Integer.parseInt(proxyVars[1])), Integer.parseInt(proxyVars[2]));
+    }
+
+    public HttpHeaders getHeaders() {
+        if (headers == null || headers.getCookie() == null) {
+            headers = HttpConnections.getHeaders(this);
+            if (headers.getCookie() == null) headers.setCookie(HttpConnections.getCookieString(host));
+            if (headers.getCookie() == null) {
+                logger.severe(String.format("Cannot get cookies for proxy %s", this.toString()));
+                forceInvalidate(false);
+            }
+        }
+
+        return headers;
     }
 }

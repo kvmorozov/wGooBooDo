@@ -19,7 +19,7 @@ public class GoogleHttpConnector extends HttpConnector {
 
     private static final Map<String, HttpRequestFactory> httpFactoryMap = new ConcurrentHashMap<>();
 
-    private HttpRequestFactory getFactory(HttpHostExt proxy) {
+    private HttpRequestFactory getFactory(final HttpHostExt proxy) {
         String key = getProxyKey(proxy);
 
         HttpRequestFactory requestFactory = httpFactoryMap.get(key);
@@ -39,7 +39,7 @@ public class GoogleHttpConnector extends HttpConnector {
 
             if ((GBDOptions.secureMode() && proxy.isLocal()) || !proxy.isAvailable()) return null;
 
-            HttpRequest req = getFactory(proxy).buildGetRequest(url).setConnectTimeout(withTimeout ? CONNECT_TIMEOUT : CONNECT_TIMEOUT * 10).setHeaders(HttpConnections.getHeaders(proxy));
+            HttpRequest req = getFactory(proxy).buildGetRequest(url).setConnectTimeout(withTimeout ? CONNECT_TIMEOUT : CONNECT_TIMEOUT * 10).setHeaders(proxy.getHeaders());
             HttpResponse resp = getContent(req, proxy, 0);
 
             if (resp == null)
