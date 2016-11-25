@@ -5,16 +5,16 @@ import ru.kmorozov.gbd.core.logic.Proxy.AbstractProxyListProvider;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractPageImgProcessor;
-import ru.kmorozov.gbd.core.logic.model.book.google.GogglePageInfo;
+import ru.kmorozov.gbd.core.logic.model.book.google.GooglePageInfo;
 
 /**
  * Created by km on 21.11.2015.
  */
-class GooglePageImgProcessor extends AbstractPageImgProcessor<GogglePageInfo> {
+class GooglePageImgProcessor extends AbstractPageImgProcessor<GooglePageInfo> {
 
     private static final String IMG_ERROR_TEMPLATE = "No img at %s with proxy %s";
 
-    public GooglePageImgProcessor(BookContext bookContext, GogglePageInfo page, HttpHostExt usedProxy) {
+    public GooglePageImgProcessor(BookContext bookContext, GooglePageInfo page, HttpHostExt usedProxy) {
         super(bookContext, page, usedProxy);
     }
 

@@ -9,7 +9,7 @@ import ru.kmorozov.gbd.core.logic.connectors.Response;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractHttpProcessor;
 import ru.kmorozov.gbd.core.logic.extractors.base.IUniqueRunnable;
-import ru.kmorozov.gbd.core.logic.model.book.google.GogglePageInfo;
+import ru.kmorozov.gbd.core.logic.model.book.google.GooglePageInfo;
 import ru.kmorozov.gbd.core.logic.model.book.google.GooglePagesInfo;
 import ru.kmorozov.gbd.core.logic.progress.IProgress;
 import ru.kmorozov.gbd.core.utils.QueuedThreadPoolExecutor;
@@ -35,20 +35,20 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
 
     private final HttpHostExt proxy;
     private final BookContext bookContext;
-    private final QueuedThreadPoolExecutor<GogglePageInfo> sigPageExecutor;
+    private final QueuedThreadPoolExecutor<GooglePageInfo> sigPageExecutor;
 
     public GooglePageSigProcessor(BookContext bookContext, HttpHostExt proxy) {
         this.bookContext = bookContext;
         this.proxy = proxy;
 
-        sigPageExecutor = new QueuedThreadPoolExecutor<>(-1, THREAD_POOL_SIZE, GogglePageInfo::isSigChecked);
+        sigPageExecutor = new QueuedThreadPoolExecutor<>(-1, THREAD_POOL_SIZE, GooglePageInfo::isSigChecked);
     }
 
-    private class SigProcessorInternal implements IUniqueRunnable<GogglePageInfo> {
+    private class SigProcessorInternal implements IUniqueRunnable<GooglePageInfo> {
 
-        private GogglePageInfo page;
+        private GooglePageInfo page;
 
-        SigProcessorInternal(GogglePageInfo page) {
+        SigProcessorInternal(GooglePageInfo page) {
             this.page = page;
         }
 
@@ -72,10 +72,10 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
                 String respStr = IOUtils.toString(resp.getContent(), Charset.defaultCharset());
                 GooglePagesInfo framePages = Mapper.getGson().fromJson(respStr, GooglePagesInfo.class);
 
-                GogglePageInfo[] pages = framePages.getPages();
-                for (GogglePageInfo framePage : pages)
+                GooglePageInfo[] pages = framePages.getPages();
+                for (GooglePageInfo framePage : pages)
                     if (framePage.getOrder() >= page.getOrder() && framePage.getSrc() != null) {
-                        GogglePageInfo _page = (GogglePageInfo) bookContext.getBookInfo().getPages().getPageByPid(framePage.getPid());
+                        GooglePageInfo _page = (GooglePageInfo) bookContext.getBookInfo().getPages().getPageByPid(framePage.getPid());
 
                         if (_page.dataProcessed.get() || _page.getSig() != null || _page.sigChecked.get()) continue;
 
@@ -115,7 +115,7 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
         }
 
         @Override
-        public GogglePageInfo getUniqueObject() {
+        public GooglePageInfo getUniqueObject() {
             return page;
         }
     }
@@ -130,7 +130,7 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
 
         bookContext.getPagesStream().forEach(page -> {
             psSigs.inc();
-            sigPageExecutor.execute(new SigProcessorInternal((GogglePageInfo) page));
+            sigPageExecutor.execute(new SigProcessorInternal((GooglePageInfo) page));
         });
         sigPageExecutor.terminate(3, TimeUnit.MINUTES);
 

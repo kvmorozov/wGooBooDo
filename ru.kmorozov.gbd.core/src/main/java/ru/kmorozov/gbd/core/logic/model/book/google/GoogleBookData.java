@@ -76,7 +76,7 @@ public class GoogleBookData implements IBookData, Serializable {
     @SerializedName("is_public_domain")
     private boolean publicDomain;
     @SerializedName("last_page")
-    private GogglePageInfo lastPage;
+    private GooglePageInfo lastPage;
 
     @Override
     public String getTitle() {

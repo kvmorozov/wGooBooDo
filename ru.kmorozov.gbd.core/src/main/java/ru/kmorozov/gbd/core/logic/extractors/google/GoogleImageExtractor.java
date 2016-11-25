@@ -6,7 +6,7 @@ import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractImageExtractor;
-import ru.kmorozov.gbd.core.logic.model.book.google.GogglePageInfo;
+import ru.kmorozov.gbd.core.logic.model.book.google.GooglePageInfo;
 import ru.kmorozov.gbd.core.logic.model.book.google.GoogleBookData;
 import ru.kmorozov.gbd.core.utils.Images;
 
@@ -57,7 +57,7 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
                 if (Images.isImageFile(filePath)) {
                     String fileName = FilenameUtils.getBaseName(filePath.toString());
                     String[] nameParts = fileName.split("_");
-                    GogglePageInfo _page = (GogglePageInfo) bookContext.getBookInfo().getPages().getPageByPid(nameParts[1]);
+                    GooglePageInfo _page = (GooglePageInfo) bookContext.getBookInfo().getPages().getPageByPid(nameParts[1]);
                     if (_page != null) {
                         try {
                             if (GBDOptions.reloadImages()) {
@@ -137,8 +137,8 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
                 bookContext.sigExecutor.terminate(3, TimeUnit.MINUTES);
 
                 bookContext.getPagesStream()
-                        .filter(page -> !page.dataProcessed.get() && ((GogglePageInfo) page).getSig() != null)
-                        .forEach(page -> bookContext.imgExecutor.execute(new GooglePageImgProcessor(bookContext, (GogglePageInfo) page, HttpHostExt.NO_PROXY)));
+                        .filter(page -> !page.dataProcessed.get() && ((GooglePageInfo) page).getSig() != null)
+                        .forEach(page -> bookContext.imgExecutor.execute(new GooglePageImgProcessor(bookContext, (GooglePageInfo) page, HttpHostExt.NO_PROXY)));
 
                 bookContext.imgExecutor.terminate(5, TimeUnit.MINUTES);
 

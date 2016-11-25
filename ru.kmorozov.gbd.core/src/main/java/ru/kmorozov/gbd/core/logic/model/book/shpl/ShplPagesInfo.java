@@ -2,7 +2,7 @@ package ru.kmorozov.gbd.core.logic.model.book.shpl;
 
 import com.google.gson.annotations.SerializedName;
 import ru.kmorozov.gbd.core.logic.model.book.base.IPagesInfo;
-import ru.kmorozov.gbd.core.logic.model.book.google.GogglePageInfo;
+import ru.kmorozov.gbd.core.logic.model.book.google.GooglePageInfo;
 
 /**
  * Created by sbt-morozov-kv on 16.11.2016.
@@ -32,7 +32,7 @@ public class ShplPagesInfo implements IPagesInfo {
     }
 
     @Override
-    public GogglePageInfo getPageByPid(String pid) {
+    public GooglePageInfo getPageByPid(String pid) {
         return null;
     }
 }

@@ -2,7 +2,7 @@ package ru.kmorozov.gbd.core.utils.gson;
 
 import com.google.gson.*;
 import ru.kmorozov.gbd.core.logic.model.book.base.IPage;
-import ru.kmorozov.gbd.core.logic.model.book.google.GogglePageInfo;
+import ru.kmorozov.gbd.core.logic.model.book.google.GooglePageInfo;
 import ru.kmorozov.gbd.core.logic.model.book.shpl.ShplPage;
 
 import java.lang.reflect.Type;
@@ -16,7 +16,7 @@ public class IPageAdapter implements JsonSerializer<IPage> ,JsonDeserializer<IPa
     public IPage deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject jsonObject = json.getAsJsonObject();
 
-        return context.deserialize(jsonObject, jsonObject.get("pid") == null ? ShplPage.class : GogglePageInfo.class);
+        return context.deserialize(jsonObject, jsonObject.get("pid") == null ? ShplPage.class : GooglePageInfo.class);
     }
 
     @Override

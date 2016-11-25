@@ -45,18 +45,14 @@ public class HttpConnections {
         HttpHostExt.NO_PROXY.setCookie(cookieBuilder.toString());
     }
 
-    private HttpHeaders _getHeaders(HttpHostExt proxy) {
-        HttpHeaders headers = headersMap.get(proxy);
+    private HttpHeaders _getHeaders(final HttpHostExt proxy) {
+        return headersMap.computeIfAbsent(proxy, httpHostExt -> {
+            HttpHeaders _headers = new HttpHeaders();
+            _headers.setUserAgent(USER_AGENT);
+            _headers.setCookie(httpHostExt.getCookie());
 
-        if (headers == null) {
-            headers = new HttpHeaders();
-            headers.setUserAgent(USER_AGENT);
-            headers.setCookie(proxy.getCookie());
-
-            headersMap.put(proxy, headers);
-        }
-
-        return headers;
+            return _headers;
+        });
     }
 
     private HttpResponse _getResponse(Proxy proxy) {
@@ -101,8 +97,7 @@ public class HttpConnections {
         try {
             HttpResponse resp = HttpConnections.getResponse(proxy);
 
-            if (resp == null)
-                return "";
+            if (resp == null) return "";
 
             return ((ArrayList) resp.getHeaders().get("set-cookie")).get(0).toString().split(";")[0];
         } catch (Exception e) {

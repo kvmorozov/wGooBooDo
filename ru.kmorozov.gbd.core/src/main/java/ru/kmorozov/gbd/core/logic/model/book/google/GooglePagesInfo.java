@@ -21,28 +21,28 @@ public class GooglePagesInfo implements IPagesInfo, Serializable {
     private static final Logger logger = INSTANCE.getLogger(GooglePagesInfo.class);
 
     @SerializedName("page")
-    private GogglePageInfo[] pages;
+    private GooglePageInfo[] pages;
     @SerializedName("prefix")
     private String prefix;
 
-    private transient Map<String, GogglePageInfo> pagesMap;
-    private transient LinkedList<GogglePageInfo> pagesList;
+    private transient Map<String, GooglePageInfo> pagesMap;
+    private transient LinkedList<GooglePageInfo> pagesList;
 
-    private void addPage(GogglePageInfo page) {
+    private void addPage(GooglePageInfo page) {
         pagesMap.put(page.getPid(), page);
         pagesList.add(page);
     }
 
     @Override
     public void build() {
-        List<GogglePageInfo> _pages = Arrays.asList(pages);
+        List<GooglePageInfo> _pages = Arrays.asList(pages);
         pagesMap = new ConcurrentHashMap<>(_pages.size());
         pagesList = new LinkedList<>();
 
-        _pages.sort(GogglePageInfo::compareTo);
+        _pages.sort(GooglePageInfo::compareTo);
 
-        GogglePageInfo prevPage = null;
-        for (GogglePageInfo page : _pages) {
+        GooglePageInfo prevPage = null;
+        for (GooglePageInfo page : _pages) {
             addPage(page);
 
             if (prevPage != null && page.getOrder() - prevPage.getOrder() > 1) fillGap(prevPage, page);
@@ -51,7 +51,7 @@ public class GooglePagesInfo implements IPagesInfo, Serializable {
         }
     }
 
-    private void fillGap(GogglePageInfo beginGap, GogglePageInfo endGap) {
+    private void fillGap(GooglePageInfo beginGap, GooglePageInfo endGap) {
         if (beginGap.isGapPage() || endGap.isGapPage())
             return;
 
@@ -67,13 +67,13 @@ public class GooglePagesInfo implements IPagesInfo, Serializable {
         if (beginPagePrefix.equals(endPagePrefix)) {
             for (int index = beginGap.getOrder() + 1; index < endGap.getOrder(); index++) {
                 String pid = beginPageNum > 0 ? beginPagePrefix + (beginPageNum + index - beginGap.getOrder()) : beginGap.getPid() + "_" + index;
-                GogglePageInfo gapPage = new GogglePageInfo(pid, index);
+                GooglePageInfo gapPage = new GooglePageInfo(pid, index);
                 addPage(gapPage);
             }
 
             if (beginPageNum > 0 && endPageNum > 0)
                 for (int index = beginGap.getOrder() + 1; index < endGap.getOrder() - endPageNum; index++) {
-                    GogglePageInfo gapPage = new GogglePageInfo(beginPagePrefix + String.valueOf(index + 1), index);
+                    GooglePageInfo gapPage = new GooglePageInfo(beginPagePrefix + String.valueOf(index + 1), index);
                     addPage(gapPage);
                 }
         } else {
@@ -84,7 +84,7 @@ public class GooglePagesInfo implements IPagesInfo, Serializable {
                     if (endPageNum - index < 1) break;
                     String newPagePidFromEnd = endPagePrefix + (endPageNum - index);
                     if (!pagesMap.containsKey(newPagePidFromEnd) && !beginPagePrefix.contains(newPagePidFromEnd)) {
-                        GogglePageInfo gapPage = new GogglePageInfo(newPagePidFromEnd, endGap.getOrder() - index);
+                        GooglePageInfo gapPage = new GooglePageInfo(newPagePidFromEnd, endGap.getOrder() - index);
                         addPage(gapPage);
                         pagesCreated++;
                     } else break;
@@ -93,7 +93,7 @@ public class GooglePagesInfo implements IPagesInfo, Serializable {
                     pagesToCreate = pagesToCreate - pagesCreated;
                     for (int index = 1; index <= pagesToCreate; index++) {
                         String newPagePidFromBegin = beginPagePrefix + (beginPageNum + index);
-                        GogglePageInfo gapPage = new GogglePageInfo(newPagePidFromBegin, beginGap.getOrder() + index);
+                        GooglePageInfo gapPage = new GooglePageInfo(newPagePidFromBegin, beginGap.getOrder() + index);
                         addPage(gapPage);
                     }
                 }
@@ -102,47 +102,47 @@ public class GooglePagesInfo implements IPagesInfo, Serializable {
             }
         }
 
-        pagesList.sort(GogglePageInfo::compareTo);
+        pagesList.sort(GooglePageInfo::compareTo);
     }
 
     @Override
-    public GogglePageInfo getPageByPid(String pid) {
+    public GooglePageInfo getPageByPid(String pid) {
         return pagesMap.get(pid);
     }
 
     @Override
-    public GogglePageInfo[] getPages() {
+    public GooglePageInfo[] getPages() {
         return pages;
     }
 
-    public void setPages(GogglePageInfo[] pages) {
+    public void setPages(GooglePageInfo[] pages) {
         this.pages = pages;
         this.pagesMap = new HashMap<>();
 
-        if (pages != null) for (GogglePageInfo page : pages)
+        if (pages != null) for (GooglePageInfo page : pages)
             pagesMap.put(page.getPid(), page);
     }
 
     @Override
     public String getMissingPagesList() {
-        Predicate<GogglePageInfo> predicate = pageInfo -> !pageInfo.fileExists.get();
+        Predicate<GooglePageInfo> predicate = pageInfo -> !pageInfo.fileExists.get();
         return getListByCondition(predicate);
     }
 
-    private Pair<GogglePageInfo, GogglePageInfo> createPair(GogglePageInfo p1, GogglePageInfo p2) {
+    private Pair<GooglePageInfo, GooglePageInfo> createPair(GooglePageInfo p1, GooglePageInfo p2) {
         return p1.getOrder() < p2.getOrder() ? new ImmutablePair(p1, p2) : new ImmutablePair(p2, p1);
     }
 
-    private String getListByCondition(Predicate<GogglePageInfo> condition) {
+    private String getListByCondition(Predicate<GooglePageInfo> condition) {
         StringBuilder bList = new StringBuilder();
-        List<Pair<GogglePageInfo, GogglePageInfo>> pairs = new ArrayList<>();
+        List<Pair<GooglePageInfo, GooglePageInfo>> pairs = new ArrayList<>();
 
-        GogglePageInfo blockStart = null, prevPage = null;
+        GooglePageInfo blockStart = null, prevPage = null;
 
         long filteredCount = pagesList.stream().filter(condition).count();
-        GogglePageInfo lastPage = pagesList.getLast();
+        GooglePageInfo lastPage = pagesList.getLast();
 
-        for (GogglePageInfo currentPage : pagesList) {
+        for (GooglePageInfo currentPage : pagesList) {
             if (condition.test(currentPage)) if (blockStart == null) {
                 blockStart = currentPage;
             } else {
@@ -160,7 +160,7 @@ public class GooglePagesInfo implements IPagesInfo, Serializable {
             prevPage = currentPage;
         }
 
-        for (Pair<GogglePageInfo, GogglePageInfo> pair : pairs)
+        for (Pair<GooglePageInfo, GooglePageInfo> pair : pairs)
             if (pair.getLeft() == pair.getRight()) bList.append(String.format("%s, ", pair.getLeft().getPid()));
             else bList.append(String.format("%s-%s, ", pair.getLeft().getPid(), pair.getRight().getPid()));
 

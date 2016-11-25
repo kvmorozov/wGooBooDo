@@ -11,7 +11,7 @@ import java.io.Serializable;
  * Created by km on 21.11.2015.
  */
 
-public class GogglePageInfo extends AbstractPage implements Serializable, Comparable<GogglePageInfo> {
+public class GooglePageInfo extends AbstractPage implements Serializable, Comparable<GooglePageInfo> {
 
     @SerializedName("pid")
     private String pid;
@@ -37,11 +37,11 @@ public class GogglePageInfo extends AbstractPage implements Serializable, Compar
 
     private transient boolean gapPage = false;
 
-    public GogglePageInfo() {
+    public GooglePageInfo() {
     }
 
     // Создание страниц для заполнения разрыва
-    public GogglePageInfo(String pid, int order) {
+    public GooglePageInfo(String pid, int order) {
         this.pid = pid;
         this.order = order;
 
@@ -112,7 +112,7 @@ public class GogglePageInfo extends AbstractPage implements Serializable, Compar
     }
 
     @Override
-    public int compareTo(GogglePageInfo anotherPage) {
+    public int compareTo(GooglePageInfo anotherPage) {
         return this.getOrder().compareTo(anotherPage.getOrder());
     }
 
