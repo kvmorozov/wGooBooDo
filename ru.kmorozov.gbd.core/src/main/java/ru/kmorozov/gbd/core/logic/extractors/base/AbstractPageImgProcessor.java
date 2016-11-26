@@ -72,7 +72,7 @@ public abstract class AbstractPageImgProcessor<T extends AbstractPage> extends A
                         else return false;
                     } else break;
 
-                    if (outputFile != null && outputFile.exists()) break;
+                    if (outputFile.exists()) break;
 
                     if (!proxy.isLocal())
                         logger.info(String.format("Started img %s for %s with %s Proxy", reloadFlag ? "RELOADING" : "processing", page.getPid(), proxy.toString()));

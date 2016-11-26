@@ -89,7 +89,6 @@ public abstract class AbstractImageExtractor extends AbstractEventSource impleme
             boolean dirResult = bookContext.getOutputDir().mkdir();
             if (!dirResult) {
                 logger.severe(String.format("Invalid book title: %s", bookContext.getBookInfo().getBookData().getTitle()));
-                return;
             }
         }
     }

@@ -130,7 +130,7 @@ public class GooglePagesInfo implements IPagesInfo, Serializable {
     }
 
     private Pair<GooglePageInfo, GooglePageInfo> createPair(GooglePageInfo p1, GooglePageInfo p2) {
-        return p1.getOrder() < p2.getOrder() ? new ImmutablePair(p1, p2) : new ImmutablePair(p2, p1);
+        return p1.getOrder() < p2.getOrder() ? new ImmutablePair<>(p1, p2) : new ImmutablePair<>(p2, p1);
     }
 
     private String getListByCondition(Predicate<GooglePageInfo> condition) {

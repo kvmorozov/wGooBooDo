@@ -100,9 +100,7 @@ public class HttpHostExt {
 
     @Override
     public boolean equals(final Object obj) {
-        if (obj == null || !(obj instanceof HttpHostExt)) return false;
-
-        return host.equals(((HttpHostExt) obj).getHost());
+        return !(obj == null || !(obj instanceof HttpHostExt)) && host.equals(((HttpHostExt) obj).getHost());
     }
 
     @Override
@@ -164,9 +162,7 @@ public class HttpHostExt {
     }
 
     public boolean isSameAsStr(String proxyStr) {
-        if (Strings.isNullOrEmpty(proxyStr)) return false;
-
-        return proxyStr.equals(getProxyStringShort());
+        return !Strings.isNullOrEmpty(proxyStr) && proxyStr.equals(getProxyStringShort());
     }
 
     public void update(HttpHostExt anotherHost) {

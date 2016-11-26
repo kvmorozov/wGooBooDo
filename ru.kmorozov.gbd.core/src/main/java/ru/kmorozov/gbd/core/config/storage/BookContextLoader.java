@@ -44,7 +44,7 @@ public class BookContextLoader extends BaseLoader {
 
         try {
             try (FileWriter writer = new FileWriter(getFileToLoad(true))) {
-                Mapper.getGson().toJson(new ArrayList(booksInfo.values()), writer);
+                Mapper.getGson().toJson(new ArrayList<>(booksInfo.values()), writer);
             }
         } catch (IOException e) {
             e.printStackTrace();

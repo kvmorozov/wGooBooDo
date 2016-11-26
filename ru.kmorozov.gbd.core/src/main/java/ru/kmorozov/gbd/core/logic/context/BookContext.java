@@ -22,7 +22,7 @@ import static ru.kmorozov.gbd.core.utils.QueuedThreadPoolExecutor.THREAD_POOL_SI
  */
 public class BookContext {
 
-    public final QueuedThreadPoolExecutor<BookContext> sigExecutor = new QueuedThreadPoolExecutor(1, THREAD_POOL_SIZE, x -> true);
+    public final QueuedThreadPoolExecutor<BookContext> sigExecutor = new QueuedThreadPoolExecutor<>(1, THREAD_POOL_SIZE, x -> true);
     public final QueuedThreadPoolExecutor<AbstractPage> imgExecutor;
 
     public AtomicBoolean started = new AtomicBoolean(false);
@@ -46,7 +46,7 @@ public class BookContext {
 
         long pagesToProcess = Arrays.stream(bookInfo.getPages().getPages()).filter(pagePredicate.negate()).count();
         pagesBefore = getPagesStream().filter(pageInfo -> pageInfo.dataProcessed.get()).count();
-        imgExecutor = new QueuedThreadPoolExecutor(pagesToProcess, THREAD_POOL_SIZE, pagePredicate);
+        imgExecutor = new QueuedThreadPoolExecutor<>(pagesToProcess, THREAD_POOL_SIZE, pagePredicate);
     }
 
     public String getBookId() {

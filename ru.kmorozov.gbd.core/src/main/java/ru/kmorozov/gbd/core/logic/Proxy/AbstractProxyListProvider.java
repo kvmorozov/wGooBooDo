@@ -1,6 +1,5 @@
 package ru.kmorozov.gbd.core.logic.Proxy;
 
-import com.google.api.client.http.HttpResponse;
 import org.apache.commons.lang3.StringUtils;
 import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
@@ -8,7 +7,6 @@ import ru.kmorozov.gbd.core.utils.HttpConnections;
 import ru.kmorozov.gbd.core.utils.Logger;
 
 import java.net.InetSocketAddress;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -37,10 +35,10 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
 
     private String[] splitItems(String proxyItem) {
         String[] tmpItems = splitItems(proxyItem, DEFAULT_PROXY_DELIMITER);
-        if (tmpItems != null && tmpItems.length >= 2) return tmpItems;
+        if (tmpItems.length >= 2) return tmpItems;
         else {
             tmpItems = splitItems(proxyItem, "\\s+");
-            return tmpItems != null && tmpItems.length >= 2 ? tmpItems : null;
+            return tmpItems.length >= 2 ? tmpItems : null;
         }
     }
 
