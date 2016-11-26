@@ -28,7 +28,7 @@ import static ru.kmorozov.gbd.core.utils.QueuedThreadPoolExecutor.THREAD_POOL_SI
 /**
  * Created by km on 21.11.2015.
  */
-class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRunnable<BookContext> {
+class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRunnable<HttpHostExt> {
 
     private static final String SIG_ERROR_TEMPLATE = "No sig at %s with proxy %s";
     private static final String SIG_WRONG_FORMAT = "Wrong sig format: %s";
@@ -138,8 +138,8 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
     }
 
     @Override
-    public BookContext getUniqueObject() {
-        return bookContext;
+    public HttpHostExt getUniqueObject() {
+        return proxy;
     }
 
     @Override
