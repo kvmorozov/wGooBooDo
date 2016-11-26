@@ -2,6 +2,8 @@ package ru.kmorozov.gbd.core.logic.extractors.google;
 
 import com.google.gson.JsonParseException;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.hc.core5.http.NoHttpResponseException;
 import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
@@ -28,7 +30,7 @@ import static ru.kmorozov.gbd.core.utils.QueuedThreadPoolExecutor.THREAD_POOL_SI
 /**
  * Created by km on 21.11.2015.
  */
-class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRunnable<HttpHostExt> {
+class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRunnable<GooglePageSigProcessor> {
 
     private static final String SIG_ERROR_TEMPLATE = "No sig at %s with proxy %s";
     private static final String SIG_WRONG_FORMAT = "Wrong sig format: %s";
@@ -138,12 +140,28 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
     }
 
     @Override
-    public HttpHostExt getUniqueObject() {
-        return proxy;
+    public GooglePageSigProcessor getUniqueObject() {
+        return this;
     }
 
     @Override
     public String toString() {
         return "Sig processor:" + bookContext.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        GooglePageSigProcessor that = (GooglePageSigProcessor) o;
+
+        return new EqualsBuilder().append(proxy, that.proxy).append(bookContext, that.bookContext).isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(proxy).append(bookContext).toHashCode();
     }
 }
