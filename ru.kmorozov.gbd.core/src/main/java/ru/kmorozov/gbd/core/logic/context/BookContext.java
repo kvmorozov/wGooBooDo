@@ -28,6 +28,8 @@ public class BookContext {
     public AtomicBoolean started = new AtomicBoolean(false);
     public AtomicBoolean pdfCompleted = new AtomicBoolean(false);
 
+    private static final Predicate<AbstractPage> pagePredicate = AbstractPage::isDataProcessed;
+
     private final BookInfo bookInfo;
     private File outputDir;
     private IImageExtractor extractor;
@@ -42,8 +44,8 @@ public class BookContext {
         this.postProcessor = postProcessor;
         this.metadata = LibraryFactory.getMetadata(bookId);
 
-        Predicate<AbstractPage> pagePredicate = AbstractPage::isDataProcessed;
         long pagesToProcess = Arrays.stream(bookInfo.getPages().getPages()).filter(pagePredicate.negate()).count();
+        pagesBefore = getPagesStream().filter(pageInfo -> pageInfo.dataProcessed.get()).count();
         imgExecutor = new QueuedThreadPoolExecutor(pagesToProcess, THREAD_POOL_SIZE, pagePredicate);
     }
 
@@ -81,7 +83,6 @@ public class BookContext {
     }
 
     public long getPagesBefore() {
-        if (pagesBefore == 0L) pagesBefore = getPagesStream().filter(pageInfo -> pageInfo.dataProcessed.get()).count();
         return pagesBefore;
     }
 
