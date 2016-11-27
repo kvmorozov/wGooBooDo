@@ -16,7 +16,7 @@ import java.util.Set;
  */
 public class Images {
 
-    private static final Set<Long> GOOGLE_BAD_FILES_SIZES = new HashSet(Arrays.asList(96352));
+    private static final Set<Long> GOOGLE_BAD_FILES_SIZES = new HashSet(Arrays.asList(96352L));
 
     private static final Logger logger = ExecutionContext.INSTANCE.getLogger(Images.class);
 
