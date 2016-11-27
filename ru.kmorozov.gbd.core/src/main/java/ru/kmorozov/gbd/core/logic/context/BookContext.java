@@ -1,5 +1,6 @@
 package ru.kmorozov.gbd.core.logic.context;
 
+import ru.kmorozov.gbd.core.logic.extractors.base.AbstractHttpProcessor;
 import ru.kmorozov.gbd.core.logic.extractors.base.IImageExtractor;
 import ru.kmorozov.gbd.core.logic.extractors.base.IPostProcessor;
 import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata;
@@ -22,7 +23,7 @@ import static ru.kmorozov.gbd.core.utils.QueuedThreadPoolExecutor.THREAD_POOL_SI
  */
 public class BookContext {
 
-    public final QueuedThreadPoolExecutor<BookContext> sigExecutor = new QueuedThreadPoolExecutor<>(1, THREAD_POOL_SIZE, x -> true);
+    public final QueuedThreadPoolExecutor<? extends AbstractHttpProcessor> sigExecutor = new QueuedThreadPoolExecutor<>(1, THREAD_POOL_SIZE, x -> true);
     public final QueuedThreadPoolExecutor<AbstractPage> imgExecutor;
 
     public AtomicBoolean started = new AtomicBoolean(false);

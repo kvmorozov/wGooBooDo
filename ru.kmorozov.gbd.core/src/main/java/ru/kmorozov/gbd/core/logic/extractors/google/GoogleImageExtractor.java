@@ -6,8 +6,9 @@ import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractImageExtractor;
-import ru.kmorozov.gbd.core.logic.model.book.google.GooglePageInfo;
+import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage;
 import ru.kmorozov.gbd.core.logic.model.book.google.GoogleBookData;
+import ru.kmorozov.gbd.core.logic.model.book.google.GooglePageInfo;
 import ru.kmorozov.gbd.core.utils.Images;
 
 import javax.imageio.ImageIO;
@@ -15,11 +16,14 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static java.nio.file.FileVisitOption.FOLLOW_LINKS;
 import static ru.kmorozov.gbd.core.logic.context.ExecutionContext.INSTANCE;
 
 /**
@@ -49,9 +53,21 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
 
     private void scanDir() {
         int imgWidth = GBDOptions.getImageWidth() == 0 ? GoogleImageExtractor.DEFAULT_PAGE_WIDTH : GBDOptions.getImageWidth();
+        Path outputPath = Paths.get(bookContext.getOutputDir().toURI());
 
         try {
-            Files.walk(Paths.get(bookContext.getOutputDir().toURI())).forEach(filePath -> {
+            Arrays.stream(bookContext.getBookInfo().getPages().getPages()).filter(AbstractPage::isDataProcessed).forEach(page -> {
+                try {
+                    if (Files.find(outputPath, 1, (path, basicFileAttributes) -> {return path.toString().contains(page.getOrder() + "_" + page.getPid());}, FOLLOW_LINKS).count() == 0) {
+                        logger.severe(String.format("Page %s not found in directory!", page.getPid()));
+                        page.dataProcessed.set(false);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+
+            Files.walk(outputPath).forEach(filePath -> {
                 setProgress(bookContext.getProgress().incrementAndProgress());
 
                 if (Images.isImageFile(filePath)) {
@@ -67,11 +83,17 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
 
                                 // 1.4 - эмпирически, высота переменная
                                 if (bimg.getWidth() * 1.4 > bimg.getHeight()) {
-                                    (new File(filePath.toString())).delete();
+                                    Files.delete(filePath);
                                     _page.dataProcessed.set(false);
                                     logger.severe(String.format("Page %s deleted!", _page.getPid()));
                                 }
                             } else _page.dataProcessed.set(true);
+
+                            if (!Images.isValidImage(filePath)) {
+                                Files.delete(filePath);
+                                _page.dataProcessed.set(false);
+                                logger.severe(String.format("Page %s deleted!", _page.getPid()));
+                            }
                         } catch (IOException e) {
                             // Значит файл с ошибкой
                             (new File(filePath.toString())).delete();
@@ -98,9 +120,7 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
         if (!Strings.isNullOrEmpty(((GoogleBookData) bookContext.getBookInfo().getBookData()).getFlags().getDownloadPdfUrl())) {
             logger.severe("There is direct url to download book. DIY!");
             return false;
-        }
-        else
-            return true;
+        } else return true;
     }
 
     @Override
@@ -136,9 +156,7 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
 
                 bookContext.sigExecutor.terminate(3, TimeUnit.MINUTES);
 
-                bookContext.getPagesStream()
-                        .filter(page -> !page.dataProcessed.get() && ((GooglePageInfo) page).getSig() != null)
-                        .forEach(page -> bookContext.imgExecutor.execute(new GooglePageImgProcessor(bookContext, (GooglePageInfo) page, HttpHostExt.NO_PROXY)));
+                bookContext.getPagesStream().filter(page -> !page.dataProcessed.get() && ((GooglePageInfo) page).getSig() != null).forEach(page -> bookContext.imgExecutor.execute(new GooglePageImgProcessor(bookContext, (GooglePageInfo) page, HttpHostExt.NO_PROXY)));
 
                 bookContext.imgExecutor.terminate(5, TimeUnit.MINUTES);
 

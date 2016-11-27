@@ -1,5 +1,7 @@
 package ru.kmorozov.gbd.core.config.storage;
 
+import org.apache.commons.lang3.StringUtils;
+import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
@@ -38,6 +40,9 @@ public class BookContextLoader extends BaseLoader {
     }
 
     public void updateContext() {
+        if (!StringUtils.isEmpty(GBDOptions.getBookId()))
+            return;
+
         List<BookInfo> runtimeBooksInfo = ExecutionContext.INSTANCE.getContexts(false).stream().map(BookContext::getBookInfo).collect(Collectors.toList());
         for (BookInfo bookInfo : runtimeBooksInfo)
             booksInfo.put(bookInfo.getBookId(), bookInfo);

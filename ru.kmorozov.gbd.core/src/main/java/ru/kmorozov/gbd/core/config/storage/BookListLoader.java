@@ -1,5 +1,7 @@
 package ru.kmorozov.gbd.core.config.storage;
 
+import org.apache.commons.lang3.StringUtils;
+import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.library.LibraryFactory;
 
@@ -73,7 +75,7 @@ public class BookListLoader extends BaseLoader {
     }
 
     public void updateIndex() {
-        if (loadedFromIndex)
+        if (loadedFromIndex || !StringUtils.isEmpty(GBDOptions.getBookId()))
             return;
 
         try (PrintWriter writer = new PrintWriter(getFileToLoad(true))) {

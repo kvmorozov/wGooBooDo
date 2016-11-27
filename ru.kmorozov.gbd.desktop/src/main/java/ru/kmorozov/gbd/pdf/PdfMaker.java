@@ -77,22 +77,28 @@ public class PdfMaker implements IPostProcessor {
         try (PDDocument document = new PDDocument()) {
             try {
                 long imgCount = Files.list(imgDir.toPath()).filter(Images::isImageFile).count();
-                if (imgCount == existPages) {
+                if (imgCount <= existPages) {
                     logger.finest("No new pages, exiting...");
+                    bookInfo.setLastPdfChecked(System.currentTimeMillis());
                     return;
                 }
 
                 Files.list(imgDir.toPath()).filter(Images::isImageFile).sorted(Comparator.comparing(this::getPagenum)).forEach(filePath -> {
                     try (InputStream in = new FileInputStream(filePath.toFile())) {
-                        BufferedImage bimg = ImageIO.read(in);
-                        float width = bimg.getWidth();
-                        float height = bimg.getHeight();
-                        PDPage page = new PDPage(new PDRectangle(width, height));
-                        document.addPage(page);
-                        PDImageXObject img = PDImageXObject.createFromFile(filePath.toString(), document);
-                        PDPageContentStream contentStream = new PDPageContentStream(document, page);
-                        contentStream.drawImage(img, 0, 0);
-                        contentStream.close();
+                        if (Images.isValidImage(filePath)) {
+                            BufferedImage bimg = ImageIO.read(in);
+                            float width = bimg.getWidth();
+                            float height = bimg.getHeight();
+                            PDPage page = new PDPage(new PDRectangle(width, height));
+                            document.addPage(page);
+                            PDImageXObject img = PDImageXObject.createFromFile(filePath.toString(), document);
+                            PDPageContentStream contentStream = new PDPageContentStream(document, page);
+                            contentStream.drawImage(img, 0, 0);
+                            contentStream.close();
+                        } else {
+                            Files.delete(filePath);
+                            logger.severe(String.format("Image %s was deleted!", filePath.getFileName()));
+                        }
                     } catch (IOException e) {
                         try {
                             Files.delete(filePath);
@@ -107,11 +113,11 @@ public class PdfMaker implements IPostProcessor {
             }
 
             document.save(pdfFile);
-            bookInfo.setLastPdfChecked(System.currentTimeMillis());
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        bookInfo.setLastPdfChecked(System.currentTimeMillis());
         logger.info("Pdf completed.");
     }
 
