@@ -4,7 +4,6 @@ import org.apache.commons.io.FilenameUtils;
 import ru.kmorozov.gbd.core.logic.connectors.Response;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -39,12 +38,8 @@ public class Images {
     }
 
     public static boolean isValidImage(Path filePath) {
-        try {
-            Long fileSize = Files.size(filePath);
-            return !GOOGLE_BAD_FILES_SIZES.contains(fileSize);
-        } catch (IOException e) {
-            return false;
-        }
+        Long fileSize = filePath.toFile().length();
+        return !GOOGLE_BAD_FILES_SIZES.contains(fileSize);
     }
 
     public static boolean isPdfFile(Path filePath) {

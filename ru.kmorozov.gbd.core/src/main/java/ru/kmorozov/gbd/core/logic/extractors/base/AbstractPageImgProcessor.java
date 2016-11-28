@@ -9,7 +9,9 @@ import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage;
 import ru.kmorozov.gbd.core.utils.Images;
 import ru.kmorozov.gbd.core.utils.Logger;
 
+import javax.net.ssl.SSLException;
 import java.io.*;
+import java.net.SocketException;
 import java.net.SocketTimeoutException;
 
 /**
@@ -96,7 +98,7 @@ public abstract class AbstractPageImgProcessor<T extends AbstractPage> extends A
             page.fileExists.set(true);
 
             return true;
-        } catch (SocketTimeoutException ste) {
+        } catch (SocketTimeoutException | SocketException | SSLException ste) {
             proxy.registerFailure();
         } catch (Exception ex) {
             ex.printStackTrace();
