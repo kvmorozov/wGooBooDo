@@ -26,12 +26,14 @@ public class QueuedThreadPoolExecutor<T> extends ThreadPoolExecutor {
 
     private final Map<T, IUniqueRunnable<T>> uniqueMap = new ConcurrentHashMap<>();
     private final Predicate<T> completeChecker;
+    private String description;
 
-    public QueuedThreadPoolExecutor(long needProcessCount, int threadPoolSize, Predicate<T> completeChecker) {
+    public QueuedThreadPoolExecutor(long needProcessCount, int threadPoolSize, Predicate<T> completeChecker, String description) {
         super(threadPoolSize, threadPoolSize, 0, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(RETENTION_QUEUE_SIZE));
         this.needProcessCount = needProcessCount;
         this.timeStart = System.currentTimeMillis();
         this.completeChecker = completeChecker;
+        this.description = description;
 
         setRejectedExecutionHandler((r, executor) -> {
             try {
@@ -48,14 +50,23 @@ public class QueuedThreadPoolExecutor<T> extends ThreadPoolExecutor {
 
     public void terminate(long timeout, TimeUnit unit) {
         Long liveTime = Math.min(unit.toMillis(timeout), MAX_LIVE_TIME);
+        int counter = 0;
         while (true) try {
-            if (uniqueMap.keySet().stream().filter(completeChecker).count() >= needProcessCount || System.currentTimeMillis() - timeStart > liveTime)
+            long completed = uniqueMap.keySet().stream().filter(completeChecker).count();
+            if (getCompletedTaskCount() == getTaskCount() || System.currentTimeMillis() - timeStart > liveTime)
                 break;
+            if (++counter % 100 == 0)
+                if (needProcessCount > 0)
+                    logger.finest(String.format("Waiting for %s %s sec (%s of %s completed, %s tasks finished of %s submitted)",
+                            description, counter, completed, needProcessCount, getCompletedTaskCount(), getTaskCount()));
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
+        if (needProcessCount > 0)
+            logger.finest(String.format("Terminating working threads for %s after %s sec (%s of %s completed, %s tasks finished of %s submitted)",
+                    description, counter, uniqueMap.keySet().stream().filter(completeChecker).count(), needProcessCount, getCompletedTaskCount(), getTaskCount()));
         shutdownNow();
 
         uniqueMap.clear();

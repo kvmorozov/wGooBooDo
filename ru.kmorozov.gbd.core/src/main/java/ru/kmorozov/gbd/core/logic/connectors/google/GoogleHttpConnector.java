@@ -58,7 +58,7 @@ public class GoogleHttpConnector extends HttpConnector {
     private HttpResponse getContent(HttpRequest req, HttpHostExt proxy, int attempt) throws IOException {
         if (attempt >= MAX_RETRY_COUNT) return null;
 
-        if (attempt > 0) try {
+        if (attempt > 1) try {
             logger.finest(String.format("Attempt %d with %s url", attempt, req.getUrl().toString()));
             Thread.sleep(SLEEP_TIME * attempt);
         } catch (InterruptedException ignored) {
@@ -68,7 +68,7 @@ public class GoogleHttpConnector extends HttpConnector {
             return req.execute();
         } catch (SocketTimeoutException ste1) {
             proxy.registerFailure();
-            return getContent(req, proxy, attempt++);
+            return getContent(req, proxy, ++attempt);
         }
     }
 }

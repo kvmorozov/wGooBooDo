@@ -81,8 +81,8 @@ public class ExecutionContext {
     }
 
     public void execute() {
-        bookExecutor = new QueuedThreadPoolExecutor<>(bookContextMap.size(), 5, BookContext::isImgStarted);
-        pdfExecutor = new QueuedThreadPoolExecutor<>(bookContextMap.size(), 5, BookContext::isPdfCompleted);
+        bookExecutor = new QueuedThreadPoolExecutor<>(bookContextMap.size(), 5, BookContext::isImgStarted, "bookExecutor");
+        pdfExecutor = new QueuedThreadPoolExecutor<>(bookContextMap.size(), 5, BookContext::isPdfCompleted, "pdfExecutor");
 
         for (BookContext bookContext : getContexts(true)) {
             IImageExtractor extractor = bookContext.getExtractor();

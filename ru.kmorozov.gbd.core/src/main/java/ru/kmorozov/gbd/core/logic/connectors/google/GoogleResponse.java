@@ -19,7 +19,7 @@ public class GoogleResponse implements Response {
 
     @Override
     public InputStream getContent() throws IOException {
-        return resp.getContent();
+        return resp ==null ? null : resp.getContent();
     }
 
     @Override
