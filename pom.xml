@@ -18,6 +18,7 @@
     <modules>
         <module>ru.kmorozov.gbd.core</module>
         <module>ru.kmorozov.gbd.desktop</module>
+        <module>ru.kmorozov.library.data.model</module>
     </modules>
 
     <dependencies>

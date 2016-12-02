@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static ru.kmorozov.gbd.core.config.GBDOptions.getBooksDir;
+
 /**
  * Created by sbt-morozov-kv on 14.11.2016.
  */
@@ -23,7 +25,7 @@ public class BookListLoader extends BaseLoader {
 
     private static final String INDEX_FILE_NAME = "books.index";
 
-    public static final BookListLoader BOOK_LIST_LOADER = new BookListLoader();
+    static final BookListLoader BOOK_LIST_LOADER = new BookListLoader();
 
     private boolean loadedFromIndex = false;
 
@@ -44,7 +46,7 @@ public class BookListLoader extends BaseLoader {
     private List<String> loadFromDirNames() {
         List<String> bookIdsList = new ArrayList<>();
         try {
-            Files.walk(Paths.get(booksDir.toURI())).forEach(filePath -> {
+            Files.walk(Paths.get(getBooksDir().toURI())).forEach(filePath -> {
                 if (filePath.toFile().isDirectory()) {
                     String[] nameParts = filePath.toFile().getName().split(" ");
                     if (isValidId(nameParts[nameParts.length - 1]))

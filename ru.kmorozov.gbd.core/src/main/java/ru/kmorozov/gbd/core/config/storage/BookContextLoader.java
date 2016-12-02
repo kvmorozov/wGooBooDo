@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static ru.kmorozov.gbd.core.config.GBDOptions.isValidDirectory;
+
 /**
  * Created by sbt-morozov-kv on 14.11.2016.
  */
@@ -24,7 +26,7 @@ public class BookContextLoader extends BaseLoader {
 
     private static final String CTX_FILE_NAME = "books.ctx";
 
-    public static final BookContextLoader BOOK_CTX_LOADER = new BookContextLoader();
+    static final BookContextLoader BOOK_CTX_LOADER = new BookContextLoader();
 
     private Map<String, BookInfo> booksInfo = new HashMap<>();
 

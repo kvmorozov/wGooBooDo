@@ -1,5 +1,6 @@
 package ru.kmorozov.gbd.core.logic.context;
 
+import ru.kmorozov.gbd.core.config.storage.AbstractContextProvider;
 import ru.kmorozov.gbd.core.logic.Proxy.AbstractProxyListProvider;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.extractors.base.IImageExtractor;
@@ -11,9 +12,6 @@ import ru.kmorozov.gbd.core.utils.QueuedThreadPoolExecutor;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-
-import static ru.kmorozov.gbd.core.config.storage.BookContextLoader.BOOK_CTX_LOADER;
-import static ru.kmorozov.gbd.core.config.storage.BookListLoader.BOOK_LIST_LOADER;
 
 /**
  * Created by km on 22.11.2015.
@@ -30,6 +28,7 @@ public class ExecutionContext {
     private final boolean singleMode;
     private final AbstractOutput output;
     private final Map<String, BookContext> bookContextMap = new HashMap<>();
+    private final static AbstractContextProvider contextProvider = AbstractContextProvider.getContextProvider();
 
     private ExecutionContext(AbstractOutput output, boolean singleMode) {
         this.output = output;
@@ -95,8 +94,8 @@ public class ExecutionContext {
         bookExecutor.terminate(10, TimeUnit.MINUTES);
         pdfExecutor.terminate(10, TimeUnit.MINUTES);
 
-        BOOK_LIST_LOADER.updateIndex();
-        BOOK_CTX_LOADER.updateContext();
+        contextProvider.updateIndex();
+        contextProvider.updateContext();
     }
 
     public void newProxyEvent(HttpHostExt proxy) {

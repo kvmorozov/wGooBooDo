@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.config.IGBDOptions;
+import ru.kmorozov.gbd.core.config.storage.AbstractContextProvider;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.extractors.google.GoogleBookInfoExtractor;
 import ru.kmorozov.gbd.core.logic.extractors.shpl.ShplBookExtractor;
@@ -28,7 +29,6 @@ import java.nio.charset.Charset;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static ru.kmorozov.gbd.core.config.storage.BookContextLoader.BOOK_CTX_LOADER;
 
 /**
  * Created by sbt-morozov-kv on 16.11.2016.
@@ -85,16 +85,18 @@ public class ExtractorTest {
 
     @Test
     public void bookContextLoadTest() {
-        int ctxSizeBefore = BOOK_CTX_LOADER.getContextSize();
+        AbstractContextProvider contextProvider = AbstractContextProvider.getContextProvider();
+
+        int ctxSizeBefore = contextProvider.getContextSize();
         assertTrue(ctxSizeBefore > 0);
 
         ExecutionContext.INSTANCE.addBookContext(new OptionsBasedProducer(), null, null);
         ExecutionContext.INSTANCE.addBookContext(new SingleBookProducer("http://localhost/elib.shpl.ru"), null, null);
 
-        BOOK_CTX_LOADER.updateContext();
-        BOOK_CTX_LOADER.refreshContext();
+        contextProvider.updateContext();
+        contextProvider.refreshContext();
 
-        int ctxSizeAfter = BOOK_CTX_LOADER.getContextSize();
+        int ctxSizeAfter = contextProvider.getContextSize();
         assertEquals(ctxSizeBefore + 1, ctxSizeAfter);
     }
 

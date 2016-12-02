@@ -10,20 +10,14 @@ import java.io.IOException;
  */
 public abstract class BaseLoader {
 
-    protected File booksDir;
-
     protected BaseLoader() {
-        this.booksDir = new File(GBDOptions.getOutputDir());
-    }
 
-    public boolean isValidDirectory() {
-        return booksDir.exists() && booksDir.isDirectory();
     }
 
     protected abstract String getLoadedFileName();
 
     protected File getFileToLoad(boolean createIfNotExists) {
-        if (!isValidDirectory())
+        if (!GBDOptions.isValidDirectory())
             return null;
 
         File indexFile = new File(GBDOptions.getOutputDir() + File.separator + getLoadedFileName());

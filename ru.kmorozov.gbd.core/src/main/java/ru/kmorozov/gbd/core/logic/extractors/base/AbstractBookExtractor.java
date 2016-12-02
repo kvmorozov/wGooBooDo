@@ -4,6 +4,7 @@ import org.apache.commons.io.IOUtils;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import ru.kmorozov.gbd.core.config.storage.AbstractContextProvider;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.connectors.Response;
 import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
@@ -12,8 +13,6 @@ import ru.kmorozov.gbd.core.utils.HttpConnections;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
-
-import static ru.kmorozov.gbd.core.config.storage.BookContextLoader.BOOK_CTX_LOADER;
 
 /**
  * Created by sbt-morozov-kv on 16.11.2016.
@@ -26,7 +25,7 @@ public abstract class AbstractBookExtractor extends AbstractHttpProcessor {
     protected AbstractBookExtractor(String bookId) {
         this.bookId = bookId;
 
-        BookInfo storedBookInfo = BOOK_CTX_LOADER.getBookInfo(bookId);
+        BookInfo storedBookInfo = AbstractContextProvider.getContextProvider().getBookInfo(bookId);
         bookInfo = storedBookInfo == null ? findBookInfo() : storedBookInfo;
     }
 

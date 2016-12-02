@@ -56,19 +56,31 @@
         </plugins>
     </build>
 
-    <dependencies>
-        <dependency>
-            <groupId>ru.kmorozov.gbd</groupId>
-            <artifactId>ru.kmorozov.gbd.core</artifactId>
-            <version>${version}</version>
-        </dependency>
+    <profiles>
+        <profile>
+            <id>lite</id>
+            <dependencies>
+                <dependency>
+                    <groupId>ru.kmorozov.gbd</groupId>
+                    <artifactId>ru.kmorozov.gbd.core</artifactId>
+                    <version>${version}</version>
+                </dependency>
 
-        <dependency>
-            <groupId>ru.kmorozov.gbd</groupId>
-            <artifactId>ru.kmorozov.gbd.desktop</artifactId>
-            <version>${version}</version>
-        </dependency>
-    </dependencies>
-
+                <dependency>
+                    <groupId>ru.kmorozov.gbd</groupId>
+                    <artifactId>ru.kmorozov.gbd.desktop</artifactId>
+                    <version>${version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>pro</id>
+            <dependency>
+                <groupId>ru.kmorozov.gbd</groupId>
+                <artifactId>ru.kmorozov.library.data.model</artifactId>
+                <version>${version}</version>
+            </dependency>
+        </profile>
+    </profiles>
 
 </project>
