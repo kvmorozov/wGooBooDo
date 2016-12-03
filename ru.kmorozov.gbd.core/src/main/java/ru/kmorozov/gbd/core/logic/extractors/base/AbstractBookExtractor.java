@@ -11,6 +11,7 @@ import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
 import ru.kmorozov.gbd.core.utils.HttpConnections;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 
@@ -68,8 +69,8 @@ public abstract class AbstractBookExtractor extends AbstractHttpProcessor {
 
         if (resp == null) return null;
         else {
-            try {
-                String respStr = IOUtils.toString(resp.getContent(), Charset.defaultCharset());
+            try (InputStream is = resp.getContent()) {
+                String respStr = IOUtils.toString(is, Charset.defaultCharset());
                 return Jsoup.parse(respStr);
             } catch (IOException e) {
                 return null;

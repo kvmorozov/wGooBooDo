@@ -45,6 +45,8 @@ public class GoogleHttpConnector extends HttpConnector {
                 HttpRequest req = getFactory(proxy).buildGetRequest(url).setConnectTimeout(withTimeout ? CONNECT_TIMEOUT : CONNECT_TIMEOUT * 10).setHeaders(headers);
                 resp = getContent(req, proxy, 0);
             }
+            else
+                throw new RuntimeException("Invalid proxy config!");
 
             if (resp == null)
                 logger.finest(String.format("No response at url %s with proxy %s", url.toString(), proxy.toString()));

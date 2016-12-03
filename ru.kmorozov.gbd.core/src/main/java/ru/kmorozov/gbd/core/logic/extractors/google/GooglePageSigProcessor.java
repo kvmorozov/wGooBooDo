@@ -2,6 +2,7 @@ package ru.kmorozov.gbd.core.logic.extractors.google;
 
 import com.google.gson.JsonParseException;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.hc.core5.http.NoHttpResponseException;
@@ -18,6 +19,7 @@ import ru.kmorozov.gbd.core.utils.QueuedThreadPoolExecutor;
 import ru.kmorozov.gbd.core.utils.gson.Mapper;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.nio.charset.Charset;
@@ -71,7 +73,18 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
                     return;
                 }
 
-                String respStr = IOUtils.toString(resp.getContent(), Charset.defaultCharset());
+                String respStr = null;
+                try (InputStream is = resp.getContent()) {
+                    respStr = IOUtils.toString(is, Charset.defaultCharset());
+                } catch (SocketException se) {
+
+                }
+
+                if (StringUtils.isEmpty(respStr)) {
+                    logger.info(String.format(SIG_ERROR_TEMPLATE, rqUrl, proxy.toString()));
+                    return;
+                }
+
                 GooglePagesInfo framePages = Mapper.getGson().fromJson(respStr, GooglePagesInfo.class);
 
                 GooglePageInfo[] pages = framePages.getPages();

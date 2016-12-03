@@ -13,6 +13,7 @@ import ru.kmorozov.gbd.core.utils.HttpConnections;
 import ru.kmorozov.gbd.core.utils.Logger;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
@@ -71,8 +72,10 @@ public class HttpHostExt {
         try {
             HttpResponse resp = requestFactory.buildGetRequest(checkProxyUrl).execute();
             if (resp != null && resp.getContent() != null) {
-                String respStr = IOUtils.toString(resp.getContent(), Charset.defaultCharset());
-                return !respStr.contains(InetAddress.getLocalHost().getHostName());
+                try (InputStream is = resp.getContent()) {
+                    String respStr = IOUtils.toString(is, Charset.defaultCharset());
+                    return !respStr.contains(InetAddress.getLocalHost().getHostName());
+                }
             }
         } catch (IOException e) {
             return false;
@@ -184,11 +187,13 @@ public class HttpHostExt {
 
     public HttpHeaders getHeaders() {
         if (headers == null || headers.getCookie() == null) {
-            headers = HttpConnections.getHeaders(this);
-            if (headers.getCookie() == null) headers.setCookie(HttpConnections.getCookieString(host));
-            if (headers.getCookie() == null) {
-                logger.severe(String.format("Cannot get cookies for proxy %s", this.toString()));
-                forceInvalidate(false);
+            synchronized (this) {
+                headers = HttpConnections.getHeaders(this);
+                if (headers.getCookie() == null) headers.setCookie(HttpConnections.getCookieString(host));
+                if (headers.getCookie() == null) {
+                    logger.severe(String.format("Cannot get cookies for proxy %s", this.toString()));
+                    forceInvalidate(false);
+                }
             }
         }
 

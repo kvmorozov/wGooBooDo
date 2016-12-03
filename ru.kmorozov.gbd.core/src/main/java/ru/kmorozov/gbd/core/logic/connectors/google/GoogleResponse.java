@@ -13,13 +13,13 @@ public class GoogleResponse implements Response {
 
     private final HttpResponse resp;
 
-    public GoogleResponse (HttpResponse resp) {
+    public GoogleResponse(HttpResponse resp) {
         this.resp = resp;
     }
 
     @Override
     public InputStream getContent() throws IOException {
-        return resp ==null ? null : resp.getContent();
+        return resp == null ? null : resp.getContent();
     }
 
     @Override
