@@ -39,7 +39,7 @@ public class QueuedThreadPoolExecutor<T> extends ThreadPoolExecutor {
             try {
                 if (r instanceof IUniqueRunnable) {
                     synchronized (((IUniqueRunnable) r).getUniqueObject()) {
-                        if (!completeChecker.test((T) r)) getQueue().put(r);
+                        if (!completeChecker.test((T) ((IUniqueRunnable) r).getUniqueObject())) getQueue().put(r);
                     }
                 }
             } catch (InterruptedException e) {
@@ -53,15 +53,15 @@ public class QueuedThreadPoolExecutor<T> extends ThreadPoolExecutor {
         int counter = 0;
         while (true) try {
             long completed = uniqueMap.keySet().stream().filter(completeChecker).count();
-            if (getCompletedTaskCount() == getTaskCount() || System.currentTimeMillis() - timeStart > liveTime)
+            if ((getCompletedTaskCount() == getTaskCount() && getCompletedTaskCount() == needProcessCount) || System.currentTimeMillis() - timeStart > liveTime)
                 break;
             if (++counter % 100 == 0)
                 if (needProcessCount > 0)
-                    logger.finest(String.format("Waiting for %s %s sec (%s of %s completed, %s tasks finished of %s submitted)",
-                            description, counter, completed, needProcessCount, getCompletedTaskCount(), getTaskCount()));
+                    logger.finest(String.format("Waiting for %s %s sec (%s of %s completed, %s tasks finished of %s submitted, %s in queue)",
+                            description, counter, completed, needProcessCount, getCompletedTaskCount(), getTaskCount(), getQueue().size()));
             Thread.sleep(1000);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            logger.severe("Wait interrupted for " + description);
         }
 
         if (needProcessCount > 0)
@@ -76,14 +76,7 @@ public class QueuedThreadPoolExecutor<T> extends ThreadPoolExecutor {
     public void execute(final Runnable command) {
         if (command instanceof IUniqueRunnable) synchronized (this) {
             T uniqueObj = (T) ((IUniqueRunnable) command).getUniqueObject();
-            if (uniqueMap.put(uniqueObj, (IUniqueRunnable<T>) command) == null) super.execute(new Thread(command) {
-
-                @Override
-                public void interrupt() {
-                    logger.severe("Interrupted thread " + command.toString());
-                    super.interrupt();
-                }
-            });
+            if (uniqueMap.put(uniqueObj, (IUniqueRunnable<T>) command) == null) super.execute(command);
         }
         else super.execute(command);
     }
