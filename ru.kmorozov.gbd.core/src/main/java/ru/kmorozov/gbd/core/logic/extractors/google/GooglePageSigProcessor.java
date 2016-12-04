@@ -18,6 +18,7 @@ import ru.kmorozov.gbd.core.logic.progress.IProgress;
 import ru.kmorozov.gbd.core.utils.QueuedThreadPoolExecutor;
 import ru.kmorozov.gbd.core.utils.gson.Mapper;
 
+import javax.net.ssl.SSLException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.SocketException;
@@ -45,7 +46,7 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
         this.bookContext = bookContext;
         this.proxy = proxy;
 
-        sigPageExecutor = new QueuedThreadPoolExecutor<>(-1, THREAD_POOL_SIZE, GooglePageInfo::isSigChecked, bookContext.toString());
+        sigPageExecutor = new QueuedThreadPoolExecutor<>(bookContext.getPagesStream().count(), THREAD_POOL_SIZE, GooglePageInfo::isSigChecked, bookContext.toString());
     }
 
     private class SigProcessorInternal implements IUniqueRunnable<GooglePageInfo> {
@@ -56,6 +57,7 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
             this.page = page;
         }
 
+        @Override
         public void run() {
             if (!proxy.isAvailable()) return;
 
@@ -76,7 +78,7 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
                 String respStr = null;
                 try (InputStream is = resp.getContent()) {
                     respStr = IOUtils.toString(is, Charset.defaultCharset());
-                } catch (SocketException se) {
+                } catch (SocketException | SSLException se) {
 
                 }
 
@@ -89,10 +91,10 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
 
                 GooglePageInfo[] pages = framePages.getPages();
                 for (GooglePageInfo framePage : pages)
-                    if (framePage.getOrder() >= page.getOrder() && framePage.getSrc() != null) {
+                    if (framePage.getSrc() != null) {
                         GooglePageInfo _page = (GooglePageInfo) bookContext.getBookInfo().getPages().getPageByPid(framePage.getPid());
 
-                        if (_page.dataProcessed.get() || _page.getSig() != null || _page.sigChecked.get()) continue;
+                        if (_page.dataProcessed.get()) continue;
 
                         String _frameSrc = framePage.getSrc();
                         if (_frameSrc != null) _page.setSrc(_frameSrc);

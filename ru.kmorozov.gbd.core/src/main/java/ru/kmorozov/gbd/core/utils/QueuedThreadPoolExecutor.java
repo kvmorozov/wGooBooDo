@@ -22,7 +22,7 @@ public class QueuedThreadPoolExecutor<T> extends ThreadPoolExecutor {
 
     public static final int THREAD_POOL_SIZE = 10;
     private static final int RETENTION_QUEUE_SIZE = 200;
-    private static final long MAX_LIVE_TIME = 1 * 60 * 60 * 1000;
+    private static final long MAX_LIVE_TIME = TimeUnit.HOURS.toMillis(1);
 
     private final Map<T, IUniqueRunnable<T>> uniqueMap = new ConcurrentHashMap<>();
     private final Predicate<T> completeChecker;
@@ -53,7 +53,7 @@ public class QueuedThreadPoolExecutor<T> extends ThreadPoolExecutor {
         int counter = 0;
         while (true) try {
             long completed = uniqueMap.keySet().stream().filter(completeChecker).count();
-            if ((getCompletedTaskCount() == getTaskCount() && getCompletedTaskCount() == needProcessCount) || System.currentTimeMillis() - timeStart > liveTime)
+            if ((getCompletedTaskCount() == getTaskCount() && getCompletedTaskCount() >= needProcessCount) || System.currentTimeMillis() - timeStart > liveTime)
                 break;
             if (++counter % 100 == 0)
                 if (needProcessCount > 0)

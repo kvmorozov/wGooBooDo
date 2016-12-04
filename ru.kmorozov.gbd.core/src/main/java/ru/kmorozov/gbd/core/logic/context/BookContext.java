@@ -47,8 +47,8 @@ public class BookContext {
 
         long pagesToProcess = Arrays.stream(bookInfo.getPages().getPages()).filter(pagePredicate.negate()).count();
         pagesBefore = getPagesStream().filter(pageInfo -> pageInfo.dataProcessed.get()).count();
-        sigExecutor = new QueuedThreadPoolExecutor<>(1, THREAD_POOL_SIZE, x -> true, bookId);
-        imgExecutor = new QueuedThreadPoolExecutor<>(pagesToProcess, THREAD_POOL_SIZE, pagePredicate, bookId);
+        sigExecutor = new QueuedThreadPoolExecutor<>(1, THREAD_POOL_SIZE, x -> true, "Sig_"+ bookId);
+        imgExecutor = new QueuedThreadPoolExecutor<>(0, THREAD_POOL_SIZE, pagePredicate, "Img_"+ bookId);
     }
 
     public String getBookId() {
