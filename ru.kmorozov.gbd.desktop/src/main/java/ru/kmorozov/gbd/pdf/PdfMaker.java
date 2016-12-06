@@ -33,7 +33,7 @@ public class PdfMaker implements IPostProcessor {
     private BookContext bookContext;
 
     public PdfMaker(BookContext bookContext) {
-        setBookContext(bookContext);
+        this.bookContext = bookContext;
     }
 
     public PdfMaker() {
@@ -42,6 +42,7 @@ public class PdfMaker implements IPostProcessor {
     @Override
     public void make() {
         Logger logger = INSTANCE.getLogger(PdfMaker.class, bookContext);
+        logger.info("Starting making pdf file...");
 
         if (!bookContext.pdfCompleted.compareAndSet(false, true)) return;
 
@@ -73,7 +74,6 @@ public class PdfMaker implements IPostProcessor {
             return;
         }
 
-        logger.info("Starting making pdf file...");
         try (PDDocument document = new PDDocument()) {
             try {
                 long imgCount = Files.list(imgDir.toPath()).filter(Images::isImageFile).count();
@@ -131,8 +131,8 @@ public class PdfMaker implements IPostProcessor {
     }
 
     @Override
-    public void setBookContext(BookContext bookContext) {
-        this.bookContext = bookContext;
+    public PdfMaker getPostProcessor(BookContext bookContext) {
+        return new PdfMaker(bookContext);
     }
 
     @Override

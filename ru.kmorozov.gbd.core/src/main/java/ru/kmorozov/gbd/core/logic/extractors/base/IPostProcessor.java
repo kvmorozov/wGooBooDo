@@ -7,7 +7,7 @@ import ru.kmorozov.gbd.core.logic.context.BookContext;
  */
 public interface IPostProcessor extends IUniqueRunnable<BookContext> {
 
-    void setBookContext(BookContext bookContext);
-
     void make();
+
+    IPostProcessor getPostProcessor(BookContext bookContext);
 }

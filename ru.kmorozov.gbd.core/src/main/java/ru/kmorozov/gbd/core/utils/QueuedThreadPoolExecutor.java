@@ -76,7 +76,9 @@ public class QueuedThreadPoolExecutor<T> extends ThreadPoolExecutor {
     public void execute(final Runnable command) {
         if (command instanceof IUniqueRunnable) synchronized (this) {
             T uniqueObj = (T) ((IUniqueRunnable) command).getUniqueObject();
-            if (uniqueMap.put(uniqueObj, (IUniqueRunnable<T>) command) == null) super.execute(command);
+            synchronized(uniqueObj) {
+                if (uniqueMap.put(uniqueObj, (IUniqueRunnable<T>) command) == null) super.execute(command);
+            }
         }
         else super.execute(command);
     }

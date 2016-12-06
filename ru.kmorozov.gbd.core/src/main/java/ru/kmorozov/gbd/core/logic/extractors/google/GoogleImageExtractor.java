@@ -58,7 +58,9 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
         try {
             Arrays.stream(bookContext.getBookInfo().getPages().getPages()).filter(AbstractPage::isDataProcessed).forEach(page -> {
                 try {
-                    if (Files.find(outputPath, 1, (path, basicFileAttributes) -> {return path.toString().contains(page.getOrder() + "_" + page.getPid());}, FOLLOW_LINKS).count() == 0) {
+                    if (Files.find(outputPath, 1, (path, basicFileAttributes) -> {
+                        return path.toString().contains(page.getOrder() + "_" + page.getPid());
+                    }, FOLLOW_LINKS).count() == 0) {
                         logger.severe(String.format("Page %s not found in directory!", page.getPid()));
                         page.dataProcessed.set(false);
                     }
@@ -168,9 +170,7 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
 
                 logger.info(String.format("Processed %s pages", pagesAfter - bookContext.getPagesBefore()));
 
-                synchronized (bookContext) {
-                    INSTANCE.postProcessBook(bookContext);
-                }
+                INSTANCE.postProcessBook(bookContext);
             }
         }
     }

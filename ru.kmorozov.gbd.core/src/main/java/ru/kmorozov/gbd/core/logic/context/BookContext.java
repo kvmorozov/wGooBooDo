@@ -72,8 +72,7 @@ public class BookContext {
     }
 
     public IPostProcessor getPostProcessor() {
-        postProcessor.setBookContext(this);
-        return postProcessor;
+        return postProcessor.getPostProcessor(this);
     }
 
     public boolean isPdfCompleted() {
