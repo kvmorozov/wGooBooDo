@@ -60,7 +60,7 @@ public class QueuedThreadPoolExecutor<T> extends ThreadPoolExecutor {
                 if (needProcessCount > 0)
                     logger.finest(String.format("Waiting for %s %d sec (%d of %d completed, %d tasks finished of %d submitted, %d in queue)", description, counter, completed, needProcessCount, getCompletedTaskCount(), getTaskCount(), getQueue().size()));
 
-                if (submitted == getTaskCount() && getTaskCount() > 0) {
+                if (submitted == getTaskCount() && getTaskCount() > 0 && submitted < needProcessCount) {
                     logger.severe(String.format("Nothing was submitted to %s, set needProcessCount to %d", description, submitted));
                     needProcessCount = submitted;
                 }
