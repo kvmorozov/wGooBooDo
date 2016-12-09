@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -56,13 +55,12 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
         Path outputPath = Paths.get(bookContext.getOutputDir().toURI());
 
         try {
-            Arrays.stream(bookContext.getBookInfo().getPages().getPages()).filter(AbstractPage::isDataProcessed).forEach(page -> {
+            bookContext.getPagesStream().filter(AbstractPage::isFileExists).forEach(page -> {
                 try {
-                    if (Files.find(outputPath, 1, (path, basicFileAttributes) -> {
-                        return path.toString().contains(page.getOrder() + "_" + page.getPid());
-                    }, FOLLOW_LINKS).count() == 0) {
+                    if (Files.find(outputPath, 1, (path, basicFileAttributes) -> path.toString().contains(page.getOrder() + "_" + page.getPid()), FOLLOW_LINKS).count() == 0) {
                         logger.severe(String.format("Page %s not found in directory!", page.getPid()));
                         page.dataProcessed.set(false);
+                        page.fileExists.set(false);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();

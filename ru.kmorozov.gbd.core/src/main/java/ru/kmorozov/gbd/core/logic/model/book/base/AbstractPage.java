@@ -13,4 +13,5 @@ public abstract class AbstractPage implements IPage {
     public AtomicBoolean loadingStarted = new AtomicBoolean(false);
 
     public boolean isDataProcessed() {return dataProcessed.get();}
+    public boolean isFileExists() {return fileExists.get();}
 }
