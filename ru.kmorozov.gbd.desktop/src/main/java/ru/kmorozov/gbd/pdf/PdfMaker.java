@@ -80,7 +80,7 @@ public class PdfMaker implements IPostProcessor {
                 logger.finest("No new pages, exiting...");
                 bookInfo.setLastPdfChecked(System.currentTimeMillis());
                 return;
-            } else logger.info(String.format("Rewriting pdf from %d to %d", existPages, imgCount));
+            } else logger.info(String.format("Rewriting pdf from %d to %d pages", existPages, imgCount));
         } catch (IOException e) {
             e.printStackTrace();
         }

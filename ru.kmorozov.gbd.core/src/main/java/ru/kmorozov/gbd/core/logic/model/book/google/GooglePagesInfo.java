@@ -79,7 +79,7 @@ public class GooglePagesInfo implements IPagesInfo, Serializable {
                     addPage(gapPage);
                 }
         } else {
-            if (endPageNum > 1) {
+            if (endPageNum >= 1) {
                 int pagesToCreate = endGap.getOrder() - beginGap.getOrder() - 1;
                 int pagesCreated = 0;
                 for (int index = 1; index <= pagesToCreate; index++) {
