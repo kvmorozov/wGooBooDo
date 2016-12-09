@@ -57,7 +57,7 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
         try {
             bookContext.getPagesStream().filter(AbstractPage::isFileExists).forEach(page -> {
                 try {
-                    if (Files.find(outputPath, 1, (path, basicFileAttributes) -> path.toString().contains(page.getOrder() + "_" + page.getPid()), FOLLOW_LINKS).count() == 0) {
+                    if (Files.find(outputPath, 1, (path, basicFileAttributes) -> path.toString().contains("\\" + page.getOrder() + "_" + page.getPid() + "."), FOLLOW_LINKS).count() == 0) {
                         logger.severe(String.format("Page %s not found in directory!", page.getPid()));
                         page.dataProcessed.set(false);
                         page.fileExists.set(false);
@@ -74,6 +74,7 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
                     String fileName = FilenameUtils.getBaseName(filePath.toString());
                     String[] nameParts = fileName.split("_");
                     GooglePageInfo _page = (GooglePageInfo) bookContext.getBookInfo().getPages().getPageByPid(nameParts[1]);
+                    int order = Integer.valueOf(nameParts[0]);
                     if (_page == null) {
                         logger.severe(String.format("Page %s not found!", fileName));
                     } else {
@@ -91,7 +92,7 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
                                 }
                             } else _page.dataProcessed.set(true);
 
-                            if (!Images.isValidImage(filePath)) {
+                            if (!Images.isValidImage(filePath) || _page.getOrder() != order) {
                                 Files.delete(filePath);
                                 _page.dataProcessed.set(false);
                                 logger.severe(String.format("Page %s deleted!", _page.getPid()));
@@ -113,7 +114,7 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
             if (bookContext.getProgress() != null) bookContext.getProgress().finish();
         }
 
-        bookContext.setPagesBefore(bookContext.getPagesStream().filter(pageInfo -> pageInfo.fileExists.get()).count());
+        bookContext.setPagesBefore(bookContext.getPagesStream().filter(AbstractPage::isFileExists).count());
     }
 
     private void setProgress(int i) {

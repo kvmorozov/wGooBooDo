@@ -17,7 +17,7 @@ public class QueuedThreadPoolExecutor<T> extends ThreadPoolExecutor {
 
     private final static Logger logger = ExecutionContext.INSTANCE.getLogger("Executor");
 
-    private final long needProcessCount;
+    private long needProcessCount;
     private final long timeStart;
 
     public static final int THREAD_POOL_SIZE = 10;
@@ -51,14 +51,22 @@ public class QueuedThreadPoolExecutor<T> extends ThreadPoolExecutor {
     public void terminate(long timeout, TimeUnit unit) {
         Long liveTime = Math.min(unit.toMillis(timeout), MAX_LIVE_TIME);
         int counter = 0;
+        long submitted = 0;
         while (true) try {
             long completed = uniqueMap.keySet().stream().filter(completeChecker).count();
             if ((getCompletedTaskCount() == getTaskCount() && getCompletedTaskCount() >= needProcessCount) || System.currentTimeMillis() - timeStart > liveTime)
                 break;
-            if (++counter % 100 == 0)
+            if (++counter % 100 == 0) {
                 if (needProcessCount > 0)
-                    logger.finest(String.format("Waiting for %s %s sec (%s of %s completed, %s tasks finished of %s submitted, %s in queue)",
-                            description, counter, completed, needProcessCount, getCompletedTaskCount(), getTaskCount(), getQueue().size()));
+                    logger.finest(String.format("Waiting for %s %d sec (%d of %d completed, %d tasks finished of %d submitted, %d in queue)", description, counter, completed, needProcessCount, getCompletedTaskCount(), getTaskCount(), getQueue().size()));
+
+                if (submitted == getTaskCount() && getTaskCount() > 0) {
+                    logger.severe(String.format("Nothing was submitted to %s, set needProcessCount to %d", description, submitted));
+                    needProcessCount = submitted;
+                }
+                else
+                    submitted = getTaskCount();
+            }
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             logger.severe("Wait interrupted for " + description);
@@ -74,7 +82,7 @@ public class QueuedThreadPoolExecutor<T> extends ThreadPoolExecutor {
 
     @Override
     public void execute(final Runnable command) {
-        if (command instanceof IUniqueRunnable) synchronized (this) {
+        if (command instanceof IUniqueRunnable) {
             T uniqueObj = (T) ((IUniqueRunnable) command).getUniqueObject();
             synchronized(uniqueObj) {
                 if (uniqueMap.put(uniqueObj, (IUniqueRunnable<T>) command) == null) super.execute(command);
