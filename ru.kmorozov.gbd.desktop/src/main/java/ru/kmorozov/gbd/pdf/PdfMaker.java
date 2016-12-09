@@ -74,46 +74,46 @@ public class PdfMaker implements IPostProcessor {
             return;
         }
 
-        try (PDDocument document = new PDDocument()) {
-            try {
-                long imgCount = Files.list(imgDir.toPath()).filter(Images::isImageFile).count();
-                if (imgCount <= existPages) {
-                    logger.finest("No new pages, exiting...");
-                    bookInfo.setLastPdfChecked(System.currentTimeMillis());
-                    return;
-                }
+        try {
+            long imgCount = Files.list(imgDir.toPath()).filter(Images::isImageFile).count();
+            if (imgCount <= existPages) {
+                logger.finest("No new pages, exiting...");
+                bookInfo.setLastPdfChecked(System.currentTimeMillis());
+                return;
+            } else logger.info(String.format("Rewriting pdf from %d to %d", existPages, imgCount));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-                Files.list(imgDir.toPath()).filter(Images::isImageFile).sorted(Comparator.comparing(this::getPagenum)).forEach(filePath -> {
-                    try (InputStream in = new FileInputStream(filePath.toFile())) {
-                        if (Images.isValidImage(filePath)) {
-                            BufferedImage bimg = ImageIO.read(in);
-                            float width = bimg.getWidth();
-                            float height = bimg.getHeight();
-                            PDPage page = new PDPage(new PDRectangle(width, height));
-                            document.addPage(page);
-                            PDImageXObject img = PDImageXObject.createFromFile(filePath.toString(), document);
-                            PDPageContentStream contentStream = new PDPageContentStream(document, page);
-                            contentStream.drawImage(img, 0, 0);
-                            contentStream.close();
-                        } else {
-                            Files.delete(filePath);
-                            logger.severe(String.format("Image %s was deleted!", filePath.getFileName()));
-                        }
-                    } catch (IOException e) {
-                        try {
-                            Files.delete(filePath);
-                            logger.severe(String.format("Image %s was deleted!", filePath.getFileName()));
-                        } catch (IOException ioe) {
-                            ioe.printStackTrace();
-                        }
+        try (PDDocument document = new PDDocument()) {
+            Files.list(imgDir.toPath()).filter(Images::isImageFile).sorted(Comparator.comparing(this::getPagenum)).forEach(filePath -> {
+                try (InputStream in = new FileInputStream(filePath.toFile())) {
+                    if (Images.isValidImage(filePath)) {
+                        BufferedImage bimg = ImageIO.read(in);
+                        float width = bimg.getWidth();
+                        float height = bimg.getHeight();
+                        PDPage page = new PDPage(new PDRectangle(width, height));
+                        document.addPage(page);
+                        PDImageXObject img = PDImageXObject.createFromFile(filePath.toString(), document);
+                        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+                        contentStream.drawImage(img, 0, 0);
+                        contentStream.close();
+                    } else {
+                        Files.delete(filePath);
+                        logger.severe(String.format("Image %s was deleted!", filePath.getFileName()));
                     }
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                } catch (IOException e) {
+                    try {
+                        Files.delete(filePath);
+                        logger.severe(String.format("Image %s was deleted!", filePath.getFileName()));
+                    } catch (IOException ioe) {
+                        ioe.printStackTrace();
+                    }
+                }
+            });
 
             document.save(pdfFile);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

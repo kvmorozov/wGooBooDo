@@ -45,8 +45,7 @@ public class BookContext {
         this.postProcessor = postProcessor;
         this.metadata = LibraryFactory.getMetadata(bookId);
 
-        long pagesToProcess = Arrays.stream(bookInfo.getPages().getPages()).filter(pagePredicate.negate()).count();
-        pagesBefore = getPagesStream().filter(pageInfo -> pageInfo.dataProcessed.get()).count();
+        pagesBefore = getPagesStream().filter(pageInfo -> pageInfo.fileExists.get()).count();
         sigExecutor = new QueuedThreadPoolExecutor<>(1, THREAD_POOL_SIZE, x -> true, "Sig_"+ bookId);
         imgExecutor = new QueuedThreadPoolExecutor<>(0, THREAD_POOL_SIZE, pagePredicate, "Img_"+ bookId);
     }
@@ -85,6 +84,10 @@ public class BookContext {
 
     public long getPagesBefore() {
         return pagesBefore;
+    }
+
+    public void setPagesBefore(long pagesBefore) {
+        this.pagesBefore = pagesBefore;
     }
 
     public Stream<AbstractPage> getPagesStream() {

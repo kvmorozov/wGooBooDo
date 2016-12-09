@@ -49,6 +49,8 @@ public class GooglePagesInfo implements IPagesInfo, Serializable {
 
             prevPage = page;
         }
+
+        pages = pagesMap.values().toArray(new GooglePageInfo[pagesMap.size()]);
     }
 
     private void fillGap(GooglePageInfo beginGap, GooglePageInfo endGap) {

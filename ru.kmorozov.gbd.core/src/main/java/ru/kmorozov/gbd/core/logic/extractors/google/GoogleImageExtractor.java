@@ -76,7 +76,9 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
                     String fileName = FilenameUtils.getBaseName(filePath.toString());
                     String[] nameParts = fileName.split("_");
                     GooglePageInfo _page = (GooglePageInfo) bookContext.getBookInfo().getPages().getPageByPid(nameParts[1]);
-                    if (_page != null) {
+                    if (_page == null) {
+                        logger.severe(String.format("Page %s not found!", fileName));
+                    } else {
                         try {
                             if (GBDOptions.reloadImages()) {
                                 BufferedImage bimg = ImageIO.read(new File(filePath.toString()));
@@ -112,6 +114,8 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
         } finally {
             if (bookContext.getProgress() != null) bookContext.getProgress().finish();
         }
+
+        bookContext.setPagesBefore(bookContext.getPagesStream().filter(pageInfo -> pageInfo.fileExists.get()).count());
     }
 
     private void setProgress(int i) {

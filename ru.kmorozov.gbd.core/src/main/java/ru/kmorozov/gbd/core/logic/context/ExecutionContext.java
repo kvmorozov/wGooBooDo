@@ -92,7 +92,7 @@ public class ExecutionContext {
         AbstractProxyListProvider.getInstance().processProxyList();
 
         bookExecutor.terminate(10, TimeUnit.MINUTES);
-        pdfExecutor.terminate(10, TimeUnit.MINUTES);
+        pdfExecutor.terminate(30, TimeUnit.MINUTES);
 
         contextProvider.updateIndex();
         contextProvider.updateContext();

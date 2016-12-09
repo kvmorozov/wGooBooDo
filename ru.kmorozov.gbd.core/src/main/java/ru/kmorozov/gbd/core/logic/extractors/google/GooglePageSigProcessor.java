@@ -46,7 +46,7 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
         this.bookContext = bookContext;
         this.proxy = proxy;
 
-        sigPageExecutor = new QueuedThreadPoolExecutor<>(bookContext.getPagesStream().count(), THREAD_POOL_SIZE, GooglePageInfo::isSigChecked, bookContext.toString());
+        sigPageExecutor = new QueuedThreadPoolExecutor<>(bookContext.getPagesStream().count(), THREAD_POOL_SIZE, GooglePageInfo::isSigChecked, bookContext.toString() + "/" + proxy.toString());
     }
 
     private class SigProcessorInternal implements IUniqueRunnable<GooglePageInfo> {
@@ -71,7 +71,7 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
             try {
                 resp = getContent(rqUrl, proxy, true);
                 if (resp == null || resp.getContent() == null) {
-                    logger.info(String.format(SIG_ERROR_TEMPLATE, rqUrl, proxy.toString()));
+                    logger.finest(String.format(SIG_ERROR_TEMPLATE, rqUrl, proxy.toString()));
                     return;
                 }
 
@@ -83,7 +83,7 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
                 }
 
                 if (StringUtils.isEmpty(respStr)) {
-                    logger.info(String.format(SIG_ERROR_TEMPLATE, rqUrl, proxy.toString()));
+                    logger.finest(String.format(SIG_ERROR_TEMPLATE, rqUrl, proxy.toString()));
                     return;
                 }
 
