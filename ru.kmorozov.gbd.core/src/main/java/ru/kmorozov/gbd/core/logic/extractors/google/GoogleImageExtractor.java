@@ -77,6 +77,12 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
                     int order = Integer.valueOf(nameParts[0]);
                     if (_page == null) {
                         logger.severe(String.format("Page %s not found!", fileName));
+                        try {
+                            Files.delete(filePath);
+                            logger.severe(String.format("Page %s deleted!", fileName));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     } else {
                         try {
                             if (GBDOptions.reloadImages()) {

@@ -44,9 +44,7 @@ public class GoogleHttpConnector extends HttpConnector {
             if (!StringUtils.isEmpty(headers.getCookie()) && headers.getCookie().contains("NID")) {
                 HttpRequest req = getFactory(proxy).buildGetRequest(url).setConnectTimeout(withTimeout ? CONNECT_TIMEOUT : CONNECT_TIMEOUT * 10).setHeaders(headers);
                 resp = getContent(req, proxy, 0);
-            }
-            else
-                throw new RuntimeException("Invalid proxy config!");
+            } else throw new RuntimeException("Invalid proxy config!");
 
             if (resp == null)
                 logger.finest(String.format("No response at url %s with proxy %s", url.toString(), proxy.toString()));
@@ -58,7 +56,10 @@ public class GoogleHttpConnector extends HttpConnector {
     }
 
     private HttpResponse getContent(HttpRequest req, HttpHostExt proxy, int attempt) throws IOException {
-        if (attempt >= MAX_RETRY_COUNT) return null;
+        if (attempt >= MAX_RETRY_COUNT) {
+            proxy.registerFailure();
+            return null;
+        }
 
         if (attempt > 1) try {
             logger.finest(String.format("Attempt %d with %s url", attempt, req.getUrl().toString()));
@@ -66,9 +67,13 @@ public class GoogleHttpConnector extends HttpConnector {
         } catch (InterruptedException ignored) {
         }
 
+        long startMillis = System.currentTimeMillis();
         try {
             return req.execute();
         } catch (SocketTimeoutException ste1) {
+            long endMillis = System.currentTimeMillis();
+            if (endMillis - startMillis < req.getConnectTimeout())
+                logger.info(String.format("Premature timeout: %d instead of %d", endMillis - startMillis, req.getConnectTimeout()));
             proxy.registerFailure();
             return getContent(req, proxy, ++attempt);
         }
