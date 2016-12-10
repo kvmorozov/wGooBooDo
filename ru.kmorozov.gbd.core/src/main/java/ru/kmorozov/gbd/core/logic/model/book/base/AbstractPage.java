@@ -14,4 +14,5 @@ public abstract class AbstractPage implements IPage {
 
     public boolean isDataProcessed() {return dataProcessed.get();}
     public boolean isFileExists() {return fileExists.get();}
+    public boolean isSigChecked() {return !isDataProcessed() && !sigChecked.get() && !isFileExists();}
 }

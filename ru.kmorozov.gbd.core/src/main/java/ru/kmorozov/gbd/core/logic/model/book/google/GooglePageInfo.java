@@ -115,6 +115,4 @@ public class GooglePageInfo extends AbstractPage implements Serializable, Compar
     public int compareTo(GooglePageInfo anotherPage) {
         return this.getOrder().compareTo(anotherPage.getOrder());
     }
-
-    public boolean isSigChecked() {return sigChecked.get();}
 }

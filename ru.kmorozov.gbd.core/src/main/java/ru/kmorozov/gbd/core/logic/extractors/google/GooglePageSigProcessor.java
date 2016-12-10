@@ -12,6 +12,7 @@ import ru.kmorozov.gbd.core.logic.connectors.Response;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractHttpProcessor;
 import ru.kmorozov.gbd.core.logic.extractors.base.IUniqueRunnable;
+import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage;
 import ru.kmorozov.gbd.core.logic.model.book.google.GooglePageInfo;
 import ru.kmorozov.gbd.core.logic.model.book.google.GooglePagesInfo;
 import ru.kmorozov.gbd.core.logic.progress.IProgress;
@@ -46,7 +47,7 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
         this.bookContext = bookContext;
         this.proxy = proxy;
 
-        sigPageExecutor = new QueuedThreadPoolExecutor<>(bookContext.getPagesStream().count(), THREAD_POOL_SIZE, GooglePageInfo::isSigChecked, bookContext.toString() + "/" + proxy.toString());
+        sigPageExecutor = new QueuedThreadPoolExecutor<>(bookContext.getPagesStream().filter(AbstractPage::isSigChecked).count(), THREAD_POOL_SIZE, GooglePageInfo::isSigChecked, bookContext.toString() + "/" + proxy.toString());
     }
 
     private class SigProcessorInternal implements IUniqueRunnable<GooglePageInfo> {
@@ -145,7 +146,7 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
 
         final IProgress psSigs = bookContext.getProgress().getSubProgress(bookContext.getBookInfo().getPages().getPages().length);
 
-        bookContext.getPagesStream().forEach(page -> {
+        bookContext.getPagesStream().filter(page -> !page.isSigChecked()).forEach(page -> {
             psSigs.inc();
             sigPageExecutor.execute(new SigProcessorInternal((GooglePageInfo) page));
         });
