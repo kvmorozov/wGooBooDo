@@ -67,13 +67,9 @@ public class GoogleHttpConnector extends HttpConnector {
         } catch (InterruptedException ignored) {
         }
 
-        long startMillis = System.currentTimeMillis();
         try {
             return req.execute();
         } catch (SocketTimeoutException ste1) {
-            long endMillis = System.currentTimeMillis();
-            if (endMillis - startMillis < req.getConnectTimeout())
-                logger.info(String.format("Premature timeout: %d instead of %d", endMillis - startMillis, req.getConnectTimeout()));
             proxy.registerFailure();
             return getContent(req, proxy, ++attempt);
         }
