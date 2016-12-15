@@ -6,7 +6,7 @@
 
     <groupId>ru.kmorozov.library</groupId>
     <artifactId>ru.kmorozov.library.data.model</artifactId>
-    <version>2.1-b1</version>
+    <version>2.1-b2</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

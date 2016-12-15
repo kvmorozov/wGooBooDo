@@ -6,7 +6,7 @@
 
     <groupId>ru.kmorozov.gbd</groupId>
     <artifactId>parent</artifactId>
-    <version>2.1-b1</version>
+    <version>2.1-b2</version>
     <packaging>pom</packaging>
 
     <properties>
