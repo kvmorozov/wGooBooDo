@@ -9,7 +9,12 @@ import ru.kmorozov.gbd.core.logic.output.events.AbstractEventSource;
 import ru.kmorozov.gbd.core.utils.Logger;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -94,6 +99,12 @@ public abstract class AbstractImageExtractor extends AbstractEventSource impleme
     }
 
     private String getDirectoryName(String baseOutputDirPath) {
+        try {
+            Optional<Path> optPath = Files.find(Paths.get(baseOutputDirPath), 1, (path, basicFileAttributes) -> path.toString().contains(bookContext.getBookInfo().getBookData().getVolumeId())).findAny();
+            if (optPath.isPresent()) return optPath.get().toString();
+        } catch (IOException ignored) {
+        }
+
         String directoryName = baseOutputDirPath + "\\" + bookContext.getBookInfo().getBookData().getTitle().replace(":", "").replace("<", "").replace(">", "").replace("/", ".");
         String volumeId = bookContext.getBookInfo().getBookData().getVolumeId();
         return StringUtils.isEmpty(volumeId) ? directoryName : directoryName + " " + bookContext.getBookInfo().getBookData().getVolumeId();
