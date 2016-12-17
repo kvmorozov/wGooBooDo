@@ -177,7 +177,8 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
 
                 long pagesAfter = bookContext.getPagesStream().filter(pageInfo -> pageInfo.dataProcessed.get()).count();
 
-                logger.info(String.format("Processed %s pages", pagesAfter - bookContext.getPagesBefore()));
+                bookContext.setPagesProcessed(pagesAfter - bookContext.getPagesBefore());
+                logger.info(String.format("Processed %s pages", bookContext.getPagesProcessed()));
 
                 INSTANCE.postProcessBook(bookContext);
             }

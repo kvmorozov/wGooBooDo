@@ -36,7 +36,7 @@ public class BookContext {
     private IImageExtractor extractor;
     private final IProgress progress;
     private final IPostProcessor postProcessor;
-    private long pagesBefore;
+    private long pagesBefore, pagesProcessed;
     private final ILibraryMetadata metadata;
 
     BookContext(String bookId, IProgress progress, IPostProcessor postProcessor) {
@@ -92,6 +92,14 @@ public class BookContext {
 
     public Stream<AbstractPage> getPagesStream() {
         return Arrays.stream(bookInfo.getPages().getPages());
+    }
+
+    public long getPagesProcessed() {
+        return pagesProcessed;
+    }
+
+    public void setPagesProcessed(long pagesProcessed) {
+        this.pagesProcessed = pagesProcessed;
     }
 
     @Override

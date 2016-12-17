@@ -94,6 +94,9 @@ public class ExecutionContext {
         bookExecutor.terminate(10, TimeUnit.MINUTES);
         pdfExecutor.terminate(30, TimeUnit.MINUTES);
 
+        long totalProcessed = getContexts(false).stream().mapToLong(BookContext::getPagesProcessed).sum();
+        getLogger("Total").info("Total pages processed: " + totalProcessed);
+
         contextProvider.updateIndex();
         contextProvider.updateContext();
     }
