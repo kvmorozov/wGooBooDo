@@ -2,6 +2,7 @@ package ru.kmorozov.gbd.core.logic.Proxy;
 
 import org.apache.commons.lang3.StringUtils;
 import ru.kmorozov.gbd.core.config.GBDOptions;
+import ru.kmorozov.gbd.core.logic.Proxy.web.WebProxyListProvider;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.utils.HttpConnections;
 import ru.kmorozov.gbd.core.utils.Logger;

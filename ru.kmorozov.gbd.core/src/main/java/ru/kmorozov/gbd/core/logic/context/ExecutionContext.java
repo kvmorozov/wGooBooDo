@@ -96,6 +96,7 @@ public class ExecutionContext {
 
         contextProvider.updateIndex();
         contextProvider.updateContext();
+        updateBlacklist();
     }
 
     public void newProxyEvent(HttpHostExt proxy) {

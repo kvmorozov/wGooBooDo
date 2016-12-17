@@ -171,15 +171,11 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
             if (proxyNeeded <= 0) {
                 if (!processingStarted.compareAndSet(false, true)) return;
 
-                INSTANCE.updateBlacklist();
-
                 bookContext.sigExecutor.terminate(10, TimeUnit.MINUTES);
 
                 bookContext.getPagesStream().filter(page -> !page.dataProcessed.get() && ((GooglePageInfo) page).getSig() != null).forEach(page -> bookContext.imgExecutor.execute(new GooglePageImgProcessor(bookContext, (GooglePageInfo) page, HttpHostExt.NO_PROXY)));
 
                 bookContext.imgExecutor.terminate(10, TimeUnit.MINUTES);
-
-                INSTANCE.updateProxyList();
 
                 logger.info(bookContext.getBookInfo().getPages().getMissingPagesList());
 

@@ -68,6 +68,8 @@ public class ProxyBlacklistHolder {
                 out.write(host.getProxyString() + System.getProperty("line.separator"));
             for (HttpHostExt host : deadProxyList)
                 out.write(host.getProxyString() + System.getProperty("line.separator"));
+
+            out.flush();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
