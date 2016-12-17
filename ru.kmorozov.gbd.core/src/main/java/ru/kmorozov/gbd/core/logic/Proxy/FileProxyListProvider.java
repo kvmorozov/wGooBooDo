@@ -4,6 +4,7 @@ import org.apache.commons.io.IOUtils;
 import ru.kmorozov.gbd.core.config.GBDOptions;
 
 import java.io.*;
+import java.util.HashSet;
 
 /**
  * Created by sbt-morozov-kv on 02.12.2015.
@@ -22,7 +23,7 @@ public class FileProxyListProvider extends AbstractProxyListProvider {
         if (!proxyListFile.exists() && !proxyListFile.canRead()) return;
 
         try (InputStream is = new FileInputStream(proxyListFile)) {
-            this.proxyItems = IOUtils.readLines(is, "UTF-8");
+            this.proxyItems = new HashSet(IOUtils.readLines(is, "UTF-8"));
         } catch (IOException e) {
             e.printStackTrace();
         }
