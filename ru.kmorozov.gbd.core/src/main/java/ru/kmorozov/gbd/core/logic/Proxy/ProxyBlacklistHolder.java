@@ -44,16 +44,15 @@ public class ProxyBlacklistHolder {
     }
 
     public boolean isProxyInBlacklist(final String proxyStr) {
-        return storedHosts.parallelStream().filter(httpHostExt -> httpHostExt.isSameAsStr(proxyStr)).count() > 0;
+        Optional<HttpHostExt> host = storedHosts.parallelStream().filter(httpHostExt -> httpHostExt.isSameAsStr(proxyStr)).findFirst();
+        return host.isPresent() ? !host.get().isAvailable() : false;
     }
 
     public void updateBlacklist(Collection<HttpHostExt> currentProxyList) {
         for (HttpHostExt proxy : currentProxyList) {
             Optional<HttpHostExt> proxyInListOpt = storedHosts.parallelStream().filter(httpHostExt -> httpHostExt.equals(proxy)).findFirst();
-            HttpHostExt proxyInList;
             if (proxyInListOpt.isPresent()) {
-                proxyInList = proxyInListOpt.get();
-                proxyInList.update(proxy);
+                proxyInListOpt.get().update(proxy);
             }
             else {
                 storedHosts.add(proxy);

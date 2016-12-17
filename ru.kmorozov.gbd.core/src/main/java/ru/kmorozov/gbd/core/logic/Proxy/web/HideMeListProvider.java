@@ -25,7 +25,7 @@ public class HideMeListProvider extends AbstractProxyExtractor {
                 getElementsByTag("tbody").get(0).getElementsByTag("tr").stream().map(this::extractProxyData).collect(Collectors.toList());
     }
 
-    public String extractProxyData(Element element) {
+    private String extractProxyData(Element element) {
         return ((TextNode) element.childNode(0).childNode(0)).getWholeText() + ":" + ((TextNode) element.childNode(1).childNode(0)).getWholeText();
     }
 }
