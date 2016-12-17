@@ -17,12 +17,10 @@ public abstract class BaseLoader {
     protected abstract String getLoadedFileName();
 
     protected File getFileToLoad(boolean createIfNotExists) {
-        if (!GBDOptions.isValidDirectory())
-            return null;
+        if (!GBDOptions.isValidDirectory()) return null;
 
         File indexFile = new File(GBDOptions.getOutputDir() + File.separator + getLoadedFileName());
-        if (indexFile.exists())
-            return indexFile;
+        if (indexFile.exists()) return indexFile;
         else if (createIfNotExists) {
             try {
                 indexFile.createNewFile();

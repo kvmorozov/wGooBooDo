@@ -9,7 +9,10 @@ import java.io.Serializable;
  */
 class OnlineAccess implements Serializable {
 
-    @SerializedName("url") private String url;
-    @SerializedName("price") private String price;
-    @SerializedName("list_price") private String listPrice;
+    @SerializedName("url")
+    private String url;
+    @SerializedName("price")
+    private String price;
+    @SerializedName("list_price")
+    private String listPrice;
 }

@@ -66,7 +66,7 @@ public class ShplBookExtractor extends AbstractBookExtractor {
 
                     ShplPage[] pages = Mapper.getGson().fromJson(pagesData, ShplPage[].class);
                     for (int i = 1; i <= pages.length; i++)
-                        pages[i-1].setOrder(i);
+                        pages[i - 1].setOrder(i);
                     pagesInfo = new ShplPagesInfo(pages);
                     break;
                 }

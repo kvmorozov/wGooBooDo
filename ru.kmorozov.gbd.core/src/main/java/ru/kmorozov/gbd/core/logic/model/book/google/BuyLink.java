@@ -9,9 +9,14 @@ import java.io.Serializable;
  */
 class BuyLink implements Serializable {
 
-    @SerializedName("Seller") private String seller;
-    @SerializedName("Url") private String url;
-    @SerializedName("TrackingUrl") private String trackingUrl;
-    @SerializedName("IsPublisher") private String publisher;
-    @SerializedName("Price") private String price;
+    @SerializedName("Seller")
+    private String seller;
+    @SerializedName("Url")
+    private String url;
+    @SerializedName("TrackingUrl")
+    private String trackingUrl;
+    @SerializedName("IsPublisher")
+    private String publisher;
+    @SerializedName("Price")
+    private String price;
 }

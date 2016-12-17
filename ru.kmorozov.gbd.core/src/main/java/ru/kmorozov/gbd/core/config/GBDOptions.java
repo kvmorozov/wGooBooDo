@@ -44,8 +44,7 @@ public class GBDOptions {
     }
 
     public static boolean isValidDirectory() {
-        if (booksDir == null)
-            booksDir = new File(GBDOptions.getOutputDir());
+        if (booksDir == null) booksDir = new File(GBDOptions.getOutputDir());
 
         return booksDir.exists() && booksDir.isDirectory();
     }

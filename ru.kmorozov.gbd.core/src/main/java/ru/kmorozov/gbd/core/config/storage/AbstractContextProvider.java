@@ -17,21 +17,28 @@ public abstract class AbstractContextProvider {
     public static AbstractContextProvider getContextProvider() {
         if (contextProvider == null) {
             synchronized (LOCK_OBJ) {
-                if (contextProvider == null)
-                    if (classExists(DB_CTX_PROVIDER_CLASS_NAME)) {
-                        try {
-                            contextProvider = (AbstractContextProvider) Class.forName(DB_CTX_PROVIDER_CLASS_NAME).newInstance();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                if (contextProvider == null) if (classExists(DB_CTX_PROVIDER_CLASS_NAME)) {
+                    try {
+                        contextProvider = (AbstractContextProvider) Class.forName(DB_CTX_PROVIDER_CLASS_NAME).newInstance();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
+                }
 
-                if (contextProvider == null)
-                    contextProvider = new FileContextProvider();
+                if (contextProvider == null) contextProvider = new FileContextProvider();
             }
         }
 
         return contextProvider;
+    }
+
+    private static boolean classExists(String className) {
+        try {
+            Class.forName(className);
+            return true;
+        } catch (ClassNotFoundException cnfe) {
+            return false;
+        }
     }
 
     public abstract void updateIndex();
@@ -45,13 +52,4 @@ public abstract class AbstractContextProvider {
     public abstract int getContextSize();
 
     public abstract void refreshContext();
-
-    private static boolean classExists(String className) {
-        try {
-            Class.forName(className);
-            return true;
-        } catch (ClassNotFoundException cnfe) {
-            return false;
-        }
-    }
 }

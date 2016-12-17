@@ -79,7 +79,10 @@ public class GooglePageInfo extends AbstractPage implements Serializable, Compar
     }
 
     public String getImqRqUrl(String bookId, String urlTemplate, int width) {
-        return urlTemplate.replace(GoogleImageExtractor.BOOK_ID_PLACEHOLDER, bookId) + GoogleImageExtractor.IMG_REQUEST_TEMPLATE.replace(GoogleImageExtractor.RQ_PG_PLACEHOLDER, getPid()).replace(GoogleImageExtractor.RQ_SIG_PLACEHOLDER, getSig()).replace(GoogleImageExtractor.RQ_WIDTH_PLACEHOLDER, String.valueOf(width));
+        return urlTemplate.replace(GoogleImageExtractor.BOOK_ID_PLACEHOLDER, bookId) + GoogleImageExtractor.IMG_REQUEST_TEMPLATE.replace(GoogleImageExtractor.RQ_PG_PLACEHOLDER, getPid())
+                                                                                                                                .replace(GoogleImageExtractor.RQ_SIG_PLACEHOLDER, getSig())
+                                                                                                                                .replace(GoogleImageExtractor.RQ_WIDTH_PLACEHOLDER, String
+                                                                                                                                        .valueOf(width));
     }
 
     public String getPrefix() {
@@ -102,7 +105,8 @@ public class GooglePageInfo extends AbstractPage implements Serializable, Compar
             else if (!numFound && !Character.isDigit(ch)) {
                 numFound = true;
                 prefix = ch + prefix;
-            } else prefix = ch + prefix;
+            }
+            else prefix = ch + prefix;
         }
 
         try {

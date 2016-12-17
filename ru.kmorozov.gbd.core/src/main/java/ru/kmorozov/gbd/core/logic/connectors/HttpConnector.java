@@ -12,11 +12,10 @@ import static ru.kmorozov.gbd.core.logic.context.ExecutionContext.INSTANCE;
  */
 public abstract class HttpConnector {
 
+    public static final int CONNECT_TIMEOUT = 30000;
     protected static final Logger logger = INSTANCE.getLogger(HttpConnector.class);
-
     protected static final int MAX_RETRY_COUNT = 2;
     protected static final int SLEEP_TIME = 500;
-    public static final int CONNECT_TIMEOUT = 30000;
 
     protected String getProxyKey(HttpHostExt proxy) {
         return proxy.toString();

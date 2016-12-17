@@ -60,7 +60,8 @@ public class GoogleBookInfoExtractor extends AbstractBookExtractor {
                     if (proxyBookInfo == null) proxy.forceInvalidate(true);
                     else return proxyBookInfo;
                 }
-            } else return defaultBookInfo;
+            }
+            else return defaultBookInfo;
         } catch (Exception e) {
             e.printStackTrace();
         }

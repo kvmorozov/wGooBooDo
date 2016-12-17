@@ -16,27 +16,23 @@ import java.net.SocketTimeoutException;
 public class ApacheHttpConnector extends HttpConnector {
 
     public ApacheResponse getContent(String rqUrl, HttpHostExt proxy, boolean withTimeout) throws IOException {
-        if ((GBDOptions.secureMode() && proxy.isLocal()) || !proxy.isAvailable())
-            return null;
+        if ((GBDOptions.secureMode() && proxy.isLocal()) || !proxy.isAvailable()) return null;
 
         HttpResponse response = getContent(ApacheConnections.INSTANCE.getClient(proxy, withTimeout), new HttpGet(rqUrl), proxy, 0);
 
-        if (response == null)
-            logger.finest(String.format("No response at url %s with proxy %s", rqUrl, proxy.toString()));
+        if (response == null) logger.finest(String.format("No response at url %s with proxy %s", rqUrl, proxy.toString()));
 
         return new ApacheResponse(response);
     }
 
     private HttpResponse getContent(HttpClient client, HttpGet req, HttpHostExt proxy, int attempt) throws IOException {
-        if (attempt >= MAX_RETRY_COUNT)
-            return null;
+        if (attempt >= MAX_RETRY_COUNT) return null;
 
-        if (attempt > 0)
-            try {
-                logger.finest(String.format("Attempt %d with %s url", attempt, req.getURI().toString()));
-                Thread.sleep(SLEEP_TIME * attempt);
-            } catch (InterruptedException ignored) {
-            }
+        if (attempt > 0) try {
+            logger.finest(String.format("Attempt %d with %s url", attempt, req.getURI().toString()));
+            Thread.sleep(SLEEP_TIME * attempt);
+        } catch (InterruptedException ignored) {
+        }
 
         try {
             return client.execute(req);

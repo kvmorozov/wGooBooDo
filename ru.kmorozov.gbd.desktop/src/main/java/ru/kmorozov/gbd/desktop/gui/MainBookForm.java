@@ -19,6 +19,7 @@ import javax.swing.*;
  * Created by km on 05.12.2015.
  */
 public class MainBookForm {
+    private static MainBookForm INSTANCE;
     private JTabbedPane tabbedPane1;
     private JPanel mainPanel, pProgress, pFooter;
     private JTextField tfBookId, tfRootOutDir, tfProxyListFile, tfBookTitle;
@@ -28,8 +29,6 @@ public class MainBookForm {
     private JTabbedPane tpBookInfo;
     private JTable tLog;
     private SwingWorker workerExtractor, workerPdfmaker;
-
-    private static MainBookForm INSTANCE;
 
     public MainBookForm() {
         if (INSTANCE != null) return;
@@ -45,8 +44,7 @@ public class MainBookForm {
         cbReload.setSelected(SystemConfigs.getReload());
         cbSecureMode.setSelected(SystemConfigs.getSecureMode());
 
-        if (SystemConfigs.getResolution() > 0)
-            cbResolution.setSelectedItem(Resolutions.getEnum(SystemConfigs.getResolution()));
+        if (SystemConfigs.getResolution() > 0) cbResolution.setSelectedItem(Resolutions.getEnum(SystemConfigs.getResolution()));
 
         bRootOutDir.addActionListener(e -> {
             JFileChooser fcRootDir = new JFileChooser();
@@ -97,8 +95,7 @@ public class MainBookForm {
         cbReload.addChangeListener(event -> SystemConfigs.setReload(((AbstractButton) event.getSource()).getModel().isSelected()));
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            if (workerExtractor != null && workerExtractor.getState() == SwingWorker.StateValue.STARTED)
-                workerExtractor.cancel(true);
+            if (workerExtractor != null && workerExtractor.getState() == SwingWorker.StateValue.STARTED) workerExtractor.cancel(true);
         }));
 
         bMakeBook.addActionListener(e -> {
@@ -130,6 +127,10 @@ public class MainBookForm {
         tLog.getColumnModel().getColumn(0).setMaxWidth(20);
     }
 
+    public static MainBookForm getINSTANCE() {
+        return INSTANCE;
+    }
+
     public JPanel getMainPanel() {
         return mainPanel;
     }
@@ -140,9 +141,5 @@ public class MainBookForm {
 
     public JPanel getProgressPanel() {
         return pProgress;
-    }
-
-    public static MainBookForm getINSTANCE() {
-        return INSTANCE;
     }
 }

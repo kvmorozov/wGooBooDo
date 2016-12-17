@@ -38,11 +38,11 @@ public class ShplPage extends AbstractPage {
         return order;
     }
 
-    public String getImgUrl() {
-        return String.format("http://elib.shpl.ru/pages/%s/zooms/%s", id, GBDOptions.getImageWidth(ShplImageExtractor.DEFAULT_PAGE_WIDTH));
-    }
-
     public void setOrder(Integer order) {
         this.order = order;
+    }
+
+    public String getImgUrl() {
+        return String.format("http://elib.shpl.ru/pages/%s/zooms/%s", id, GBDOptions.getImageWidth(ShplImageExtractor.DEFAULT_PAGE_WIDTH));
     }
 }

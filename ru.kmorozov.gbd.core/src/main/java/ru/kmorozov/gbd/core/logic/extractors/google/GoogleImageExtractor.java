@@ -83,7 +83,8 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                    } else {
+                    }
+                    else {
                         try {
                             if (GBDOptions.reloadImages()) {
                                 BufferedImage bimg = ImageIO.read(new File(filePath.toString()));
@@ -96,7 +97,8 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
                                     _page.dataProcessed.set(false);
                                     logger.severe(String.format("Page %s deleted!", _page.getPid()));
                                 }
-                            } else _page.dataProcessed.set(true);
+                            }
+                            else _page.dataProcessed.set(true);
 
                             if (!Images.isValidImage(filePath) || _page.getOrder() != order) {
                                 Files.delete(filePath);
@@ -131,7 +133,8 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
         if (!Strings.isNullOrEmpty(((GoogleBookData) bookContext.getBookInfo().getBookData()).getFlags().getDownloadPdfUrl())) {
             logger.severe("There is direct url to download book. DIY!");
             return false;
-        } else return true;
+        }
+        else return true;
     }
 
     @Override
@@ -139,6 +142,11 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
         super.prepareDirectory();
         bookContext.getBookInfo().getPages().build();
         scanDir();
+    }
+
+    @Override
+    public void newProxyEvent(HttpHostExt proxy) {
+        (new Thread(new EventProcessor(proxy))).start();
     }
 
     private class EventProcessor implements Runnable {
@@ -183,10 +191,5 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
                 INSTANCE.postProcessBook(bookContext);
             }
         }
-    }
-
-    @Override
-    public void newProxyEvent(HttpHostExt proxy) {
-        (new Thread(new EventProcessor(proxy))).start();
     }
 }

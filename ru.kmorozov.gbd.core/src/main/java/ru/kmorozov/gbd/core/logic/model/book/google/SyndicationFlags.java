@@ -9,5 +9,6 @@ import java.io.Serializable;
  */
 class SyndicationFlags implements Serializable {
 
-    @SerializedName("allow_disabling_chrome") private boolean allowDisablingChrome;
+    @SerializedName("allow_disabling_chrome")
+    private boolean allowDisablingChrome;
 }

@@ -25,12 +25,12 @@ public class ImageExtractorWorker extends SwingWorker<Void, Void> implements IEv
         return null;
     }
 
-    protected void setProcessStatus(IProgress processStatus) {
-        this._processStatus = processStatus;
-    }
-
     @Override
     public IProgress getProcessStatus() {
         return _processStatus;
+    }
+
+    protected void setProcessStatus(IProgress processStatus) {
+        this._processStatus = processStatus;
     }
 }

@@ -10,7 +10,7 @@ import java.lang.reflect.Type;
 /**
  * Created by sbt-morozov-kv on 17.11.2016.
  */
-public class IBookDataAdapter implements JsonSerializer<IBookData> ,JsonDeserializer<IBookData> {
+public class IBookDataAdapter implements JsonSerializer<IBookData>, JsonDeserializer<IBookData> {
 
     @Override
     public IBookData deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {

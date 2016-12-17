@@ -11,11 +11,15 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class Book {
 
-    @Id String bookId;
-    @TextIndexed String title;
-    @TextIndexed String author;
+    @Id
+    String bookId;
+    @TextIndexed
+    String title;
+    @TextIndexed
+    String author;
 
-    public Book() {}
+    public Book() {
+    }
 
     public Book(String title, String author) {
         this.title = title;

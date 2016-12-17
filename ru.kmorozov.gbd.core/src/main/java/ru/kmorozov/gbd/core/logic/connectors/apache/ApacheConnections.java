@@ -25,13 +25,12 @@ import static ru.kmorozov.gbd.core.utils.HttpConnections.USER_AGENT;
  */
 public class ApacheConnections {
 
+    public static final ApacheConnections INSTANCE = new ApacheConnections();
     private final HttpClientBuilder builder;
     private final HttpClientBuilder builderWithTimeout;
-    private CloseableHttpClient noProxyClient;
     private final Map<HttpHost, HttpClient> clientsMap = new ConcurrentHashMap<>();
     private final Map<HttpHost, HttpClient> withTimeoutClientsMap = new ConcurrentHashMap<>();
-
-    public static final ApacheConnections INSTANCE = new ApacheConnections();
+    private CloseableHttpClient noProxyClient;
 
     private ApacheConnections() {
         BasicCookieStore cookieStore = new BasicCookieStore();
@@ -51,18 +50,9 @@ public class ApacheConnections {
         connPool.setMaxTotal(200);
         connPool.setDefaultMaxPerRoute(200);
 
-        builder = HttpClientBuilder
-                .create()
-                .setUserAgent(USER_AGENT)
-                .setConnectionManager(connPool)
-                .setConnectionManagerShared(true)
-                .setDefaultCookieStore(cookieStore);
+        builder = HttpClientBuilder.create().setUserAgent(USER_AGENT).setConnectionManager(connPool).setConnectionManagerShared(true).setDefaultCookieStore(cookieStore);
 
-        builderWithTimeout = HttpClientBuilder
-                .create()
-                .setUserAgent(USER_AGENT)
-                .setConnectionManager(connPool)
-                .setDefaultCookieStore(cookieStore);
+        builderWithTimeout = HttpClientBuilder.create().setUserAgent(USER_AGENT).setConnectionManager(connPool).setDefaultCookieStore(cookieStore);
 
         try {
             SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, (arg0, arg1) -> true).build();
@@ -73,11 +63,8 @@ public class ApacheConnections {
             ex.printStackTrace();
         }
 
-        RequestConfig requestConfig = RequestConfig.copy(RequestConfig.DEFAULT)
-                .setSocketTimeout(CONNECT_TIMEOUT)
-                .setConnectTimeout(CONNECT_TIMEOUT)
-                .setConnectionRequestTimeout(CONNECT_TIMEOUT)
-                .build();
+        RequestConfig requestConfig = RequestConfig.copy(RequestConfig.DEFAULT).setSocketTimeout(CONNECT_TIMEOUT).setConnectTimeout(CONNECT_TIMEOUT).setConnectionRequestTimeout
+                (CONNECT_TIMEOUT).build();
 
         builderWithTimeout.setDefaultRequestConfig(requestConfig);
     }
@@ -86,11 +73,11 @@ public class ApacheConnections {
         HttpClientBuilder _builder = withTimeout ? builderWithTimeout : builder;
 
         if (proxy.isLocal()) {
-            if (noProxyClient == null)
-                noProxyClient = _builder.build();
+            if (noProxyClient == null) noProxyClient = _builder.build();
 
             return noProxyClient;
-        } else {
+        }
+        else {
             Map<HttpHost, HttpClient> _map = withTimeout ? withTimeoutClientsMap : clientsMap;
 
             HttpHost host = new HttpHost(proxy.getHost().getAddress());
@@ -101,12 +88,10 @@ public class ApacheConnections {
 
     public void closeAllConnections() {
         try {
-            if (noProxyClient != null)
-                noProxyClient.close();
+            if (noProxyClient != null) noProxyClient.close();
 
-            if (clientsMap != null)
-                for (HttpClient client : clientsMap.values())
-                    ((CloseableHttpClient) client).close();
+            if (clientsMap != null) for (HttpClient client : clientsMap.values())
+                ((CloseableHttpClient) client).close();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -44,10 +44,10 @@ public class GoogleHttpConnector extends HttpConnector {
             if (!StringUtils.isEmpty(headers.getCookie()) && headers.getCookie().contains("NID")) {
                 HttpRequest req = getFactory(proxy).buildGetRequest(url).setConnectTimeout(withTimeout ? CONNECT_TIMEOUT : CONNECT_TIMEOUT * 10).setHeaders(headers);
                 resp = getContent(req, proxy, 0);
-            } else throw new RuntimeException("Invalid proxy config!");
+            }
+            else throw new RuntimeException("Invalid proxy config!");
 
-            if (resp == null)
-                logger.finest(String.format("No response at url %s with proxy %s", url.toString(), proxy.toString()));
+            if (resp == null) logger.finest(String.format("No response at url %s with proxy %s", url.toString(), proxy.toString()));
 
             return new GoogleResponse(resp);
         } catch (HttpResponseException hre) {

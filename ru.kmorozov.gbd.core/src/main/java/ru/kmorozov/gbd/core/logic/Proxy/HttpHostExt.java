@@ -26,20 +26,17 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class HttpHostExt {
 
+    public static final HttpHostExt NO_PROXY = new HttpHostExt();
     private static final Logger logger = ExecutionContext.INSTANCE.getLogger(HttpHostExt.class);
-
     private static final GenericUrl checkProxyUrl = new GenericUrl("http://mxtoolbox.com/WhatIsMyIP/");
-
     private static final int REMOTE_FAILURES_THRESHOLD = 15;
     private static final int LOCAL_FAILURES_THRESHOLD = 50;
-    public static final HttpHostExt NO_PROXY = new HttpHostExt();
     private static final String NO_PROXY_STR = "NO_PROXY";
-
+    private final AtomicBoolean available;
+    private final AtomicInteger failureCount;
     private InetSocketAddress host;
     private Proxy proxy;
     private String cookie;
-    private final AtomicBoolean available;
-    private final AtomicInteger failureCount;
     private boolean isSecure = true;
     private volatile HttpHeaders headers;
 
@@ -64,6 +61,11 @@ public class HttpHostExt {
         proxy = Proxy.NO_PROXY;
         failureCount = new AtomicInteger(0);
         available = new AtomicBoolean(true);
+    }
+
+    public static HttpHostExt getProxyFromString(String proxyStr) {
+        String[] proxyVars = proxyStr.split(";");
+        return new HttpHostExt(new InetSocketAddress(proxyVars[0], Integer.parseInt(proxyVars[1])), Integer.parseInt(proxyVars[2]));
     }
 
     private boolean checkSecurity() {
@@ -131,8 +133,7 @@ public class HttpHostExt {
             if (isAvailable()) {
                 failureCount.addAndGet(5);
                 available.set(false);
-                if (reportFailure)
-                    logger.info(String.format("Proxy %s force-invalidated!", host == null ? NO_PROXY_STR : host.toString()));
+                if (reportFailure) logger.info(String.format("Proxy %s force-invalidated!", host == null ? NO_PROXY_STR : host.toString()));
             }
         }
     }
@@ -142,8 +143,7 @@ public class HttpHostExt {
     }
 
     public Proxy getProxy() {
-        if (proxy == null)
-            proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(host.getHostName(), host.getPort()));
+        if (proxy == null) proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(host.getHostName(), host.getPort()));
 
         return proxy;
     }
@@ -178,11 +178,6 @@ public class HttpHostExt {
 
     public String getProxyStringShort() {
         return host.getAddress().getHostAddress() + ":" + host.getPort();
-    }
-
-    public static HttpHostExt getProxyFromString(String proxyStr) {
-        String[] proxyVars = proxyStr.split(";");
-        return new HttpHostExt(new InetSocketAddress(proxyVars[0], Integer.parseInt(proxyVars[1])), Integer.parseInt(proxyVars[2]));
     }
 
     public HttpHeaders getHeaders() {

@@ -24,10 +24,8 @@ import static ru.kmorozov.gbd.core.config.GBDOptions.isValidDirectory;
  */
 public class BookContextLoader extends BaseLoader {
 
-    private static final String CTX_FILE_NAME = "books.ctx";
-
     static final BookContextLoader BOOK_CTX_LOADER = new BookContextLoader();
-
+    private static final String CTX_FILE_NAME = "books.ctx";
     private Map<String, BookInfo> booksInfo = new HashMap<>();
 
     protected BookContextLoader() {
@@ -42,8 +40,7 @@ public class BookContextLoader extends BaseLoader {
     }
 
     public void updateContext() {
-        if (!StringUtils.isEmpty(GBDOptions.getBookId()))
-            return;
+        if (!StringUtils.isEmpty(GBDOptions.getBookId())) return;
 
         List<BookInfo> runtimeBooksInfo = ExecutionContext.INSTANCE.getContexts(false).stream().map(BookContext::getBookInfo).collect(Collectors.toList());
         for (BookInfo bookInfo : runtimeBooksInfo)
@@ -59,8 +56,7 @@ public class BookContextLoader extends BaseLoader {
     }
 
     private void initContext() {
-        if (!isValidDirectory())
-            return;
+        if (!isValidDirectory()) return;
 
         refreshContext();
     }
@@ -75,8 +71,7 @@ public class BookContextLoader extends BaseLoader {
 
     public void refreshContext() {
         File contextFile = getFileToLoad(false);
-        if (contextFile == null)
-            return;
+        if (contextFile == null) return;
 
         try {
             BookInfo[] ctxObjArr;

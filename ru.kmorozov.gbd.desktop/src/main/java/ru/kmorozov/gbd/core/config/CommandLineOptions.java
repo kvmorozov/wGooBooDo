@@ -70,15 +70,11 @@ public class CommandLineOptions implements IGBDOptions {
     }
 
     private String getStringOptionValue(String optionName) {
-        return commandLine.hasOption(optionName) && commandLine.getOptionValues(optionName).length == 1
-                ? commandLine.getOptionValues(optionName)[0]
-                : null;
+        return commandLine.hasOption(optionName) && commandLine.getOptionValues(optionName).length == 1 ? commandLine.getOptionValues(optionName)[0] : null;
     }
 
     private int getIntOptionValue(String optionName) {
-        return commandLine.hasOption(optionName) && commandLine.getOptionValues(optionName).length == 1
-                ? Integer.parseInt(commandLine.getOptionValues(optionName)[0])
-                : 0;
+        return commandLine.hasOption(optionName) && commandLine.getOptionValues(optionName).length == 1 ? Integer.parseInt(commandLine.getOptionValues(optionName)[0]) : 0;
     }
 
     private boolean getBoolOptionValue(String optionName) {

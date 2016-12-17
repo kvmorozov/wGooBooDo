@@ -13,8 +13,7 @@ public class MainFrame extends JFrame {
     public MainFrame() {
         super("wGooBooDo");
 
-        if (INSTANCE != null)
-            return;
+        if (INSTANCE != null) return;
 
         INSTANCE = this;
 
@@ -29,11 +28,11 @@ public class MainFrame extends JFrame {
         setLocation(x, y);
     }
 
-    public void setVisible() {
-        setVisible(true);
-    }
-
     public static MainFrame getINSTANCE() {
         return INSTANCE;
+    }
+
+    public void setVisible() {
+        setVisible(true);
     }
 }

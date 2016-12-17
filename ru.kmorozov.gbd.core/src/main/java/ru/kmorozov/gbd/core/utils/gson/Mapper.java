@@ -11,8 +11,8 @@ import ru.kmorozov.gbd.core.logic.model.book.base.IPagesInfo;
  */
 public class Mapper {
 
-    private static volatile Gson gson;
     private static final Object lockObj = new Object();
+    private static volatile Gson gson;
 
     public static Gson getGson() {
         if (gson == null) {

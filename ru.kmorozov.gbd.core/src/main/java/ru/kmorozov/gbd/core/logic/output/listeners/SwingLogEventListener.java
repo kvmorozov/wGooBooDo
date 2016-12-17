@@ -1,8 +1,8 @@
 package ru.kmorozov.gbd.core.logic.output.listeners;
 
+import ru.kmorozov.gbd.core.logic.model.log.LogTableModel;
 import ru.kmorozov.gbd.core.logic.output.events.BaseEvent;
 import ru.kmorozov.gbd.core.logic.output.events.LogEvent;
-import ru.kmorozov.gbd.core.logic.model.log.LogTableModel;
 
 import javax.swing.*;
 

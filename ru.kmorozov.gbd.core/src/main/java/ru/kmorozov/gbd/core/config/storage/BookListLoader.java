@@ -23,10 +23,8 @@ import static ru.kmorozov.gbd.core.config.GBDOptions.getBooksDir;
  */
 public class BookListLoader extends BaseLoader {
 
-    private static final String INDEX_FILE_NAME = "books.index";
-
     static final BookListLoader BOOK_LIST_LOADER = new BookListLoader();
-
+    private static final String INDEX_FILE_NAME = "books.index";
     private boolean loadedFromIndex = false;
 
     protected BookListLoader() {
@@ -35,8 +33,7 @@ public class BookListLoader extends BaseLoader {
 
     public List<String> getBookIdsList() {
         File indexFile = getFileToLoad(false);
-        if (indexFile == null)
-            return loadFromDirNames();
+        if (indexFile == null) return loadFromDirNames();
         else {
             loadedFromIndex = true;
             return loadFromIndex(indexFile);
@@ -49,8 +46,7 @@ public class BookListLoader extends BaseLoader {
             Files.walk(Paths.get(getBooksDir().toURI())).forEach(filePath -> {
                 if (filePath.toFile().isDirectory()) {
                     String[] nameParts = filePath.toFile().getName().split(" ");
-                    if (isValidId(nameParts[nameParts.length - 1]))
-                        bookIdsList.add(nameParts[nameParts.length - 1]);
+                    if (isValidId(nameParts[nameParts.length - 1])) bookIdsList.add(nameParts[nameParts.length - 1]);
                 }
             });
         } catch (Exception ex) {
@@ -77,8 +73,7 @@ public class BookListLoader extends BaseLoader {
     }
 
     public void updateIndex() {
-        if (loadedFromIndex || !StringUtils.isEmpty(GBDOptions.getBookId()))
-            return;
+        if (loadedFromIndex || !StringUtils.isEmpty(GBDOptions.getBookId())) return;
 
         try (PrintWriter writer = new PrintWriter(getFileToLoad(true))) {
             ExecutionContext.INSTANCE.getBookIds().forEach(writer::println);

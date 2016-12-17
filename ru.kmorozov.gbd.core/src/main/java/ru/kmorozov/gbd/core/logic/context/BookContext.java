@@ -23,21 +23,18 @@ import static ru.kmorozov.gbd.core.utils.QueuedThreadPoolExecutor.THREAD_POOL_SI
  */
 public class BookContext {
 
-    public final QueuedThreadPoolExecutor<? extends AbstractHttpProcessor>  sigExecutor;
-    public final QueuedThreadPoolExecutor<AbstractPage> imgExecutor;
-
-    public AtomicBoolean started = new AtomicBoolean(false);
-    public AtomicBoolean pdfCompleted = new AtomicBoolean(false);
-
     private static final Predicate<AbstractPage> pagePredicate = AbstractPage::isDataProcessed;
-
+    public final QueuedThreadPoolExecutor<? extends AbstractHttpProcessor> sigExecutor;
+    public final QueuedThreadPoolExecutor<AbstractPage> imgExecutor;
     private final BookInfo bookInfo;
-    private File outputDir;
-    private IImageExtractor extractor;
     private final IProgress progress;
     private final IPostProcessor postProcessor;
-    private long pagesBefore, pagesProcessed;
     private final ILibraryMetadata metadata;
+    public AtomicBoolean started = new AtomicBoolean(false);
+    public AtomicBoolean pdfCompleted = new AtomicBoolean(false);
+    private File outputDir;
+    private IImageExtractor extractor;
+    private long pagesBefore, pagesProcessed;
 
     BookContext(String bookId, IProgress progress, IPostProcessor postProcessor) {
         this.bookInfo = LibraryFactory.getMetadata(bookId).getBookExtractor(bookId).getBookInfo();
@@ -46,8 +43,8 @@ public class BookContext {
         this.metadata = LibraryFactory.getMetadata(bookId);
 
         pagesBefore = getPagesStream().filter(pageInfo -> pageInfo.fileExists.get()).count();
-        sigExecutor = new QueuedThreadPoolExecutor<>(1, THREAD_POOL_SIZE, x -> true, "Sig_"+ bookId);
-        imgExecutor = new QueuedThreadPoolExecutor<>(0, THREAD_POOL_SIZE, pagePredicate, "Img_"+ bookId);
+        sigExecutor = new QueuedThreadPoolExecutor<>(1, THREAD_POOL_SIZE, x -> true, "Sig_" + bookId);
+        imgExecutor = new QueuedThreadPoolExecutor<>(0, THREAD_POOL_SIZE, pagePredicate, "Img_" + bookId);
     }
 
     public String getBookId() {

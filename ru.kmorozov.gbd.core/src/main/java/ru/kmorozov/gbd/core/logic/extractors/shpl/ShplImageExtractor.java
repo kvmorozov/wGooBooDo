@@ -27,6 +27,13 @@ public class ShplImageExtractor extends AbstractImageExtractor {
         return true;
     }
 
+    @Override
+    public void newProxyEvent(HttpHostExt proxy) {
+        if (!proxy.isLocal()) return;
+
+        (new Thread(new EventProcessor(proxy))).start();
+    }
+
     private class EventProcessor implements Runnable {
 
         private HttpHostExt proxy;
@@ -59,13 +66,5 @@ public class ShplImageExtractor extends AbstractImageExtractor {
                 INSTANCE.postProcessBook(bookContext);
             }
         }
-    }
-
-    @Override
-    public void newProxyEvent(HttpHostExt proxy) {
-        if (!proxy.isLocal())
-            return;
-
-        (new Thread(new EventProcessor(proxy))).start();
     }
 }

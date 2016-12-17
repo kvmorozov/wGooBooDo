@@ -47,7 +47,51 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
         this.bookContext = bookContext;
         this.proxy = proxy;
 
-        sigPageExecutor = new QueuedThreadPoolExecutor<>(bookContext.getPagesStream().filter(AbstractPage::isNotProcessed).count(), THREAD_POOL_SIZE, GooglePageInfo::isProcessed, bookContext.toString() + "/" + proxy.toString());
+        sigPageExecutor = new QueuedThreadPoolExecutor<>(bookContext.getPagesStream().filter(AbstractPage::isNotProcessed).count(), THREAD_POOL_SIZE, GooglePageInfo::isProcessed,
+                                                         bookContext.toString() + "/" + proxy.toString());
+    }
+
+    @Override
+    public void run() {
+        if ((GBDOptions.secureMode() && proxy.isLocal()) || !proxy.isAvailable()) return;
+
+        if (!proxy.isLocal() && !(proxy.isAvailable() && proxy.getHost().getPort() > 0)) return;
+
+        final IProgress psSigs = bookContext.getProgress().getSubProgress(bookContext.getBookInfo().getPages().getPages().length);
+
+        bookContext.getPagesStream().filter(AbstractPage::isNotProcessed).forEach(page -> {
+            psSigs.inc();
+            sigPageExecutor.execute(new SigProcessorInternal((GooglePageInfo) page));
+        });
+        sigPageExecutor.terminate(3, TimeUnit.MINUTES);
+
+        psSigs.finish();
+    }
+
+    @Override
+    public GooglePageSigProcessor getUniqueObject() {
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return "Sig processor:" + bookContext.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        GooglePageSigProcessor that = (GooglePageSigProcessor) o;
+
+        return new EqualsBuilder().append(proxy, that.proxy).append(bookContext, that.bookContext).isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(proxy).append(bookContext).toHashCode();
     }
 
     private class SigProcessorInternal implements IUniqueRunnable<GooglePageInfo> {
@@ -62,8 +106,7 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
         public void run() {
             if (!proxy.isAvailable()) return;
 
-            if (page.dataProcessed.get() || page.getSig() != null || page.sigChecked.get() || page.loadingStarted.get())
-                return;
+            if (page.dataProcessed.get() || page.getSig() != null || page.sigChecked.get() || page.loadingStarted.get()) return;
 
             Response resp = null;
             String baseUrl = HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, bookContext.getBookInfo().getBookId());
@@ -111,8 +154,7 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
                             }
                         }
 
-                        if (_page.getSrc() != null && _page.getSig() == null)
-                            logger.finest(String.format(SIG_WRONG_FORMAT, _page.getSrc()));
+                        if (_page.getSrc() != null && _page.getSig() == null) logger.finest(String.format(SIG_WRONG_FORMAT, _page.getSrc()));
                     }
             } catch (JsonParseException | SocketTimeoutException | SocketException | NoHttpResponseException ce) {
                 if (!proxy.isLocal()) {
@@ -136,48 +178,5 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
         public GooglePageInfo getUniqueObject() {
             return page;
         }
-    }
-
-    @Override
-    public void run() {
-        if ((GBDOptions.secureMode() && proxy.isLocal()) || !proxy.isAvailable()) return;
-
-        if (!proxy.isLocal() && !(proxy.isAvailable() && proxy.getHost().getPort() > 0)) return;
-
-        final IProgress psSigs = bookContext.getProgress().getSubProgress(bookContext.getBookInfo().getPages().getPages().length);
-
-        bookContext.getPagesStream().filter(AbstractPage::isNotProcessed).forEach(page -> {
-            psSigs.inc();
-            sigPageExecutor.execute(new SigProcessorInternal((GooglePageInfo) page));
-        });
-        sigPageExecutor.terminate(3, TimeUnit.MINUTES);
-
-        psSigs.finish();
-    }
-
-    @Override
-    public GooglePageSigProcessor getUniqueObject() {
-        return this;
-    }
-
-    @Override
-    public String toString() {
-        return "Sig processor:" + bookContext.toString();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-
-        if (o == null || getClass() != o.getClass()) return false;
-
-        GooglePageSigProcessor that = (GooglePageSigProcessor) o;
-
-        return new EqualsBuilder().append(proxy, that.proxy).append(bookContext, that.bookContext).isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(proxy).append(bookContext).toHashCode();
     }
 }

@@ -18,17 +18,14 @@ import java.util.concurrent.TimeUnit;
  */
 public class ExecutionContext {
 
-    public static ExecutionContext INSTANCE;
-
     private static final String EMPTY = "";
-
-    public QueuedThreadPoolExecutor bookExecutor;
-    public QueuedThreadPoolExecutor pdfExecutor;
-
+    private final static AbstractContextProvider contextProvider = AbstractContextProvider.getContextProvider();
+    public static ExecutionContext INSTANCE;
     private final boolean singleMode;
     private final AbstractOutput output;
     private final Map<String, BookContext> bookContextMap = new HashMap<>();
-    private final static AbstractContextProvider contextProvider = AbstractContextProvider.getContextProvider();
+    public QueuedThreadPoolExecutor bookExecutor;
+    public QueuedThreadPoolExecutor pdfExecutor;
 
     private ExecutionContext(AbstractOutput output, boolean singleMode) {
         this.output = output;

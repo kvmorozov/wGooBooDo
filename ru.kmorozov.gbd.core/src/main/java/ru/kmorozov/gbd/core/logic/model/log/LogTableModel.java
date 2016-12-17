@@ -17,7 +17,8 @@ public class LogTableModel extends AbstractTableModel {
 
     private final List<LogEvent> logEvents = Collections.synchronizedList(new ArrayList<>());
 
-    private LogTableModel() {}
+    private LogTableModel() {
+    }
 
     @Override
     public int getRowCount() {

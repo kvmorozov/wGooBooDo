@@ -26,8 +26,18 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
     private static AbstractProxyListProvider INSTANCE;
 
     protected final Set<HttpHostExt> proxyList = new HashSet<>();
-    private AtomicBoolean proxyListCompleted = new AtomicBoolean(false);
     protected List<String> proxyItems;
+    private AtomicBoolean proxyListCompleted = new AtomicBoolean(false);
+
+    public static AbstractProxyListProvider getInstance() {
+        if (INSTANCE == null) INSTANCE = GBDOptions.getProxyListFile() == null ? new WebProxyListProvider() : new FileProxyListProvider();
+
+        return INSTANCE;
+    }
+
+    public static void updateBlacklist() {
+        ProxyBlacklistHolder.BLACKLIST.updateBlacklist(INSTANCE.proxyList);
+    }
 
     private String[] splitItems(String proxyItem, String delimiter) {
         return proxyItem.split(delimiter);
@@ -44,6 +54,41 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
 
     private String getCookie(InetSocketAddress proxy) {
         return HttpConnections.getCookieString(proxy);
+    }
+
+    public void processProxyList() {
+        for (String proxyString : proxyItems)
+            (new Thread(new ProxyChecker(proxyString))).start();
+    }
+
+    @Override
+    public void invalidatedProxyListener() {
+        long liveProxyCount = proxyList.stream().filter(HttpHostExt::isAvailable).count();
+        if (liveProxyCount == 0 && GBDOptions.secureMode()) throw new RuntimeException("No more proxies!");
+    }
+
+    @Override
+    public Stream<HttpHostExt> getParallelProxyStream() {
+        if (!proxyListCompleted.get()) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        return proxyList.parallelStream();
+    }
+
+    public Set<HttpHostExt> getProxyList() {
+        return proxyList;
+    }
+
+    protected boolean notBlacklisted(String proxyStr) {
+        return !ProxyBlacklistHolder.BLACKLIST.isProxyInBlacklist(proxyStr);
+    }
+
+    public int getProxyCount() {
+        return proxyItems.size();
     }
 
     private class ProxyChecker implements Runnable {
@@ -74,11 +119,13 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
                 if (!StringUtils.isEmpty(cookie)) {
                     if (!GBDOptions.secureMode() || proxy.isSecure()) {
                         logger.info(String.format("%sroxy %s added.", GBDOptions.secureMode() ? proxy.isSecure() ? "Secure p" : "NOT secure p" : "P", host.toString()));
-                    } else {
+                    }
+                    else {
                         logger.info(String.format("NOT secure proxy %s NOT added.", host.toString()));
                         proxy.forceInvalidate(false);
                     }
-                } else {
+                }
+                else {
                     logger.info(String.format("Proxy %s NOT added.", host.toString()));
                     proxy.forceInvalidate(false);
                 }
@@ -91,51 +138,5 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
 
             return proxy;
         }
-    }
-
-    public void processProxyList() {
-        for (String proxyString : proxyItems)
-            (new Thread(new ProxyChecker(proxyString))).start();
-    }
-
-    public static AbstractProxyListProvider getInstance() {
-        if (INSTANCE == null)
-            INSTANCE = GBDOptions.getProxyListFile() == null ? new WebProxyListProvider() : new FileProxyListProvider();
-
-        return INSTANCE;
-    }
-
-    @Override
-    public void invalidatedProxyListener() {
-        long liveProxyCount = proxyList.stream().filter(HttpHostExt::isAvailable).count();
-        if (liveProxyCount == 0 && GBDOptions.secureMode()) throw new RuntimeException("No more proxies!");
-    }
-
-    @Override
-    public Stream<HttpHostExt> getParallelProxyStream() {
-        if (!proxyListCompleted.get()) {
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        return proxyList.parallelStream();
-    }
-
-    public Set<HttpHostExt> getProxyList() {
-        return proxyList;
-    }
-
-    protected boolean notBlacklisted(String proxyStr) {
-        return !ProxyBlacklistHolder.BLACKLIST.isProxyInBlacklist(proxyStr);
-    }
-
-    public static void updateBlacklist() {
-        ProxyBlacklistHolder.BLACKLIST.updateBlacklist(INSTANCE.proxyList);
-    }
-
-    public int getProxyCount() {
-        return proxyItems.size();
     }
 }

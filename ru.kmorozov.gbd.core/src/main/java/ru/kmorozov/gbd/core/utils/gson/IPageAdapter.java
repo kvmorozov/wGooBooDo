@@ -10,7 +10,7 @@ import java.lang.reflect.Type;
 /**
  * Created by sbt-morozov-kv on 17.11.2016.
  */
-public class IPageAdapter implements JsonSerializer<IPage> ,JsonDeserializer<IPage> {
+public class IPageAdapter implements JsonSerializer<IPage>, JsonDeserializer<IPage> {
 
     @Override
     public IPage deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {

@@ -22,13 +22,10 @@ public class WebProxyListProvider extends AbstractProxyListProvider {
 
     private void buildList() {
         try {
-            Document doc = Jsoup
-                    .connect(PROXY_LIST_URL)
-                    .userAgent(HttpConnections.USER_AGENT)
-                    .get();
+            Document doc = Jsoup.connect(PROXY_LIST_URL).userAgent(HttpConnections.USER_AGENT).get();
 
-            this.proxyItems = doc.getElementById("proxylisttable").getElementsByTag("tbody").get(0).getElementsByTag("tr")
-                    .stream().map(this::extractProxyData).filter(this::notBlacklisted).limit(20).collect(Collectors.toList());
+            this.proxyItems = doc.getElementById("proxylisttable").getElementsByTag("tbody").get(0).getElementsByTag("tr").stream().map(this::extractProxyData).filter
+                    (this::notBlacklisted).limit(20).collect(Collectors.toList());
             this.proxyItems.addAll(ProxyBlacklistHolder.BLACKLIST.getWhiteList());
 
         } catch (IOException e) {

@@ -14,7 +14,8 @@ public class GoogleBooksMetadata implements ILibraryMetadata {
 
     public static final ILibraryMetadata GOOGLE_METADATA = new GoogleBooksMetadata();
 
-    private GoogleBooksMetadata() {}
+    private GoogleBooksMetadata() {
+    }
 
     @Override
     public boolean isValidId(String bookId) {

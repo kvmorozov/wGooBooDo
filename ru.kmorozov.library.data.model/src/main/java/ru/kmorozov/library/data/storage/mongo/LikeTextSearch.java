@@ -41,8 +41,7 @@ public class LikeTextSearch {
         Set<ObjectId> objectIds = new HashSet<>();
         BasicDBList resultList = (BasicDBList) commandResult.get("results");
 
-        if (resultList == null)
-            return Collections.EMPTY_LIST;
+        if (resultList == null) return Collections.EMPTY_LIST;
 
         Iterator<Object> it = resultList.iterator();
         while (it.hasNext()) {

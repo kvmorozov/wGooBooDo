@@ -18,11 +18,8 @@ public class LogIconColumnRenderer extends DefaultTableCellRenderer {
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
         Level level = (Level) value;
 
-        if (level == Level.INFO)
-            return labelInfo;
-        else if (level == Level.SEVERE)
-            return labelSevere;
-        else
-            return labelFinest;
+        if (level == Level.INFO) return labelInfo;
+        else if (level == Level.SEVERE) return labelSevere;
+        else return labelFinest;
     }
 }

@@ -24,7 +24,8 @@ class Main {
             INSTANCE.addBookContext(producer, new ProcessStatus(), new PdfMaker());
 
             INSTANCE.execute();
-        } else {
+        }
+        else {
             GBDOptions.init(new LocalSystemOptions());
             (new MainFrame()).setVisible();
         }

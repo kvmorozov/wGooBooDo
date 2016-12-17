@@ -58,8 +58,7 @@ public class PdfMaker implements IPostProcessor {
             e.printStackTrace();
         }
 
-        if (pdfFile == null)
-            pdfFile = new File(imgDir.getPath() + File.separator + bookInfo.getBookData().getTitle().replaceAll("[^А-Яа-яa-zA-Z0-9-]", " ") + ".pdf");
+        if (pdfFile == null) pdfFile = new File(imgDir.getPath() + File.separator + bookInfo.getBookData().getTitle().replaceAll("[^А-Яа-яa-zA-Z0-9-]", " ") + ".pdf");
         try {
             if (Files.exists(pdfFile.toPath())) {
                 if (pdfFile.lastModified() < bookInfo.getLastPdfChecked()) existPages = bookContext.getPagesBefore();
@@ -68,7 +67,8 @@ public class PdfMaker implements IPostProcessor {
                 } catch (Exception ex) {
                     pdfFile.createNewFile();
                 }
-            } else pdfFile.createNewFile();
+            }
+            else pdfFile.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
             return;
@@ -80,7 +80,8 @@ public class PdfMaker implements IPostProcessor {
                 logger.finest("No new pages, exiting...");
                 bookInfo.setLastPdfChecked(System.currentTimeMillis());
                 return;
-            } else logger.info(String.format("Rewriting pdf from %d to %d pages", existPages, imgCount));
+            }
+            else logger.info(String.format("Rewriting pdf from %d to %d pages", existPages, imgCount));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -98,7 +99,8 @@ public class PdfMaker implements IPostProcessor {
                         PDPageContentStream contentStream = new PDPageContentStream(document, page);
                         contentStream.drawImage(img, 0, 0);
                         contentStream.close();
-                    } else {
+                    }
+                    else {
                         Files.delete(filePath);
                         logger.severe(String.format("Image %s was deleted!", filePath.getFileName()));
                     }

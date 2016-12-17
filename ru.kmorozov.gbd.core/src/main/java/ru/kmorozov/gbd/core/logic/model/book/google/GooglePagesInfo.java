@@ -54,8 +54,7 @@ public class GooglePagesInfo implements IPagesInfo, Serializable {
     }
 
     private void fillGap(GooglePageInfo beginGap, GooglePageInfo endGap) {
-        if (beginGap.isGapPage() || endGap.isGapPage())
-            return;
+        if (beginGap.isGapPage() || endGap.isGapPage()) return;
 
         String beginPagePrefix = beginGap.getPrefix();
         String endPagePrefix = endGap.getPrefix();
@@ -73,12 +72,12 @@ public class GooglePagesInfo implements IPagesInfo, Serializable {
                 addPage(gapPage);
             }
 
-            if (beginPageNum > 0 && endPageNum > 0)
-                for (int index = beginGap.getOrder() + 1; index < endGap.getOrder() - endPageNum; index++) {
-                    GooglePageInfo gapPage = new GooglePageInfo(beginPagePrefix + String.valueOf(index + 1), index);
-                    addPage(gapPage);
-                }
-        } else {
+            if (beginPageNum > 0 && endPageNum > 0) for (int index = beginGap.getOrder() + 1; index < endGap.getOrder() - endPageNum; index++) {
+                GooglePageInfo gapPage = new GooglePageInfo(beginPagePrefix + String.valueOf(index + 1), index);
+                addPage(gapPage);
+            }
+        }
+        else {
             if (endPageNum >= 1) {
                 int pagesToCreate = endGap.getOrder() - beginGap.getOrder() - 1;
                 int pagesCreated = 0;
@@ -89,7 +88,8 @@ public class GooglePagesInfo implements IPagesInfo, Serializable {
                         GooglePageInfo gapPage = new GooglePageInfo(newPagePidFromEnd, endGap.getOrder() - index);
                         addPage(gapPage);
                         pagesCreated++;
-                    } else break;
+                    }
+                    else break;
                 }
                 if (pagesCreated < pagesToCreate) {
                     pagesToCreate = pagesToCreate - pagesCreated;
@@ -99,7 +99,8 @@ public class GooglePagesInfo implements IPagesInfo, Serializable {
                         addPage(gapPage);
                     }
                 }
-            } else if (beginPageNum > 1 && endPageNum < 0) {
+            }
+            else if (beginPageNum > 1 && endPageNum < 0) {
                 logger.severe(String.format("Cannot fill gap between pages %s(order=%s) and %s(order=%s)", beginGap.getPid(), beginGap.getOrder(), endGap.getPid(), endGap.getOrder()));
             }
         }
@@ -147,11 +148,13 @@ public class GooglePagesInfo implements IPagesInfo, Serializable {
         for (GooglePageInfo currentPage : pagesList) {
             if (condition.test(currentPage)) if (blockStart == null) {
                 blockStart = currentPage;
-            } else {
+            }
+            else {
             }
             else {
                 if (blockStart == null) {
-                } else {
+                }
+                else {
                     pairs.add(createPair(blockStart, prevPage));
                     blockStart = null;
                 }

@@ -14,11 +14,9 @@ import java.util.stream.Collectors;
  */
 public class ProxyBlacklistHolder {
 
+    public static final ProxyBlacklistHolder BLACKLIST = new ProxyBlacklistHolder();
     private static final String BL_FILE_NAME = "black.lst";
     private static final int DEAD_PROXY_TREASHOLD = 5000;
-
-    public static final ProxyBlacklistHolder BLACKLIST = new ProxyBlacklistHolder();
-
     private File blacklistFile;
     private List<HttpHostExt> storedHosts = new CopyOnWriteArrayList<>();
 
@@ -56,7 +54,8 @@ public class ProxyBlacklistHolder {
             if (proxyInListOpt.isPresent()) {
                 proxyInList = proxyInListOpt.get();
                 proxyInList.update(proxy);
-            } else {
+            }
+            else {
                 storedHosts.add(proxy);
             }
         }

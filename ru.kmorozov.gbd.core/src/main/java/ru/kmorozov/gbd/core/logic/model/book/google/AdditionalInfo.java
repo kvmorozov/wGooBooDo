@@ -9,5 +9,6 @@ import java.io.Serializable;
  */
 class AdditionalInfo implements Serializable {
 
-    @SerializedName("[JsonBookInfo]") private JsonBookInfo jsonBookInfo;
+    @SerializedName("[JsonBookInfo]")
+    private JsonBookInfo jsonBookInfo;
 }

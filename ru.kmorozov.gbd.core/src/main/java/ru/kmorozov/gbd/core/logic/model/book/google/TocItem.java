@@ -9,8 +9,12 @@ import java.io.Serializable;
  */
 class TocItem implements Serializable {
 
-    @SerializedName("Title") private String title;
-    @SerializedName("Pid") private String pid;
-    @SerializedName("PgNum") private String pgNum;
-    @SerializedName("Order") private int order;
+    @SerializedName("Title")
+    private String title;
+    @SerializedName("Pid")
+    private String pid;
+    @SerializedName("PgNum")
+    private String pgNum;
+    @SerializedName("Order")
+    private int order;
 }

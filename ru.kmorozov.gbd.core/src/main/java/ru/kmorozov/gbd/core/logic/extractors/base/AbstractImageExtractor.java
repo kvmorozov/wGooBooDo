@@ -25,12 +25,10 @@ import static ru.kmorozov.gbd.core.logic.context.ExecutionContext.INSTANCE;
  */
 public abstract class AbstractImageExtractor extends AbstractEventSource implements IUniqueRunnable<BookContext>, IImageExtractor {
 
-    protected Logger logger;
-
     protected final AbstractOutput output;
     protected final BookContext bookContext;
-
     protected final AtomicBoolean initComplete = new AtomicBoolean(false);
+    protected Logger logger;
     protected List<HttpHostExt> waitingProxy = new CopyOnWriteArrayList<>();
 
     protected AbstractImageExtractor(BookContext bookContext) {
@@ -100,7 +98,8 @@ public abstract class AbstractImageExtractor extends AbstractEventSource impleme
 
     private String getDirectoryName(String baseOutputDirPath) {
         try {
-            Optional<Path> optPath = Files.find(Paths.get(baseOutputDirPath), 1, (path, basicFileAttributes) -> path.toString().contains(bookContext.getBookInfo().getBookData().getVolumeId())).findAny();
+            Optional<Path> optPath = Files.find(Paths.get(baseOutputDirPath), 1, (path, basicFileAttributes) -> path.toString().contains(bookContext.getBookInfo().getBookData()
+                                                                                                                                                    .getVolumeId())).findAny();
             if (optPath.isPresent()) return optPath.get().toString();
         } catch (IOException ignored) {
         }
