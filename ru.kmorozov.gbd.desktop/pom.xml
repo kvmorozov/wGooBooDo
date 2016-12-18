@@ -10,7 +10,7 @@
         <groupId>ru.kmorozov.gbd</groupId>
         <artifactId>parent</artifactId>
         <version>2.1-b2</version>
-        <relativePath>../pom.xml</relativePath>
+        <relativePath>../ru.kmorozov.gbd.parent/pom.xml</relativePath>
     </parent>
 
     <dependencies>
@@ -18,13 +18,6 @@
             <groupId>ru.kmorozov.gbd</groupId>
             <artifactId>ru.kmorozov.gbd.core</artifactId>
             <version>${version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>ru.kmorozov.library</groupId>
-            <artifactId>ru.kmorozov.library.data.model</artifactId>
-            <version>${version}</version>
-            <scope>compile</scope>
         </dependency>
 
         <dependency>
