@@ -39,4 +39,9 @@ public class DbContextProvider extends AbstractContextProvider {
     public void refreshContext() {
 
     }
+
+    @Override
+    public boolean isValid() {
+        return false;
+    }
 }

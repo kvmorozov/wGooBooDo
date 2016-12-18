@@ -55,13 +55,10 @@ public class ExtractorTest {
                 response.setContentType(MimeTypes.Type.TEXT_HTML.toString());
 
                 String resFileName = null;
-                if (request.getRequestURI().contains(ShplMetadata.SHPL_BASE_URL))
-                    resFileName = SHPL_HTML_RESOURCE;
-                else if (request.getRequestURI().contains("google"))
-                    resFileName = GOOGLE_HTML_RESOURCE;
+                if (request.getRequestURI().contains(ShplMetadata.SHPL_BASE_URL)) resFileName = SHPL_HTML_RESOURCE;
+                else if (request.getRequestURI().contains("google")) resFileName = GOOGLE_HTML_RESOURCE;
 
-                if (resFileName == null)
-                    return;
+                if (resFileName == null) return;
 
                 File res = new File(getClass().getClassLoader().getResource(resFileName).getFile());
                 String data = IOUtils.toString(new FileInputStream(res), Charset.forName("UTF-8"));

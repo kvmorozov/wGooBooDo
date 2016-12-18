@@ -20,10 +20,11 @@ import javax.swing.*;
  */
 public class MainBookForm {
     private static MainBookForm INSTANCE;
+    private static ManageController manageController = new ManageController();
     private JTabbedPane tabbedPane1;
-    private JPanel mainPanel, pProgress, pFooter;
+    private JPanel mainPanel, pProgress, pFooter, pManage;
     private JTextField tfBookId, tfRootOutDir, tfProxyListFile, tfBookTitle;
-    private JButton bRootOutDir, bProxyList, bLoad, bMakeBook;
+    private JButton bRootOutDir, bProxyList, bLoad, bMakeBook, bImport;
     private JComboBox cbResolution;
     private JCheckBox cbReload, cbSecureMode;
     private JTabbedPane tpBookInfo;
@@ -43,6 +44,8 @@ public class MainBookForm {
         cbResolution.setModel(new DefaultComboBoxModel<>(Resolutions.values()));
         cbReload.setSelected(SystemConfigs.getReload());
         cbSecureMode.setSelected(SystemConfigs.getSecureMode());
+
+        configureManage();
 
         if (SystemConfigs.getResolution() > 0) cbResolution.setSelectedItem(Resolutions.getEnum(SystemConfigs.getResolution()));
 
@@ -141,5 +144,11 @@ public class MainBookForm {
 
     public JPanel getProgressPanel() {
         return pProgress;
+    }
+
+    private void configureManage() {
+        tabbedPane1.setEnabledAt(2, manageController.isManageAllowed());
+        bImport.setVisible(manageController.isImportAllowed());
+        bImport.addActionListener(e -> manageController.importBooks());
     }
 }

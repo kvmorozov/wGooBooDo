@@ -41,4 +41,9 @@ public class FileContextProvider extends AbstractContextProvider {
     public void refreshContext() {
         BOOK_CTX_LOADER.refreshContext();
     }
+
+    @Override
+    public boolean isValid() {
+        return true;
+    }
 }

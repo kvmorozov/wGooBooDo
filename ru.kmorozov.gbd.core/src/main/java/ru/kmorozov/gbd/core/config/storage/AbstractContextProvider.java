@@ -25,7 +25,7 @@ public abstract class AbstractContextProvider {
                     }
                 }
 
-                if (contextProvider == null) contextProvider = new FileContextProvider();
+                if (contextProvider == null || !contextProvider.isValid()) contextProvider = new FileContextProvider();
             }
         }
 
@@ -52,4 +52,6 @@ public abstract class AbstractContextProvider {
     public abstract int getContextSize();
 
     public abstract void refreshContext();
+
+    public abstract boolean isValid();
 }
