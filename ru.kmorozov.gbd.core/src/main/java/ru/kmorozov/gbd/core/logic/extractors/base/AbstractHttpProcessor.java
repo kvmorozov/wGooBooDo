@@ -6,20 +6,15 @@ import ru.kmorozov.gbd.core.logic.connectors.HttpConnector;
 import ru.kmorozov.gbd.core.logic.connectors.Response;
 import ru.kmorozov.gbd.core.logic.connectors.ResponseException;
 import ru.kmorozov.gbd.core.logic.connectors.google.GoogleHttpConnector;
-import ru.kmorozov.gbd.core.utils.Logger;
 
 import javax.net.ssl.SSLException;
 import java.io.IOException;
 import java.net.SocketException;
 
-import static ru.kmorozov.gbd.core.logic.context.ExecutionContext.INSTANCE;
-
 /**
  * Created by km on 05.12.2015.
  */
 public class AbstractHttpProcessor {
-
-    protected static final Logger logger = INSTANCE.getLogger(AbstractHttpProcessor.class);
 
     private static final HttpConnector connector = new GoogleHttpConnector();
 

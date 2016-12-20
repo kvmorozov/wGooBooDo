@@ -16,6 +16,7 @@ import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage;
 import ru.kmorozov.gbd.core.logic.model.book.google.GooglePageInfo;
 import ru.kmorozov.gbd.core.logic.model.book.google.GooglePagesInfo;
 import ru.kmorozov.gbd.core.logic.progress.IProgress;
+import ru.kmorozov.gbd.core.utils.Logger;
 import ru.kmorozov.gbd.core.utils.QueuedThreadPoolExecutor;
 import ru.kmorozov.gbd.core.utils.gson.Mapper;
 
@@ -27,6 +28,7 @@ import java.net.SocketTimeoutException;
 import java.nio.charset.Charset;
 import java.util.concurrent.TimeUnit;
 
+import static ru.kmorozov.gbd.core.logic.context.ExecutionContext.INSTANCE;
 import static ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor.BOOK_ID_PLACEHOLDER;
 import static ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor.HTTPS_TEMPLATE;
 import static ru.kmorozov.gbd.core.utils.QueuedThreadPoolExecutor.THREAD_POOL_SIZE;
@@ -35,6 +37,8 @@ import static ru.kmorozov.gbd.core.utils.QueuedThreadPoolExecutor.THREAD_POOL_SI
  * Created by km on 21.11.2015.
  */
 class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRunnable<GooglePageSigProcessor> {
+
+    protected static final Logger logger = INSTANCE.getLogger(GooglePageSigProcessor.class);
 
     private static final String SIG_ERROR_TEMPLATE = "No sig at %s with proxy %s";
     private static final String SIG_WRONG_FORMAT = "Wrong sig format: %s";

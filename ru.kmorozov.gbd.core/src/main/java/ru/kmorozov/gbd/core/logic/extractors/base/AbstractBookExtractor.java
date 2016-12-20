@@ -9,16 +9,21 @@ import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.connectors.Response;
 import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
 import ru.kmorozov.gbd.core.utils.HttpConnections;
+import ru.kmorozov.gbd.core.utils.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 
+import static ru.kmorozov.gbd.core.logic.context.ExecutionContext.INSTANCE;
+
 /**
  * Created by sbt-morozov-kv on 16.11.2016.
  */
 public abstract class AbstractBookExtractor extends AbstractHttpProcessor {
+
+    protected static final Logger logger = INSTANCE.getLogger(AbstractBookExtractor.class);
 
     protected String bookId;
     protected BookInfo bookInfo;

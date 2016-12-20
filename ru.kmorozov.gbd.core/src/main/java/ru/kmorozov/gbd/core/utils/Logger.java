@@ -1,5 +1,6 @@
 package ru.kmorozov.gbd.core.utils;
 
+import ru.kmorozov.gbd.core.logic.output.consumers.DummyBookInfoOutput;
 import ru.kmorozov.gbd.core.logic.output.consumers.IEventConsumer;
 import ru.kmorozov.gbd.core.logic.output.events.LogEvent;
 
@@ -21,6 +22,10 @@ public class Logger {
 
     public static Logger getLogger(IEventConsumer eventConsumer, String name, String prefix) {
         return new Logger(eventConsumer, name, prefix);
+    }
+
+    public static Logger getLogger(Class claszz) {
+        return new Logger(new DummyBookInfoOutput(), claszz.getName(), ": ");
     }
 
     public void info(String msg) {

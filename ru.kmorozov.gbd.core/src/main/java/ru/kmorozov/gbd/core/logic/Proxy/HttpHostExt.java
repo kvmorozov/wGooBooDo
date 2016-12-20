@@ -8,7 +8,6 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.repackaged.com.google.common.base.Strings;
 import org.apache.commons.io.IOUtils;
 import ru.kmorozov.gbd.core.config.GBDOptions;
-import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.utils.HttpConnections;
 import ru.kmorozov.gbd.core.utils.Logger;
 
@@ -27,7 +26,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class HttpHostExt {
 
     public static final HttpHostExt NO_PROXY = new HttpHostExt();
-    private static final Logger logger = ExecutionContext.INSTANCE.getLogger(HttpHostExt.class);
+    private static final Logger logger = Logger.getLogger(HttpHostExt.class);
     private static final GenericUrl checkProxyUrl = new GenericUrl("http://mxtoolbox.com/WhatIsMyIP/");
     private static final int REMOTE_FAILURES_THRESHOLD = 15;
     private static final int LOCAL_FAILURES_THRESHOLD = 50;
