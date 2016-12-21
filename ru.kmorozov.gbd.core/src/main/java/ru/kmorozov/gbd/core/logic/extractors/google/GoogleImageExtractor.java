@@ -100,7 +100,7 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
                             }
                             else _page.dataProcessed.set(true);
 
-                            if (!Images.isValidImage(filePath) || _page.getOrder() != order) {
+                            if (!Images.isValidImage(filePath) || (_page.getOrder() != order && !_page.isGapPage())) {
                                 Files.delete(filePath);
                                 _page.dataProcessed.set(false);
                                 logger.severe(String.format("Page %s deleted!", _page.getPid()));
