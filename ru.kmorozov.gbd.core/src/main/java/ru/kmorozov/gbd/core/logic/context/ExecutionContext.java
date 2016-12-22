@@ -3,6 +3,7 @@ package ru.kmorozov.gbd.core.logic.context;
 import ru.kmorozov.gbd.core.config.storage.AbstractContextProvider;
 import ru.kmorozov.gbd.core.logic.Proxy.AbstractProxyListProvider;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
+import ru.kmorozov.gbd.core.logic.extractors.base.AbstractHttpProcessor;
 import ru.kmorozov.gbd.core.logic.extractors.base.IImageExtractor;
 import ru.kmorozov.gbd.core.logic.extractors.base.IPostProcessor;
 import ru.kmorozov.gbd.core.logic.output.consumers.AbstractOutput;
@@ -97,6 +98,7 @@ public class ExecutionContext {
         contextProvider.updateIndex();
         contextProvider.updateContext();
         updateBlacklist();
+        AbstractHttpProcessor.close();
     }
 
     public void newProxyEvent(HttpHostExt proxy) {

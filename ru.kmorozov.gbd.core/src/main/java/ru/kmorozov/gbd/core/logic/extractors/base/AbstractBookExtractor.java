@@ -57,15 +57,6 @@ public abstract class AbstractBookExtractor extends AbstractHttpProcessor {
             }
         }
 
-        try {
-            if (res != null) {
-                doc = res.parse();
-                HttpConnections.setDefaultCookies(res.cookies());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         return doc;
     }
 

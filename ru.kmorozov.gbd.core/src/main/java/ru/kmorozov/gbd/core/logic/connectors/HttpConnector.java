@@ -20,4 +20,6 @@ public abstract class HttpConnector {
     }
 
     public abstract Response getContent(String url, HttpHostExt proxy, boolean withTimeout) throws IOException;
+
+    public abstract void close();
 }

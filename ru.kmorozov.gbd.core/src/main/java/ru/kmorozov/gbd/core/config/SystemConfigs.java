@@ -91,6 +91,6 @@ public class SystemConfigs {
     }
 
     public static boolean isConsoleMode() {
-        return false;
+        return true;
     }
 }

@@ -135,7 +135,14 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
                     return;
                 }
 
-                GooglePagesInfo framePages = Mapper.getGson().fromJson(respStr, GooglePagesInfo.class);
+                GooglePagesInfo framePages = null;
+                try {
+                    Mapper.getGson().fromJson(respStr, GooglePagesInfo.class);
+                } catch (JsonParseException jpe) {
+                    logger.severe("Invalid JSON string: " + respStr);
+                }
+
+                if (framePages == null) return;
 
                 GooglePageInfo[] pages = framePages.getPages();
                 for (GooglePageInfo framePage : pages)
@@ -160,7 +167,7 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
 
                         if (_page.getSrc() != null && _page.getSig() == null) logger.finest(String.format(SIG_WRONG_FORMAT, _page.getSrc()));
                     }
-            } catch (JsonParseException | SocketTimeoutException | SocketException | NoHttpResponseException ce) {
+            } catch (SocketTimeoutException | SocketException | NoHttpResponseException ce) {
                 if (!proxy.isLocal()) {
                     proxy.registerFailure();
                     logger.info(String.format("Proxy %s failed!", proxy.toString()));

@@ -61,6 +61,11 @@ public class OkHttpConnector extends HttpConnector {
         return new OkResponse(response);
     }
 
+    @Override
+    public void close() {
+
+    }
+
 
     private okhttp3.Response getContent(Request request, HttpHostExt proxy, boolean withTimeout, int attempt) throws IOException {
         if (attempt >= MAX_RETRY_COUNT) return null;

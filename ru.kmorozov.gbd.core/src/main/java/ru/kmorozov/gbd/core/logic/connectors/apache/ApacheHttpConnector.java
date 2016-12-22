@@ -41,4 +41,9 @@ public class ApacheHttpConnector extends HttpConnector {
             return getContent(client, req, proxy, attempt++);
         }
     }
+
+    @Override
+    public void close() {
+        ApacheConnections.INSTANCE.closeAllConnections();
+    }
 }

@@ -5,6 +5,7 @@ import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector;
 import ru.kmorozov.gbd.core.logic.connectors.Response;
 import ru.kmorozov.gbd.core.logic.connectors.ResponseException;
+import ru.kmorozov.gbd.core.logic.connectors.apache.ApacheHttpConnector;
 import ru.kmorozov.gbd.core.logic.connectors.google.GoogleHttpConnector;
 
 import javax.net.ssl.SSLException;
@@ -16,7 +17,7 @@ import java.net.SocketException;
  */
 public class AbstractHttpProcessor {
 
-    private static final HttpConnector connector = new GoogleHttpConnector();
+    private static final HttpConnector connector = new ApacheHttpConnector();
 
     protected Response getContent(String rqUrl, HttpHostExt proxy, boolean withTimeout) {
         try {
@@ -50,5 +51,9 @@ public class AbstractHttpProcessor {
             ex.printStackTrace();
             return null;
         }
+    }
+
+    public static final void close() {
+        connector.close();
     }
 }

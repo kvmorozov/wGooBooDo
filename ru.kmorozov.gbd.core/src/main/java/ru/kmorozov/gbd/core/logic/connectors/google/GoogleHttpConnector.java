@@ -74,4 +74,9 @@ public class GoogleHttpConnector extends HttpConnector {
             return getContent(req, proxy, ++attempt);
         }
     }
+
+    @Override
+    public void close() {
+
+    }
 }

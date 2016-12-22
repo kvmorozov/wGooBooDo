@@ -26,7 +26,6 @@ public class HttpConnections {
     private static final HttpHeaders headers = new HttpHeaders().setUserAgent(USER_AGENT);
     private static final HttpConnections INSTANCE = new HttpConnections();
     private static GenericUrl baseUrl = null;
-    private static Map<String, String> cookiesMap;
 
     private final Map<HttpHostExt, HttpHeaders> headersMap = new ConcurrentHashMap<>();
 
@@ -43,16 +42,6 @@ public class HttpConnections {
 
     public static HttpHeaders getHeaders(HttpHostExt proxy) {
         return INSTANCE._getHeaders(proxy);
-    }
-
-    public static void setDefaultCookies(Map<String, String> _cookiesMap) {
-        cookiesMap = _cookiesMap;
-
-        INSTANCE._setDefaultCookies(cookiesMap);
-    }
-
-    public static Map<String, String> getCookiesMap() {
-        return cookiesMap;
     }
 
     public static String getCookieString(InetSocketAddress proxy) {
