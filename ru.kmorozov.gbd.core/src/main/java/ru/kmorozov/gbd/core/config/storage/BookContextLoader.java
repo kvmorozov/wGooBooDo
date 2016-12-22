@@ -11,10 +11,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static ru.kmorozov.gbd.core.config.GBDOptions.isValidDirectory;
@@ -28,7 +25,7 @@ public class BookContextLoader extends BaseLoader {
     private static final String CTX_FILE_NAME = "books.ctx";
     private Map<String, BookInfo> booksInfo = new HashMap<>();
 
-    protected BookContextLoader() {
+    public BookContextLoader() {
         super();
 
         initContext();
@@ -63,6 +60,10 @@ public class BookContextLoader extends BaseLoader {
 
     public BookInfo getBookInfo(String bookId) {
         return booksInfo.get(bookId);
+    }
+
+    public Collection<BookInfo> getBooks() {
+        return booksInfo.values();
     }
 
     public int getContextSize() {

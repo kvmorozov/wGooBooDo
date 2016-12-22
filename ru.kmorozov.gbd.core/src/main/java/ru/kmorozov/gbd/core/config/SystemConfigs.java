@@ -1,7 +1,5 @@
 package ru.kmorozov.gbd.core.config;
 
-import ru.kmorozov.gbd.desktop.gui.MainBookForm;
-
 import java.util.prefs.Preferences;
 
 /**
@@ -84,14 +82,6 @@ public class SystemConfigs {
         setBoolProperty(KEY_RELOAD, value);
     }
 
-    public static boolean getFillGaps() {
-        return getBoolProperty(KEY_FILL_GAPS);
-    }
-
-    public static void setFillGaps(boolean value) {
-        setBoolProperty(KEY_FILL_GAPS, value);
-    }
-
     public static boolean getSecureMode() {
         return getBoolProperty(KEY_SECURE_MODE);
     }
@@ -101,6 +91,6 @@ public class SystemConfigs {
     }
 
     public static boolean isConsoleMode() {
-        return MainBookForm.getINSTANCE() == null;
+        return false;
     }
 }

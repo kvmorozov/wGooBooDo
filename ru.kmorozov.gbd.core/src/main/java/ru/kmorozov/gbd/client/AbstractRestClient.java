@@ -27,6 +27,17 @@ public abstract class AbstractRestClient extends AbstractHttpProcessor {
         return DEFAULT_REST_SERVICE_URL;
     }
 
+    protected static final class RestParam {
+
+        String paramName;
+        Object value;
+
+        RestParam(String paramName, Object value) {
+            this.paramName = paramName;
+            this.value = value;
+        }
+    }
+
     public boolean serviceAvailable() {
         try {
             getRawResult(getRestServiceBaseUrl());
@@ -56,15 +67,22 @@ public abstract class AbstractRestClient extends AbstractHttpProcessor {
         }
     }
 
-    protected <T> T getCallResult(String operation, Class<T> resultClass, Object... parameters) {
+    protected <T> T getCallResult(String operation, Class<T> resultClass, RestParam... parameters) {
         String rqUrl = getRestServiceBaseUrl() + operation;
+
+        if (parameters != null && parameters.length > 0) {
+            rqUrl += "?";
+            for (RestParam param : parameters)
+                rqUrl += (param.paramName + "=" + param.value.toString() + "&");
+        }
+
         String rawResult = null;
 
         try {
             rawResult = getRawResult(rqUrl);
         } catch (RestServiceUnavailableException e) {
             logger.finest(String.format("Service %s call failed!", operation));
-            return null;
+            return resultClass.equals(Boolean.class) ? (T) Boolean.FALSE : null;
         }
 
         if (StringUtils.isEmpty(rawResult)) {

@@ -5,6 +5,7 @@ import org.jsoup.nodes.Document;
 import ru.kmorozov.gbd.core.utils.HttpConnections;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public abstract class AbstractProxyExtractor {
             e.printStackTrace();
         }
 
-        return Collections.EMPTY_LIST;
+        return new ArrayList<>();
     }
 
     protected abstract String getProxyListUrl();

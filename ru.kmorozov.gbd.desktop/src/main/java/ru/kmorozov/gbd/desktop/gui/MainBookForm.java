@@ -74,6 +74,7 @@ public class MainBookForm {
             bLoad.setEnabled(false);
             bMakeBook.setEnabled(false);
 
+
             ExecutionContext.INSTANCE.addBookContext(new SingleBookProducer(tfBookId.getText()), new ProcessStatus(), new PdfMaker());
             workerExtractor = new ImageExtractorWorker(new GoogleImageExtractor(ExecutionContext.INSTANCE.getContexts(false).get(0))) {
 
@@ -149,6 +150,6 @@ public class MainBookForm {
     private void configureManage() {
         tabbedPane1.setEnabledAt(2, manageController.isManageAllowed());
         bImport.setVisible(manageController.isImportAllowed());
-        bImport.addActionListener(e -> manageController.importBooks());
+        bImport.addActionListener(e -> manageController.synchronize());
     }
 }

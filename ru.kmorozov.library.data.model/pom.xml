@@ -32,7 +32,6 @@
             <groupId>ru.kmorozov.gbd</groupId>
             <artifactId>ru.kmorozov.gbd.core</artifactId>
             <version>${project.version}</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 
