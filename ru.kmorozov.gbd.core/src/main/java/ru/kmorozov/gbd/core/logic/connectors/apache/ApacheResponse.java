@@ -20,7 +20,7 @@ public class ApacheResponse implements Response {
 
     @Override
     public InputStream getContent() throws IOException {
-        return response.getEntity().getContent();
+        return response == null ? null : response.getEntity().getContent();
     }
 
     @Override
@@ -32,6 +32,6 @@ public class ApacheResponse implements Response {
 
     @Override
     public void close() throws IOException {
-        EntityUtils.consumeQuietly(response.getEntity());
+        if (response != null) EntityUtils.consumeQuietly(response.getEntity());
     }
 }

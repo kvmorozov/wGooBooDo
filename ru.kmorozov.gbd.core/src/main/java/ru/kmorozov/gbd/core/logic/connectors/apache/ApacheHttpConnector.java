@@ -39,6 +39,9 @@ public class ApacheHttpConnector extends HttpConnector {
         } catch (SocketTimeoutException ste1) {
             proxy.registerFailure();
             return getContent(client, req, proxy, attempt++);
+        } catch (Exception ex) {
+            proxy.registerFailure();
+            return null;
         }
     }
 
