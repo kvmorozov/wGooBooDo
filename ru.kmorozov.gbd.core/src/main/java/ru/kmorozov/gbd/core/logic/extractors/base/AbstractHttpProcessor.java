@@ -25,10 +25,11 @@ public class AbstractHttpProcessor {
     private static final HttpConnector getConnector() {
         if (connector == null) synchronized (AbstractHttpProcessor.class) {
             if (connector == null) {
-                if (ClassUtils.isClassExists("org.asynchttpclient.AsyncHttpClient")) connector = new AsyncHttpConnector();
+/*                if (ClassUtils.isClassExists("org.asynchttpclient.AsyncHttpClient")) connector = new AsyncHttpConnector();
                 else if (ClassUtils.isClassExists("okhttp3.OkHttpClient")) connector = new OkHttpConnector();
                 else if (ClassUtils.isClassExists("org.apache.hc.client5.http.sync.HttpClient")) connector = new ApacheHttpConnector();
-                else connector = new GoogleHttpConnector();
+                else*/
+                connector = new GoogleHttpConnector();
             }
         }
 

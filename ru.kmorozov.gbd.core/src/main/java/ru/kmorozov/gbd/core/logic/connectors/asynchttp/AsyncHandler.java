@@ -1,5 +1,6 @@
 package ru.kmorozov.gbd.core.logic.connectors.asynchttp;
 
+import io.netty.handler.timeout.TimeoutException;
 import org.asynchttpclient.AsyncCompletionHandlerBase;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 
@@ -19,6 +20,8 @@ public class AsyncHandler extends AsyncCompletionHandlerBase {
     @Override
     public void onThrowable(Throwable t) {
         if (t instanceof ConnectException) proxy.registerFailure();
-        else super.onThrowable(t);
+        else if (t instanceof TimeoutException) proxy.registerFailure();
+        else
+            super.onThrowable(t);
     }
 }

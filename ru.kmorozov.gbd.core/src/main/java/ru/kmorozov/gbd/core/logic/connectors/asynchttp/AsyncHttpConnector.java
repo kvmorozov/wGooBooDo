@@ -65,7 +65,8 @@ public class AsyncHttpConnector extends HttpConnector {
     public void close() {
         for (AsyncHttpClient client : clientsMap.values())
             try {
-                if (client.isClosed()) client.close();
+                if (!client.isClosed())
+                    client.close();
             } catch (IOException ignored) {
             }
     }

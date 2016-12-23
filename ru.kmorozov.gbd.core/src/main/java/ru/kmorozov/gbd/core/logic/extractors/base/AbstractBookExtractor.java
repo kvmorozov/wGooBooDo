@@ -57,6 +57,14 @@ public abstract class AbstractBookExtractor extends AbstractHttpProcessor {
             }
         }
 
+        try {
+            if (res != null) {
+                doc = res.parse();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         return doc;
     }
 

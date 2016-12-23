@@ -91,14 +91,21 @@ public class PdfMaker implements IPostProcessor {
                 try (InputStream in = new FileInputStream(filePath.toFile())) {
                     if (Images.isValidImage(filePath)) {
                         BufferedImage bimg = ImageIO.read(in);
-                        float width = bimg.getWidth();
-                        float height = bimg.getHeight();
-                        PDPage page = new PDPage(new PDRectangle(width, height));
-                        document.addPage(page);
-                        PDImageXObject img = PDImageXObject.createFromFile(filePath.toString(), document);
-                        PDPageContentStream contentStream = new PDPageContentStream(document, page);
-                        contentStream.drawImage(img, 0, 0);
-                        contentStream.close();
+
+                        if (bimg == null) {
+                            Files.delete(filePath);
+                            logger.severe(String.format("Image %s was deleted!", filePath.getFileName()));
+                        }
+                        else {
+                            float width = bimg.getWidth();
+                            float height = bimg.getHeight();
+                            PDPage page = new PDPage(new PDRectangle(width, height));
+                            document.addPage(page);
+                            PDImageXObject img = PDImageXObject.createFromFile(filePath.toString(), document);
+                            PDPageContentStream contentStream = new PDPageContentStream(document, page);
+                            contentStream.drawImage(img, 0, 0);
+                            contentStream.close();
+                        }
                     }
                     else {
                         Files.delete(filePath);
