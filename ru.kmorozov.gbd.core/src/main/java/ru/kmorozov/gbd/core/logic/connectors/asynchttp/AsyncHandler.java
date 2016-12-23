@@ -1,0 +1,24 @@
+package ru.kmorozov.gbd.core.logic.connectors.asynchttp;
+
+import org.asynchttpclient.AsyncCompletionHandlerBase;
+import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
+
+import java.net.ConnectException;
+
+/**
+ * Created by km on 23.12.2016.
+ */
+public class AsyncHandler extends AsyncCompletionHandlerBase {
+
+    private HttpHostExt proxy;
+
+    public AsyncHandler(HttpHostExt proxy) {
+        this.proxy = proxy;
+    }
+
+    @Override
+    public void onThrowable(Throwable t) {
+        if (t instanceof ConnectException) proxy.registerFailure();
+        else super.onThrowable(t);
+    }
+}

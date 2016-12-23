@@ -5,7 +5,11 @@ import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector;
 import ru.kmorozov.gbd.core.logic.connectors.Response;
 import ru.kmorozov.gbd.core.logic.connectors.ResponseException;
+import ru.kmorozov.gbd.core.logic.connectors.apache.ApacheHttpConnector;
+import ru.kmorozov.gbd.core.logic.connectors.asynchttp.AsyncHttpConnector;
 import ru.kmorozov.gbd.core.logic.connectors.google.GoogleHttpConnector;
+import ru.kmorozov.gbd.core.logic.connectors.ok.OkHttpConnector;
+import ru.kmorozov.gbd.core.utils.ClassUtils;
 
 import javax.net.ssl.SSLException;
 import java.io.IOException;
@@ -16,11 +20,24 @@ import java.net.SocketException;
  */
 public class AbstractHttpProcessor {
 
-    private static final HttpConnector connector = new GoogleHttpConnector();
+    private static HttpConnector connector;
+
+    private static final HttpConnector getConnector() {
+        if (connector == null) synchronized (AbstractHttpProcessor.class) {
+            if (connector == null) {
+                if (ClassUtils.isClassExists("org.asynchttpclient.AsyncHttpClient")) connector = new AsyncHttpConnector();
+                else if (ClassUtils.isClassExists("okhttp3.OkHttpClient")) connector = new OkHttpConnector();
+                else if (ClassUtils.isClassExists("org.apache.hc.client5.http.sync.HttpClient")) connector = new ApacheHttpConnector();
+                else connector = new GoogleHttpConnector();
+            }
+        }
+
+        return connector;
+    }
 
     protected Response getContent(String rqUrl, HttpHostExt proxy, boolean withTimeout) {
         try {
-            Response resp = connector.getContent(rqUrl, proxy, withTimeout);
+            Response resp = getConnector().getContent(rqUrl, proxy, withTimeout);
             return proxy.isLocal() ? resp : resp == null ? getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout) : resp;
         } catch (ResponseException re) {
             switch (re.getStatusCode()) {
@@ -53,6 +70,6 @@ public class AbstractHttpProcessor {
     }
 
     public static final void close() {
-        connector.close();
+        getConnector().close();
     }
 }

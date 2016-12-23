@@ -14,7 +14,7 @@ public class ApacheResponse implements Response {
 
     private final HttpResponse response;
 
-    public ApacheResponse(HttpResponse response) {
+    ApacheResponse(HttpResponse response) {
         this.response = response;
     }
 

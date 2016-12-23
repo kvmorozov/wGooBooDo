@@ -137,7 +137,7 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
 
                 GooglePagesInfo framePages = null;
                 try {
-                    Mapper.getGson().fromJson(respStr, GooglePagesInfo.class);
+                    framePages = Mapper.getGson().fromJson(respStr, GooglePagesInfo.class);
                 } catch (JsonParseException jpe) {
                     logger.severe("Invalid JSON string: " + respStr);
                 }

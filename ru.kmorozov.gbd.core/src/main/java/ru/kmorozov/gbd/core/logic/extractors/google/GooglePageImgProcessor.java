@@ -20,7 +20,7 @@ class GooglePageImgProcessor extends AbstractPageImgProcessor<GooglePageInfo> {
 
     private boolean processImageWithProxy(HttpHostExt proxy) {
         int imgWidth = GBDOptions.getImageWidth() == 0 ? GoogleImageExtractor.DEFAULT_PAGE_WIDTH : GBDOptions.getImageWidth();
-        return !(!proxy.isLocal() && !proxy.isAvailable()) && processImage(page.getImqRqUrl(bookContext.getBookInfo().getBookId(), GoogleImageExtractor.HTTPS_TEMPLATE, imgWidth), proxy);
+        return !(!proxy.isLocal() && !proxy.isAvailable()) && processImage(page.getImqRqUrl(bookContext.getBookInfo().getBookId(), GoogleImageExtractor.HTTPS_IMG_TEMPLATE, imgWidth), proxy);
     }
 
     @Override

@@ -8,7 +8,6 @@ import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector;
 import ru.kmorozov.gbd.core.logic.connectors.Response;
-import ru.kmorozov.gbd.core.utils.HttpConnections;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
@@ -46,7 +45,7 @@ public class OkHttpConnector extends HttpConnector {
     public Response getContent(String url, HttpHostExt proxy, boolean withTimeout) throws IOException {
         if ((GBDOptions.secureMode() && proxy.isLocal()) || !proxy.isAvailable()) return null;
 
-        HttpHeaders googleHeaders = HttpConnections.getHeaders(proxy);
+        HttpHeaders googleHeaders = proxy.getHeaders();
         List<String> headerItems = new ArrayList<>();
         for (Map.Entry<String, Object> headerItem : googleHeaders.entrySet()) {
             headerItems.add(headerItem.getKey());

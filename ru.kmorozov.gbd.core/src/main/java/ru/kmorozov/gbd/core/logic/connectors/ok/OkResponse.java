@@ -12,7 +12,7 @@ public class OkResponse implements Response {
 
     private final okhttp3.Response resp;
 
-    public OkResponse(okhttp3.Response resp) {
+    OkResponse(okhttp3.Response resp) {
         this.resp = resp;
     }
 

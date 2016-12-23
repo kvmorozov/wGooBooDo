@@ -33,6 +33,7 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
     public static final int DEFAULT_PAGE_WIDTH = 1280;
     public static final String HTTP_TEMPLATE = "http://books.google.ru/books?id=%BOOK_ID%";
     public static final String HTTPS_TEMPLATE = "https://books.google.ru/books?id=%BOOK_ID%";
+    public static final String HTTPS_IMG_TEMPLATE = "https://books.google.ru/books/content?id=%BOOK_ID%";
 
     public static final String BOOK_ID_PLACEHOLDER = "%BOOK_ID%";
     public static final String RQ_PG_PLACEHOLDER = "%PG%";
