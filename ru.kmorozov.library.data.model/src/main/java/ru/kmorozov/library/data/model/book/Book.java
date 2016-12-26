@@ -2,6 +2,7 @@ package ru.kmorozov.library.data.model.book;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.TextIndexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -17,6 +18,11 @@ public class Book {
     String title;
     @TextIndexed
     String author;
+
+    BookInfo bookInfo;
+
+    @DBRef
+    Storage storage;
 
     public Book() {
     }
@@ -48,6 +54,22 @@ public class Book {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public BookInfo getBookInfo() {
+        return bookInfo;
+    }
+
+    public void setBookInfo(BookInfo bookInfo) {
+        this.bookInfo = bookInfo;
+    }
+
+    public Storage getStorage() {
+        return storage;
+    }
+
+    public void setStorage(Storage storage) {
+        this.storage = storage;
     }
 
     @Override

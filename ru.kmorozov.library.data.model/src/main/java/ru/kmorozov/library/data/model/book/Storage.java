@@ -30,6 +30,8 @@ public class Storage {
     @DBRef(lazy = true)
     List<Category> categories;
 
+    StorageInfo storageInfo;
+
     public StorageType getStorageType() {
         return storageType;
     }
@@ -75,5 +77,13 @@ public class Storage {
             categories = new ArrayList<>();
 
         categories.add(category);
+    }
+
+    public StorageInfo getStorageInfo() {
+        return storageInfo;
+    }
+
+    public void setStorageInfo(StorageInfo storageInfo) {
+        this.storageInfo = storageInfo;
     }
 }
