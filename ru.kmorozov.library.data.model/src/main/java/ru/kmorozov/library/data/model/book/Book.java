@@ -72,6 +72,10 @@ public class Book {
         this.storage = storage;
     }
 
+    public String getBookKey() {
+        return bookInfo.getFileName();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
