@@ -51,6 +51,7 @@ public class GoogleHttpConnector extends HttpConnector {
 
             return new GoogleResponse(resp);
         } catch (HttpResponseException hre) {
+            logger.severe("Connection error: " + hre.getMessage());
             throw new GoogleResponseException(hre);
         }
     }

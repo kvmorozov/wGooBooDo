@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.FileSystemException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
@@ -111,6 +112,8 @@ public class PdfMaker implements IPostProcessor {
                         Files.delete(filePath);
                         logger.severe(String.format("Image %s was deleted!", filePath.getFileName()));
                     }
+                } catch (FileSystemException fse) {
+
                 } catch (IOException e) {
                     try {
                         Files.delete(filePath);

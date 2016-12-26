@@ -29,9 +29,10 @@ public class AsyncHttpConnector extends HttpConnector {
         if (client == null) synchronized (proxy) {
             DefaultAsyncHttpClientConfig.Builder builder = new DefaultAsyncHttpClientConfig.Builder();
             if (!proxy.isLocal()) builder.setProxyServer(new ProxyServer.Builder(proxy.getHost().getHostName(), proxy.getHost().getPort()).build());
+            builder.setConnectTimeout(HttpConnector.CONNECT_TIMEOUT);
             client = new DefaultAsyncHttpClient(builder.build());
 
-            clientsMap.put(key, client);
+//            clientsMap.put(key, client);
         }
 
         return client;
@@ -58,6 +59,8 @@ public class AsyncHttpConnector extends HttpConnector {
         } catch (InterruptedException | ExecutionException ex) {
             ex.printStackTrace();
             return null;
+        } finally {
+            client.close();
         }
     }
 

@@ -25,7 +25,7 @@ import static ru.kmorozov.gbd.core.utils.HttpConnections.USER_AGENT;
  */
 public class ApacheConnections {
 
-    public static final ApacheConnections INSTANCE = new ApacheConnections();
+    static final ApacheConnections INSTANCE = new ApacheConnections();
     private final HttpClientBuilder builder;
     private final HttpClientBuilder builderWithTimeout;
     private final Map<HttpHost, HttpClient> clientsMap = new ConcurrentHashMap<>();
@@ -46,7 +46,6 @@ public class ApacheConnections {
             SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, (arg0, arg1) -> true).build();
             builder.setSSLContext(sslContext);
             builderWithTimeout.setSSLContext(sslContext);
-
         } catch (Exception ex) {
             ex.printStackTrace();
         }

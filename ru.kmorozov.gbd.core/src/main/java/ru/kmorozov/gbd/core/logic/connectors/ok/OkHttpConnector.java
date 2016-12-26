@@ -79,7 +79,7 @@ public class OkHttpConnector extends HttpConnector {
             return getFactory(proxy, withTimeout).newCall(request).execute();
         } catch (SocketTimeoutException ste1) {
             proxy.registerFailure();
-            return getContent(request, proxy, withTimeout, attempt++);
+            return getContent(request, proxy, withTimeout, ++attempt);
         }
     }
 }

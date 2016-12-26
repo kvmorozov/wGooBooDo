@@ -14,32 +14,41 @@ import ru.kmorozov.gbd.core.utils.ClassUtils;
 import javax.net.ssl.SSLException;
 import java.io.IOException;
 import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by km on 05.12.2015.
  */
 public class AbstractHttpProcessor {
 
-    private static HttpConnector connector;
+    private static List<HttpConnector> connectors;
 
-    private static final HttpConnector getConnector() {
-        if (connector == null) synchronized (AbstractHttpProcessor.class) {
-            if (connector == null) {
-/*                if (ClassUtils.isClassExists("org.asynchttpclient.AsyncHttpClient")) connector = new AsyncHttpConnector();
-                else if (ClassUtils.isClassExists("okhttp3.OkHttpClient")) connector = new OkHttpConnector();
-                else if (ClassUtils.isClassExists("org.apache.hc.client5.http.sync.HttpClient")) connector = new ApacheHttpConnector();
-                else*/
-                connector = new GoogleHttpConnector();
+    private static final List<HttpConnector> getConnectors() {
+        if (connectors == null) synchronized (AbstractHttpProcessor.class) {
+            if (connectors == null) {
+                connectors = new ArrayList<>();
+//                if (ClassUtils.isClassExists("org.asynchttpclient.AsyncHttpClient")) connectors.add(new AsyncHttpConnector());
+//                if (ClassUtils.isClassExists("okhttp3.OkHttpClient")) connectors.add(new OkHttpConnector());
+//                if (ClassUtils.isClassExists("org.apache.hc.client5.http.sync.HttpClient")) connectors.add(new ApacheHttpConnector());
+                if (ClassUtils.isClassExists("com.google.api.client.http.HttpRequestFactory")) connectors.add(new GoogleHttpConnector());
             }
         }
 
-        return connector;
+        return connectors;
     }
 
     protected Response getContent(String rqUrl, HttpHostExt proxy, boolean withTimeout) {
         try {
-            Response resp = getConnector().getContent(rqUrl, proxy, withTimeout);
-            return proxy.isLocal() ? resp : resp == null ? getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout) : resp;
+            Response resp = null;
+            for (HttpConnector connector : getConnectors()) {
+                resp = connector.getContent(rqUrl, proxy, withTimeout);
+                resp = proxy.isLocal() ? resp : resp == null ? getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout) : resp;
+                if (resp != null)
+                    return resp;
+            }
+
+            return resp;
         } catch (ResponseException re) {
             switch (re.getStatusCode()) {
                 case HttpStatusCodes.STATUS_CODE_SERVICE_UNAVAILABLE:
@@ -71,6 +80,7 @@ public class AbstractHttpProcessor {
     }
 
     public static final void close() {
-        getConnector().close();
+        for (HttpConnector connector : getConnectors())
+            connector.close();
     }
 }
