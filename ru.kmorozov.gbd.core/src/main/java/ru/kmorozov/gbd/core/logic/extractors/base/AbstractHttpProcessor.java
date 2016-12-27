@@ -5,10 +5,7 @@ import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector;
 import ru.kmorozov.gbd.core.logic.connectors.Response;
 import ru.kmorozov.gbd.core.logic.connectors.ResponseException;
-import ru.kmorozov.gbd.core.logic.connectors.apache.ApacheHttpConnector;
-import ru.kmorozov.gbd.core.logic.connectors.asynchttp.AsyncHttpConnector;
 import ru.kmorozov.gbd.core.logic.connectors.google.GoogleHttpConnector;
-import ru.kmorozov.gbd.core.logic.connectors.ok.OkHttpConnector;
 import ru.kmorozov.gbd.core.utils.ClassUtils;
 
 import javax.net.ssl.SSLException;
@@ -70,7 +67,7 @@ public class AbstractHttpProcessor {
             proxy.registerFailure();
 
             // Если что-то более специфическое
-            if (!ioe.getClass().getName().equals(IOException.class.getName())) ioe.printStackTrace();
+            if (!ioe.getClass().equals(IOException.class)) ioe.printStackTrace();
 
             return proxy.isLocal() ? null : getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout);
         } catch (Exception ex) {

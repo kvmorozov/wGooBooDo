@@ -101,7 +101,12 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
                             }
                             else _page.dataProcessed.set(true);
 
-                            if (!Images.isValidImage(filePath) || (_page.getOrder() != order && !_page.isGapPage())) {
+                            if (Images.isInvalidImage(filePath)) {
+                                _page.dataProcessed.set(false);
+                                Files.delete(filePath);
+                                logger.severe(String.format("Page %s deleted!", _page.getPid()));
+                            }
+                            else if (_page.getOrder() != order && !_page.isGapPage()) {
                                 File oldFile = filePath.toFile();
                                 File newFile = new File(filePath.toString().replace(order + "_", _page.getOrder() + "_"));
                                 if (!newFile.exists())

@@ -90,7 +90,7 @@ public class PdfMaker implements IPostProcessor {
         try (PDDocument document = new PDDocument()) {
             Files.list(imgDir.toPath()).filter(Images::isImageFile).sorted(Comparator.comparing(this::getPagenum)).forEach(filePath -> {
                 try (InputStream in = new FileInputStream(filePath.toFile())) {
-                    if (Images.isValidImage(filePath)) {
+                    if (!Images.isInvalidImage(filePath)) {
                         BufferedImage bimg = ImageIO.read(in);
 
                         if (bimg == null) {

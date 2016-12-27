@@ -22,7 +22,7 @@ public class GooglePageInfo extends AbstractPage implements Serializable, Compar
     private String src;
     @SerializedName("uf")
     private String uf;
-    private String sig;
+    private transient String sig;
 
     @SerializedName("order")
     private int order;

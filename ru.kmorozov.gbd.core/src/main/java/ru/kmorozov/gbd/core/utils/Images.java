@@ -37,9 +37,9 @@ public class Images {
         }
     }
 
-    public static boolean isValidImage(Path filePath) {
+    public static boolean isInvalidImage(Path filePath) {
         Long fileSize = filePath.toFile().length();
-        return !GOOGLE_BAD_FILES_SIZES.contains(fileSize);
+        return GOOGLE_BAD_FILES_SIZES.contains(fileSize);
     }
 
     public static boolean isPdfFile(Path filePath) {
