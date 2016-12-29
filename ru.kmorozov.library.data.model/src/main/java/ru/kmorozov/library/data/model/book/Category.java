@@ -70,4 +70,11 @@ public class Category {
 
         parents.addAll(parents);
     }
+
+    public void addParent(Category parent) {
+        if (parents == null)
+            parents = new ArrayList<>();
+
+        parents.add(parent);
+    }
 }

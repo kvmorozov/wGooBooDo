@@ -9,8 +9,11 @@ import ru.kmorozov.library.data.repository.BooksRepository;
 import ru.kmorozov.library.data.repository.CategoryRepository;
 import ru.kmorozov.library.data.repository.StorageRepository;
 import ru.kmorozov.library.utils.BookUtils;
+import sun.awt.shell.ShellFolder;
+import sun.awt.shell.Win32ShellFolderManager2;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -35,9 +38,11 @@ public class LocalDirectoryLoader {
     private BooksRepository booksRepository;
 
     private Path basePath;
+    private Win32ShellFolderManager2 shellFolderManager;
 
     public LocalDirectoryLoader(@Autowired String localBasePath) {
         this.basePath = Paths.get(localBasePath);
+        this.shellFolderManager = new Win32ShellFolderManager2();
     }
 
     public void clear() {
@@ -100,6 +105,7 @@ public class LocalDirectoryLoader {
                 storageRepository.save(storage);
 
                 category.addParents(parentStorage.getCategories());
+                categoryRepository.save(category);
             }
 
             category.addStorage(storage);
@@ -108,7 +114,7 @@ public class LocalDirectoryLoader {
             return category;
         }
         else
-            return storage.getCategories().get(0);
+            return storage.getMainCategory();
     }
 
     private void updateStorage(Storage storage) throws IOException {
@@ -145,4 +151,44 @@ public class LocalDirectoryLoader {
         storage.setStorageInfo(storageInfo);
         storageRepository.save(storage);
     }
+
+    public void processLinks() throws IOException {
+        Files.walk(basePath).filter(filePath -> filePath.toString().endsWith(".lnk")).forEach(filePath -> {
+            try {
+                ShellFolder folder = shellFolderManager.createShellFolder(filePath.toFile());
+                if (folder.isLink()) {
+                    ShellFolder link = folder.getLinkLocation();
+                    if (!link.exists()) {
+                        link = repairLink(link);
+                    }
+
+                    Storage parentStorage = storageRepository.findByUrl(folder.getParent());
+                    Storage linkStorage = storageRepository.findByUrl(link.toString());
+                    if (linkStorage == null) {
+                        link = repairLink(link);
+                        linkStorage = storageRepository.findByUrl(link.toString());
+                        if (linkStorage == null) {
+                            logger.log(Level.ERROR, "Invalid link: " + link.toString());
+                        }
+                    }
+
+                    if (linkStorage != null && parentStorage != null) {
+                        Category linkCategory = linkStorage.getMainCategory();
+                        linkCategory.addParent(parentStorage.getMainCategory());
+                        categoryRepository.save(linkCategory);
+                    }
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private ShellFolder repairLink(ShellFolder link) throws FileNotFoundException {
+        if (link.toString().startsWith("F:\\_Книги"))
+            return shellFolderManager.createShellFolder(new File(link.toString().replace("F:\\_Книги", "J:\\_Книги")));
+        else
+            return link;
+    }
+
 }

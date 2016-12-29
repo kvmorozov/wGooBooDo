@@ -3,6 +3,7 @@ package ru.kmorozov.library.data.model.book;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,5 +86,9 @@ public class Storage {
 
     public void setStorageInfo(StorageInfo storageInfo) {
         this.storageInfo = storageInfo;
+    }
+
+    public Category getMainCategory() {
+        return CollectionUtils.isEmpty(categories) ? null : categories.get(0);
     }
 }
