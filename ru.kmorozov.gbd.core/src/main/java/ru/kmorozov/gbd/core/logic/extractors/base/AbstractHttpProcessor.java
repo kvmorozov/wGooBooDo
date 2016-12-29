@@ -20,10 +20,11 @@ import java.util.List;
 public class AbstractHttpProcessor {
 
     private static List<HttpConnector> connectors;
+    private static final Object LOCK = new Object();
 
     private static final List<HttpConnector> getConnectors() {
-        if (connectors == null) synchronized (AbstractHttpProcessor.class) {
-            if (connectors == null) {
+        if (connectors == null || connectors.size() == 0) synchronized (LOCK) {
+            if (connectors == null || connectors.size() == 0) {
                 connectors = new ArrayList<>();
 //                if (ClassUtils.isClassExists("org.asynchttpclient.AsyncHttpClient")) connectors.add(new AsyncHttpConnector());
 //                if (ClassUtils.isClassExists("okhttp3.OkHttpClient")) connectors.add(new OkHttpConnector());
