@@ -2,6 +2,7 @@ package ru.kmorozov.gbd.core.logic.connectors.asynchttp;
 
 import io.netty.handler.timeout.TimeoutException;
 import org.asynchttpclient.AsyncCompletionHandlerBase;
+import org.asynchttpclient.HttpResponseStatus;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 
 import java.net.ConnectException;
@@ -23,5 +24,12 @@ public class AsyncHandler extends AsyncCompletionHandlerBase {
         else if (t instanceof TimeoutException) proxy.registerFailure();
         else
             super.onThrowable(t);
+    }
+
+    @Override
+    public State onStatusReceived(HttpResponseStatus status) throws Exception {
+        int statusCode = status.getStatusCode();
+
+        return statusCode == 200 ? super.onStatusReceived(status) : State.ABORT;
     }
 }

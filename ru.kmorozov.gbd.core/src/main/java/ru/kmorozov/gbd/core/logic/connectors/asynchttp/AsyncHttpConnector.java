@@ -1,5 +1,6 @@
 package ru.kmorozov.gbd.core.logic.connectors.asynchttp;
 
+import io.netty.util.HashedWheelTimer;
 import org.asynchttpclient.AsyncHttpClient;
 import org.asynchttpclient.BoundRequestBuilder;
 import org.asynchttpclient.DefaultAsyncHttpClient;
@@ -20,19 +21,29 @@ import java.util.concurrent.ExecutionException;
  */
 public class AsyncHttpConnector extends HttpConnector {
 
+    private static final Object BUILDER_LOCK = new Object();
     private static final Map<String, AsyncHttpClient> clientsMap = new ConcurrentHashMap<>();
+    private static volatile DefaultAsyncHttpClientConfig.Builder builder;
 
     private AsyncHttpClient getClient(final HttpHostExt proxy) {
         String key = getProxyKey(proxy);
         AsyncHttpClient client = clientsMap.get(key);
 
+        if (builder == null) synchronized (BUILDER_LOCK) {
+            if (builder == null) {
+                builder = new DefaultAsyncHttpClientConfig.Builder();
+                HashedWheelTimer timer = new HashedWheelTimer();
+                timer.start();
+                builder.setNettyTimer(timer);
+                builder.setConnectTimeout(HttpConnector.CONNECT_TIMEOUT);
+            }
+        }
+
         if (client == null) synchronized (proxy) {
-            DefaultAsyncHttpClientConfig.Builder builder = new DefaultAsyncHttpClientConfig.Builder();
             if (!proxy.isLocal()) builder.setProxyServer(new ProxyServer.Builder(proxy.getHost().getHostName(), proxy.getHost().getPort()).build());
-            builder.setConnectTimeout(HttpConnector.CONNECT_TIMEOUT);
             client = new DefaultAsyncHttpClient(builder.build());
 
-//            clientsMap.put(key, client);
+            clientsMap.put(key, client);
         }
 
         return client;
@@ -60,7 +71,6 @@ public class AsyncHttpConnector extends HttpConnector {
             ex.printStackTrace();
             return null;
         } finally {
-            client.close();
         }
     }
 
