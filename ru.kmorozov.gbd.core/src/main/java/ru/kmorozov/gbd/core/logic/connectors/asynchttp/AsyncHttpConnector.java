@@ -1,11 +1,15 @@
 package ru.kmorozov.gbd.core.logic.connectors.asynchttp;
 
+import io.netty.channel.DefaultEventLoop;
+import io.netty.handler.codec.http.cookie.Cookie;
+import io.netty.handler.codec.http.cookie.DefaultCookie;
 import io.netty.util.HashedWheelTimer;
+import io.netty.util.concurrent.DefaultThreadFactory;
 import org.asynchttpclient.AsyncHttpClient;
 import org.asynchttpclient.BoundRequestBuilder;
 import org.asynchttpclient.DefaultAsyncHttpClient;
 import org.asynchttpclient.DefaultAsyncHttpClientConfig;
-import org.asynchttpclient.cookie.Cookie;
+import org.asynchttpclient.netty.channel.DefaultChannelPool;
 import org.asynchttpclient.proxy.ProxyServer;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector;
@@ -15,6 +19,8 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Created by km on 22.12.2016.
@@ -35,6 +41,12 @@ public class AsyncHttpConnector extends HttpConnector {
                 HashedWheelTimer timer = new HashedWheelTimer();
                 timer.start();
                 builder.setNettyTimer(timer);
+                builder.setThreadFactory(new DefaultThreadFactory("asyncPool"));
+                builder.setEventLoopGroup(new DefaultEventLoop());
+
+                DefaultChannelPool pool = new DefaultChannelPool(Integer.MAX_VALUE, Integer.MAX_VALUE, timer, Integer.MAX_VALUE);
+                builder.setChannelPool(pool);
+
                 builder.setConnectTimeout(HttpConnector.CONNECT_TIMEOUT);
             }
         }
@@ -61,14 +73,15 @@ public class AsyncHttpConnector extends HttpConnector {
             String[] cookieParts = cookieEntry.split("=", 2);
             if (cookieParts.length != 2) continue;
 
-            Cookie cookie = new Cookie(cookieParts[0], cookieParts[1], false, ".google.ru", "/", Long.MAX_VALUE, true, true);
+            Cookie cookie = new DefaultCookie(cookieParts[0], cookieParts[1]);
+            cookie.setPath("/");
+            cookie.setDomain(".google.ru");
             builder.addCookie(cookie);
         }
 
         try {
-            return new AsyncHttpResponse(builder.execute(new AsyncHandler(proxy)).get());
-        } catch (InterruptedException | ExecutionException ex) {
-            ex.printStackTrace();
+            return new AsyncHttpResponse(builder.execute(new AsyncHandler(proxy)).get(HttpConnector.CONNECT_TIMEOUT, TimeUnit.MILLISECONDS));
+        } catch (InterruptedException | ExecutionException | TimeoutException ex) {
             return null;
         } finally {
         }

@@ -6,6 +6,7 @@ import ru.kmorozov.gbd.core.logic.connectors.HttpConnector;
 import ru.kmorozov.gbd.core.logic.connectors.Response;
 import ru.kmorozov.gbd.core.logic.connectors.ResponseException;
 import ru.kmorozov.gbd.core.logic.connectors.asynchttp.AsyncHttpConnector;
+import ru.kmorozov.gbd.core.logic.connectors.google.GoogleHttpConnector;
 import ru.kmorozov.gbd.core.utils.ClassUtils;
 
 import javax.net.ssl.SSLException;
@@ -29,7 +30,7 @@ public class AbstractHttpProcessor {
                 if (ClassUtils.isClassExists("org.asynchttpclient.AsyncHttpClient")) connectors.add(new AsyncHttpConnector());
 //                if (ClassUtils.isClassExists("okhttp3.OkHttpClient")) connectors.add(new OkHttpConnector());
 //                if (ClassUtils.isClassExists("org.apache.hc.client5.http.sync.HttpClient")) connectors.add(new ApacheHttpConnector());
-//                if (ClassUtils.isClassExists("com.google.api.client.http.HttpRequestFactory")) connectors.add(new GoogleHttpConnector());
+                if (ClassUtils.isClassExists("com.google.api.client.http.HttpRequestFactory")) connectors.add(new GoogleHttpConnector());
             }
         }
 
