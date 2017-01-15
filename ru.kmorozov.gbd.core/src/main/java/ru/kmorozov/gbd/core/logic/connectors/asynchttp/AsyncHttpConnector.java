@@ -7,9 +7,10 @@ import io.netty.util.HashedWheelTimer;
 import io.netty.util.concurrent.DefaultThreadFactory;
 import org.asynchttpclient.AsyncHttpClient;
 import org.asynchttpclient.BoundRequestBuilder;
-import org.asynchttpclient.DefaultAsyncHttpClient;
 import org.asynchttpclient.DefaultAsyncHttpClientConfig;
+import org.asynchttpclient.netty.channel.ChannelManager;
 import org.asynchttpclient.netty.channel.DefaultChannelPool;
+import org.asynchttpclient.netty.ssl.DefaultSslEngineFactory;
 import org.asynchttpclient.proxy.ProxyServer;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector;
@@ -30,6 +31,7 @@ public class AsyncHttpConnector extends HttpConnector {
     private static final Object BUILDER_LOCK = new Object();
     private static final Map<String, AsyncHttpClient> clientsMap = new ConcurrentHashMap<>();
     private static volatile DefaultAsyncHttpClientConfig.Builder builder;
+    private static volatile ChannelManager channelManager;
 
     private AsyncHttpClient getClient(final HttpHostExt proxy) {
         String key = getProxyKey(proxy);
@@ -43,17 +45,20 @@ public class AsyncHttpConnector extends HttpConnector {
                 builder.setNettyTimer(timer);
                 builder.setThreadFactory(new DefaultThreadFactory("asyncPool"));
                 builder.setEventLoopGroup(new DefaultEventLoop());
+                builder.setSslEngineFactory(new DefaultSslEngineFactory());
 
                 DefaultChannelPool pool = new DefaultChannelPool(Integer.MAX_VALUE, Integer.MAX_VALUE, timer, Integer.MAX_VALUE);
                 builder.setChannelPool(pool);
 
                 builder.setConnectTimeout(HttpConnector.CONNECT_TIMEOUT);
+
+                channelManager = new ChannelManager(builder.build(), timer);
             }
         }
 
         if (client == null) synchronized (proxy) {
             if (!proxy.isLocal()) builder.setProxyServer(new ProxyServer.Builder(proxy.getHost().getHostName(), proxy.getHost().getPort()).build());
-            client = new DefaultAsyncHttpClient(builder.build());
+            client = new SingleChannelHttpClient(builder.build(), channelManager);
 
             clientsMap.put(key, client);
         }
