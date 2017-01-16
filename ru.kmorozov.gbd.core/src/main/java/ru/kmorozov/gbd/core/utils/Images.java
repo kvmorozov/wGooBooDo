@@ -6,16 +6,11 @@ import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by km on 27.12.2015.
  */
 public class Images {
-
-    private static final Set<Long> GOOGLE_BAD_FILES_SIZES = new HashSet(Arrays.asList(96352L, 96183L, 96495L));
 
     private static final Logger logger = ExecutionContext.INSTANCE.getLogger(Images.class);
 
@@ -39,7 +34,7 @@ public class Images {
 
     public static boolean isInvalidImage(Path filePath) {
         Long fileSize = filePath.toFile().length();
-        return GOOGLE_BAD_FILES_SIZES.contains(fileSize);
+        return fileSize >= 96183 && fileSize < 97200;
     }
 
     public static boolean isPdfFile(Path filePath) {

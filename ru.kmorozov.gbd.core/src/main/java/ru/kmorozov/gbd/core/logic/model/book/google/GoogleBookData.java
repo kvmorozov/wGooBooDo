@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 import ru.kmorozov.gbd.core.logic.model.book.base.IBookData;
 
 import java.io.Serializable;
+import java.net.URI;
 
 import static ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor.BOOK_ID_PLACEHOLDER;
 import static ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor.HTTPS_TEMPLATE;
@@ -92,7 +93,7 @@ public class GoogleBookData implements IBookData, Serializable {
         return volumeresult;
     }
 
-    public String getBaseUrl() {
-        return HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, volumeId);
+    public URI getBaseUrl() {
+        return URI.create(HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, volumeId));
     }
 }

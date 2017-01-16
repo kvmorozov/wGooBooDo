@@ -9,6 +9,7 @@ import ru.kmorozov.gbd.core.logic.connectors.HttpConnector;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
+import java.net.URI;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -35,7 +36,7 @@ public class GoogleHttpConnector extends HttpConnector {
 
     public GoogleResponse getContent(String rqUrl, HttpHostExt proxy, boolean withTimeout) throws IOException {
         try {
-            GenericUrl url = new GenericUrl(rqUrl);
+            GenericUrl url = new GenericUrl(URI.create(rqUrl));
 
             if ((GBDOptions.secureMode() && proxy.isLocal()) || !proxy.isAvailable()) return null;
 
