@@ -1,6 +1,6 @@
 package ru.kmorozov.gbd.core.logic.connectors.asynchttp;
 
-import io.netty.channel.DefaultEventLoop;
+import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.handler.codec.http.cookie.Cookie;
 import io.netty.handler.codec.http.cookie.DefaultCookie;
 import io.netty.util.HashedWheelTimer;
@@ -44,7 +44,7 @@ public class AsyncHttpConnector extends HttpConnector {
                 timer.start();
                 builder.setNettyTimer(timer);
                 builder.setThreadFactory(new DefaultThreadFactory("asyncPool"));
-                builder.setEventLoopGroup(new DefaultEventLoop());
+                builder.setEventLoopGroup(new NioEventLoopGroup());
                 builder.setSslEngineFactory(new DefaultSslEngineFactory());
 
                 DefaultChannelPool pool = new DefaultChannelPool(Integer.MAX_VALUE, Integer.MAX_VALUE, timer, Integer.MAX_VALUE);
