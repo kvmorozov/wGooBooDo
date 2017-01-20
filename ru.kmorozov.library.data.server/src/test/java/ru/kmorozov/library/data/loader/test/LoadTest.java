@@ -24,7 +24,7 @@ public class LoadTest {
     @Test
     public void categoryLoadTest() throws IOException {
 //        loader.clear();
-//        loader.load();
+        loader.load();
         loader.processLinks();
     }
 }

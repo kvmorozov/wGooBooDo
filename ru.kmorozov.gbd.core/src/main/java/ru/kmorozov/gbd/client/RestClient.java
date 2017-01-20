@@ -1,7 +1,5 @@
 package ru.kmorozov.gbd.client;
 
-import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
-
 /**
  * Created by km on 20.12.2016.
  */

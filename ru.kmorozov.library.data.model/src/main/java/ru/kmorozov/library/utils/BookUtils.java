@@ -1,17 +1,17 @@
 package ru.kmorozov.library.utils;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import ru.kmorozov.library.data.model.book.BookInfo;
 
 import java.nio.file.Path;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by km on 26.12.2016.
  */
 public class BookUtils {
 
-    private static final Logger logger = Logger.getLogger(BookUtils.class);
+    private static final Logger logger = Logger.getLogger(BookUtils.class.getName());
 
     public static BookInfo.BookFormat getFormat(Path filePath) {
         String pathStr = filePath.toString();

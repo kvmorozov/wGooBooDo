@@ -11,7 +11,10 @@ import ru.kmorozov.gbd.core.utils.gson.Mapper;
 import javax.net.ssl.SSLException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.net.SocketException;
+import java.net.URL;
 import java.nio.charset.Charset;
 
 /**
@@ -39,10 +42,11 @@ public abstract class AbstractRestClient extends AbstractHttpProcessor {
     }
 
     public boolean serviceAvailable() {
-        try {
-            getRawResult(getRestServiceBaseUrl());
+        try (Socket socket = new Socket()) {
+            URL serviceURL = new URL(getRestServiceBaseUrl());
+            socket.connect(new InetSocketAddress(serviceURL.getHost(), serviceURL.getPort()));
             return true;
-        } catch (RestServiceUnavailableException e) {
+        } catch (IOException e) {
             return false;
         }
     }

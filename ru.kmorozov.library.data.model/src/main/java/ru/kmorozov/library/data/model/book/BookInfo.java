@@ -12,6 +12,8 @@ public class BookInfo {
     public enum BookFormat {
         PDF("pdf"),
         DJVU("djvu"),
+        DOC("doc"),
+        DOCX("docx"),
         UNKNOWN("");
 
         String ext;

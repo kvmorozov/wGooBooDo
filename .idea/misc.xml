@@ -30,12 +30,11 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$PROJECT_DIR$/ru.kmorozov.gbd.core/pom.xml" />
-        <option value="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/pom.xml" />
-        <option value="$PROJECT_DIR$/ru.kmorozov.gbd.desktop.app/pom.xml" />
-        <option value="$PROJECT_DIR$/ru.kmorozov.library.data.server/pom.xml" />
-        <option value="$PROJECT_DIR$/ru.kmorozov.library.parent/pom.xml" />
         <option value="$PROJECT_DIR$/ru.kmorozov.gbd.parent/pom.xml" />
+        <option value="$PROJECT_DIR$/ru.kmorozov.library.data.client/pom.xml" />
+        <option value="$PROJECT_DIR$/ru.kmorozov.library.parent/pom.xml" />
+        <option value="$PROJECT_DIR$/ru.kmorozov.library.data.server/pom.xml" />
+        <option value="$PROJECT_DIR$/ru.kmorozov.gbd.desktop.app/pom.xml" />
       </list>
     </option>
   </component>

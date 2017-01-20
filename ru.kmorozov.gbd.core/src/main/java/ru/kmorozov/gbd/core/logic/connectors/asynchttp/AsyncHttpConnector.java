@@ -81,7 +81,7 @@ public class AsyncHttpConnector extends HttpConnector {
             Cookie cookie = new DefaultCookie(cookieParts[0], cookieParts[1]);
             cookie.setPath("/");
             cookie.setDomain(".google.ru");
-            builder.addCookie(cookie);
+//            builder.addCookie(cookie);
         }
 
         try {

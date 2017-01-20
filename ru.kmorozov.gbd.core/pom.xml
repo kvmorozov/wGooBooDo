@@ -121,18 +121,12 @@
                 <dependency>
                     <groupId>org.asynchttpclient</groupId>
                     <artifactId>async-http-client</artifactId>
-                    <version>2.1.0-alpha1</version>
+                    <version>LATEST</version>
                 </dependency>
 
                 <dependency>
                     <groupId>io.netty</groupId>
                     <artifactId>netty-handler</artifactId>
-                    <version>4.1.6.Final</version>
-                </dependency>
-
-                <dependency>
-                    <groupId>io.netty</groupId>
-                    <artifactId>netty-all</artifactId>
                     <version>4.1.6.Final</version>
                 </dependency>
             </dependencies>

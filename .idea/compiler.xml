@@ -9,6 +9,7 @@
         <module name="ru.kmorozov.gbd.core" />
         <module name="ru.kmorozov.gbd.desktop" />
         <module name="ru.kmorozov.gbd.desktop.app" />
+        <module name="ru.kmorozov.library.data.client" />
         <module name="ru.kmorozov.library.data.model" />
         <module name="ru.kmorozov.library.data.server" />
       </profile>
@@ -18,6 +19,7 @@
       <module name="ru.kmorozov.gbd.desktop" target="1.8" />
       <module name="ru.kmorozov.gbd.desktop.app" target="1.8" />
       <module name="ru.kmorozov.gbd.parent" target="1.8" />
+      <module name="ru.kmorozov.library.data.client" target="1.8" />
       <module name="ru.kmorozov.library.data.model" target="1.8" />
       <module name="ru.kmorozov.library.data.server" target="1.8" />
       <module name="ru.kmorozov.library.parent" target="1.8" />
