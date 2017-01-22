@@ -11,8 +11,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -31,17 +31,19 @@ public class BookListLoader extends BaseLoader {
         super();
     }
 
-    public List<String> getBookIdsList() {
+    public Set<String> getBookIdsList() {
         File indexFile = getFileToLoad(false);
-        if (indexFile == null) return loadFromDirNames();
-        else {
+        Set<String> result = loadFromDirNames();
+        if (indexFile != null) {
             loadedFromIndex = true;
-            return loadFromIndex(indexFile);
+            result.addAll(loadFromIndex(indexFile));
         }
+
+        return result;
     }
 
-    private List<String> loadFromDirNames() {
-        List<String> bookIdsList = new ArrayList<>();
+    private Set<String> loadFromDirNames() {
+        Set<String> bookIdsList = new HashSet<>();
         try {
             Files.walk(Paths.get(getBooksDir().toURI())).forEach(filePath -> {
                 if (filePath.toFile().isDirectory()) {
@@ -56,11 +58,11 @@ public class BookListLoader extends BaseLoader {
         return bookIdsList;
     }
 
-    private List<String> loadFromIndex(File indexFile) {
-        List<String> bookIdsList = null;
+    private Set<String> loadFromIndex(File indexFile) {
+        Set<String> bookIdsList = new HashSet<>();
 
         try (Stream<String> idsStream = Files.lines(indexFile.toPath())) {
-            bookIdsList = idsStream.filter(this::isValidId).collect(Collectors.toList());
+            bookIdsList = idsStream.filter(this::isValidId).collect(Collectors.toSet());
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }

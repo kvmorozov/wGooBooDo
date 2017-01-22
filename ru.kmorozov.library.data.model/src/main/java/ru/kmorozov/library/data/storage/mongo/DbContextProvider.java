@@ -3,7 +3,7 @@ package ru.kmorozov.library.data.storage.mongo;
 import ru.kmorozov.gbd.core.config.storage.AbstractContextProvider;
 import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * Created by sbt-morozov-kv on 02.12.2016.
@@ -26,7 +26,7 @@ public class DbContextProvider extends AbstractContextProvider {
     }
 
     @Override
-    public List<String> getBookIdsList() {
+    public Set<String> getBookIdsList() {
         return null;
     }
 

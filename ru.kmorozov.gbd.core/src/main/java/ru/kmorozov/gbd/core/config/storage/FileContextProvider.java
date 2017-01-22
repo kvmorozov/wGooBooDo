@@ -2,7 +2,7 @@ package ru.kmorozov.gbd.core.config.storage;
 
 import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
 
-import java.util.List;
+import java.util.Set;
 
 import static ru.kmorozov.gbd.core.config.storage.BookContextLoader.BOOK_CTX_LOADER;
 import static ru.kmorozov.gbd.core.config.storage.BookListLoader.BOOK_LIST_LOADER;
@@ -28,7 +28,7 @@ public class FileContextProvider extends AbstractContextProvider {
     }
 
     @Override
-    public List<String> getBookIdsList() {
+    public Set<String> getBookIdsList() {
         return BOOK_LIST_LOADER.getBookIdsList();
     }
 

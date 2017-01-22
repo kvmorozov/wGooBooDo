@@ -2,7 +2,7 @@ package ru.kmorozov.gbd.core.config.storage;
 
 import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * Created by sbt-morozov-kv on 02.12.2016.
@@ -47,7 +47,7 @@ public abstract class AbstractContextProvider {
 
     public abstract BookInfo getBookInfo(String bookId);
 
-    public abstract List<String> getBookIdsList();
+    public abstract Set<String> getBookIdsList();
 
     public abstract int getContextSize();
 
