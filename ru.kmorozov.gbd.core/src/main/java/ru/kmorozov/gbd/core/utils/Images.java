@@ -4,6 +4,10 @@ import org.apache.commons.io.FilenameUtils;
 import ru.kmorozov.gbd.core.logic.connectors.Response;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -32,9 +36,28 @@ public class Images {
         }
     }
 
-    public static boolean isInvalidImage(Path filePath) {
-        Long fileSize = filePath.toFile().length();
-        return fileSize >= 96183 && fileSize < 97200;
+    public static boolean isInvalidImage(Path filePath, int imgWidth) {
+        return isInvalidImage(filePath.toFile(), imgWidth);
+    }
+
+    public static boolean isInvalidImage(File imgfile, int imgWidth) {
+        Long fileSize = imgfile.length();
+
+        switch (imgWidth) {
+            case 1280:
+                if (fileSize >= 96183 && fileSize < 97200) {
+                    try {
+                        BufferedImage bimg = ImageIO.read(imgfile);
+                        return bimg.getHeight() == 1670;
+                    } catch (IOException e) {
+                        return true;
+                    }
+                }
+                else
+                    return false;
+            default:
+                return false;
+        }
     }
 
     public static boolean isPdfFile(Path filePath) {

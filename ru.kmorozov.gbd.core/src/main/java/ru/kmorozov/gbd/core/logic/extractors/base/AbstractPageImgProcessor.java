@@ -5,6 +5,7 @@ import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.connectors.Response;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
+import ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor;
 import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage;
 import ru.kmorozov.gbd.core.utils.Images;
 import ru.kmorozov.gbd.core.utils.Logger;
@@ -56,7 +57,7 @@ public abstract class AbstractPageImgProcessor<T extends AbstractPage> extends A
                 return false;
             }
 
-            int read;
+            int read, totalRead = 0;
             byte[] bytes = new byte[dataChunk];
             boolean firstChunk = true, reloadFlag;
 
@@ -85,18 +86,25 @@ public abstract class AbstractPageImgProcessor<T extends AbstractPage> extends A
 
                 firstChunk = false;
 
+                totalRead += read;
                 outputStream.write(bytes, 0, read);
             }
 
-            page.dataProcessed.set(true);
+            if (validateOutput(outputFile, getImgWidth())) {
+                page.dataProcessed.set(true);
 
-            proxy.promoteProxy();
+                proxy.promoteProxy();
 
-            logger.info(getSuccessMsg());
-            page.dataProcessed.set(true);
-            page.fileExists.set(true);
+                logger.info(getSuccessMsg());
+                page.dataProcessed.set(true);
+                page.fileExists.set(true);
 
-            return true;
+                return true;
+            }
+            else {
+                outputFile.delete();
+                return false;
+            }
         } catch (SocketTimeoutException | SocketException | SSLException ste) {
             proxy.registerFailure();
         } catch (Exception ex) {
@@ -145,4 +153,10 @@ public abstract class AbstractPageImgProcessor<T extends AbstractPage> extends A
     public String toString() {
         return "Page processor:" + bookContext.toString();
     }
+
+    protected int getImgWidth() {
+        return GBDOptions.getImageWidth() == 0 ? GoogleImageExtractor.DEFAULT_PAGE_WIDTH : GBDOptions.getImageWidth();
+    }
+
+    protected abstract boolean validateOutput(File outputFile, int width);
 }

@@ -5,8 +5,10 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.extractors.base.IPostProcessor;
+import ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor;
 import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
 import ru.kmorozov.gbd.core.utils.Images;
 import ru.kmorozov.gbd.core.utils.Logger;
@@ -87,10 +89,12 @@ public class PdfMaker implements IPostProcessor {
             e.printStackTrace();
         }
 
+        int imgWidth = GBDOptions.getImageWidth() == 0 ? GoogleImageExtractor.DEFAULT_PAGE_WIDTH : GBDOptions.getImageWidth();
+
         try (PDDocument document = new PDDocument()) {
             Files.list(imgDir.toPath()).filter(Images::isImageFile).sorted(Comparator.comparing(this::getPagenum)).forEach(filePath -> {
                 try (InputStream in = new FileInputStream(filePath.toFile())) {
-                    if (!Images.isInvalidImage(filePath)) {
+                    if (!Images.isInvalidImage(filePath, imgWidth)) {
                         BufferedImage bimg = ImageIO.read(in);
 
                         if (bimg == null) {

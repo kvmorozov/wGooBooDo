@@ -1,11 +1,13 @@
 package ru.kmorozov.gbd.core.logic.extractors.google;
 
-import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.logic.Proxy.AbstractProxyListProvider;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractPageImgProcessor;
 import ru.kmorozov.gbd.core.logic.model.book.google.GooglePageInfo;
+import ru.kmorozov.gbd.core.utils.Images;
+
+import java.io.File;
 
 /**
  * Created by km on 21.11.2015.
@@ -19,8 +21,8 @@ class GooglePageImgProcessor extends AbstractPageImgProcessor<GooglePageInfo> {
     }
 
     private boolean processImageWithProxy(HttpHostExt proxy) {
-        int imgWidth = GBDOptions.getImageWidth() == 0 ? GoogleImageExtractor.DEFAULT_PAGE_WIDTH : GBDOptions.getImageWidth();
-        return !(!proxy.isLocal() && !proxy.isAvailable()) && processImage(page.getImqRqUrl(bookContext.getBookInfo().getBookId(), GoogleImageExtractor.HTTPS_IMG_TEMPLATE, imgWidth), proxy);
+        return !(!proxy.isLocal() && !proxy.isAvailable()) &&
+                processImage(page.getImqRqUrl(bookContext.getBookInfo().getBookId(), GoogleImageExtractor.HTTPS_IMG_TEMPLATE, getImgWidth()), proxy);
     }
 
     @Override
@@ -46,5 +48,10 @@ class GooglePageImgProcessor extends AbstractPageImgProcessor<GooglePageInfo> {
                     }
                 });
         }
+    }
+
+    @Override
+    protected boolean validateOutput(File outputFile, int width) {
+        return !Images.isInvalidImage(outputFile, width);
     }
 }

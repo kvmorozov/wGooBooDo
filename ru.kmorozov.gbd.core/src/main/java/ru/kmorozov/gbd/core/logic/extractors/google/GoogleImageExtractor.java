@@ -101,7 +101,7 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
                             }
                             else _page.dataProcessed.set(true);
 
-                            if (Images.isInvalidImage(filePath)) {
+                            if (Images.isInvalidImage(filePath, imgWidth)) {
                                 _page.dataProcessed.set(false);
                                 Files.delete(filePath);
                                 logger.severe(String.format("Page %s deleted!", _page.getPid()));

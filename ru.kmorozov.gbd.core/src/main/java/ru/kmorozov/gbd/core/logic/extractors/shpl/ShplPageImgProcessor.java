@@ -5,6 +5,8 @@ import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractPageImgProcessor;
 import ru.kmorozov.gbd.core.logic.model.book.shpl.ShplPage;
 
+import java.io.File;
+
 /**
  * Created by sbt-morozov-kv on 18.11.2016.
  */
@@ -29,5 +31,10 @@ public class ShplPageImgProcessor extends AbstractPageImgProcessor<ShplPage> {
         if (page.dataProcessed.get()) return;
 
         processImage(page.getImgUrl());
+    }
+
+    @Override
+    protected boolean validateOutput(File outputFile, int width) {
+        return true;
     }
 }

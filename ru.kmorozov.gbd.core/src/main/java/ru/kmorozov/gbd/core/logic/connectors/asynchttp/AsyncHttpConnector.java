@@ -28,10 +28,13 @@ import java.util.concurrent.TimeoutException;
  */
 public class AsyncHttpConnector extends HttpConnector {
 
-    private static final Object BUILDER_LOCK = new Object();
-    private static final Map<String, AsyncHttpClient> clientsMap = new ConcurrentHashMap<>();
-    private static volatile DefaultAsyncHttpClientConfig.Builder builder;
-    private static volatile ChannelManager channelManager;
+    private final Object BUILDER_LOCK = new Object();
+    private final Map<String, AsyncHttpClient> clientsMap = new ConcurrentHashMap<>();
+    private volatile DefaultAsyncHttpClientConfig.Builder builder;
+    private volatile ChannelManager channelManager;
+    private NioEventLoopGroup nioEventLoopGroup;
+    private DefaultChannelPool pool;
+    private HashedWheelTimer timer;
 
     private AsyncHttpClient getClient(final HttpHostExt proxy) {
         String key = getProxyKey(proxy);
@@ -40,14 +43,14 @@ public class AsyncHttpConnector extends HttpConnector {
         if (builder == null) synchronized (BUILDER_LOCK) {
             if (builder == null) {
                 builder = new DefaultAsyncHttpClientConfig.Builder();
-                HashedWheelTimer timer = new HashedWheelTimer();
+                timer = new HashedWheelTimer();
                 timer.start();
                 builder.setNettyTimer(timer);
                 builder.setThreadFactory(new DefaultThreadFactory("asyncPool"));
-                builder.setEventLoopGroup(new NioEventLoopGroup());
+                builder.setEventLoopGroup(nioEventLoopGroup = new NioEventLoopGroup());
                 builder.setSslEngineFactory(new DefaultSslEngineFactory());
 
-                DefaultChannelPool pool = new DefaultChannelPool(Integer.MAX_VALUE, Integer.MAX_VALUE, timer, Integer.MAX_VALUE);
+                pool = new DefaultChannelPool(Integer.MAX_VALUE, Integer.MAX_VALUE, timer, Integer.MAX_VALUE);
                 builder.setChannelPool(pool);
 
                 builder.setConnectTimeout(HttpConnector.CONNECT_TIMEOUT);
@@ -81,7 +84,7 @@ public class AsyncHttpConnector extends HttpConnector {
             Cookie cookie = new DefaultCookie(cookieParts[0], cookieParts[1]);
             cookie.setPath("/");
             cookie.setDomain(".google.ru");
-//            builder.addCookie(cookie);
+            builder.addCookie(cookie);
         }
 
         try {
@@ -100,5 +103,9 @@ public class AsyncHttpConnector extends HttpConnector {
                     client.close();
             } catch (IOException ignored) {
             }
+
+        nioEventLoopGroup.shutdownGracefully();
+        pool.destroy();
+        timer.stop();
     }
 }
