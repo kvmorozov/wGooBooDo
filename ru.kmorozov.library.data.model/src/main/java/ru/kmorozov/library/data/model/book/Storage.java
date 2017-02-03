@@ -16,7 +16,7 @@ import java.util.List;
 public class Storage {
 
     public enum StorageType {
-        LocalFileSystem;
+        LocalFileSystem
     }
 
     @Id

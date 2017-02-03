@@ -18,11 +18,25 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
+            <version>LATEST</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-junit</artifactId>
+            <version>LATEST</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jayway.jsonpath</groupId>
+            <artifactId>json-path</artifactId>
+            <version>LATEST</version>
             <scope>test</scope>
         </dependency>
 
@@ -34,13 +48,24 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>static/node/**/*.*</exclude>
+                    <exclude>static/node_modules/**/*.*</exclude>
+                </excludes>
+            </resource>
+        </resources>
+
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>1.4.4.RELEASE</version>
             </plugin>
 
-<!--            <plugin>
+            <plugin>
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
                 <version>1.0</version>
@@ -65,20 +90,20 @@
                         </goals>
                         <configuration>
                             <arguments>install</arguments>
+                            <npmRegistryURL>http://sbtnexus.ca.sbrf.ru:8081/nexus/content/groups/npmjs_group/</npmRegistryURL>
                         </configuration>
                     </execution>
                     <execution>
-                        <id>bower install</id>
+                        <id>npm run build</id>
                         <goals>
-                            <goal>bower</goal>
+                            <goal>npm</goal>
                         </goals>
-                        <phase>generate-resources</phase>
                         <configuration>
-                            <arguments>install</arguments>
+                            <arguments>run build</arguments>
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>-->
+            </plugin>
         </plugins>
     </build>
 

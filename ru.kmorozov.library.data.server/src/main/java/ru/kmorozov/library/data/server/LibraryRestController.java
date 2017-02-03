@@ -16,12 +16,20 @@ import ru.kmorozov.gbd.core.logic.output.consumers.DummyBookInfoOutput;
 import ru.kmorozov.gbd.core.utils.Logger;
 import ru.kmorozov.library.data.model.IDataRestServer;
 import ru.kmorozov.library.data.model.book.Storage;
+import ru.kmorozov.library.data.model.dto.BookDTO;
+import ru.kmorozov.library.data.model.dto.ItemDTO;
 import ru.kmorozov.library.data.model.dto.StorageDTO;
+import ru.kmorozov.library.data.model.dto.UserDTO;
+import ru.kmorozov.library.data.repository.BooksRepository;
 import ru.kmorozov.library.data.repository.GoogleBooksRepository;
 import ru.kmorozov.library.data.repository.StorageRepository;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static ru.kmorozov.library.data.model.dto.ItemDTO.ItemType.book;
+import static ru.kmorozov.library.data.model.dto.ItemDTO.ItemType.storage;
 
 /**
  * Created by km on 19.12.2016.
@@ -37,6 +45,9 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
 
     @Autowired
     private StorageRepository storageRepository;
+
+    @Autowired
+    private BooksRepository booksRepository;
 
     private static transient BookContextLoader googleBooksLoader;
 
@@ -77,9 +88,47 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
     }
 
     @Override
+    @RequestMapping("/login")
+    public UserDTO login(@RequestParam(name = "login") String login) {
+        return new UserDTO(login);
+    }
+
+    @Override
     @RequestMapping("/storagesByParentId")
     public List<StorageDTO> getStoragesByParentId(@RequestParam(name = "storageId") String storageId) {
         Storage parentStorage = StringUtils.isEmpty(storageId) ? null : storageRepository.findOne(storageId);
         return storageRepository.findAllByParent(parentStorage).stream().map(storage -> new StorageDTO(storage)).collect(Collectors.toList());
+    }
+
+    @Override
+    @RequestMapping("/booksByStorageId")
+    public List<BookDTO> getBooksByStorageId(@RequestParam(name = "storageId") String storageId) {
+        Storage storage = StringUtils.isEmpty(storageId) ? null : storageRepository.findOne(storageId);
+        if (storage == null)
+            return Collections.EMPTY_LIST;
+
+        return booksRepository.findAllByStorage(storage).stream().map(book -> new BookDTO(book)).collect(Collectors.toList());
+    }
+
+    @Override
+    @RequestMapping("/itemsByStorageId")
+    public List<ItemDTO> getItemsByStorageId(String storageId) {
+        List<ItemDTO> result = getBooksByStorageId(storageId).stream().map(book -> new ItemDTO(book)).collect(Collectors.toList());
+        result.addAll(getStoragesByParentId(storageId).stream().map(storage -> new ItemDTO(storage)).collect(Collectors.toList()));
+
+        return result;
+    }
+
+    @Override
+    @RequestMapping("/itemByIdAndType")
+    public ItemDTO itemByIdAndType(@RequestParam(name = "itemId") String itemId, @RequestParam(name = "itemType") ItemDTO.ItemType itemType) {
+        switch (itemType) {
+            case book:
+                return new ItemDTO(new BookDTO(booksRepository.findOne(itemId)));
+            case storage:
+                return new ItemDTO(new StorageDTO(storageRepository.findOne(itemId)));
+            default:
+                return null;
+        }
     }
 }

@@ -12,6 +12,8 @@ public class StorageDTO {
     private String url;
     private String parentId;
 
+    public StorageDTO() {}
+
     public StorageDTO(Storage storage) {
         this.id = storage.getId();
         this.storageType = storage.getStorageType();
