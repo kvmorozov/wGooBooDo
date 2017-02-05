@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0c8b21df-78f5-408a-867d-4ccd8443679a" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="wGooBooDo-gbd-web.iws" />
@@ -35,11 +36,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="false">
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="17" lean-forward="false" selection-start-line="0" selection-start-column="17" selection-end-line="0" selection-end-column="17" />
+            <state relative-caret-position="17">
+              <caret line="1" column="10" lean-forward="false" selection-start-line="1" selection-start-column="10" selection-end-line="1" selection-end-column="10" />
               <folding />
             </state>
           </provider>
@@ -55,7 +56,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="true">
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ru.kmorozov.library.parent/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="127">
@@ -827,7 +828,7 @@
       <workItem from="1486142526200" duration="747000" />
       <workItem from="1486306628983" duration="285000" />
       <workItem from="1486306957824" duration="2279000" />
-      <workItem from="1486309414950" duration="94000" />
+      <workItem from="1486309414950" duration="175000" />
     </task>
     <task id="LOCAL-00001" summary="upd from github">
       <created>1485240666006</created>
@@ -948,7 +949,14 @@
       <option name="project" value="LOCAL" />
       <updated>1486309495028</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Merge remote-tracking branch 'remotes/origin/gbd-web'&#10;&#10;Conflicts:&#10;&#9;.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_core_2_7_1.xml&#10;&#9;.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_core_2_7_4.xml&#10;&#9;.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_core_2_8_6.xml&#10;&#9;.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_databind_2_7_1_1.xml&#10;&#9;.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_databind_2_7_4.xml&#10;&#9;.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_databind_2_8_6.xml&#10;&#9;pom.xml&#10;&#9;ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/output/listeners/SwingLogEventListener.java&#10;&#9;ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/desktop/gui/MainBookForm.form&#10;&#9;ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/desktop/gui/MainBookForm.java&#10;&#9;ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/desktop/gui/MainFrame.java&#10;&#9;ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/desktop/output/progress/ProcessStatus.java&#10;&#9;simpleGBD.iml&#10;&#9;src/main/java/ru/simpleGBD/App/Config/SystemConfigs.java&#10;&#9;src/main/java/ru/simpleGBD/App/GUI/MainBookForm.form&#10;&#9;src/main/java/ru/simpleGBD/App/GUI/MainBookForm.java&#10;&#9;src/main/java/ru/simpleGBD/App/GUI/MainFrame.java&#10;&#9;src/main/java/ru/simpleGBD/App/GUI/swing/MainBookForm.form&#10;&#9;src/main/java/ru/simpleGBD/App/GUI/swing/MainBookForm.java&#10;&#9;src/main/java/ru/simpleGBD/App/GUI/swing/MainFrame.java&#10;&#9;src/main/java/ru/simpleGBD/App/Logic/Output/consumers/SwingBookInfoOutput.java&#10;&#9;src/main/java/ru/simpleGBD/App/Logic/Proxy/HttpHostExt.java&#10;&#9;src/main/java/ru/simpleGBD/App/Main.java&#10;">
+      <created>1486309513647</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1486309513647</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -984,7 +992,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="156697000" />
+    <option name="totallyTimeSpent" value="156778000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -1426,14 +1434,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="17" lean-forward="false" selection-start-line="0" selection-start-column="17" selection-end-line="0" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ru.kmorozov.library.data.client/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="462">
@@ -1446,6 +1446,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="127">
           <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="10" lean-forward="false" selection-start-line="1" selection-start-column="10" selection-end-line="1" selection-end-column="10" />
           <folding />
         </state>
       </provider>
