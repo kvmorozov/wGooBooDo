@@ -2,468 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0c8b21df-78f5-408a-867d-4ccd8443679a" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/dist/fonts/glyphicons-halflings-regular.eot" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/dist/fonts/glyphicons-halflings-regular.ttf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/dist/fonts/glyphicons-halflings-regular.woff" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/dist/fonts/glyphicons-halflings-regular.woff2" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/fonts/glyphicons-halflings-regular.eot" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/fonts/glyphicons-halflings-regular.ttf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/fonts/glyphicons-halflings-regular.woff" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/fonts/glyphicons-halflings-regular.woff2" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__ch_qos_logback_logback_classic_1_1_9.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__ch_qos_logback_logback_core_1_1_9.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_classmate_1_3_3.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_code_gson_gson_2_8_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_jayway_jsonpath_json_path_2_2_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_squareup_okhttp3_okhttp_3_6_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_squareup_okio_okio_1_11_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_typesafe_netty_netty_reactive_streams_1_0_8.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_buffer_4_1_7_Final.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_codec_4_1_7_Final.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_codec_dns_4_1_7_Final.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_codec_http_4_1_7_Final.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_common_4_1_7_Final.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_handler_4_0_41_Final.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_resolver_4_1_7_Final.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_resolver_dns_4_1_7_Final.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_transport_4_1_7_Final.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_transport_native_epoll_4_1_7_Final.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__javax_validation_validation_api_1_1_0_Final.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__net_minidev_accessors_smart_1_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__net_minidev_json_smart_2_2_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__nz_net_ultraq_thymeleaf_thymeleaf_layout_dialect_1_4_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__ognl_ognl_3_0_8.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_pdfbox_pdfbox_2_0_4.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_tomcat_embed_tomcat_embed_core_8_5_11.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_tomcat_embed_tomcat_embed_el_8_5_11.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_tomcat_embed_tomcat_embed_websocket_8_5_11.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_aspectj_aspectjrt_1_8_9.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_asynchttpclient_async_http_client_2_1_0_alpha2.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_asynchttpclient_async_http_client_netty_utils_2_1_0_alpha2.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_codehaus_groovy_groovy_2_4_7.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_eclipse_jetty_jetty_http_9_4_1_v20170120.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_eclipse_jetty_jetty_io_9_4_1_v20170120.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_eclipse_jetty_jetty_server_9_4_1_v20170120.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_eclipse_jetty_jetty_util_9_4_1_v20170120.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_hamcrest_hamcrest_junit_2_0_0_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_hamcrest_java_hamcrest_2_0_0_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_hibernate_hibernate_validator_5_3_4_Final.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_javassist_javassist_3_21_0_GA.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_jboss_logging_jboss_logging_3_3_0_Final.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_jsoup_jsoup_1_10_2.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_mockito_mockito_all_2_0_2_beta.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_mongodb_mongo_java_driver_3_4_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_mongodb_mongo_java_driver_3_4_2.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_ow2_asm_asm_5_0_3.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_reactivestreams_reactive_streams_1_0_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_jcl_over_slf4j_1_7_22.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_jul_to_slf4j_1_7_22.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_log4j_over_slf4j_1_7_22.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_slf4j_api_1_7_22.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_1_5_1_RELEASE.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_autoconfigure_1_5_1_RELEASE.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_1_5_1_RELEASE.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_hateoas_1_5_1_RELEASE.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_logging_1_5_1_RELEASE.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_thymeleaf_1_5_1_RELEASE.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_tomcat_1_5_1_RELEASE.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_web_1_5_1_RELEASE.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_test_1_5_1_RELEASE.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_data_spring_data_commons_1_13_0_RELEASE.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_data_spring_data_jpa_1_11_0_RELEASE.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_data_spring_data_mongodb_1_10_0_RELEASE.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_hateoas_spring_hateoas_0_23_0_RELEASE.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_plugin_spring_plugin_core_1_2_0_RELEASE.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_aop_4_3_6_RELEASE.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_beans_4_3_6_RELEASE.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_context_4_3_6_RELEASE.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_core_4_3_6_RELEASE.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_expression_4_3_6_RELEASE.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_jdbc_4_3_6_RELEASE.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_orm_4_3_6_RELEASE.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_test_4_3_6_RELEASE.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_tx_4_3_6_RELEASE.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_web_4_3_6_RELEASE.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_webmvc_4_3_6_RELEASE.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_thymeleaf_thymeleaf_2_1_5_RELEASE.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_thymeleaf_thymeleaf_spring4_2_1_5_RELEASE.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_unbescape_unbescape_1_1_0_RELEASE.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_yaml_snakeyaml_1_17.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/mongoSettings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/simpleGBD.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/pom.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/ru.kmorozov.gbd.core.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/client/AbstractRestClient.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/client/IRestClient.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/client/RestClient.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/client/RestServiceUnavailableException.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/config/GBDOptions.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/config/SystemConfigs.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/config/storage/AbstractContextProvider.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/config/storage/BaseLoader.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/config/storage/BookContextLoader.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/config/storage/BookListLoader.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/config/storage/FileContextProvider.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/Proxy/AbstractProxyListProvider.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/Proxy/FileProxyListProvider.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/Proxy/HttpHostExt.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/Proxy/IProxyListProvider.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/Proxy/ProxyBlacklistHolder.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/Proxy/web/AbstractProxyExtractor.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/Proxy/web/HideMeListProvider.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/Proxy/web/SslProxiesListProvider.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/Proxy/web/WebProxyListProvider.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/connectors/HttpConnector.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/connectors/Response.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/connectors/ResponseException.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/connectors/apache/ApacheConnections.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/connectors/apache/ApacheHttpConnector.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/connectors/apache/ApacheResponse.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/connectors/asynchttp/AsyncHandler.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/connectors/asynchttp/AsyncHttpConnector.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/connectors/asynchttp/AsyncHttpResponse.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/connectors/asynchttp/SingleChannelHttpClient.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/connectors/google/GoogleHttpConnector.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/connectors/google/GoogleResponse.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/connectors/google/GoogleResponseException.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/connectors/ok/OkHttpConnector.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/connectors/ok/OkResponse.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/context/BookContext.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/context/ExecutionContext.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/context/IBookListProducer.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/AbstractBookExtractor.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/AbstractHttpProcessor.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/AbstractImageExtractor.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/AbstractPageImgProcessor.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/IImageExtractor.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/IPostProcessor.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/IUniqueRunnable.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/google/GoogleBookInfoExtractor.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/google/GoogleImageExtractor.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/google/GooglePageImgProcessor.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/google/GooglePageSigProcessor.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/shpl/ShplBookExtractor.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/shpl/ShplImageExtractor.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/shpl/ShplPageImgProcessor.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/library/ILibraryMetadata.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/library/LibraryFactory.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/library/metadata/GoogleBooksMetadata.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/library/metadata/ShplMetadata.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/model/book/base/AbstractPage.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/model/book/base/BookInfo.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/model/book/base/IBookData.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/model/book/base/IPage.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/model/book/base/IPagesInfo.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/model/book/google/AdditionalInfo.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/model/book/google/BuyLink.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/model/book/google/GoogleBookData.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/model/book/google/GooglePageInfo.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/model/book/google/GooglePagesInfo.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/model/book/google/JsonBookInfo.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/model/book/google/OnlineAccess.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/model/book/google/SyndicationFlags.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/model/book/google/TocItem.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/model/book/google/VolumeResultFlags.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/model/book/shpl/ShplBookData.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/model/book/shpl/ShplPage.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/model/book/shpl/ShplPagesInfo.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/model/log/LogIconColumnRenderer.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/output/consumers/AbstractOutput.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/output/consumers/IEventConsumer.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/output/events/AbstractEventSource.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/output/events/IEventSource.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/output/events/ImageExtractorWorker.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/progress/IProgress.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/utils/ClassUtils.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/utils/HttpConnections.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/utils/Images.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/utils/Logger.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/utils/QueuedThreadPoolExecutor.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/utils/gson/IBookDataAdapter.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/utils/gson/IPageAdapter.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/utils/gson/IPagesInfoAdapter.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/utils/gson/Mapper.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/test/java/ru/kmorozov/gbd/test/GbdTestBase.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/test/java/ru/kmorozov/gbd/test/client/RestClientTest.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/test/java/ru/kmorozov/gbd/test/core/GoogleImageTest.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop.app/pom.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop.app/ru.kmorozov.gbd.desktop.app.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/pom.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/ru.kmorozov.gbd.desktop.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/Main.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/desktop/gui/ManageController.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/desktop/library/OptionsBasedProducer.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/desktop/library/SingleBookProducer.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/desktop/output/consumers/SwingBookInfoOutput.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/pdf/PdfMaker.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/resources/gui.properties" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/test/java/ru/kmorozov/gbd/core/test/ExtractorTest.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/test/resources/google/book.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/test/resources/shpl/book.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.parent/pom.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.parent/ru.kmorozov.gbd.parent.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/pom.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/ru.kmorozov.library.data.client.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/java/ru/kmorozov/library/data/client/LibraryClient.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/java/ru/kmorozov/library/data/client/LibraryClientController.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/java/ru/kmorozov/library/data/client/LibraryRestProxy.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/.babelrc" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/api/uriListConverter.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/api/uriTemplateInterceptor.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/app/PerfProfiler/index.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/app/PerfProfiler/styles.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/app/app.jsx" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/app/client.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/app/renderer.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/CHANGELOG.md" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/Gruntfile.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/LICENSE" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/README.md" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/dist/css/bootstrap-theme.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/dist/css/bootstrap-theme.css.map" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/dist/css/bootstrap-theme.min.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/dist/css/bootstrap-theme.min.css.map" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/dist/css/bootstrap.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/dist/css/bootstrap.css.map" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/dist/css/bootstrap.min.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/dist/css/bootstrap.min.css.map" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/dist/fonts/glyphicons-halflings-regular.svg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/dist/js/bootstrap.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/dist/js/bootstrap.min.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/dist/js/npm.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/fonts/glyphicons-halflings-regular.svg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/grunt/.jshintrc" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/grunt/bs-commonjs-generator.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/grunt/bs-glyphicons-data-generator.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/grunt/bs-lessdoc-parser.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/grunt/bs-raw-files-generator.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/grunt/change-version.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/grunt/configBridge.json" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/grunt/npm-shrinkwrap.json" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/grunt/sauce_browsers.yml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/js/affix.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/js/alert.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/js/button.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/js/carousel.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/js/collapse.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/js/dropdown.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/js/modal.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/js/popover.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/js/scrollspy.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/js/tab.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/js/tooltip.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/js/transition.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/alerts.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/badges.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/bootstrap.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/breadcrumbs.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/button-groups.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/buttons.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/carousel.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/close.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/code.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/component-animations.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/dropdowns.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/forms.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/glyphicons.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/grid.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/input-groups.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/jumbotron.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/labels.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/list-group.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/media.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/mixins.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/mixins/alerts.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/mixins/background-variant.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/mixins/border-radius.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/mixins/buttons.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/mixins/center-block.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/mixins/clearfix.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/mixins/forms.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/mixins/gradients.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/mixins/grid-framework.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/mixins/grid.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/mixins/hide-text.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/mixins/image.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/mixins/labels.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/mixins/list-group.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/mixins/nav-divider.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/mixins/nav-vertical-align.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/mixins/opacity.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/mixins/pagination.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/mixins/panels.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/mixins/progress-bar.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/mixins/reset-filter.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/mixins/reset-text.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/mixins/resize.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/mixins/responsive-visibility.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/mixins/size.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/mixins/tab-focus.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/mixins/table-row.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/mixins/text-emphasis.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/mixins/text-overflow.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/mixins/vendor-prefixes.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/modals.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/navbar.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/navs.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/normalize.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/pager.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/pagination.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/panels.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/popovers.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/print.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/progress-bars.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/responsive-embed.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/responsive-utilities.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/scaffolding.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/tables.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/theme.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/thumbnails.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/tooltip.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/type.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/utilities.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/variables.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/less/wells.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/bootstrap/package.json" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/common.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/generated/app-bundle.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/generated/app-bundle.js.map" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/libs/react-infinite-tree/examples/animation.styl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/libs/react-infinite-tree/examples/app.styl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/libs/react-infinite-tree/examples/common.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/libs/react-infinite-tree/examples/helper.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/libs/react-infinite-tree/examples/index.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/libs/react-infinite-tree/examples/webpack.config.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/libs/react-infinite-tree/src/index.jsx" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/libs/react-infinite-tree/src/index.styl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/libs/react-infinite-tree/src/infinite-tree.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/libs/react-infinite-tree/src/renderer.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/main.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/package.json" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/run.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/webpack.config.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/templates/index.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/test/java/ru/kmorozov/library/data/client/test/LibraryRestTest.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.model/pom.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.model/ru.kmorozov.library.data.model.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.model/src/main/java/ru/kmorozov/library/data/config/MongoConfiguration.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.model/src/main/java/ru/kmorozov/library/data/model/IDataRestServer.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.model/src/main/java/ru/kmorozov/library/data/model/book/Book.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.model/src/main/java/ru/kmorozov/library/data/model/book/BookInfo.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.model/src/main/java/ru/kmorozov/library/data/model/book/Category.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.model/src/main/java/ru/kmorozov/library/data/model/book/Storage.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.model/src/main/java/ru/kmorozov/library/data/model/book/StorageInfo.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.model/src/main/java/ru/kmorozov/library/data/model/dto/BookDTO.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.model/src/main/java/ru/kmorozov/library/data/model/dto/ItemDTO.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.model/src/main/java/ru/kmorozov/library/data/model/dto/StorageDTO.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.model/src/main/java/ru/kmorozov/library/data/model/dto/UserDTO.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.model/src/main/java/ru/kmorozov/library/data/repository/BooksRepository.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.model/src/main/java/ru/kmorozov/library/data/repository/CategoryRepository.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.model/src/main/java/ru/kmorozov/library/data/repository/GoogleBooksRepository.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.model/src/main/java/ru/kmorozov/library/data/repository/StorageRepository.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.model/src/main/java/ru/kmorozov/library/data/storage/mongo/DbContextProvider.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.model/src/main/java/ru/kmorozov/library/data/storage/mongo/LikeTextSearch.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.model/src/main/java/ru/kmorozov/library/spring/LibraryContext.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.model/src/main/java/ru/kmorozov/library/utils/BookUtils.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.model/src/main/resources/mongo/mongo.config" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.model/src/test/java/ru/kmorozov/library/data/test/mongo/BaseOperationsTest.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/pom.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/ru.kmorozov.library.data.server.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/loader/LoaderConfiguration.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/loader/LocalDirectoryLoader.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/server/LibraryRestController.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/server/LibraryRestServer.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/resources/application.properties" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/test/java/ru/kmorozov/library/data/loader/test/LoadTest.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/test/java/ru/kmorozov/library/data/loader/test/QueryDataTest.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.parent/pom.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.library.parent/ru.kmorozov.library.parent.iml" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/findbugs-idea.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_code_findbugs_jsr305_1_3_9.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/pom.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Config/GBDOptions.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Config/SystemConfigs.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Logic/ExecutionContext.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Logic/Output/consumers/AbstractOutput.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Logic/Output/consumers/IEventConsumer.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Logic/Output/consumers/SwingBookInfoOutput.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Logic/Output/events/AbstractEventSource.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Logic/Output/events/IEventSource.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Logic/Proxy/AbstractProxyListProvider.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Logic/Proxy/FileProxyListProvider.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Logic/Proxy/HttpHostExt.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Logic/Proxy/IProxyListProvider.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Logic/Proxy/WebProxyListProvider.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Logic/extractors/AbstractHttpProcessor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Logic/extractors/ImageExtractor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Logic/extractors/PageImgProcessor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Logic/extractors/PageSigProcessor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Logic/model/book/AdditionalInfo.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Logic/model/book/BookData.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Logic/model/book/BookInfo.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Logic/model/book/BuyLink.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Logic/model/book/JsonBookInfo.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Logic/model/book/OnlineAccess.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Logic/model/book/PageInfo.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Logic/model/book/PagesInfo.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Logic/model/book/SyndicationFlags.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Logic/model/book/TocItem.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Logic/model/book/VolumeResultFlags.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Logic/model/log/LogIconColumnRenderer.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Main.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Utils/HttpConnections.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Utils/Images.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Utils/Logger.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Utils/Mapper.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Utils/Pools.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/pdf/PdfMaker.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/resources/bundles/gui.properties" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/test/java/Logic/ExtractorTest.java" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/simpleGBD.iml" afterPath="$PROJECT_DIR$/simpleGBD.iml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_annotations_2_7_0.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_annotations_2_8_0.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_core_2_7_4.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_core_2_8_6.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_databind_2_7_4.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_databind_2_8_6.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_http_client_google_http_client_1_21_0.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_http_client_google_http_client_1_22_0.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__commons_codec_commons_codec_1_3.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__commons_codec_commons_codec_1_10.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__commons_io_commons_io_2_4.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__commons_io_commons_io_2_5.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__commons_logging_commons_logging_1_1_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__commons_logging_commons_logging_1_2.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_commons_commons_lang3_3_4.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_commons_commons_lang3_3_5.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_httpcomponents_httpclient_4_0_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_httpcomponents_core5_httpcore5_5_0_alpha1.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_httpcomponents_httpcore_4_0_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_httpcomponents_client5_httpclient5_5_0_alpha1.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Config/CommandLineOptions.java" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/core/config/CommandLineOptions.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Config/IGBDOptions.java" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/config/IGBDOptions.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Config/LocalSystemOptions.java" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/config/LocalSystemOptions.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/GUI/swing/MainBookForm.form" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/desktop/gui/MainBookForm.form" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/GUI/swing/MainBookForm.java" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/desktop/gui/MainBookForm.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/GUI/swing/MainFrame.java" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/desktop/gui/MainFrame.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Logic/Output/consumers/DummyBookInfoOutput.java" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/output/consumers/DummyBookInfoOutput.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Logic/Output/consumers/IBookInfoOutput.java" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/output/consumers/IBookInfoOutput.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Logic/Output/events/BaseEvent.java" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/output/events/BaseEvent.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Logic/Output/events/LogEvent.java" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/output/events/LogEvent.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Logic/Output/listeners/AbstractLogEventListener.java" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/output/listeners/AbstractLogEventListener.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Logic/Output/listeners/DummyLogEventListener.java" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/output/listeners/DummyLogEventListener.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Logic/Output/listeners/IEventListener.java" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/output/listeners/IEventListener.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Logic/Output/listeners/SwingLogEventListener.java" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/output/listeners/SwingLogEventListener.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Logic/Output/progress/ProcessStatus.java" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/desktop/output/progress/ProcessStatus.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Logic/Proxy/StaticProxyListProvider.java" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/Proxy/StaticProxyListProvider.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Logic/model/book/Resolutions.java" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/model/book/google/Resolutions.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/ru/simpleGBD/App/Logic/model/log/LogTableModel.java" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/model/log/LogTableModel.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/resources/bundles/gui_ru.properties" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/resources/gui_ru.properties" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/resources/images/icons/error.png" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/resources/images/icons/error.png" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/resources/images/icons/info.png" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/resources/images/icons/info.png" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/resources/images/icons/warning.png" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/resources/images/icons/warning.png" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/resources/proxy/list1" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/resources/proxy/list1" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
-    <list id="f54b6889-1c6d-49cf-bb7d-9c81a74bd655" name="ttt" comment="" />
     <ignored path="wGooBooDo-gbd-web.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/ru.kmorozov.gbd.desktop.app/target/" />
@@ -499,7 +39,7 @@
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
-              <caret line="0" column="17" lean-forward="false" selection-start-line="0" selection-start-column="17" selection-end-line="0" selection-end-column="17" />
+              <caret line="0" column="17" lean-forward="true" selection-start-line="0" selection-start-column="17" selection-end-line="0" selection-end-column="17" />
               <folding />
             </state>
           </provider>
@@ -1378,7 +918,7 @@
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="0c8b21df-78f5-408a-867d-4ccd8443679a" name="Default" comment="" />
-      <changelist id="f54b6889-1c6d-49cf-bb7d-9c81a74bd655" name="ttt" comment="" />
+      <changelist id="" name="ttt" comment="" />
       <created>1485240290261</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -1389,7 +929,7 @@
       <workItem from="1485861080026" duration="51344000" />
       <workItem from="1486142526200" duration="747000" />
       <workItem from="1486306628983" duration="285000" />
-      <workItem from="1486306957824" duration="1935000" />
+      <workItem from="1486306957824" duration="2279000" />
     </task>
     <task id="LOCAL-00001" summary="upd from github">
       <created>1485240666006</created>
@@ -1496,7 +1036,14 @@
       <option name="project" value="LOCAL" />
       <updated>1486142995943</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Merge remote-tracking branch 'remotes/origin/gbd-web'&#10;&#10;Conflicts:&#10;&#9;.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_core_2_7_1.xml&#10;&#9;.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_core_2_7_4.xml&#10;&#9;.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_core_2_8_6.xml&#10;&#9;.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_databind_2_7_1_1.xml&#10;&#9;.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_databind_2_7_4.xml&#10;&#9;.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_databind_2_8_6.xml&#10;&#9;pom.xml&#10;&#9;ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/output/listeners/SwingLogEventListener.java&#10;&#9;ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/desktop/gui/MainBookForm.form&#10;&#9;ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/desktop/gui/MainBookForm.java&#10;&#9;ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/desktop/gui/MainFrame.java&#10;&#9;ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/desktop/output/progress/ProcessStatus.java&#10;&#9;simpleGBD.iml&#10;&#9;src/main/java/ru/simpleGBD/App/Config/SystemConfigs.java&#10;&#9;src/main/java/ru/simpleGBD/App/GUI/MainBookForm.form&#10;&#9;src/main/java/ru/simpleGBD/App/GUI/MainBookForm.java&#10;&#9;src/main/java/ru/simpleGBD/App/GUI/MainFrame.java&#10;&#9;src/main/java/ru/simpleGBD/App/GUI/swing/MainBookForm.form&#10;&#9;src/main/java/ru/simpleGBD/App/GUI/swing/MainBookForm.java&#10;&#9;src/main/java/ru/simpleGBD/App/GUI/swing/MainFrame.java&#10;&#9;src/main/java/ru/simpleGBD/App/Logic/Output/consumers/SwingBookInfoOutput.java&#10;&#9;src/main/java/ru/simpleGBD/App/Logic/Proxy/HttpHostExt.java&#10;&#9;src/main/java/ru/simpleGBD/App/Main.java&#10;">
+      <created>1486309358819</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1486309358819</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1532,7 +1079,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="156259000" />
+    <option name="totallyTimeSpent" value="156603000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -1541,7 +1088,7 @@
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="FindBugs-IDEA" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3217768" sideWeight="0.5021322" order="5" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.4355363" sideWeight="0.5021322" order="5" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18869936" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -1559,7 +1106,7 @@
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3217768" sideWeight="0.4978678" order="13" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.4355363" sideWeight="0.4978678" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.35102925" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1992,7 +1539,7 @@
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
-          <caret line="0" column="17" lean-forward="false" selection-start-line="0" selection-start-column="17" selection-end-line="0" selection-end-column="17" />
+          <caret line="0" column="17" lean-forward="true" selection-start-line="0" selection-start-column="17" selection-end-line="0" selection-end-column="17" />
           <folding />
         </state>
       </provider>
