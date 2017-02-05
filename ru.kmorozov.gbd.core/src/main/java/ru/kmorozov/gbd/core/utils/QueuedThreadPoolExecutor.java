@@ -1,0 +1,90 @@
+package ru.kmorozov.gbd.core.utils;
+
+import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
+import ru.kmorozov.gbd.core.logic.extractors.base.IUniqueRunnable;
+
+import java.util.Map;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
+
+/**
+ * Created by km on 12.11.2016.
+ */
+public class QueuedThreadPoolExecutor<T> extends ThreadPoolExecutor {
+
+    public static final int THREAD_POOL_SIZE = 10;
+    private final static Logger logger = ExecutionContext.INSTANCE.getLogger("Executor");
+    private static final int RETENTION_QUEUE_SIZE = 200;
+    private static final long MAX_LIVE_TIME = TimeUnit.HOURS.toMillis(1);
+    private final long timeStart;
+    private final Map<T, IUniqueRunnable<T>> uniqueMap = new ConcurrentHashMap<>();
+    private final Predicate<T> completeChecker;
+    private long needProcessCount;
+    private String description;
+
+    public QueuedThreadPoolExecutor(long needProcessCount, int threadPoolSize, Predicate<T> completeChecker, String description) {
+        super(threadPoolSize, threadPoolSize, 0, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(RETENTION_QUEUE_SIZE));
+        this.needProcessCount = needProcessCount;
+        this.timeStart = System.currentTimeMillis();
+        this.completeChecker = completeChecker;
+        this.description = description;
+
+        setRejectedExecutionHandler((r, executor) -> {
+            try {
+                if (r instanceof IUniqueRunnable) {
+                    synchronized (((IUniqueRunnable) r).getUniqueObject()) {
+                        if (!completeChecker.test((T) ((IUniqueRunnable) r).getUniqueObject())) getQueue().put(r);
+                    }
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public void terminate(long timeout, TimeUnit unit) {
+        Long liveTime = Math.min(unit.toMillis(timeout), MAX_LIVE_TIME);
+        int counter = 0;
+        long submitted = 0;
+        while (true) try {
+            long completed = uniqueMap.keySet().stream().filter(completeChecker).count();
+            if ((getCompletedTaskCount() == getTaskCount() && getCompletedTaskCount() >= needProcessCount) || System.currentTimeMillis() - timeStart > liveTime) break;
+            if (++counter % 100 == 0) {
+                if (needProcessCount > 0)
+                    logger.finest(String.format("Waiting for %s %d sec (%d of %d completed, %d tasks finished of %d submitted, %d in queue)", description, counter, completed,
+                                                needProcessCount, getCompletedTaskCount(), getTaskCount(), getQueue().size()));
+
+                if (submitted == getTaskCount() && getTaskCount() > 0 && submitted < needProcessCount) {
+                    logger.severe(String.format("Nothing was submitted to %s, set needProcessCount to %d", description, submitted));
+                    needProcessCount = submitted;
+                }
+                else submitted = getTaskCount();
+            }
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            logger.severe("Wait interrupted for " + description);
+        }
+
+        if (needProcessCount > 0)
+            logger.finest(String.format("Terminating working threads for %s after %s sec (%s of %s completed, %s tasks finished of %s submitted)", description, counter, uniqueMap.keySet()
+                                                                                                                                                                                  .stream()
+                                                                                                                                                                                  .filter(completeChecker).count(), needProcessCount, getCompletedTaskCount(), getTaskCount()));
+        shutdownNow();
+
+        uniqueMap.clear();
+    }
+
+    @Override
+    public void execute(final Runnable command) {
+        if (command instanceof IUniqueRunnable) {
+            T uniqueObj = (T) ((IUniqueRunnable) command).getUniqueObject();
+            synchronized (uniqueObj) {
+                if (uniqueMap.put(uniqueObj, (IUniqueRunnable<T>) command) == null) super.execute(command);
+            }
+        }
+        else super.execute(command);
+    }
+}
