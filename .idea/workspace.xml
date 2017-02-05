@@ -827,7 +827,7 @@
       <workItem from="1486142526200" duration="747000" />
       <workItem from="1486306628983" duration="285000" />
       <workItem from="1486306957824" duration="2279000" />
-      <workItem from="1486309414950" duration="77000" />
+      <workItem from="1486309414950" duration="94000" />
     </task>
     <task id="LOCAL-00001" summary="upd from github">
       <created>1485240666006</created>
@@ -941,7 +941,14 @@
       <option name="project" value="LOCAL" />
       <updated>1486309358819</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Merge remote-tracking branch 'remotes/origin/gbd-web'&#10;&#10;Conflicts:&#10;&#9;.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_core_2_7_1.xml&#10;&#9;.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_core_2_7_4.xml&#10;&#9;.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_core_2_8_6.xml&#10;&#9;.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_databind_2_7_1_1.xml&#10;&#9;.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_databind_2_7_4.xml&#10;&#9;.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_databind_2_8_6.xml&#10;&#9;pom.xml&#10;&#9;ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/output/listeners/SwingLogEventListener.java&#10;&#9;ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/desktop/gui/MainBookForm.form&#10;&#9;ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/desktop/gui/MainBookForm.java&#10;&#9;ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/desktop/gui/MainFrame.java&#10;&#9;ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/desktop/output/progress/ProcessStatus.java&#10;&#9;simpleGBD.iml&#10;&#9;src/main/java/ru/simpleGBD/App/Config/SystemConfigs.java&#10;&#9;src/main/java/ru/simpleGBD/App/GUI/MainBookForm.form&#10;&#9;src/main/java/ru/simpleGBD/App/GUI/MainBookForm.java&#10;&#9;src/main/java/ru/simpleGBD/App/GUI/MainFrame.java&#10;&#9;src/main/java/ru/simpleGBD/App/GUI/swing/MainBookForm.form&#10;&#9;src/main/java/ru/simpleGBD/App/GUI/swing/MainBookForm.java&#10;&#9;src/main/java/ru/simpleGBD/App/GUI/swing/MainFrame.java&#10;&#9;src/main/java/ru/simpleGBD/App/Logic/Output/consumers/SwingBookInfoOutput.java&#10;&#9;src/main/java/ru/simpleGBD/App/Logic/Proxy/HttpHostExt.java&#10;&#9;src/main/java/ru/simpleGBD/App/Main.java&#10;">
+      <created>1486309495028</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1486309495028</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -977,7 +984,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="156680000" />
+    <option name="totallyTimeSpent" value="156697000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
