@@ -28,7 +28,11 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 @RestController
 public class LibraryRestProxy implements IDataRestServer {
 
-    private static final RestTemplate template = new RestTemplate();
+    private final RestTemplate template;
+
+    public LibraryRestProxy(RestTemplate template) {
+        this.template = template;
+    }
 
     @Override
     @RequestMapping("/login")
