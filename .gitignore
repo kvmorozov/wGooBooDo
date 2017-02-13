@@ -1,2 +1,6 @@
 */static/node/*.*
-*/target/*
+ru.kmorozov.gbd.core/target/
+ru.kmorozov.gbd.desktop/target/
+ru.kmorozov.library.data.client/target/
+ru.kmorozov.library.data.model/target/
+ru.kmorozov.library.data.server/target/
