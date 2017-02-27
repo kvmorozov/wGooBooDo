@@ -5,17 +5,13 @@ var nib = require('nib');
 
 module.exports = {
     devtool: 'source-map',
-    entry: './main.js',
+    entry: './index.js',
     output: {
         path: path.join(__dirname, 'generated'),
         filename: 'app-bundle.js'
     },
     resolve: {
-        extensions: ['.js', '.jsx', '.styl'],
-        alias: {
-            InfiniteTree: './../libs/react-infinite-tree/src',
-            ITexamples: './../libs/react-infinite-tree/examples'
-        }
+        extensions: ['.js', '.jsx', '.styl']
     },
     plugins: [
         new webpack.LoaderOptionsPlugin({
@@ -53,14 +49,14 @@ module.exports = {
             },
             {
                 test: /\.(png|jpg)$/,
-                loader: 'url',
+                loader: 'url-loader',
                 query: {
                     limit: 8192
                 }
             },
             {
                 test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-                loader: 'url',
+                loader: 'url-loader',
                 query: {
                     limit: 10000,
                     mimetype: 'application/font-woff'
@@ -68,13 +64,13 @@ module.exports = {
             },
             {
                 test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-                loader: 'file'
+                loader: 'file-loader'
             }
         ]
     },
     devServer: {
         noInfo: false,
-        quite: false,
+        quiet: false,
         lazy: false,
         watchOptions: {
             poll: true

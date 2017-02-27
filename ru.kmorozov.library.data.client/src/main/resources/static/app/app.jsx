@@ -1,13 +1,14 @@
-import PerfProfiler from "./PerfProfiler";
 import React from "react";
 import ReactDom from "react-dom";
 import client from "./client";
-import InfiniteTree from "InfiniteTree";
+import InfiniteTree from "react-infinite-tree";
 import rowRenderer from "./renderer";
-import {quoteattr} from "ITexamples/helper";
-import "InfiniteTree/index.styl";
-import "ITexamples/app.styl";
-import "ITexamples/animation.styl";
+import {quoteattr} from "./tree-utils/helper";
+import "./tree-utils/index.styl";
+import "./tree-utils/app.styl";
+import "./tree-utils/animation.styl";
+
+import "../bootstrap.min.css";
 
 class App extends React.Component {
     constructor(props) {
@@ -157,4 +158,3 @@ class App extends React.Component {
 }
 
 ReactDom.render(<App />, document.getElementById('react'));
-ReactDom.render(<PerfProfiler/>, document.getElementById('prof'));

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JavaScriptLibraryMappings">
-    <file url="file://$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static" libraries="{wGooBooDo-gbd-web/ru.kmorozov.library.data.client/src/main/resources/static/node_modules}" />
+    <file url="file://$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static" libraries="{wGooBooDo/ru.kmorozov.library.data.client/src/main/resources/static/node_modules}" />
     <includedPredefinedLibrary name="ECMAScript 6" />
   </component>
 </project>
