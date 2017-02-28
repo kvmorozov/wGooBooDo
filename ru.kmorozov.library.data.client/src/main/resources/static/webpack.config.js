@@ -8,6 +8,7 @@ module.exports = {
     entry: './index.js',
     output: {
         path: path.join(__dirname, 'generated'),
+        publicPath: '/build/js',
         filename: 'app-bundle.js'
     },
     resolve: {
@@ -71,6 +72,7 @@ module.exports = {
     devServer: {
         noInfo: false,
         quiet: false,
+        port:8888,
         lazy: false,
         watchOptions: {
             poll: true
