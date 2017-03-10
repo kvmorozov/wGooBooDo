@@ -41,6 +41,7 @@
         <option value="$PROJECT_DIR$/ru.kmorozov.library.parent/pom.xml" />
         <option value="$PROJECT_DIR$/ru.kmorozov.library.data.server/pom.xml" />
         <option value="$PROJECT_DIR$/ru.kmorozov.gbd.desktop.app/pom.xml" />
+        <option value="$PROJECT_DIR$/ru.kmorozov.api.onedrive/pom.xml" />
       </list>
     </option>
   </component>

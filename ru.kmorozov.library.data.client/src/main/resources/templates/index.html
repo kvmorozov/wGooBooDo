@@ -9,45 +9,15 @@
 </head>
 <body>
 <div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <section id="classic">
-                <div class="container-fluid">
-                    <div class="row" style="margin-bottom: 10px;">
-                        <div class="col-xs-12">
-                            <button
-                                    type="button"
-                                    class="btn btn-default"
-                                    draggable="true"
-                                    data-id="draggable-element"
-                                    style="margin-right: 10px"
-                            >
-                                Drag me!
-                            </button>
-                            <span class="dropped-result" data-id="dropped-result"/>
-                        </div>
-                    </div>
-                    <div class="row" style="margin-bottom: 5px;">
-                        <div class="col-xs-6">
-                            <div class="tree" data-id="tree" id="react"/>
-                        </div>
-                        <div class="col-xs-6">
-                            <div class="preview" data-id="preview"/>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-6">
-                            <div class="progress">
-                                <div class="progress-bar" role="progressbar" data-id="scrolling-progress"
-                                     aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+    <div class="row" style="margin-bottom: 5px;">
+        <div class="col-xs-6">
+            <div class="tree" data-id="tree" id="react"/>
         </div>
-        <script src="http://localhost:8888/build/js/app-bundle.js"/>
+        <div class="col-xs-6">
+            <div class="preview" data-id="preview"/>
+        </div>
     </div>
 </div>
+<script src="http://localhost:8888/build/js/app-bundle.js"/>
 </body>
 </html>

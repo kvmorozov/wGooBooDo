@@ -1,7 +1,7 @@
 package ru.kmorozov.library.data.model.dto;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.hateoas.ResourceSupport;
+import org.springframework.util.StringUtils;
 
 /**
  * Created by sbt-morozov-kv on 02.02.2017.

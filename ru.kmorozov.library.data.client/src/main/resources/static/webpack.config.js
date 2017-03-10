@@ -8,7 +8,7 @@ module.exports = {
     entry: './index.js',
     output: {
         path: path.join(__dirname, 'generated'),
-        publicPath: '/build/js',
+        publicPath: '/build/js/',
         filename: 'app-bundle.js'
     },
     resolve: {
@@ -57,7 +57,7 @@ module.exports = {
             },
             {
                 test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-                loader: 'url-loader',
+                loader: 'file-loader',
                 query: {
                     limit: 10000,
                     mimetype: 'application/font-woff'

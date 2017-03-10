@@ -13,7 +13,7 @@ import ru.kmorozov.library.data.config.MongoConfiguration;
 @ComponentScan(basePackageClasses = {MongoConfiguration.class}, basePackages = {"ru.kmorozov.library.data.loader"})
 public class LoaderConfiguration {
 
-    private static final String LOCAL_DIR = "J:\\_Книги";
+    private static final String LOCAL_DIR = "C:\\Users\\sbt-morozov-kv\\Desktop\\Документы\\Прочая документация";
 
     @Bean
     public String localBasePath() {
