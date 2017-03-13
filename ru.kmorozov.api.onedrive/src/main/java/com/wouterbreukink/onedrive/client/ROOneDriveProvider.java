@@ -2,9 +2,7 @@ package com.wouterbreukink.onedrive.client;
 
 import com.google.api.client.http.*;
 import com.google.api.client.http.apache.ApacheHttpTransport;
-import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.JsonObjectParser;
-import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.repackaged.com.google.common.base.Throwables;
 import com.google.api.client.util.Lists;
 import com.wouterbreukink.onedrive.client.authoriser.AuthorisationProvider;
@@ -18,10 +16,11 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
+import static com.wouterbreukink.onedrive.client.utils.JsonUtils.JSON_FACTORY;
+
 class ROOneDriveProvider implements OneDriveProvider {
 
     static final HttpTransport HTTP_TRANSPORT = new ApacheHttpTransport();
-    static final JsonFactory JSON_FACTORY = new GsonFactory();
 
     final HttpRequestFactory requestFactory;
 

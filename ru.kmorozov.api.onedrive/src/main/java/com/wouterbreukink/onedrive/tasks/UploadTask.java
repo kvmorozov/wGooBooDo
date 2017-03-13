@@ -10,8 +10,8 @@ import java.io.File;
 import java.io.IOException;
 
 import static com.wouterbreukink.onedrive.CommandLineOpts.getCommandLineOpts;
-import static com.wouterbreukink.onedrive.LogUtils.readableFileSize;
-import static com.wouterbreukink.onedrive.LogUtils.readableTime;
+import static com.wouterbreukink.onedrive.client.utils.LogUtils.readableFileSize;
+import static com.wouterbreukink.onedrive.client.utils.LogUtils.readableTime;
 
 public class UploadTask extends Task {
 

@@ -5,6 +5,7 @@ import com.wouterbreukink.onedrive.client.OneDriveItem;
 import com.wouterbreukink.onedrive.client.OneDriveProvider;
 import com.wouterbreukink.onedrive.client.authoriser.AuthorisationProvider;
 import com.wouterbreukink.onedrive.client.resources.Drive;
+import com.wouterbreukink.onedrive.client.utils.LogUtils;
 import com.wouterbreukink.onedrive.filesystem.FileSystemProvider;
 import com.wouterbreukink.onedrive.tasks.CheckTask;
 import com.wouterbreukink.onedrive.tasks.Task;
@@ -18,7 +19,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static com.wouterbreukink.onedrive.CommandLineOpts.getCommandLineOpts;
-import static com.wouterbreukink.onedrive.LogUtils.readableFileSize;
+import static com.wouterbreukink.onedrive.client.utils.LogUtils.readableFileSize;
 
 /***
  * OneDrive Java Client

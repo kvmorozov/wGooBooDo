@@ -21,6 +21,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Date;
 
 import static com.wouterbreukink.onedrive.CommandLineOpts.getCommandLineOpts;
+import static com.wouterbreukink.onedrive.client.utils.JsonUtils.JSON_FACTORY;
 
 class RWOneDriveProvider extends ROOneDriveProvider implements OneDriveProvider {
 

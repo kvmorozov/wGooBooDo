@@ -10,8 +10,8 @@ import org.apache.logging.log4j.Logger;
 import java.io.File;
 import java.io.IOException;
 
-import static com.wouterbreukink.onedrive.LogUtils.readableFileSize;
-import static com.wouterbreukink.onedrive.LogUtils.readableTime;
+import static com.wouterbreukink.onedrive.client.utils.LogUtils.readableFileSize;
+import static com.wouterbreukink.onedrive.client.utils.LogUtils.readableTime;
 
 public class DownloadTask extends Task {
 

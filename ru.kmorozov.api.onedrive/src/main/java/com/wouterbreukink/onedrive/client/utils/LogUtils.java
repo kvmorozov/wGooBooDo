@@ -1,4 +1,4 @@
-package com.wouterbreukink.onedrive;
+package com.wouterbreukink.onedrive.client.utils;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Layout;

@@ -3,8 +3,8 @@ package com.wouterbreukink.onedrive.tasks;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import static com.wouterbreukink.onedrive.LogUtils.readableFileSize;
-import static com.wouterbreukink.onedrive.LogUtils.readableTime;
+import static com.wouterbreukink.onedrive.client.utils.LogUtils.readableFileSize;
+import static com.wouterbreukink.onedrive.client.utils.LogUtils.readableTime;
 
 public class TaskReporter {
 
