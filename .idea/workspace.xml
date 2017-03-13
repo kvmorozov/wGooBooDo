@@ -2,115 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0c8b21df-78f5-408a-867d-4ccd8443679a" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__junit_junit_5_0_SNAPSHOT.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__ru_kmorozov_gbd_ru_kmorozov_gbd_core_2_1_b2.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/pom.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/ru.kmorozov.api.onedrive.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/CommandLineOpts.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/LogUtils.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/Main.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/TaskQueue.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/client/OneDriveAPIException.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/client/OneDriveItem.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/client/OneDriveProvider.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/client/OneDriveResponseHandler.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/client/OneDriveUploadSession.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/client/OneDriveUrl.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/client/ROOneDriveProvider.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/client/RWOneDriveProvider.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/client/authoriser/AuthorisationProvider.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/client/authoriser/OneDriveAuthorisationProvider.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/client/downloader/ResumableDownloader.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/client/downloader/ResumableDownloaderProgressListener.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/client/facets/DeletedFacet.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/client/facets/ErrorFacet.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/client/facets/FileFacet.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/client/facets/FileSystemInfoFacet.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/client/facets/FolderFacet.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/client/facets/HashesFacet.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/client/facets/QuotaFacet.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/client/resources/Authorisation.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/client/resources/Drive.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/client/resources/ErrorSet.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/client/resources/Identity.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/client/resources/IdentitySet.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/client/resources/Item.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/client/resources/ItemReference.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/client/resources/ItemSet.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/client/resources/UploadSession.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/client/serialization/JsonDateSerializer.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/filesystem/FileSystemProvider.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/filesystem/ROFileSystemProvider.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/filesystem/RWFileSystemProvider.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/tasks/CheckTask.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/tasks/DeleteTask.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/tasks/DownloadTask.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/tasks/Task.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/tasks/TaskReporter.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/tasks/UpdatePropertiesTask.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/tasks/UploadTask.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/resources/log4j2.xml" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__junit_junit_4_12.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_asynchttpclient_async_http_client_2_1_0_alpha5.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_asynchttpclient_async_http_client_netty_utils_2_1_0_alpha5.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_hamcrest_hamcrest_core_1_3.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_mongodb_mongo_java_driver_3_4_1.xml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/pom.xml" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/ru.kmorozov.gbd.core.iml" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/ru.kmorozov.gbd.core.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop.app/pom.xml" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop.app/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop.app/ru.kmorozov.gbd.desktop.app.iml" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop.app/ru.kmorozov.gbd.desktop.app.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/ru.kmorozov.gbd.desktop.iml" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/ru.kmorozov.gbd.desktop.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/pom.xml" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/pom.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/ru.kmorozov.api.onedrive.iml" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/ru.kmorozov.api.onedrive.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.parent/pom.xml" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.parent/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.parent/ru.kmorozov.gbd.parent.iml" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.parent/ru.kmorozov.gbd.parent.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.client/ru.kmorozov.library.data.client.iml" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/ru.kmorozov.library.data.client.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/java/ru/kmorozov/library/data/client/LibraryRestProxy.java" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/java/ru/kmorozov/library/data/client/LibraryRestProxy.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/app/app.jsx" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/app/app.jsx" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/webpack.config.js" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/static/webpack.config.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/templates/index.html" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/resources/templates/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.model/ru.kmorozov.library.data.model.iml" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.model/ru.kmorozov.library.data.model.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.model/src/main/java/ru/kmorozov/library/data/model/dto/UserDTO.java" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.model/src/main/java/ru/kmorozov/library/data/model/dto/UserDTO.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.server/ru.kmorozov.library.data.server.iml" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/ru.kmorozov.library.data.server.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/loader/LoaderConfiguration.java" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/loader/LoaderConfiguration.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ru.kmorozov.library.parent/pom.xml" afterPath="$PROJECT_DIR$/ru.kmorozov.library.parent/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ru.kmorozov.library.parent/ru.kmorozov.library.parent.iml" afterPath="$PROJECT_DIR$/ru.kmorozov.library.parent/ru.kmorozov.library.parent.iml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__ch_qos_logback_logback_classic_1_1_9.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__ch_qos_logback_logback_classic_1_1_11.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__ch_qos_logback_logback_core_1_1_9.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__ch_qos_logback_logback_core_1_1_11.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_core_2_8_6.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_core_2_8_7.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_databind_2_8_6.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_databind_2_8_7.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_codehaus_groovy_groovy_2_4_7.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_codehaus_groovy_groovy_2_4_9.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_jcl_over_slf4j_1_7_22.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_jcl_over_slf4j_1_7_24.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_jul_to_slf4j_1_7_22.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_jul_to_slf4j_1_7_24.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_log4j_over_slf4j_1_7_22.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_log4j_over_slf4j_1_7_24.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_slf4j_api_1_7_22.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_slf4j_api_1_7_24.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_1_5_1_RELEASE.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_1_5_2_RELEASE.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_autoconfigure_1_5_1_RELEASE.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_autoconfigure_1_5_2_RELEASE.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_1_5_1_RELEASE.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_1_5_2_RELEASE.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_hateoas_1_5_1_RELEASE.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_logging_1_5_2_RELEASE.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_logging_1_5_1_RELEASE.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_hateoas_1_5_2_RELEASE.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_thymeleaf_1_5_1_RELEASE.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_thymeleaf_1_5_2_RELEASE.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_tomcat_1_5_1_RELEASE.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_tomcat_1_5_2_RELEASE.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_web_1_5_1_RELEASE.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_web_1_5_2_RELEASE.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_test_1_5_1_RELEASE.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_test_1_5_2_RELEASE.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_data_spring_data_commons_1_13_0_RELEASE.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_data_spring_data_commons_1_13_1_RELEASE.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_data_spring_data_jpa_1_11_0_RELEASE.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_data_spring_data_jpa_1_11_1_RELEASE.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_data_spring_data_mongodb_1_10_0_RELEASE.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_data_spring_data_mongodb_1_10_1_RELEASE.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_aop_4_3_6_RELEASE.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_aop_4_3_7_RELEASE.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_beans_4_3_6_RELEASE.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_beans_4_3_7_RELEASE.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_context_4_3_6_RELEASE.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_context_4_3_7_RELEASE.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_core_4_3_6_RELEASE.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_test_4_3_7_RELEASE.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_expression_4_3_6_RELEASE.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_expression_4_3_7_RELEASE.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_jdbc_4_3_6_RELEASE.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_jdbc_4_3_7_RELEASE.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_orm_4_3_6_RELEASE.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_orm_4_3_7_RELEASE.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_test_4_3_6_RELEASE.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_core_4_3_7_RELEASE.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_tx_4_3_6_RELEASE.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_tx_4_3_7_RELEASE.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_web_4_3_6_RELEASE.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_web_4_3_7_RELEASE.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_webmvc_4_3_6_RELEASE.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_webmvc_4_3_7_RELEASE.xml" />
     </list>
     <ignored path="wGooBooDo-gbd-web.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -144,11 +40,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="true">
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ru.kmorozov.api.onedrive/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="459">
-              <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
+            <state relative-caret-position="204">
+              <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="3" selection-start-line="0" selection-start-column="3" selection-end-line="0" selection-end-column="3" />
               <folding />
             </state>
           </provider>
@@ -289,7 +195,7 @@
           <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$RootNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="parent" />
+          <option name="myItemId" value="ru.kmorozov.api.onedrive" />
           <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$ProjectNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
@@ -303,22 +209,8 @@
           <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$RootNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="parent" />
+          <option name="myItemId" value="ru.kmorozov.api.onedrive" />
           <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$ProjectNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="" />
-          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$RootNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="parent" />
-          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$ProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="Lifecycle" />
-          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$LifecycleNode" />
         </PATH_ELEMENT>
       </PATH>
     </treeState>
@@ -366,108 +258,6 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="wGooBooDo" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wGooBooDo" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ru.kmorozov.library.parent" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wGooBooDo" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ru.kmorozov.gbd.parent" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wGooBooDo" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ru.kmorozov.gbd.core" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wGooBooDo" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ru.kmorozov.api.onedrive" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wGooBooDo" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ru.kmorozov.api.onedrive" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wGooBooDo" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ru.kmorozov.api.onedrive" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="resources" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wGooBooDo" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ru.kmorozov.api.onedrive" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="onedrive" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -1136,7 +926,7 @@
       <workItem from="1487012927842" duration="273000" />
       <workItem from="1488184632507" duration="5631000" />
       <workItem from="1488200454744" duration="10790000" />
-      <workItem from="1488893213862" duration="7645000" />
+      <workItem from="1488893213862" duration="9694000" />
     </task>
     <task id="LOCAL-00001" summary="upd from github">
       <created>1485240666006</created>
@@ -1320,7 +1110,14 @@
       <option name="project" value="LOCAL" />
       <updated>1488288903879</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="onedrive added">
+      <created>1489153684337</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1489153684337</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1356,7 +1153,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="182204000" />
+    <option name="totallyTimeSpent" value="184253000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -1487,7 +1284,8 @@
     <MESSAGE value="upd libs" />
     <MESSAGE value="node upd" />
     <MESSAGE value="use webpack-dev-server" />
-    <option name="LAST_COMMIT_MESSAGE" value="use webpack-dev-server" />
+    <MESSAGE value="onedrive added" />
+    <option name="LAST_COMMIT_MESSAGE" value="onedrive added" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1512,7 +1310,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$MAVEN_REPOSITORY$/org/hamcrest/java-hamcrest/2.0.0.0/java-hamcrest-2.0.0.0.jar!/org/hamcrest/collection/IsMapContaining.class" />
     <entry file="jar://$MAVEN_REPOSITORY$/org/hamcrest/java-hamcrest/2.0.0.0/java-hamcrest-2.0.0.0.jar!/org/hamcrest/Matchers.class" />
     <entry file="file://$PROJECT_DIR$/simpleGBD.iml">
       <provider selected="true" editor-type-id="text-editor">
@@ -1666,14 +1463,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="5" selection-start-line="4" selection-start-column="5" selection-end-line="4" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/java/ru/kmorozov/library/data/client/LibraryClient.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
@@ -1767,7 +1556,7 @@
         <state relative-caret-position="255">
           <caret line="60" column="33" selection-start-line="60" selection-start-column="33" selection-end-line="60" selection-end-column="33" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1794,14 +1583,6 @@
             <element signature="e#5810#5811#0" expanded="false" />
             <element signature="e#5849#5850#0" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/resources/log4j2.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1837,10 +1618,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/resources/log4j2.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/com/wouterbreukink/onedrive/LogUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="363">
+          <caret line="51" column="29" selection-start-line="51" selection-start-column="29" selection-end-line="51" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/ru.kmorozov.api.onedrive/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
+        <state relative-caret-position="204">
+          <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="3" selection-start-line="0" selection-start-column="3" selection-end-line="0" selection-end-column="3" />
           <folding />
         </state>
       </provider>
