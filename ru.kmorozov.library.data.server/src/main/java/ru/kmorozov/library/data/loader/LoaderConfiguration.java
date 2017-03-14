@@ -19,4 +19,9 @@ public class LoaderConfiguration {
     public String localBasePath() {
         return LOCAL_DIR;
     }
+
+    @Bean
+    public String oneDriveKeyFileName() {
+        return "onedrive.key";
+    }
 }

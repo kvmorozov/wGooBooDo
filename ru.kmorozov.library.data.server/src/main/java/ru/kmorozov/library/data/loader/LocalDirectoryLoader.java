@@ -5,9 +5,6 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.kmorozov.library.data.model.book.*;
-import ru.kmorozov.library.data.repository.BooksRepository;
-import ru.kmorozov.library.data.repository.CategoryRepository;
-import ru.kmorozov.library.data.repository.StorageRepository;
 import ru.kmorozov.library.utils.BookUtils;
 import sun.awt.shell.ShellFolder;
 import sun.awt.shell.Win32ShellFolderManager2;
@@ -24,18 +21,9 @@ import java.nio.file.Paths;
  */
 
 @Component
-public class LocalDirectoryLoader {
+public class LocalDirectoryLoader extends BaseLoader {
 
     private static final Logger logger = Logger.getLogger(LocalDirectoryLoader.class);
-
-    @Autowired
-    private CategoryRepository categoryRepository;
-
-    @Autowired
-    private StorageRepository storageRepository;
-
-    @Autowired
-    private BooksRepository booksRepository;
 
     private Path basePath;
     private Win32ShellFolderManager2 shellFolderManager;
@@ -45,27 +33,7 @@ public class LocalDirectoryLoader {
         this.shellFolderManager = new Win32ShellFolderManager2();
     }
 
-    public void clear() {
-        long categoryCount = categoryRepository.count();
-        long storageCount = storageRepository.count();
-        long booksCount = booksRepository.count();
-
-        if (categoryCount > 0) {
-            logger.log(Level.INFO, "Categories loaded: " + categoryCount);
-            categoryRepository.deleteAll();
-        }
-
-        if (storageCount > 0) {
-            logger.log(Level.INFO, "Storages loaded: " + storageCount);
-            storageRepository.deleteAll();
-        }
-
-        if (booksCount > 0) {
-            logger.log(Level.INFO, "Books loaded: " + storageCount);
-            booksRepository.deleteAll();
-        }
-    }
-
+    @Override
     public void load() throws IOException {
         Files.walk(basePath).forEach(filePath -> {
             File file = filePath.toFile();

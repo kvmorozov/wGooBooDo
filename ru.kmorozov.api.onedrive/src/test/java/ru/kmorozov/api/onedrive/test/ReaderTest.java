@@ -27,5 +27,8 @@ public class ReaderTest {
         OneDriveItem root = api.getRoot();
 
         assertThat(root, is(notNullValue()));
+
+        OneDriveItem[] children = api.getChildren(root);
+        assertThat(children, is(notNullValue()));
     }
 }

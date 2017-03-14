@@ -34,6 +34,12 @@
             <artifactId>ru.kmorozov.library.data.model</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>ru.kmorozov.gbd</groupId>
+            <artifactId>ru.kmorozov.api.onedrive</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>
