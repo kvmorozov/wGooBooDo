@@ -13,4 +13,9 @@ public class OneDriveException extends IOException {
         super();
         this.errorInfo = errorInfo;
     }
+
+    @Override
+    public String getMessage() {
+        return errorInfo.toString();
+    }
 }

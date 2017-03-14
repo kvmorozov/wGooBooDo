@@ -2,10 +2,7 @@ package com.wouterbreukink.onedrive.client.authoriser;
 
 import com.google.api.client.http.*;
 import com.google.api.client.http.apache.ApacheHttpTransport;
-import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.JsonObjectParser;
-import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.client.util.Key;
 import com.google.api.client.util.Preconditions;
 import com.wouterbreukink.onedrive.client.OneDriveAPIException;
 import com.wouterbreukink.onedrive.client.exceptions.OneDriveExceptionFactory;
@@ -141,19 +138,15 @@ class OneDriveAuthorisationProvider implements AuthorisationProvider {
     private void getTokenFromRefreshToken(final String refreshToken) throws IOException {
         log.debug("Fetching authorisation token using refresh token");
 
+        Map data = Collections.unmodifiableMap(Stream.of(
+                new AbstractMap.SimpleEntry<>("client_id", clientId),
+                new AbstractMap.SimpleEntry<>("grant_type", "refresh_token"),
+                new AbstractMap.SimpleEntry<>("refresh_token", refreshToken),
+                new AbstractMap.SimpleEntry<>("redirect_uri", "https://login.live.com/oauth20_desktop.srf"))
+                .collect(Collectors.toMap((e) -> e.getKey(), (e) -> e.getValue())));
+
         HttpRequest request =
-                HTTP_TRANSPORT.createRequestFactory().buildPostRequest(new GenericUrl("https://login.live.com/oauth20_token.srf") {
-                    @Key("client_id")
-                    private String id = clientId;
-                    @Key("client_secret")
-                    private String secret = clientSecret;
-                    @Key("refresh_token")
-                    private String token = refreshToken;
-                    @Key("grant_type")
-                    private String grantType = "refresh_token";
-                    @Key("redirect_uri")
-                    private String redirect = "https://login.live.com/oauth20_desktop.srf";
-                }, null);
+                HTTP_TRANSPORT.createRequestFactory().buildPostRequest(new GenericUrl("https://login.live.com/oauth20_token.srf"), new UrlEncodedContent(data));
 
         request.setParser(new JsonObjectParser(JSON_FACTORY));
 
