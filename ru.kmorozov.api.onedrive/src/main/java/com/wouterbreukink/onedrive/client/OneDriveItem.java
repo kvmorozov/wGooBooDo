@@ -28,6 +28,8 @@ public interface OneDriveItem {
 
     OneDriveItem getParent();
 
+    Item getItem();
+
     class FACTORY {
 
         public static OneDriveItem create(final OneDriveItem parent, final String name, final boolean isDirectory) {
@@ -72,6 +74,11 @@ public interface OneDriveItem {
                 @Override
                 public OneDriveItem getParent() {
                     return parent;
+                }
+
+                @Override
+                public Item getItem() {
+                    return null;
                 }
             };
         }
@@ -124,6 +131,11 @@ public interface OneDriveItem {
                 @Override
                 public OneDriveItem getParent() {
                     return parent;
+                }
+
+                @Override
+                public Item getItem() {
+                    return item;
                 }
             };
         }
@@ -182,6 +194,11 @@ public interface OneDriveItem {
 
                 @Override
                 public OneDriveItem getParent() {
+                    return null;
+                }
+
+                @Override
+                public Item getItem() {
                     return null;
                 }
             };
