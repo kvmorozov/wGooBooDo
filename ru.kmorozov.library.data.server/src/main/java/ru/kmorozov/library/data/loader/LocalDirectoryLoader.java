@@ -4,8 +4,8 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.kmorozov.library.data.model.book.*;
-import ru.kmorozov.library.utils.BookUtils;
+import ru.kmorozov.library.data.model.book.Category;
+import ru.kmorozov.library.data.model.book.Storage;
 import sun.awt.shell.ShellFolder;
 import sun.awt.shell.Win32ShellFolderManager2;
 
@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.stream.Stream;
 
 /**
  * Created by km on 26.12.2016.
@@ -36,9 +37,9 @@ public class LocalDirectoryLoader extends BaseLoader {
     @Override
     public void load() throws IOException {
         Files.walk(basePath).forEach(filePath -> {
-            File file = filePath.toFile();
-            if (file.isDirectory()) {
-                Category category = getCategoryByPath(filePath);
+            ServerItem serverItem = new ServerItem(filePath);
+            if (serverItem.isDirectory()) {
+                Category category = getCategoryByServerItem(serverItem);
                 for (Storage storage : category.getStorages())
                     try {
                         updateStorage(storage);
@@ -47,77 +48,6 @@ public class LocalDirectoryLoader extends BaseLoader {
                     }
             }
         });
-    }
-
-    private Category getCategoryByPath(Path filePath) {
-        Category category;
-        Storage storage = storageRepository.findByUrl(filePath.toString());
-
-        if (storage == null || storage.getCategories().size() < 1) {
-            category = new Category();
-            category.setName(filePath.toFile().getName());
-
-            categoryRepository.save(category);
-
-            storage = new Storage();
-            storage.setStorageType(Storage.StorageType.LocalFileSystem);
-            storage.setUrl(filePath.toString());
-            storage.addCategory(category);
-
-            storageRepository.save(storage);
-
-            Storage parentStorage = storageRepository.findByUrl(filePath.getParent().toString());
-
-            if (parentStorage != null) {
-                storage.setParent(parentStorage);
-                storageRepository.save(storage);
-
-                category.addParents(parentStorage.getCategories());
-                categoryRepository.save(category);
-            }
-
-            category.addStorage(storage);
-            categoryRepository.save(category);
-
-            return category;
-        }
-        else
-            return storage.getMainCategory();
-    }
-
-    private void updateStorage(Storage storage) throws IOException {
-        if (storage.getStorageType() != Storage.StorageType.LocalFileSystem)
-            return;
-
-        StorageInfo storageInfo = storage.getStorageInfo() == null ? new StorageInfo() : storage.getStorageInfo();
-//        List<Book> books = booksRepository.findAllByStorage(storage);
-//        Map<String, Book> oldBooksMap = books.stream().collect(Collectors.toMap(Book::getBookKey, Function.identity()));
-
-        Path storagePath = Paths.get(storage.getUrl());
-        int counter = 0;
-
-        Files.walk(storagePath, 1).forEach(filePath -> {
-            if (!filePath.toFile().isDirectory()) {
-                BookInfo.BookFormat bookFormat = BookUtils.getFormat(filePath);
-                if (bookFormat != BookInfo.BookFormat.UNKNOWN) {
-                    Book book = new Book();
-
-                    BookInfo bookInfo = new BookInfo();
-                    bookInfo.setFileName(filePath.toString());
-                    bookInfo.setFormat(bookFormat);
-
-                    book.setBookInfo(bookInfo);
-                    book.setStorage(storage);
-
-                    booksRepository.save(book);
-                }
-            }
-        });
-
-        storageInfo.setLastChecked(System.currentTimeMillis());
-
-        storage.setStorageInfo(storageInfo);
-        storageRepository.save(storage);
     }
 
     public void processLinks() throws IOException {
@@ -159,4 +89,8 @@ public class LocalDirectoryLoader extends BaseLoader {
             return link;
     }
 
+    @Override
+    protected Stream<ServerItem> getItemsStreamByStorage(Storage storage) throws IOException {
+        return Files.walk(Paths.get(storage.getUrl()), 1).map(path -> new ServerItem(path));
+    }
 }

@@ -18,7 +18,11 @@ public interface OneDriveProvider {
 
     OneDriveItem[] getChildren(OneDriveItem parent) throws IOException;
 
+    OneDriveItem[] getChildren(String id) throws IOException;
+
     OneDriveItem getPath(String path) throws IOException;
+
+    OneDriveItem getItem(String id) throws IOException;
 
     // Write operations
 

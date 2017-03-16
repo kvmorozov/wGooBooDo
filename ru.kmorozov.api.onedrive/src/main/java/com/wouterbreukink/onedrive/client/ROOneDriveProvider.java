@@ -43,19 +43,21 @@ class ROOneDriveProvider implements OneDriveProvider {
                 });
     }
 
+    @Override
     public Drive getDefaultDrive() throws IOException {
         HttpRequest request = requestFactory.buildGetRequest(OneDriveUrl.defaultDrive());
         return request.execute().parseAs(Drive.class);
     }
 
+    @Override
     public OneDriveItem getRoot() throws IOException {
         HttpRequest request = requestFactory.buildGetRequest(OneDriveUrl.driveRoot());
         Item response = request.execute().parseAs(Item.class);
         return OneDriveItem.FACTORY.create(response);
     }
 
+    @Override
     public OneDriveItem[] getChildren(OneDriveItem parent) throws IOException {
-
         if (!parent.isDirectory()) {
             throw new IllegalArgumentException("Specified Item is not a folder");
         }
@@ -86,6 +88,35 @@ class ROOneDriveProvider implements OneDriveProvider {
         return itemsToReturn.toArray(new OneDriveItem[itemsToReturn.size()]);
     }
 
+    @Override
+    public OneDriveItem[] getChildren(String id) throws IOException {
+        List<OneDriveItem> itemsToReturn = Lists.newArrayList();
+
+        String token = null;
+
+        do {
+
+            OneDriveUrl url = OneDriveUrl.children(id);
+
+            if (token != null) {
+                url.setToken(token);
+            }
+
+            HttpRequest request = requestFactory.buildGetRequest(url);
+            ItemSet items = request.execute().parseAs(ItemSet.class);
+
+            for (Item i : items.getValue()) {
+                itemsToReturn.add(OneDriveItem.FACTORY.create(i));
+            }
+
+            token = items.getNextToken();
+
+        } while (token != null); // If we have a token for the next page we need to keep going
+
+        return itemsToReturn.toArray(new OneDriveItem[itemsToReturn.size()]);
+    }
+
+    @Override
     public OneDriveItem getPath(String path) throws IOException {
         try {
             HttpRequest request = requestFactory.buildGetRequest(OneDriveUrl.getPath(path));
@@ -96,6 +127,13 @@ class ROOneDriveProvider implements OneDriveProvider {
         } catch (IOException e) {
             throw new OneDriveAPIException(0, "Unable to get path", e);
         }
+    }
+
+    @Override
+    public OneDriveItem getItem(String id) throws IOException {
+        HttpRequest request = requestFactory.buildGetRequest(OneDriveUrl.item(id));
+        Item response = request.execute().parseAs(Item.class);
+        return OneDriveItem.FACTORY.create(response);
     }
 
     public OneDriveItem replaceFile(OneDriveItem parent, File file) throws IOException {
@@ -126,20 +164,24 @@ class ROOneDriveProvider implements OneDriveProvider {
         session.setComplete(OneDriveItem.FACTORY.create(session.getParent(), session.getFile().getName(), session.getFile().isDirectory()));
     }
 
+    @Override
     public OneDriveItem updateFile(OneDriveItem item, Date createdDate, Date modifiedDate) throws IOException {
         // Do nothing, just return the unmodified item
         return item;
     }
 
+    @Override
     public OneDriveItem createFolder(OneDriveItem parent, File target) throws IOException {
         // Return a dummy folder
         return OneDriveItem.FACTORY.create(parent, target.getName(), true);
     }
 
+    @Override
     public void download(OneDriveItem item, File target, ResumableDownloaderProgressListener progressListener) throws IOException {
         // Do nothing
     }
 
+    @Override
     public void delete(OneDriveItem remoteFile) throws IOException {
         // Do nothing
     }

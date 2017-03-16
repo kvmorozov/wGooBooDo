@@ -78,7 +78,7 @@ public class OneDriveWalker implements Closeable {
                     return new Event(EventType.ENTRY, item, ioe);
                 }
 
-                this.stack.push(new DirectoryNode(item, item.getItem().getcTag(), itemStream));
+                this.stack.push(new DirectoryNode(item, item.getId(), itemStream));
                 return new Event(EventType.START_DIRECTORY, item);
             }
         } else {

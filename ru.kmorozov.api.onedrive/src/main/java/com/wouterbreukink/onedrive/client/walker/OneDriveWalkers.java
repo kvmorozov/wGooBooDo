@@ -13,6 +13,8 @@ import java.util.stream.StreamSupport;
  */
 public class OneDriveWalkers {
 
+    private static final int MAX_MAX_DEPTH = 100;
+
     public static Stream<OneDriveItem> walk(OneDriveProvider api, int maxDepth) throws IOException {
         OneDriveIterator<OneDriveItem> itr = new OneDriveIterator(api, api.getRoot(), maxDepth);
 
@@ -23,5 +25,9 @@ public class OneDriveWalkers {
             itr.close();
             throw ex;
         }
+    }
+
+    public static Stream<OneDriveItem> walk(OneDriveProvider api) throws IOException {
+        return walk(api, MAX_MAX_DEPTH);
     }
 }
