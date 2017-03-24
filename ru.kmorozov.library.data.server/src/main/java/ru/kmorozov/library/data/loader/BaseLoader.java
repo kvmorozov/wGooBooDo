@@ -60,7 +60,7 @@ public abstract class BaseLoader implements ILoader {
             categoryRepository.save(category);
 
             storage = new Storage();
-            storage.setStorageType(Storage.StorageType.LocalFileSystem);
+            storage.setStorageType(serverItem.getStorageType());
             storage.setUrl(serverItem.getUrl());
             storage.addCategory(category);
             storage.setLastModifiedDateTime(serverItem.getLastModifiedDateTime());

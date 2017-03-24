@@ -2,6 +2,7 @@ package ru.kmorozov.library.data.loader;
 
 import com.wouterbreukink.onedrive.client.OneDriveItem;
 import ru.kmorozov.library.data.model.book.BookInfo;
+import ru.kmorozov.library.data.model.book.Storage;
 import ru.kmorozov.library.utils.BookUtils;
 
 import java.nio.file.Path;
@@ -16,12 +17,14 @@ public class ServerItem {
     private String url, name;
     private ServerItem parent;
     private Date lastModifiedDateTime;
+    private Storage.StorageType storageType;
 
     private ServerItem(OneDriveItem oneDriveItem, boolean lookupParent) {
         this.isDirectory = oneDriveItem.isDirectory();
         this.url = oneDriveItem.getId();
         this.name = oneDriveItem.getName();
         this.lastModifiedDateTime = oneDriveItem.getLastModifiedDateTime();
+        this.storageType = Storage.StorageType.OneDrive;
 
         if (lookupParent && oneDriveItem.getParent() != null && oneDriveItem.getParent().getId() != null)
             parent = new ServerItem(oneDriveItem.getParent(), false);
@@ -35,6 +38,7 @@ public class ServerItem {
         this.isDirectory = path.toFile().isDirectory();
         this.url = path.toString();
         this.name = path.toFile().getName();
+        this.storageType = Storage.StorageType.LocalFileSystem;
 
         if (lookupParent)
             parent = new ServerItem(path.getParent(), false);
@@ -66,5 +70,9 @@ public class ServerItem {
 
     public boolean isLoadableItem() {
         return isDirectory || BookUtils.getFormat(name) != BookInfo.BookFormat.UNKNOWN;
+    }
+
+    public Storage.StorageType getStorageType() {
+        return storageType;
     }
 }
