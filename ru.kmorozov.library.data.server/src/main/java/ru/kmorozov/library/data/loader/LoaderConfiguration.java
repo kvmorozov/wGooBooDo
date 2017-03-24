@@ -2,6 +2,7 @@ package ru.kmorozov.library.data.loader;
 
 import com.wouterbreukink.onedrive.client.OneDriveProvider;
 import com.wouterbreukink.onedrive.client.authoriser.AuthorisationProvider;
+import com.wouterbreukink.onedrive.client.exceptions.CodeExpiredException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -41,6 +42,8 @@ public class LoaderConfiguration {
 
         try {
             authoriser = AuthorisationProvider.FACTORY.create(file.toPath());
+        } catch (CodeExpiredException cee) {
+            throw new RuntimeException(cee);
         } catch (IOException e) {
             logger.error("OneDrive API init error", e);
         }

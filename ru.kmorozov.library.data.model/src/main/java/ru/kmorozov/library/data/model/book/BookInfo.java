@@ -28,7 +28,7 @@ public class BookInfo {
     }
 
     BookFormat format;
-    String fileName;
+    String fileName, path;
 
     public BookFormat getFormat() {
         return format;
@@ -44,5 +44,13 @@ public class BookInfo {
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }

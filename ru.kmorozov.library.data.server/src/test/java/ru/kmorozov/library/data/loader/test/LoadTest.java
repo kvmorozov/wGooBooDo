@@ -7,6 +7,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.kmorozov.library.data.loader.LoaderConfiguration;
 import ru.kmorozov.library.data.loader.LocalDirectoryLoader;
+import ru.kmorozov.library.data.loader.OneDriveLoader;
 
 import java.io.IOException;
 
@@ -19,12 +20,21 @@ import java.io.IOException;
 public class LoadTest {
 
     @Autowired
-    private LocalDirectoryLoader loader;
+    private LocalDirectoryLoader fsLoader;
+
+    @Autowired
+    private OneDriveLoader oneLoader;
 
     @Test
-    public void categoryLoadTest() throws IOException {
-//        loader.clear();
-        loader.load();
-        loader.processLinks();
+    public void categoryLoadTestFs() throws IOException {
+//        fsLoader.clear();
+        fsLoader.load();
+        fsLoader.processLinks();
+    }
+
+    @Test
+    public void categoryLoadTestOne() throws IOException {
+        oneLoader.clear();
+        oneLoader.load();
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -24,6 +25,7 @@ public class Storage {
 
     StorageType storageType;
     String url;
+    Date lastModifiedDateTime;
 
     @DBRef(lazy = true)
     Storage parent;
@@ -71,6 +73,14 @@ public class Storage {
 
     public void setCategories(List<Category> categories) {
         this.categories = categories;
+    }
+
+    public Date getLastModifiedDateTime() {
+        return lastModifiedDateTime;
+    }
+
+    public void setLastModifiedDateTime(Date lastModifiedDateTime) {
+        this.lastModifiedDateTime = lastModifiedDateTime;
     }
 
     public void addCategory(Category category) {

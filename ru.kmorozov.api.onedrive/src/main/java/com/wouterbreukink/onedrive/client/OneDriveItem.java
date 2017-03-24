@@ -132,7 +132,7 @@ public interface OneDriveItem {
             return new OneDriveItem() {
                 @Override
                 public String getId() {
-                    return parent.getId();
+                    return parent == null ? null : parent.getId();
                 }
 
                 @Override

@@ -63,10 +63,11 @@ public abstract class BaseLoader implements ILoader {
             storage.setStorageType(Storage.StorageType.LocalFileSystem);
             storage.setUrl(serverItem.getUrl());
             storage.addCategory(category);
+            storage.setLastModifiedDateTime(serverItem.getLastModifiedDateTime());
 
             storageRepository.save(storage);
 
-            Storage parentStorage = storageRepository.findByUrl(serverItem.getParent().getUrl());
+            Storage parentStorage = serverItem.getParent() == null ? null : storageRepository.findByUrl(serverItem.getParent().getUrl());
 
             if (parentStorage != null) {
                 storage.setParent(parentStorage);
@@ -96,23 +97,26 @@ public abstract class BaseLoader implements ILoader {
 
         int counter = 0;
 
-        getItemsStreamByStorage(storage).forEach(serverItem -> {
-            if (!serverItem.isDirectory()) {
-                BookInfo.BookFormat bookFormat = BookUtils.getFormat(serverItem.getName());
-                if (bookFormat != BookInfo.BookFormat.UNKNOWN) {
-                    Book book = new Book();
+        getItemsStreamByStorage(storage)
+                .filter(ServerItem::isLoadableItem)
+                .forEach(serverItem -> {
+                    if (!serverItem.isDirectory()) {
+                        BookInfo.BookFormat bookFormat = BookUtils.getFormat(serverItem.getName());
+                        if (bookFormat != BookInfo.BookFormat.UNKNOWN) {
+                            Book book = new Book();
 
-                    BookInfo bookInfo = new BookInfo();
-                    bookInfo.setFileName(serverItem.getUrl());
-                    bookInfo.setFormat(bookFormat);
+                            BookInfo bookInfo = new BookInfo();
+                            bookInfo.setFileName(serverItem.getName());
+                            bookInfo.setPath(serverItem.getUrl());
+                            bookInfo.setFormat(bookFormat);
 
-                    book.setBookInfo(bookInfo);
-                    book.setStorage(storage);
+                            book.setBookInfo(bookInfo);
+                            book.setStorage(storage);
 
-                    booksRepository.save(book);
-                }
-            }
-        });
+                            booksRepository.save(book);
+                        }
+                    }
+                });
 
         storageInfo.setLastChecked(System.currentTimeMillis());
 

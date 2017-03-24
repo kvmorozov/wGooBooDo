@@ -26,20 +26,17 @@ class ROOneDriveProvider implements OneDriveProvider {
 
     public ROOneDriveProvider(final AuthorisationProvider authoriser) {
         requestFactory =
-                HTTP_TRANSPORT.createRequestFactory(new HttpRequestInitializer() {
-                    @Override
-                    public void initialize(HttpRequest request) {
-                        request.setParser(new JsonObjectParser(JSON_FACTORY));
-                        request.setReadTimeout(60000);
-                        request.setConnectTimeout(60000);
-                        try {
-                            request.getHeaders().setAuthorization("bearer " + authoriser.getAccessToken());
-                        } catch (IOException e) {
-                            throw Throwables.propagate(e);
-                        }
-
-                        request.setUnsuccessfulResponseHandler(new OneDriveResponseHandler(authoriser));
+                HTTP_TRANSPORT.createRequestFactory(request -> {
+                    request.setParser(new JsonObjectParser(JSON_FACTORY));
+                    request.setReadTimeout(60000);
+                    request.setConnectTimeout(60000);
+                    try {
+                        request.getHeaders().setAuthorization("bearer " + authoriser.getAccessToken());
+                    } catch (IOException e) {
+                        throw Throwables.propagate(e);
                     }
+
+                    request.setUnsuccessfulResponseHandler(new OneDriveResponseHandler(authoriser));
                 });
     }
 
