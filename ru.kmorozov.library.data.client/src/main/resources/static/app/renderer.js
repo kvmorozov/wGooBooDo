@@ -64,7 +64,6 @@ const renderer = (node, treeOptions) => {
                         { 'rotating': loading }
                     )}
                 />
-                <span className="count">{childrenLength}</span>
             </div>
         </div>
     );

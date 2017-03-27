@@ -11,6 +11,9 @@ import Nav from "react-bootstrap/lib/Nav";
 import Navbar from "react-bootstrap/lib/Navbar";
 import NavItem from "react-bootstrap/lib/NavItem";
 import Grid from "react-bootstrap/lib/Grid";
+import Row from "react-bootstrap/lib/Row";
+import Col from "react-bootstrap/lib/Col";
+import Preview from "./preview";
 import "../bootstrap.min.css";
 
 class App extends React.Component {
@@ -86,21 +89,7 @@ class App extends React.Component {
 
     updatePreview(node) {
         const el = document.querySelector('[data-id="preview"]');
-        if (node) {
-            let o = {
-                id: node.id,
-                name: node.name,
-                children: node.children ? node.children.length : 0,
-                parent: node.parent ? node.parent.id : null,
-                state: node.state
-            };
-            if (node.loadOnDemand !== undefined) {
-                o.loadOnDemand = node.loadOnDemand;
-            }
-            el.innerHTML = JSON.stringify(o, null, 2).replace(/\n/g, '<br>').replace(/\s/g, '&nbsp;');
-        } else {
-            el.innerHTML = '';
-        }
+        ReactDom.render(<Preview node={node}/>, el);
     }
 
     render() {
@@ -119,55 +108,64 @@ class App extends React.Component {
                     </Navbar.Collapse>
                 </Navbar>
                 <Grid>
-                    <InfiniteTree
-                        ref={(c) => this.tree = c.tree}
-                        autoOpen={true}
-                        droppable={{
-                            hoverClass: 'infinite-tree-drop-hover',
-                            accept: function (opts) {
-                                const {type, draggableTarget, droppableTarget, node} = opts;
-                                return true;
-                            },
-                            drop: function (e, opts) {
-                                const {draggableTarget, droppableTarget, node} = opts;
-                                const source = e.dataTransfer.getData('text');
-                                document.querySelector('[data-id="dropped-result"]').innerHTML = 'Dropped to <b>' + quoteattr(node.name) + '</b>';
-                            }
-                        }}
-                        loadNodes={(parentNode, done) => {
-                            done(null, this.getStoragesByParent(parentNode));
-                        }}
-                        rowRenderer={rowRenderer}
-                        selectable={true} // Defaults to true
-                        shouldSelectNode={(node) => { // Defaults to null
-                            if (!node || (node === this.tree.getSelectedNode())) {
-                                return false; // Prevent from deselecting the current node
-                            }
-                            return true;
-                        }}
-                        onDoubleClick={(event) => {
-                            const target = event.target || event.srcElement; // IE8
-                            console.log('onDoubleClick', target);
-                        }}
-                        onClick={(event) => {
-                            const target = event.target || event.srcElement; // IE8
-                            console.log('onClick', target);
-                        }}
-                        onDropNode={(node, e) => {
-                            const source = e.dataTransfer.getData('text');
-                            document.querySelector('[data-id="dropped-result"]').innerHTML = 'Dropped to <b>' + quoteattr(node.name) + '</b>';
-                        }}
-                        onContentWillUpdate={() => {
-                            console.log('onContentWillUpdate');
-                        }}
-                        onContentDidUpdate={() => {
-                            this.updatePreview(this.tree.getSelectedNode());
-                        }}
-                        onSelectNode={(node) => {
-                            this.updatePreview(node);
-                            this.getStoragesByParent(node);
-                        }}
-                    />
+                    <Row>
+                        <Col>
+                            <InfiniteTree
+                                ref={(c) => this.tree = c.tree}
+                                autoOpen={true}
+                                droppable={{
+                                    hoverClass: 'infinite-tree-drop-hover',
+                                    accept: function (opts) {
+                                        const {type, draggableTarget, droppableTarget, node} = opts;
+                                        return true;
+                                    },
+                                    drop: function (e, opts) {
+                                        const {draggableTarget, droppableTarget, node} = opts;
+                                        const source = e.dataTransfer.getData('text');
+                                        document.querySelector('[data-id="dropped-result"]').innerHTML = 'Dropped to <b>' + quoteattr(node.name) + '</b>';
+                                    }
+                                }}
+                                loadNodes={(parentNode, done) => {
+                                    done(null, this.getStoragesByParent(parentNode));
+                                }}
+                                rowRenderer={rowRenderer}
+                                selectable={true} // Defaults to true
+                                shouldSelectNode={(node) => { // Defaults to null
+                                    if (!node || (node === this.tree.getSelectedNode())) {
+                                        return false; // Prevent from deselecting the current node
+                                    }
+                                    return true;
+                                }}
+                                onDoubleClick={(event) => {
+                                    const target = event.target || event.srcElement; // IE8
+                                    console.log('onDoubleClick', target);
+                                }}
+                                onClick={(event) => {
+                                    const target = event.target || event.srcElement; // IE8
+                                    console.log('onClick', target);
+                                }}
+                                onDropNode={(node, e) => {
+                                    const source = e.dataTransfer.getData('text');
+                                    document.querySelector('[data-id="dropped-result"]').innerHTML = 'Dropped to <b>' + quoteattr(node.name) + '</b>';
+                                }}
+                                onContentWillUpdate={() => {
+                                    console.log('onContentWillUpdate');
+                                }}
+                                onContentDidUpdate={() => {
+                                    this.updatePreview(this.tree.getSelectedNode());
+                                }}
+                                onSelectNode={(node) => {
+                                    this.updatePreview(node);
+                                    this.getStoragesByParent(node);
+                                }}
+                            />
+                        </Col>
+                        <Col>
+                            <div className="col-xs-6">
+                                <div className="preview" data-id="preview"/>
+                            </div>
+                        </Col>
+                    </Row>
                 </Grid>
             </div>
         );
