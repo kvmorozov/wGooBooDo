@@ -63,7 +63,9 @@ public abstract class BaseLoader implements ILoader {
             storage.setStorageType(serverItem.getStorageType());
             storage.setUrl(serverItem.getUrl());
             storage.addCategory(category);
+            storage.setName(serverItem.getName());
             storage.setLastModifiedDateTime(serverItem.getLastModifiedDateTime());
+            storage.setStorageInfo(new StorageInfo(serverItem.getFilesCount()));
 
             storageRepository.save(storage);
 
@@ -92,10 +94,6 @@ public abstract class BaseLoader implements ILoader {
             return;
 
         StorageInfo storageInfo = storage.getStorageInfo() == null ? new StorageInfo() : storage.getStorageInfo();
-//        List<Book> books = booksRepository.findAllByStorage(storage);
-//        Map<String, Book> oldBooksMap = books.stream().collect(Collectors.toMap(Book::getBookKey, Function.identity()));
-
-        int counter = 0;
 
         getItemsStreamByStorage(storage)
                 .filter(ServerItem::isLoadableItem)

@@ -18,6 +18,7 @@ public class ServerItem {
     private ServerItem parent;
     private Date lastModifiedDateTime;
     private Storage.StorageType storageType;
+    private long filesCount;
 
     private ServerItem(OneDriveItem oneDriveItem, boolean lookupParent) {
         this.isDirectory = oneDriveItem.isDirectory();
@@ -28,6 +29,9 @@ public class ServerItem {
 
         if (lookupParent && oneDriveItem.getParent() != null && oneDriveItem.getParent().getId() != null)
             parent = new ServerItem(oneDriveItem.getParent(), false);
+
+        if (oneDriveItem.getFolder() != null)
+            filesCount = oneDriveItem.getFolder().getChildCount();
     }
 
     ServerItem(OneDriveItem oneDriveItem) {
@@ -74,5 +78,9 @@ public class ServerItem {
 
     public Storage.StorageType getStorageType() {
         return storageType;
+    }
+
+    public long getFilesCount() {
+        return filesCount;
     }
 }

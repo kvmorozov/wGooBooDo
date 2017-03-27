@@ -24,7 +24,7 @@ public class ItemDTO extends ResourceSupport {
         this.itemId = storageDTO.getId();
         this.itemType = ItemType.storage;
         this.itemSubType = storageDTO.getStorageType();
-        this.displayName = storageDTO.getUrl();
+        this.displayName = storageDTO.getDisplayName();
     }
 
     public ItemDTO(BookDTO bookDTO) {

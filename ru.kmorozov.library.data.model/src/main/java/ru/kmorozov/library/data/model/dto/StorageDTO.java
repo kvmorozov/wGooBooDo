@@ -9,7 +9,7 @@ public class StorageDTO {
 
     private String id;
     private Storage.StorageType storageType;
-    private String url;
+    private String url, displayName;
     private String parentId;
 
     public StorageDTO() {}
@@ -18,6 +18,7 @@ public class StorageDTO {
         this.id = storage.getId();
         this.storageType = storage.getStorageType();
         this.url = storage.getUrl();
+        this.displayName = storage.getName();
         this.parentId = storage.getParent() == null ? null : storage.getParent().getId();
     }
 
@@ -35,5 +36,9 @@ public class StorageDTO {
 
     public String getParentId() {
         return parentId;
+    }
+
+    public String getDisplayName() {
+        return displayName;
     }
 }

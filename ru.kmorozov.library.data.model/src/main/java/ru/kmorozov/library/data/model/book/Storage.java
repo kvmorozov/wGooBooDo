@@ -25,7 +25,7 @@ public class Storage {
     String id;
 
     StorageType storageType;
-    String url;
+    String url, name;
     Date lastModifiedDateTime;
 
     @DBRef(lazy = true)
@@ -82,6 +82,14 @@ public class Storage {
 
     public void setLastModifiedDateTime(Date lastModifiedDateTime) {
         this.lastModifiedDateTime = lastModifiedDateTime;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void addCategory(Category category) {

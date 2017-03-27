@@ -1,6 +1,7 @@
 package com.wouterbreukink.onedrive.client;
 
 import com.google.api.client.util.Throwables;
+import com.wouterbreukink.onedrive.client.facets.FolderFacet;
 import com.wouterbreukink.onedrive.client.resources.Item;
 import com.wouterbreukink.onedrive.client.resources.ItemReference;
 import com.wouterbreukink.onedrive.client.serialization.JsonDateSerializer;
@@ -27,6 +28,8 @@ public interface OneDriveItem {
     Date getLastModifiedDateTime();
 
     OneDriveItem getParent();
+
+    FolderFacet getFolder();
 
     class FACTORY {
 
@@ -72,6 +75,11 @@ public interface OneDriveItem {
                 @Override
                 public OneDriveItem getParent() {
                     return parent;
+                }
+
+                @Override
+                public FolderFacet getFolder() {
+                    return null;
                 }
             };
         }
@@ -124,6 +132,11 @@ public interface OneDriveItem {
                 @Override
                 public OneDriveItem getParent() {
                     return parent;
+                }
+
+                @Override
+                public FolderFacet getFolder() {
+                    return item.getFolder();
                 }
             };
         }
@@ -182,6 +195,11 @@ public interface OneDriveItem {
 
                 @Override
                 public OneDriveItem getParent() {
+                    return null;
+                }
+
+                @Override
+                public FolderFacet getFolder() {
                     return null;
                 }
             };

@@ -9,10 +9,17 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class StorageInfo {
 
-    int filesCount;
+    long filesCount;
     long lastChecked;
 
-    public int getFilesCount() {
+    public StorageInfo() {
+    }
+
+    public StorageInfo(long filesCount) {
+        this.filesCount = filesCount;
+    }
+
+    public long getFilesCount() {
         return filesCount;
     }
 
