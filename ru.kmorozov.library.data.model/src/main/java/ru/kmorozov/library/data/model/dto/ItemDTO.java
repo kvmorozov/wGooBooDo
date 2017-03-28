@@ -17,6 +17,7 @@ public class ItemDTO extends ResourceSupport {
     private ItemType itemType;
     private Object itemSubType;
     private String displayName;
+    private long filesCount;
 
     public ItemDTO() {}
 
@@ -25,6 +26,7 @@ public class ItemDTO extends ResourceSupport {
         this.itemType = ItemType.storage;
         this.itemSubType = storageDTO.getStorageType();
         this.displayName = storageDTO.getDisplayName();
+        this.filesCount = storageDTO.getFilesCount();
     }
 
     public ItemDTO(BookDTO bookDTO) {
@@ -64,5 +66,9 @@ public class ItemDTO extends ResourceSupport {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public long getFilesCount() {
+        return filesCount;
     }
 }

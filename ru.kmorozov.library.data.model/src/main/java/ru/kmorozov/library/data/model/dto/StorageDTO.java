@@ -11,6 +11,7 @@ public class StorageDTO {
     private Storage.StorageType storageType;
     private String url, displayName;
     private String parentId;
+    private long filesCount;
 
     public StorageDTO() {}
 
@@ -20,6 +21,7 @@ public class StorageDTO {
         this.url = storage.getUrl();
         this.displayName = storage.getName();
         this.parentId = storage.getParent() == null ? null : storage.getParent().getId();
+        this.filesCount = storage.getStorageInfo() == null ? 0l : storage.getStorageInfo().getFilesCount();
     }
 
     public String getId() {
@@ -40,5 +42,9 @@ public class StorageDTO {
 
     public String getDisplayName() {
         return displayName;
+    }
+
+    public long getFilesCount() {
+        return filesCount;
     }
 }

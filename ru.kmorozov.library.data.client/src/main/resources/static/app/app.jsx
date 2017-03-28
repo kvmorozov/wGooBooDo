@@ -46,7 +46,8 @@ class App extends React.Component {
                             itemType: data[i].itemType,
                             itemSubType: data[i].itemSubType,
                             loadOnDemand: data[i].itemType == 'storage',
-                            links: data[i].links
+                            links: data[i].links,
+                            filesCount: data[i].filesCount
                         });
                     }
 
@@ -76,7 +77,8 @@ class App extends React.Component {
                         itemType: data[i].itemType,
                         itemSubType: data[i].itemSubType,
                         loadOnDemand: data[i].itemType == 'storage',
-                        links: data[i].links
+                        links: data[i].links,
+                        filesCount: data[i].filesCount
                     });
                 }
 
@@ -161,9 +163,7 @@ class App extends React.Component {
                             />
                         </Col>
                         <Col>
-                            <div className="col-xs-6">
-                                <div className="preview" data-id="preview"/>
-                            </div>
+                            <div className="preview" data-id="preview"/>
                         </Col>
                     </Row>
                 </Grid>

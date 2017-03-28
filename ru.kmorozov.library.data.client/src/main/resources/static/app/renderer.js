@@ -1,10 +1,10 @@
-import React from 'react';
-import classNames from 'classnames';
+import React from "react";
+import classNames from "classnames";
 
 const renderer = (node, treeOptions) => {
-    const { id, name, loadOnDemand = false, children, state, props = {}, itemType, itemSubType } = node;
+    const {id, name, loadOnDemand = false, children, state, props = {}, itemType, itemSubType, filesCount} = node;
     const droppable = (treeOptions.droppable) && (props.droppable);
-    const { depth, open, path, total, loading = false, selected = false } = state;
+    const {depth, open, path, total, loading = false, selected = false} = state;
     const childrenLength = Object.keys(children).length;
     const more = node.hasChildren();
 
@@ -15,7 +15,7 @@ const renderer = (node, treeOptions) => {
         <div
             className={classNames(
                 'infinite-tree-item',
-                { 'infinite-tree-selected': selected }
+                {'infinite-tree-selected': selected}
             )}
             data-id={id}
             data-expanded={more && open}
@@ -28,40 +28,40 @@ const renderer = (node, treeOptions) => {
         >
             <div
                 className="infinite-tree-node"
-                style={{ marginLeft: depth * 18 }}
+                style={{marginLeft: depth * 18}}
             >
                 {!more && loadOnDemand &&
-                    <a className={classNames(treeOptions.togglerClass, 'infinite-tree-closed')}>
-                        <i className="glyphicon glyphicon-triangle-right" />
-                    </a>
+                <a className={classNames(treeOptions.togglerClass, 'infinite-tree-closed')}>
+                    <i className="glyphicon glyphicon-triangle-right"/>
+                </a>
                 }
                 {more && open &&
-                    <a className={classNames(treeOptions.togglerClass)}>
-                        <i className="glyphicon glyphicon-triangle-bottom" />
-                    </a>
+                <a className={classNames(treeOptions.togglerClass)}>
+                    <i className="glyphicon glyphicon-triangle-bottom"/>
+                </a>
                 }
                 {more && !open &&
-                    <a className={classNames(treeOptions.togglerClass, 'infinite-tree-closed')}>
-                        <i className="glyphicon glyphicon-triangle-right" />
-                    </a>
+                <a className={classNames(treeOptions.togglerClass, 'infinite-tree-closed')}>
+                    <i className="glyphicon glyphicon-triangle-right"/>
+                </a>
                 }
                 <i
                     className={classNames(
                         'infinite-tree-folder-icon',
                         'glyphicon',
-                        { 'glyphicon-folder-open': isDir && open },
-                        { 'glyphicon-folder-close': isDir && !open },
-                        { 'glyphicon-file': !isDir }
+                        {'glyphicon-folder-open': isDir && selected},
+                        {'glyphicon-folder-close': isDir && !selected},
+                        {'glyphicon-file': !isDir}
                     )}
                 />
-                <span className="infinite-tree-title">{name}</span>
+                <span className="infinite-tree-title">{name} {filesCount}</span>
                 <i
-                    style={{ marginLeft: 5 }}
+                    style={{marginLeft: 5}}
                     className={classNames(
-                        { 'hidden': !loading },
+                        {'hidden': !loading},
                         'glyphicon',
                         'glyphicon-refresh',
-                        { 'rotating': loading }
+                        {'rotating': loading}
                     )}
                 />
             </div>

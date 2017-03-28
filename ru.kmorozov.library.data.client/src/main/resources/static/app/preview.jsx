@@ -17,7 +17,8 @@ class Preview extends React.Component {
                 name: node.name,
                 children: node.children ? node.children.length : 0,
                 parent: node.parent ? node.parent.id : null,
-                state: node.state
+                state: node.state,
+                filesCount: node.filesCount
             };
             if (node.loadOnDemand !== undefined) {
                 o.loadOnDemand = node.loadOnDemand;
