@@ -50,10 +50,11 @@ public class LocalDirectoryLoader extends BaseLoader {
         });
     }
 
+    @Override
     public void processLinks() throws IOException {
-        Files.walk(basePath).filter(filePath -> filePath.toString().endsWith(".lnk")).forEach(filePath -> {
+        links.forEach(linkItem -> {
             try {
-                ShellFolder folder = shellFolderManager.createShellFolder(filePath.toFile());
+                ShellFolder folder = shellFolderManager.createShellFolder(((Path) linkItem).toFile());
                 if (folder.isLink()) {
                     ShellFolder link = folder.getLinkLocation();
                     if (!link.exists()) {
@@ -80,6 +81,11 @@ public class LocalDirectoryLoader extends BaseLoader {
                 e.printStackTrace();
             }
         });
+    }
+
+    @Override
+    public boolean postponedLinksLoad() {
+        return false;
     }
 
     private ShellFolder repairLink(ShellFolder link) throws FileNotFoundException {

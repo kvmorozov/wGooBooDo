@@ -19,6 +19,7 @@ public class ServerItem {
     private Date lastModifiedDateTime;
     private Storage.StorageType storageType;
     private long filesCount;
+    private final Object originalItem;
 
     private ServerItem(OneDriveItem oneDriveItem, boolean lookupParent) {
         this.isDirectory = oneDriveItem.isDirectory();
@@ -26,6 +27,7 @@ public class ServerItem {
         this.name = oneDriveItem.getName();
         this.lastModifiedDateTime = oneDriveItem.getLastModifiedDateTime();
         this.storageType = Storage.StorageType.OneDrive;
+        this.originalItem = oneDriveItem;
 
         if (lookupParent && oneDriveItem.getParent() != null && oneDriveItem.getParent().getId() != null)
             parent = new ServerItem(oneDriveItem.getParent(), false);
@@ -43,6 +45,7 @@ public class ServerItem {
         this.url = path.toString();
         this.name = path.toFile().getName();
         this.storageType = Storage.StorageType.LocalFileSystem;
+        this.originalItem = path;
 
         if (lookupParent)
             parent = new ServerItem(path.getParent(), false);
@@ -73,7 +76,20 @@ public class ServerItem {
     }
 
     public boolean isLoadableItem() {
-        return isDirectory || BookUtils.getFormat(name) != BookInfo.BookFormat.UNKNOWN;
+        if (isDirectory)
+            return true;
+        else {
+            BookInfo.BookFormat format = BookUtils.getFormat(name);
+            return format != BookInfo.BookFormat.UNKNOWN && format != BookInfo.BookFormat.LNK;
+        }
+    }
+
+    public boolean isLink() {
+        return BookUtils.getFormat(name) == BookInfo.BookFormat.LNK;
+    }
+
+    public boolean isLoadableOrLink() {
+        return isLoadableItem() || isLink();
     }
 
     public Storage.StorageType getStorageType() {
@@ -82,5 +98,9 @@ public class ServerItem {
 
     public long getFilesCount() {
         return filesCount;
+    }
+
+    public Object getOriginalItem() {
+        return originalItem;
     }
 }

@@ -14,6 +14,7 @@ public class BookInfo {
         DJVU("djvu"),
         DOC("doc"),
         DOCX("docx"),
+        LNK("lnk"),
         UNKNOWN("");
 
         String ext;
@@ -53,4 +54,6 @@ public class BookInfo {
     public void setPath(String path) {
         this.path = path;
     }
+
+    public boolean isLink() {return format == BookFormat.LNK;}
 }

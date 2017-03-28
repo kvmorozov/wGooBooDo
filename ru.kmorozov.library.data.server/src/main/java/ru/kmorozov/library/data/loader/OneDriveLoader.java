@@ -9,7 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.kmorozov.library.data.model.book.Category;
 import ru.kmorozov.library.data.model.book.Storage;
+import sun.awt.shell.ShellFolder;
+import sun.awt.shell.Win32ShellFolderManager2;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.stream.Stream;
@@ -44,5 +47,31 @@ public class OneDriveLoader extends BaseLoader {
     protected Stream<ServerItem> getItemsStreamByStorage(Storage storage) throws IOException {
         OneDriveItem[] children = api.getChildren(storage.getUrl());
         return Arrays.asList(children).stream().map(oneDriveItem -> new ServerItem(oneDriveItem));
+    }
+
+    @Override
+    public void processLinks() throws IOException {
+        Win32ShellFolderManager2 shellFolderManager = new Win32ShellFolderManager2();
+
+        links.forEach(linkItem -> {
+            try {
+                File tmpFile = File.createTempFile("one", "tmplnk");
+                api.download((OneDriveItem) linkItem, tmpFile, downloader -> {
+                });
+                ShellFolder lnkFile = shellFolderManager.createShellFolder(tmpFile);
+                if (lnkFile.isLink()) {
+
+                }
+
+                tmpFile.delete();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    @Override
+    public boolean postponedLinksLoad() {
+        return true;
     }
 }

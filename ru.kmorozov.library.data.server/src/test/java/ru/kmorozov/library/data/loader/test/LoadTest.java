@@ -36,5 +36,6 @@ public class LoadTest {
     public void categoryLoadTestOne() throws IOException {
         oneLoader.clear();
         oneLoader.load();
+        oneLoader.processLinks();
     }
 }

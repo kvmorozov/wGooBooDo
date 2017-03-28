@@ -10,6 +10,9 @@ import ru.kmorozov.library.data.repository.StorageRepository;
 import ru.kmorozov.library.utils.BookUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -18,6 +21,7 @@ import java.util.stream.Stream;
 public abstract class BaseLoader implements ILoader {
 
     private static final Logger logger = Logger.getLogger(BaseLoader.class);
+    protected List<Object> links = new ArrayList<>();
 
     @Autowired
     protected CategoryRepository categoryRepository;
@@ -89,14 +93,15 @@ public abstract class BaseLoader implements ILoader {
 
     protected abstract Stream<ServerItem> getItemsStreamByStorage(Storage storage) throws IOException;
 
-    protected void updateStorage(Storage storage) throws IOException {
-        if (storage.getStorageType() != Storage.StorageType.LocalFileSystem)
-            return;
+    public abstract void processLinks() throws IOException;
 
+    public abstract boolean postponedLinksLoad();
+
+    protected void updateStorage(Storage storage) throws IOException {
         StorageInfo storageInfo = storage.getStorageInfo() == null ? new StorageInfo() : storage.getStorageInfo();
 
         getItemsStreamByStorage(storage)
-                .filter(ServerItem::isLoadableItem)
+                .filter(ServerItem::isLoadableOrLink)
                 .forEach(serverItem -> {
                     if (!serverItem.isDirectory()) {
                         BookInfo.BookFormat bookFormat = BookUtils.getFormat(serverItem.getName());
@@ -111,7 +116,12 @@ public abstract class BaseLoader implements ILoader {
                             book.setBookInfo(bookInfo);
                             book.setStorage(storage);
 
-                            booksRepository.save(book);
+                            if (bookInfo.isLink() && !postponedLinksLoad())
+                                links.add(serverItem.getOriginalItem());
+                            else {
+                                booksRepository.save(book);
+                                storage.getStorageInfo().incFilesCount();
+                            }
                         }
                     }
                 });

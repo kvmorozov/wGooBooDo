@@ -23,8 +23,12 @@ public class StorageInfo {
         return filesCount;
     }
 
-    public void setFilesCount(int filesCount) {
+    public void setFilesCount(long filesCount) {
         this.filesCount = filesCount;
+    }
+
+    public void incFilesCount() {
+        this.filesCount++;
     }
 
     public long getLastChecked() {
