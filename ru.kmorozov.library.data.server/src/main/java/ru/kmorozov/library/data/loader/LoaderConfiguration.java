@@ -48,6 +48,6 @@ public class LoaderConfiguration {
             logger.error("OneDrive API init error", e);
         }
 
-        return OneDriveProvider.FACTORY.readOnlyApi(authoriser);
+        return OneDriveProvider.FACTORY.readWriteApi(authoriser);
     }
 }

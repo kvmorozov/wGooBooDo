@@ -7,13 +7,16 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.kmorozov.library.data.loader.utils.WindowsShortcut;
+import ru.kmorozov.library.data.model.book.Book;
 import ru.kmorozov.library.data.model.book.Category;
 import ru.kmorozov.library.data.model.book.Storage;
-import sun.awt.shell.ShellFolder;
-import sun.awt.shell.Win32ShellFolderManager2;
+import ru.kmorozov.library.data.repository.BooksRepository;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
@@ -27,6 +30,8 @@ public class OneDriveLoader extends BaseLoader {
     private static final Logger logger = Logger.getLogger(OneDriveLoader.class);
     @Autowired
     private OneDriveProvider api;
+    @Autowired
+    private BooksRepository booksRepository;
 
     @Override
     public void load() throws IOException {
@@ -51,17 +56,26 @@ public class OneDriveLoader extends BaseLoader {
 
     @Override
     public void processLinks() throws IOException {
-        Win32ShellFolderManager2 shellFolderManager = new Win32ShellFolderManager2();
+        Stream<Book> lnkBooks = booksRepository.streamByBookInfoFormat("LNK");
 
-        links.forEach(linkItem -> {
+        lnkBooks.forEach(lnk -> {
             try {
-                File tmpFile = File.createTempFile("one", "tmplnk");
-                api.download((OneDriveItem) linkItem, tmpFile, downloader -> {
-                });
-                ShellFolder lnkFile = shellFolderManager.createShellFolder(tmpFile);
-                if (lnkFile.isLink()) {
+                OneDriveItem linkItem = api.getItem(lnk.getBookInfo().getPath());
 
-                }
+                File tmpFile = File.createTempFile("one", ".lnk");
+                api.download(linkItem, tmpFile, progressListener -> {
+                });
+                if (WindowsShortcut.isPotentialValidLink(tmpFile))
+                    try {
+                        WindowsShortcut lnkFile = new WindowsShortcut(tmpFile, Charset.forName("Windows-1251"));
+                        if (lnkFile.isDirectory()) {
+
+                        } else {
+                            String realPath = lnkFile.getRealFilename();
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
 
                 tmpFile.delete();
             } catch (IOException e) {

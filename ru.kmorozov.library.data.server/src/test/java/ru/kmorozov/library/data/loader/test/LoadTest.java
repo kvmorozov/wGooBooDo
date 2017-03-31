@@ -38,4 +38,9 @@ public class LoadTest {
         oneLoader.load();
         oneLoader.processLinks();
     }
+
+    @Test
+    public void loadLinksTestOne() throws IOException {
+        oneLoader.processLinks();
+    }
 }

@@ -41,9 +41,6 @@ public class CommandLineOpts {
     private boolean authorise = false;
 
     public static CommandLineOpts getCommandLineOpts() {
-        if (!opts.isInitialised) {
-            throw new IllegalStateException("The command line options have not been initialised");
-        }
         return opts;
     }
 

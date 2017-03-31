@@ -4,6 +4,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -14,9 +16,11 @@ import ru.kmorozov.library.data.storage.mongo.LikeTextSearch;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by sbt-morozov-kv on 28.11.2016.
@@ -67,5 +71,11 @@ public class BaseOperationsTest {
         } finally {
             booksRepository.delete(books);
         }
+    }
+
+    @Test
+    public void findLinks() {
+        Stream<Book> lnkBooks = booksRepository.streamByBookInfoFormat("LNK");
+        assertTrue(lnkBooks.count() > 10);
     }
 }
