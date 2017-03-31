@@ -11,13 +11,14 @@ import ru.kmorozov.library.data.loader.utils.WindowsShortcut;
 import ru.kmorozov.library.data.model.book.Book;
 import ru.kmorozov.library.data.model.book.Category;
 import ru.kmorozov.library.data.model.book.Storage;
-import ru.kmorozov.library.data.repository.BooksRepository;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 /**
@@ -28,10 +29,10 @@ import java.util.stream.Stream;
 public class OneDriveLoader extends BaseLoader {
 
     private static final Logger logger = Logger.getLogger(OneDriveLoader.class);
+    private static final String delimiter = Pattern.quote(File.separator);
+
     @Autowired
     private OneDriveProvider api;
-    @Autowired
-    private BooksRepository booksRepository;
 
     @Override
     public void load() throws IOException {
@@ -69,7 +70,14 @@ public class OneDriveLoader extends BaseLoader {
                     try {
                         WindowsShortcut lnkFile = new WindowsShortcut(tmpFile, Charset.forName("Windows-1251"));
                         if (lnkFile.isDirectory()) {
+                            Storage linkedStorage = getStorageByLink(lnkFile);
+                            Storage thisStorage = lnk.getStorage();
 
+                            if (linkedStorage != null && thisStorage != null) {
+                                Category linkCategory = linkedStorage.getMainCategory();
+                                linkCategory.addParent(thisStorage.getMainCategory());
+                                categoryRepository.save(linkCategory);
+                            }
                         } else {
                             String realPath = lnkFile.getRealFilename();
                         }
@@ -87,5 +95,14 @@ public class OneDriveLoader extends BaseLoader {
     @Override
     public boolean postponedLinksLoad() {
         return true;
+    }
+
+    private Storage getStorageByLink(WindowsShortcut lnkFile) {
+        String[] names = lnkFile.getRealFilename().split(delimiter);
+        List<Storage> storages = storageRepository.findAllByName(names[names.length - 1]);
+
+        assert storages.size() == 1 : lnkFile.getRealFilename();
+
+        return storages.size() == 1 ? storages.get(0) : null;
     }
 }

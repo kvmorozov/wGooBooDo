@@ -4,8 +4,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by km on 26.12.2016.
@@ -20,10 +20,10 @@ public class Category {
     String name;
 
     @DBRef(lazy = true)
-    List<Category> parents;
+    Set<Category> parents;
 
     @DBRef(lazy = true)
-    List<Storage> storages;
+    Set<Storage> storages;
 
     public String getId() {
         return id;
@@ -41,40 +41,57 @@ public class Category {
         this.name = name;
     }
 
-    public List<Category> getParents() {
+    public Set<Category> getParents() {
         return parents;
     }
 
-    public void setParents(List<Category> parents) {
+    public void setParents(Set<Category> parents) {
         this.parents = parents;
     }
 
-    public List<Storage> getStorages() {
+    public Set<Storage> getStorages() {
         return storages;
     }
 
-    public void setStorages(List<Storage> storages) {
+    public void setStorages(Set<Storage> storages) {
         this.storages = storages;
     }
 
     public void addStorage(Storage storage) {
         if (storages == null)
-            storages = new ArrayList<>();
+            storages = new HashSet<>();
 
         storages.add(storage);
     }
 
-    public void addParents(List<Category> parents) {
+    public void addParents(Set<Category> items) {
         if (parents == null)
-            parents = new ArrayList<>();
+            parents = new HashSet<>();
 
-        parents.addAll(parents);
+        parents.addAll(items);
     }
 
     public void addParent(Category parent) {
         if (parents == null)
-            parents = new ArrayList<>();
+            parents = new HashSet<>();
 
-        parents.add(parent);
+        if (!parents.contains(parent))
+            parents.add(parent);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Category category = (Category) o;
+
+        return id.equals(category.id);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 }

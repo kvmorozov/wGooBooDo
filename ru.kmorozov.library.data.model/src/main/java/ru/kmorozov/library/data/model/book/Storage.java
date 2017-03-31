@@ -5,9 +5,9 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by km on 26.12.2016.
@@ -32,7 +32,7 @@ public class Storage {
     Storage parent;
 
     @DBRef(lazy = true)
-    List<Category> categories;
+    Set<Category> categories;
 
     StorageInfo storageInfo;
 
@@ -68,11 +68,11 @@ public class Storage {
         this.parent = parent;
     }
 
-    public List<Category> getCategories() {
+    public Set<Category> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<Category> categories) {
+    public void setCategories(Set<Category> categories) {
         this.categories = categories;
     }
 
@@ -94,9 +94,10 @@ public class Storage {
 
     public void addCategory(Category category) {
         if (categories == null)
-            categories = new ArrayList<>();
+            categories = new HashSet<>();
 
-        categories.add(category);
+        if (!categories.contains(category))
+            categories.add(category);
     }
 
     public StorageInfo getStorageInfo() {
@@ -108,6 +109,22 @@ public class Storage {
     }
 
     public Category getMainCategory() {
-        return CollectionUtils.isEmpty(categories) ? null : categories.get(0);
+        return CollectionUtils.isEmpty(categories) ? null : (Category) categories.toArray()[0];
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Storage storage = (Storage) o;
+
+        return id.equals(storage.id);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 }

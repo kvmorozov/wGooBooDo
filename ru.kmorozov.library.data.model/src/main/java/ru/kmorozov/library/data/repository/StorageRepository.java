@@ -13,4 +13,6 @@ public interface StorageRepository extends MongoRepository<Storage, String> {
     Storage findByUrl(String url);
 
     List<Storage> findAllByParent(Storage parent);
+
+    List<Storage> findAllByName(String name);
 }
