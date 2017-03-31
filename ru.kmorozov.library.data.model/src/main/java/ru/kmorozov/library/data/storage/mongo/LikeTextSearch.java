@@ -43,9 +43,8 @@ public class LikeTextSearch {
 
         if (resultList == null) return Collections.EMPTY_LIST;
 
-        Iterator<Object> it = resultList.iterator();
-        while (it.hasNext()) {
-            BasicDBObject resultContainer = (BasicDBObject) it.next();
+        for (Object aResultList : resultList) {
+            BasicDBObject resultContainer = (BasicDBObject) aResultList;
             BasicDBObject resultObj = (BasicDBObject) resultContainer.get("obj");
             ObjectId resultId = (ObjectId) resultObj.get("_id");
             objectIds.add(resultId);

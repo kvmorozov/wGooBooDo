@@ -1,7 +1,6 @@
 package com.wouterbreukink.onedrive.client.exceptions;
 
 import com.google.api.client.util.Key;
-import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by sbt-morozov-kv on 13.03.2017.

@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Predicate;
 
 import static org.asynchttpclient.util.Assertions.assertNotNull;
 
@@ -69,7 +70,7 @@ public class SingleChannelHttpClient implements AsyncHttpClient {
         nettyTimer = allowStopNettyTimer ? newNettyTimer() : config.getNettyTimer();
 
         this.channelManager = channelManager == null ? new ChannelManager(config, nettyTimer) : channelManager;
-        requestSender = new NettyRequestSender(config, channelManager, nettyTimer, new AsyncHttpClientState(closed));
+        requestSender = new NettyRequestSender(config, channelManager, null, nettyTimer, new AsyncHttpClientState(closed));
         this.channelManager.configureBootstraps(requestSender);
     }
 
@@ -245,6 +246,11 @@ public class SingleChannelHttpClient implements AsyncHttpClient {
     @Override
     public ClientStats getClientStats() {
         return channelManager.getClientStats();
+    }
+
+    @Override
+    public void flushChannelPoolPartitions(Predicate<Object> predicate) {
+
     }
 
     protected BoundRequestBuilder requestBuilder(String method, String url) {

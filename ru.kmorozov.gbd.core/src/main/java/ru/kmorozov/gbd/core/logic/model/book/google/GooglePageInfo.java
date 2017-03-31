@@ -98,10 +98,10 @@ public class GooglePageInfo extends AbstractPage implements Serializable, Compar
     private void parsePageNum() {
         boolean numFound = false;
         prefix = "";
-        String strNum = "";
+        StringBuilder strNum = new StringBuilder();
         for (int i = pid.length() - 1; i >= 0; i--) {
             char ch = pid.charAt(i);
-            if (!numFound && Character.isDigit(ch)) strNum = ch + strNum;
+            if (!numFound && Character.isDigit(ch)) strNum.insert(0, ch);
             else if (!numFound && !Character.isDigit(ch)) {
                 numFound = true;
                 prefix = ch + prefix;
@@ -110,7 +110,7 @@ public class GooglePageInfo extends AbstractPage implements Serializable, Compar
         }
 
         try {
-            pageNum = Integer.parseInt(strNum);
+            pageNum = Integer.parseInt(strNum.toString());
         } catch (NumberFormatException ignored) {
         }
     }

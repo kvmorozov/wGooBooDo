@@ -97,6 +97,6 @@ public class LocalDirectoryLoader extends BaseLoader {
 
     @Override
     protected Stream<ServerItem> getItemsStreamByStorage(Storage storage) throws IOException {
-        return Files.walk(Paths.get(storage.getUrl()), 1).map(path -> new ServerItem(path));
+        return Files.walk(Paths.get(storage.getUrl()), 1).map(ServerItem::new);
     }
 }

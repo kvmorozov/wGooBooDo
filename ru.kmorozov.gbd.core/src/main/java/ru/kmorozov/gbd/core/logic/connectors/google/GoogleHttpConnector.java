@@ -40,7 +40,7 @@ public class GoogleHttpConnector extends HttpConnector {
 
             if ((GBDOptions.secureMode() && proxy.isLocal()) || !proxy.isAvailable()) return null;
 
-            HttpResponse resp = null;
+            HttpResponse resp;
             HttpHeaders headers = proxy.getHeaders();
             if ((rqUrl.contains("google") && !StringUtils.isEmpty(headers.getCookie()) && headers.getCookie().contains("NID")) || !rqUrl.contains("google")) {
                 HttpRequest req = getFactory(proxy).buildGetRequest(url).setConnectTimeout(withTimeout ? CONNECT_TIMEOUT : CONNECT_TIMEOUT * 10).setHeaders(headers);

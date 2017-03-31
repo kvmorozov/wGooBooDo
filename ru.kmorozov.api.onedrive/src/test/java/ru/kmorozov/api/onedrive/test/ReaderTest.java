@@ -41,8 +41,6 @@ public class ReaderTest {
 
     @Test
     public void walkTest() throws IOException {
-        OneDriveWalkers.walk(api, 3).forEach(oneDriveItem -> {
-            System.out.println(oneDriveItem.getName());
-        });
+        OneDriveWalkers.walk(api, 3).forEach(oneDriveItem -> System.out.println(oneDriveItem.getName()));
     }
 }

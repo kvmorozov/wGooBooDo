@@ -70,7 +70,7 @@ public class OneDriveWalker implements Closeable {
             if (this.followLinks && wouldLoop(item)) {
                 return new Event(EventType.ENTRY, item, new OneDriveException(item.toString()));
             } else {
-                Stream<OneDriveItem> itemStream = null;
+                Stream<OneDriveItem> itemStream;
 
                 try {
                     itemStream = Arrays.asList(api.getChildren(item)).stream();

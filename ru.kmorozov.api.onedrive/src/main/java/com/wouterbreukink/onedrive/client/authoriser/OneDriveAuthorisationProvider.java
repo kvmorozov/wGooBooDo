@@ -113,7 +113,7 @@ class OneDriveAuthorisationProvider implements AuthorisationProvider {
                 new AbstractMap.SimpleEntry<>("code", code),
                 new AbstractMap.SimpleEntry<>("grant_type", "authorization_code"),
                 new AbstractMap.SimpleEntry<>("redirect_uri", "https://login.live.com/oauth20_desktop.srf"))
-                .collect(Collectors.toMap((e) -> e.getKey(), (e) -> e.getValue())));
+                .collect(Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue)));
 
         HttpRequest request =
                 HTTP_TRANSPORT.createRequestFactory().buildPostRequest(new GenericUrl("https://login.live.com/oauth20_token.srf"), new UrlEncodedContent(data));
@@ -143,7 +143,7 @@ class OneDriveAuthorisationProvider implements AuthorisationProvider {
                 new AbstractMap.SimpleEntry<>("grant_type", "refresh_token"),
                 new AbstractMap.SimpleEntry<>("refresh_token", refreshToken),
                 new AbstractMap.SimpleEntry<>("redirect_uri", "https://login.live.com/oauth20_desktop.srf"))
-                .collect(Collectors.toMap((e) -> e.getKey(), (e) -> e.getValue())));
+                .collect(Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue)));
 
         HttpRequest request =
                 HTTP_TRANSPORT.createRequestFactory().buildPostRequest(new GenericUrl("https://login.live.com/oauth20_token.srf"), new UrlEncodedContent(data));

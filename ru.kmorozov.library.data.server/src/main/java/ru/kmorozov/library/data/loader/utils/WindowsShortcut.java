@@ -39,15 +39,12 @@ public class WindowsShortcut {
      */
     public static boolean isPotentialValidLink(File file) throws IOException {
         final int minimum_length = 0x64;
-        InputStream fis = new FileInputStream(file);
-        boolean isPotentiallyValid = false;
-        try {
+        boolean isPotentiallyValid;
+        try (InputStream fis = new FileInputStream(file)) {
             isPotentiallyValid = file.isFile()
                     && file.getName().toLowerCase().endsWith(".lnk")
                     && fis.available() >= minimum_length
                     && isMagicPresent(getBytes(fis, 32));
-        } finally {
-            fis.close();
         }
         return isPotentiallyValid;
     }
@@ -55,11 +52,8 @@ public class WindowsShortcut {
     public WindowsShortcut(File file, Charset charset) throws IOException, ParseException {
         this.charset = charset;
 
-        InputStream in = new FileInputStream(file);
-        try {
+        try (InputStream in = new FileInputStream(file)) {
             parseLink(getBytes(in));
-        } finally {
-            in.close();
         }
     }
 
@@ -147,11 +141,7 @@ public class WindowsShortcut {
             final int file_atts_offset = 0x18;
             byte file_atts = link[file_atts_offset];
             byte is_dir_mask = (byte) 0x10;
-            if ((file_atts & is_dir_mask) > 0) {
-                isDirectory = true;
-            } else {
-                isDirectory = false;
-            }
+            isDirectory = (file_atts & is_dir_mask) > 0;
 
             // if the shell settings are present, skip them
             final int shell_offset = 0x4c;

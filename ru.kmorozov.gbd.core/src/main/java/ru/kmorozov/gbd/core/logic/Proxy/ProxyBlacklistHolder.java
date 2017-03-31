@@ -45,7 +45,7 @@ public class ProxyBlacklistHolder {
 
     public boolean isProxyInBlacklist(final String proxyStr) {
         Optional<HttpHostExt> host = storedHosts.parallelStream().filter(httpHostExt -> httpHostExt.isSameAsStr(proxyStr)).findFirst();
-        return host.isPresent() ? !host.get().isAvailable() : false;
+        return host.filter(httpHostExt -> !httpHostExt.isAvailable()).isPresent();
     }
 
     public void updateBlacklist(Collection<HttpHostExt> currentProxyList) {

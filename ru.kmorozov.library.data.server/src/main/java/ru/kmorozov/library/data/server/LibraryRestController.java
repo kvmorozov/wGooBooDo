@@ -97,7 +97,7 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
     @RequestMapping("/storagesByParentId")
     public List<StorageDTO> getStoragesByParentId(@RequestParam(name = "storageId") String storageId) {
         Storage parentStorage = StringUtils.isEmpty(storageId) ? null : storageRepository.findOne(storageId);
-        return storageRepository.findAllByParent(parentStorage).stream().map(storage -> new StorageDTO(storage)).collect(Collectors.toList());
+        return storageRepository.findAllByParent(parentStorage).stream().map(StorageDTO::new).collect(Collectors.toList());
     }
 
     @Override
@@ -107,14 +107,14 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
         if (storage == null)
             return Collections.EMPTY_LIST;
 
-        return booksRepository.findAllByStorage(storage).stream().map(book -> new BookDTO(book)).collect(Collectors.toList());
+        return booksRepository.findAllByStorage(storage).stream().map(BookDTO::new).collect(Collectors.toList());
     }
 
     @Override
     @RequestMapping("/itemsByStorageId")
     public List<ItemDTO> getItemsByStorageId(String storageId) {
-        List<ItemDTO> result = getBooksByStorageId(storageId).stream().map(book -> new ItemDTO(book)).collect(Collectors.toList());
-        result.addAll(getStoragesByParentId(storageId).stream().map(storage -> new ItemDTO(storage)).collect(Collectors.toList()));
+        List<ItemDTO> result = getBooksByStorageId(storageId).stream().map(ItemDTO::new).collect(Collectors.toList());
+        result.addAll(getStoragesByParentId(storageId).stream().map(ItemDTO::new).collect(Collectors.toList()));
 
         return result;
     }

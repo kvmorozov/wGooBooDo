@@ -72,18 +72,18 @@ public abstract class AbstractRestClient extends AbstractHttpProcessor {
     }
 
     protected <T> T getCallResult(String operation, Class<T> resultClass, RestParam... parameters) {
-        String rqUrl = getRestServiceBaseUrl() + operation;
+        StringBuilder rqUrl = new StringBuilder(getRestServiceBaseUrl() + operation);
 
         if (parameters != null && parameters.length > 0) {
-            rqUrl += "?";
+            rqUrl.append("?");
             for (RestParam param : parameters)
-                rqUrl += (param.paramName + "=" + param.value.toString() + "&");
+                rqUrl.append(param.paramName).append("=").append(param.value.toString()).append("&");
         }
 
-        String rawResult = null;
+        String rawResult;
 
         try {
-            rawResult = getRawResult(rqUrl);
+            rawResult = getRawResult(rqUrl.toString());
         } catch (RestServiceUnavailableException e) {
             logger.finest(String.format("Service %s call failed!", operation));
             return resultClass.equals(Boolean.class) ? (T) Boolean.FALSE : null;

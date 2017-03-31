@@ -52,7 +52,7 @@ public class OneDriveLoader extends BaseLoader {
     @Override
     protected Stream<ServerItem> getItemsStreamByStorage(Storage storage) throws IOException {
         OneDriveItem[] children = api.getChildren(storage.getUrl());
-        return Arrays.asList(children).stream().map(oneDriveItem -> new ServerItem(oneDriveItem));
+        return Arrays.asList(children).stream().map(ServerItem::new);
     }
 
     @Override

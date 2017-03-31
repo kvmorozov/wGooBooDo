@@ -4,8 +4,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -59,7 +57,7 @@ public class BaseOperationsTest {
 
     @Test
     public void searchTest() {
-        List<Book> books = Arrays.asList(new Book[]{new Book("Test tit1le", "Test aut1hor"), new Book("Test tit2le", "Test aut2hor")});
+        List<Book> books = Arrays.asList(new Book("Test tit1le", "Test aut1hor"), new Book("Test tit2le", "Test aut2hor"));
 
         booksRepository.save(books);
 

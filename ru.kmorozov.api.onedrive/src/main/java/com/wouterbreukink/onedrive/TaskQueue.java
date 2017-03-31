@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class TaskQueue {
 
-    private final PriorityBlockingQueue<Task> queue = new PriorityBlockingQueue<Task>();
+    private final PriorityBlockingQueue<Task> queue = new PriorityBlockingQueue<>();
     private final Object suspendedMonitor = new Object();
     private final Object doneMonitor = new Object();
     private AtomicInteger tasksInProgress = new AtomicInteger(0);
