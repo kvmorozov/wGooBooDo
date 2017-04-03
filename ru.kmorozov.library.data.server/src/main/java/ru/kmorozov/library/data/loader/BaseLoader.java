@@ -52,15 +52,24 @@ public abstract class BaseLoader implements ILoader {
         }
     }
 
+    private Category getorCreatecategory(String name) {
+        Category category = categoryRepository.findOneByName(name);
+        if (category == null) {
+            category = new Category();
+            category.setName(name);
+
+            categoryRepository.save(category);
+        }
+
+        return category;
+    }
+
     protected Category getCategoryByServerItem(ServerItem serverItem) {
         Category category;
         Storage storage = storageRepository.findByUrl(serverItem.getUrl());
 
         if (storage == null || storage.getCategories().size() < 1) {
-            category = new Category();
-            category.setName(serverItem.getName());
-
-            categoryRepository.save(category);
+            category = getorCreatecategory(serverItem.getName());
 
             storage = new Storage();
             storage.setStorageType(serverItem.getStorageType());

@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -70,7 +71,7 @@ public class OneDriveLoader extends BaseLoader {
                     try {
                         WindowsShortcut lnkFile = new WindowsShortcut(tmpFile, Charset.forName("Windows-1251"));
                         if (lnkFile.isDirectory()) {
-                            Storage linkedStorage = getStorageByLink(lnkFile);
+                            Storage linkedStorage = getStorageByLink(lnkFile.getRealFilename());
                             Storage thisStorage = lnk.getStorage();
 
                             if (linkedStorage != null && thisStorage != null) {
@@ -97,12 +98,28 @@ public class OneDriveLoader extends BaseLoader {
         return true;
     }
 
-    private Storage getStorageByLink(WindowsShortcut lnkFile) {
-        String[] names = lnkFile.getRealFilename().split(delimiter);
+    private Storage getStorageByLink(String lnkFileName) {
+        String[] names = lnkFileName.split(delimiter);
         List<Storage> storages = storageRepository.findAllByName(names[names.length - 1]);
+        String parentName = null;
 
-        assert storages.size() == 1 : lnkFile.getRealFilename();
+        for (int index = names.length - 1; index > 0; index--) {
+            if (storages.size() == 1)
+                break;
+            else {
+                parentName = names[index - 1];
+                if (parentName != null) {
+                    List<Storage> filteredStorages = new ArrayList<>();
+                    for (Storage storage : storages)
+                        if (storage.getParent().getName().equals(parentName))
+                            filteredStorages.add(storage);
 
-        return storages.size() == 1 ? storages.get(0) : null;
+                    storages = filteredStorages;
+                }
+            }
+        }
+
+        assert storages.size() == 1 : lnkFileName;
+        return storages.get(0);
     }
 }
