@@ -3,6 +3,7 @@ package ru.kmorozov.library.data.server;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.kmorozov.gbd.client.IRestClient;
@@ -14,6 +15,7 @@ import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
 import ru.kmorozov.gbd.core.logic.output.consumers.DummyBookInfoOutput;
 import ru.kmorozov.gbd.core.utils.Logger;
+import ru.kmorozov.library.data.loader.OneDriveLoader;
 import ru.kmorozov.library.data.model.IDataRestServer;
 import ru.kmorozov.library.data.model.book.Storage;
 import ru.kmorozov.library.data.model.dto.BookDTO;
@@ -24,12 +26,10 @@ import ru.kmorozov.library.data.repository.BooksRepository;
 import ru.kmorozov.library.data.repository.GoogleBooksRepository;
 import ru.kmorozov.library.data.repository.StorageRepository;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static ru.kmorozov.library.data.model.dto.ItemDTO.ItemType.book;
-import static ru.kmorozov.library.data.model.dto.ItemDTO.ItemType.storage;
 
 /**
  * Created by km on 19.12.2016.
@@ -48,6 +48,9 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
 
     @Autowired
     private BooksRepository booksRepository;
+
+    @Autowired
+    private OneDriveLoader oneLoader;
 
     private static transient BookContextLoader googleBooksLoader;
 
@@ -129,6 +132,16 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
                 return new ItemDTO(new StorageDTO(storageRepository.findOne(itemId)));
             default:
                 return null;
+        }
+    }
+
+    @Override
+    @RequestMapping(value = "/updateLibrary", method = RequestMethod.POST)
+    public void updateLibrary() {
+        try {
+            oneLoader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

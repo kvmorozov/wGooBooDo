@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDom from "react-dom";
-import client from "./client";
+import client from "./restClient";
 import InfiniteTree from "react-infinite-tree";
 import rowRenderer from "./renderer";
 import {quoteattr} from "./tree-utils/helper";
@@ -14,6 +14,7 @@ import Grid from "react-bootstrap/lib/Grid";
 import Row from "react-bootstrap/lib/Row";
 import Col from "react-bootstrap/lib/Col";
 import Preview from "./preview";
+import LoadPopup from "./loadPopup";
 
 class App extends React.Component {
     constructor(props) {
@@ -21,6 +22,7 @@ class App extends React.Component {
 
         this.tree = null;
         this.getStoragesByParent = this.getStoragesByParent.bind(this);
+        this.handleSelect = this.handleSelect.bind(this);
     }
 
     componentDidMount() {
@@ -94,6 +96,10 @@ class App extends React.Component {
         ReactDom.render(<Preview node={node}/>, el);
     }
 
+    handleSelect(selectedKey) {
+        this.refs.loadPopup.open();
+    }
+
     render() {
         return (
             <div>
@@ -103,9 +109,9 @@ class App extends React.Component {
                     </Navbar.Header>
                     <Navbar.Toggle/>
                     <Navbar.Collapse>
-                        <Nav navbar>
-                            <NavItem>Menu1</NavItem>
-                            <NavItem>Menu2</NavItem>
+                        <Nav navbar onSelect={this.handleSelect}>
+                            <NavItem eventKey={1}>Menu1</NavItem>
+                            <NavItem eventKey={2}>Menu2</NavItem>
                         </Nav>
                     </Navbar.Collapse>
                 </Navbar>
@@ -167,6 +173,8 @@ class App extends React.Component {
                         </Col>
                     </Row>
                 </Grid>
+
+                <LoadPopup ref="loadPopup"/>
             </div>
         );
     }

@@ -1,9 +1,7 @@
 package ru.kmorozov.library.data.client;
 
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import ru.kmorozov.library.data.model.IDataRestServer;
@@ -101,6 +99,19 @@ public class LibraryRestProxy implements IDataRestServer {
                 .build().toString();
 
         return template.getForEntity(uri, ItemDTO.class).getBody();
+    }
+
+    @Override
+    @RequestMapping(value = "/updateLibrary", method = RequestMethod.POST)
+    public void updateLibrary() {
+        UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
+        String uri = builder.scheme("http")
+                .host("localhost")
+                .port(9000)
+                .path("updateLibrary")
+                .build().toString();
+
+        template.execute(uri, HttpMethod.POST, null, null);
     }
 
     private List getList(String operation, String paramName, String paramValue, Class arrClass) {

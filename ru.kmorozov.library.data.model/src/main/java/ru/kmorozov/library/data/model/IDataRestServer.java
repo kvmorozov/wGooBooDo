@@ -21,4 +21,6 @@ public interface IDataRestServer {
     List<ItemDTO> getItemsByStorageId(String storageId);
 
     ItemDTO itemByIdAndType(String itemId, ItemDTO.ItemType itemType);
+
+    void updateLibrary();
 }
