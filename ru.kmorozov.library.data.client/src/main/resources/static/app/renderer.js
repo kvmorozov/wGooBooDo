@@ -8,6 +8,10 @@ const renderer = (node, treeOptions) => {
     const childrenLength = Object.keys(children).length;
     const more = node.hasChildren();
 
+    var itemStyle = {
+        fontSize: "200%"
+    };
+
     const isDir = itemType == "storage";
     const isPdf = !isDir && (itemSubType == 'pdf');
 
@@ -54,7 +58,7 @@ const renderer = (node, treeOptions) => {
                         {'glyphicon-file': !isDir}
                     )}
                 />
-                <span className="infinite-tree-title">{name} {filesCount}</span>
+                <span className="infinite-tree-title" style={itemStyle}>{name} {filesCount}</span>
                 <i
                     style={{marginLeft: 5}}
                     className={classNames(

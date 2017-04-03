@@ -14,7 +14,6 @@ import Grid from "react-bootstrap/lib/Grid";
 import Row from "react-bootstrap/lib/Row";
 import Col from "react-bootstrap/lib/Col";
 import Preview from "./preview";
-import "../bootstrap.min.css";
 
 class App extends React.Component {
     constructor(props) {
@@ -70,16 +69,17 @@ class App extends React.Component {
                 const result = [];
 
                 for (let i = 0; i < data.length; i++) {
-                    result.push({
-                        id: data[i].itemId,
-                        name: data[i].displayName,
-                        parent: parentNode,
-                        itemType: data[i].itemType,
-                        itemSubType: data[i].itemSubType,
-                        loadOnDemand: data[i].itemType == 'storage',
-                        links: data[i].links,
-                        filesCount: data[i].filesCount
-                    });
+                    if (data[i].filesCount > 0)
+                        result.push({
+                            id: data[i].itemId,
+                            name: data[i].displayName,
+                            parent: parentNode,
+                            itemType: data[i].itemType,
+                            itemSubType: data[i].itemSubType,
+                            loadOnDemand: data[i].itemType == 'storage',
+                            links: data[i].links,
+                            filesCount: data[i].filesCount
+                        });
                 }
 
                 this.tree.addChildNodes(result, 0, parentNode);
@@ -163,7 +163,7 @@ class App extends React.Component {
                             />
                         </Col>
                         <Col>
-                            <div className="preview" data-id="preview"/>
+                            <div className="container" data-id="preview"/>
                         </Col>
                     </Row>
                 </Grid>

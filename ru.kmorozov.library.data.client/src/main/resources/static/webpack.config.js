@@ -12,7 +12,7 @@ module.exports = {
         filename: 'app-bundle.js'
     },
     resolve: {
-        extensions: ['.js', '.jsx', '.styl']
+        extensions: ['.js', '.jsx', '.styl', '.css']
     },
     plugins: [
         new webpack.LoaderOptionsPlugin({
