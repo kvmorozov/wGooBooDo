@@ -19,6 +19,12 @@ import java.util.stream.Stream;
  */
 public abstract class BaseLoader implements ILoader {
 
+    protected enum State {
+        STARTED, STOPPED
+    }
+
+    protected State loaderState = State.STOPPED;
+
     private static final Logger logger = Logger.getLogger(BaseLoader.class);
     protected List<Object> links = new ArrayList<>();
 
@@ -52,7 +58,7 @@ public abstract class BaseLoader implements ILoader {
         }
     }
 
-    private Category getorCreatecategory(String name) {
+    private Category getOrCreateCategory(String name) {
         Category category = categoryRepository.findOneByName(name);
         if (category == null) {
             category = new Category();
@@ -64,39 +70,41 @@ public abstract class BaseLoader implements ILoader {
         return category;
     }
 
-    protected Category getCategoryByServerItem(ServerItem serverItem) {
-        Category category;
+    private Storage getOrCreateStorage(ServerItem serverItem) {
         Storage storage = storageRepository.findByUrl(serverItem.getUrl());
-
-        if (storage == null || storage.getCategories().size() < 1) {
-            category = getorCreatecategory(serverItem.getName());
-
+        if (storage == null)
             storage = new Storage();
-            storage.setStorageType(serverItem.getStorageType());
-            storage.setUrl(serverItem.getUrl());
-            storage.addCategory(category);
-            storage.setName(serverItem.getName());
-            storage.setLastModifiedDateTime(serverItem.getLastModifiedDateTime());
-            storage.setStorageInfo(new StorageInfo(serverItem.getFilesCount()));
 
+        return storage;
+    }
+
+    protected Category getCategoryByServerItem(ServerItem serverItem) {
+        Category category = getOrCreateCategory(serverItem.getName());
+        Storage storage = getOrCreateStorage(serverItem);
+
+        storage.setStorageType(serverItem.getStorageType());
+        storage.setUrl(serverItem.getUrl());
+        storage.addCategory(category);
+        storage.setName(serverItem.getName());
+        storage.setLastModifiedDateTime(serverItem.getLastModifiedDateTime());
+        storage.setStorageInfo(new StorageInfo(serverItem.getFilesCount()));
+
+        storageRepository.save(storage);
+
+        Storage parentStorage = serverItem.getParent() == null ? null : storageRepository.findByUrl(serverItem.getParent().getUrl());
+
+        if (parentStorage != null) {
+            storage.setParent(parentStorage);
             storageRepository.save(storage);
 
-            Storage parentStorage = serverItem.getParent() == null ? null : storageRepository.findByUrl(serverItem.getParent().getUrl());
-
-            if (parentStorage != null) {
-                storage.setParent(parentStorage);
-                storageRepository.save(storage);
-
-                category.addParents(parentStorage.getCategories());
-                categoryRepository.save(category);
-            }
-
-            category.addStorage(storage);
+            category.addParents(parentStorage.getCategories());
             categoryRepository.save(category);
+        }
 
-            return category;
-        } else
-            return storage.getMainCategory();
+        category.addStorage(storage);
+        categoryRepository.save(category);
+
+        return storage.getMainCategory();
     }
 
     protected abstract Stream<ServerItem> getItemsStreamByStorage(Storage storage) throws IOException;
@@ -138,5 +146,9 @@ public abstract class BaseLoader implements ILoader {
 
         storage.setStorageInfo(storageInfo);
         storageRepository.save(storage);
+    }
+
+    public boolean isStarted() {
+        return loaderState == State.STARTED;
     }
 }

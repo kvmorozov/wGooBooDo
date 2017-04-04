@@ -37,6 +37,11 @@ public class OneDriveLoader extends BaseLoader {
 
     @Override
     public void load() throws IOException {
+        if (loaderState == State.STARTED)
+            throw new IllegalStateException("Loader is already started!");
+
+        loaderState = State.STARTED;
+
         OneDriveWalkers.walk(api).forEach(oneDriveItem -> {
             if (oneDriveItem.isDirectory()) {
                 Category category = getCategoryByServerItem(new ServerItem(oneDriveItem));
@@ -48,6 +53,8 @@ public class OneDriveLoader extends BaseLoader {
                     }
             }
         });
+
+        loaderState = State.STOPPED;
     }
 
     @Override

@@ -139,7 +139,8 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
     @RequestMapping(value = "/updateLibrary", method = RequestMethod.POST)
     public void updateLibrary() {
         try {
-            oneLoader.load();
+            if (!oneLoader.isStarted())
+                oneLoader.load();
         } catch (IOException e) {
             e.printStackTrace();
         }

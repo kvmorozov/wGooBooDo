@@ -110,8 +110,8 @@ class App extends React.Component {
                     <Navbar.Toggle/>
                     <Navbar.Collapse>
                         <Nav navbar onSelect={this.handleSelect}>
-                            <NavItem eventKey={1}>Menu1</NavItem>
-                            <NavItem eventKey={2}>Menu2</NavItem>
+                            <NavItem eventKey={1}>Update library</NavItem>
+                            <NavItem eventKey={2}>Options</NavItem>
                         </Nav>
                     </Navbar.Collapse>
                 </Navbar>
