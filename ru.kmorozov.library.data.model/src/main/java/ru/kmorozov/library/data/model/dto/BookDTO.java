@@ -16,6 +16,10 @@ public class BookDTO {
     }
 
     public BookDTO(Book book) {
+        this(book, false);
+    }
+
+    public BookDTO(Book book, boolean withCategories) {
         this.id = book.getBookId();
         this.format = book.getBookInfo().getFormat();
         this.title = book.getTitle() == null ? book.getBookInfo().getFileName() : book.getTitle();

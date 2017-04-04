@@ -1,5 +1,11 @@
 import React from "react";
-import Panel from "react-bootstrap/lib/Panel";
+import ControlLabel from "react-bootstrap/lib/ControlLabel";
+import FormGroup from "react-bootstrap/lib/FormGroup";
+import FormControl from "react-bootstrap/lib/FormControl";
+import Form from "react-bootstrap/lib/Form";
+import Col from "react-bootstrap/lib/Col";
+import Button from "react-bootstrap/lib/Button";
+import ButtonGroup from "react-bootstrap/lib/ButtonGroup";
 
 class Preview extends React.Component {
 
@@ -8,31 +14,53 @@ class Preview extends React.Component {
     }
 
     render() {
-        let node = this.props.node;
-        let text;
-
-        if (node) {
-            let o = {
-                id: node.id,
-                name: node.name,
-                children: node.children ? node.children.length : 0,
-                parent: node.parent ? node.parent.id : null,
-                state: node.state,
-                filesCount: node.filesCount
-            };
-            if (node.loadOnDemand !== undefined) {
-                o.loadOnDemand = node.loadOnDemand;
-            }
-            text = JSON.stringify(o, null, 2);
-        } else {
-            text = '';
+        if (this.props == null || this.props.node == null) {
+            return <Form/>
         }
+        else {
+            let node = this.props.node;
+            let catButtons = node.categories.map(category => <Button>{category.name}</Button>);
 
-        return (
-            <Panel>
-                {text}
-            </Panel>
-        );
+            return (
+                <Form horizontal>
+                    <FormGroup controlId="formAttrsId">
+                        <Col componentClass={ControlLabel} sm={2}>ID</Col>
+                        <Col sm={10}>
+                            <FormControl type="text"
+                                         value={node.itemId}/>
+                        </Col>
+                    </FormGroup>
+
+                    <FormGroup controlId="formAttrsName">
+                        <Col componentClass={ControlLabel} sm={2}>Name</Col>
+                        <Col sm={10}>
+                            <FormControl type="text"
+                                         value={node.displayName}/>
+                        </Col>
+                    </FormGroup>
+
+                    <FormGroup controlId="formAttrsType">
+                        <Col componentClass={ControlLabel} sm={2}>Item type</Col>
+                        <Col sm={10}>
+                            <FormControl type="text"
+                                         value={node.itemType}/>
+                        </Col>
+                    </FormGroup>
+
+                    <FormGroup controlId="formAttrsFiles">
+                        <Col componentClass={ControlLabel} sm={2}>Files count</Col>
+                        <Col sm={10}>
+                            <FormControl type="text"
+                                         value={node.filesCount}/>
+                        </Col>
+                    </FormGroup>
+                    <ButtonGroup>
+                        {catButtons}
+                    </ButtonGroup>
+
+                </Form>
+            );
+        }
     }
 }
 

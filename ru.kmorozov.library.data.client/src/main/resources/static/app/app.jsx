@@ -93,7 +93,15 @@ class App extends React.Component {
 
     updatePreview(node) {
         const el = document.querySelector('[data-id="preview"]');
-        ReactDom.render(<Preview node={node}/>, el);
+
+        if (node != null)
+            client({
+                method: 'GET', path: node.links.find(link => link.rel == 'self').href
+            }).then(
+                response => {
+                    ReactDom.render(<Preview node={response.entity}/>, el);
+                }
+            );
     }
 
     handleSelect(selectedKey) {

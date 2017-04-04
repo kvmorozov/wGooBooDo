@@ -2,6 +2,9 @@ package ru.kmorozov.library.data.model.dto;
 
 import org.springframework.hateoas.ResourceSupport;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Created by sbt-morozov-kv on 31.01.2017.
  */
@@ -18,8 +21,10 @@ public class ItemDTO extends ResourceSupport {
     private Object itemSubType;
     private String displayName;
     private long filesCount;
+    private List<CategoryDTO> categories;
 
-    public ItemDTO() {}
+    public ItemDTO() {
+    }
 
     public ItemDTO(StorageDTO storageDTO) {
         this.itemId = storageDTO.getId();
@@ -27,6 +32,9 @@ public class ItemDTO extends ResourceSupport {
         this.itemSubType = storageDTO.getStorageType();
         this.displayName = storageDTO.getDisplayName();
         this.filesCount = storageDTO.getFilesCount();
+
+        if (storageDTO.getCategories() != null)
+            this.categories = storageDTO.getCategories().stream().map(CategoryDTO::new).collect(Collectors.toList());
     }
 
     public ItemDTO(BookDTO bookDTO) {
@@ -40,35 +48,23 @@ public class ItemDTO extends ResourceSupport {
         return itemId;
     }
 
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
-    }
-
     public ItemType getItemType() {
         return itemType;
-    }
-
-    public void setItemType(ItemType itemType) {
-        this.itemType = itemType;
     }
 
     public Object getItemSubType() {
         return itemSubType;
     }
 
-    public void setItemSubType(Object itemSubType) {
-        this.itemSubType = itemSubType;
-    }
-
     public String getDisplayName() {
         return displayName;
     }
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
-
     public long getFilesCount() {
         return filesCount;
+    }
+
+    public List<CategoryDTO> getCategories() {
+        return categories;
     }
 }

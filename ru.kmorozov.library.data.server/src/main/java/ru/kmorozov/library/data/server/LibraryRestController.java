@@ -126,9 +126,9 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
     public ItemDTO itemByIdAndType(@RequestParam(name = "itemId") String itemId, @RequestParam(name = "itemType") ItemDTO.ItemType itemType) {
         switch (itemType) {
             case book:
-                return new ItemDTO(new BookDTO(booksRepository.findOne(itemId)));
+                return new ItemDTO(new BookDTO(booksRepository.findOne(itemId), true));
             case storage:
-                return new ItemDTO(new StorageDTO(storageRepository.findOne(itemId)));
+                return new ItemDTO(new StorageDTO(storageRepository.findOne(itemId), true));
             default:
                 return null;
         }
