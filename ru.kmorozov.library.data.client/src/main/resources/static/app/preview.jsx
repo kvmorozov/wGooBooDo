@@ -19,7 +19,7 @@ class Preview extends React.Component {
         }
         else {
             let node = this.props.node;
-            let catButtons = node.categories.map(category => <Button>{category.name}</Button>);
+            let catButtons = node.categories.map(category => <Button key={category.name}>{category.name}</Button>);
 
             return (
                 <Form horizontal>
@@ -27,7 +27,10 @@ class Preview extends React.Component {
                         <Col componentClass={ControlLabel} sm={2}>ID</Col>
                         <Col sm={10}>
                             <FormControl type="text"
-                                         value={node.itemId}/>
+                                         value={node.itemId}
+                                         onChange={()=> {
+                                         }}
+                            />
                         </Col>
                     </FormGroup>
 
@@ -35,7 +38,10 @@ class Preview extends React.Component {
                         <Col componentClass={ControlLabel} sm={2}>Name</Col>
                         <Col sm={10}>
                             <FormControl type="text"
-                                         value={node.displayName}/>
+                                         value={node.displayName}
+                                         onChange={()=> {
+                                         }}
+                            />
                         </Col>
                     </FormGroup>
 
@@ -43,7 +49,10 @@ class Preview extends React.Component {
                         <Col componentClass={ControlLabel} sm={2}>Item type</Col>
                         <Col sm={10}>
                             <FormControl type="text"
-                                         value={node.itemType}/>
+                                         value={node.itemType}
+                                         onChange={()=> {
+                                         }}
+                            />
                         </Col>
                     </FormGroup>
 
@@ -51,7 +60,10 @@ class Preview extends React.Component {
                         <Col componentClass={ControlLabel} sm={2}>Files count</Col>
                         <Col sm={10}>
                             <FormControl type="text"
-                                         value={node.filesCount}/>
+                                         value={node.filesCount}
+                                         onChange={()=> {
+                                         }}
+                            />
                         </Col>
                     </FormGroup>
                     <ButtonGroup>
