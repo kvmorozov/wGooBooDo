@@ -102,13 +102,14 @@ public class LibraryRestProxy implements IDataRestServer {
     }
 
     @Override
-    @RequestMapping(value = "/updateLibrary", method = RequestMethod.POST)
-    public void updateLibrary() {
+    @RequestMapping(value = "/updateLibrary/{state}", method = RequestMethod.POST)
+    public void updateLibrary(@PathVariable String state) {
         UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
         String uri = builder.scheme("http")
                 .host("localhost")
                 .port(9000)
                 .path("updateLibrary")
+                .queryParam("state", state)
                 .build().toString();
 
         template.execute(uri, HttpMethod.POST, null, null);

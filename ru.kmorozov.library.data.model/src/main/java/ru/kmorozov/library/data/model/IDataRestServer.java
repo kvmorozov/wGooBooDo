@@ -22,5 +22,5 @@ public interface IDataRestServer {
 
     ItemDTO itemByIdAndType(String itemId, ItemDTO.ItemType itemType);
 
-    void updateLibrary();
+    void updateLibrary(String state);
 }

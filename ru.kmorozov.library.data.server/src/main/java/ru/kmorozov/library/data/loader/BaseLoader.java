@@ -17,16 +17,11 @@ import java.util.stream.Stream;
 /**
  * Created by sbt-morozov-kv on 14.03.2017.
  */
-public abstract class BaseLoader implements ILoader {
-
-    protected enum State {
-        STARTED, STOPPED
-    }
-
-    protected State loaderState = State.STOPPED;
+public abstract class BaseLoader implements ILoader, Runnable {
 
     private static final Logger logger = Logger.getLogger(BaseLoader.class);
     protected List<Object> links = new ArrayList<>();
+    protected volatile LoaderExecutor.State state = LoaderExecutor.State.STOPPED;
 
     @Autowired
     protected CategoryRepository categoryRepository;
@@ -148,7 +143,24 @@ public abstract class BaseLoader implements ILoader {
         storageRepository.save(storage);
     }
 
-    public boolean isStarted() {
-        return loaderState == State.STARTED;
+    @Override
+    public void run() {
+        try {
+            load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    void setState(LoaderExecutor.State state) {
+        this.state = state;
+    }
+
+    LoaderExecutor.State getState() {
+        return state;
+    }
+
+    public boolean isStopped() {
+        return state == LoaderExecutor.State.STOPPED;
     }
 }

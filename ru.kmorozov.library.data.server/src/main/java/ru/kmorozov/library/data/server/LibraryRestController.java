@@ -15,7 +15,7 @@ import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
 import ru.kmorozov.gbd.core.logic.output.consumers.DummyBookInfoOutput;
 import ru.kmorozov.gbd.core.utils.Logger;
-import ru.kmorozov.library.data.loader.OneDriveLoader;
+import ru.kmorozov.library.data.loader.LoaderExecutor;
 import ru.kmorozov.library.data.model.IDataRestServer;
 import ru.kmorozov.library.data.model.book.Storage;
 import ru.kmorozov.library.data.model.dto.BookDTO;
@@ -26,7 +26,6 @@ import ru.kmorozov.library.data.repository.BooksRepository;
 import ru.kmorozov.library.data.repository.GoogleBooksRepository;
 import ru.kmorozov.library.data.repository.StorageRepository;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -50,7 +49,7 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
     private BooksRepository booksRepository;
 
     @Autowired
-    private OneDriveLoader oneLoader;
+    private LoaderExecutor loader;
 
     private static transient BookContextLoader googleBooksLoader;
 
@@ -137,12 +136,18 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
 
     @Override
     @RequestMapping(value = "/updateLibrary", method = RequestMethod.POST)
-    public void updateLibrary() {
-        try {
-            if (!oneLoader.isStarted())
-                oneLoader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
+    public void updateLibrary(@RequestParam(name = "state") String stateString) {
+        LoaderExecutor.State state = LoaderExecutor.State.valueOf(stateString);
+
+        switch (state) {
+            case STARTED:
+                loader.start();
+                break;
+            case PAUSED:
+                loader.pause();
+                break;
+            case STOPPED:
+                loader.stop();
         }
     }
 }

@@ -36,11 +36,6 @@ public class LocalDirectoryLoader extends BaseLoader {
 
     @Override
     public void load() throws IOException {
-        if (loaderState == State.STARTED)
-            throw new IllegalStateException("Loader is already started!");
-
-        loaderState = State.STARTED;
-
         Files.walk(basePath).forEach(filePath -> {
             ServerItem serverItem = new ServerItem(filePath);
             if (serverItem.isDirectory()) {
@@ -54,7 +49,7 @@ public class LocalDirectoryLoader extends BaseLoader {
             }
         });
 
-        loaderState = State.STOPPED;
+        setState(LoaderExecutor.State.STOPPED);
     }
 
     @Override

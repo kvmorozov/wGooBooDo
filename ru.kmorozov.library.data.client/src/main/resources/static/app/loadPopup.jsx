@@ -1,6 +1,7 @@
 import React from "react";
 import Modal from "react-bootstrap/lib/Modal";
 import Button from "react-bootstrap/lib/Button";
+import ButtonGroup from "react-bootstrap/lib/ButtonGroup";
 import client from "./restClient";
 
 class LoadPopup extends React.Component {
@@ -12,7 +13,10 @@ class LoadPopup extends React.Component {
 
         this.close = this.close.bind(this);
         this.open = this.open.bind(this);
-        this.update = this.update.bind(this);
+
+        this.updateStart = this.updateStart.bind(this);
+        this.updatePause = this.updatePause.bind(this);
+        this.updateStop = this.updateStop.bind(this);
     }
 
     close() {
@@ -23,11 +27,16 @@ class LoadPopup extends React.Component {
         this.setState({showModal: true});
     }
 
-    update() {
-        client({
-            method: 'POST', path: '/updateLibrary'
-        }).done(
-        );
+    updateStart() {
+        client({method: 'POST', path: '/updateLibrary/STARTED'}).done();
+    }
+
+    updatePause() {
+        client({method: 'POST', path: '/updateLibrary/PAUSED'}).done();
+    }
+
+    updateStop() {
+        client({method: 'POST', path: '/updateLibrary/STOPPED'}).done();
     }
 
     render() {
@@ -38,7 +47,11 @@ class LoadPopup extends React.Component {
                         <Modal.Title>Update library</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <Button onClick={this.update}>Update</Button>
+                        <ButtonGroup>
+                            <Button onClick={this.updateStart}>Update start</Button>
+                            <Button onClick={this.updatePause}>Update pause</Button>
+                            <Button onClick={this.updateStop}>Update stop</Button>
+                        </ButtonGroup>
                     </Modal.Body>
                     <Modal.Footer>
                         <Button onClick={this.close}>Close</Button>
