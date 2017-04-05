@@ -3,7 +3,6 @@ import ReactDom from "react-dom";
 import client from "./restClient";
 import InfiniteTree from "react-infinite-tree";
 import rowRenderer from "./renderer";
-import {quoteattr} from "./tree-utils/helper";
 import "./tree-utils/index.styl";
 import "./tree-utils/app.styl";
 import "./tree-utils/animation.styl";
@@ -13,7 +12,7 @@ import NavItem from "react-bootstrap/lib/NavItem";
 import Grid from "react-bootstrap/lib/Grid";
 import Row from "react-bootstrap/lib/Row";
 import Col from "react-bootstrap/lib/Col";
-import Preview from "./preview";
+import Preview from "./preview/preview";
 import LoadPopup from "./loadPopup";
 
 class App extends React.Component {
@@ -40,16 +39,7 @@ class App extends React.Component {
                     const result = [];
 
                     for (let i = 0; i < data.length; i++) {
-                        result.push({
-                            id: data[i].itemId,
-                            name: data[i].displayName,
-                            parent: null,
-                            itemType: data[i].itemType,
-                            itemSubType: data[i].itemSubType,
-                            loadOnDemand: data[i].itemType == 'storage',
-                            links: data[i].links,
-                            filesCount: data[i].filesCount
-                        });
+                        result.push(this.itemToNode(data[i]));
                     }
 
                     this.tree.loadData(result);
@@ -57,6 +47,19 @@ class App extends React.Component {
                 }
             )
         })
+    }
+
+    itemToNode(item, parent) {
+        return {
+            id: item.itemId,
+            name: item.displayName,
+            parent: parent,
+            itemType: item.itemType,
+            itemSubType: item.itemSubType,
+            loadOnDemand: item.itemType == 'storage',
+            links: item.links,
+            filesCount: item.filesCount
+        };
     }
 
     getStoragesByParent(parentNode) {
@@ -72,16 +75,7 @@ class App extends React.Component {
 
                 for (let i = 0; i < data.length; i++) {
                     if (data[i].filesCount > 0)
-                        result.push({
-                            id: data[i].itemId,
-                            name: data[i].displayName,
-                            parent: parentNode,
-                            itemType: data[i].itemType,
-                            itemSubType: data[i].itemSubType,
-                            loadOnDemand: data[i].itemType == 'storage',
-                            links: data[i].links,
-                            filesCount: data[i].filesCount
-                        });
+                        result.push(this.itemToNode(data[i], parentNode));
                 }
 
                 this.tree.addChildNodes(result, 0, parentNode);
@@ -92,14 +86,12 @@ class App extends React.Component {
     }
 
     updatePreview(node) {
-        const el = document.querySelector('[data-id="preview"]');
-
         if (node != null)
             client({
                 method: 'GET', path: node.links.find(link => link.rel == 'self').href
             }).then(
                 response => {
-                    ReactDom.render(<Preview node={response.entity}/>, el);
+                    this.refs.preview.update(response.entity);
                 }
             );
     }
@@ -129,18 +121,6 @@ class App extends React.Component {
                             <InfiniteTree
                                 ref={(c) => this.tree = c.tree}
                                 autoOpen={true}
-                                droppable={{
-                                    hoverClass: 'infinite-tree-drop-hover',
-                                    accept: function (opts) {
-                                        const {type, draggableTarget, droppableTarget, node} = opts;
-                                        return true;
-                                    },
-                                    drop: function (e, opts) {
-                                        const {draggableTarget, droppableTarget, node} = opts;
-                                        const source = e.dataTransfer.getData('text');
-                                        document.querySelector('[data-id="dropped-result"]').innerHTML = 'Dropped to <b>' + quoteattr(node.name) + '</b>';
-                                    }
-                                }}
                                 loadNodes={(parentNode, done) => {
                                     done(null, this.getStoragesByParent(parentNode));
                                 }}
@@ -154,18 +134,9 @@ class App extends React.Component {
                                 }}
                                 onDoubleClick={(event) => {
                                     const target = event.target || event.srcElement; // IE8
-                                    console.log('onDoubleClick', target);
                                 }}
                                 onClick={(event) => {
                                     const target = event.target || event.srcElement; // IE8
-                                    console.log('onClick', target);
-                                }}
-                                onDropNode={(node, e) => {
-                                    const source = e.dataTransfer.getData('text');
-                                    document.querySelector('[data-id="dropped-result"]').innerHTML = 'Dropped to <b>' + quoteattr(node.name) + '</b>';
-                                }}
-                                onContentWillUpdate={() => {
-                                    console.log('onContentWillUpdate');
                                 }}
                                 onContentDidUpdate={() => {
                                     this.updatePreview(this.tree.getSelectedNode());
@@ -177,7 +148,7 @@ class App extends React.Component {
                             />
                         </Col>
                         <Col>
-                            <div className="container" data-id="preview"/>
+                            <Preview ref="preview"/>
                         </Col>
                     </Row>
                 </Grid>

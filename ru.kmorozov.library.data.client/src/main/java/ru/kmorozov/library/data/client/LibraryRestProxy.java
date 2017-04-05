@@ -66,24 +66,27 @@ public class LibraryRestProxy implements IDataRestServer {
 
         return result
                 .stream()
-                .map(item -> {
-                    item.add(linkTo(methodOn(LibraryRestProxy.class, item.getItemType(), item.getItemId())
-                            .itemByIdAndType(item.getItemId(), item.getItemType())).withSelfRel());
-
-                    switch (item.getItemType()) {
-                        case storage:
-                            item.add(linkTo(methodOn(LibraryRestProxy.class)
-                                    .getBooksByStorageId(item.getItemId())).withRel("books"));
-                            item.add(linkTo(methodOn(LibraryRestProxy.class)
-                                    .getStoragesByParentId(item.getItemId())).withRel("storages"));
-                            item.add(linkTo(methodOn(LibraryRestProxy.class)
-                                    .getItemsByStorageId(item.getItemId())).withRel("items"));
-                            break;
-                        default:
-                    }
-                    return item;
-                })
+                .map(this::addLinks)
                 .collect(Collectors.toList());
+    }
+
+    private ItemDTO addLinks(ItemDTO item) {
+        item.add(linkTo(methodOn(LibraryRestProxy.class, item.getItemType(), item.getItemId())
+                .itemByIdAndType(item.getItemId(), item.getItemType())).withSelfRel());
+
+        switch (item.getItemType()) {
+            case storage:
+                item.add(linkTo(methodOn(LibraryRestProxy.class)
+                        .getBooksByStorageId(item.getItemId())).withRel("books"));
+                item.add(linkTo(methodOn(LibraryRestProxy.class)
+                        .getStoragesByParentId(item.getItemId())).withRel("storages"));
+                item.add(linkTo(methodOn(LibraryRestProxy.class)
+                        .getItemsByStorageId(item.getItemId())).withRel("items"));
+                break;
+            default:
+        }
+
+        return item;
     }
 
     @Override
@@ -98,7 +101,7 @@ public class LibraryRestProxy implements IDataRestServer {
                 .queryParam("itemType", itemType.toString())
                 .build().toString();
 
-        return template.getForEntity(uri, ItemDTO.class).getBody();
+        return addLinks(template.getForEntity(uri, ItemDTO.class).getBody());
     }
 
     @Override
