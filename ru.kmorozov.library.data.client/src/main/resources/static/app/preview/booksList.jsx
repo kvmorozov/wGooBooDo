@@ -17,8 +17,8 @@ class BooksList extends React.Component {
     getLayoutItem(book, index) {
         return {
             i: book.id,
-            x: Math.floor(index / 4),
-            y: index % 4,
+            x: index % 4,
+            y: Math.floor(index / 4),
             w: 1, h: 1, static: true
         };
     }
@@ -30,11 +30,12 @@ class BooksList extends React.Component {
             let books = this.state.books;
             let layout = books.map((book, index) => this.getLayoutItem(book, index));
 
-            let cells = books.map(book => <AutosizeInput key={book.id} value={book.title}/>);
+            let cells = books.map(book => <AutosizeInput key={book.id} value={book.title} onChange={()=> {
+            }}/>);
 
             return (
                 <ReactGridLayout className="layout" layout={layout}
-                                 rowHeight={30} width={1200}>
+                                 rowHeight={30} width={1000} cols={4}>
                     {cells}
                 </ReactGridLayout>
             )

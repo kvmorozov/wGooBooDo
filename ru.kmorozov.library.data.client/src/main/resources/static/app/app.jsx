@@ -9,11 +9,11 @@ import "./tree-utils/animation.styl";
 import Nav from "react-bootstrap/lib/Nav";
 import Navbar from "react-bootstrap/lib/Navbar";
 import NavItem from "react-bootstrap/lib/NavItem";
-import Grid from "react-bootstrap/lib/Grid";
 import Row from "react-bootstrap/lib/Row";
 import Col from "react-bootstrap/lib/Col";
 import Preview from "./preview/preview";
 import LoadPopup from "./loadPopup";
+;
 
 class App extends React.Component {
     constructor(props) {
@@ -102,7 +102,7 @@ class App extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="row-fluid">
                 <Navbar>
                     <Navbar.Header>
                         <Navbar.Brand>Library Client</Navbar.Brand>
@@ -115,43 +115,41 @@ class App extends React.Component {
                         </Nav>
                     </Navbar.Collapse>
                 </Navbar>
-                <Grid>
-                    <Row>
-                        <Col>
-                            <InfiniteTree
-                                ref={(c) => this.tree = c.tree}
-                                autoOpen={true}
-                                loadNodes={(parentNode, done) => {
-                                    done(null, this.getStoragesByParent(parentNode));
-                                }}
-                                rowRenderer={rowRenderer}
-                                selectable={true} // Defaults to true
-                                shouldSelectNode={(node) => { // Defaults to null
-                                    if (!node || (node === this.tree.getSelectedNode())) {
-                                        return false; // Prevent from deselecting the current node
-                                    }
-                                    return true;
-                                }}
-                                onDoubleClick={(event) => {
-                                    const target = event.target || event.srcElement; // IE8
-                                }}
-                                onClick={(event) => {
-                                    const target = event.target || event.srcElement; // IE8
-                                }}
-                                onContentDidUpdate={() => {
-                                    this.updatePreview(this.tree.getSelectedNode());
-                                }}
-                                onSelectNode={(node) => {
-                                    this.updatePreview(node);
-                                    this.getStoragesByParent(node);
-                                }}
-                            />
-                        </Col>
-                        <Col>
-                            <Preview ref="preview"/>
-                        </Col>
-                    </Row>
-                </Grid>
+                <Row>
+                    <Col xs={2} md={6}>
+                        <InfiniteTree
+                            ref={(c) => this.tree = c.tree}
+                            autoOpen={true}
+                            loadNodes={(parentNode, done) => {
+                                done(null, this.getStoragesByParent(parentNode));
+                            }}
+                            rowRenderer={rowRenderer}
+                            selectable={true} // Defaults to true
+                            shouldSelectNode={(node) => { // Defaults to null
+                                if (!node || (node === this.tree.getSelectedNode())) {
+                                    return false; // Prevent from deselecting the current node
+                                }
+                                return true;
+                            }}
+                            onDoubleClick={(event) => {
+                                const target = event.target || event.srcElement; // IE8
+                            }}
+                            onClick={(event) => {
+                                const target = event.target || event.srcElement; // IE8
+                            }}
+                            onContentDidUpdate={() => {
+                                this.updatePreview(this.tree.getSelectedNode());
+                            }}
+                            onSelectNode={(node) => {
+                                this.updatePreview(node);
+                                this.getStoragesByParent(node);
+                            }}
+                        />
+                    </Col>
+                    <Col xs={2} md={6}>
+                        <Preview ref="preview"/>
+                    </Col>
+                </Row>
 
                 <LoadPopup ref="loadPopup"/>
             </div>
