@@ -1,8 +1,5 @@
 import React from "react";
-import FormGroup from "react-bootstrap/lib/FormGroup";
-import Col from "react-bootstrap/lib/Col";
-import ControlLabel from "react-bootstrap/lib/ControlLabel";
-import FormControl from "react-bootstrap/lib/FormControl";
+import {List, Container, Label} from "semantic-ui-react/";
 
 class BaseAttrs extends React.Component {
 
@@ -10,52 +7,29 @@ class BaseAttrs extends React.Component {
         let node = this.props.node;
 
         return (
-            <div>
-                <FormGroup controlId="formAttrsId">
-                    <Col componentClass={ControlLabel} sm={2}>ID</Col>
-                    <Col sm={10}>
-                        <FormControl type="text"
-                                     value={node.itemId}
-                                     onChange={()=> {
-                                     }}
-                        />
-                    </Col>
-                </FormGroup>
+            <Container>
+                <List divided selection>
+                    <List.Item>
+                        <Label horizontal>ID</Label>
+                        {node.itemId}
+                    </List.Item>
 
-                <FormGroup controlId="formAttrsName">
-                    <Col componentClass={ControlLabel} sm={2}>Name</Col>
-                    <Col sm={10}>
-                        <FormControl type="text"
-                                     value={node.displayName}
-                                     onChange={()=> {
-                                     }}
-                        />
-                    </Col>
-                </FormGroup>
+                    <List.Item>
+                        <Label horizontal>Name</Label>
+                        {node.displayName}
+                    </List.Item>
 
-                <FormGroup controlId="formAttrsType">
-                    <Col componentClass={ControlLabel} sm={2}>Item type</Col>
-                    <Col sm={10}>
-                        <FormControl type="text"
-                                     value={node.itemType}
-                                     onChange={()=> {
-                                     }}
-                        />
-                    </Col>
-                </FormGroup>
+                    <List.Item>
+                        <Label horizontal>Item type</Label>
+                        {node.itemType}
+                    </List.Item>
 
-                <FormGroup controlId="formAttrsFiles">
-                    <Col componentClass={ControlLabel} sm={2}>Files count</Col>
-                    <Col sm={10}>
-                        <FormControl type="text"
-                                     value={node.filesCount}
-                                     onChange={()=> {
-                                     }}
-                        />
-                    </Col>
-                </FormGroup>
-            </div>
-        );
+                    <List.Item>
+                        <Label horizontal>Files count</Label>
+                        {node.filesCount}
+                    </List.Item>
+                </List>
+            </Container>);
     }
 }
 

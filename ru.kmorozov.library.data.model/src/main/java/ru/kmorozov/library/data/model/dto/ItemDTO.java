@@ -10,10 +10,17 @@ import java.util.stream.Collectors;
  */
 public class ItemDTO extends ResourceSupport {
 
+    public static final int REFRESH_INTERVAL = 10 * 1000 * 60;
+
     public enum ItemType {
         storage,
         category,
         book
+    }
+
+    public enum RefreshStatus {
+        dirty,
+        updated
     }
 
     private String itemId;
@@ -22,6 +29,7 @@ public class ItemDTO extends ResourceSupport {
     private String displayName;
     private long filesCount;
     private List<CategoryDTO> categories;
+    private RefreshStatus refreshStatus;
 
     public ItemDTO() {
     }
@@ -32,6 +40,8 @@ public class ItemDTO extends ResourceSupport {
         this.itemSubType = storageDTO.getStorageType();
         this.displayName = storageDTO.getDisplayName();
         this.filesCount = storageDTO.getFilesCount();
+
+        refreshStatus = System.currentTimeMillis() - storageDTO.getLastChecked() < ItemDTO.REFRESH_INTERVAL ? RefreshStatus.updated : RefreshStatus.dirty;
 
         if (storageDTO.getCategories() != null)
             this.categories = storageDTO.getCategories().stream().map(CategoryDTO::new).collect(Collectors.toList());
@@ -66,5 +76,13 @@ public class ItemDTO extends ResourceSupport {
 
     public List<CategoryDTO> getCategories() {
         return categories;
+    }
+
+    public RefreshStatus getRefreshStatus() {
+        return refreshStatus;
+    }
+
+    public void setUpdated() {
+        this.refreshStatus = RefreshStatus.updated;
     }
 }

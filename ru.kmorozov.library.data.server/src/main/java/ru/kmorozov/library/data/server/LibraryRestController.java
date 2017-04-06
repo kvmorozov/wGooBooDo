@@ -1,6 +1,7 @@
 package ru.kmorozov.library.data.server;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -122,13 +123,20 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
     }
 
     @Override
-    @RequestMapping("/itemByIdAndType")
-    public ItemDTO itemByIdAndType(@RequestParam(name = "itemId") String itemId, @RequestParam(name = "itemType") ItemDTO.ItemType itemType) {
+    @RequestMapping("/item")
+    public ItemDTO getItem(@RequestParam(name = "itemId") String itemId, @RequestParam(name = "itemType") ItemDTO.ItemType itemType, @RequestParam(name = "refresh") boolean refresh) {
         switch (itemType) {
             case book:
                 return new ItemDTO(new BookDTO(booksRepository.findOne(itemId), true));
             case storage:
-                return new ItemDTO(new StorageDTO(storageRepository.findOne(itemId), true));
+                Storage storage = storageRepository.findOne(itemId);
+                if (refresh)
+                    storage = loader.refresh(storage);
+                ItemDTO item = new ItemDTO(new StorageDTO(storage, true));
+                if (refresh)
+                    item.setUpdated();
+
+                return item;
             default:
                 return null;
         }

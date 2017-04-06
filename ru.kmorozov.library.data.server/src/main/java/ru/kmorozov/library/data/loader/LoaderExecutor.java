@@ -2,6 +2,7 @@ package ru.kmorozov.library.data.loader;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.kmorozov.library.data.model.book.Storage;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -41,5 +42,9 @@ public class LoaderExecutor {
 
     public synchronized void pause() {
         oneLoader.setState(State.PAUSED);
+    }
+
+    public Storage refresh(Storage storage) {
+        return oneLoader.refresh(storage);
     }
 }

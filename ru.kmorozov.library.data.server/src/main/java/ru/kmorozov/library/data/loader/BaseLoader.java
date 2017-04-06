@@ -67,8 +67,16 @@ public abstract class BaseLoader implements ILoader, Runnable {
 
     private Storage getOrCreateStorage(ServerItem serverItem) {
         Storage storage = storageRepository.findByUrl(serverItem.getUrl());
-        if (storage == null)
-            storage = new Storage();
+        return fillStorage(storage == null ? new Storage() : storage, serverItem);
+    }
+
+    protected Storage fillStorage(Storage storage, ServerItem serverItem) {
+        storage.setStorageType(serverItem.getStorageType());
+        storage.setUrl(serverItem.getUrl());
+        storage.setName(serverItem.getName());
+        storage.setLastModifiedDateTime(serverItem.getLastModifiedDateTime());
+        storage.setStorageInfo(new StorageInfo(serverItem.getFilesCount()));
+        storage.getStorageInfo().setLastChecked(System.currentTimeMillis());
 
         return storage;
     }
@@ -77,12 +85,7 @@ public abstract class BaseLoader implements ILoader, Runnable {
         Category category = getOrCreateCategory(serverItem.getName());
         Storage storage = getOrCreateStorage(serverItem);
 
-        storage.setStorageType(serverItem.getStorageType());
-        storage.setUrl(serverItem.getUrl());
         storage.addCategory(category);
-        storage.setName(serverItem.getName());
-        storage.setLastModifiedDateTime(serverItem.getLastModifiedDateTime());
-        storage.setStorageInfo(new StorageInfo(serverItem.getFilesCount()));
 
         storageRepository.save(storage);
 
@@ -163,4 +166,6 @@ public abstract class BaseLoader implements ILoader, Runnable {
     public boolean isStopped() {
         return state == LoaderExecutor.State.STOPPED;
     }
+
+    public abstract Storage refresh(Storage storage);
 }

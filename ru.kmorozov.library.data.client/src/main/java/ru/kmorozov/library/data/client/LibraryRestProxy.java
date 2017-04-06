@@ -72,7 +72,9 @@ public class LibraryRestProxy implements IDataRestServer {
 
     private ItemDTO addLinks(ItemDTO item) {
         item.add(linkTo(methodOn(LibraryRestProxy.class, item.getItemType(), item.getItemId())
-                .itemByIdAndType(item.getItemId(), item.getItemType())).withSelfRel());
+                .getItem(item.getItemId(), item.getItemType(), false)).withSelfRel());
+        item.add(linkTo(methodOn(LibraryRestProxy.class)
+                .getItem(item.getItemId(), item.getItemType(), true)).withRel("refresh"));
 
         switch (item.getItemType()) {
             case storage:
@@ -90,15 +92,18 @@ public class LibraryRestProxy implements IDataRestServer {
     }
 
     @Override
-    @RequestMapping("/item/{itemType}/{itemId}")
-    public ItemDTO itemByIdAndType(@PathVariable String itemId, @PathVariable ItemDTO.ItemType itemType) {
+    @RequestMapping("/item/{itemType}/{itemId}/{refresh}")
+    public ItemDTO getItem(@PathVariable(name = "itemId") String itemId,
+                           @PathVariable(name = "itemType") ItemDTO.ItemType itemType,
+                           @PathVariable(name = "refresh") boolean refresh) {
         UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
         String uri = builder.scheme("http")
                 .host("localhost")
                 .port(9000)
-                .path("itemByIdAndType")
+                .path("item")
                 .queryParam("itemId", itemId)
                 .queryParam("itemType", itemType.toString())
+                .queryParam("refresh", refresh)
                 .build().toString();
 
         return addLinks(template.getForEntity(uri, ItemDTO.class).getBody());

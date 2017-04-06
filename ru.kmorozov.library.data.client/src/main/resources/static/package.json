@@ -24,6 +24,7 @@
     "react-input-autosize": "^1.1.0",
     "requirejs": "^2.3.3",
     "rest": "^1.3.2",
+    "semantic-ui-react": "^0.67.2",
     "when": "^3.7.8"
   },
   "scripts": {

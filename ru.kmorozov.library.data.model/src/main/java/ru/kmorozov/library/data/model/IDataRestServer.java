@@ -20,7 +20,7 @@ public interface IDataRestServer {
 
     List<ItemDTO> getItemsByStorageId(String storageId);
 
-    ItemDTO itemByIdAndType(String itemId, ItemDTO.ItemType itemType);
+    ItemDTO getItem(String itemId, ItemDTO.ItemType itemType, boolean refresh);
 
     void updateLibrary(String state);
 }

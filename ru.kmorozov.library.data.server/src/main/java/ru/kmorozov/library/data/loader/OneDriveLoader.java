@@ -11,6 +11,7 @@ import ru.kmorozov.library.data.loader.utils.WindowsShortcut;
 import ru.kmorozov.library.data.model.book.Book;
 import ru.kmorozov.library.data.model.book.Category;
 import ru.kmorozov.library.data.model.book.Storage;
+import ru.kmorozov.library.data.model.dto.ItemDTO;
 
 import java.io.File;
 import java.io.IOException;
@@ -126,5 +127,23 @@ public class OneDriveLoader extends BaseLoader {
 
         assert storages.size() == 1 : lnkFileName;
         return storages.get(0);
+    }
+
+    @Override
+    public Storage refresh(Storage storage) {
+        if (System.currentTimeMillis() - storage.getStorageInfo().getLastChecked() < ItemDTO.REFRESH_INTERVAL)
+            return storage;
+
+        try {
+            OneDriveItem item = api.getItem(storage.getUrl());
+            ServerItem serverItem = new ServerItem(item);
+
+            fillStorage(storage, serverItem);
+
+            storageRepository.save(storage);
+        } catch (IOException e) {
+            logger.error(e);
+        }
+        return storage;
     }
 }

@@ -14,7 +14,7 @@ public class StorageDTO {
     private Storage.StorageType storageType;
     private String url, displayName;
     private String parentId;
-    private long filesCount;
+    private long filesCount, lastChecked;
     private Set<Category> categories;
 
     public StorageDTO() {
@@ -31,6 +31,7 @@ public class StorageDTO {
         this.displayName = storage.getName();
         this.parentId = storage.getParent() == null ? null : storage.getParent().getId();
         this.filesCount = storage.getStorageInfo() == null ? 0l : storage.getStorageInfo().getFilesCount();
+        this.lastChecked = storage.getStorageInfo() == null ? 0l : storage.getStorageInfo().getLastChecked();
 
         if (withCategories)
             this.categories = storage.getCategories();
@@ -62,5 +63,9 @@ public class StorageDTO {
 
     public Set<Category> getCategories() {
         return categories;
+    }
+
+    public long getLastChecked() {
+        return lastChecked;
     }
 }

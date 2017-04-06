@@ -1,7 +1,5 @@
 import React from "react";
-import Form from "react-bootstrap/lib/Form";
-import Button from "react-bootstrap/lib/Button";
-import ButtonGroup from "react-bootstrap/lib/ButtonGroup";
+import {Button, Icon, Container} from "semantic-ui-react/";
 import BaseAttrs from "./baseAttrs";
 import client from "./../restClient";
 import BooksList from "./booksList";
@@ -16,7 +14,7 @@ class Preview extends React.Component {
 
     update(node) {
         this.setState({node: node});
-        if (node._links != null)
+        if (node._links != null) {
             client({
                 method: 'GET', path: node._links['books'].href
             }).then(
@@ -24,24 +22,36 @@ class Preview extends React.Component {
                     this.refs.booksList.update(response.entity);
                 }
             );
+            if (node.refreshStatus == 'dirty')
+                client({
+                    method: 'GET', path: node._links['refresh'].href
+                }).then(
+                    response => {
+                        this.setState({node: response.entity});
+                    }
+                )
+        }
     }
 
     render() {
         if (this.state == null || this.state.node == null) {
-            return <Form/>
+            return <Container/>
         }
         else {
             let node = this.state.node;
             let catButtons = node.categories.map(category => <Button key={category.name}>{category.name}</Button>);
 
+            let refreshStatusIcon = node.refreshStatus == 'dirty' ? 'warning circle' : 'check circle';
+
             return (
-                <Form horizontal>
+                <Container>
+                    <Container textAlign='right'>
+                        <Icon name={refreshStatusIcon}/>
+                    </Container>
                     <BaseAttrs node={node}/>
-                    <ButtonGroup>
-                        {catButtons}
-                    </ButtonGroup>
+                    {catButtons}
                     <BooksList ref="booksList"/>
-                </Form>
+                </Container>
             );
         }
     }
