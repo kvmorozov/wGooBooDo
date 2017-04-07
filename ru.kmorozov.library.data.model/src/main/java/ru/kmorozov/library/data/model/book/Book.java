@@ -80,6 +80,7 @@ public class Book {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (title == null) return false;
 
         Book book = (Book) o;
 
@@ -89,6 +90,9 @@ public class Book {
 
     @Override
     public int hashCode() {
+        if (title == null)
+            return super.hashCode();
+
         int result = title.hashCode();
         result = 31 * result + author.hashCode();
         return result;

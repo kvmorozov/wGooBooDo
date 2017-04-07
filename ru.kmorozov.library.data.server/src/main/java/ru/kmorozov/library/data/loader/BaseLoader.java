@@ -120,21 +120,27 @@ public abstract class BaseLoader implements ILoader, Runnable {
                     if (!serverItem.isDirectory()) {
                         BookInfo.BookFormat bookFormat = BookUtils.getFormat(serverItem.getName());
                         if (bookFormat != BookInfo.BookFormat.UNKNOWN) {
-                            Book book = new Book();
+                            Book existBook = booksRepository.findOneByBookInfoPath(serverItem.getUrl());
+                            if (existBook == null) {
+                                Book book = new Book();
 
-                            BookInfo bookInfo = new BookInfo();
-                            bookInfo.setFileName(serverItem.getName());
-                            bookInfo.setPath(serverItem.getUrl());
-                            bookInfo.setFormat(bookFormat);
+                                BookInfo bookInfo = new BookInfo();
+                                bookInfo.setFileName(serverItem.getName());
+                                bookInfo.setPath(serverItem.getUrl());
+                                bookInfo.setFormat(bookFormat);
 
-                            book.setBookInfo(bookInfo);
-                            book.setStorage(storage);
+                                book.setBookInfo(bookInfo);
+                                book.setStorage(storage);
 
-                            if (bookInfo.isLink() && !postponedLinksLoad())
-                                links.add(serverItem.getOriginalItem());
+                                if (bookInfo.isLink() && !postponedLinksLoad())
+                                    links.add(serverItem.getOriginalItem());
+                                else {
+                                    booksRepository.save(book);
+                                    storage.getStorageInfo().incFilesCount();
+                                }
+                            }
                             else {
-                                booksRepository.save(book);
-                                storage.getStorageInfo().incFilesCount();
+                                logger.warn("Duplicate found: " + existBook.getBookInfo().getFileName());
                             }
                         }
                     }

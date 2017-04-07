@@ -27,7 +27,8 @@ class Preview extends React.Component {
                     method: 'GET', path: node._links['refresh'].href
                 }).then(
                     response => {
-                        this.setState({node: response.entity});
+                        if (response.entity.itemId == this.state.node.itemId)
+                            this.setState({node: response.entity});
                     }
                 )
         }

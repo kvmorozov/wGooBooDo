@@ -7,6 +7,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.kmorozov.library.data.loader.utils.ConsistencyUtils;
 import ru.kmorozov.library.data.loader.utils.WindowsShortcut;
 import ru.kmorozov.library.data.model.book.Book;
 import ru.kmorozov.library.data.model.book.Category;
@@ -20,7 +21,9 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -38,6 +41,8 @@ public class OneDriveLoader extends BaseLoader {
 
     @Override
     public void load() throws IOException {
+        setState(LoaderExecutor.State.STARTED);
+
         OneDriveWalkers.walk(api).forEach(oneDriveItem -> {
             if (isStopped())
                 OneDriveWalkers.stopAll();
@@ -139,6 +144,11 @@ public class OneDriveLoader extends BaseLoader {
             ServerItem serverItem = new ServerItem(item);
 
             fillStorage(storage, serverItem);
+
+            Map<String, Book> books = ConsistencyUtils.deduplicate(booksRepository.findAllByStorage(storage), booksRepository)
+                    .stream().collect(Collectors.toMap(book -> book.getBookInfo().getPath(), book -> book));
+            Map<String, OneDriveItem> children = Arrays.asList(api.getChildren(item)).stream()
+                    .collect(Collectors.toMap(OneDriveItem::getId, child -> child));
 
             storageRepository.save(storage);
         } catch (IOException e) {

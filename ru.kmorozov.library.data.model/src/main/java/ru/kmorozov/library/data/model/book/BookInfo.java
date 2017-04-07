@@ -1,12 +1,11 @@
 package ru.kmorozov.library.data.model.book;
 
-import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.index.Indexed;
 
 /**
  * Created by km on 26.12.2016.
  */
 
-@Document
 public class BookInfo {
 
     public enum BookFormat {
@@ -29,7 +28,11 @@ public class BookInfo {
     }
 
     BookFormat format;
-    String fileName, path;
+
+    String fileName;
+
+    @Indexed(unique = true)
+    String path;
 
     public BookFormat getFormat() {
         return format;
