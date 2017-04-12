@@ -10,32 +10,25 @@ class LoadPopup extends React.Component {
         super(props);
 
         this.state = {showModal: false};
-
-        this.close = this.close.bind(this);
-        this.open = this.open.bind(this);
-
-        this.updateStart = this.updateStart.bind(this);
-        this.updatePause = this.updatePause.bind(this);
-        this.updateStop = this.updateStop.bind(this);
     }
 
-    close() {
+    close = () => {
         this.setState({showModal: false});
     }
 
-    open() {
+    open = () => {
         this.setState({showModal: true});
     }
 
-    updateStart() {
+    updateStart = () => {
         client({method: 'POST', path: '/updateLibrary/STARTED'}).done();
     }
 
-    updatePause() {
+    updatePause = () => {
         client({method: 'POST', path: '/updateLibrary/PAUSED'}).done();
     }
 
-    updateStop() {
+    updateStop = () => {
         client({method: 'POST', path: '/updateLibrary/STOPPED'}).done();
     }
 

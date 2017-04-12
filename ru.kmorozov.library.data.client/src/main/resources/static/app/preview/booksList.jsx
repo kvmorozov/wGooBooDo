@@ -6,11 +6,9 @@ class BooksList extends React.Component {
 
     constructor(props) {
         super(props);
-
-        this.update = this.update.bind(this);
     }
 
-    update(books) {
+    update = (books) => {
         this.setState({books: books});
     }
 

@@ -1,5 +1,5 @@
 import React from "react";
-import {List, Container, Label} from "semantic-ui-react/";
+import {List, Container, Label} from "semantic-ui-react";
 
 class BaseAttrs extends React.Component {
 

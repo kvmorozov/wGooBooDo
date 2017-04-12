@@ -1,5 +1,5 @@
 import React from "react";
-import {Button, Icon, Container} from "semantic-ui-react/";
+import {Button, Icon, Container} from "semantic-ui-react";
 import BaseAttrs from "./baseAttrs";
 import client from "./../restClient";
 import BooksList from "./booksList";
@@ -8,11 +8,9 @@ class Preview extends React.Component {
 
     constructor(props) {
         super(props);
-
-        this.update = this.update.bind(this);
     }
 
-    update(node) {
+    update = (node) => {
         this.setState({node: node});
         if (node._links != null) {
             client({

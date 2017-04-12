@@ -6,22 +6,16 @@ import rowRenderer from "./renderer";
 import "./tree-utils/index.styl";
 import "./tree-utils/app.styl";
 import "./tree-utils/animation.styl";
-import Nav from "react-bootstrap/lib/Nav";
-import Navbar from "react-bootstrap/lib/Navbar";
-import NavItem from "react-bootstrap/lib/NavItem";
-import Row from "react-bootstrap/lib/Row";
-import Col from "react-bootstrap/lib/Col";
+import {Menu, Grid} from "semantic-ui-react";
 import Preview from "./preview/preview";
 import LoadPopup from "./loadPopup";
-;
 
 class App extends React.Component {
     constructor(props) {
         super(props);
 
         this.tree = null;
-        this.getStoragesByParent = this.getStoragesByParent.bind(this);
-        this.handleSelect = this.handleSelect.bind(this);
+        this.updating = false;
     }
 
     componentDidMount() {
@@ -62,9 +56,14 @@ class App extends React.Component {
         };
     }
 
-    getStoragesByParent(parentNode) {
+    getStoragesByParent = (parentNode) => {
         if (parentNode.childrenLoaded || !parentNode.loadOnDemand)
             return;
+
+        if (this.updating)
+            return;
+
+        this.updating = true;
 
         client({
             method: 'GET', path: parentNode.links.find(link => link.rel == 'items').href
@@ -81,11 +80,13 @@ class App extends React.Component {
                 this.tree.addChildNodes(result, 0, parentNode);
                 parentNode['childrenLoaded'] = true;
                 parentNode.state.open = true;
+
+                this.updating = false;
             }
         )
     }
 
-    updatePreview(node) {
+    updatePreview = (node) => {
         if (node != null)
             client({
                 method: 'GET', path: node.links.find(link => link.rel == 'self').href
@@ -96,27 +97,29 @@ class App extends React.Component {
             );
     }
 
-    handleSelect(selectedKey) {
+    handleItemClick = () => {
         this.refs.loadPopup.open();
     }
 
     render() {
         return (
-            <div className="row-fluid">
-                <Navbar>
-                    <Navbar.Header>
-                        <Navbar.Brand>Library Client</Navbar.Brand>
-                    </Navbar.Header>
-                    <Navbar.Toggle/>
-                    <Navbar.Collapse>
-                        <Nav navbar onSelect={this.handleSelect}>
-                            <NavItem eventKey={1}>Update library</NavItem>
-                            <NavItem eventKey={2}>Options</NavItem>
-                        </Nav>
-                    </Navbar.Collapse>
-                </Navbar>
-                <Row>
-                    <Col xs={2} md={6}>
+            <Grid columns={2} divided>
+                <Grid.Row columns={2}>
+                    <Menu>
+                        <Menu.Item
+                            name='update'
+                            onClick={this.handleItemClick}>
+                            Update library
+                        </Menu.Item>
+                        <Menu.Item
+                            name='options'
+                            onClick={this.handleItemClick}>
+                            Options
+                        </Menu.Item>
+                    </Menu>
+                </Grid.Row>
+                <Grid.Row>
+                    <Grid.Column>
                         <InfiniteTree
                             ref={(c) => this.tree = c.tree}
                             autoOpen={true}
@@ -145,16 +148,18 @@ class App extends React.Component {
                                 this.getStoragesByParent(node);
                             }}
                         />
-                    </Col>
-                    <Col xs={2} md={6}>
+                    </Grid.Column>
+                    <Grid.Column>
                         <Preview ref="preview"/>
-                    </Col>
-                </Row>
+                    </Grid.Column>
+                </Grid.Row>
 
                 <LoadPopup ref="loadPopup"/>
-            </div>
+            </Grid>
         );
     }
 }
 
-ReactDom.render(<App />, document.getElementById('react'));
+ReactDom.render(
+    <App />
+    , document.getElementById('react'));
