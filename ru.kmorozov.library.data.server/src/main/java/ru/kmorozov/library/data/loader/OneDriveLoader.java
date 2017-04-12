@@ -11,6 +11,7 @@ import ru.kmorozov.library.data.loader.utils.ConsistencyUtils;
 import ru.kmorozov.library.data.loader.utils.WindowsShortcut;
 import ru.kmorozov.library.data.model.book.Book;
 import ru.kmorozov.library.data.model.book.Category;
+import ru.kmorozov.library.data.model.book.LinkInfo;
 import ru.kmorozov.library.data.model.book.Storage;
 import ru.kmorozov.library.data.model.dto.ItemDTO;
 
@@ -102,6 +103,46 @@ public class OneDriveLoader extends BaseLoader {
                 e.printStackTrace();
             }
         });
+    }
+
+    @Override
+    public void resolveLink(Book lnkBook) throws IOException {
+        if (lnkBook.getLinkInfo() != null || !lnkBook.isLink())
+            return;
+
+        OneDriveItem linkItem = api.getItem(lnkBook.getBookInfo().getPath());
+        LinkInfo linkInfo = new LinkInfo();
+
+        File tmpFile = File.createTempFile("one", ".lnk");
+        api.download(linkItem, tmpFile, progressListener -> {
+        });
+        if (WindowsShortcut.isPotentialValidLink(tmpFile))
+            try {
+                WindowsShortcut lnkFile = new WindowsShortcut(tmpFile, Charset.forName("Windows-1251"));
+                if (lnkFile.isDirectory()) {
+                    Storage linkedStorage = getStorageByLink(lnkFile.getRealFilename());
+                    Storage thisStorage = lnkBook.getStorage();
+                    linkInfo.setLinkedStorage(linkedStorage);
+
+                    if (linkedStorage != null && thisStorage != null) {
+                        Category linkCategory = linkedStorage.getMainCategory();
+                        linkCategory.addParent(thisStorage.getMainCategory());
+                        categoryRepository.save(linkCategory);
+                    }
+                } else {
+                    String realPath = lnkFile.getRealFilename();
+                    logger.warn("File lnk" + realPath);
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+        tmpFile.delete();
+
+        if (linkInfo.getLinkedBook() != null || linkInfo.getLinkedStorage() != null) {
+            lnkBook.setLinkInfo(linkInfo);
+            booksRepository.save(lnkBook);
+        }
     }
 
     @Override

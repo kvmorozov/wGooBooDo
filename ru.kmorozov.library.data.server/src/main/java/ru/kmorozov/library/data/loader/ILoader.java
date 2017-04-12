@@ -1,5 +1,7 @@
 package ru.kmorozov.library.data.loader;
 
+import ru.kmorozov.library.data.model.book.Book;
+
 import java.io.IOException;
 
 /**
@@ -8,4 +10,6 @@ import java.io.IOException;
 public interface ILoader {
 
     void load() throws IOException;
+
+    public void resolveLink(Book lnkBook) throws IOException;
 }

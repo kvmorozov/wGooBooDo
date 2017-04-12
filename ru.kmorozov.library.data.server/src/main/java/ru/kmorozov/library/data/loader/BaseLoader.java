@@ -132,7 +132,7 @@ public abstract class BaseLoader implements ILoader, Runnable {
                                 book.setBookInfo(bookInfo);
                                 book.setStorage(storage);
 
-                                if (bookInfo.isLink() && !postponedLinksLoad())
+                                if (book.isLink() && !postponedLinksLoad())
                                     links.add(serverItem.getOriginalItem());
                                 else {
                                     booksRepository.save(book);

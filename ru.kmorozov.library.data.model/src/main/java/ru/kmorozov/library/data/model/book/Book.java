@@ -21,6 +21,8 @@ public class Book {
 
     BookInfo bookInfo;
 
+    LinkInfo linkInfo;
+
     @DBRef
     Storage storage;
 
@@ -74,6 +76,22 @@ public class Book {
 
     public String getBookKey() {
         return bookInfo.getFileName();
+    }
+
+    public LinkInfo getLinkInfo() {
+        return linkInfo;
+    }
+
+    public void setLinkInfo(LinkInfo linkInfo) {
+        this.linkInfo = linkInfo;
+    }
+
+    public boolean isLink() {
+        return this.bookInfo.isLink();
+    }
+
+    public boolean notLink() {
+        return !this.bookInfo.isLink();
     }
 
     @Override

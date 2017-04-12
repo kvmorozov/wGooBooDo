@@ -18,6 +18,7 @@ import ru.kmorozov.gbd.core.logic.output.consumers.DummyBookInfoOutput;
 import ru.kmorozov.gbd.core.utils.Logger;
 import ru.kmorozov.library.data.loader.LoaderExecutor;
 import ru.kmorozov.library.data.model.IDataRestServer;
+import ru.kmorozov.library.data.model.book.Book;
 import ru.kmorozov.library.data.model.book.Storage;
 import ru.kmorozov.library.data.model.dto.BookDTO;
 import ru.kmorozov.library.data.model.dto.ItemDTO;
@@ -100,7 +101,18 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
     @RequestMapping("/storagesByParentId")
     public List<StorageDTO> getStoragesByParentId(@RequestParam(name = "storageId") String storageId) {
         Storage parentStorage = StringUtils.isEmpty(storageId) ? null : storageRepository.findOne(storageId);
-        return storageRepository.findAllByParent(parentStorage).stream().map(StorageDTO::new).collect(Collectors.toList());
+
+        List<Storage> realStorages = storageRepository.findAllByParent(parentStorage);
+        List<Book> linksInStorages = booksRepository.findAllByStorageAndBookInfoFormat(parentStorage, "LNK");
+        linksInStorages.stream().forEach(book -> loader.resolveLink(book));
+        List<Storage> linkedStorages = linksInStorages.stream()
+                .filter(lnk -> lnk.getLinkInfo() != null && lnk.getLinkInfo().getLinkedStorage() != null)
+                .map(lnk -> lnk.getLinkInfo().getLinkedStorage())
+                .collect(Collectors.toList());
+
+        realStorages.addAll(linkedStorages);
+
+        return realStorages.stream().map(StorageDTO::new).collect(Collectors.toList());
     }
 
     @Override
@@ -110,7 +122,10 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
         if (storage == null)
             return Collections.EMPTY_LIST;
 
-        return booksRepository.findAllByStorage(storage).stream().map(BookDTO::new).collect(Collectors.toList());
+        return booksRepository.findAllByStorage(storage).stream()
+                .filter(Book::notLink)
+                .map(BookDTO::new)
+                .collect(Collectors.toList());
     }
 
     @Override

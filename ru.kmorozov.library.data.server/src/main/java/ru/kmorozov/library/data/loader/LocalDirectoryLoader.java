@@ -4,6 +4,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.kmorozov.library.data.model.book.Book;
 import ru.kmorozov.library.data.model.book.Category;
 import ru.kmorozov.library.data.model.book.Storage;
 import sun.awt.shell.ShellFolder;
@@ -105,5 +106,10 @@ public class LocalDirectoryLoader extends BaseLoader {
     @Override
     public Storage refresh(Storage storage) {
         return storage;
+    }
+
+    @Override
+    public void resolveLink(Book lnkBook) throws IOException {
+
     }
 }

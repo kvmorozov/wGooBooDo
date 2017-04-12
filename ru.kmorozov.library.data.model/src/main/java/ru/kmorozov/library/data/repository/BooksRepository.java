@@ -17,6 +17,8 @@ public interface BooksRepository extends MongoRepository<Book, String> {
 
     List<Book> findAllByStorage(Storage storage);
 
+    List<Book> findAllByStorageAndBookInfoFormat(Storage storage, String format);
+
     Stream<Book> streamByBookInfoFormat (String format);
 
     Book findOneByBookInfoPath (String path);

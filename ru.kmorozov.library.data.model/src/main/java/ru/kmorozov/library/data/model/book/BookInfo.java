@@ -58,5 +58,5 @@ public class BookInfo {
         this.path = path;
     }
 
-    public boolean isLink() {return format == BookFormat.LNK;}
+    boolean isLink() {return format == BookFormat.LNK;}
 }
