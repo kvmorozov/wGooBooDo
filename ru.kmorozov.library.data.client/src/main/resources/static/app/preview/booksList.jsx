@@ -1,6 +1,5 @@
 import React from "react";
-import ReactGridLayout from "react-grid-layout";
-import AutosizeInput from "react-input-autosize";
+import {Item} from "semantic-ui-react";
 
 class BooksList extends React.Component {
 
@@ -12,30 +11,40 @@ class BooksList extends React.Component {
         this.setState({books: books});
     }
 
-    getLayoutItem(book, index) {
-        return {
-            i: book.id,
-            x: index % 4,
-            y: Math.floor(index / 4),
-            w: 1, h: 1, static: true
-        };
+    getDisplayItem(book) {
+        let imgPath;
+        if (book.title.endsWith('pdf'))
+            imgPath = '/icons/pdf.png';
+        else if (book.title.endsWith('djvu'))
+            imgPath = '/icons/djvu.png';
+
+        return (
+            <Item key={book.id}>
+                <Item.Image size='tiny' src={imgPath} />
+
+                <Item.Content>
+                    <Item.Header as='a'>Header</Item.Header>
+                    <Item.Meta>Description</Item.Meta>
+                    <Item.Description>
+                        {book.title}
+                    </Item.Description>
+                    <Item.Extra>Additional Details</Item.Extra>
+                </Item.Content>
+            </Item>
+        )
     }
 
     render() {
         if (this.state == null || this.state.books == null)
-            return <ReactGridLayout></ReactGridLayout>
+            return <Item.Group></Item.Group>
         else {
             let books = this.state.books;
-            let layout = books.map((book, index) => this.getLayoutItem(book, index));
-
-            let cells = books.map(book => <AutosizeInput key={book.id} value={book.title} onChange={()=> {
-            }}/>);
+            let cells = books.map(book => this.getDisplayItem(book));
 
             return (
-                <ReactGridLayout className="layout" layout={layout}
-                                 rowHeight={30} width={1000} cols={4}>
+                <Item.Group>
                     {cells}
-                </ReactGridLayout>
+                </Item.Group>
             )
         }
     }
