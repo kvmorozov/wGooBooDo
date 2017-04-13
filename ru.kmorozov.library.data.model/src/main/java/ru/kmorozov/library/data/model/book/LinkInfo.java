@@ -7,6 +7,8 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
  */
 public class LinkInfo {
 
+    boolean broken;
+
     @DBRef
     Storage linkedStorage;
 
@@ -27,5 +29,13 @@ public class LinkInfo {
 
     public void setLinkedBook(Book linkedBook) {
         this.linkedBook = linkedBook;
+    }
+
+    public boolean isBroken() {
+        return broken;
+    }
+
+    public void setBroken(boolean broken) {
+        this.broken = broken;
     }
 }

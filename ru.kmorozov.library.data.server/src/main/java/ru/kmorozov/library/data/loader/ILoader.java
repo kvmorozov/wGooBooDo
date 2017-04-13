@@ -11,5 +11,5 @@ public interface ILoader {
 
     void load() throws IOException;
 
-    public void resolveLink(Book lnkBook) throws IOException;
+    void resolveLink(Book lnkBook);
 }

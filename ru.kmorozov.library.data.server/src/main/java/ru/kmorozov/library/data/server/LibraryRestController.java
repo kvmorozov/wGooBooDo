@@ -1,7 +1,6 @@
 package ru.kmorozov.library.data.server;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,6 +29,7 @@ import ru.kmorozov.library.data.repository.StorageRepository;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -123,7 +123,9 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
             return Collections.EMPTY_LIST;
 
         return booksRepository.findAllByStorage(storage).stream()
-                .filter(Book::notLink)
+                .filter(book -> !book.isBrokenLink())
+                .map(book -> book.isLink() ? book.getLinkInfo().getLinkedBook() : book)
+                .filter(Objects::nonNull)
                 .map(BookDTO::new)
                 .collect(Collectors.toList());
     }

@@ -90,8 +90,8 @@ public class Book {
         return this.bookInfo.isLink();
     }
 
-    public boolean notLink() {
-        return !this.bookInfo.isLink();
+    public boolean isBrokenLink() {
+        return this.bookInfo.isLink() && ((this.linkInfo != null && this.linkInfo.isBroken() || this.linkInfo == null));
     }
 
     @Override

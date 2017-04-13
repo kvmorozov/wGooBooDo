@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import ru.kmorozov.library.data.model.book.Book;
 import ru.kmorozov.library.data.model.book.Storage;
 
-import java.io.IOException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -51,10 +50,6 @@ public class LoaderExecutor {
     }
 
     public void resolveLink(Book lnkBook) {
-        try {
-            oneLoader.resolveLink(lnkBook);
-        } catch (IOException ignored) {
-
-        }
+        oneLoader.resolveLink(lnkBook);
     }
 }

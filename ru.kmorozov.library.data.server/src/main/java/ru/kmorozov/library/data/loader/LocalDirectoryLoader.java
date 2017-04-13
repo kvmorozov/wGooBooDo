@@ -109,7 +109,7 @@ public class LocalDirectoryLoader extends BaseLoader {
     }
 
     @Override
-    public void resolveLink(Book lnkBook) throws IOException {
+    public void resolveLink(Book lnkBook) {
 
     }
 }

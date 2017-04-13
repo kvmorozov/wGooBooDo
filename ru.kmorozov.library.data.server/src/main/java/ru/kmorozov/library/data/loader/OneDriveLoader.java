@@ -72,77 +72,71 @@ public class OneDriveLoader extends BaseLoader {
     public void processLinks() throws IOException {
         Stream<Book> lnkBooks = booksRepository.streamByBookInfoFormat("LNK");
 
-        lnkBooks.forEach(lnk -> {
-            try {
-                OneDriveItem linkItem = api.getItem(lnk.getBookInfo().getPath());
+        lnkBooks.forEach(this::resolveLink);
+    }
 
-                File tmpFile = File.createTempFile("one", ".lnk");
-                api.download(linkItem, tmpFile, progressListener -> {
-                });
-                if (WindowsShortcut.isPotentialValidLink(tmpFile))
-                    try {
-                        WindowsShortcut lnkFile = new WindowsShortcut(tmpFile, Charset.forName("Windows-1251"));
-                        if (lnkFile.isDirectory()) {
-                            Storage linkedStorage = getStorageByLink(lnkFile.getRealFilename());
-                            Storage thisStorage = lnk.getStorage();
+    @Override
+    public void resolveLink(Book lnkBook) {
+        if (lnkBook.getLinkInfo() != null || !lnkBook.isLink())
+            return;
 
-                            if (linkedStorage != null && thisStorage != null) {
+        logger.info("Resolving link: " + lnkBook.getBookInfo().getFileName());
+
+        try {
+            OneDriveItem linkItem = api.getItem(lnkBook.getBookInfo().getPath());
+            LinkInfo linkInfo = new LinkInfo();
+
+            File tmpFile = File.createTempFile("one", ".lnk");
+            api.download(linkItem, tmpFile, progressListener -> {
+            });
+            if (WindowsShortcut.isPotentialValidLink(tmpFile))
+                try {
+                    WindowsShortcut lnkFile = new WindowsShortcut(tmpFile, Charset.forName("Windows-1251"));
+                    if (lnkFile.isDirectory()) {
+                        Storage linkedStorage = getStorageByLink(lnkFile.getRealFilename());
+                        if (linkedStorage == null) {
+                            linkInfo.setBroken(true);
+                            logger.warn("Storage lnk not found for " + lnkFile.getRealFilename());
+                        } else {
+                            Storage thisStorage = lnkBook.getStorage();
+                            linkInfo.setLinkedStorage(linkedStorage);
+
+                            if (thisStorage != null) {
                                 Category linkCategory = linkedStorage.getMainCategory();
                                 linkCategory.addParent(thisStorage.getMainCategory());
                                 categoryRepository.save(linkCategory);
                             }
-                        } else {
-                            String realPath = lnkFile.getRealFilename();
                         }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+                    } else {
+                        String realPath = lnkFile.getRealFilename();
+                        Book linkedBook = getBookByLink(realPath);
+                        if (linkedBook == null) {
+                            linkInfo.setBroken(true);
+                            logger.warn("File lnk not found for " + realPath);
+                        }
+                        else
+                            linkInfo.setLinkedBook(linkedBook);
                     }
+                } catch (ParseException e) {
+                    logger.error(e);
+                }
 
-                tmpFile.delete();
-            } catch (IOException e) {
-                e.printStackTrace();
+            tmpFile.delete();
+
+            if (linkInfo.getLinkedBook() != null || linkInfo.getLinkedStorage() != null || linkInfo.isBroken()) {
+                lnkBook.setLinkInfo(linkInfo);
+                booksRepository.save(lnkBook);
             }
-        });
+        } catch (IOException ioe) {
+            logger.error(ioe);
+        }
     }
 
-    @Override
-    public void resolveLink(Book lnkBook) throws IOException {
-        if (lnkBook.getLinkInfo() != null || !lnkBook.isLink())
-            return;
+    private Book getBookByLink(String lnkFileName) {
+        String[] names = lnkFileName.split(delimiter);
+        List<Book> books = booksRepository.findAllByBookInfoFileName(names[names.length - 1]);
 
-        OneDriveItem linkItem = api.getItem(lnkBook.getBookInfo().getPath());
-        LinkInfo linkInfo = new LinkInfo();
-
-        File tmpFile = File.createTempFile("one", ".lnk");
-        api.download(linkItem, tmpFile, progressListener -> {
-        });
-        if (WindowsShortcut.isPotentialValidLink(tmpFile))
-            try {
-                WindowsShortcut lnkFile = new WindowsShortcut(tmpFile, Charset.forName("Windows-1251"));
-                if (lnkFile.isDirectory()) {
-                    Storage linkedStorage = getStorageByLink(lnkFile.getRealFilename());
-                    Storage thisStorage = lnkBook.getStorage();
-                    linkInfo.setLinkedStorage(linkedStorage);
-
-                    if (linkedStorage != null && thisStorage != null) {
-                        Category linkCategory = linkedStorage.getMainCategory();
-                        linkCategory.addParent(thisStorage.getMainCategory());
-                        categoryRepository.save(linkCategory);
-                    }
-                } else {
-                    String realPath = lnkFile.getRealFilename();
-                    logger.warn("File lnk" + realPath);
-                }
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
-        tmpFile.delete();
-
-        if (linkInfo.getLinkedBook() != null || linkInfo.getLinkedStorage() != null) {
-            lnkBook.setLinkInfo(linkInfo);
-            booksRepository.save(lnkBook);
-        }
+        return books.size() == 1 ? books.get(0) : null;
     }
 
     @Override
@@ -171,8 +165,7 @@ public class OneDriveLoader extends BaseLoader {
             }
         }
 
-        assert storages.size() == 1 : lnkFileName;
-        return storages.get(0);
+        return storages.size() == 1 ? storages.get(0) : null;
     }
 
     @Override
