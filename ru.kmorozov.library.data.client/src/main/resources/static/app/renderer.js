@@ -1,5 +1,6 @@
 import React from "react";
 import classNames from "classnames";
+import {Label} from "semantic-ui-react";
 
 const renderer = (node, treeOptions) => {
     const {id, name, loadOnDemand = false, children, state, props = {}, itemType, itemSubType, filesCount} = node;
@@ -27,13 +28,10 @@ const renderer = (node, treeOptions) => {
             data-path={path}
             data-selected={selected}
             data-children={childrenLength}
-            data-total={total}
-            droppable={droppable}
-        >
+            data-total={total}>
             <div
                 className="infinite-tree-node"
-                style={{marginLeft: depth * 18}}
-            >
+                style={{marginLeft: depth * 18}}>
                 {!more && loadOnDemand &&
                 <a className={classNames(treeOptions.togglerClass, 'infinite-tree-closed')}>
                     <i className="glyphicon glyphicon-triangle-right"/>
@@ -49,16 +47,10 @@ const renderer = (node, treeOptions) => {
                     <i className="glyphicon glyphicon-triangle-right"/>
                 </a>
                 }
-                <i
-                    className={classNames(
-                        'infinite-tree-folder-icon',
-                        'glyphicon',
-                        {'glyphicon-folder-open': isDir && selected},
-                        {'glyphicon-folder-close': isDir && !selected},
-                        {'glyphicon-file': !isDir}
-                    )}
-                />
-                <span className="infinite-tree-title" style={itemStyle}>{name} {filesCount}</span>
+                <Label image className="infinite-tree-title">
+                    <img src={selected ? '/icons/folder-open-icon.png' : '/icons/folder-closed-icon.png'}/>
+                    {name}
+                </Label>
                 <i
                     style={{marginLeft: 5}}
                     className={classNames(
