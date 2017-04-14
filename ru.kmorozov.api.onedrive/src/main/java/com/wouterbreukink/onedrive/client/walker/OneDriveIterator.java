@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.function.Predicate;
 
 /**
  * Created by sbt-morozov-kv on 14.03.2017.
@@ -17,8 +18,8 @@ public class OneDriveIterator<T extends OneDriveItem> implements Iterator<OneDri
     private final OneDriveWalker walker;
     private OneDriveWalker.Event next;
 
-    OneDriveIterator(OneDriveProvider api, T root, int maxDepth) {
-        this.walker = new OneDriveWalker(api, maxDepth);
+    OneDriveIterator(OneDriveProvider api, T root, int maxDepth, Predicate<OneDriveItem> skipCondition) {
+        this.walker = new OneDriveWalker(api, maxDepth, skipCondition);
         this.next = this.walker.walk(root);
 
         assert this.next.type() == OneDriveWalker.EventType.ENTRY || this.next.type() == OneDriveWalker.EventType.START_DIRECTORY;

@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
@@ -21,10 +22,12 @@ public class OneDriveWalker implements Closeable {
     private final ArrayDeque<OneDriveWalker.DirectoryNode> stack = new ArrayDeque();
     private final int maxDepth;
     private boolean closed;
+    private Predicate<OneDriveItem> skipCondition;
 
-    OneDriveWalker(OneDriveProvider api, int maxDepth) {
+    OneDriveWalker(OneDriveProvider api, int maxDepth, Predicate<OneDriveItem> skipCondition) {
         this.api = api;
         this.maxDepth = maxDepth;
+        this.skipCondition = skipCondition;
     }
 
     @Override
@@ -167,12 +170,11 @@ public class OneDriveWalker implements Closeable {
         }
     }
 
-    private static class DirectoryNode {
+    private class DirectoryNode {
         private final OneDriveItem item;
         private final Object key;
         private final Stream<OneDriveItem> stream;
         private final Iterator<OneDriveItem> iterator;
-        private boolean skipped;
 
         DirectoryNode(OneDriveItem item, Object key, Stream<OneDriveItem> stream) {
             this.item = item;
@@ -185,10 +187,6 @@ public class OneDriveWalker implements Closeable {
             return this.item;
         }
 
-        Object key() {
-            return this.key;
-        }
-
         Stream<OneDriveItem> stream() {
             return this.stream;
         }
@@ -197,12 +195,8 @@ public class OneDriveWalker implements Closeable {
             return this.iterator;
         }
 
-        void skip() {
-            this.skipped = true;
-        }
-
         boolean skipped() {
-            return this.skipped;
+            return skipCondition.test(item);
         }
     }
 }

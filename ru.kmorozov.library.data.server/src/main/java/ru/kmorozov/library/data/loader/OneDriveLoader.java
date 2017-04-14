@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -42,9 +43,13 @@ public class OneDriveLoader extends BaseLoader {
 
     @Override
     public void load() throws IOException {
+        load(x -> false);
+    }
+
+    public void load(Predicate<OneDriveItem> skipCondition) throws IOException {
         setState(LoaderExecutor.State.STARTED);
 
-        OneDriveWalkers.walk(api).forEach(oneDriveItem -> {
+        OneDriveWalkers.walk(api, skipCondition).forEach(oneDriveItem -> {
             if (isStopped())
                 OneDriveWalkers.stopAll();
 
@@ -113,8 +118,7 @@ public class OneDriveLoader extends BaseLoader {
                         if (linkedBook == null) {
                             linkInfo.setBroken(true);
                             logger.warn("File lnk not found for " + realPath);
-                        }
-                        else
+                        } else
                             linkInfo.setLinkedBook(linkedBook);
                     }
                 } catch (ParseException e) {
