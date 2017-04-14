@@ -16,6 +16,7 @@ import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
 import ru.kmorozov.gbd.core.logic.output.consumers.DummyBookInfoOutput;
 import ru.kmorozov.gbd.core.utils.Logger;
 import ru.kmorozov.library.data.loader.LoaderExecutor;
+import ru.kmorozov.library.data.loader.utils.BookUtils;
 import ru.kmorozov.library.data.model.IDataRestServer;
 import ru.kmorozov.library.data.model.book.Book;
 import ru.kmorozov.library.data.model.book.Storage;
@@ -126,7 +127,7 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
                 .filter(book -> !book.isBrokenLink())
                 .map(book -> book.isLink() ? book.getLinkInfo().getLinkedBook() : book)
                 .filter(Objects::nonNull)
-                .map(BookDTO::new)
+                .map(BookUtils::createBookDIO)
                 .collect(Collectors.toList());
     }
 

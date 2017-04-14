@@ -6,7 +6,7 @@ import com.google.api.client.util.Key;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-class OneDriveUrl extends GenericUrl {
+public class OneDriveUrl extends GenericUrl {
 
     private static final String rootUrl = "https://api.onedrive.com/v1.0";
     @Key("$skiptoken")

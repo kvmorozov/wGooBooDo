@@ -20,6 +20,7 @@
     "react-bootstrap": "^0.30.7",
     "react-dom": "^15.4.2",
     "react-infinite-tree": "^0.6.1",
+    "react-pdf-js": "^1.0.35",
     "requirejs": "^2.3.3",
     "rest": "^1.3.2",
     "semantic-ui-react": "^0.67.2",

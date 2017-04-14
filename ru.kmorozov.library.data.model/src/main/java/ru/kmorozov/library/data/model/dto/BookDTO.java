@@ -10,7 +10,7 @@ public class BookDTO {
 
     private String id;
     private BookInfo.BookFormat format;
-    private String title;
+    private String title, path;
 
     public BookDTO() {
     }
@@ -37,12 +37,20 @@ public class BookDTO {
         return format;
     }
 
-    public void setFormat(BookInfo.BookFormat format) {
-        this.format = format;
-    }
-
     public String getTitle() {
         return title;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public void setFormat(BookInfo.BookFormat format) {
+        this.format = format;
     }
 
     public void setTitle(String title) {

@@ -13,22 +13,21 @@ class BooksList extends React.Component {
 
     getDisplayItem(book) {
         let imgPath;
-        if (book.title.endsWith('pdf'))
-            imgPath = '/icons/pdf.png';
-        else if (book.title.endsWith('djvu'))
-            imgPath = '/icons/djvu.png';
+        switch (book.format) {
+            case 'PDF':
+                imgPath = '/icons/pdf.png';
+                break;
+            case 'DJVU':
+                imgPath = '/icons/djvu.png';
+                break;
+        }
 
         return (
             <Item key={book.id}>
-                <Item.Image size='tiny' src={imgPath} />
+                <Item.Image size='mini' src={imgPath}/>
 
                 <Item.Content>
-                    <Item.Header as='a'>Header</Item.Header>
-                    <Item.Meta>Description</Item.Meta>
-                    <Item.Description>
-                        {book.title}
-                    </Item.Description>
-                    <Item.Extra>Additional Details</Item.Extra>
+                    <Item.Header as='a' onclick={}>{book.title}</Item.Header>
                 </Item.Content>
             </Item>
         )
