@@ -11,6 +11,7 @@ import ru.kmorozov.library.utils.BookUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -132,15 +133,26 @@ public abstract class BaseLoader implements ILoader, Runnable {
                                 book.setBookInfo(bookInfo);
                                 book.setStorage(storage);
 
-                                if (book.isLink() && !postponedLinksLoad())
+                                if (book.isLink() && !postponedLinksLoad()) {
                                     links.add(serverItem.getOriginalItem());
+                                    logger.info("Added link " + serverItem.getName());
+                                }
                                 else {
                                     booksRepository.save(book);
                                     storage.getStorageInfo().incFilesCount();
+                                    logger.info("Added file " + serverItem.getName());
                                 }
                             }
                             else {
-                                logger.warn("Duplicate found: " + existBook.getBookInfo().getFileName());
+                                Date oldDate = existBook.getBookInfo().getLastModifiedDateTime();
+                                Date newDate = serverItem.getLastModifiedDateTime();
+                                if (oldDate == null || oldDate.before(newDate)) {
+                                    existBook.getBookInfo().setFileName(serverItem.getName());
+                                    existBook.getBookInfo().setLastModifiedDateTime(newDate);
+                                    booksRepository.save(existBook);
+
+                                    logger.info("Updated file " + serverItem.getName());
+                                }
                             }
                         }
                     }

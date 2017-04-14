@@ -2,6 +2,8 @@ package ru.kmorozov.library.data.model.book;
 
 import org.springframework.data.mongodb.core.index.Indexed;
 
+import java.util.Date;
+
 /**
  * Created by km on 26.12.2016.
  */
@@ -31,6 +33,8 @@ public class BookInfo {
 
     String fileName;
 
+    Date lastModifiedDateTime;
+
     @Indexed(unique = true)
     String path;
 
@@ -59,4 +63,12 @@ public class BookInfo {
     }
 
     boolean isLink() {return format == BookFormat.LNK;}
+
+    public Date getLastModifiedDateTime() {
+        return lastModifiedDateTime;
+    }
+
+    public void setLastModifiedDateTime(Date lastModifiedDateTime) {
+        this.lastModifiedDateTime = lastModifiedDateTime;
+    }
 }

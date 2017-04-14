@@ -19,8 +19,8 @@ public class ScheduledOneDriveTasks {
     private OneDriveLoader oneLoader;
 
     @Scheduled(fixedRate = 1 * 60 * 60 * 1000)
-    public void refreshOneDrive() {
-
+    public void refreshOneDrive() throws IOException {
+        oneLoader.load();
     }
 
     @Scheduled(fixedRate = 1 * 60 * 60 * 1000)
