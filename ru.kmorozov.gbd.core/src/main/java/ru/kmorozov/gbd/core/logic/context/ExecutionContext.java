@@ -19,6 +19,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class ExecutionContext {
 
+    protected static final Logger logger = Logger.getLogger(ExecutionContext.class);
+
     private static final String EMPTY = "";
     private final static AbstractContextProvider contextProvider = AbstractContextProvider.getContextProvider();
     public static ExecutionContext INSTANCE;
@@ -51,7 +53,12 @@ public class ExecutionContext {
 
     public void addBookContext(IBookListProducer idsProducer, IProgress progress, IPostProcessor postProcessor) {
         for (String bookId : idsProducer.getBookIds()) {
-            bookContextMap.computeIfAbsent(bookId, k -> new BookContext(bookId, progress, postProcessor));
+            try {
+                bookContextMap.computeIfAbsent(bookId, k -> new BookContext(bookId, progress, postProcessor));
+            }
+            catch(Exception ex) {
+                logger.severe("Cannot add book " + bookId);
+            }
         }
     }
 

@@ -22,7 +22,7 @@ public class AbstractHttpProcessor {
     private static List<HttpConnector> connectors;
     private static final Object LOCK = new Object();
 
-    private static final List<HttpConnector> getConnectors() {
+    private static List<HttpConnector> getConnectors() {
         if (connectors == null || connectors.size() == 0) synchronized (LOCK) {
             if (connectors == null || connectors.size() == 0) {
                 connectors = new ArrayList<>();
@@ -78,7 +78,7 @@ public class AbstractHttpProcessor {
         }
     }
 
-    public static final void close() {
+    public static void close() {
         for (HttpConnector connector : getConnectors())
             connector.close();
     }
