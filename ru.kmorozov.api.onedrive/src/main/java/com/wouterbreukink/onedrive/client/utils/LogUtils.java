@@ -9,6 +9,7 @@ import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.layout.PatternLayout;
 
 import java.io.Serializable;
+import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 
 public class LogUtils {
@@ -49,7 +50,7 @@ public class LogUtils {
 
         // Default log layout
         Layout<? extends Serializable> layout =
-                PatternLayout.createLayout("%d %p [%t] %m%n", null, null, null, true, true, null, null);
+                PatternLayout.createLayout("%d %p [%t] %m%n", null, null, null, Charset.defaultCharset(), true, true, null, null);
 
         // Create a new file appender for the given filename
         FileAppender appender = FileAppender.createAppender(

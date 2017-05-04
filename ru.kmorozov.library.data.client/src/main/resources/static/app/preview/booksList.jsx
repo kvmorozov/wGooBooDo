@@ -1,5 +1,7 @@
 import React from "react";
-import {Item} from "semantic-ui-react";
+import {Button} from "semantic-ui-react";
+import {BootstrapTable, TableHeaderColumn} from "react-bootstrap-table";
+import BookPreviewPopup from "./bookPreviewPopup";
 
 class BooksList extends React.Component {
 
@@ -9,6 +11,11 @@ class BooksList extends React.Component {
 
     update = (books) => {
         this.setState({books: books});
+    }
+
+    handleItemClick = (row) => {
+        const selectedBook = this.state.books.find(book => book.id == row.id);
+        this.refs.bookPreviewPopup.open(selectedBook);
     }
 
     getDisplayItem(book) {
@@ -23,27 +30,29 @@ class BooksList extends React.Component {
         }
 
         return (
-            <Item key={book.id}>
-                <Item.Image size='mini' src={imgPath}/>
-
-                <Item.Content>
-                    <Item.Header as='a' onclick={}>{book.title}</Item.Header>
-                </Item.Content>
-            </Item>
+            <Button onClick={this.handleItemClick(book)}>Preview</Button>
         )
     }
 
     render() {
         if (this.state == null || this.state.books == null)
-            return <Item.Group></Item.Group>
+            return <div/>
         else {
-            let books = this.state.books;
-            let cells = books.map(book => this.getDisplayItem(book));
+            const options = {
+                onRowClick: this.handleItemClick,
+                onRowDoubleClick: this.handleItemClick
+            };
 
             return (
-                <Item.Group>
-                    {cells}
-                </Item.Group>
+                <div>
+                    <BootstrapTable ref='table' data={ this.state.books } options={ options }
+                                    pagination>
+                        <TableHeaderColumn dataField='id' isKey={ true }>Book ID</TableHeaderColumn>
+                        <TableHeaderColumn dataField='format'>Format</TableHeaderColumn>
+                        <TableHeaderColumn dataField='title'>Title</TableHeaderColumn>
+                    </BootstrapTable>
+                    <BookPreviewPopup ref="bookPreviewPopup"/>
+                </div>
             )
         }
     }

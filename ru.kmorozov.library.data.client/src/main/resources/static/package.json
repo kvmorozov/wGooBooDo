@@ -18,6 +18,7 @@
     "infinite-tree": "^1.8.1",
     "react": "^15.4.2",
     "react-bootstrap": "^0.30.7",
+    "react-bootstrap-table": "^3.3.0",
     "react-dom": "^15.4.2",
     "react-infinite-tree": "^0.6.1",
     "react-pdf-js": "^1.0.35",
