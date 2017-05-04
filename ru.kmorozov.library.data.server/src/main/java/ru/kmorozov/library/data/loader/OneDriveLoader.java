@@ -118,7 +118,8 @@ public class OneDriveLoader extends BaseLoader {
                         if (linkedBook == null) {
                             linkInfo.setBroken(true);
                             logger.warn("File lnk not found for " + realPath);
-                        } else
+                        }
+                        else
                             linkInfo.setLinkedBook(linkedBook);
                     }
                 } catch (ParseException e) {

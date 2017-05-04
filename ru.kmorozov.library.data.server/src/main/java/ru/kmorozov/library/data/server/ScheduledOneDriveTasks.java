@@ -15,20 +15,20 @@ import java.io.IOException;
 @Component
 public class ScheduledOneDriveTasks {
 
-    private static final long SCHEDULE_INTERVA = 1 * 60 * 60 * 1000;
+    private static final long SCHEDULE_INTERVAL = 1 * 60 * 60 * 1000;
     private static final Logger logger = Logger.getLogger(ScheduledOneDriveTasks.class);
 
     @Autowired
     private OneDriveLoader oneLoader;
 
-    @Scheduled(fixedRate = SCHEDULE_INTERVA)
+    @Scheduled(fixedRate = SCHEDULE_INTERVAL)
     public void refreshOneDrive() throws IOException {
         logger.info("Scheduled refresh started");
-        oneLoader.load(oneDriveItem -> System.currentTimeMillis() - oneDriveItem.getLastModifiedDateTime().getTime() > SCHEDULE_INTERVA);
+        oneLoader.load(oneDriveItem -> System.currentTimeMillis() - oneDriveItem.getLastModifiedDateTime().getTime() > SCHEDULE_INTERVAL);
         logger.info("Scheduled refresh finished");
     }
 
-    @Scheduled(fixedRate = SCHEDULE_INTERVA)
+    @Scheduled(fixedRate = SCHEDULE_INTERVAL)
     public void processLinks() throws IOException {
         logger.info("Scheduled links processing started");
         oneLoader.processLinks();

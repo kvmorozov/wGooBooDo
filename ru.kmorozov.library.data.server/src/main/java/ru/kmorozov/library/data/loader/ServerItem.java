@@ -5,6 +5,7 @@ import ru.kmorozov.library.data.model.book.BookInfo;
 import ru.kmorozov.library.data.model.book.Storage;
 import ru.kmorozov.library.utils.BookUtils;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.util.Date;
 
@@ -18,7 +19,7 @@ public class ServerItem {
     private ServerItem parent;
     private Date lastModifiedDateTime;
     private Storage.StorageType storageType;
-    private long filesCount;
+    private long filesCount, size;
     private final Object originalItem;
 
     private ServerItem(OneDriveItem oneDriveItem, boolean lookupParent) {
@@ -28,6 +29,7 @@ public class ServerItem {
         this.lastModifiedDateTime = oneDriveItem.getLastModifiedDateTime();
         this.storageType = Storage.StorageType.OneDrive;
         this.originalItem = oneDriveItem;
+        this.size = oneDriveItem.getSize();
 
         if (lookupParent && oneDriveItem.getParent() != null && oneDriveItem.getParent().getId() != null)
             parent = new ServerItem(oneDriveItem.getParent(), false);
@@ -41,11 +43,14 @@ public class ServerItem {
     }
 
     private ServerItem(Path path, boolean lookupParent) {
-        this.isDirectory = path.toFile().isDirectory();
+        File file = path.toFile();
+
+        this.isDirectory = file.isDirectory();
         this.url = path.toString();
-        this.name = path.toFile().getName();
+        this.name = file.getName();
         this.storageType = Storage.StorageType.LocalFileSystem;
         this.originalItem = path;
+        this.size = file.length();
 
         if (lookupParent)
             parent = new ServerItem(path.getParent(), false);
@@ -102,5 +107,9 @@ public class ServerItem {
 
     public Object getOriginalItem() {
         return originalItem;
+    }
+
+    public long getSize() {
+        return size;
     }
 }

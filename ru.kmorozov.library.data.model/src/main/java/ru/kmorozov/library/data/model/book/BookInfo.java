@@ -38,6 +38,8 @@ public class BookInfo {
     @Indexed(unique = true)
     String path;
 
+    long size;
+
     public BookFormat getFormat() {
         return format;
     }
@@ -70,5 +72,13 @@ public class BookInfo {
 
     public void setLastModifiedDateTime(Date lastModifiedDateTime) {
         this.lastModifiedDateTime = lastModifiedDateTime;
+    }
+
+    public long getSize() {
+        return size;
+    }
+
+    public void setSize(long size) {
+        this.size = size;
     }
 }

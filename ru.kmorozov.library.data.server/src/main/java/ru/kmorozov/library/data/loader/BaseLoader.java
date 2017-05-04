@@ -10,6 +10,7 @@ import ru.kmorozov.library.data.repository.StorageRepository;
 import ru.kmorozov.library.utils.BookUtils;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -129,6 +130,7 @@ public abstract class BaseLoader implements ILoader, Runnable {
                                 bookInfo.setFileName(serverItem.getName());
                                 bookInfo.setPath(serverItem.getUrl());
                                 bookInfo.setFormat(bookFormat);
+                                bookInfo.setSize(serverItem.getSize());
 
                                 book.setBookInfo(bookInfo);
                                 book.setStorage(storage);
@@ -146,7 +148,13 @@ public abstract class BaseLoader implements ILoader, Runnable {
                             else {
                                 Date oldDate = existBook.getBookInfo().getLastModifiedDateTime();
                                 Date newDate = serverItem.getLastModifiedDateTime();
-                                if (oldDate == null || oldDate.before(newDate)) {
+                                boolean dateCondition = oldDate == null || oldDate.before(newDate);
+
+                                long oldSize = existBook.getBookInfo().getSize();
+                                long newSize = serverItem.getSize();
+                                boolean sizeCondition = oldSize == 0l || oldSize != newSize;
+
+                                if (dateCondition || sizeCondition) {
                                     existBook.getBookInfo().setFileName(serverItem.getName());
                                     existBook.getBookInfo().setLastModifiedDateTime(newDate);
                                     booksRepository.save(existBook);
@@ -168,7 +176,9 @@ public abstract class BaseLoader implements ILoader, Runnable {
     public void run() {
         try {
             load();
-        } catch (IOException e) {
+        } catch (IOException | UncheckedIOException e) {
+            setState(LoaderExecutor.State.STOPPED);
+
             e.printStackTrace();
         }
     }

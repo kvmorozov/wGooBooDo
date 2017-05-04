@@ -23,7 +23,7 @@ class BookPreviewPopup extends React.Component {
 
         if (this.state.showModal)
             return (
-                <Modal show={this.state.showModal} onHide={this.close}>
+                <Modal show={this.state.showModal} onHide={this.close} backdrop="static">
                     <Modal.Header closeButton>
                         <Modal.Title>Book preview</Modal.Title>
                     </Modal.Header>
