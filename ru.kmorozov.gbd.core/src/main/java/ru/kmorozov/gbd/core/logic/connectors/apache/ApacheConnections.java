@@ -10,6 +10,7 @@ import org.apache.hc.client5.http.impl.sync.HttpClientBuilder;
 import org.apache.hc.client5.http.sync.HttpClient;
 import org.apache.hc.core5.http.HttpHost;
 import org.apache.hc.core5.ssl.SSLContextBuilder;
+import org.apache.hc.core5.util.TimeValue;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 
 import javax.net.ssl.SSLContext;
@@ -44,14 +45,16 @@ public class ApacheConnections {
 
         try {
             SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, (arg0, arg1) -> true).build();
-            builder.setSSLContext(sslContext);
-            builderWithTimeout.setSSLContext(sslContext);
+//            builder.setSSLContext(sslContext);
+//            builderWithTimeout.setSSLContext(sslContext);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
 
-        RequestConfig requestConfig = RequestConfig.copy(RequestConfig.DEFAULT).setSocketTimeout(CONNECT_TIMEOUT).setConnectTimeout(CONNECT_TIMEOUT).setConnectionRequestTimeout
-                (CONNECT_TIMEOUT).build();
+        RequestConfig requestConfig = RequestConfig.copy(RequestConfig.DEFAULT)
+                                                   .setSocketTimeout(TimeValue.ofMillis(CONNECT_TIMEOUT))
+                                                   .setConnectTimeout(TimeValue.ofMillis(CONNECT_TIMEOUT))
+                                                   .setConnectionRequestTimeout(TimeValue.ofMillis(CONNECT_TIMEOUT)).build();
 
         builderWithTimeout.setDefaultRequestConfig(requestConfig);
     }

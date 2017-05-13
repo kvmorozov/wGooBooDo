@@ -1,7 +1,7 @@
 package ru.kmorozov.gbd.core.logic.connectors.apache;
 
-import org.apache.hc.core5.http.HttpResponse;
-import org.apache.hc.core5.http.entity.EntityUtils;
+import org.apache.hc.client5.http.impl.sync.CloseableHttpResponse;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
 import ru.kmorozov.gbd.core.logic.connectors.Response;
 
 import java.io.IOException;
@@ -12,9 +12,9 @@ import java.io.InputStream;
  */
 public class ApacheResponse implements Response {
 
-    private final HttpResponse response;
+    private final CloseableHttpResponse response;
 
-    ApacheResponse(HttpResponse response) {
+    ApacheResponse(CloseableHttpResponse response) {
         this.response = response;
     }
 
