@@ -40,7 +40,6 @@ public class ServerAdapterHandler extends SimpleChannelInboundHandler<String> {
     public void channelReadComplete(ChannelHandlerContext arg0)
             throws Exception {
         // TODO Auto-generated method stub
-        System.out.println("channelReadComplete");
     }
 
     @Override
@@ -49,5 +48,4 @@ public class ServerAdapterHandler extends SimpleChannelInboundHandler<String> {
         // TODO Auto-generated method stub
         System.out.println("channelWritabilityChanged");
     }
-
 }

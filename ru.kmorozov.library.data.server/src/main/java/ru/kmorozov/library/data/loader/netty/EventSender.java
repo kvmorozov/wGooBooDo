@@ -47,8 +47,10 @@ public class EventSender implements Closeable {
         if (!isInitCompleted)
             init();
 
-        if (isInitCompleted)
+        if (isInitCompleted) {
             channel.write(msg);
+            channel.flush();
+        }
     }
 
     @Override
