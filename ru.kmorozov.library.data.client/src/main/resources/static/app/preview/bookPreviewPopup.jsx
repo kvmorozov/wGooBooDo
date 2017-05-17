@@ -1,6 +1,7 @@
 import React from "react";
 import Modal from "react-bootstrap/lib/Modal";
 import {Button} from "semantic-ui-react";
+import stompClient from "./../libs/websocket/websocket-listener";
 
 class BookPreviewPopup extends React.Component {
 
@@ -16,6 +17,16 @@ class BookPreviewPopup extends React.Component {
 
     open = (book) => {
         this.setState({showModal: true, book: book});
+    }
+
+    componentDidMount() {
+        stompClient.register([
+            {route: '/topic/info', callback: this.refreshMsgInfo}
+        ]);
+    }
+
+    refreshMsgInfo = (message) => {
+
     }
 
     render() {
