@@ -19,8 +19,7 @@ public class WebSocketEventHandler {
         this.websocket = websocket;
     }
 
-    public void sendInfo(Logger logger, String message) {
-        logger.info(message);
+    public void sendInfo(String message) {
         this.websocket.convertAndSend(WebSocketConfiguration.MESSAGE_PREFIX + "/info", message);
     }
 }

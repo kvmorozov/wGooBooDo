@@ -4,12 +4,20 @@ import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
 
-public class ContainerServer {
+@Component
+public class ContainerServer implements CommandLineRunner {
 
-    int port;
+    private int port;
 
-    public void start() {
+    @Autowired
+    private ServerAdapterInitializer initializer;
+
+    @Override
+    public void run(String... args) {
         port = 5252;
         EventLoopGroup producer = new NioEventLoopGroup();
         EventLoopGroup consumer = new NioEventLoopGroup();
@@ -18,7 +26,7 @@ public class ContainerServer {
             ServerBootstrap bootstrap = new ServerBootstrap()
                     .group(producer, consumer)
                     .channel(NioServerSocketChannel.class)
-                    .childHandler(new ServerAdapterInitializer());
+                    .childHandler(initializer);
             System.out.println("Event server started");
             bootstrap.bind(port).sync().channel().closeFuture().sync();
 
