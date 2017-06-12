@@ -29,9 +29,9 @@ public class AbstractHttpProcessor {
         if (connectors == null || connectors.size() == 0) synchronized (LOCK) {
             if (connectors == null || connectors.size() == 0) {
                 connectors = new ArrayList<>();
-                if (ClassUtils.isClassExists("org.asynchttpclient.AsyncHttpClient")) connectors.add(new AsyncHttpConnector());
-                if (ClassUtils.isClassExists("okhttp3.OkHttpClient")) connectors.add(new OkHttpConnector());
-                if (ClassUtils.isClassExists("org.apache.hc.client5.http.sync.HttpClient")) connectors.add(new ApacheHttpConnector());
+//                if (ClassUtils.isClassExists("org.asynchttpclient.AsyncHttpClient")) connectors.add(new AsyncHttpConnector());
+//                if (ClassUtils.isClassExists("okhttp3.OkHttpClient")) connectors.add(new OkHttpConnector());
+//                if (ClassUtils.isClassExists("org.apache.hc.client5.http.sync.HttpClient")) connectors.add(new ApacheHttpConnector());
                 if (ClassUtils.isClassExists("com.google.api.client.http.HttpRequestFactory")) connectors.add(new GoogleHttpConnector());
             }
         }
