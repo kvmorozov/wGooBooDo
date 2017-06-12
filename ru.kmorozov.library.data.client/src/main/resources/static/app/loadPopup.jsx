@@ -3,6 +3,7 @@ import Modal from "react-bootstrap/lib/Modal";
 import Button from "react-bootstrap/lib/Button";
 import ButtonGroup from "react-bootstrap/lib/ButtonGroup";
 import client from "./restClient";
+import stompClient from "./libs/websocket/websocket-listener";
 
 class LoadPopup extends React.Component {
 
@@ -30,6 +31,16 @@ class LoadPopup extends React.Component {
 
     updateStop = () => {
         client({method: 'POST', path: '/updateLibrary/STOPPED'}).done();
+    }
+
+    componentDidMount() {
+        stompClient.register([
+            {route: '/topic/info', callback: this.refreshMsgInfo}
+        ]);
+    }
+
+    refreshMsgInfo = (message) => {
+        console.log(message);
     }
 
     render() {

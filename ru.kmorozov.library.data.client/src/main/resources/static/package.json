@@ -16,6 +16,7 @@
   "dependencies": {
     "classnames": "^2.2.5",
     "infinite-tree": "^1.8.1",
+    "net": "^1.0.2",
     "react": "^15.4.2",
     "react-bootstrap": "^0.30.7",
     "react-bootstrap-table": "^3.3.0",
@@ -25,6 +26,8 @@
     "requirejs": "^2.3.3",
     "rest": "^1.3.2",
     "semantic-ui-react": "^0.67.2",
+    "sockjs-client": "^1.1.4",
+    "stompjs": "^2.3.3",
     "when": "^3.7.8"
   },
   "scripts": {

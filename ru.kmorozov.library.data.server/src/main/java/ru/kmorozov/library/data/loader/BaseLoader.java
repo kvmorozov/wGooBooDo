@@ -3,6 +3,7 @@ package ru.kmorozov.library.data.loader;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import ru.kmorozov.library.data.loader.netty.EventSender;
 import ru.kmorozov.library.data.model.book.*;
 import ru.kmorozov.library.data.repository.BooksRepository;
 import ru.kmorozov.library.data.repository.CategoryRepository;
@@ -137,15 +138,13 @@ public abstract class BaseLoader implements ILoader, Runnable {
 
                                 if (book.isLink() && !postponedLinksLoad()) {
                                     links.add(serverItem.getOriginalItem());
-                                    logger.info("Added link " + serverItem.getName());
-                                }
-                                else {
+                                    EventSender.INSTANCE.sendInfo(logger, "Added link " + serverItem.getName());
+                                } else {
                                     booksRepository.save(book);
                                     storage.getStorageInfo().incFilesCount();
-                                    logger.info("Added file " + serverItem.getName());
+                                    EventSender.INSTANCE.sendInfo(logger, "Added file " + serverItem.getName());
                                 }
-                            }
-                            else {
+                            } else {
                                 Date oldDate = existBook.getBookInfo().getLastModifiedDateTime();
                                 Date newDate = serverItem.getLastModifiedDateTime();
                                 boolean dateCondition = oldDate == null || oldDate.before(newDate);
@@ -159,7 +158,7 @@ public abstract class BaseLoader implements ILoader, Runnable {
                                     existBook.getBookInfo().setLastModifiedDateTime(newDate);
                                     booksRepository.save(existBook);
 
-                                    logger.info("Updated file " + serverItem.getName());
+                                    EventSender.INSTANCE.sendInfo(logger, "Updated file " + serverItem.getName());
                                 }
                             }
                         }
