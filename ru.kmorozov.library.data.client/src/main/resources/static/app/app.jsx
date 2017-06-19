@@ -9,6 +9,7 @@ import "./tree-utils/animation.styl";
 import {Menu, Grid} from "semantic-ui-react";
 import Preview from "./preview/preview";
 import LoadPopup from "./loadPopup";
+import MessagesList from "./preview/messagesList";
 
 class App extends React.Component {
     constructor(props) {
@@ -155,6 +156,7 @@ class App extends React.Component {
                 </Grid.Row>
 
                 <LoadPopup ref="loadPopup"/>
+                <MessagesList/>
             </Grid>
         );
     }

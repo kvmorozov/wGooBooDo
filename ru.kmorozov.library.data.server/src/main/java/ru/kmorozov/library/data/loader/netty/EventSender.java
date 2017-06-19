@@ -59,7 +59,12 @@ public class EventSender implements Closeable {
     }
 
     public void sendInfo(Logger logger, String msg) {
-        write(msg);
+        try {
+            write(msg);
+        } catch (Exception ex) {
+            logger.error(ex.getMessage());
+        }
+
         logger.info(msg);
     }
 }

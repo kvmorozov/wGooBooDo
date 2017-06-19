@@ -3,7 +3,7 @@ import Modal from "react-bootstrap/lib/Modal";
 import Button from "react-bootstrap/lib/Button";
 import ButtonGroup from "react-bootstrap/lib/ButtonGroup";
 import client from "./restClient";
-import stompClient from "./libs/websocket/websocket-listener";
+import MessagesList from "./../app/preview/messagesList";
 
 class LoadPopup extends React.Component {
 
@@ -33,16 +33,6 @@ class LoadPopup extends React.Component {
         client({method: 'POST', path: '/updateLibrary/STOPPED'}).done();
     }
 
-    componentDidMount() {
-        stompClient.register([
-            {route: '/topic/info', callback: this.refreshMsgInfo}
-        ]);
-    }
-
-    refreshMsgInfo = (message) => {
-        console.log(message);
-    }
-
     render() {
         return (
             <Modal show={this.state.showModal} onHide={this.close}>
@@ -50,6 +40,7 @@ class LoadPopup extends React.Component {
                     <Modal.Title>Update library</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+                    <MessagesList/>
                     <ButtonGroup>
                         <Button onClick={this.updateStart}>Update start</Button>
                         <Button onClick={this.updatePause}>Update pause</Button>
