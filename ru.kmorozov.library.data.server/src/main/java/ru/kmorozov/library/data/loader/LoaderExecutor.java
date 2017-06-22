@@ -52,4 +52,8 @@ public class LoaderExecutor {
     public void resolveLink(Book lnkBook) {
         oneLoader.resolveLink(lnkBook);
     }
+
+    public String downloadBook(Book book) {
+        return oneLoader.downloadBook(book);
+    }
 }

@@ -49,6 +49,7 @@
             <artifactId>ru.kmorozov.library.data.model</artifactId>
             <version>${project.version}</version>
         </dependency>
+
     </dependencies>
 
     <build>

@@ -1,5 +1,6 @@
 package ru.kmorozov.library.data.client.netty;
 
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.group.ChannelGroup;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 import ru.kmorozov.library.data.client.WebSocketEventHandler;
 
 @Component
+@ChannelHandler.Sharable
 public class ServerAdapterHandler extends SimpleChannelInboundHandler<String> {
 
     private static final ChannelGroup channels = new DefaultChannelGroup("containers", GlobalEventExecutor.INSTANCE);

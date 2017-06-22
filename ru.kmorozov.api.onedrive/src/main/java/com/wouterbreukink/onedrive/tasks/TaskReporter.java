@@ -27,6 +27,8 @@ public class TaskReporter {
     private int replaceDownloaded;
     private long replaceDownloadedSize;
 
+    private Logger taskLogger;
+
     private long startTime;
 
     public TaskReporter() {
@@ -166,5 +168,23 @@ public class TaskReporter {
 
     private String plural(long same) {
         return same != 1 ? "s" : "";
+    }
+
+    public void setTaskLogger(Logger taskLogger) {
+        this.taskLogger = taskLogger;
+    }
+
+    public void info(String message) {
+        if (taskLogger != null)
+            taskLogger.info(message);
+        else
+            log.info(message);
+    }
+
+    public void warn(String message) {
+        if (taskLogger != null)
+            taskLogger.warn(message);
+        else
+            log.warn(message);
     }
 }

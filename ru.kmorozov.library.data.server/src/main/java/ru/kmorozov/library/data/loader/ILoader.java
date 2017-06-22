@@ -12,4 +12,6 @@ public interface ILoader {
     void load() throws IOException;
 
     void resolveLink(Book lnkBook);
+
+    String downloadBook(Book book);
 }

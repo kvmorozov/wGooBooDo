@@ -1,8 +1,12 @@
 package ru.kmorozov.library.data.loader;
 
+import com.wouterbreukink.onedrive.TaskQueue;
 import com.wouterbreukink.onedrive.client.OneDriveItem;
 import com.wouterbreukink.onedrive.client.OneDriveProvider;
 import com.wouterbreukink.onedrive.client.walker.OneDriveWalkers;
+import com.wouterbreukink.onedrive.filesystem.FileSystemProvider;
+import com.wouterbreukink.onedrive.tasks.DownloadTask;
+import com.wouterbreukink.onedrive.tasks.Task;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,8 +122,7 @@ public class OneDriveLoader extends BaseLoader {
                         if (linkedBook == null) {
                             linkInfo.setBroken(true);
                             logger.warn("File lnk not found for " + realPath);
-                        }
-                        else
+                        } else
                             linkInfo.setLinkedBook(linkedBook);
                     }
                 } catch (ParseException e) {
@@ -194,5 +197,25 @@ public class OneDriveLoader extends BaseLoader {
             logger.error(e);
         }
         return storage;
+    }
+
+    @Override
+    public String downloadBook(Book book) {
+        try {
+            OneDriveItem bookItem = api.getItem(book.getBookInfo().getPath());
+            File parent = new File("E:\\tmp");
+
+            DownloadTask task = new DownloadTask(
+                    new Task.TaskOptions(new TaskQueue(), api, FileSystemProvider.FACTORY.readWriteProvider(), new SocketReporter()),
+                    parent, bookItem, true);
+
+            task.run();
+
+            return task.getLocalFileName();
+        } catch (IOException e) {
+            logger.error(e);
+        }
+
+        return null;
     }
 }

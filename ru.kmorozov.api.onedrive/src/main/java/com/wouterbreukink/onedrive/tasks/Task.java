@@ -33,6 +33,9 @@ public abstract class Task implements Runnable, Comparable<Task> {
         this.api = Preconditions.checkNotNull(options.getApi());
         this.fileSystem = Preconditions.checkNotNull(options.getFileSystem());
         this.reporter = Preconditions.checkNotNull(options.getReporter());
+
+        reporter.setTaskLogger(log);
+
         this.id = taskIdCounter.getAndIncrement();
         this.attempt = 0;
     }

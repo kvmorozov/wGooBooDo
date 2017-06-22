@@ -23,4 +23,6 @@ public interface IDataRestServer {
     ItemDTO getItem(String itemId, ItemDTO.ItemType itemType, boolean refresh);
 
     void updateLibrary(String state);
+
+    String downloadBook(String bookId);
 }

@@ -10,7 +10,7 @@ class MessagesList extends React.Component {
     }
 
     refreshMsgInfo = (message) => {
-        this.setState({msg: message});
+        this.setState({msg: message.body});
     }
 
     render() {

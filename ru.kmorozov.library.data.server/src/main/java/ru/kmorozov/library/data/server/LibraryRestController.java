@@ -176,4 +176,11 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
                 loader.stop();
         }
     }
+
+    @Override
+    @RequestMapping("/downloadBook")
+    public String downloadBook(@RequestParam(name = "bookId") String bookId) {
+        String bookPath = loader.downloadBook(booksRepository.findOne(bookId));
+        return bookPath;
+    }
 }

@@ -15,13 +15,13 @@ import static com.wouterbreukink.onedrive.client.utils.LogUtils.readableTime;
 
 public class DownloadTask extends Task {
 
-    private static final Logger log = LogManager.getLogger(UploadTask.class.getName());
+    private static final Logger log = LogManager.getLogger(DownloadTask.class.getName());
     private final File parent;
     private final OneDriveItem remoteFile;
     private final boolean replace;
+    private String localFileName;
 
     public DownloadTask(TaskOptions options, File parent, OneDriveItem remoteFile, boolean replace) {
-
         super(options);
 
         this.parent = Preconditions.checkNotNull(parent);
@@ -85,7 +85,7 @@ public class DownloadTask extends Task {
                             case MEDIA_IN_PROGRESS:
                                 long elapsedTimeInner = System.currentTimeMillis() - startTimeInner;
 
-                                log.info(String.format("Downloaded chunk (progress %.1f%%) of %s (%s/s) for file %s",
+                                reporter.info(String.format("Downloaded chunk (progress %.1f%%) of %s (%s/s) for file %s",
                                         downloader.getProgress() * 100,
                                         readableFileSize(downloader.getChunkSize()),
                                         elapsedTimeInner > 0 ? readableFileSize(downloader.getChunkSize() / (elapsedTimeInner / 1000d)) : 0,
@@ -95,7 +95,7 @@ public class DownloadTask extends Task {
                                 break;
                             case MEDIA_COMPLETE:
                                 long elapsedTime = System.currentTimeMillis() - startTime;
-                                log.info(String.format("Downloaded %s in %s (%s/s) of %s file %s",
+                                reporter.info(String.format("Downloaded %s in %s (%s/s) of %s file %s",
                                         readableFileSize(remoteFile.getSize()),
                                         readableTime(elapsedTime),
                                         elapsedTime > 0 ? readableFileSize(remoteFile.getSize() / (elapsedTime / 1000d)) : 0,
@@ -117,18 +117,25 @@ public class DownloadTask extends Task {
                         remoteFile.getCreatedDateTime(),
                         remoteFile.getLastModifiedDateTime());
 
-                fileSystem.replaceFile(new File(parent, remoteFile.getName()), downloadFile);
+                File localFile = new File(parent, remoteFile.getName());
+                localFileName = localFile.getPath();
+
+                fileSystem.replaceFile(localFile, downloadFile);
                 reporter.fileDownloaded(replace, remoteFile.getSize());
             } catch (Throwable e) {
                 if (downloadFile != null) {
                     if (!downloadFile.delete()) {
-                        log.warn("Unable to remove temporary file " + downloadFile.getPath());
+                        reporter.warn("Unable to remove temporary file " + downloadFile.getPath());
                     }
                 }
 
                 throw e;
             }
         }
+    }
+
+    public String getLocalFileName() {
+        return localFileName;
     }
 }
 

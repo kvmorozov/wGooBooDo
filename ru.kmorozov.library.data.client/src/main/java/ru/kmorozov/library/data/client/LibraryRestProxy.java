@@ -123,6 +123,21 @@ public class LibraryRestProxy implements IDataRestServer {
         template.execute(uri, HttpMethod.POST, null, null);
     }
 
+    @Override
+    @RequestMapping("/downloadBook/{bookId}")
+    public String downloadBook(@PathVariable String bookId) {
+        UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
+        String uri = builder.scheme("http")
+                .host("localhost")
+                .port(9000)
+                .path("downloadBook")
+                .queryParam("bookId", bookId)
+                .build().toString();
+
+        String bookPath = template.getForEntity(uri, String.class).getBody();
+        return bookPath;
+    }
+
     private List getList(String operation, String paramName, String paramValue, Class arrClass) {
         UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
         String uri = builder.scheme("http")

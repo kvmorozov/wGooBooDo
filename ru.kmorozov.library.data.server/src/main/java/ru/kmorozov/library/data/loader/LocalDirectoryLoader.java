@@ -112,4 +112,9 @@ public class LocalDirectoryLoader extends BaseLoader {
     public void resolveLink(Book lnkBook) {
 
     }
+
+    @Override
+    public String downloadBook(Book book) {
+        return book.getBookInfo().getPath();
+    }
 }
