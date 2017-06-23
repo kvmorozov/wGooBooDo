@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import ru.kmorozov.library.data.model.IDataRestServer;
+import ru.kmorozov.library.data.model.book.Book;
 import ru.kmorozov.library.data.model.dto.BookDTO;
 import ru.kmorozov.library.data.model.dto.ItemDTO;
 import ru.kmorozov.library.data.model.dto.StorageDTO;
@@ -125,7 +126,7 @@ public class LibraryRestProxy implements IDataRestServer {
 
     @Override
     @RequestMapping("/downloadBook/{bookId}")
-    public String downloadBook(@PathVariable String bookId) {
+    public BookDTO downloadBook(@PathVariable String bookId) {
         UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
         String uri = builder.scheme("http")
                 .host("localhost")
@@ -134,8 +135,8 @@ public class LibraryRestProxy implements IDataRestServer {
                 .queryParam("bookId", bookId)
                 .build().toString();
 
-        String bookPath = template.getForEntity(uri, String.class).getBody();
-        return bookPath;
+        BookDTO book = template.getForEntity(uri, BookDTO.class).getBody();
+        return book;
     }
 
     private List getList(String operation, String paramName, String paramValue, Class arrClass) {

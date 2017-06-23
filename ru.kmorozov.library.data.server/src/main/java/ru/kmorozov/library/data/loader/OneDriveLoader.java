@@ -211,7 +211,7 @@ public class OneDriveLoader extends BaseLoader {
 
             task.run();
 
-            return task.getLocalFileName();
+            return book.getStorage().getName();
         } catch (IOException e) {
             logger.error(e);
         }

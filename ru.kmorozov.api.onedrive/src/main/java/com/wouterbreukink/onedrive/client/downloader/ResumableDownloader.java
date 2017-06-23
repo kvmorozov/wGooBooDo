@@ -17,6 +17,8 @@ package com.wouterbreukink.onedrive.client.downloader;
 import com.google.api.client.http.*;
 import com.google.api.client.util.IOUtils;
 import com.google.api.client.util.Preconditions;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -47,6 +49,8 @@ import java.io.OutputStream;
  */
 @SuppressWarnings("deprecation")
 public final class ResumableDownloader {
+
+    private static final Logger log = LogManager.getLogger(ResumableDownloader.class.getName());
 
     /**
      * Default maximum number of bytes that will be downloaded from the server in any single HTTP
@@ -172,8 +176,16 @@ public final class ResumableDownloader {
                 // If last byte position has been specified use it iff it is smaller than the chunksize.
                 currentRequestLastBytePos = Math.min(lastBytePos, currentRequestLastBytePos);
             }
-            HttpResponse response = executeCurrentRequest(
-                    currentRequestLastBytePos, requestUrl, requestHeaders, outputStream);
+            HttpResponse response = null;
+
+            try {
+                response = executeCurrentRequest(
+                        currentRequestLastBytePos, requestUrl, requestHeaders, outputStream);
+            } catch (Exception ex) {
+                log.error("Retry because of error: " + ex.getMessage());
+                response = executeCurrentRequest(
+                        currentRequestLastBytePos, requestUrl, requestHeaders, outputStream);
+            }
 
             String contentRange = response.getHeaders().getContentRange();
             long nextByteIndex = getNextByteIndex(contentRange);

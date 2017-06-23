@@ -1,5 +1,6 @@
 package ru.kmorozov.library.data.model;
 
+import ru.kmorozov.library.data.model.book.Book;
 import ru.kmorozov.library.data.model.dto.BookDTO;
 import ru.kmorozov.library.data.model.dto.ItemDTO;
 import ru.kmorozov.library.data.model.dto.StorageDTO;
@@ -24,5 +25,5 @@ public interface IDataRestServer {
 
     void updateLibrary(String state);
 
-    String downloadBook(String bookId);
+    BookDTO downloadBook(String bookId);
 }

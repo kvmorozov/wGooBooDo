@@ -2,6 +2,7 @@ package ru.kmorozov.library.data.client;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.AsyncSupportConfigurer;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 /**
@@ -14,5 +15,10 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     public void configureAsyncSupport(AsyncSupportConfigurer configurer) {
         configurer.setDefaultTimeout(Long.MAX_VALUE);
         super.configureAsyncSupport(configurer);
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/**").addResourceLocations("file:/E:/tmp/");
     }
 }

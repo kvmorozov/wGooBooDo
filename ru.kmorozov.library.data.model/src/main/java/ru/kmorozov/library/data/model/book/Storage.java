@@ -36,6 +36,8 @@ public class Storage {
 
     StorageInfo storageInfo;
 
+    String localPath;
+
     public StorageType getStorageType() {
         return storageType;
     }
@@ -126,5 +128,13 @@ public class Storage {
     @Override
     public int hashCode() {
         return id.hashCode();
+    }
+
+    public String getLocalPath() {
+        return localPath;
+    }
+
+    public void setLocalPath(String localPath) {
+        this.localPath = localPath;
     }
 }

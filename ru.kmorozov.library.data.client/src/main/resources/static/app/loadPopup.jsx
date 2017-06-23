@@ -3,7 +3,6 @@ import Modal from "react-bootstrap/lib/Modal";
 import Button from "react-bootstrap/lib/Button";
 import ButtonGroup from "react-bootstrap/lib/ButtonGroup";
 import client from "./restClient";
-import MessagesList from "./../app/preview/messagesList";
 
 class LoadPopup extends React.Component {
 
@@ -40,7 +39,6 @@ class LoadPopup extends React.Component {
                     <Modal.Title>Update library</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <MessagesList/>
                     <ButtonGroup>
                         <Button onClick={this.updateStart}>Update start</Button>
                         <Button onClick={this.updatePause}>Update pause</Button>

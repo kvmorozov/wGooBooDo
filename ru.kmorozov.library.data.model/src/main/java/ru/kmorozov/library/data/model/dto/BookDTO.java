@@ -10,7 +10,7 @@ public class BookDTO {
 
     private String id;
     private BookInfo.BookFormat format;
-    private String title, path;
+    private String title, path, localPath;
 
     public BookDTO() {
     }
@@ -23,6 +23,7 @@ public class BookDTO {
         this.id = book.getBookId();
         this.format = book.getBookInfo().getFormat();
         this.title = book.getTitle() == null ? book.getBookInfo().getFileName() : book.getTitle();
+        this.localPath = book.getStorage().getLocalPath();
     }
 
     public String getId() {
@@ -49,11 +50,19 @@ public class BookDTO {
         this.path = path;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getLocalPath() {
+        return localPath;
+    }
+
     public void setFormat(BookInfo.BookFormat format) {
         this.format = format;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setLocalPath(String localPath) {
+        this.localPath = localPath;
     }
 }

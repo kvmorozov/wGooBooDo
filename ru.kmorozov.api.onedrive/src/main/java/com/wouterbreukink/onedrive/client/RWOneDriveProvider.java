@@ -30,7 +30,6 @@ class RWOneDriveProvider extends ROOneDriveProvider implements OneDriveProvider 
     }
 
     public OneDriveItem replaceFile(OneDriveItem parent, File file) throws IOException {
-
         if (!parent.isDirectory()) {
             throw new IllegalArgumentException("Parent is not a folder");
         }
@@ -48,7 +47,6 @@ class RWOneDriveProvider extends ROOneDriveProvider implements OneDriveProvider 
     }
 
     public OneDriveItem uploadFile(OneDriveItem parent, File file) throws IOException {
-
         if (!parent.isDirectory()) {
             throw new IllegalArgumentException("Parent is not a folder");
         }
@@ -82,7 +80,6 @@ class RWOneDriveProvider extends ROOneDriveProvider implements OneDriveProvider 
 
     @Override
     public OneDriveUploadSession startUploadSession(OneDriveItem parent, File file) throws IOException {
-
         HttpRequest request = requestFactory.buildPostRequest(
                 OneDriveUrl.createUploadSession(parent.getId(), file.getName()),
                 new JsonHttpContent(JSON_FACTORY, new UploadSessionFacet(file.getName())));
@@ -94,7 +91,6 @@ class RWOneDriveProvider extends ROOneDriveProvider implements OneDriveProvider 
 
     @Override
     public void uploadChunk(OneDriveUploadSession session) throws IOException {
-
         byte[] bytesToUpload = session.getChunk();
         OneDriveItem item;
 
@@ -121,7 +117,6 @@ class RWOneDriveProvider extends ROOneDriveProvider implements OneDriveProvider 
     }
 
     public OneDriveItem updateFile(OneDriveItem item, Date createdDate, Date modifiedDate) throws IOException {
-
         FileSystemInfoFacet fileSystem = new FileSystemInfoFacet();
         fileSystem.setCreatedDateTime(JsonDateSerializer.INSTANCE.serialize(createdDate));
         fileSystem.setLastModifiedDateTime(JsonDateSerializer.INSTANCE.serialize(modifiedDate));
@@ -137,7 +132,6 @@ class RWOneDriveProvider extends ROOneDriveProvider implements OneDriveProvider 
     }
 
     public OneDriveItem createFolder(OneDriveItem parent, File target) throws IOException {
-
         WriteFolderFacet newFolder = new WriteFolderFacet(target.getName());
 
         HttpRequest request = requestFactory.buildPostRequest(
@@ -155,14 +149,17 @@ class RWOneDriveProvider extends ROOneDriveProvider implements OneDriveProvider 
     }
 
     public void download(OneDriveItem item, File target, ResumableDownloaderProgressListener progressListener) throws IOException {
-
         FileOutputStream fos = null;
 
         try {
             fos = new FileOutputStream(target);
             ResumableDownloader downloader = new ResumableDownloader(HTTP_TRANSPORT, requestFactory.getInitializer());
             downloader.setProgressListener(progressListener);
-            downloader.setChunkSize(getCommandLineOpts().getSplitAfter() * 1024 * 1024);
+
+            int defaultChunkSize = getCommandLineOpts().getSplitAfter() * 1024 * 1024;
+            int itemPartSize = item.getSize() > 0 ? (int) item.getSize() / 10 : Integer.MAX_VALUE;
+
+            downloader.setChunkSize(Math.min(defaultChunkSize, itemPartSize));
 
             downloader.download(OneDriveUrl.content(item.getId()), fos);
         } catch (IOException e) {
