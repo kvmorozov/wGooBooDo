@@ -19,6 +19,11 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/**").addResourceLocations("file:/E:/tmp/");
+        if (!registry.hasMappingForPattern("/icons/**")) {
+            registry.addResourceHandler("/icons/**").addResourceLocations(
+                    "classpath:/static/icons/");
+        }
+        if (!registry.hasMappingForPattern("/**"))
+            registry.addResourceHandler("/**").addResourceLocations("file:/E:/tmp/");
     }
 }
