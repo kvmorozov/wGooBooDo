@@ -253,6 +253,11 @@ public class SingleChannelHttpClient implements AsyncHttpClient {
 
     }
 
+    @Override
+    public AsyncHttpClientConfig getConfig() {
+        return null;
+    }
+
     protected BoundRequestBuilder requestBuilder(String method, String url) {
         return new BoundRequestBuilder(this, method, config.isDisableUrlEncodingForBoundRequests()).setUrl(url).setSignatureCalculator(signatureCalculator);
     }
