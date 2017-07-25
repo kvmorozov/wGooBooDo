@@ -2,6 +2,7 @@ import React from "react";
 import {Button} from "semantic-ui-react";
 import {BootstrapTable, TableHeaderColumn} from "react-bootstrap-table";
 import BookPreviewPopup from "./bookPreviewPopup";
+import BookFormatter from "./bookFormatter";
 
 class BooksList extends React.Component {
 
@@ -18,20 +19,10 @@ class BooksList extends React.Component {
         this.refs.bookPreviewPopup.open(selectedBook);
     }
 
-    getDisplayItem(book) {
-        let imgPath;
-        switch (book.format) {
-            case 'PDF':
-                imgPath = '/icons/pdf.png';
-                break;
-            case 'DJVU':
-                imgPath = '/icons/djvu.png';
-                break;
-        }
-
+    bookFormatter = (cell, row) => {
         return (
-            <Button onClick={this.handleItemClick(book)}>Preview</Button>
-        )
+            <BookFormatter format={ cell }/>
+        );
     }
 
     render() {
@@ -47,9 +38,8 @@ class BooksList extends React.Component {
                 <div>
                     <BootstrapTable ref='table' data={ this.state.books } options={ options }
                                     pagination>
-                        <TableHeaderColumn dataField='id' isKey={ true }>Book ID</TableHeaderColumn>
-                        <TableHeaderColumn dataField='format'>Format</TableHeaderColumn>
-                        <TableHeaderColumn dataField='title'>Title</TableHeaderColumn>
+                        <TableHeaderColumn dataField='format' dataFormat={ this.bookFormatter }>Format</TableHeaderColumn>
+                        <TableHeaderColumn dataField='title' isKey={ true }>Title</TableHeaderColumn>
                     </BootstrapTable>
                     <BookPreviewPopup ref="bookPreviewPopup"/>
                 </div>

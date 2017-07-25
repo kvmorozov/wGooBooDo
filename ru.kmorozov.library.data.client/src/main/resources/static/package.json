@@ -25,9 +25,10 @@
     "react-pdf-js": "^1.0.37",
     "requirejs": "^2.3.4",
     "rest": "^1.3.2",
-    "semantic-ui-react": "^0.67.2",
+    "semantic-ui-react": "^0.71.2",
     "sockjs-client": "1.0.0",
     "stompjs": "^2.3.3",
+    "webpack-dev-server": "^2.6.1",
     "when": "^3.7.8"
   },
   "scripts": {
@@ -47,7 +48,6 @@
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",
     "url-loader": "^0.5.9",
-    "webpack": "^3.3.0",
-    "webpack-dev-server": "^2.6.1"
+    "webpack": "^3.3.0"
   }
 }
