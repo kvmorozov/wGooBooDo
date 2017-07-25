@@ -82,7 +82,7 @@ class BookPreviewPopup extends React.Component {
         if (this.state.book != undefined)
             if (this.state.book.localPath && this.state.book.format == 'PDF')
                 preview = <div>
-                    <PDF file={this.state.book.localPath} onDocumentComplete={this.onDocumentComplete}
+                    <PDF file={'/' + this.state.book.localPath} onDocumentComplete={this.onDocumentComplete}
                          onPageComplete={this.onPageComplete} page={this.state.page}/>
                     {pagination}
                 </div>

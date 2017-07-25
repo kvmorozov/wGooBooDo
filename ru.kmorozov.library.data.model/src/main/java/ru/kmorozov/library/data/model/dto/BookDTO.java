@@ -23,7 +23,7 @@ public class BookDTO {
         this.id = book.getBookId();
         this.format = book.getBookInfo().getFormat();
         this.title = book.getTitle() == null ? book.getBookInfo().getFileName() : book.getTitle();
-        this.localPath = book.getStorage().getLocalPath();
+        this.localPath = book.getBookInfo().getFileName();
     }
 
     public String getId() {
