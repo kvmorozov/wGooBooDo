@@ -1,8 +1,7 @@
 import React from "react";
-import {Button} from "semantic-ui-react";
+import {Button, Icon} from "semantic-ui-react";
 import {BootstrapTable, TableHeaderColumn} from "react-bootstrap-table";
 import BookPreviewPopup from "./bookPreviewPopup";
-import BookFormatter from "./bookFormatter";
 
 class BooksList extends React.Component {
 
@@ -20,8 +19,18 @@ class BooksList extends React.Component {
     }
 
     bookFormatter = (cell, row) => {
+        let iconName;
+        switch (cell) {
+            case 'PDF':
+                iconName = 'file pdf outline';
+                break;
+            case 'DJVU':
+                iconName = 'file text';
+                break;
+        }
+
         return (
-            <BookFormatter format={ cell }/>
+            <Icon disabled name={iconName} />
         );
     }
 
