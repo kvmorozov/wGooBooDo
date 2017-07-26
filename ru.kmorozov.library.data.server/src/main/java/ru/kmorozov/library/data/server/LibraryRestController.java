@@ -28,8 +28,6 @@ import ru.kmorozov.library.data.repository.BooksRepository;
 import ru.kmorozov.library.data.repository.GoogleBooksRepository;
 import ru.kmorozov.library.data.repository.StorageRepository;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -183,18 +181,15 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
     @RequestMapping("/downloadBook")
     public BookDTO downloadBook(@RequestParam(name = "bookId") String bookId) {
         Book book = booksRepository.findOne(bookId);
-        String bookPath = book.getStorage().getLocalPath();
-        if (!StringUtils.isEmpty(bookPath)) {
-            if (Files.exists(Paths.get(bookPath)))
-                return new BookDTO(book);
-            else {
-                book.getStorage().setLocalPath(null);
-                booksRepository.save(book);
-            }
+        if (BookUtils.bookLoaded(book))
+            return new BookDTO(book, true);
+        else {
+            book.getStorage().setLocalPath(null);
+            booksRepository.save(book);
         }
 
         book.getStorage().setLocalPath(loader.downloadBook(book));
         storageRepository.save(book.getStorage());
-        return new BookDTO(book);
+        return new BookDTO(book, true);
     }
 }

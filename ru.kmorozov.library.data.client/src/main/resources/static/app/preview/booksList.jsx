@@ -25,6 +25,12 @@ class BooksList extends React.Component {
         );
     }
 
+    loadedFormatter = (cell, row) => {
+        return (
+            <input type='checkbox' checked={ cell } readOnly="true"/>
+        );
+    }
+
     render() {
         if (this.state == null || this.state.books == null)
             return <div/>
@@ -39,6 +45,8 @@ class BooksList extends React.Component {
                     <BootstrapTable ref='table' data={ this.state.books } options={ options }
                                     pagination>
                         <TableHeaderColumn dataField='format' dataFormat={ this.bookFormatter }>Format</TableHeaderColumn>
+                        <TableHeaderColumn dataField='size' width='75'>Size</TableHeaderColumn>
+                        <TableHeaderColumn dataField='loaded' dataFormat={ this.loadedFormatter }>Loaded</TableHeaderColumn>
                         <TableHeaderColumn dataField='title' isKey={ true }>Title</TableHeaderColumn>
                     </BootstrapTable>
                     <BookPreviewPopup ref="bookPreviewPopup"/>
