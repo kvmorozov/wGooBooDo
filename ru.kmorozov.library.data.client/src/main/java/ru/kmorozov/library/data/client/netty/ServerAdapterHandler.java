@@ -8,12 +8,14 @@ import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.util.concurrent.GlobalEventExecutor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.kmorozov.gbd.core.utils.Logger;
 import ru.kmorozov.library.data.client.WebSocketEventHandler;
 
 @Component
 @ChannelHandler.Sharable
 public class ServerAdapterHandler extends SimpleChannelInboundHandler<String> {
 
+    protected static final Logger logger = Logger.getLogger(ServerAdapterHandler.class);
     private static final ChannelGroup channels = new DefaultChannelGroup("containers", GlobalEventExecutor.INSTANCE);
 
     @Autowired
@@ -42,6 +44,8 @@ public class ServerAdapterHandler extends SimpleChannelInboundHandler<String> {
     protected void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
         if (eventHandler != null)
             eventHandler.sendInfo(msg);
+
+        logger.info(msg);
     }
 
     @Override

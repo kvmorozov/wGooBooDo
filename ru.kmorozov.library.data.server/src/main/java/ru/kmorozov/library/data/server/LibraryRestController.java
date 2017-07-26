@@ -188,8 +188,7 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
             booksRepository.save(book);
         }
 
-        book.getStorage().setLocalPath(loader.downloadBook(book));
-        storageRepository.save(book.getStorage());
+        loader.downloadBook(book);
         return new BookDTO(book, true);
     }
 }

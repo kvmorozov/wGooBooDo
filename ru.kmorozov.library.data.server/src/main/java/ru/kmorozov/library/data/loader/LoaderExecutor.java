@@ -53,7 +53,7 @@ public class LoaderExecutor {
         oneLoader.resolveLink(lnkBook);
     }
 
-    public String downloadBook(Book book) {
-        return oneLoader.downloadBook(book);
+    public void downloadBook(Book book) {
+        oneLoader.downloadBook(book);
     }
 }

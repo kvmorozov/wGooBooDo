@@ -13,5 +13,5 @@ public interface ILoader {
 
     void resolveLink(Book lnkBook);
 
-    String downloadBook(Book book);
+    void downloadBook(Book book);
 }

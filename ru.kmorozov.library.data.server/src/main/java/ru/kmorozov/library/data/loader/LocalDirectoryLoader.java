@@ -114,7 +114,7 @@ public class LocalDirectoryLoader extends BaseLoader {
     }
 
     @Override
-    public String downloadBook(Book book) {
-        return book.getBookInfo().getPath();
+    public void downloadBook(Book book) {
+
     }
 }

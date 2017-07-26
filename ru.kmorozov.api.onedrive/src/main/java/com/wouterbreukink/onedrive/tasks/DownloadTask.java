@@ -19,7 +19,6 @@ public class DownloadTask extends Task {
     private final File parent;
     private final OneDriveItem remoteFile;
     private final boolean replace;
-    private String localFileName;
 
     public DownloadTask(TaskOptions options, File parent, OneDriveItem remoteFile, boolean replace) {
         super(options);
@@ -118,7 +117,6 @@ public class DownloadTask extends Task {
                         remoteFile.getLastModifiedDateTime());
 
                 File localFile = new File(parent, remoteFile.getName());
-                localFileName = localFile.getPath();
 
                 fileSystem.replaceFile(localFile, downloadFile);
                 reporter.fileDownloaded(replace, remoteFile.getSize());
@@ -132,10 +130,6 @@ public class DownloadTask extends Task {
                 throw e;
             }
         }
-    }
-
-    public String getLocalFileName() {
-        return localFileName;
     }
 }
 

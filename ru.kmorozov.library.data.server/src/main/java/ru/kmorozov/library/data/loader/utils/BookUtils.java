@@ -5,6 +5,7 @@ import org.springframework.util.StringUtils;
 import ru.kmorozov.library.data.model.book.Book;
 import ru.kmorozov.library.data.model.dto.BookDTO;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -28,7 +29,7 @@ public class BookUtils {
     }
 
     public static boolean bookLoaded(Book book) {
-        String bookPath = book.getStorage().getLocalPath();
+        String bookPath = book.getStorage().getLocalPath() + File.separator + book.getBookInfo().getFileName();
         if (!StringUtils.isEmpty(bookPath)) {
             if (Files.exists(Paths.get(bookPath)))
                 return true;

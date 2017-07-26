@@ -41,6 +41,7 @@ public class OneDriveLoader extends BaseLoader {
 
     private static final Logger logger = Logger.getLogger(OneDriveLoader.class);
     private static final String delimiter = Pattern.quote(File.separator);
+    private static final String DEFAULT_PARENT = "E:\\tmp";
 
     @Autowired
     private OneDriveProvider api;
@@ -200,22 +201,21 @@ public class OneDriveLoader extends BaseLoader {
     }
 
     @Override
-    public String downloadBook(Book book) {
+    public void downloadBook(Book book) {
         try {
             OneDriveItem bookItem = api.getItem(book.getBookInfo().getPath());
-            File parent = new File("E:\\tmp");
+            File parent = new File(DEFAULT_PARENT);
+
+            book.getStorage().setLocalPath(DEFAULT_PARENT);
+            storageRepository.save(book.getStorage());
 
             DownloadTask task = new DownloadTask(
                     new Task.TaskOptions(new TaskQueue(), api, FileSystemProvider.FACTORY.readWriteProvider(), new SocketReporter()),
                     parent, bookItem, true);
 
             task.run();
-
-            return task.getLocalFileName();
         } catch (IOException e) {
             logger.error(e);
         }
-
-        return null;
     }
 }
