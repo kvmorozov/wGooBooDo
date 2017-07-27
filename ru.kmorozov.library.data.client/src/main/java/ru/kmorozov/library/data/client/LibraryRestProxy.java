@@ -1,15 +1,12 @@
 package ru.kmorozov.library.data.client;
 
 import org.springframework.http.HttpMethod;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import ru.kmorozov.library.data.model.IDataRestServer;
-import ru.kmorozov.library.data.model.book.Book;
-import ru.kmorozov.library.data.model.dto.BookDTO;
-import ru.kmorozov.library.data.model.dto.ItemDTO;
-import ru.kmorozov.library.data.model.dto.StorageDTO;
-import ru.kmorozov.library.data.model.dto.UserDTO;
+import ru.kmorozov.library.data.model.dto.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -141,12 +138,19 @@ public class LibraryRestProxy implements IDataRestServer {
 
     private List getList(String operation, String paramName, String paramValue, Class arrClass) {
         UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
-        String uri = builder.scheme("http")
-                .host("localhost")
-                .port(9000)
-                .path(operation)
-                .queryParam(paramName, paramValue)
-                .build().toString();
+        builder.scheme("http").host("localhost").port(9000).path(operation);
+
+        if (!StringUtils.isEmpty(paramName) && !StringUtils.isEmpty(paramValue))
+            builder.queryParam(paramName, paramValue);
+
+        String uri = builder.build().toString();
+
         return Arrays.stream((Object[]) template.getForEntity(uri, arrClass).getBody()).collect(Collectors.toList());
+    }
+
+    @Override
+    @RequestMapping("/findDuplicates")
+    public List<DuplicatedBookDTO> findDuplicates() {
+        return getList("/findDuplicates", null, null, DuplicatedBookDTO[].class);
     }
 }

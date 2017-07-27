@@ -20,10 +20,7 @@ import ru.kmorozov.library.data.loader.utils.BookUtils;
 import ru.kmorozov.library.data.model.IDataRestServer;
 import ru.kmorozov.library.data.model.book.Book;
 import ru.kmorozov.library.data.model.book.Storage;
-import ru.kmorozov.library.data.model.dto.BookDTO;
-import ru.kmorozov.library.data.model.dto.ItemDTO;
-import ru.kmorozov.library.data.model.dto.StorageDTO;
-import ru.kmorozov.library.data.model.dto.UserDTO;
+import ru.kmorozov.library.data.model.dto.*;
 import ru.kmorozov.library.data.repository.BooksRepository;
 import ru.kmorozov.library.data.repository.GoogleBooksRepository;
 import ru.kmorozov.library.data.repository.StorageRepository;
@@ -190,5 +187,11 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
 
         loader.downloadBook(book);
         return new BookDTO(book, true);
+    }
+
+    @Override
+    @RequestMapping("/downloadBook")
+    public List<DuplicatedBookDTO> findDuplicates() {
+        return null;
     }
 }

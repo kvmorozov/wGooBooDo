@@ -2,9 +2,9 @@ import React from "react";
 import Modal from "react-bootstrap/lib/Modal";
 import Button from "react-bootstrap/lib/Button";
 import ButtonGroup from "react-bootstrap/lib/ButtonGroup";
-import client from "./restClient";
+import client from "../restClient";
 
-class LoadPopup extends React.Component {
+class FindDuplicates extends React.Component {
 
     constructor(props) {
         super(props);
@@ -20,29 +20,19 @@ class LoadPopup extends React.Component {
         this.setState({showModal: true});
     }
 
-    updateStart = () => {
-        client({method: 'POST', path: '/updateLibrary/STARTED'}).done();
-    }
-
-    updatePause = () => {
-        client({method: 'POST', path: '/updateLibrary/PAUSED'}).done();
-    }
-
-    updateStop = () => {
-        client({method: 'POST', path: '/updateLibrary/STOPPED'}).done();
+    findDuplicates = () => {
+        client({method: 'GET', path: '/findDuplicates'}).done();
     }
 
     render() {
         return (
             <Modal show={this.state.showModal} onHide={this.close}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Update library</Modal.Title>
+                    <Modal.Title>Find Duplicates</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <ButtonGroup>
-                        <Button onClick={this.updateStart}>Update start</Button>
-                        <Button onClick={this.updatePause}>Update pause</Button>
-                        <Button onClick={this.updateStop}>Update stop</Button>
+                        <Button onClick={this.findDuplicates}>Find</Button>
                     </ButtonGroup>
                 </Modal.Body>
                 <Modal.Footer>
@@ -53,4 +43,4 @@ class LoadPopup extends React.Component {
     }
 }
 
-export default LoadPopup;
+export default FindDuplicates;

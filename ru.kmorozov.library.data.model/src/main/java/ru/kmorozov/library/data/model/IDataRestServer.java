@@ -1,10 +1,7 @@
 package ru.kmorozov.library.data.model;
 
 import ru.kmorozov.library.data.model.book.Book;
-import ru.kmorozov.library.data.model.dto.BookDTO;
-import ru.kmorozov.library.data.model.dto.ItemDTO;
-import ru.kmorozov.library.data.model.dto.StorageDTO;
-import ru.kmorozov.library.data.model.dto.UserDTO;
+import ru.kmorozov.library.data.model.dto.*;
 
 import java.util.List;
 
@@ -26,4 +23,6 @@ public interface IDataRestServer {
     void updateLibrary(String state);
 
     BookDTO downloadBook(String bookId);
+
+    List<DuplicatedBookDTO> findDuplicates();
 }

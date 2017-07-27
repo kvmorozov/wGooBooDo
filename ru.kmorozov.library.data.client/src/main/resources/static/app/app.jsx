@@ -8,7 +8,8 @@ import "./tree-utils/app.styl";
 import "./tree-utils/animation.styl";
 import {Menu, Grid} from "semantic-ui-react";
 import Preview from "./preview/preview";
-import LoadPopup from "./loadPopup";
+import LoadPopup from "./utilities/loadPopup";
+import FindDuplicates from "./utilities/findDuplicates";
 
 class App extends React.Component {
     constructor(props) {
@@ -97,8 +98,12 @@ class App extends React.Component {
             );
     }
 
-    handleItemClick = () => {
+    handleLoadItemClick = () => {
         this.refs.loadPopup.open();
+    }
+
+    handleFindDuplicatesItemClick = () => {
+        this.refs.findDuplicates.open();
     }
 
     render() {
@@ -108,12 +113,17 @@ class App extends React.Component {
                     <Menu>
                         <Menu.Item
                             name='update'
-                            onClick={this.handleItemClick}>
+                            onClick={this.handleLoadItemClick}>
                             Update library
                         </Menu.Item>
                         <Menu.Item
+                            name='findDuplicates'
+                            onClick={this.handleFindDuplicatesItemClick}>
+                            Find Duplicates
+                        </Menu.Item>
+                        <Menu.Item
                             name='options'
-                            onClick={this.handleItemClick}>
+                            onClick={this.handleLoadItemClick}>
                             Options
                         </Menu.Item>
                     </Menu>
@@ -155,6 +165,7 @@ class App extends React.Component {
                 </Grid.Row>
 
                 <LoadPopup ref="loadPopup"/>
+                <FindDuplicates ref="findDuplicates"/>
             </Grid>
         );
     }
