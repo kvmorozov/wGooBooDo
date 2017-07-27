@@ -3,6 +3,7 @@ import Modal from "react-bootstrap/lib/Modal";
 import {Button} from "semantic-ui-react";
 import client from "../restClient";
 import PDF from "react-pdf-js";
+import MessagesList from "./messagesList";
 
 class BookPreviewPopup extends React.Component {
 
@@ -98,6 +99,7 @@ class BookPreviewPopup extends React.Component {
                         {preview}
                     </Modal.Body>
                     <Modal.Footer>
+                        <MessagesList/>
                         <Button onClick={this.preview}>Preview</Button>
                         <Button onClick={this.close}>Close</Button>
                     </Modal.Footer>
