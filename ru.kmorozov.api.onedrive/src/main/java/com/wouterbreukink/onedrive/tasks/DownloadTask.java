@@ -19,17 +19,23 @@ public class DownloadTask extends Task {
     private final File parent;
     private final OneDriveItem remoteFile;
     private final boolean replace;
+    private final int chunkSize;
 
-    public DownloadTask(TaskOptions options, File parent, OneDriveItem remoteFile, boolean replace) {
+    public DownloadTask(TaskOptions options, File parent, OneDriveItem remoteFile, boolean replace, int chunkSize) {
         super(options);
 
         this.parent = Preconditions.checkNotNull(parent);
         this.remoteFile = Preconditions.checkNotNull(remoteFile);
         this.replace = Preconditions.checkNotNull(replace);
+        this.chunkSize = chunkSize;
 
         if (!parent.isDirectory()) {
             throw new IllegalArgumentException("Specified parent is not a folder");
         }
+    }
+
+    public DownloadTask(TaskOptions options, File parent, OneDriveItem remoteFile, boolean replace) {
+        this(options, parent, remoteFile, replace, ResumableDownloader.MAXIMUM_CHUNK_SIZE);
     }
 
     public int priority() {
@@ -104,7 +110,7 @@ public class DownloadTask extends Task {
                     }
                 };
 
-                api.download(remoteFile, downloadFile, progressListener);
+                api.download(remoteFile, downloadFile, progressListener, chunkSize);
 
                 // Do a CRC check on the downloaded file
                 if (!fileSystem.verifyCrc(downloadFile, remoteFile.getCrc32())) {

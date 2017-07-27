@@ -38,6 +38,8 @@ public interface OneDriveProvider {
 
     OneDriveItem createFolder(OneDriveItem parent, File target) throws IOException;
 
+    void download(OneDriveItem item, File target, ResumableDownloaderProgressListener progressListener, int chunkSize) throws IOException;
+
     void download(OneDriveItem item, File target, ResumableDownloaderProgressListener progressListener) throws IOException;
 
     void delete(OneDriveItem remoteFile) throws IOException;

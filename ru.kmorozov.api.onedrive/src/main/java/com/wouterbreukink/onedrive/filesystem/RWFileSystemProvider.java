@@ -67,12 +67,31 @@ class RWFileSystemProvider extends ROFileSystemProvider implements FileSystemPro
 
     @Override
     public void replaceFile(File original, File replacement) throws IOException {
-        if (original.exists() && !original.delete()) {
+        replaceFileInternal(original, replacement, 0, 10);
+    }
+
+    private void replaceFileInternal(File original, File replacement, int currentTry, int maxRetries) throws IOException {
+        if (currentTry >= maxRetries)
             throw new IOException("Unable to replace local file" + original.getPath());
+
+        if (original.exists() && !original.delete()) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            replaceFileInternal(original, replacement, currentTry + 1, maxRetries);
         }
 
         if (!replacement.renameTo(original)) {
-            throw new IOException("Unable to replace local file" + original.getPath());
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            replaceFileInternal(original, replacement, currentTry + 1, maxRetries);
         }
     }
 

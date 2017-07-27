@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class HttpConnections {
 
-    public static final String USER_AGENT = "Mozilla/5.0 (Windows; U; Windows NT 6.1; zh_CN) AppleWebKit/534.7 (KHTML, like Gecko) Chrome/7.0 " + "baidubrowser/1.x Safari/534.7";
+    public static final String USER_AGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 YaBrowser/17.6.1.871 Yowser/2.5 Safari/537.36";
     private static final HttpHeaders headers = new HttpHeaders().setUserAgent(USER_AGENT);
     private static final HttpConnections INSTANCE = new HttpConnections();
     private static GenericUrl baseUrl = null;

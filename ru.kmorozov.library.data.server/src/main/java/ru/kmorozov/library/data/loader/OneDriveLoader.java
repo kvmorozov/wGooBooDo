@@ -209,9 +209,11 @@ public class OneDriveLoader extends BaseLoader {
             book.getStorage().setLocalPath(DEFAULT_PARENT);
             storageRepository.save(book.getStorage());
 
+            int itemPartSize = bookItem.getSize() > 0 ? (int) bookItem.getSize() / 5 : Integer.MAX_VALUE;
+
             DownloadTask task = new DownloadTask(
                     new Task.TaskOptions(new TaskQueue(), api, FileSystemProvider.FACTORY.readWriteProvider(), new SocketReporter()),
-                    parent, bookItem, true);
+                    parent, bookItem, true, itemPartSize);
 
             task.run();
         } catch (IOException e) {

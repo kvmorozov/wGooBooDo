@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
+import static com.wouterbreukink.onedrive.client.downloader.ResumableDownloader.ioExceptionHandler;
 import static com.wouterbreukink.onedrive.client.utils.JsonUtils.JSON_FACTORY;
 
 class ROOneDriveProvider implements OneDriveProvider {
@@ -129,6 +130,8 @@ class ROOneDriveProvider implements OneDriveProvider {
     @Override
     public OneDriveItem getItem(String id) throws IOException {
         HttpRequest request = requestFactory.buildGetRequest(OneDriveUrl.item(id));
+        request.setRetryOnExecuteIOException(true);
+        request.setIOExceptionHandler(ioExceptionHandler);
         Item response = request.execute().parseAs(Item.class);
         return OneDriveItem.FACTORY.create(response);
     }
@@ -171,6 +174,11 @@ class ROOneDriveProvider implements OneDriveProvider {
     public OneDriveItem createFolder(OneDriveItem parent, File target) throws IOException {
         // Return a dummy folder
         return OneDriveItem.FACTORY.create(parent, target.getName(), true);
+    }
+
+    @Override
+    public void download(OneDriveItem item, File target, ResumableDownloaderProgressListener progressListener, int chunkSize) throws IOException {
+        // Do nothing
     }
 
     @Override

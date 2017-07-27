@@ -15,13 +15,16 @@
 package com.wouterbreukink.onedrive.client.downloader;
 
 import com.google.api.client.http.*;
+import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.client.util.IOUtils;
 import com.google.api.client.util.Preconditions;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Media HTTP Downloader, with support for both direct and resumable media downloads. Documentation
@@ -93,7 +96,7 @@ public final class ResumableDownloader {
     /**
      * The total number of bytes downloaded by this downloader.
      */
-    private long bytesDownloaded;
+    private long bytesDownloaded = 1;
     /**
      * The last byte position of the media file we want to download, default value is {@code -1}.
      * <p>
@@ -102,6 +105,13 @@ public final class ResumableDownloader {
      * </p>
      */
     private long lastBytePos = -1;
+
+    private long totalSize;
+
+    /**
+     * IOExceptionHandler
+     */
+    public static final HttpIOExceptionHandler ioExceptionHandler = new HttpBackOffIOExceptionHandler(new ExponentialBackOff());
 
     /**
      * Construct the {@link ResumableDownloader}.
@@ -188,8 +198,10 @@ public final class ResumableDownloader {
             }
 
             String contentRange = response.getHeaders().getContentRange();
+
             long nextByteIndex = getNextByteIndex(contentRange);
             setMediaContentLength(contentRange);
+            setTotalSize(contentRange);
 
             if (mediaContentLength <= nextByteIndex) {
                 // All required bytes have been downloaded from the server.
@@ -221,19 +233,31 @@ public final class ResumableDownloader {
             request.getHeaders().putAll(requestHeaders);
         }
         // set Range header (if necessary)
+
+        boolean chunked = false;
         if (bytesDownloaded != 0 || currentRequestLastBytePos != -1) {
             StringBuilder rangeHeader = new StringBuilder();
-            rangeHeader.append("bytes=").append(bytesDownloaded).append("-");
-            if (currentRequestLastBytePos != -1) {
-                rangeHeader.append(currentRequestLastBytePos);
-            }
+            rangeHeader.append("bytes=");
+            if (totalSize == 0 || totalSize - currentRequestLastBytePos > chunkSize)
+                rangeHeader.append(bytesDownloaded).append("-").append(currentRequestLastBytePos);
+            else
+                rangeHeader.append("-").append(totalSize - bytesDownloaded);
+
             request.getHeaders().setRange(rangeHeader.toString());
+
+            chunked = true;
         }
+
+        request.setRetryOnExecuteIOException(true);
+        request.setIOExceptionHandler(ioExceptionHandler);
+
         // execute the request and copy into the output stream
         HttpResponse response = request.execute();
         try {
             IOUtils.copy(response.getContent(), outputStream);
-        } finally {
+        } finally
+
+        {
             response.disconnect();
         }
         return response;
@@ -253,6 +277,13 @@ public final class ResumableDownloader {
         }
         return Long.parseLong(
                 rangeHeader.substring(rangeHeader.indexOf('-') + 1, rangeHeader.indexOf('/'))) + 1;
+    }
+
+    private void setTotalSize(String rangeHeader) {
+        if (totalSize > 0)
+            return;
+
+        totalSize = Long.parseLong(rangeHeader.substring(rangeHeader.indexOf('/') + 1));
     }
 
     /**

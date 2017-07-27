@@ -2,6 +2,7 @@ package com.wouterbreukink.onedrive.client;
 
 import com.google.api.client.http.*;
 import com.google.api.client.http.json.JsonHttpContent;
+import com.google.api.client.util.IOUtils;
 import com.google.api.client.util.Key;
 import com.wouterbreukink.onedrive.client.authoriser.AuthorisationProvider;
 import com.wouterbreukink.onedrive.client.downloader.ResumableDownloader;
@@ -13,14 +14,15 @@ import com.wouterbreukink.onedrive.client.resources.Item;
 import com.wouterbreukink.onedrive.client.resources.UploadSession;
 import com.wouterbreukink.onedrive.client.serialization.JsonDateSerializer;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Date;
 
-import static com.wouterbreukink.onedrive.CommandLineOpts.getCommandLineOpts;
 import static com.wouterbreukink.onedrive.client.utils.JsonUtils.JSON_FACTORY;
 
 class RWOneDriveProvider extends ROOneDriveProvider implements OneDriveProvider {
@@ -148,7 +150,7 @@ class RWOneDriveProvider extends ROOneDriveProvider implements OneDriveProvider 
         return item;
     }
 
-    public void download(OneDriveItem item, File target, ResumableDownloaderProgressListener progressListener) throws IOException {
+    public void download(OneDriveItem item, File target, ResumableDownloaderProgressListener progressListener, int chunkSize) throws IOException {
         FileOutputStream fos = null;
 
         try {
@@ -156,10 +158,13 @@ class RWOneDriveProvider extends ROOneDriveProvider implements OneDriveProvider 
             ResumableDownloader downloader = new ResumableDownloader(HTTP_TRANSPORT, requestFactory.getInitializer());
             downloader.setProgressListener(progressListener);
 
-            int defaultChunkSize = getCommandLineOpts().getSplitAfter() * 1024 * 1024;
-            int itemPartSize = item.getSize() > 0 ? (int) item.getSize() / 10 : Integer.MAX_VALUE;
+            downloader.setChunkSize(chunkSize);
 
-            downloader.setChunkSize(Math.min(defaultChunkSize, itemPartSize));
+            if (chunkSize < item.getSize()) {
+                // We need to fix the first byte, ranged OneDrive API is bugged
+                if (target.getPath().endsWith(".pdf.tmp"))
+                    IOUtils.copy(new ByteArrayInputStream("%".getBytes(StandardCharsets.US_ASCII)), fos);
+            }
 
             downloader.download(OneDriveUrl.content(item.getId()), fos);
         } catch (IOException e) {
@@ -169,6 +174,11 @@ class RWOneDriveProvider extends ROOneDriveProvider implements OneDriveProvider 
                 fos.close();
             }
         }
+    }
+
+    @Override
+    public void download(OneDriveItem item, File target, ResumableDownloaderProgressListener progressListener) throws IOException {
+        download(item, target, progressListener, ResumableDownloader.MAXIMUM_CHUNK_SIZE);
     }
 
     public void delete(OneDriveItem remoteFile) throws IOException {
