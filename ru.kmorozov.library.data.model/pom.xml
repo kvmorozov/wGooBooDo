@@ -22,12 +22,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongo-java-driver</artifactId>
-            <version>LATEST</version>
-        </dependency>
-
-        <dependency>
             <groupId>ru.kmorozov.gbd</groupId>
             <artifactId>ru.kmorozov.gbd.core</artifactId>
             <version>${project.version}</version>

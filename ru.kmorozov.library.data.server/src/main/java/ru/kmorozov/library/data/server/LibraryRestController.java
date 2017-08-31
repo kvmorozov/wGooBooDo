@@ -17,6 +17,7 @@ import ru.kmorozov.gbd.core.logic.output.consumers.DummyBookInfoOutput;
 import ru.kmorozov.gbd.core.utils.Logger;
 import ru.kmorozov.library.data.loader.LoaderExecutor;
 import ru.kmorozov.library.data.loader.utils.BookUtils;
+import ru.kmorozov.library.data.loader.utils.DuplicatesProcessor;
 import ru.kmorozov.library.data.model.IDataRestServer;
 import ru.kmorozov.library.data.model.book.Book;
 import ru.kmorozov.library.data.model.book.Storage;
@@ -50,6 +51,9 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
 
     @Autowired
     private LoaderExecutor loader;
+
+    @Autowired
+    private DuplicatesProcessor duplicatesProcessor;
 
     private static transient BookContextLoader googleBooksLoader;
 
@@ -190,8 +194,8 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
     }
 
     @Override
-    @RequestMapping("/downloadBook")
+    @RequestMapping("/findDuplicates")
     public List<DuplicatedBookDTO> findDuplicates() {
-        return null;
+        return duplicatesProcessor.process();
     }
 }

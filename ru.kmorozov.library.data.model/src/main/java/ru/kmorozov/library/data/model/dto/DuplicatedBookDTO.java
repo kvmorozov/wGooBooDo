@@ -1,45 +1,36 @@
 package ru.kmorozov.library.data.model.dto;
 
-import ru.kmorozov.library.data.model.book.DuplicatedBook;
+import ru.kmorozov.library.data.model.dto.results.BooksBySize;
+
+import java.util.List;
 
 /**
  * Created by sbt-morozov-kv on 27.07.2017.
  */
 public class DuplicatedBookDTO {
 
-    private String id;
-    private BookDTO book1, book2;
+    private List<BookDTO> books;
+
+    private Integer count;
+
+    private Long size;
+
+    private String format;
 
     public DuplicatedBookDTO() {
     }
 
-    public DuplicatedBookDTO(DuplicatedBook duplicatedBook) {
-        this.id = duplicatedBook.getDuplicateId();
-        this.book1 = new BookDTO(duplicatedBook.getBook1(), false);
-        this.book2 = new BookDTO(duplicatedBook.getBook2(), false);
+    public DuplicatedBookDTO(BooksBySize duplicatedBook) {
+        this.count = duplicatedBook.getCount();
+        this.format = duplicatedBook.getFormat();
+        this.size = duplicatedBook.getSize();
     }
 
-    public String getId() {
-        return id;
+    public List<BookDTO> getBooks() {
+        return books;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public BookDTO getBook1() {
-        return book1;
-    }
-
-    public void setBook1(BookDTO book1) {
-        this.book1 = book1;
-    }
-
-    public BookDTO getBook2() {
-        return book2;
-    }
-
-    public void setBook2(BookDTO book2) {
-        this.book2 = book2;
+    public void setBooks(List<BookDTO> books) {
+        this.books = books;
     }
 }
