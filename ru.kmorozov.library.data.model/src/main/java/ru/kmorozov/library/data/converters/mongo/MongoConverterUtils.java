@@ -1,11 +1,13 @@
 package ru.kmorozov.library.data.converters.mongo;
 
-import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.convert.EntityReader;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Fields;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
@@ -20,43 +22,46 @@ public class MongoConverterUtils {
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    public <O> List<O> mapAggregationResults(Class<O> outputType, DBObject commandResult, String collectionName) {
+    public <O> List<O> mapAggregationResults(Class<O> outputType, Document commandResult, String collectionName) {
 
         @SuppressWarnings("unchecked")
-                // Изменено здесь
-        Iterable<DBObject> resultSet = (Iterable<DBObject>) ((DBObject) commandResult.get("cursor")).get("firstBatch");
+        // Изменено здесь
+        Iterable<Document> resultSet = (Iterable<Document>) ((Document) commandResult.get("cursor")).get("firstBatch");
         if (resultSet == null) {
             return Collections.emptyList();
         }
 
-        DbObjectCallback<O> callback = new UnwrapAndReadDbObjectCallback<O>(mongoTemplate.getConverter(), outputType, collectionName);
+        DocumentCallback<O> callback = new UnwrapAndReadDocumentCallback<O>(mongoTemplate.getConverter(), outputType, collectionName);
 
         List<O> mappedResults = new ArrayList<O>();
-        for (DBObject dbObject : resultSet) {
-            mappedResults.add(callback.doWith(dbObject));
+        for (Document document : resultSet) {
+            mappedResults.add(callback.doWith(document));
         }
 
         return mappedResults;
     }
 
-    class UnwrapAndReadDbObjectCallback<T> extends ReadDbObjectCallback<T> {
+    class UnwrapAndReadDocumentCallback<T> extends ReadDocumentCallback<T> {
 
-        public UnwrapAndReadDbObjectCallback(EntityReader<? super T, DBObject> reader, Class<T> type,
-                                             String collectionName) {
+        public UnwrapAndReadDocumentCallback(EntityReader<? super T, Bson> reader, Class<T> type, String collectionName) {
             super(reader, type, collectionName);
         }
 
         @Override
-        public T doWith(DBObject object) {
+        public T doWith(@Nullable Document object) {
+
+            if (object == null) {
+                return null;
+            }
 
             Object idField = object.get(Fields.UNDERSCORE_ID);
 
-            if (!(idField instanceof DBObject)) {
+            if (!(idField instanceof Document)) {
                 return super.doWith(object);
             }
 
-            DBObject toMap = new BasicDBObject();
-            DBObject nested = (DBObject) idField;
+            Document toMap = new Document();
+            Document nested = (Document) idField;
             toMap.putAll(nested);
 
             for (String key : object.keySet()) {
@@ -69,13 +74,13 @@ public class MongoConverterUtils {
         }
     }
 
-    private class ReadDbObjectCallback<T> implements DbObjectCallback<T> {
+    private class ReadDocumentCallback<T> implements DocumentCallback<T> {
 
-        private final EntityReader<? super T, DBObject> reader;
+        private final EntityReader<? super T, Bson> reader;
         private final Class<T> type;
         private final String collectionName;
 
-        public ReadDbObjectCallback(EntityReader<? super T, DBObject> reader, Class<T> type, String collectionName) {
+        public ReadDocumentCallback(EntityReader<? super T, Bson> reader, Class<T> type, String collectionName) {
 
             Assert.notNull(reader, "EntityReader must not be null!");
             Assert.notNull(type, "Entity type must not be null!");
@@ -85,13 +90,16 @@ public class MongoConverterUtils {
             this.collectionName = collectionName;
         }
 
-        public T doWith(DBObject object) {
+        @Nullable
+        public T doWith(Document object) {
             T source = reader.read(type, object);
             return source;
         }
     }
 
-    interface DbObjectCallback<T> {
-        T doWith(DBObject object);
+    interface DocumentCallback<T> {
+
+        @Nullable
+        T doWith(@Nullable Document object);
     }
 }

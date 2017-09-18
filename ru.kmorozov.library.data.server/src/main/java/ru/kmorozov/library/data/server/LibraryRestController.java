@@ -102,7 +102,7 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
     @Override
     @RequestMapping("/storagesByParentId")
     public List<StorageDTO> getStoragesByParentId(@RequestParam(name = "storageId") String storageId) {
-        Storage parentStorage = StringUtils.isEmpty(storageId) ? null : storageRepository.findOne(storageId);
+        Storage parentStorage = StringUtils.isEmpty(storageId) ? null : storageRepository.findById(storageId).get();
 
         List<Storage> realStorages = storageRepository.findAllByParent(parentStorage);
         List<Book> linksInStorages = booksRepository.findAllByStorageAndBookInfoFormat(parentStorage, "LNK");
@@ -120,7 +120,7 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
     @Override
     @RequestMapping("/booksByStorageId")
     public List<BookDTO> getBooksByStorageId(@RequestParam(name = "storageId") String storageId) {
-        Storage storage = StringUtils.isEmpty(storageId) ? null : storageRepository.findOne(storageId);
+        Storage storage = StringUtils.isEmpty(storageId) ? null : storageRepository.findById(storageId).get();
         if (storage == null)
             return Collections.EMPTY_LIST;
 
@@ -146,9 +146,9 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
     public ItemDTO getItem(@RequestParam(name = "itemId") String itemId, @RequestParam(name = "itemType") ItemDTO.ItemType itemType, @RequestParam(name = "refresh") boolean refresh) {
         switch (itemType) {
             case book:
-                return new ItemDTO(new BookDTO(booksRepository.findOne(itemId), true));
+                return new ItemDTO(new BookDTO(booksRepository.findById(itemId).get(), true));
             case storage:
-                Storage storage = storageRepository.findOne(itemId);
+                Storage storage = storageRepository.findById(itemId).get();
                 if (refresh)
                     storage = loader.refresh(storage);
                 ItemDTO item = new ItemDTO(new StorageDTO(storage, true));
@@ -181,7 +181,7 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
     @Override
     @RequestMapping("/downloadBook")
     public BookDTO downloadBook(@RequestParam(name = "bookId") String bookId) {
-        Book book = booksRepository.findOne(bookId);
+        Book book = booksRepository.findById(bookId).get();
         if (BookUtils.bookLoaded(book))
             return new BookDTO(book, true);
         else {

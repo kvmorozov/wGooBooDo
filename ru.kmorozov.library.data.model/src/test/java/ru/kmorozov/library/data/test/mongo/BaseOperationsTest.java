@@ -16,9 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Created by sbt-morozov-kv on 28.11.2016.
@@ -59,7 +57,7 @@ public class BaseOperationsTest {
     public void searchTest() {
         List<Book> books = Arrays.asList(new Book("Test tit1le", "Test aut1hor"), new Book("Test tit2le", "Test aut2hor"));
 
-        booksRepository.save(books);
+        booksRepository.saveAll(books);
 
         try {
             LikeTextSearch likeTextSearch = new LikeTextSearch(Book.class.getSimpleName(), mongoTemplate);
@@ -67,7 +65,7 @@ public class BaseOperationsTest {
             TextCriteria criteria2 = TextCriteria.forDefaultLanguage().matching("Test");
             assertEquals(2, booksRepository.findAllBy(criteria2).size());
         } finally {
-            booksRepository.delete(books);
+            booksRepository.deleteAll(books);
         }
     }
 

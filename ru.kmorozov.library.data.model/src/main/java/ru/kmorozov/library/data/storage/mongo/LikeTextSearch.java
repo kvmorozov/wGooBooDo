@@ -2,11 +2,14 @@ package ru.kmorozov.library.data.storage.mongo;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
-import com.mongodb.CommandResult;
+import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by sbt-morozov-kv on 29.11.2016.
@@ -24,20 +27,20 @@ public class LikeTextSearch {
     }
 
     public Collection<ObjectId> findMatchingIds(String searchString) {
-        CommandResult result = executeFullTextSearch(searchString);
+        Document result = executeFullTextSearch(searchString);
         return extractSearchResultIds(result);
     }
 
-    private CommandResult executeFullTextSearch(String searchString) {
-        BasicDBObject textSearch = new BasicDBObject();
+    private Document executeFullTextSearch(String searchString) {
+        Document textSearch = new Document();
         textSearch.put("$text", collectionName);
         textSearch.put("search", searchString);
         textSearch.put("limit", SEARCH_LIMIT); // override default of 100
-        textSearch.put("project", new BasicDBObject("_id", 1));
+        textSearch.put("project", new Document("_id", 1));
         return mongoTemplate.executeCommand(textSearch);
     }
 
-    private Collection<ObjectId> extractSearchResultIds(CommandResult commandResult) {
+    private Collection<ObjectId> extractSearchResultIds(Document commandResult) {
         Set<ObjectId> objectIds = new HashSet<>();
         BasicDBList resultList = (BasicDBList) commandResult.get("results");
 

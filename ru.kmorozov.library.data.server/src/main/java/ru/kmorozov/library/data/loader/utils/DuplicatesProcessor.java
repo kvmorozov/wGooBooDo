@@ -1,6 +1,6 @@
 package ru.kmorozov.library.data.loader.utils;
 
-import com.mongodb.BasicDBObject;
+import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
@@ -39,7 +39,7 @@ public class DuplicatesProcessor {
                 Aggregation.match(Criteria.where("count").gt(1.0)),
                 Aggregation.project("bookIds", "count", "size", "format"),
                 Aggregation.skip(0l)
-        ).withOptions(new AggregationOptions(true, false, new BasicDBObject("batchSize", 1000.0)));
+        ).withOptions(new AggregationOptions(true, false, new Document("batchSize", 1000.0)));
 
         AggregationResults<BooksBySize> results = mongoTemplate.aggregate(booksAggregation, BooksBySize.class);
 
@@ -50,7 +50,7 @@ public class DuplicatesProcessor {
 
     private DuplicatedBookDTO createDuplicateDTO(BooksBySize book) {
         DuplicatedBookDTO dto = new DuplicatedBookDTO(book);
-        dto.setBooks(book.getBookIds().stream().map(id -> new BookDTO(booksRepository.findOne(id), false)).collect(Collectors.toList()));
+        dto.setBooks(book.getBookIds().stream().map(id -> new BookDTO(booksRepository.findById(id).get(), false)).collect(Collectors.toList()));
 
         return dto;
     }
