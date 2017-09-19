@@ -3,13 +3,19 @@ package com.wouterbreukink.onedrive.client.authoriser;
 import com.google.api.client.http.*;
 import com.google.api.client.http.apache.ApacheHttpTransport;
 import com.google.api.client.json.JsonObjectParser;
+import com.google.api.client.repackaged.com.google.common.base.Strings;
 import com.google.api.client.util.Preconditions;
 import com.wouterbreukink.onedrive.client.OneDriveAPIException;
+import com.wouterbreukink.onedrive.client.exceptions.InvalidCodeException;
 import com.wouterbreukink.onedrive.client.exceptions.OneDriveExceptionFactory;
 import com.wouterbreukink.onedrive.client.resources.Authorisation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import sun.security.provider.certpath.BuildStep;
+import sun.security.provider.certpath.SunCertPathBuilderException;
+import sun.security.validator.ValidatorException;
 
+import javax.net.ssl.SSLHandshakeException;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -48,6 +54,9 @@ class OneDriveAuthorisationProvider implements AuthorisationProvider {
             case 1:
                 String authCode = keyFileContents[0];
 
+                if (Strings.isNullOrEmpty(authCode))
+                    throw new InvalidCodeException(null);
+
                 // If the user has pasted the entire URL then parse it
                 Pattern url = Pattern.compile("https://login.live.com/oauth20_desktop.srf.*code=(.*)&.*");
                 Matcher m = url.matcher(authCode);
@@ -71,16 +80,17 @@ class OneDriveAuthorisationProvider implements AuthorisationProvider {
     }
 
     public static void printAuthInstructions() {
-        String authString =
-                String.format("%s?client_id=%s&response_type=code&scope=wl.signin%%20wl.offline_access%%20onedrive.readwrite&client_secret=%s&redirect_uri=%s",
-                        "https://login.live.com/oauth20_authorize.srf",
-                        clientId,
-                        clientSecret,
-                        "https://login.live.com/oauth20_desktop.srf");
-
         log.info("To authorise this application ou must generate an authorisation token");
         log.info("Open the following in a browser, sign on, wait until you are redirected to a blank page and then store the url in the address bar in your key file.");
-        log.info("Authorisation URL: " + authString);
+        log.info("Authorisation URL: " + getAuthString());
+    }
+
+    public static String getAuthString() {
+        return String.format("%s?client_id=%s&response_type=code&scope=wl.signin%%20wl.offline_access%%20onedrive.readwrite&client_secret=%s&redirect_uri=%s",
+                "https://login.live.com/oauth20_authorize.srf",
+                clientId,
+                clientSecret,
+                "https://login.live.com/oauth20_desktop.srf");
     }
 
     @Override
@@ -130,6 +140,18 @@ class OneDriveAuthorisationProvider implements AuthorisationProvider {
             response = request.execute();
         } catch (HttpResponseException hre) {
             throw OneDriveExceptionFactory.getException(hre.getContent());
+        } catch (SSLHandshakeException she) {
+            log.error("Failed to validate certificates!");
+            if (she.getCause() instanceof ValidatorException)
+                if (she.getCause().getCause() instanceof SunCertPathBuilderException) {
+                    SunCertPathBuilderException certEx = (SunCertPathBuilderException) she.getCause().getCause();
+                    Iterator<BuildStep> steps = certEx.getAdjacencyList().iterator();
+                    while (steps.hasNext()) {
+                        BuildStep step = steps.next();
+                        log.info(step.getVertex().toString());
+                    }
+                }
+            throw OneDriveExceptionFactory.getException(she.getMessage());
         }
 
         return response;

@@ -16,7 +16,8 @@ public class OneDriveExceptionFactory {
             errorInfo = JSON_FACTORY.fromString(content, OneDriveErrorInfo.class);
             switch (errorInfo.error) {
                 case "invalid_grant":
-                    return new CodeExpiredException(errorInfo);
+                case "server_error":
+                    return new InvalidCodeException(errorInfo);
                 default:
                     return new OneDriveException(errorInfo);
             }
