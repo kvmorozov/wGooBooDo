@@ -13,7 +13,6 @@ import org.openqa.selenium.support.ui.Wait;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
@@ -27,14 +26,14 @@ public class TokenFactory {
             WebDriver driver = new ChromeDriver();
             driver.get(OneDriveAuthorisationProvider.getAuthString());
 
-            Wait wait = new FluentWait(driver)
+            Wait<WebDriver> wait = new FluentWait(driver)
                     .withTimeout(30, TimeUnit.MINUTES)
                     .pollingEvery(1, SECONDS)
                     .ignoring(NoSuchElementException.class);
 
-            final WebElement okButton = (WebElement) wait.until((Function<WebDriver, WebElement>) driver1 -> driver1.findElement(By.id("idBtn_Accept")));
+            final WebElement okButton = wait.until(driver1 -> driver1.findElement(By.id("idBtn_Accept")));
 
-            WebElement noButton = (WebElement) wait.until((Function<WebDriver, WebElement>) driver12 -> {
+            WebElement noButton = wait.until(driver12 -> {
                 try {
                     WebElement button = driver12.findElement(By.id("idBtn_Accept"));
                     return null;
