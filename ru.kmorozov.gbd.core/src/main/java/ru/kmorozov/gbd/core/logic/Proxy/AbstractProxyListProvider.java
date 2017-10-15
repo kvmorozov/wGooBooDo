@@ -1,5 +1,6 @@
 package ru.kmorozov.gbd.core.logic.Proxy;
 
+import com.google.api.client.repackaged.com.google.common.base.Strings;
 import org.apache.commons.lang3.StringUtils;
 import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.logic.Proxy.web.WebProxyListProvider;
@@ -58,7 +59,8 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
 
     public void processProxyList() {
         for (String proxyString : proxyItems)
-            (new Thread(new ProxyChecker(proxyString))).start();
+            if (!Strings.isNullOrEmpty(proxyString))
+                (new Thread(new ProxyChecker(proxyString))).start();
     }
 
     @Override

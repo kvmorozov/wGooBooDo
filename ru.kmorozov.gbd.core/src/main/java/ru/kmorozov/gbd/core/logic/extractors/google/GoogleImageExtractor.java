@@ -155,7 +155,8 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
 
     @Override
     public void newProxyEvent(HttpHostExt proxy) {
-        (new Thread(new EventProcessor(proxy))).start();
+        if (proxy != null)
+            (new Thread(new EventProcessor(proxy))).start();
     }
 
     private class EventProcessor implements Runnable {
