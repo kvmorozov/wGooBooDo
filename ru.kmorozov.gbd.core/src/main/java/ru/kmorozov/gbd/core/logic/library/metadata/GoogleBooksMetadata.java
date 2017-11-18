@@ -1,5 +1,7 @@
 package ru.kmorozov.gbd.core.logic.library.metadata;
 
+import ru.kmorozov.gbd.core.logic.connectors.HttpConnector;
+import ru.kmorozov.gbd.core.logic.connectors.google.GoogleHttpConnector;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookExtractor;
 import ru.kmorozov.gbd.core.logic.extractors.base.IImageExtractor;
@@ -30,5 +32,15 @@ public class GoogleBooksMetadata implements ILibraryMetadata {
     @Override
     public AbstractBookExtractor getBookExtractor(String bookId) {
         return new GoogleBookInfoExtractor(bookId);
+    }
+
+    @Override
+    public boolean needSetCookies() {
+        return true;
+    }
+
+    @Override
+    public HttpConnector preferredConnector() {
+        return new GoogleHttpConnector();
     }
 }

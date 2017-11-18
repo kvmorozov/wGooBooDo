@@ -57,9 +57,9 @@ public class ShplBookExtractor extends AbstractBookExtractor {
         for (Element script : scripts) {
             List<Node> childs = script.childNodes();
             if (childs != null && childs.size() > 0) {
-                String data = childs.get(0).attr("data");
+                String data = childs.get(0).toString();
 
-                if (data == null || data.length() == 0) return null;
+                if (data == null || data.length() == 0) continue;
 
                 if (data.contains(JSON_TAG_PAGES)) {
                     String pagesData = "[" + data.split("[|]")[2].split("\\[|\\]")[3] + "]";

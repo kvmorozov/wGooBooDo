@@ -12,6 +12,7 @@ import org.apache.hc.core5.http.HttpHost;
 import org.apache.hc.core5.ssl.SSLContextBuilder;
 import org.apache.hc.core5.util.TimeValue;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
+import ru.kmorozov.gbd.core.logic.library.LibraryFactory;
 
 import javax.net.ssl.SSLContext;
 import java.io.IOException;
@@ -99,10 +100,12 @@ public class ApacheConnections {
                 for (String cookieEntry : cookies) {
                     String[] cookieParts = cookieEntry.split("=", 2);
 
-                    BasicClientCookie cookie = new BasicClientCookie(cookieParts[0], cookieParts[1]);
-                    cookie.setDomain(".google.ru");
-                    cookie.setPath("/");
-                    cookieStore.addCookie(cookie);
+                    if (cookieParts != null && cookieParts.length > 1 && LibraryFactory.needSetCookies()) {
+                        BasicClientCookie cookie = new BasicClientCookie(cookieParts[0], cookieParts[1]);
+                        cookie.setDomain(".google.ru");
+                        cookie.setPath("/");
+                        cookieStore.addCookie(cookie);
+                    }
                 }
 
                 cookieStoreMap.put(proxy, cookieStore);

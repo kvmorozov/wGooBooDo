@@ -1,5 +1,7 @@
 package ru.kmorozov.gbd.core.logic.library.metadata;
 
+import ru.kmorozov.gbd.core.logic.connectors.HttpConnector;
+import ru.kmorozov.gbd.core.logic.connectors.apache.ApacheHttpConnector;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookExtractor;
 import ru.kmorozov.gbd.core.logic.extractors.base.IImageExtractor;
@@ -32,5 +34,15 @@ public class ShplMetadata implements ILibraryMetadata {
     @Override
     public AbstractBookExtractor getBookExtractor(String bookId) {
         return new ShplBookExtractor(bookId);
+    }
+
+    @Override
+    public boolean needSetCookies() {
+        return false;
+    }
+
+    @Override
+    public HttpConnector preferredConnector() {
+        return new ApacheHttpConnector();
     }
 }

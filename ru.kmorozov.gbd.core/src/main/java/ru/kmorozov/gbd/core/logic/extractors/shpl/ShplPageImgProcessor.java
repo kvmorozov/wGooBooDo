@@ -18,7 +18,7 @@ public class ShplPageImgProcessor extends AbstractPageImgProcessor<ShplPage> {
 
     @Override
     protected String getErrorMsg(String imgUrl, HttpHostExt proxy) {
-        return null;
+        return String.format("Cannot load data from %s", imgUrl);
     }
 
     @Override

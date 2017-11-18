@@ -1,5 +1,6 @@
 package ru.kmorozov.gbd.core.logic.library;
 
+import ru.kmorozov.gbd.core.logic.connectors.HttpConnector;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookExtractor;
 import ru.kmorozov.gbd.core.logic.extractors.base.IImageExtractor;
@@ -14,4 +15,8 @@ public interface ILibraryMetadata {
     IImageExtractor getExtractor(BookContext bookContext);
 
     AbstractBookExtractor getBookExtractor(String bookId);
+
+    boolean needSetCookies();
+
+    HttpConnector preferredConnector();
 }

@@ -70,7 +70,7 @@ public class SingleChannelHttpClient implements AsyncHttpClient {
         nettyTimer = allowStopNettyTimer ? newNettyTimer() : config.getNettyTimer();
 
         this.channelManager = channelManager == null ? new ChannelManager(config, nettyTimer) : channelManager;
-        requestSender = new NettyRequestSender(config, channelManager, null, nettyTimer, new AsyncHttpClientState(closed));
+        requestSender = new NettyRequestSender(config, channelManager, nettyTimer, new AsyncHttpClientState(closed));
         this.channelManager.configureBootstraps(requestSender);
     }
 
