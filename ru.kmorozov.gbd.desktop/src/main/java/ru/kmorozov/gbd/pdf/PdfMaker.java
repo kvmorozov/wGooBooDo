@@ -5,6 +5,7 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import ru.kmorozov.gbd.core.PdfOptions;
 import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.extractors.base.IPostProcessor;
@@ -44,6 +45,9 @@ public class PdfMaker implements IPostProcessor {
 
     @Override
     public void make() {
+        if (GBDOptions.pdfOptions() == PdfOptions.SKIP)
+            return;
+
         Logger logger = INSTANCE.getLogger(PdfMaker.class, bookContext);
         logger.info("Starting making pdf file...");
 

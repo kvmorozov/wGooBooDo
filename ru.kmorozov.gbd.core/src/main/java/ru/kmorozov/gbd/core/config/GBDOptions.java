@@ -1,5 +1,8 @@
 package ru.kmorozov.gbd.core.config;
 
+import com.google.api.client.repackaged.com.google.common.base.Strings;
+import ru.kmorozov.gbd.core.PdfOptions;
+
 import java.io.File;
 
 /**
@@ -37,6 +40,10 @@ public class GBDOptions {
 
     public static boolean secureMode() {
         return INSTANCE.secureMode();
+    }
+
+    public static PdfOptions pdfOptions() {
+        return Strings.isNullOrEmpty(INSTANCE.pdfOptions()) ? PdfOptions.DEFAULT_MODE : PdfOptions.getOption(INSTANCE.pdfOptions());
     }
 
     public static int getImageWidth(int defaultValue) {

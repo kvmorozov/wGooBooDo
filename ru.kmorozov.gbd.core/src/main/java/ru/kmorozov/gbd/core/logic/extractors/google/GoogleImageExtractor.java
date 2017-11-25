@@ -51,7 +51,8 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
         logger = INSTANCE.getLogger(GoogleImageExtractor.class, bookContext);
     }
 
-    private void scanDir() {
+    @Override
+    protected void scanDir() {
         int imgWidth = GBDOptions.getImageWidth() == 0 ? GoogleImageExtractor.DEFAULT_PAGE_WIDTH : GBDOptions.getImageWidth();
         Path outputPath = Paths.get(bookContext.getOutputDir().toURI());
 
@@ -150,7 +151,6 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
     protected void prepareDirectory() {
         super.prepareDirectory();
         bookContext.getBookInfo().getPages().build();
-        scanDir();
     }
 
     @Override

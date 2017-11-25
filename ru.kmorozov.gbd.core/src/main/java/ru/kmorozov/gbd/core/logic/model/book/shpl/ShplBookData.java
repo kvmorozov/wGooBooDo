@@ -10,16 +10,16 @@ public class ShplBookData implements IBookData {
     private final String title;
 
     public ShplBookData(String title) {
-        this.title = title;
+        this.title = title.trim();
     }
 
     @Override
     public String getTitle() {
-        return title.trim();
+        return title;
     }
 
     @Override
     public String getVolumeId() {
-        return "";
+        return String.valueOf(title.hashCode());
     }
 }

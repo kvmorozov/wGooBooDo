@@ -13,8 +13,8 @@ public class SystemConfigs {
     private static final String KEY_LAST_BOOK_ID = "last.book.id";
     private static final String KEY_RESOLUTION = "resolution";
     private static final String KEY_RELOAD = "reload";
-    private static final String KEY_FILL_GAPS = "fill.gaps";
     private static final String KEY_SECURE_MODE = "secure.mode";
+    private static final String KEY_PDF_MODE = "pdf.mode";
 
     private static final Preferences preferences = Preferences.userRoot().node(PREFERENCES_NODE);
 
@@ -92,5 +92,13 @@ public class SystemConfigs {
 
     public static boolean isConsoleMode() {
         return true;
+    }
+
+    public static String getPdfMode() {
+        return getStringProperty(KEY_PDF_MODE);
+    }
+
+    public static void setPdfMode(String value) {
+        setStringProperty(KEY_PDF_MODE, value);
     }
 }

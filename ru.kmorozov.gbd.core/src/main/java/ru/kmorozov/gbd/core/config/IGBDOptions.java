@@ -16,4 +16,6 @@ public interface IGBDOptions {
     boolean reloadImages();
 
     boolean secureMode();
+
+    String pdfOptions();
 }

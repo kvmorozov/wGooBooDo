@@ -34,4 +34,9 @@ public class LocalSystemOptions implements IGBDOptions {
     public boolean secureMode() {
         return SystemConfigs.getSecureMode();
     }
+
+    @Override
+    public String pdfOptions() {
+        return SystemConfigs.getPdfMode();
+    }
 }

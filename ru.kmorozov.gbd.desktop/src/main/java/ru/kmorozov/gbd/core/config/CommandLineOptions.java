@@ -19,6 +19,8 @@ public class CommandLineOptions implements IGBDOptions {
     private static final String OPTION_IMG_RELOAD_LONG = "reload";
     private static final String OPTION_SECURE_MODE_SHORT = "s";
     private static final String OPTION_SECURE_MODE_LONG = "secure";
+    private static final String OPTION_PDF_MODE_SHORT = "x";
+    private static final String OPTION_PDF_MODE_LONG = "pdf";
 
     private CommandLine commandLine;
 
@@ -62,6 +64,12 @@ public class CommandLineOptions implements IGBDOptions {
         option.setArgName("Secure mode ");
         options.addOption(option);
 
+        option = new Option(OPTION_PDF_MODE_SHORT, OPTION_PDF_MODE_LONG, true, "Pdf mode");
+        option.setArgs(1);
+        option.setOptionalArg(true);
+        option.setArgName("Pdf mode ");
+        options.addOption(option);
+
         try {
             commandLine = cmdLineParser.parse(options, commandLineArguments);
         } catch (ParseException e) {
@@ -70,7 +78,8 @@ public class CommandLineOptions implements IGBDOptions {
     }
 
     private String getStringOptionValue(String optionName) {
-        return commandLine.hasOption(optionName) && commandLine.getOptionValues(optionName).length == 1 ? commandLine.getOptionValues(optionName)[0] : null;
+        return commandLine.hasOption(optionName) && commandLine.getOptionValues(optionName) != null && commandLine.getOptionValues(optionName).length == 1
+                ? commandLine.getOptionValues(optionName)[0] : null;
     }
 
     private int getIntOptionValue(String optionName) {
@@ -109,5 +118,10 @@ public class CommandLineOptions implements IGBDOptions {
     @Override
     public boolean secureMode() {
         return getBoolOptionValue(OPTION_SECURE_MODE_SHORT);
+    }
+
+    @Override
+    public String pdfOptions() {
+        return getStringOptionValue(OPTION_PDF_MODE_SHORT);
     }
 }

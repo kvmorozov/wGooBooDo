@@ -72,7 +72,10 @@ public abstract class AbstractPageImgProcessor<T extends AbstractPage> extends A
                         outputFile = new File(bookContext.getOutputDir().getPath() + "\\" + page.getOrder() + "_" + page.getPid() + "." + imgFormat);
 
                         if (reloadFlag = outputFile.exists()) if (GBDOptions.reloadImages()) outputFile.delete();
-                        else return false;
+                        else {
+                            page.dataProcessed.set(true);
+                            return false;
+                        }
                     }
                     else break;
 

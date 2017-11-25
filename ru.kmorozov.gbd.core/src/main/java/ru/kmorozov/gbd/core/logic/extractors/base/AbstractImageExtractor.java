@@ -44,6 +44,8 @@ public abstract class AbstractImageExtractor extends AbstractEventSource impleme
         return bookContext;
     }
 
+    protected abstract void scanDir();
+
     @Override
     public String toString() {
         return "Extractor:" + bookContext.toString();
@@ -55,6 +57,7 @@ public abstract class AbstractImageExtractor extends AbstractEventSource impleme
         if (!preCheck()) return;
 
         prepareDirectory();
+        scanDir();
 
         initComplete.set(true);
     }
@@ -104,7 +107,11 @@ public abstract class AbstractImageExtractor extends AbstractEventSource impleme
         } catch (IOException ignored) {
         }
 
-        String directoryName = baseOutputDirPath + "\\" + bookContext.getBookInfo().getBookData().getTitle().replace(":", "").replace("<", "").replace(">", "").replace("/", ".");
+        String directoryName = baseOutputDirPath + "\\" + bookContext.getBookInfo().getBookData().getTitle()
+                                                                     .replace(":", "")
+                                                                     .replace("<", "")
+                                                                     .replace(">", "")
+                                                                     .replace("/", ".");
         String volumeId = bookContext.getBookInfo().getBookData().getVolumeId();
         return StringUtils.isEmpty(volumeId) ? directoryName : directoryName + " " + bookContext.getBookInfo().getBookData().getVolumeId();
     }
