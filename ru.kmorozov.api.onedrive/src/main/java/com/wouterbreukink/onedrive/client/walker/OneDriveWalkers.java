@@ -21,8 +21,8 @@ public class OneDriveWalkers {
         itr = new OneDriveIterator(api, api.getRoot(), maxDepth, skipCondition);
 
         try {
-            Stream stream = StreamSupport.stream(Spliterators.spliteratorUnknownSize(itr, 1), false);
-            return (Stream<OneDriveItem>) stream.onClose(itr::close);
+            Stream<OneDriveItem> stream = StreamSupport.stream(Spliterators.spliteratorUnknownSize(itr, 1), false);
+            return stream.onClose(itr::close);
         } catch (RuntimeException | Error ex) {
             itr.close();
             throw ex;

@@ -18,9 +18,6 @@ import java.io.File;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static com.wouterbreukink.onedrive.CommandLineOpts.getCommandLineOpts;
-import static com.wouterbreukink.onedrive.client.utils.LogUtils.readableFileSize;
-
 /***
  * OneDrive Java Client
  * Copyright (C) 2015 Wouter Breukink
@@ -54,31 +51,31 @@ public class Main {
             return;
         }
 
-        if (getCommandLineOpts().help()) {
+        if (CommandLineOpts.getCommandLineOpts().help()) {
             CommandLineOpts.printHelp();
             return;
         }
 
-        if (getCommandLineOpts().version()) {
-            String version = getCommandLineOpts().getClass().getPackage().getImplementationVersion();
+        if (CommandLineOpts.getCommandLineOpts().version()) {
+            String version = CommandLineOpts.getCommandLineOpts().getClass().getPackage().getImplementationVersion();
             log.info("onedrive-java-client version " + (version != null ? version : "DEVELOPMENT"));
             return;
         }
 
         // Initialise a log file (if set)
-        if (getCommandLineOpts().getLogFile() != null) {
-            String logFileName = LogUtils.addFileLogger(getCommandLineOpts().getLogFile());
+        if (CommandLineOpts.getCommandLineOpts().getLogFile() != null) {
+            String logFileName = LogUtils.addFileLogger(CommandLineOpts.getCommandLineOpts().getLogFile());
             log.info(String.format("Writing log output to %s", logFileName));
         }
 
-        if (getCommandLineOpts().isAuthorise()) {
+        if (CommandLineOpts.getCommandLineOpts().isAuthorise()) {
             AuthorisationProvider.FACTORY.printAuthInstructions();
             return;
         }
 
-        if (getCommandLineOpts().getLocalPath() == null
-                || getCommandLineOpts().getRemotePath() == null
-                || getCommandLineOpts().getDirection() == null) {
+        if (CommandLineOpts.getCommandLineOpts().getLocalPath() == null
+                || CommandLineOpts.getCommandLineOpts().getRemotePath() == null
+                || CommandLineOpts.getCommandLineOpts().getDirection() == null) {
             log.error("Must specify --local, --remote and --direction");
             CommandLineOpts.printHelp();
             return;
@@ -87,7 +84,7 @@ public class Main {
         // Initialise the OneDrive authorisation
         AuthorisationProvider authoriser;
         try {
-            authoriser = AuthorisationProvider.FACTORY.create(getCommandLineOpts().getKeyFile());
+            authoriser = AuthorisationProvider.FACTORY.create(CommandLineOpts.getCommandLineOpts().getKeyFile());
             authoriser.getAccessToken();
         } catch (OneDriveAPIException ex) {
             log.error("Unable to authorise client: " + ex.getMessage());
@@ -98,7 +95,7 @@ public class Main {
         // Initialise the providers
         OneDriveProvider api;
         FileSystemProvider fileSystem;
-        if (getCommandLineOpts().isDryRun()) {
+        if (CommandLineOpts.getCommandLineOpts().isDryRun()) {
             log.warn("This is a dry run - no changes will be made");
             api = OneDriveProvider.FACTORY.readOnlyApi(authoriser);
             fileSystem = FileSystemProvider.FACTORY.readOnlyProvider();
@@ -115,35 +112,35 @@ public class Main {
 
         // Report quotas
         log.info(String.format("Using drive with id '%s' (%s). Usage %s of %s (%.2f%%)",
-                primary.getId(),
-                primary.getDriveType(),
-                readableFileSize(primary.getQuota().getUsed()),
-                readableFileSize(primary.getQuota().getTotal()),
-                ((double) primary.getQuota().getUsed() / primary.getQuota().getTotal()) * 100));
+                               primary.getId(),
+                               primary.getDriveType(),
+                               LogUtils.readableFileSize(primary.getQuota().getUsed()),
+                               LogUtils.readableFileSize(primary.getQuota().getTotal()),
+                               ((double) primary.getQuota().getUsed() / primary.getQuota().getTotal()) * 100));
 
         // Check the given root folder
         OneDriveItem rootFolder;
         try {
-            rootFolder = api.getPath(getCommandLineOpts().getRemotePath());
+            rootFolder = api.getPath(CommandLineOpts.getCommandLineOpts().getRemotePath());
         } catch (OneDriveAPIException e) {
             if (e.getCode() == 404) {
-                log.error(String.format("Specified remote folder '%s' does not exist", getCommandLineOpts().getRemotePath()));
+                log.error(String.format("Specified remote folder '%s' does not exist", CommandLineOpts.getCommandLineOpts().getRemotePath()));
             } else {
-                log.error(String.format("Unable to locate remote folder '%s' - %s", getCommandLineOpts().getRemotePath(), e.getMessage()));
+                log.error(String.format("Unable to locate remote folder '%s' - %s", CommandLineOpts.getCommandLineOpts().getRemotePath(), e.getMessage()));
             }
             return;
         }
 
         if (rootFolder == null || !rootFolder.isDirectory()) {
-            log.error(String.format("Specified root '%s' is not a folder", getCommandLineOpts().getRemotePath()));
+            log.error(String.format("Specified root '%s' is not a folder", CommandLineOpts.getCommandLineOpts().getRemotePath()));
             return;
         }
 
         // Check the target folder
-        File localFolder = new File(getCommandLineOpts().getLocalPath());
+        File localFolder = new File(CommandLineOpts.getCommandLineOpts().getLocalPath());
 
         if (!localFolder.exists() || !localFolder.isDirectory()) {
-            log.error(String.format("Specified local path '%s' is not a valid folder", getCommandLineOpts().getLocalPath()));
+            log.error(String.format("Specified local path '%s' is not a valid folder", CommandLineOpts.getCommandLineOpts().getLocalPath()));
             return;
         }
 
@@ -154,9 +151,9 @@ public class Main {
         queue.add(new CheckTask(new Task.TaskOptions(queue, api, fileSystem, reporter), rootFolder, localFolder));
 
         // Get a bunch of threads going
-        ExecutorService executorService = Executors.newFixedThreadPool(getCommandLineOpts().getThreads());
+        ExecutorService executorService = Executors.newFixedThreadPool(CommandLineOpts.getCommandLineOpts().getThreads());
 
-        for (int i = 0; i < getCommandLineOpts().getThreads(); i++) {
+        for (int i = 0; i < CommandLineOpts.getCommandLineOpts().getThreads(); i++) {
             executorService.submit(() -> {
                 try {
                     //noinspection InfiniteLoopStatement

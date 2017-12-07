@@ -17,7 +17,7 @@ import java.util.stream.Stream;
  */
 public class OneDriveWalker implements Closeable {
 
-    private final boolean followLinks = true;
+    private static final boolean followLinks = true;
     private final OneDriveProvider api;
     private final ArrayDeque<OneDriveWalker.DirectoryNode> stack = new ArrayDeque();
     private final int maxDepth;
@@ -92,7 +92,7 @@ public class OneDriveWalker implements Closeable {
     /**
      * TODO сделать проверку на зацикливание, по аналогии с {@link java.nio.file.FileTreeWalker#wouldLoop}
      */
-    private boolean wouldLoop(OneDriveItem item) {
+    private static boolean wouldLoop(OneDriveItem item) {
         return false;
     }
 
@@ -113,10 +113,10 @@ public class OneDriveWalker implements Closeable {
                 OneDriveItem item = null;
                 IOException exception = null;
                 if (!node.skipped()) {
-                    Iterator iterator = node.iterator();
+                    Iterator<OneDriveItem> iterator = node.iterator();
 
                     if (iterator.hasNext())
-                        item = (OneDriveItem) iterator.next();
+                        item = iterator.next();
                 }
 
                 if (item == null) {

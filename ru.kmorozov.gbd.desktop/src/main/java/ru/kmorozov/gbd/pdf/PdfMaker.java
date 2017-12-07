@@ -8,6 +8,7 @@ import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import ru.kmorozov.gbd.core.PdfOptions;
 import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
+import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.extractors.base.IPostProcessor;
 import ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor;
 import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
@@ -26,8 +27,6 @@ import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static ru.kmorozov.gbd.core.logic.context.ExecutionContext.INSTANCE;
 
 /**
  * Created by km on 17.12.2015.
@@ -48,7 +47,7 @@ public class PdfMaker implements IPostProcessor {
         if (GBDOptions.pdfOptions() == PdfOptions.SKIP)
             return;
 
-        Logger logger = INSTANCE.getLogger(PdfMaker.class, bookContext);
+        Logger logger = ExecutionContext.INSTANCE.getLogger(PdfMaker.class, bookContext);
         logger.info("Starting making pdf file...");
 
         if (!bookContext.pdfCompleted.compareAndSet(false, true)) return;
@@ -96,7 +95,7 @@ public class PdfMaker implements IPostProcessor {
         int imgWidth = GBDOptions.getImageWidth() == 0 ? GoogleImageExtractor.DEFAULT_PAGE_WIDTH : GBDOptions.getImageWidth();
 
         try (PDDocument document = new PDDocument()) {
-            Files.list(imgDir.toPath()).filter(Images::isImageFile).sorted(Comparator.comparing(this::getPagenum)).forEach(filePath -> {
+            Files.list(imgDir.toPath()).filter(Images::isImageFile).sorted(Comparator.comparing(PdfMaker::getPagenum)).forEach(filePath -> {
                 try (InputStream in = new FileInputStream(filePath.toFile())) {
                     if (!Images.isInvalidImage(filePath, imgWidth)) {
                         BufferedImage bimg = ImageIO.read(in);
@@ -111,9 +110,9 @@ public class PdfMaker implements IPostProcessor {
                             PDPage page = new PDPage(new PDRectangle(width, height));
                             document.addPage(page);
                             PDImageXObject img = PDImageXObject.createFromFile(filePath.toString(), document);
-                            PDPageContentStream contentStream = new PDPageContentStream(document, page);
-                            contentStream.drawImage(img, 0, 0);
-                            contentStream.close();
+                            try(PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
+                                contentStream.drawImage(img, 0, 0);
+                            }
                         }
                     }
                     else {
@@ -141,7 +140,7 @@ public class PdfMaker implements IPostProcessor {
         logger.info("Pdf completed.");
     }
 
-    private Integer getPagenum(Path pagePath) {
+    private static Integer getPagenum(Path pagePath) {
         String name = pagePath.getFileName().toString();
         try {
             return Integer.parseInt(name.split("_")[0]);

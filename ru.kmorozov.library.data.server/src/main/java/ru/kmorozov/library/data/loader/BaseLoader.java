@@ -1,7 +1,5 @@
 package ru.kmorozov.library.data.loader;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.kmorozov.library.data.loader.netty.EventSender;
 import ru.kmorozov.library.data.model.book.*;
@@ -73,7 +71,7 @@ public abstract class BaseLoader implements ILoader, Runnable {
         return fillStorage(storage == null ? new Storage() : storage, serverItem);
     }
 
-    protected Storage fillStorage(Storage storage, ServerItem serverItem) {
+    protected static Storage fillStorage(Storage storage, ServerItem serverItem) {
         storage.setStorageType(serverItem.getStorageType());
         storage.setUrl(serverItem.getUrl());
         storage.setName(serverItem.getName());
@@ -177,7 +175,7 @@ public abstract class BaseLoader implements ILoader, Runnable {
         try {
             load();
         } catch (IOException | UncheckedIOException e) {
-            setState(LoaderExecutor.State.STOPPED);
+            this.state = LoaderExecutor.State.STOPPED;
 
             e.printStackTrace();
         }

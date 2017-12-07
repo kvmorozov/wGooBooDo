@@ -72,10 +72,12 @@ public class HttpHostExt {
 
         try {
             HttpResponse resp = requestFactory.buildGetRequest(checkProxyUrl).execute();
-            if (resp != null && resp.getContent() != null) {
+            if (resp != null) {
                 try (InputStream is = resp.getContent()) {
-                    String respStr = IOUtils.toString(is, Charset.defaultCharset());
-                    return !respStr.contains(InetAddress.getLocalHost().getHostName());
+                    if (is != null) {
+                        String respStr = IOUtils.toString(is, Charset.defaultCharset());
+                        return !respStr.contains(InetAddress.getLocalHost().getHostName());
+                    }
                 }
             }
         } catch (IOException e) {
@@ -104,7 +106,7 @@ public class HttpHostExt {
 
     @Override
     public boolean equals(final Object obj) {
-        return !(obj == null || !(obj instanceof HttpHostExt)) && host.equals(((HttpHostExt) obj).getHost());
+        return !(obj == null || !(obj instanceof HttpHostExt)) && host.equals(((HttpHostExt) obj).host);
     }
 
     @Override
@@ -172,11 +174,11 @@ public class HttpHostExt {
     }
 
     public String getProxyString() {
-        return host.getAddress().getHostAddress() + ";" + host.getPort() + ";" + failureCount.get();
+        return host.getAddress().getHostAddress() + ';' + host.getPort() + ';' + failureCount.get();
     }
 
     public String getProxyStringShort() {
-        return host.getAddress().getHostAddress() + ":" + host.getPort();
+        return host.getAddress().getHostAddress() + ':' + host.getPort();
     }
 
     public HttpHeaders getHeaders() {

@@ -13,6 +13,7 @@ import com.wouterbreukink.onedrive.client.facets.FolderFacet;
 import com.wouterbreukink.onedrive.client.resources.Item;
 import com.wouterbreukink.onedrive.client.resources.UploadSession;
 import com.wouterbreukink.onedrive.client.serialization.JsonDateSerializer;
+import com.wouterbreukink.onedrive.client.utils.JsonUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -22,8 +23,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Date;
-
-import static com.wouterbreukink.onedrive.client.utils.JsonUtils.JSON_FACTORY;
 
 class RWOneDriveProvider extends ROOneDriveProvider implements OneDriveProvider {
 
@@ -65,7 +64,7 @@ class RWOneDriveProvider extends ROOneDriveProvider implements OneDriveProvider 
                         new HttpHeaders()
                                 .set("Content-ID", "<metadata>")
                                 .setAcceptEncoding(null),
-                        new JsonHttpContent(JSON_FACTORY, itemToWrite)))
+                        new JsonHttpContent(JsonUtils.JSON_FACTORY, itemToWrite)))
                 .addPart(new MultipartContent.Part(
                         new HttpHeaders()
                                 .set("Content-ID", "<content>")
@@ -84,7 +83,7 @@ class RWOneDriveProvider extends ROOneDriveProvider implements OneDriveProvider 
     public OneDriveUploadSession startUploadSession(OneDriveItem parent, File file) throws IOException {
         HttpRequest request = requestFactory.buildPostRequest(
                 OneDriveUrl.createUploadSession(parent.getId(), file.getName()),
-                new JsonHttpContent(JSON_FACTORY, new UploadSessionFacet(file.getName())));
+                new JsonHttpContent(JsonUtils.JSON_FACTORY, new UploadSessionFacet(file.getName())));
 
         UploadSession session = request.execute().parseAs(UploadSession.class);
 
@@ -127,7 +126,7 @@ class RWOneDriveProvider extends ROOneDriveProvider implements OneDriveProvider 
 
         HttpRequest request = requestFactory.buildPatchRequest(
                 OneDriveUrl.item(item.getId()),
-                new JsonHttpContent(JSON_FACTORY, updateItem));
+                new JsonHttpContent(JsonUtils.JSON_FACTORY, updateItem));
 
         Item response = request.execute().parseAs(Item.class);
         return OneDriveItem.FACTORY.create(response);
@@ -138,7 +137,7 @@ class RWOneDriveProvider extends ROOneDriveProvider implements OneDriveProvider 
 
         HttpRequest request = requestFactory.buildPostRequest(
                 OneDriveUrl.children(parent.getId()),
-                new JsonHttpContent(JSON_FACTORY, newFolder));
+                new JsonHttpContent(JsonUtils.JSON_FACTORY, newFolder));
 
         Item response = request.execute().parseAs(Item.class);
         OneDriveItem item = OneDriveItem.FACTORY.create(response);
@@ -244,7 +243,7 @@ class RWOneDriveProvider extends ROOneDriveProvider implements OneDriveProvider 
             return item;
         }
 
-        public class FileDetail {
+        public static class FileDetail {
 
             @Key
             private String name;

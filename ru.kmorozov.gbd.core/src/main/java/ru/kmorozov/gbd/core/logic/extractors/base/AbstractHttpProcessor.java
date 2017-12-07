@@ -5,12 +5,7 @@ import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector;
 import ru.kmorozov.gbd.core.logic.connectors.Response;
 import ru.kmorozov.gbd.core.logic.connectors.ResponseException;
-import ru.kmorozov.gbd.core.logic.connectors.apache.ApacheHttpConnector;
-import ru.kmorozov.gbd.core.logic.connectors.asynchttp.AsyncHttpConnector;
-import ru.kmorozov.gbd.core.logic.connectors.google.GoogleHttpConnector;
-import ru.kmorozov.gbd.core.logic.connectors.ok.OkHttpConnector;
 import ru.kmorozov.gbd.core.logic.library.LibraryFactory;
-import ru.kmorozov.gbd.core.utils.ClassUtils;
 
 import javax.net.ssl.SSLException;
 import java.io.IOException;
@@ -41,7 +36,7 @@ public class AbstractHttpProcessor {
         return connectors;
     }
 
-    protected Response getContent(String rqUrl, HttpHostExt proxy, boolean withTimeout) {
+    protected static Response getContent(String rqUrl, HttpHostExt proxy, boolean withTimeout) {
         try {
             Response resp = null;
             for (HttpConnector connector : getConnectors()) {

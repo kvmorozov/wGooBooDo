@@ -4,14 +4,12 @@ import com.google.api.client.util.Preconditions;
 import com.wouterbreukink.onedrive.client.OneDriveItem;
 import com.wouterbreukink.onedrive.client.downloader.ResumableDownloader;
 import com.wouterbreukink.onedrive.client.downloader.ResumableDownloaderProgressListener;
+import com.wouterbreukink.onedrive.client.utils.LogUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
-
-import static com.wouterbreukink.onedrive.client.utils.LogUtils.readableFileSize;
-import static com.wouterbreukink.onedrive.client.utils.LogUtils.readableTime;
 
 public class DownloadTask extends Task {
 
@@ -91,21 +89,21 @@ public class DownloadTask extends Task {
                                 long elapsedTimeInner = System.currentTimeMillis() - startTimeInner;
 
                                 reporter.info(String.format("Downloaded chunk (progress %.1f%%) of %s (%s/s) for file %s",
-                                        downloader.getProgress() * 100,
-                                        readableFileSize(downloader.getChunkSize()),
-                                        elapsedTimeInner > 0 ? readableFileSize(downloader.getChunkSize() / (elapsedTimeInner / 1000d)) : 0,
-                                        remoteFile.getFullName()));
+                                                            downloader.getProgress() * 100,
+                                                            LogUtils.readableFileSize(downloader.getChunkSize()),
+                                                            elapsedTimeInner > 0 ? LogUtils.readableFileSize(downloader.getChunkSize() / (elapsedTimeInner / 1000d)) : 0,
+                                                            remoteFile.getFullName()));
 
                                 startTimeInner = System.currentTimeMillis();
                                 break;
                             case MEDIA_COMPLETE:
                                 long elapsedTime = System.currentTimeMillis() - startTime;
                                 reporter.info(String.format("Downloaded %s in %s (%s/s) of %s file %s",
-                                        readableFileSize(remoteFile.getSize()),
-                                        readableTime(elapsedTime),
-                                        elapsedTime > 0 ? readableFileSize(remoteFile.getSize() / (elapsedTime / 1000d)) : 0,
-                                        replace ? "replaced" : "new",
-                                        remoteFile.getFullName()));
+                                                            LogUtils.readableFileSize(remoteFile.getSize()),
+                                                            LogUtils.readableTime(elapsedTime),
+                                                            elapsedTime > 0 ? LogUtils.readableFileSize(remoteFile.getSize() / (elapsedTime / 1000d)) : 0,
+                                                            replace ? "replaced" : "new",
+                                                            remoteFile.getFullName()));
                         }
                     }
                 };

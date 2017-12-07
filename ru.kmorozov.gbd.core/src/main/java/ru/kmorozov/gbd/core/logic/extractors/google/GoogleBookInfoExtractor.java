@@ -6,6 +6,7 @@ import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 import ru.kmorozov.gbd.core.logic.Proxy.AbstractProxyListProvider;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
+import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookExtractor;
 import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
 import ru.kmorozov.gbd.core.logic.model.book.google.GoogleBookData;
@@ -15,15 +16,12 @@ import ru.kmorozov.gbd.core.utils.gson.Mapper;
 
 import java.util.List;
 
-import static ru.kmorozov.gbd.core.logic.context.ExecutionContext.INSTANCE;
-import static ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor.*;
-
 /**
  * Created by km on 08.10.2016.
  */
 public class GoogleBookInfoExtractor extends AbstractBookExtractor {
 
-    private static final Logger logger = INSTANCE.getLogger(GoogleImageExtractor.class);
+    private static final Logger logger = ExecutionContext.INSTANCE.getLogger(GoogleImageExtractor.class);
 
     private static final String ADD_FLAGS_ATTRIBUTE = "_OC_addFlags";
     private static final String OC_RUN_ATTRIBUTE = "_OC_Run";
@@ -37,12 +35,12 @@ public class GoogleBookInfoExtractor extends AbstractBookExtractor {
 
     @Override
     protected String getBookUrl() {
-        return HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, bookId) + OPEN_PAGE_ADD_URL;
+        return GoogleImageExtractor.HTTPS_TEMPLATE.replace(GoogleImageExtractor.BOOK_ID_PLACEHOLDER, bookId) + OPEN_PAGE_ADD_URL;
     }
 
     @Override
     protected String getReserveBookUrl() {
-        return HTTP_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, bookId) + OPEN_PAGE_ADD_URL;
+        return GoogleImageExtractor.HTTP_TEMPLATE.replace(GoogleImageExtractor.BOOK_ID_PLACEHOLDER, bookId) + OPEN_PAGE_ADD_URL;
     }
 
     @Override

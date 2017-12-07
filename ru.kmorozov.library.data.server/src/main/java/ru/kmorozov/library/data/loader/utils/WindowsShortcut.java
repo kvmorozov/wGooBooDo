@@ -103,19 +103,20 @@ public class WindowsShortcut {
      */
     private static byte[] getBytes(InputStream in, Integer max) throws IOException {
         // read the entire file into a byte buffer
-        ByteArrayOutputStream bout = new ByteArrayOutputStream();
-        byte[] buff = new byte[256];
-        while (max == null || max > 0) {
-            int n = in.read(buff);
-            if (n == -1) {
-                break;
+        try(ByteArrayOutputStream bout = new ByteArrayOutputStream()) {
+            byte[] buff = new byte[256];
+            while (max == null || max > 0) {
+                int n = in.read(buff);
+                if (n == -1) {
+                    break;
+                }
+                bout.write(buff, 0, n);
+                if (max != null)
+                    max -= n;
             }
-            bout.write(buff, 0, n);
-            if (max != null)
-                max -= n;
+            in.close();
+            return bout.toByteArray();
         }
-        in.close();
-        return bout.toByteArray();
     }
 
     private static boolean isMagicPresent(byte[] link) {
@@ -175,7 +176,7 @@ public class WindowsShortcut {
                 int shareName_offset = link[networkVolumeTable_offset + shareName_offset_offset]
                         + networkVolumeTable_offset;
                 String shareName = getNullDelimitedString(link, shareName_offset);
-                real_file = shareName + "\\" + finalname;
+                real_file = shareName + '\\' + finalname;
             }
         } catch (ArrayIndexOutOfBoundsException e) {
             throw new ParseException("Could not be parsed, probably not a valid WindowsShortcut", 0);

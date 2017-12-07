@@ -11,15 +11,15 @@ public class ManageController {
 
     private static final RestClient restClient = new RestClient();
 
-    public boolean isManageAllowed() {
+    public static boolean isManageAllowed() {
         return restClient.serviceAvailable();
     }
 
-    public boolean isImportAllowed() {
+    public static boolean isImportAllowed() {
         return restClient.ping();
     }
 
-    public void synchronize() {
+    public static void synchronize() {
         if (!restClient.serviceAvailable()) return;
 
         BookContextLoader loader = new BookContextLoader();

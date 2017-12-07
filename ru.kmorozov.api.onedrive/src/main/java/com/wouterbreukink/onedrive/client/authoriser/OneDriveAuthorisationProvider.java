@@ -9,6 +9,7 @@ import com.wouterbreukink.onedrive.client.OneDriveAPIException;
 import com.wouterbreukink.onedrive.client.exceptions.InvalidCodeException;
 import com.wouterbreukink.onedrive.client.exceptions.OneDriveExceptionFactory;
 import com.wouterbreukink.onedrive.client.resources.Authorisation;
+import com.wouterbreukink.onedrive.client.utils.JsonUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sun.security.provider.certpath.BuildStep;
@@ -25,8 +26,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static com.wouterbreukink.onedrive.client.utils.JsonUtils.JSON_FACTORY;
 
 class OneDriveAuthorisationProvider implements AuthorisationProvider {
 
@@ -128,12 +127,12 @@ class OneDriveAuthorisationProvider implements AuthorisationProvider {
         HttpRequest request =
                 HTTP_TRANSPORT.createRequestFactory().buildPostRequest(new GenericUrl("https://login.live.com/oauth20_token.srf"), new UrlEncodedContent(data));
 
-        request.setParser(new JsonObjectParser(JSON_FACTORY));
+        request.setParser(new JsonObjectParser(JsonUtils.JSON_FACTORY));
 
         processResponse(getResponse(request));
     }
 
-    private HttpResponse getResponse(HttpRequest request) throws IOException {
+    private static HttpResponse getResponse(HttpRequest request) throws IOException {
         HttpResponse response;
 
         try {
@@ -170,7 +169,7 @@ class OneDriveAuthorisationProvider implements AuthorisationProvider {
         HttpRequest request =
                 HTTP_TRANSPORT.createRequestFactory().buildPostRequest(new GenericUrl("https://login.live.com/oauth20_token.srf"), new UrlEncodedContent(data));
 
-        request.setParser(new JsonObjectParser(JSON_FACTORY));
+        request.setParser(new JsonObjectParser(JsonUtils.JSON_FACTORY));
 
         processResponse(getResponse(request));
     }

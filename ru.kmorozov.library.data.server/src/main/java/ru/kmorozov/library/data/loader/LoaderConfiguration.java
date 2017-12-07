@@ -4,7 +4,6 @@ import com.wouterbreukink.onedrive.client.OneDriveProvider;
 import com.wouterbreukink.onedrive.client.authoriser.AuthorisationProvider;
 import com.wouterbreukink.onedrive.client.authoriser.TokenFactory;
 import com.wouterbreukink.onedrive.client.exceptions.InvalidCodeException;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;

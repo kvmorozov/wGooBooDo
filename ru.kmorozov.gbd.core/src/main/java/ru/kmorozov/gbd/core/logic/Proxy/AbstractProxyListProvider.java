@@ -40,7 +40,7 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
         ProxyBlacklistHolder.BLACKLIST.updateBlacklist(INSTANCE.proxyList);
     }
 
-    private String[] splitItems(String proxyItem, String delimiter) {
+    private static String[] splitItems(String proxyItem, String delimiter) {
         return proxyItem.split(delimiter);
     }
 
@@ -53,7 +53,7 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
         }
     }
 
-    private String getCookie(InetSocketAddress proxy) {
+    private static String getCookie(InetSocketAddress proxy) {
         return HttpConnections.getCookieString(proxy);
     }
 
@@ -85,7 +85,7 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
         return proxyList;
     }
 
-    protected boolean notBlacklisted(String proxyStr) {
+    protected static boolean notBlacklisted(String proxyStr) {
         return !ProxyBlacklistHolder.BLACKLIST.isProxyInBlacklist(proxyStr);
     }
 

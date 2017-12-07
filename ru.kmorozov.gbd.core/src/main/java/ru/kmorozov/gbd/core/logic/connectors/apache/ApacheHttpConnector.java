@@ -26,7 +26,7 @@ public class ApacheHttpConnector extends HttpConnector {
         return new ApacheResponse((CloseableHttpResponse) response);
     }
 
-    private HttpResponse getContent(HttpClient client, HttpGet req, HttpHostExt proxy, int attempt) throws IOException {
+    private static HttpResponse getContent(HttpClient client, HttpGet req, HttpHostExt proxy, int attempt) throws IOException {
         if (attempt >= MAX_RETRY_COUNT) return null;
 
         if (attempt > 0) try {

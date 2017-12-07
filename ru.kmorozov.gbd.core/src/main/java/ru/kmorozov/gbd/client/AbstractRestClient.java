@@ -26,7 +26,7 @@ public abstract class AbstractRestClient extends AbstractHttpProcessor {
 
     private static final String DEFAULT_REST_SERVICE_URL = "http://localhost:8080/";
 
-    protected String getRestServiceBaseUrl() {
+    protected static String getRestServiceBaseUrl() {
         return DEFAULT_REST_SERVICE_URL;
     }
 
@@ -43,7 +43,7 @@ public abstract class AbstractRestClient extends AbstractHttpProcessor {
 
     public boolean serviceAvailable() {
         try (Socket socket = new Socket()) {
-            URL serviceURL = new URL(getRestServiceBaseUrl());
+            URL serviceURL = new URL(DEFAULT_REST_SERVICE_URL);
             socket.connect(new InetSocketAddress(serviceURL.getHost(), serviceURL.getPort()));
             return true;
         } catch (IOException e) {
@@ -72,12 +72,12 @@ public abstract class AbstractRestClient extends AbstractHttpProcessor {
     }
 
     protected <T> T getCallResult(String operation, Class<T> resultClass, RestParam... parameters) {
-        StringBuilder rqUrl = new StringBuilder(getRestServiceBaseUrl() + operation);
+        StringBuilder rqUrl = new StringBuilder(DEFAULT_REST_SERVICE_URL + operation);
 
         if (parameters != null && parameters.length > 0) {
-            rqUrl.append("?");
+            rqUrl.append('?');
             for (RestParam param : parameters)
-                rqUrl.append(param.paramName).append("=").append(param.value.toString()).append("&");
+                rqUrl.append(param.paramName).append('=').append(param.value.toString()).append('&');
         }
 
         String rawResult;

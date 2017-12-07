@@ -122,7 +122,7 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
     public List<BookDTO> getBooksByStorageId(@RequestParam(name = "storageId") String storageId) {
         Storage storage = StringUtils.isEmpty(storageId) ? null : storageRepository.findById(storageId).get();
         if (storage == null)
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
 
         return booksRepository.findAllByStorage(storage).stream()
                 .filter(book -> !book.isBrokenLink())

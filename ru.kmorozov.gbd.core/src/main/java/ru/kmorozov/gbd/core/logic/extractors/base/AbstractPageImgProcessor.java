@@ -69,7 +69,7 @@ public abstract class AbstractPageImgProcessor<T extends AbstractPage> extends A
                         if (page.loadingStarted.get()) return false;
 
                         page.loadingStarted.set(true);
-                        outputFile = new File(bookContext.getOutputDir().getPath() + "\\" + page.getOrder() + "_" + page.getPid() + "." + imgFormat);
+                        outputFile = new File(bookContext.getOutputDir().getPath() + '\\' + page.getOrder() + '_' + page.getPid() + '.' + imgFormat);
 
                         if (reloadFlag = outputFile.exists()) if (GBDOptions.reloadImages()) outputFile.delete();
                         else {
@@ -157,7 +157,7 @@ public abstract class AbstractPageImgProcessor<T extends AbstractPage> extends A
         return "Page processor:" + bookContext.toString();
     }
 
-    protected int getImgWidth() {
+    protected static int getImgWidth() {
         return GBDOptions.getImageWidth() == 0 ? GoogleImageExtractor.DEFAULT_PAGE_WIDTH : GBDOptions.getImageWidth();
     }
 

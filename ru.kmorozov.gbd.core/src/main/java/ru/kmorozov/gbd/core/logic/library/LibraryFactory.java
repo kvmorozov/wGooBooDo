@@ -1,16 +1,15 @@
 package ru.kmorozov.gbd.core.logic.library;
 
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector;
-
-import static ru.kmorozov.gbd.core.logic.library.metadata.GoogleBooksMetadata.GOOGLE_METADATA;
-import static ru.kmorozov.gbd.core.logic.library.metadata.ShplMetadata.SHPL_METADATA;
+import ru.kmorozov.gbd.core.logic.library.metadata.GoogleBooksMetadata;
+import ru.kmorozov.gbd.core.logic.library.metadata.ShplMetadata;
 
 /**
  * Created by sbt-morozov-kv on 15.11.2016.
  */
-public class LibraryFactory {
+public final class LibraryFactory {
 
-    private static final ILibraryMetadata[] METADATA = new ILibraryMetadata[]{GOOGLE_METADATA, SHPL_METADATA};
+    private static final ILibraryMetadata[] METADATA = new ILibraryMetadata[]{GoogleBooksMetadata.GOOGLE_METADATA, ShplMetadata.SHPL_METADATA};
 
     private static ILibraryMetadata selectedMetadata;
 

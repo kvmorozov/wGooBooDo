@@ -7,6 +7,7 @@ import ru.kmorozov.gbd.core.logic.model.book.google.Resolutions;
 import ru.kmorozov.gbd.core.logic.model.log.LogIconColumnRenderer;
 import ru.kmorozov.gbd.core.logic.model.log.LogTableModel;
 import ru.kmorozov.gbd.core.logic.output.events.AbstractEventSource;
+import ru.kmorozov.gbd.core.logic.output.events.IEventSource;
 import ru.kmorozov.gbd.core.logic.output.events.ImageExtractorWorker;
 import ru.kmorozov.gbd.desktop.library.SingleBookProducer;
 import ru.kmorozov.gbd.desktop.output.consumers.SwingBookInfoOutput;
@@ -87,7 +88,7 @@ public class MainBookForm {
 
             workerExtractor.addPropertyChangeListener(event -> {
                 if ("progress".equals(event.getPropertyName()) && event.getSource() instanceof AbstractEventSource) {
-                    ProcessStatus status = (ProcessStatus) ((AbstractEventSource) event.getSource()).getProcessStatus();
+                    ProcessStatus status = (ProcessStatus) ((IEventSource) event.getSource()).getProcessStatus();
                     status.getProgressBar().setValue(status.get());
                 }
             });
@@ -148,8 +149,8 @@ public class MainBookForm {
     }
 
     private void configureManage() {
-        tabbedPane1.setEnabledAt(2, manageController.isManageAllowed());
-        bImport.setVisible(manageController.isImportAllowed());
-        bImport.addActionListener(e -> manageController.synchronize());
+        tabbedPane1.setEnabledAt(2, ManageController.isManageAllowed());
+        bImport.setVisible(ManageController.isImportAllowed());
+        bImport.addActionListener(e -> ManageController.synchronize());
     }
 }

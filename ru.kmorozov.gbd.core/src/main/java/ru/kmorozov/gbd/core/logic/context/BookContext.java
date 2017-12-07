@@ -16,8 +16,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import static ru.kmorozov.gbd.core.utils.QueuedThreadPoolExecutor.THREAD_POOL_SIZE;
-
 /**
  * Created by km on 08.11.2016.
  */
@@ -43,8 +41,8 @@ public class BookContext {
         this.metadata = LibraryFactory.getMetadata(bookId);
 
         pagesBefore = getPagesStream().filter(pageInfo -> pageInfo.fileExists.get()).count();
-        sigExecutor = new QueuedThreadPoolExecutor<>(1, THREAD_POOL_SIZE, x -> true, "Sig_" + bookId);
-        imgExecutor = new QueuedThreadPoolExecutor<>(0, THREAD_POOL_SIZE, pagePredicate, "Img_" + bookId);
+        sigExecutor = new QueuedThreadPoolExecutor<>(1, QueuedThreadPoolExecutor.THREAD_POOL_SIZE, x -> true, "Sig_" + bookId);
+        imgExecutor = new QueuedThreadPoolExecutor<>(0, QueuedThreadPoolExecutor.THREAD_POOL_SIZE, pagePredicate, "Img_" + bookId);
     }
 
     public String getBookId() {
@@ -101,7 +99,7 @@ public class BookContext {
 
     @Override
     public String toString() {
-        return bookInfo.getBookId() + " " + bookInfo.getBookData().getTitle();
+        return bookInfo.getBookId() + ' ' + bookInfo.getBookData().getTitle();
     }
 
     public IImageExtractor getExtractor() {

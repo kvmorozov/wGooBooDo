@@ -2,6 +2,7 @@ package com.wouterbreukink.onedrive.tasks;
 
 import com.google.api.client.util.Maps;
 import com.google.api.client.util.Preconditions;
+import com.wouterbreukink.onedrive.CommandLineOpts;
 import com.wouterbreukink.onedrive.client.OneDriveItem;
 import com.wouterbreukink.onedrive.filesystem.FileSystemProvider;
 import org.apache.logging.log4j.LogManager;
@@ -10,8 +11,6 @@ import org.apache.logging.log4j.Logger;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
-
-import static com.wouterbreukink.onedrive.CommandLineOpts.getCommandLineOpts;
 
 public class CheckTask extends Task {
 
@@ -70,7 +69,7 @@ public class CheckTask extends Task {
             // Iterate over all the remote files
             for (OneDriveItem remoteFile : remoteFiles) {
 
-                if (remoteFile.isDirectory() && !getCommandLineOpts().isRecursive()) {
+                if (remoteFile.isDirectory() && !CommandLineOpts.getCommandLineOpts().isRecursive()) {
                     continue;
                 }
 
@@ -81,7 +80,7 @@ public class CheckTask extends Task {
             // Iterate over any local files we've not matched yet
             for (File localFile : localFileCache.values()) {
 
-                if (localFile.isDirectory() && !getCommandLineOpts().isRecursive()) {
+                if (localFile.isDirectory() && !CommandLineOpts.getCommandLineOpts().isRecursive()) {
                     continue;
                 }
 
@@ -93,7 +92,7 @@ public class CheckTask extends Task {
         }
 
         // Skip if the file size is too big or if the file is ignored
-        switch (getCommandLineOpts().getDirection()) {
+        switch (CommandLineOpts.getCommandLineOpts().getDirection()) {
             case UP:
                 if (isSizeInvalid(localFile) || isIgnored(localFile)) {
                     reporter.skipped();
@@ -119,7 +118,7 @@ public class CheckTask extends Task {
 
             switch (match) {
                 case NO:
-                    switch (getCommandLineOpts().getDirection()) {
+                    switch (CommandLineOpts.getCommandLineOpts().getDirection()) {
                         case UP:
                             queue.add(new UploadTask(getTaskOptions(), remoteFile.getParent(), localFile, true));
                             break;
@@ -127,7 +126,7 @@ public class CheckTask extends Task {
                             queue.add(new DownloadTask(getTaskOptions(), localFile.getParentFile(), remoteFile, true));
                             break;
                         default:
-                            throw new IllegalStateException("Unsupported direction " + getCommandLineOpts().getDirection());
+                            throw new IllegalStateException("Unsupported direction " + CommandLineOpts.getCommandLineOpts().getDirection());
                     }
                     break;
                 case CRC:
@@ -139,7 +138,7 @@ public class CheckTask extends Task {
             }
 
         } else { // Resolve cases where remote and local disagree over whether the item is a file or folder
-            switch (getCommandLineOpts().getDirection()) {
+            switch (CommandLineOpts.getCommandLineOpts().getDirection()) {
                 case UP:
                     new DeleteTask(getTaskOptions(), remoteFile).taskBody(); // Execute immediately
                     queue.add(new UploadTask(getTaskOptions(), remoteFile.getParent(), localFile, true));
@@ -149,7 +148,7 @@ public class CheckTask extends Task {
                     queue.add(new DownloadTask(getTaskOptions(), localFile.getParentFile(), remoteFile, true));
                     break;
                 default:
-                    throw new IllegalStateException("Unsupported direction " + getCommandLineOpts().getDirection());
+                    throw new IllegalStateException("Unsupported direction " + CommandLineOpts.getCommandLineOpts().getDirection());
             }
         }
     }
@@ -170,7 +169,7 @@ public class CheckTask extends Task {
 
         // Case 1: We only have the file remotely
         if (remoteOnly) {
-            switch (getCommandLineOpts().getDirection()) {
+            switch (CommandLineOpts.getCommandLineOpts().getDirection()) {
                 case UP:
                     queue.add(new DeleteTask(getTaskOptions(), remoteFile));
                     break;
@@ -178,13 +177,13 @@ public class CheckTask extends Task {
                     queue.add(new DownloadTask(getTaskOptions(), this.localFile, remoteFile, false));
                     break;
                 default:
-                    throw new IllegalStateException("Unsupported direction " + getCommandLineOpts().getDirection());
+                    throw new IllegalStateException("Unsupported direction " + CommandLineOpts.getCommandLineOpts().getDirection());
             }
         }
 
         // Case 2: We only have the file locally
         else if (localOnly) {
-            switch (getCommandLineOpts().getDirection()) {
+            switch (CommandLineOpts.getCommandLineOpts().getDirection()) {
                 case UP:
                     queue.add(new UploadTask(getTaskOptions(), this.remoteFile, localFile, false));
                     break;
@@ -192,7 +191,7 @@ public class CheckTask extends Task {
                     queue.add(new DeleteTask(getTaskOptions(), localFile));
                     break;
                 default:
-                    throw new IllegalStateException("Unsupported direction " + getCommandLineOpts().getDirection());
+                    throw new IllegalStateException("Unsupported direction " + CommandLineOpts.getCommandLineOpts().getDirection());
             }
         }
 

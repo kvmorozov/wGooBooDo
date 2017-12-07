@@ -1,5 +1,6 @@
 package ru.kmorozov.library.data.loader.test;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
-
-import static org.junit.Assert.assertTrue;
 
 /**
  * Created by km on 26.12.2016.
@@ -79,6 +78,6 @@ public class LoadTest {
             }
         }
 
-        assertTrue(storages.size() == 1);
+        Assert.assertTrue(storages.size() == 1);
     }
 }

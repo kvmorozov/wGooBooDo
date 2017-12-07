@@ -32,7 +32,7 @@ public class ShplBookExtractor extends AbstractBookExtractor {
 
     @Override
     protected String getReserveBookUrl() {
-        return getBookUrl();
+        return bookId;
     }
 
     @Override
@@ -62,7 +62,7 @@ public class ShplBookExtractor extends AbstractBookExtractor {
                 if (data == null || data.length() == 0) continue;
 
                 if (data.contains(JSON_TAG_PAGES)) {
-                    String pagesData = "[" + data.split("[|]")[2].split("\\[|\\]")[3] + "]";
+                    String pagesData = '[' + data.split("[|]")[2].split("\\[|\\]")[3] + ']';
 
                     ShplPage[] pages = Mapper.getGson().fromJson(pagesData, ShplPage[].class);
                     for (int i = 1; i <= pages.length; i++)

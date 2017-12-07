@@ -5,8 +5,10 @@ import org.eclipse.jetty.http.MimeTypes;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.DefaultHandler;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.config.IGBDOptions;
 import ru.kmorozov.gbd.core.config.storage.AbstractContextProvider;
@@ -24,11 +26,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.charset.Charset;
-
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  * Created by sbt-morozov-kv on 16.11.2016.
@@ -41,9 +40,9 @@ public class ExtractorTest {
     @Before
     public void initServer() {
         ExecutionContext.initContext(new DummyBookInfoOutput(), true);
-        IGBDOptions mockOptions = mock(IGBDOptions.class);
-        when(mockOptions.getOutputDir()).thenReturn("E:\\Work\\gbd\\");
-        when(mockOptions.getProxyListFile()).thenReturn("E:\\Work\\gbd\\proxy.txt");
+        IGBDOptions mockOptions = Mockito.mock(IGBDOptions.class);
+        Mockito.when(mockOptions.getOutputDir()).thenReturn("E:\\Work\\gbd\\");
+        Mockito.when(mockOptions.getProxyListFile()).thenReturn("E:\\Work\\gbd\\proxy.txt");
         GBDOptions.init(mockOptions);
 
         Server server = new Server(80);
@@ -62,7 +61,9 @@ public class ExtractorTest {
 
                 File res = new File(getClass().getClassLoader().getResource(resFileName).getFile());
                 String data = IOUtils.toString(new FileInputStream(res), Charset.forName("UTF-8"));
-                response.getOutputStream().write(data.getBytes());
+                try (OutputStream os = response.getOutputStream()) {
+                    os.write(data.getBytes());
+                }
             }
         });
 
@@ -77,7 +78,7 @@ public class ExtractorTest {
     public void shplBookInfoTest() {
         ShplBookExtractor extractor = new ShplBookExtractor("http://localhost");
 
-        assertNotNull(extractor.getBookInfo());
+        Assert.assertNotNull(extractor.getBookInfo());
     }
 
     @Test
@@ -85,7 +86,7 @@ public class ExtractorTest {
         AbstractContextProvider contextProvider = AbstractContextProvider.getContextProvider();
 
         int ctxSizeBefore = contextProvider.getContextSize();
-        assertTrue(ctxSizeBefore > 0);
+        Assert.assertTrue(ctxSizeBefore > 0);
 
         ExecutionContext.INSTANCE.addBookContext(new OptionsBasedProducer(), null, null);
         ExecutionContext.INSTANCE.addBookContext(new SingleBookProducer("http://localhost/elib.shpl.ru"), null, null);
@@ -94,7 +95,7 @@ public class ExtractorTest {
         contextProvider.refreshContext();
 
         int ctxSizeAfter = contextProvider.getContextSize();
-        assertEquals(ctxSizeBefore + 1, ctxSizeAfter);
+        Assert.assertEquals(ctxSizeBefore + 1, ctxSizeAfter);
     }
 
     @Test
@@ -106,6 +107,6 @@ public class ExtractorTest {
             }
         };
 
-        assertNotNull(extractor.getBookInfo());
+        Assert.assertNotNull(extractor.getBookInfo());
     }
 }

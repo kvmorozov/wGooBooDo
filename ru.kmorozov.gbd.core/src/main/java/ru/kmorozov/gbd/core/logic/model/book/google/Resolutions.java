@@ -15,7 +15,7 @@ public enum Resolutions {
 
     public static Resolutions getEnum(int value) {
         for (Resolutions v : values())
-            if (v.getResolution() == value) return v;
+            if (v.resolution == value) return v;
 
         throw new IllegalArgumentException();
     }

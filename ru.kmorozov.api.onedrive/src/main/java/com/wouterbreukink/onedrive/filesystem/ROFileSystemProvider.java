@@ -1,5 +1,7 @@
 package com.wouterbreukink.onedrive.filesystem;
 
+import com.wouterbreukink.onedrive.CommandLineOpts;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -9,8 +11,6 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.CRC32;
 import java.util.zip.CheckedInputStream;
-
-import static com.wouterbreukink.onedrive.CommandLineOpts.getCommandLineOpts;
 
 class ROFileSystemProvider implements FileSystemProvider {
 
@@ -60,7 +60,7 @@ class ROFileSystemProvider implements FileSystemProvider {
         boolean createdMatches = created.equals(localCreatedDate);
         boolean modifiedMatches = lastModified.equals(localModifiedDate);
 
-        if (!getCommandLineOpts().useHash() && sizeMatches && createdMatches && modifiedMatches) {
+        if (!CommandLineOpts.getCommandLineOpts().useHash() && sizeMatches && createdMatches && modifiedMatches) {
             // Close enough!
             return FileMatch.YES;
         }
@@ -71,9 +71,11 @@ class ROFileSystemProvider implements FileSystemProvider {
         // If the crc matches but the timestamps do not we won't upload the content again
         if (crcMatches && !(modifiedMatches && createdMatches)) {
             return FileMatch.CRC;
-        } else if (crcMatches) {
+        }
+        else if (crcMatches) {
             return FileMatch.YES;
-        } else {
+        }
+        else {
             return FileMatch.NO;
         }
     }
@@ -95,18 +97,15 @@ class ROFileSystemProvider implements FileSystemProvider {
 
         if (createdMatches && modifiedMatches) {
             return FileMatch.YES;
-        } else {
+        }
+        else {
             return FileMatch.NO;
         }
     }
 
     public long getChecksum(File file) throws IOException {
-
         // Compute CRC32 checksum
-        CheckedInputStream cis = null;
-
-        try {
-            cis = new CheckedInputStream(new FileInputStream(file), new CRC32());
+        try (CheckedInputStream cis = new CheckedInputStream(new FileInputStream(file), new CRC32())) {
             byte[] buf = new byte[1024];
 
             //noinspection StatementWithEmptyBody
@@ -114,10 +113,6 @@ class ROFileSystemProvider implements FileSystemProvider {
             }
 
             return cis.getChecksum().getValue();
-        } finally {
-            if (cis != null) {
-                cis.close();
-            }
         }
     }
 }

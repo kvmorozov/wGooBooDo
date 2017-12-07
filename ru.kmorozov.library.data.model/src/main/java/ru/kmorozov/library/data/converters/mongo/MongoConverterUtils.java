@@ -1,6 +1,5 @@
 package ru.kmorozov.library.data.converters.mongo;
 
-import com.mongodb.DBObject;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,7 @@ import org.springframework.util.Assert;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @Component
 //TODO Перенесено из Spring Data MongoTemplate - нужно вернуть обратно
@@ -31,9 +31,9 @@ public class MongoConverterUtils {
             return Collections.emptyList();
         }
 
-        DocumentCallback<O> callback = new UnwrapAndReadDocumentCallback<O>(mongoTemplate.getConverter(), outputType, collectionName);
+        DocumentCallback<O> callback = new UnwrapAndReadDocumentCallback<>(mongoTemplate.getConverter(), outputType, collectionName);
 
-        List<O> mappedResults = new ArrayList<O>();
+        List<O> mappedResults = new ArrayList<>();
         for (Document document : resultSet) {
             mappedResults.add(callback.doWith(document));
         }
@@ -64,9 +64,9 @@ public class MongoConverterUtils {
             Document nested = (Document) idField;
             toMap.putAll(nested);
 
-            for (String key : object.keySet()) {
-                if (!Fields.UNDERSCORE_ID.equals(key)) {
-                    toMap.put(key, object.get(key));
+            for (Map.Entry<String, Object> stringObjectEntry : object.entrySet()) {
+                if (!Fields.UNDERSCORE_ID.equals(stringObjectEntry.getKey())) {
+                    toMap.put(stringObjectEntry.getKey(), stringObjectEntry.getValue());
                 }
             }
 
@@ -74,7 +74,7 @@ public class MongoConverterUtils {
         }
     }
 
-    private class ReadDocumentCallback<T> implements DocumentCallback<T> {
+    private static class ReadDocumentCallback<T> implements DocumentCallback<T> {
 
         private final EntityReader<? super T, Bson> reader;
         private final Class<T> type;

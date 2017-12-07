@@ -12,13 +12,12 @@ import org.asynchttpclient.filter.RequestFilter;
 import org.asynchttpclient.handler.resumable.ResumableAsyncHandler;
 import org.asynchttpclient.netty.channel.ChannelManager;
 import org.asynchttpclient.netty.request.NettyRequestSender;
+import org.asynchttpclient.util.Assertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Predicate;
-
-import static org.asynchttpclient.util.Assertions.assertNotNull;
 
 /**
  * Created by km on 15.01.2017.
@@ -74,7 +73,7 @@ public class SingleChannelHttpClient implements AsyncHttpClient {
         this.channelManager.configureBootstraps(requestSender);
     }
 
-    private Timer newNettyTimer() {
+    private static Timer newNettyTimer() {
         HashedWheelTimer timer = new HashedWheelTimer();
         timer.start();
         return timer;
@@ -218,7 +217,7 @@ public class SingleChannelHttpClient implements AsyncHttpClient {
     private <T> FilterContext<T> preProcessRequest(FilterContext<T> fc) throws FilterException {
         for (RequestFilter asyncFilter : config.getRequestFilters()) {
             fc = asyncFilter.filter(fc);
-            assertNotNull(fc, "filterContext");
+            Assertions.assertNotNull(fc, "filterContext");
         }
 
         Request request = fc.getRequest();
@@ -228,7 +227,7 @@ public class SingleChannelHttpClient implements AsyncHttpClient {
 
         if (request.getRangeOffset() != 0) {
             RequestBuilder builder = new RequestBuilder(request);
-            builder.setHeader("Range", "bytes=" + request.getRangeOffset() + "-");
+            builder.setHeader("Range", "bytes=" + request.getRangeOffset() + '-');
             request = builder.build();
         }
         fc = new FilterContext.FilterContextBuilder<>(fc).request(request).build();

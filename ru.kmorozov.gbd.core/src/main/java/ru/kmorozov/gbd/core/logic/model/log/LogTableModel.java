@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by km on 17.12.2015.
  */
-public class LogTableModel extends AbstractTableModel {
+public final class LogTableModel extends AbstractTableModel {
 
     public static final LogTableModel INSTANCE = new LogTableModel();
 

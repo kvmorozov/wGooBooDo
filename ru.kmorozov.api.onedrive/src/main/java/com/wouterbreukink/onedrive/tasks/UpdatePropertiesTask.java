@@ -1,6 +1,7 @@
 package com.wouterbreukink.onedrive.tasks;
 
 import com.google.api.client.util.Preconditions;
+import com.wouterbreukink.onedrive.CommandLineOpts;
 import com.wouterbreukink.onedrive.client.OneDriveItem;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,8 +12,6 @@ import java.nio.file.Files;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
-
-import static com.wouterbreukink.onedrive.CommandLineOpts.getCommandLineOpts;
 
 public class UpdatePropertiesTask extends Task {
 
@@ -40,7 +39,7 @@ public class UpdatePropertiesTask extends Task {
     @Override
     protected void taskBody() throws IOException {
 
-        switch (getCommandLineOpts().getDirection()) {
+        switch (CommandLineOpts.getCommandLineOpts().getDirection()) {
             case UP:
                 BasicFileAttributes attr = Files.readAttributes(localFile.toPath(), BasicFileAttributes.class);
                 // Timestamp rounded to the nearest second
@@ -57,7 +56,7 @@ public class UpdatePropertiesTask extends Task {
                 log.info("Updated local timestamps for item " + remoteFile.getFullName());
                 break;
             default:
-                throw new IllegalStateException("Unsupported direction " + getCommandLineOpts().getDirection());
+                throw new IllegalStateException("Unsupported direction " + CommandLineOpts.getCommandLineOpts().getDirection());
         }
 
         reporter.propertiesUpdated();

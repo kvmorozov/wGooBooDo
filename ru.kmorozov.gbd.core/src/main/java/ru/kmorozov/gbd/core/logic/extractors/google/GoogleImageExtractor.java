@@ -5,6 +5,7 @@ import org.apache.commons.io.FilenameUtils;
 import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
+import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractImageExtractor;
 import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage;
 import ru.kmorozov.gbd.core.logic.model.book.google.GoogleBookData;
@@ -15,15 +16,13 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import static java.nio.file.FileVisitOption.FOLLOW_LINKS;
-import static ru.kmorozov.gbd.core.logic.context.ExecutionContext.INSTANCE;
 
 /**
  * Created by km on 21.11.2015.
@@ -48,7 +47,7 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
 
     public GoogleImageExtractor(BookContext bookContext) {
         super(bookContext);
-        logger = INSTANCE.getLogger(GoogleImageExtractor.class, bookContext);
+        logger = ExecutionContext.INSTANCE.getLogger(GoogleImageExtractor.class, bookContext);
     }
 
     @Override
@@ -59,7 +58,7 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
         try {
             bookContext.getPagesStream().filter(AbstractPage::isFileExists).forEach(page -> {
                 try {
-                    if (Files.find(outputPath, 1, (path, basicFileAttributes) -> path.toString().contains("\\" + page.getOrder() + "_" + page.getPid() + "."), FOLLOW_LINKS).count() == 0) {
+                    if (Files.find(outputPath, 1, (path, basicFileAttributes) -> path.toString().contains("\\" + page.getOrder() + '_' + page.getPid() + '.'), FileVisitOption.FOLLOW_LINKS).count() == 0) {
                         logger.severe(String.format("Page %s not found in directory!", page.getPid()));
                         page.dataProcessed.set(false);
                         page.fileExists.set(false);
@@ -176,7 +175,7 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
 
             if (proxy.isAvailable()) bookContext.sigExecutor.execute(new GooglePageSigProcessor(bookContext, proxy));
 
-            int proxyNeeded = INSTANCE.getProxyCount() - proxyReceived.incrementAndGet();
+            int proxyNeeded = ExecutionContext.getProxyCount() - proxyReceived.incrementAndGet();
 
             if (proxyNeeded <= 0) {
                 if (!processingStarted.compareAndSet(false, true)) return;
@@ -194,7 +193,7 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
                 bookContext.setPagesProcessed(pagesAfter - bookContext.getPagesBefore());
                 logger.info(String.format("Processed %s pages", bookContext.getPagesProcessed()));
 
-                INSTANCE.postProcessBook(bookContext);
+                ExecutionContext.INSTANCE.postProcessBook(bookContext);
             }
         }
     }

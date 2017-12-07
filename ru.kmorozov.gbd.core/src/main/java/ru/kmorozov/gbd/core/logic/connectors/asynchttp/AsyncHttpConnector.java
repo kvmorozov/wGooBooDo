@@ -104,8 +104,13 @@ public class AsyncHttpConnector extends HttpConnector {
             } catch (IOException ignored) {
             }
 
-        nioEventLoopGroup.shutdownGracefully();
-        pool.destroy();
-        timer.stop();
+        if (nioEventLoopGroup != null)
+            nioEventLoopGroup.shutdownGracefully();
+
+        if (pool != null)
+            pool.destroy();
+
+        if (timer != null)
+            timer.stop();
     }
 }

@@ -1,8 +1,8 @@
 package com.wouterbreukink.onedrive.client.exceptions;
 
-import java.io.IOException;
+import com.wouterbreukink.onedrive.client.utils.JsonUtils;
 
-import static com.wouterbreukink.onedrive.client.utils.JsonUtils.JSON_FACTORY;
+import java.io.IOException;
 
 /**
  * Created by sbt-morozov-kv on 13.03.2017.
@@ -13,7 +13,7 @@ public class OneDriveExceptionFactory {
         OneDriveErrorInfo errorInfo = null;
 
         try {
-            errorInfo = JSON_FACTORY.fromString(content, OneDriveErrorInfo.class);
+            errorInfo = JsonUtils.JSON_FACTORY.fromString(content, OneDriveErrorInfo.class);
             switch (errorInfo.error) {
                 case "invalid_grant":
                 case "server_error":

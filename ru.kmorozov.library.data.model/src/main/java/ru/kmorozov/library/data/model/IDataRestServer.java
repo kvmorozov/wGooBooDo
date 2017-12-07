@@ -1,6 +1,5 @@
 package ru.kmorozov.library.data.model;
 
-import ru.kmorozov.library.data.model.book.Book;
 import ru.kmorozov.library.data.model.dto.*;
 
 import java.util.List;

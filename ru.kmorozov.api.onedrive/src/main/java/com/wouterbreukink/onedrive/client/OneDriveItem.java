@@ -167,7 +167,7 @@ public interface OneDriveItem {
                     int index = parent.getPath().indexOf(':');
 
                     try {
-                        return URLDecoder.decode(index > 0 ? parent.getPath().substring(index + 1) : parent.getPath(), "UTF-8") + "/";
+                        return URLDecoder.decode(index > 0 ? parent.getPath().substring(index + 1) : parent.getPath(), "UTF-8") + '/';
                     } catch (UnsupportedEncodingException e) {
                         throw Throwables.propagate(e);
                     }

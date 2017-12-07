@@ -7,8 +7,6 @@ import com.wouterbreukink.onedrive.client.walker.OneDriveWalkers;
 import com.wouterbreukink.onedrive.filesystem.FileSystemProvider;
 import com.wouterbreukink.onedrive.tasks.DownloadTask;
 import com.wouterbreukink.onedrive.tasks.Task;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.kmorozov.library.data.loader.utils.ConsistencyUtils;

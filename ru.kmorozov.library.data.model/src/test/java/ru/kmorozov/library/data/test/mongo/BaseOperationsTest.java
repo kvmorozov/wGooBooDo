@@ -1,5 +1,6 @@
 package ru.kmorozov.library.data.test.mongo;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,6 @@ import ru.kmorozov.library.data.storage.mongo.LikeTextSearch;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by sbt-morozov-kv on 28.11.2016.
@@ -34,9 +33,9 @@ public class BaseOperationsTest {
 
     @Test
     public void connectTest() {
-        assertNotNull(booksRepository);
+        Assert.assertNotNull(booksRepository);
         booksRepository.deleteAll();
-        assertEquals(0, booksRepository.count());
+        Assert.assertEquals(0, booksRepository.count());
     }
 
     @Test
@@ -46,11 +45,11 @@ public class BaseOperationsTest {
         Book book = new Book("Test title", "Test author");
 
         Book savedBook = booksRepository.save(book);
-        assertNotNull(savedBook);
-        assertEquals(book, savedBook);
-        assertEquals(countBefore + 1, booksRepository.count());
+        Assert.assertNotNull(savedBook);
+        Assert.assertEquals(book, savedBook);
+        Assert.assertEquals(countBefore + 1, booksRepository.count());
         booksRepository.delete(book);
-        assertEquals(countBefore, booksRepository.count());
+        Assert.assertEquals(countBefore, booksRepository.count());
     }
 
     @Test
@@ -61,9 +60,9 @@ public class BaseOperationsTest {
 
         try {
             LikeTextSearch likeTextSearch = new LikeTextSearch(Book.class.getSimpleName(), mongoTemplate);
-            assertEquals(0, likeTextSearch.findMatchingIds("%aut1%").size());
+            Assert.assertEquals(0, likeTextSearch.findMatchingIds("%aut1%").size());
             TextCriteria criteria2 = TextCriteria.forDefaultLanguage().matching("Test");
-            assertEquals(2, booksRepository.findAllBy(criteria2).size());
+            Assert.assertEquals(2, booksRepository.findAllBy(criteria2).size());
         } finally {
             booksRepository.deleteAll(books);
         }
@@ -72,6 +71,6 @@ public class BaseOperationsTest {
     @Test
     public void findLinks() {
         Stream<Book> lnkBooks = booksRepository.streamByBookInfoFormat("LNK");
-        assertTrue(lnkBooks.count() > 10);
+        Assert.assertTrue(lnkBooks.count() > 10);
     }
 }

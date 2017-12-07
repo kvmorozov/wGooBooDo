@@ -40,11 +40,11 @@ public class LikeTextSearch {
         return mongoTemplate.executeCommand(textSearch);
     }
 
-    private Collection<ObjectId> extractSearchResultIds(Document commandResult) {
+    private static Collection<ObjectId> extractSearchResultIds(Document commandResult) {
         Set<ObjectId> objectIds = new HashSet<>();
         BasicDBList resultList = (BasicDBList) commandResult.get("results");
 
-        if (resultList == null) return Collections.EMPTY_LIST;
+        if (resultList == null) return Collections.emptyList();
 
         for (Object aResultList : resultList) {
             BasicDBObject resultContainer = (BasicDBObject) aResultList;

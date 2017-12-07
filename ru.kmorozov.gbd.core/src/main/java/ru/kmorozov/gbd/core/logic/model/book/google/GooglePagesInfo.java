@@ -3,6 +3,7 @@ package ru.kmorozov.gbd.core.logic.model.book.google;
 import com.google.gson.annotations.SerializedName;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.model.book.base.IPagesInfo;
 import ru.kmorozov.gbd.core.utils.Logger;
 
@@ -11,14 +12,12 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 
-import static ru.kmorozov.gbd.core.logic.context.ExecutionContext.INSTANCE;
-
 /**
  * Created by km on 21.11.2015.
  */
 public class GooglePagesInfo implements IPagesInfo, Serializable {
 
-    private static final Logger logger = INSTANCE.getLogger(GooglePagesInfo.class);
+    private static final Logger logger = ExecutionContext.INSTANCE.getLogger(GooglePagesInfo.class);
 
     @SerializedName("page")
     private GooglePageInfo[] pages;
@@ -67,7 +66,7 @@ public class GooglePagesInfo implements IPagesInfo, Serializable {
 
         if (beginPagePrefix.equals(endPagePrefix)) {
             for (int index = beginGap.getOrder() + 1; index < endGap.getOrder(); index++) {
-                String pid = beginPageNum > 0 ? beginPagePrefix + (beginPageNum + index - beginGap.getOrder()) : beginGap.getPid() + "_" + index;
+                String pid = beginPageNum > 0 ? beginPagePrefix + (beginPageNum + index - beginGap.getOrder()) : beginGap.getPid() + '_' + index;
                 GooglePageInfo gapPage = new GooglePageInfo(pid, index);
                 addPage(gapPage);
             }
@@ -92,7 +91,7 @@ public class GooglePagesInfo implements IPagesInfo, Serializable {
                     else break;
                 }
                 if (pagesCreated < pagesToCreate) {
-                    pagesToCreate = pagesToCreate - pagesCreated;
+                    pagesToCreate -= pagesCreated;
                     for (int index = 1; index <= pagesToCreate; index++) {
                         String newPagePidFromBegin = beginPagePrefix + (beginPageNum + index);
                         GooglePageInfo gapPage = new GooglePageInfo(newPagePidFromBegin, beginGap.getOrder() + index);
@@ -132,7 +131,7 @@ public class GooglePagesInfo implements IPagesInfo, Serializable {
         return getListByCondition(predicate);
     }
 
-    private Pair<GooglePageInfo, GooglePageInfo> createPair(GooglePageInfo p1, GooglePageInfo p2) {
+    private static Pair<GooglePageInfo, GooglePageInfo> createPair(GooglePageInfo p1, GooglePageInfo p2) {
         return p1.getOrder() < p2.getOrder() ? new ImmutablePair<>(p1, p2) : new ImmutablePair<>(p2, p1);
     }
 

@@ -21,10 +21,10 @@ public class SslProxiesListProvider extends AbstractProxyExtractor {
 
     @Override
     protected List<String> extractProxyList(Document doc) {
-        return doc.getElementById("proxylisttable").getElementsByTag("tbody").get(0).getElementsByTag("tr").stream().map(this::extractProxyData).collect(Collectors.toList());
+        return doc.getElementById("proxylisttable").getElementsByTag("tbody").get(0).getElementsByTag("tr").stream().map(SslProxiesListProvider::extractProxyData).collect(Collectors.toList());
     }
 
-    private String extractProxyData(Element element) {
-        return ((TextNode) element.childNode(0).childNode(0)).getWholeText() + ":" + ((TextNode) element.childNode(1).childNode(0)).getWholeText();
+    private static String extractProxyData(Element element) {
+        return ((TextNode) element.childNode(0).childNode(0)).getWholeText() + ':' + ((TextNode) element.childNode(1).childNode(0)).getWholeText();
     }
 }

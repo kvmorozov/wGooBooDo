@@ -1,13 +1,11 @@
 package ru.kmorozov.gbd.core.logic.model.book.google;
 
 import com.google.gson.annotations.SerializedName;
+import ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor;
 import ru.kmorozov.gbd.core.logic.model.book.base.IBookData;
 
 import java.io.Serializable;
 import java.net.URI;
-
-import static ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor.BOOK_ID_PLACEHOLDER;
-import static ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor.HTTPS_TEMPLATE;
 
 /**
  * Created by km on 28.11.2015.
@@ -94,6 +92,6 @@ public class GoogleBookData implements IBookData, Serializable {
     }
 
     public URI getBaseUrl() {
-        return URI.create(HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, volumeId));
+        return URI.create(GoogleImageExtractor.HTTPS_TEMPLATE.replace(GoogleImageExtractor.BOOK_ID_PLACEHOLDER, volumeId));
     }
 }

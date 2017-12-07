@@ -51,7 +51,7 @@ public class CommandLineOpts {
 
         for (Option opt : line.getOptions()) {
             log.debug(String.format("Parsing command line option -%s, value = %s ",
-                    opt.getLongOpt() != null ? "-" + opt.getLongOpt() : opt.getOpt(),
+                    opt.getLongOpt() != null ? '-' + opt.getLongOpt() : opt.getOpt(),
                     opt.getValue()));
         }
 

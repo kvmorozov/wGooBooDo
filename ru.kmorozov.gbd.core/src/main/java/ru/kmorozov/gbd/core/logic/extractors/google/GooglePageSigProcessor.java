@@ -10,6 +10,7 @@ import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.connectors.Response;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
+import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractHttpProcessor;
 import ru.kmorozov.gbd.core.logic.extractors.base.IUniqueRunnable;
 import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage;
@@ -28,17 +29,12 @@ import java.net.SocketTimeoutException;
 import java.nio.charset.Charset;
 import java.util.concurrent.TimeUnit;
 
-import static ru.kmorozov.gbd.core.logic.context.ExecutionContext.INSTANCE;
-import static ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor.BOOK_ID_PLACEHOLDER;
-import static ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor.HTTPS_TEMPLATE;
-import static ru.kmorozov.gbd.core.utils.QueuedThreadPoolExecutor.THREAD_POOL_SIZE;
-
 /**
  * Created by km on 21.11.2015.
  */
 class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRunnable<GooglePageSigProcessor> {
 
-    protected static final Logger logger = INSTANCE.getLogger(GooglePageSigProcessor.class);
+    protected static final Logger logger = ExecutionContext.INSTANCE.getLogger(GooglePageSigProcessor.class);
 
     private static final String SIG_ERROR_TEMPLATE = "No sig at %s with proxy %s";
     private static final String SIG_WRONG_FORMAT = "Wrong sig format: %s";
@@ -51,8 +47,8 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
         this.bookContext = bookContext;
         this.proxy = proxy;
 
-        sigPageExecutor = new QueuedThreadPoolExecutor<>(bookContext.getPagesStream().filter(AbstractPage::isNotProcessed).count(), THREAD_POOL_SIZE, GooglePageInfo::isProcessed,
-                                                         bookContext.toString() + "/" + proxy.toString());
+        sigPageExecutor = new QueuedThreadPoolExecutor<>(bookContext.getPagesStream().filter(AbstractPage::isNotProcessed).count(), QueuedThreadPoolExecutor.THREAD_POOL_SIZE, GooglePageInfo::isProcessed,
+                                                         bookContext.toString() + '/' + proxy.toString());
     }
 
     @Override
@@ -113,7 +109,7 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
             if (page.dataProcessed.get() || page.getSig() != null || page.sigChecked.get() || page.loadingStarted.get()) return;
 
             Response resp = null;
-            String baseUrl = HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, bookContext.getBookInfo().getBookId());
+            String baseUrl = GoogleImageExtractor.HTTPS_TEMPLATE.replace(GoogleImageExtractor.BOOK_ID_PLACEHOLDER, bookContext.getBookInfo().getBookId());
             String rqUrl = baseUrl + GoogleImageExtractor.PAGES_REQUEST_TEMPLATE.replace(GoogleImageExtractor.RQ_PG_PLACEHOLDER, page.getPid());
 
             try {

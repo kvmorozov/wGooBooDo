@@ -24,7 +24,7 @@ public class Logger {
         return new Logger(eventConsumer, name, prefix);
     }
 
-    public static Logger getLogger(Class claszz) {
+    public static Logger getLogger(Class<?> claszz) {
         return new Logger(new DummyBookInfoOutput(), claszz.getName(), ": ");
     }
 

@@ -1,10 +1,8 @@
 package com.wouterbreukink.onedrive.tasks;
 
+import com.wouterbreukink.onedrive.client.utils.LogUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import static com.wouterbreukink.onedrive.client.utils.LogUtils.readableFileSize;
-import static com.wouterbreukink.onedrive.client.utils.LogUtils.readableTime;
 
 public class TaskReporter {
 
@@ -111,24 +109,24 @@ public class TaskReporter {
 
             uploadedResult.append(
                     String.format("Uploaded %d file%s (%s) - ",
-                            newUploaded + replaceUploaded,
-                            plural(newUploaded + replaceUploaded),
-                            readableFileSize(newUploadedSize + replaceUploadedSize)));
+                                  newUploaded + replaceUploaded,
+                                  plural(newUploaded + replaceUploaded),
+                                  LogUtils.readableFileSize(newUploadedSize + replaceUploadedSize)));
 
             if (newUploaded > 0) {
                 uploadedResult.append(
                         String.format("%d new file%s (%s) ",
-                                newUploaded,
-                                plural(newUploaded),
-                                readableFileSize(newUploadedSize)));
+                                      newUploaded,
+                                      plural(newUploaded),
+                                      LogUtils.readableFileSize(newUploadedSize)));
             }
 
             if (replaceUploaded > 0) {
                 uploadedResult.append(
                         String.format("%d new file%s (%s) ",
-                                replaceUploaded,
-                                plural(replaceUploaded),
-                                readableFileSize(replaceUploadedSize)));
+                                      replaceUploaded,
+                                      plural(replaceUploaded),
+                                      LogUtils.readableFileSize(replaceUploadedSize)));
             }
 
             log.info(uploadedResult.toString());
@@ -139,34 +137,34 @@ public class TaskReporter {
 
             downloadedResult.append(
                     String.format("Downloaded %d file%s (%s) - ",
-                            newDownloaded + replaceDownloaded,
-                            plural(newDownloaded + replaceDownloaded),
-                            readableFileSize(newDownloadedSize + replaceDownloadedSize)));
+                                  newDownloaded + replaceDownloaded,
+                                  plural(newDownloaded + replaceDownloaded),
+                                  LogUtils.readableFileSize(newDownloadedSize + replaceDownloadedSize)));
 
             if (newDownloaded > 0) {
                 downloadedResult.append(
                         String.format("%d new file%s (%s) ",
-                                newDownloaded,
-                                plural(newDownloaded),
-                                readableFileSize(newDownloadedSize)));
+                                      newDownloaded,
+                                      plural(newDownloaded),
+                                      LogUtils.readableFileSize(newDownloadedSize)));
             }
 
             if (replaceDownloaded > 0) {
                 downloadedResult.append(
                         String.format("%d new file%s (%s) ",
-                                replaceDownloaded,
-                                plural(replaceDownloaded),
-                                readableFileSize(replaceDownloadedSize)));
+                                      replaceDownloaded,
+                                      plural(replaceDownloaded),
+                                      LogUtils.readableFileSize(replaceDownloadedSize)));
             }
 
             log.info(downloadedResult.toString());
         }
 
         long elapsed = System.currentTimeMillis() - startTime;
-        log.info(String.format("Elapsed time: %s", readableTime(elapsed)));
+        log.info(String.format("Elapsed time: %s", LogUtils.readableTime(elapsed)));
     }
 
-    private String plural(long same) {
+    private static String plural(long same) {
         return same != 1 ? "s" : "";
     }
 

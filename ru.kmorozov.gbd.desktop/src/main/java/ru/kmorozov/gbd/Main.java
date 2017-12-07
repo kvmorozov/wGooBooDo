@@ -11,8 +11,6 @@ import ru.kmorozov.gbd.desktop.library.OptionsBasedProducer;
 import ru.kmorozov.gbd.desktop.output.progress.ProcessStatus;
 import ru.kmorozov.gbd.pdf.PdfMaker;
 
-import static ru.kmorozov.gbd.core.logic.context.ExecutionContext.INSTANCE;
-
 class Main {
 
     public static void main(String[] args) {
@@ -21,9 +19,9 @@ class Main {
 
             IBookListProducer producer = new OptionsBasedProducer();
             ExecutionContext.initContext(new DummyBookInfoOutput(), producer.getBookIds().size() == 1);
-            INSTANCE.addBookContext(producer, new ProcessStatus(), new PdfMaker());
+            ExecutionContext.INSTANCE.addBookContext(producer, new ProcessStatus(), new PdfMaker());
 
-            INSTANCE.execute();
+            ExecutionContext.INSTANCE.execute();
         }
         else {
             GBDOptions.init(new LocalSystemOptions());

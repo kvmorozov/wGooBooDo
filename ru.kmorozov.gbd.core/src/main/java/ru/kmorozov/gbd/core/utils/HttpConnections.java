@@ -12,7 +12,7 @@ import ru.kmorozov.gbd.core.logic.model.book.google.GoogleBookData;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -37,7 +37,7 @@ public class HttpConnections {
     }
 
     public static HttpResponse getResponse(InetSocketAddress host) {
-        return INSTANCE._getResponse(hostToProxy(host));
+        return HttpConnections._getResponse(hostToProxy(host));
     }
 
     public static HttpHeaders getHeaders(HttpHostExt proxy) {
@@ -46,21 +46,21 @@ public class HttpConnections {
 
     public static String getCookieString(InetSocketAddress proxy) {
         try {
-            HttpResponse resp = HttpConnections.getResponse(proxy);
+            HttpResponse resp = getResponse(proxy);
 
             if (resp == null) return "";
 
-            return ((ArrayList) resp.getHeaders().get("set-cookie")).get(0).toString().split(";")[0];
+            return ((List<String>) resp.getHeaders().get("set-cookie")).get(0).toString().split(";")[0];
         } catch (Exception e) {
             return null;
         }
     }
 
-    private void _setDefaultCookies(Map<String, String> cookiesMap) {
+    private static void _setDefaultCookies(Map<String, String> cookiesMap) {
         StringBuilder cookieBuilder = new StringBuilder();
 
         for (Map.Entry<String, String> cookieEntry : cookiesMap.entrySet()) {
-            cookieBuilder.append(cookieEntry.getKey()).append("=").append(cookieEntry.getValue()).append("; ");
+            cookieBuilder.append(cookieEntry.getKey()).append('=').append(cookieEntry.getValue()).append("; ");
         }
 
         HttpHostExt.NO_PROXY.setCookie(cookieBuilder.toString());
@@ -76,7 +76,7 @@ public class HttpConnections {
         });
     }
 
-    private HttpResponse _getResponse(Proxy proxy) {
+    private static HttpResponse _getResponse(Proxy proxy) {
         if (baseUrl == null) {
             Optional<BookContext> anyContext = ExecutionContext.INSTANCE.getContexts(false).stream().filter(bookContext -> bookContext.getBookInfo().getBookData() instanceof
                     GoogleBookData).findAny();

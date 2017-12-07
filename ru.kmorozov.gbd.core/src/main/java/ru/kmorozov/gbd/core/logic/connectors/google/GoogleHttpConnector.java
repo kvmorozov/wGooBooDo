@@ -57,7 +57,7 @@ public class GoogleHttpConnector extends HttpConnector {
         }
     }
 
-    private HttpResponse getContent(HttpRequest req, HttpHostExt proxy, int attempt) throws IOException {
+    private static HttpResponse getContent(HttpRequest req, HttpHostExt proxy, int attempt) throws IOException {
         if (attempt >= MAX_RETRY_COUNT) {
             proxy.registerFailure();
             return null;

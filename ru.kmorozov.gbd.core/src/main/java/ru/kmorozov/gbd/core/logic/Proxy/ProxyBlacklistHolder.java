@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 /**
  * Created by km on 29.10.2016.
  */
-public class ProxyBlacklistHolder {
+public final class ProxyBlacklistHolder {
 
     public static final ProxyBlacklistHolder BLACKLIST = new ProxyBlacklistHolder();
     private static final String BL_FILE_NAME = "black.lst";

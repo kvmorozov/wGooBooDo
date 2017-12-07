@@ -6,18 +6,17 @@ import com.google.api.client.json.JsonObjectParser;
 import com.google.api.client.repackaged.com.google.common.base.Throwables;
 import com.google.api.client.util.Lists;
 import com.wouterbreukink.onedrive.client.authoriser.AuthorisationProvider;
+import com.wouterbreukink.onedrive.client.downloader.ResumableDownloader;
 import com.wouterbreukink.onedrive.client.downloader.ResumableDownloaderProgressListener;
 import com.wouterbreukink.onedrive.client.resources.Drive;
 import com.wouterbreukink.onedrive.client.resources.Item;
 import com.wouterbreukink.onedrive.client.resources.ItemSet;
+import com.wouterbreukink.onedrive.client.utils.JsonUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
-
-import static com.wouterbreukink.onedrive.client.downloader.ResumableDownloader.ioExceptionHandler;
-import static com.wouterbreukink.onedrive.client.utils.JsonUtils.JSON_FACTORY;
 
 class ROOneDriveProvider implements OneDriveProvider {
 
@@ -28,7 +27,7 @@ class ROOneDriveProvider implements OneDriveProvider {
     public ROOneDriveProvider(final AuthorisationProvider authoriser) {
         requestFactory =
                 HTTP_TRANSPORT.createRequestFactory(request -> {
-                    request.setParser(new JsonObjectParser(JSON_FACTORY));
+                    request.setParser(new JsonObjectParser(JsonUtils.JSON_FACTORY));
                     request.setReadTimeout(60000);
                     request.setConnectTimeout(60000);
                     try {
@@ -131,7 +130,7 @@ class ROOneDriveProvider implements OneDriveProvider {
     public OneDriveItem getItem(String id) throws IOException {
         HttpRequest request = requestFactory.buildGetRequest(OneDriveUrl.item(id));
         request.setRetryOnExecuteIOException(true);
-        request.setIOExceptionHandler(ioExceptionHandler);
+        request.setIOExceptionHandler(ResumableDownloader.ioExceptionHandler);
         Item response = request.execute().parseAs(Item.class);
         return OneDriveItem.FACTORY.create(response);
     }

@@ -46,7 +46,7 @@ class OneDriveResponseHandler implements HttpUnsuccessfulResponseHandler {
         return false;
     }
 
-    public boolean isRequired(HttpResponse httpResponse) {
+    public static boolean isRequired(HttpResponse httpResponse) {
         return httpResponse.getStatusCode() / 100 == 5 || httpResponse.getStatusCode() == 429;
     }
 

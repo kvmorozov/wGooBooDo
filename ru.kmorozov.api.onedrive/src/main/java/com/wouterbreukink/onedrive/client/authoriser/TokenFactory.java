@@ -14,8 +14,6 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.util.concurrent.TimeUnit;
 
-import static java.util.concurrent.TimeUnit.SECONDS;
-
 public class TokenFactory {
 
     private static final Logger log = LogManager.getLogger(TokenFactory.class.getName());
@@ -28,7 +26,7 @@ public class TokenFactory {
 
             Wait<WebDriver> wait = new FluentWait(driver)
                     .withTimeout(30, TimeUnit.MINUTES)
-                    .pollingEvery(1, SECONDS)
+                    .pollingEvery(1, TimeUnit.SECONDS)
                     .ignoring(NoSuchElementException.class);
 
             final WebElement okButton = wait.until(driver1 -> driver1.findElement(By.id("idBtn_Accept")));

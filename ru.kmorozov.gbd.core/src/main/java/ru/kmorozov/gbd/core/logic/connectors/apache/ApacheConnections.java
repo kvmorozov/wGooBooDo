@@ -12,20 +12,20 @@ import org.apache.hc.core5.http.HttpHost;
 import org.apache.hc.core5.ssl.SSLContextBuilder;
 import org.apache.hc.core5.util.TimeValue;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
+import ru.kmorozov.gbd.core.logic.connectors.HttpConnector;
 import ru.kmorozov.gbd.core.logic.library.LibraryFactory;
+import ru.kmorozov.gbd.core.utils.HttpConnections;
 
 import javax.net.ssl.SSLContext;
+import java.io.Closeable;
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static ru.kmorozov.gbd.core.logic.connectors.HttpConnector.CONNECT_TIMEOUT;
-import static ru.kmorozov.gbd.core.utils.HttpConnections.USER_AGENT;
-
 /**
  * Created by km on 22.05.2016.
  */
-public class ApacheConnections {
+public final class ApacheConnections {
 
     static final ApacheConnections INSTANCE = new ApacheConnections();
     private final HttpClientBuilder builder;
@@ -40,9 +40,9 @@ public class ApacheConnections {
         connPool.setMaxTotal(200);
         connPool.setDefaultMaxPerRoute(200);
 
-        builder = HttpClientBuilder.create().setUserAgent(USER_AGENT).setConnectionManager(connPool).setConnectionManagerShared(true);
+        builder = HttpClientBuilder.create().setUserAgent(HttpConnections.USER_AGENT).setConnectionManager(connPool).setConnectionManagerShared(true);
 
-        builderWithTimeout = HttpClientBuilder.create().setUserAgent(USER_AGENT).setConnectionManager(connPool);
+        builderWithTimeout = HttpClientBuilder.create().setUserAgent(HttpConnections.USER_AGENT).setConnectionManager(connPool);
 
         try {
             SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, (arg0, arg1) -> true).build();
@@ -53,9 +53,9 @@ public class ApacheConnections {
         }
 
         RequestConfig requestConfig = RequestConfig.copy(RequestConfig.DEFAULT)
-                                                   .setSocketTimeout(TimeValue.ofMillis(CONNECT_TIMEOUT))
-                                                   .setConnectTimeout(TimeValue.ofMillis(CONNECT_TIMEOUT))
-                                                   .setConnectionRequestTimeout(TimeValue.ofMillis(CONNECT_TIMEOUT)).build();
+                                                   .setSocketTimeout(TimeValue.ofMillis(HttpConnector.CONNECT_TIMEOUT))
+                                                   .setConnectTimeout(TimeValue.ofMillis(HttpConnector.CONNECT_TIMEOUT))
+                                                   .setConnectionRequestTimeout(TimeValue.ofMillis(HttpConnector.CONNECT_TIMEOUT)).build();
 
         builderWithTimeout.setDefaultRequestConfig(requestConfig);
     }
@@ -83,7 +83,7 @@ public class ApacheConnections {
             if (noProxyClient != null) noProxyClient.close();
 
             if (clientsMap != null) for (HttpClient client : clientsMap.values())
-                ((CloseableHttpClient) client).close();
+                ((Closeable) client).close();
         } catch (IOException e) {
             e.printStackTrace();
         }

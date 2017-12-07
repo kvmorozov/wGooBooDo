@@ -1,5 +1,6 @@
 package ru.kmorozov.library.data.client;
 
+import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.HttpMethod;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -11,9 +12,6 @@ import ru.kmorozov.library.data.model.dto.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 /**
  * Created by sbt-morozov-kv on 19.01.2017.
@@ -40,7 +38,7 @@ public class LibraryRestProxy implements IDataRestServer {
                 .build().toString();
 
         UserDTO user = template.getForEntity(uri, UserDTO.class).getBody();
-        user.add(linkTo(methodOn(LibraryRestProxy.class).getItemsByStorageId("root")).withRel("root"));
+        user.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(LibraryRestProxy.class).getItemsByStorageId("root")).withRel("root"));
 
         return user;
     }
@@ -64,24 +62,24 @@ public class LibraryRestProxy implements IDataRestServer {
 
         return result
                 .stream()
-                .map(this::addLinks)
+                .map(LibraryRestProxy::addLinks)
                 .collect(Collectors.toList());
     }
 
-    private ItemDTO addLinks(ItemDTO item) {
-        item.add(linkTo(methodOn(LibraryRestProxy.class, item.getItemType(), item.getItemId())
-                .getItem(item.getItemId(), item.getItemType(), false)).withSelfRel());
-        item.add(linkTo(methodOn(LibraryRestProxy.class)
-                .getItem(item.getItemId(), item.getItemType(), true)).withRel("refresh"));
+    private static ItemDTO addLinks(ItemDTO item) {
+        item.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(LibraryRestProxy.class, item.getItemType(), item.getItemId())
+                                                                   .getItem(item.getItemId(), item.getItemType(), false)).withSelfRel());
+        item.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(LibraryRestProxy.class)
+                                                                   .getItem(item.getItemId(), item.getItemType(), true)).withRel("refresh"));
 
         switch (item.getItemType()) {
             case storage:
-                item.add(linkTo(methodOn(LibraryRestProxy.class)
-                        .getBooksByStorageId(item.getItemId())).withRel("books"));
-                item.add(linkTo(methodOn(LibraryRestProxy.class)
-                        .getStoragesByParentId(item.getItemId())).withRel("storages"));
-                item.add(linkTo(methodOn(LibraryRestProxy.class)
-                        .getItemsByStorageId(item.getItemId())).withRel("items"));
+                item.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(LibraryRestProxy.class)
+                                                                           .getBooksByStorageId(item.getItemId())).withRel("books"));
+                item.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(LibraryRestProxy.class)
+                                                                           .getStoragesByParentId(item.getItemId())).withRel("storages"));
+                item.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(LibraryRestProxy.class)
+                                                                           .getItemsByStorageId(item.getItemId())).withRel("items"));
                 break;
             default:
         }

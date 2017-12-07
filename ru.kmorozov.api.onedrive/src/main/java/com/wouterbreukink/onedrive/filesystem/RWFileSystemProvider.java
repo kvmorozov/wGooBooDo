@@ -70,7 +70,7 @@ class RWFileSystemProvider extends ROFileSystemProvider implements FileSystemPro
         replaceFileInternal(original, replacement, 0, 10);
     }
 
-    private void replaceFileInternal(File original, File replacement, int currentTry, int maxRetries) throws IOException {
+    private static void replaceFileInternal(File original, File replacement, int currentTry, int maxRetries) throws IOException {
         if (currentTry >= maxRetries)
             throw new IOException("Unable to replace local file" + original.getPath());
 

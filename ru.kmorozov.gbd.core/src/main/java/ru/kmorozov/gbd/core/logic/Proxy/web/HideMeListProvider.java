@@ -22,10 +22,10 @@ public class HideMeListProvider extends AbstractProxyExtractor {
     @Override
     protected List<String> extractProxyList(Document doc) {
         return doc.getElementsByClass("proxy-table").get(0).
-                getElementsByTag("tbody").get(0).getElementsByTag("tr").stream().map(this::extractProxyData).collect(Collectors.toList());
+                getElementsByTag("tbody").get(0).getElementsByTag("tr").stream().map(HideMeListProvider::extractProxyData).collect(Collectors.toList());
     }
 
-    private String extractProxyData(Element element) {
-        return ((TextNode) element.childNode(0).childNode(0)).getWholeText() + ":" + ((TextNode) element.childNode(1).childNode(0)).getWholeText();
+    private static String extractProxyData(Element element) {
+        return ((TextNode) element.childNode(0).childNode(0)).getWholeText() + ':' + ((TextNode) element.childNode(1).childNode(0)).getWholeText();
     }
 }

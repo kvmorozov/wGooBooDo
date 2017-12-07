@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
+import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.output.consumers.AbstractOutput;
 import ru.kmorozov.gbd.core.logic.output.events.AbstractEventSource;
 import ru.kmorozov.gbd.core.utils.Logger;
@@ -17,8 +18,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import static ru.kmorozov.gbd.core.logic.context.ExecutionContext.INSTANCE;
 
 /**
  * Created by sbt-morozov-kv on 16.11.2016.
@@ -35,7 +34,7 @@ public abstract class AbstractImageExtractor extends AbstractEventSource impleme
         this.bookContext = bookContext;
         setProcessStatus(bookContext.getProgress());
 
-        this.output = INSTANCE.getOutput();
+        this.output = ExecutionContext.INSTANCE.getOutput();
     }
 
 
@@ -85,7 +84,7 @@ public abstract class AbstractImageExtractor extends AbstractEventSource impleme
         File baseOutputDir = new File(baseOutputDirPath);
         if (!baseOutputDir.exists()) if (!baseOutputDir.mkdir()) return;
 
-        logger.info(INSTANCE.isSingleMode() ? String.format("Working with %s", bookContext.getBookInfo().getBookData().getTitle()) : "Starting...");
+        logger.info(ExecutionContext.INSTANCE.isSingleMode() ? String.format("Working with %s", bookContext.getBookInfo().getBookData().getTitle()) : "Starting...");
 
         bookContext.setOutputDir(new File(getDirectoryName(baseOutputDirPath)));
         File[] files = bookContext.getOutputDir().listFiles();
@@ -107,12 +106,12 @@ public abstract class AbstractImageExtractor extends AbstractEventSource impleme
         } catch (IOException ignored) {
         }
 
-        String directoryName = baseOutputDirPath + "\\" + bookContext.getBookInfo().getBookData().getTitle()
+        String directoryName = baseOutputDirPath + '\\' + bookContext.getBookInfo().getBookData().getTitle()
                                                                      .replace(":", "")
                                                                      .replace("<", "")
                                                                      .replace(">", "")
                                                                      .replace("/", ".");
         String volumeId = bookContext.getBookInfo().getBookData().getVolumeId();
-        return StringUtils.isEmpty(volumeId) ? directoryName : directoryName + " " + bookContext.getBookInfo().getBookData().getVolumeId();
+        return StringUtils.isEmpty(volumeId) ? directoryName : directoryName + ' ' + bookContext.getBookInfo().getBookData().getVolumeId();
     }
 }

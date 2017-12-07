@@ -1,7 +1,5 @@
 package ru.kmorozov.library.data.loader;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.kmorozov.library.data.model.book.Book;

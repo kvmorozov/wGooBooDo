@@ -35,8 +35,8 @@ public class QueuedThreadPoolExecutor<T> extends ThreadPoolExecutor {
         setRejectedExecutionHandler((r, executor) -> {
             try {
                 if (r instanceof IUniqueRunnable) {
-                    synchronized (((IUniqueRunnable) r).getUniqueObject()) {
-                        if (!completeChecker.test((T) ((IUniqueRunnable) r).getUniqueObject())) getQueue().put(r);
+                    synchronized (((IUniqueRunnable<T>) r).getUniqueObject()) {
+                        if (!completeChecker.test((T) ((IUniqueRunnable<T>) r).getUniqueObject())) getQueue().put(r);
                     }
                 }
             } catch (InterruptedException e) {
@@ -80,7 +80,7 @@ public class QueuedThreadPoolExecutor<T> extends ThreadPoolExecutor {
     @Override
     public void execute(final Runnable command) {
         if (command instanceof IUniqueRunnable) {
-            T uniqueObj = (T) ((IUniqueRunnable) command).getUniqueObject();
+            T uniqueObj = ((IUniqueRunnable<T>) command).getUniqueObject();
             synchronized (uniqueObj) {
                 if (uniqueMap.put(uniqueObj, (IUniqueRunnable<T>) command) == null) super.execute(command);
             }

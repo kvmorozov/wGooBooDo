@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by km on 22.11.2015.
  */
-public class ExecutionContext {
+public final class ExecutionContext {
 
     protected static final Logger logger = Logger.getLogger(ExecutionContext.class);
 
@@ -27,8 +27,8 @@ public class ExecutionContext {
     private final boolean singleMode;
     private final AbstractOutput output;
     private final Map<String, BookContext> bookContextMap = new HashMap<>();
-    public QueuedThreadPoolExecutor bookExecutor;
-    public QueuedThreadPoolExecutor pdfExecutor;
+    public QueuedThreadPoolExecutor<BookContext> bookExecutor;
+    public QueuedThreadPoolExecutor<BookContext> pdfExecutor;
 
     private ExecutionContext(AbstractOutput output, boolean singleMode) {
         this.output = output;
@@ -39,11 +39,11 @@ public class ExecutionContext {
         INSTANCE = new ExecutionContext(output, singleMode);
     }
 
-    public Logger getLogger(Class clazz, BookContext bookContext) {
+    public Logger getLogger(Class<?> clazz, BookContext bookContext) {
         return Logger.getLogger(output, clazz.getName(), singleMode || bookContext == null ? EMPTY : bookContext.getBookInfo().getBookData().getTitle() + ": ");
     }
 
-    public Logger getLogger(Class clazz) {
+    public Logger getLogger(Class<?> clazz) {
         return getLogger(clazz, null);
     }
 
@@ -72,7 +72,7 @@ public class ExecutionContext {
         return output;
     }
 
-    public int getProxyCount() {
+    public static int getProxyCount() {
         return AbstractProxyListProvider.getInstance().getProxyCount();
     }
 

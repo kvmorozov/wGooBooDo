@@ -2,6 +2,7 @@ package com.wouterbreukink.onedrive.tasks;
 
 import com.google.api.client.http.HttpResponseException;
 import com.google.api.client.util.Preconditions;
+import com.wouterbreukink.onedrive.CommandLineOpts;
 import com.wouterbreukink.onedrive.TaskQueue;
 import com.wouterbreukink.onedrive.client.OneDriveItem;
 import com.wouterbreukink.onedrive.client.OneDriveProvider;
@@ -13,8 +14,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import static com.wouterbreukink.onedrive.CommandLineOpts.getCommandLineOpts;
 
 public abstract class Task implements Runnable, Comparable<Task> {
 
@@ -49,7 +48,7 @@ public abstract class Task implements Runnable, Comparable<Task> {
     }
 
     private static boolean isSizeInvalid(String filename, long size) {
-        int maxSizeKb = getCommandLineOpts().getMaxSizeKb();
+        int maxSizeKb = CommandLineOpts.getCommandLineOpts().getMaxSizeKb();
         if (maxSizeKb > 0 && size > maxSizeKb * 1024) {
             log.debug(String.format("Skipping file %s - size is %dKB (bigger than maximum of %dKB)",
                     filename,
@@ -82,7 +81,7 @@ public abstract class Task implements Runnable, Comparable<Task> {
     }
 
     private static boolean isIgnored(String name) {
-        Set<String> ignoredSet = getCommandLineOpts().getIgnored();
+        Set<String> ignoredSet = CommandLineOpts.getCommandLineOpts().getIgnored();
         return ignoredSet != null && ignoredSet.contains(name);
     }
 
@@ -130,7 +129,7 @@ public abstract class Task implements Runnable, Comparable<Task> {
             queue.suspend(1);
         }
 
-        if (attempt < getCommandLineOpts().getTries()) {
+        if (attempt < CommandLineOpts.getCommandLineOpts().getTries()) {
             queue.add(this);
         } else {
             reporter.error();

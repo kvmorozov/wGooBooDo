@@ -12,7 +12,7 @@ import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata;
 /**
  * Created by sbt-morozov-kv on 15.11.2016.
  */
-public class GoogleBooksMetadata implements ILibraryMetadata {
+public final class GoogleBooksMetadata implements ILibraryMetadata {
 
     public static final ILibraryMetadata GOOGLE_METADATA = new GoogleBooksMetadata();
 

@@ -1,5 +1,6 @@
 package ru.kmorozov.library.data.loader.test;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +11,6 @@ import ru.kmorozov.library.data.model.book.Storage;
 import ru.kmorozov.library.data.repository.StorageRepository;
 
 import java.util.List;
-
-import static org.junit.Assert.assertEquals;
 
 /**
  * Created by sbt-morozov-kv on 17.01.2017.
@@ -27,9 +26,9 @@ public class QueryDataTest {
     @Test
     public void storageQueryTest() {
         List<Storage> topStorages = storageRepository.findAllByParent(null);
-        assertEquals(1, topStorages.size());
+        Assert.assertEquals(1, topStorages.size());
 
         List<Storage> level1Storages = storageRepository.findAllByParent(topStorages.get(0));
-        assertEquals(4, level1Storages.size());
+        Assert.assertEquals(4, level1Storages.size());
     }
 }

@@ -21,10 +21,8 @@ import com.google.api.client.util.Preconditions;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 
 /**
  * Media HTTP Downloader, with support for both direct and resumable media downloads. Documentation
@@ -239,9 +237,9 @@ public final class ResumableDownloader {
             StringBuilder rangeHeader = new StringBuilder();
             rangeHeader.append("bytes=");
             if (totalSize == 0 || totalSize - currentRequestLastBytePos > chunkSize)
-                rangeHeader.append(bytesDownloaded).append("-").append(currentRequestLastBytePos);
+                rangeHeader.append(bytesDownloaded).append('-').append(currentRequestLastBytePos);
             else
-                rangeHeader.append("-").append(totalSize - bytesDownloaded);
+                rangeHeader.append('-').append(totalSize - bytesDownloaded);
 
             request.getHeaders().setRange(rangeHeader.toString());
 
@@ -271,7 +269,7 @@ public final class ResumableDownloader {
      * @param rangeHeader in the HTTP response
      * @return the byte index beginning where the server has yet to send out data
      */
-    private long getNextByteIndex(String rangeHeader) {
+    private static long getNextByteIndex(String rangeHeader) {
         if (rangeHeader == null) {
             return 0L;
         }

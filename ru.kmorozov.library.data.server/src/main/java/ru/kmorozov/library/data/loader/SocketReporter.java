@@ -1,7 +1,6 @@
 package ru.kmorozov.library.data.loader;
 
 import com.wouterbreukink.onedrive.tasks.TaskReporter;
-import org.apache.log4j.Logger;
 import ru.kmorozov.library.data.loader.netty.EventSender;
 
 /**

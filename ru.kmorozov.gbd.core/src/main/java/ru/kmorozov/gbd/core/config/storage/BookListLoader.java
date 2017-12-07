@@ -16,8 +16,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static ru.kmorozov.gbd.core.config.GBDOptions.getBooksDir;
-
 /**
  * Created by sbt-morozov-kv on 14.11.2016.
  */
@@ -45,7 +43,7 @@ public class BookListLoader extends BaseLoader {
     private Set<String> loadFromDirNames() {
         Set<String> bookIdsList = new HashSet<>();
         try {
-            Files.walk(Paths.get(getBooksDir().toURI())).forEach(filePath -> {
+            Files.walk(Paths.get(GBDOptions.getBooksDir().toURI())).forEach(filePath -> {
                 if (filePath.toFile().isDirectory()) {
                     String[] nameParts = filePath.toFile().getName().split(" ");
                     if (isValidId(nameParts[nameParts.length - 1])) bookIdsList.add(nameParts[nameParts.length - 1]);
@@ -62,7 +60,7 @@ public class BookListLoader extends BaseLoader {
         Set<String> bookIdsList = new HashSet<>();
 
         try (Stream<String> idsStream = Files.lines(indexFile.toPath())) {
-            bookIdsList = idsStream.filter(this::isValidId).collect(Collectors.toSet());
+            bookIdsList = idsStream.filter(BookListLoader::isValidId).collect(Collectors.toSet());
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
@@ -70,7 +68,7 @@ public class BookListLoader extends BaseLoader {
         return bookIdsList;
     }
 
-    private boolean isValidId(String bookId) {
+    private static boolean isValidId(String bookId) {
         return LibraryFactory.isValidId(bookId);
     }
 

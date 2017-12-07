@@ -12,7 +12,7 @@ import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata;
 /**
  * Created by sbt-morozov-kv on 15.11.2016.
  */
-public class ShplMetadata implements ILibraryMetadata {
+public final class ShplMetadata implements ILibraryMetadata {
 
     public static final String SHPL_BASE_URL = "elib.shpl.ru";
 
