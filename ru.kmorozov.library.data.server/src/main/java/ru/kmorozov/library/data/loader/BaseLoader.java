@@ -1,8 +1,10 @@
 package ru.kmorozov.library.data.loader;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import ru.kmorozov.library.data.loader.LoaderExecutor.State;
 import ru.kmorozov.library.data.loader.netty.EventSender;
 import ru.kmorozov.library.data.model.book.*;
+import ru.kmorozov.library.data.model.book.BookInfo.BookFormat;
 import ru.kmorozov.library.data.repository.BooksRepository;
 import ru.kmorozov.library.data.repository.CategoryRepository;
 import ru.kmorozov.library.data.repository.StorageRepository;
@@ -11,8 +13,8 @@ import ru.kmorozov.library.utils.BookUtils;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import java.util.stream.Stream;
 
 /**
@@ -21,8 +23,8 @@ import java.util.stream.Stream;
 public abstract class BaseLoader implements ILoader, Runnable {
 
     private static final Logger logger = Logger.getLogger(BaseLoader.class);
-    protected List<Object> links = new ArrayList<>();
-    protected volatile LoaderExecutor.State state = LoaderExecutor.State.STOPPED;
+    protected Collection<Object> links = new ArrayList<>();
+    protected volatile State state = State.STOPPED;
 
     @Autowired
     protected CategoryRepository categoryRepository;
@@ -34,29 +36,29 @@ public abstract class BaseLoader implements ILoader, Runnable {
     protected BooksRepository booksRepository;
 
     public void clear() {
-        long categoryCount = categoryRepository.count();
-        long storageCount = storageRepository.count();
-        long booksCount = booksRepository.count();
+        final long categoryCount = categoryRepository.count();
+        final long storageCount = storageRepository.count();
+        final long booksCount = booksRepository.count();
 
-        if (categoryCount > 0) {
+        if (0 < categoryCount) {
             logger.log(Level.INFO, "Categories loaded: " + categoryCount);
             categoryRepository.deleteAll();
         }
 
-        if (storageCount > 0) {
+        if (0 < storageCount) {
             logger.log(Level.INFO, "Storages loaded: " + storageCount);
             storageRepository.deleteAll();
         }
 
-        if (booksCount > 0) {
+        if (0 < booksCount) {
             logger.log(Level.INFO, "Books loaded: " + storageCount);
             booksRepository.deleteAll();
         }
     }
 
-    private Category getOrCreateCategory(String name) {
+    private Category getOrCreateCategory(final String name) {
         Category category = categoryRepository.findOneByName(name);
-        if (category == null) {
+        if (null == category) {
             category = new Category();
             category.setName(name);
 
@@ -66,12 +68,12 @@ public abstract class BaseLoader implements ILoader, Runnable {
         return category;
     }
 
-    private Storage getOrCreateStorage(ServerItem serverItem) {
-        Storage storage = storageRepository.findByUrl(serverItem.getUrl());
-        return fillStorage(storage == null ? new Storage() : storage, serverItem);
+    private Storage getOrCreateStorage(final ServerItem serverItem) {
+        final Storage storage = storageRepository.findByUrl(serverItem.getUrl());
+        return fillStorage(null == storage ? new Storage() : storage, serverItem);
     }
 
-    protected static Storage fillStorage(Storage storage, ServerItem serverItem) {
+    protected static Storage fillStorage(final Storage storage, final ServerItem serverItem) {
         storage.setStorageType(serverItem.getStorageType());
         storage.setUrl(serverItem.getUrl());
         storage.setName(serverItem.getName());
@@ -82,17 +84,17 @@ public abstract class BaseLoader implements ILoader, Runnable {
         return storage;
     }
 
-    protected Category getCategoryByServerItem(ServerItem serverItem) {
-        Category category = getOrCreateCategory(serverItem.getName());
-        Storage storage = getOrCreateStorage(serverItem);
+    protected Category getCategoryByServerItem(final ServerItem serverItem) {
+        final Category category = getOrCreateCategory(serverItem.getName());
+        final Storage storage = getOrCreateStorage(serverItem);
 
         storage.addCategory(category);
 
         storageRepository.save(storage);
 
-        Storage parentStorage = serverItem.getParent() == null ? null : storageRepository.findByUrl(serverItem.getParent().getUrl());
+        final Storage parentStorage = null == serverItem.getParent() ? null : storageRepository.findByUrl(serverItem.getParent().getUrl());
 
-        if (parentStorage != null) {
+        if (null != parentStorage) {
             storage.setParent(parentStorage);
             storageRepository.save(storage);
 
@@ -108,24 +110,24 @@ public abstract class BaseLoader implements ILoader, Runnable {
 
     protected abstract Stream<ServerItem> getItemsStreamByStorage(Storage storage) throws IOException;
 
-    public abstract void processLinks() throws IOException;
+    public abstract void processLinks();
 
     public abstract boolean postponedLinksLoad();
 
-    protected void updateStorage(Storage storage) throws IOException {
-        StorageInfo storageInfo = storage.getStorageInfo() == null ? new StorageInfo() : storage.getStorageInfo();
+    protected void updateStorage(final Storage storage) throws IOException {
+        final StorageInfo storageInfo = null == storage.getStorageInfo() ? new StorageInfo() : storage.getStorageInfo();
 
         getItemsStreamByStorage(storage)
                 .filter(ServerItem::isLoadableOrLink)
                 .forEach(serverItem -> {
                     if (!serverItem.isDirectory()) {
-                        BookInfo.BookFormat bookFormat = BookUtils.getFormat(serverItem.getName());
-                        if (bookFormat != BookInfo.BookFormat.UNKNOWN) {
-                            Book existBook = booksRepository.findOneByBookInfoPath(serverItem.getUrl());
-                            if (existBook == null) {
-                                Book book = new Book();
+                        final BookFormat bookFormat = BookUtils.getFormat(serverItem.getName());
+                        if (BookInfo.BookFormat.UNKNOWN != bookFormat) {
+                            final Book existBook = booksRepository.findOneByBookInfoPath(serverItem.getUrl());
+                            if (null == existBook) {
+                                final Book book = new Book();
 
-                                BookInfo bookInfo = new BookInfo();
+                                final BookInfo bookInfo = new BookInfo();
                                 bookInfo.setFileName(serverItem.getName());
                                 bookInfo.setPath(serverItem.getUrl());
                                 bookInfo.setFormat(bookFormat);
@@ -143,13 +145,13 @@ public abstract class BaseLoader implements ILoader, Runnable {
                                     EventSender.INSTANCE.sendInfo(logger, "Added file " + serverItem.getName());
                                 }
                             } else {
-                                Date oldDate = existBook.getBookInfo().getLastModifiedDateTime();
-                                Date newDate = serverItem.getLastModifiedDateTime();
-                                boolean dateCondition = oldDate == null || oldDate.before(newDate);
+                                final Date oldDate = existBook.getBookInfo().getLastModifiedDateTime();
+                                final Date newDate = serverItem.getLastModifiedDateTime();
+                                final boolean dateCondition = null == oldDate || oldDate.before(newDate);
 
-                                long oldSize = existBook.getBookInfo().getSize();
-                                long newSize = serverItem.getSize();
-                                boolean sizeCondition = oldSize == 0l || oldSize != newSize;
+                                final long oldSize = existBook.getBookInfo().getSize();
+                                final long newSize = serverItem.getSize();
+                                final boolean sizeCondition = 0l == oldSize || oldSize != newSize;
 
                                 if (dateCondition || sizeCondition) {
                                     existBook.getBookInfo().setFileName(serverItem.getName());
@@ -175,22 +177,22 @@ public abstract class BaseLoader implements ILoader, Runnable {
         try {
             load();
         } catch (IOException | UncheckedIOException e) {
-            this.state = LoaderExecutor.State.STOPPED;
+            this.state = State.STOPPED;
 
             e.printStackTrace();
         }
     }
 
-    void setState(LoaderExecutor.State state) {
+    void setState(final State state) {
         this.state = state;
     }
 
-    LoaderExecutor.State getState() {
+    State getState() {
         return state;
     }
 
     public boolean isStopped() {
-        return state == LoaderExecutor.State.STOPPED;
+        return LoaderExecutor.State.STOPPED == state;
     }
 
     public abstract Storage refresh(Storage storage);

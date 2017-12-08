@@ -2,6 +2,7 @@ package ru.kmorozov.api.onedrive.test;
 
 import com.wouterbreukink.onedrive.client.OneDriveItem;
 import com.wouterbreukink.onedrive.client.OneDriveProvider;
+import com.wouterbreukink.onedrive.client.OneDriveProvider.FACTORY;
 import com.wouterbreukink.onedrive.client.authoriser.AuthorisationProvider;
 import com.wouterbreukink.onedrive.client.walker.OneDriveWalkers;
 import org.hamcrest.CoreMatchers;
@@ -21,19 +22,19 @@ public class ReaderTest {
 
     @Before
     public void initApi() throws IOException {
-        File file = new File(getClass().getClassLoader().getResource("onedrive.key").getFile());
+        final File file = new File(getClass().getClassLoader().getResource("onedrive.key").getFile());
 
-        AuthorisationProvider authoriser = AuthorisationProvider.FACTORY.create(file.toPath());
-        api = OneDriveProvider.FACTORY.readOnlyApi(authoriser);
+        final AuthorisationProvider authoriser = AuthorisationProvider.FACTORY.create(file.toPath());
+        api = FACTORY.readOnlyApi(authoriser);
     }
 
     @Test
     public void rootTest() throws IOException {
-        OneDriveItem root = api.getRoot();
+        final OneDriveItem root = api.getRoot();
 
         MatcherAssert.assertThat(root, CoreMatchers.is(CoreMatchers.notNullValue()));
 
-        OneDriveItem[] children = api.getChildren(root);
+        final OneDriveItem[] children = api.getChildren(root);
         MatcherAssert.assertThat(children, CoreMatchers.is(CoreMatchers.notNullValue()));
     }
 

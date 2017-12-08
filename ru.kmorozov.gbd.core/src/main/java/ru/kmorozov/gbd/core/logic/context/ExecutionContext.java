@@ -19,10 +19,10 @@ import java.util.concurrent.TimeUnit;
  */
 public final class ExecutionContext {
 
-    protected static final Logger logger = Logger.getLogger(ExecutionContext.class);
+    static final Logger logger = Logger.getLogger(ExecutionContext.class);
 
     private static final String EMPTY = "";
-    private final static AbstractContextProvider contextProvider = AbstractContextProvider.getContextProvider();
+    private static final AbstractContextProvider contextProvider = AbstractContextProvider.getContextProvider();
     public static ExecutionContext INSTANCE;
     private final boolean singleMode;
     private final AbstractOutput output;
@@ -30,40 +30,40 @@ public final class ExecutionContext {
     public QueuedThreadPoolExecutor<BookContext> bookExecutor;
     public QueuedThreadPoolExecutor<BookContext> pdfExecutor;
 
-    private ExecutionContext(AbstractOutput output, boolean singleMode) {
+    private ExecutionContext(final AbstractOutput output, final boolean singleMode) {
         this.output = output;
         this.singleMode = singleMode;
     }
 
-    public synchronized static void initContext(AbstractOutput output, boolean singleMode) {
+    public static synchronized void initContext(final AbstractOutput output, final boolean singleMode) {
         INSTANCE = new ExecutionContext(output, singleMode);
     }
 
-    public Logger getLogger(Class<?> clazz, BookContext bookContext) {
-        return Logger.getLogger(output, clazz.getName(), singleMode || bookContext == null ? EMPTY : bookContext.getBookInfo().getBookData().getTitle() + ": ");
+    public Logger getLogger(final Class<?> clazz, final BookContext bookContext) {
+        return Logger.getLogger(output, clazz.getName(), singleMode || null == bookContext ? EMPTY : bookContext.getBookInfo().getBookData().getTitle() + ": ");
     }
 
-    public Logger getLogger(Class<?> clazz) {
+    public Logger getLogger(final Class<?> clazz) {
         return getLogger(clazz, null);
     }
 
-    public Logger getLogger(String location) {
+    public Logger getLogger(final String location) {
         return Logger.getLogger(output, location, EMPTY);
     }
 
-    public void addBookContext(IBookListProducer idsProducer, IProgress progress, IPostProcessor postProcessor) {
-        for (String bookId : idsProducer.getBookIds()) {
+    public void addBookContext(final IBookListProducer idsProducer, final IProgress progress, final IPostProcessor postProcessor) {
+        for (final String bookId : idsProducer.getBookIds()) {
             try {
                 bookContextMap.computeIfAbsent(bookId, k -> new BookContext(bookId, progress, postProcessor));
             }
-            catch(Exception ex) {
+            catch(final Exception ex) {
                 logger.severe("Cannot add book " + bookId);
             }
         }
     }
 
-    public List<BookContext> getContexts(boolean shuffle) {
-        List<BookContext> contexts = Arrays.asList(bookContextMap.values().toArray(new BookContext[bookContextMap.values().size()]));
+    public List<BookContext> getContexts(final boolean shuffle) {
+        final List<BookContext> contexts = Arrays.asList(bookContextMap.values().toArray(new BookContext[bookContextMap.values().size()]));
         if (shuffle) Collections.shuffle(contexts);
         return contexts;
     }
@@ -88,8 +88,8 @@ public final class ExecutionContext {
         bookExecutor = new QueuedThreadPoolExecutor<>(bookContextMap.size(), 5, BookContext::isImgStarted, "bookExecutor");
         pdfExecutor = new QueuedThreadPoolExecutor<>(bookContextMap.size(), 5, BookContext::isPdfCompleted, "pdfExecutor");
 
-        for (BookContext bookContext : getContexts(true)) {
-            IImageExtractor extractor = bookContext.getExtractor();
+        for (final BookContext bookContext : getContexts(true)) {
+            final IImageExtractor extractor = bookContext.getExtractor();
             extractor.newProxyEvent(HttpHostExt.NO_PROXY);
             bookExecutor.execute(extractor);
         }
@@ -99,7 +99,7 @@ public final class ExecutionContext {
         bookExecutor.terminate(10, TimeUnit.MINUTES);
         pdfExecutor.terminate(30, TimeUnit.MINUTES);
 
-        long totalProcessed = getContexts(false).stream().mapToLong(BookContext::getPagesProcessed).sum();
+        final long totalProcessed = getContexts(false).stream().mapToLong(BookContext::getPagesProcessed).sum();
         getLogger("Total").info("Total pages processed: " + totalProcessed);
 
         contextProvider.updateIndex();
@@ -108,12 +108,12 @@ public final class ExecutionContext {
         AbstractHttpProcessor.close();
     }
 
-    public void newProxyEvent(HttpHostExt proxy) {
-        for (BookContext bookContext : getContexts(true))
+    public void newProxyEvent(final HttpHostExt proxy) {
+        for (final BookContext bookContext : getContexts(true))
             bookContext.getExtractor().newProxyEvent(proxy);
     }
 
-    public void postProcessBook(BookContext bookContext) {
+    public void postProcessBook(final BookContext bookContext) {
         pdfExecutor.execute(bookContext.getPostProcessor());
     }
 
@@ -121,7 +121,7 @@ public final class ExecutionContext {
         return singleMode;
     }
 
-    public Collection<String> getBookIds() {
+    public Iterable<String> getBookIds() {
         return bookContextMap.keySet();
     }
 }

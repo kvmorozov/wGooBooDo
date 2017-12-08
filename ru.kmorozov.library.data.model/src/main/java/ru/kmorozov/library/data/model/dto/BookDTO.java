@@ -1,7 +1,7 @@
 package ru.kmorozov.library.data.model.dto;
 
 import ru.kmorozov.library.data.model.book.Book;
-import ru.kmorozov.library.data.model.book.BookInfo;
+import ru.kmorozov.library.data.model.book.BookInfo.BookFormat;
 import ru.kmorozov.library.utils.BookUtils;
 
 /**
@@ -10,17 +10,17 @@ import ru.kmorozov.library.utils.BookUtils;
 public class BookDTO {
 
     private String id;
-    private BookInfo.BookFormat format;
+    private BookFormat format;
     private String title, path, localPath, size;
     private boolean loaded;
 
     public BookDTO() {
     }
 
-    public BookDTO(Book book, boolean loaded) {
+    public BookDTO(final Book book, final boolean loaded) {
         this.id = book.getBookId();
         this.format = book.getBookInfo().getFormat();
-        this.title = book.getTitle() == null ? book.getBookInfo().getFileName() : book.getTitle();
+        this.title = null == book.getTitle() ? book.getBookInfo().getFileName() : book.getTitle();
         this.localPath = book.getBookInfo().getFileName();
         this.loaded = loaded;
         this.size = BookUtils.humanReadableByteCount(book.getBookInfo().getSize(), true);
@@ -30,11 +30,11 @@ public class BookDTO {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
-    public BookInfo.BookFormat getFormat() {
+    public BookFormat getFormat() {
         return format;
     }
 
@@ -46,11 +46,11 @@ public class BookDTO {
         return path;
     }
 
-    public void setPath(String path) {
+    public void setPath(final String path) {
         this.path = path;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
         this.title = title;
     }
 
@@ -58,11 +58,11 @@ public class BookDTO {
         return localPath;
     }
 
-    public void setFormat(BookInfo.BookFormat format) {
+    public void setFormat(final BookFormat format) {
         this.format = format;
     }
 
-    public void setLocalPath(String localPath) {
+    public void setLocalPath(final String localPath) {
         this.localPath = localPath;
     }
 
@@ -70,7 +70,7 @@ public class BookDTO {
         return loaded;
     }
 
-    public void setLoaded(boolean loaded) {
+    public void setLoaded(final boolean loaded) {
         this.loaded = loaded;
     }
 
@@ -78,7 +78,7 @@ public class BookDTO {
         return size;
     }
 
-    public void setSize(String size) {
+    public void setSize(final String size) {
         this.size = size;
     }
 }

@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import ru.kmorozov.library.data.model.book.Book;
 import ru.kmorozov.library.data.model.book.Storage;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -13,7 +14,7 @@ import java.util.stream.Stream;
  */
 public interface BooksRepository extends MongoRepository<Book, String> {
 
-    List<Book> findAllBy(TextCriteria criteria);
+    Collection<Book> findAllBy(TextCriteria criteria);
 
     List<Book> findAllByStorage(Storage storage);
 

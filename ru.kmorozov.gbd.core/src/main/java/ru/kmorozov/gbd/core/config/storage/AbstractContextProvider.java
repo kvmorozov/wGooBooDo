@@ -15,28 +15,28 @@ public abstract class AbstractContextProvider {
     private static volatile AbstractContextProvider contextProvider;
 
     public static AbstractContextProvider getContextProvider() {
-        if (contextProvider == null) {
+        if (null == contextProvider) {
             synchronized (LOCK_OBJ) {
-                if (contextProvider == null) if (classExists(DB_CTX_PROVIDER_CLASS_NAME)) {
+                if (null == contextProvider) if (classExists(DB_CTX_PROVIDER_CLASS_NAME)) {
                     try {
                         contextProvider = (AbstractContextProvider) Class.forName(DB_CTX_PROVIDER_CLASS_NAME).newInstance();
-                    } catch (Exception e) {
+                    } catch (final Exception e) {
                         e.printStackTrace();
                     }
                 }
 
-                if (contextProvider == null || !contextProvider.isValid()) contextProvider = new FileContextProvider();
+                if (null == contextProvider || !contextProvider.isValid()) contextProvider = new FileContextProvider();
             }
         }
 
         return contextProvider;
     }
 
-    private static boolean classExists(String className) {
+    private static boolean classExists(final String className) {
         try {
             Class.forName(className);
             return true;
-        } catch (ClassNotFoundException cnfe) {
+        } catch (final ClassNotFoundException cnfe) {
             return false;
         }
     }

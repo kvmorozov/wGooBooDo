@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
+import java.util.Collection;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -27,12 +27,13 @@ public abstract class AbstractImageExtractor extends AbstractEventSource impleme
     protected final AbstractOutput output;
     protected final BookContext bookContext;
     protected final AtomicBoolean initComplete = new AtomicBoolean(false);
-    protected Logger logger;
-    protected List<HttpHostExt> waitingProxy = new CopyOnWriteArrayList<>();
+    protected final Logger logger;
+    protected Collection<HttpHostExt> waitingProxy = new CopyOnWriteArrayList<>();
 
-    protected AbstractImageExtractor(BookContext bookContext) {
+    protected AbstractImageExtractor(final BookContext bookContext, Class<? extends AbstractImageExtractor> extractorClass) {
         this.bookContext = bookContext;
         setProcessStatus(bookContext.getProgress());
+        logger = ExecutionContext.INSTANCE.getLogger(extractorClass, bookContext);
 
         this.output = ExecutionContext.INSTANCE.getOutput();
     }
@@ -47,7 +48,7 @@ public abstract class AbstractImageExtractor extends AbstractEventSource impleme
 
     @Override
     public String toString() {
-        return "Extractor:" + bookContext.toString();
+        return "Extractor:" + bookContext;
     }
 
     public final void process() {
@@ -70,7 +71,7 @@ public abstract class AbstractImageExtractor extends AbstractEventSource impleme
         while (!initComplete.get()) {
             try {
                 Thread.sleep(1000);
-            } catch (InterruptedException e) {
+            } catch (final InterruptedException e) {
                 e.printStackTrace();
             }
         }
@@ -78,40 +79,40 @@ public abstract class AbstractImageExtractor extends AbstractEventSource impleme
     }
 
     protected void prepareDirectory() {
-        String baseOutputDirPath = GBDOptions.getOutputDir();
-        if (baseOutputDirPath == null) return;
+        final String baseOutputDirPath = GBDOptions.getOutputDir();
+        if (null == baseOutputDirPath) return;
 
-        File baseOutputDir = new File(baseOutputDirPath);
+        final File baseOutputDir = new File(baseOutputDirPath);
         if (!baseOutputDir.exists()) if (!baseOutputDir.mkdir()) return;
 
         logger.info(ExecutionContext.INSTANCE.isSingleMode() ? String.format("Working with %s", bookContext.getBookInfo().getBookData().getTitle()) : "Starting...");
 
         bookContext.setOutputDir(new File(getDirectoryName(baseOutputDirPath)));
-        File[] files = bookContext.getOutputDir().listFiles();
-        bookContext.getProgress().resetMaxValue(files == null ? 0 : files.length);
+        final File[] files = bookContext.getOutputDir().listFiles();
+        bookContext.getProgress().resetMaxValue(null == files ? 0 : files.length);
 
         if (!bookContext.getOutputDir().exists()) {
-            boolean dirResult = bookContext.getOutputDir().mkdir();
+            final boolean dirResult = bookContext.getOutputDir().mkdir();
             if (!dirResult) {
                 logger.severe(String.format("Invalid book title: %s", bookContext.getBookInfo().getBookData().getTitle()));
             }
         }
     }
 
-    private String getDirectoryName(String baseOutputDirPath) {
+    private String getDirectoryName(final String baseOutputDirPath) {
         try {
-            Optional<Path> optPath = Files.find(Paths.get(baseOutputDirPath), 1, (path, basicFileAttributes) -> path.toString().contains(bookContext.getBookInfo().getBookData()
+            final Optional<Path> optPath = Files.find(Paths.get(baseOutputDirPath), 1, (path, basicFileAttributes) -> path.toString().contains(bookContext.getBookInfo().getBookData()
                                                                                                                                                     .getVolumeId())).findAny();
             if (optPath.isPresent()) return optPath.get().toString();
-        } catch (IOException ignored) {
+        } catch (final IOException ignored) {
         }
 
-        String directoryName = baseOutputDirPath + '\\' + bookContext.getBookInfo().getBookData().getTitle()
+        final String directoryName = baseOutputDirPath + '\\' + bookContext.getBookInfo().getBookData().getTitle()
                                                                      .replace(":", "")
                                                                      .replace("<", "")
                                                                      .replace(">", "")
                                                                      .replace("/", ".");
-        String volumeId = bookContext.getBookInfo().getBookData().getVolumeId();
+        final String volumeId = bookContext.getBookInfo().getBookData().getVolumeId();
         return StringUtils.isEmpty(volumeId) ? directoryName : directoryName + ' ' + bookContext.getBookInfo().getBookData().getVolumeId();
     }
 }

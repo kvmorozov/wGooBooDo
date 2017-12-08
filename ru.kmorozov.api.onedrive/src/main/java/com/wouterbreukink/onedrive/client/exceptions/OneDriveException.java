@@ -9,12 +9,11 @@ public class OneDriveException extends IOException {
 
     protected OneDriveErrorInfo errorInfo;
 
-    public OneDriveException(String s) {
+    public OneDriveException(final String s) {
         super(s);
     }
 
-    public OneDriveException(OneDriveErrorInfo errorInfo) {
-        super();
+    public OneDriveException(final OneDriveErrorInfo errorInfo) {
         this.errorInfo = errorInfo;
     }
 

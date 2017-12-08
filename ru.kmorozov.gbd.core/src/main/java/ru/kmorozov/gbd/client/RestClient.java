@@ -11,7 +11,7 @@ public class RestClient extends AbstractRestClient implements IRestClient {
     }
 
     @Override
-    public boolean synchronizeGoogleBook(String bookId) {
+    public boolean synchronizeGoogleBook(final String bookId) {
         return getCallResult("synchronizeGoogleBook", Boolean.class, new RestParam("bookId", bookId));
     }
 }

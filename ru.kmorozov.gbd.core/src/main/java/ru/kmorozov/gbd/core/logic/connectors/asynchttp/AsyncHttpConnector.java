@@ -11,13 +11,14 @@ import org.asynchttpclient.DefaultAsyncHttpClientConfig;
 import org.asynchttpclient.netty.channel.ChannelManager;
 import org.asynchttpclient.netty.channel.DefaultChannelPool;
 import org.asynchttpclient.netty.ssl.DefaultSslEngineFactory;
-import org.asynchttpclient.proxy.ProxyServer;
+import org.asynchttpclient.proxy.ProxyServer.Builder;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector;
 import ru.kmorozov.gbd.core.logic.connectors.Response;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -37,11 +38,11 @@ public class AsyncHttpConnector extends HttpConnector {
     private HashedWheelTimer timer;
 
     private AsyncHttpClient getClient(final HttpHostExt proxy) {
-        String key = getProxyKey(proxy);
+        final String key = getProxyKey(proxy);
         AsyncHttpClient client = clientsMap.get(key);
 
-        if (builder == null) synchronized (BUILDER_LOCK) {
-            if (builder == null) {
+        if (null == builder) synchronized (BUILDER_LOCK) {
+            if (null == builder) {
                 builder = new DefaultAsyncHttpClientConfig.Builder();
                 timer = new HashedWheelTimer();
                 timer.start();
@@ -59,8 +60,8 @@ public class AsyncHttpConnector extends HttpConnector {
             }
         }
 
-        if (client == null) synchronized (proxy) {
-            if (!proxy.isLocal()) builder.setProxyServer(new ProxyServer.Builder(proxy.getHost().getHostName(), proxy.getHost().getPort()).build());
+        if (null == client) synchronized (proxy) {
+            if (!proxy.isLocal()) builder.setProxyServer(new Builder(proxy.getHost().getHostName(), proxy.getHost().getPort()).build());
             client = new SingleChannelHttpClient(builder.build(), channelManager);
 
             clientsMap.put(key, client);
@@ -70,18 +71,18 @@ public class AsyncHttpConnector extends HttpConnector {
     }
 
     @Override
-    public Response getContent(String url, HttpHostExt proxy, boolean withTimeout) throws IOException {
-        AsyncHttpClient client = getClient(proxy);
-        BoundRequestBuilder builder = client.prepareGet(url);
-        for (Map.Entry<String, Object> headerItem : proxy.getHeaders().entrySet())
-            if (!headerItem.getKey().equals("cookie")) builder.addHeader(headerItem.getKey(), headerItem.getValue().toString());
+    public Response getContent(final String url, final HttpHostExt proxy, final boolean withTimeout) {
+        final AsyncHttpClient client = getClient(proxy);
+        final BoundRequestBuilder builder = client.prepareGet(url);
+        for (final Entry<String, Object> headerItem : proxy.getHeaders().entrySet())
+            if (!"cookie".equals(headerItem.getKey())) builder.addHeader(headerItem.getKey(), headerItem.getValue().toString());
 
-        String[] cookies = proxy.getHeaders().getCookie().split(";");
-        for (String cookieEntry : cookies) {
-            String[] cookieParts = cookieEntry.split("=", 2);
-            if (cookieParts.length != 2) continue;
+        final String[] cookies = proxy.getHeaders().getCookie().split(";");
+        for (final String cookieEntry : cookies) {
+            final String[] cookieParts = cookieEntry.split("=", 2);
+            if (2 != cookieParts.length) continue;
 
-            Cookie cookie = new DefaultCookie(cookieParts[0], cookieParts[1]);
+            final Cookie cookie = new DefaultCookie(cookieParts[0], cookieParts[1]);
             cookie.setPath("/");
             cookie.setDomain(".google.ru");
             builder.addCookie(cookie);
@@ -97,20 +98,20 @@ public class AsyncHttpConnector extends HttpConnector {
 
     @Override
     public void close() {
-        for (AsyncHttpClient client : clientsMap.values())
+        for (final AsyncHttpClient client : clientsMap.values())
             try {
                 if (!client.isClosed())
                     client.close();
-            } catch (IOException ignored) {
+            } catch (final IOException ignored) {
             }
 
-        if (nioEventLoopGroup != null)
+        if (null != nioEventLoopGroup)
             nioEventLoopGroup.shutdownGracefully();
 
-        if (pool != null)
+        if (null != pool)
             pool.destroy();
 
-        if (timer != null)
+        if (null != timer)
             timer.stop();
     }
 }

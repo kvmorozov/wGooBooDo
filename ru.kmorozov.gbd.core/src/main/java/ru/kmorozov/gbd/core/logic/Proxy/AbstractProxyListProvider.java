@@ -9,6 +9,7 @@ import ru.kmorozov.gbd.core.utils.HttpConnections;
 import ru.kmorozov.gbd.core.utils.Logger;
 
 import java.net.InetSocketAddress;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -26,12 +27,12 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
 
     private static AbstractProxyListProvider INSTANCE;
 
-    protected final Set<HttpHostExt> proxyList = new HashSet<>();
+    protected final Collection<HttpHostExt> proxyList = new HashSet<>();
     protected Set<String> proxyItems;
-    private AtomicBoolean proxyListCompleted = new AtomicBoolean(false);
+    private final AtomicBoolean proxyListCompleted = new AtomicBoolean(false);
 
     public static AbstractProxyListProvider getInstance() {
-        if (INSTANCE == null) INSTANCE = GBDOptions.getProxyListFile() == null ? new WebProxyListProvider() : new FileProxyListProvider();
+        if (null == INSTANCE) INSTANCE = null == GBDOptions.getProxyListFile() ? new WebProxyListProvider() : new FileProxyListProvider();
 
         return INSTANCE;
     }
@@ -40,33 +41,33 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
         ProxyBlacklistHolder.BLACKLIST.updateBlacklist(INSTANCE.proxyList);
     }
 
-    private static String[] splitItems(String proxyItem, String delimiter) {
+    private static String[] splitItems(final String proxyItem, final String delimiter) {
         return proxyItem.split(delimiter);
     }
 
-    private String[] splitItems(String proxyItem) {
+    private String[] splitItems(final String proxyItem) {
         String[] tmpItems = splitItems(proxyItem, DEFAULT_PROXY_DELIMITER);
-        if (tmpItems.length >= 2) return tmpItems;
+        if (2 <= tmpItems.length) return tmpItems;
         else {
             tmpItems = splitItems(proxyItem, "\\s+");
-            return tmpItems.length >= 2 ? tmpItems : null;
+            return 2 <= tmpItems.length ? tmpItems : null;
         }
     }
 
-    private static String getCookie(InetSocketAddress proxy) {
+    private static String getCookie(final InetSocketAddress proxy) {
         return HttpConnections.getCookieString(proxy);
     }
 
     public void processProxyList() {
-        for (String proxyString : proxyItems)
+        for (final String proxyString : proxyItems)
             if (!Strings.isNullOrEmpty(proxyString))
                 (new Thread(new ProxyChecker(proxyString))).start();
     }
 
     @Override
     public void invalidatedProxyListener() {
-        long liveProxyCount = proxyList.stream().filter(HttpHostExt::isAvailable).count();
-        if (liveProxyCount == 0 && GBDOptions.secureMode()) throw new RuntimeException("No more proxies!");
+        final long liveProxyCount = proxyList.stream().filter(HttpHostExt::isAvailable).count();
+        if (0 == liveProxyCount && GBDOptions.secureMode()) throw new RuntimeException("No more proxies!");
     }
 
     @Override
@@ -74,18 +75,18 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
         if (!proxyListCompleted.get()) {
             try {
                 Thread.sleep(500);
-            } catch (InterruptedException e) {
+            } catch (final InterruptedException e) {
                 e.printStackTrace();
             }
         }
         return proxyList.parallelStream();
     }
 
-    public Set<HttpHostExt> getProxyList() {
+    public Iterable<HttpHostExt> getProxyList() {
         return proxyList;
     }
 
-    protected static boolean notBlacklisted(String proxyStr) {
+    protected static boolean notBlacklisted(final String proxyStr) {
         return !ProxyBlacklistHolder.BLACKLIST.isProxyInBlacklist(proxyStr);
     }
 
@@ -95,28 +96,28 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
 
     private class ProxyChecker implements Runnable {
 
-        private String proxyStr;
+        private final String proxyStr;
 
-        ProxyChecker(String proxyStr) {
+        ProxyChecker(final String proxyStr) {
             this.proxyStr = proxyStr;
         }
 
         @Override
         public void run() {
-            HttpHostExt host = processProxyItem(proxyStr);
+            final HttpHostExt host = processProxyItem(proxyStr);
             ExecutionContext.INSTANCE.newProxyEvent(host);
         }
 
-        private HttpHostExt processProxyItem(String proxyItem) {
+        private HttpHostExt processProxyItem(final String proxyItem) {
             HttpHostExt proxy = null;
 
             try {
-                String[] proxyItemArr = splitItems(proxyItem);
+                final String[] proxyItemArr = splitItems(proxyItem);
 
-                if (proxyItemArr == null || proxyItemArr.length < 2) return null;
+                if (null == proxyItemArr || 2 > proxyItemArr.length) return null;
 
-                InetSocketAddress host = new InetSocketAddress(proxyItemArr[0], Integer.parseInt(proxyItemArr[1]));
-                String cookie = getCookie(host);
+                final InetSocketAddress host = new InetSocketAddress(proxyItemArr[0], Integer.parseInt(proxyItemArr[1]));
+                final String cookie = getCookie(host);
                 proxy = new HttpHostExt(host, cookie);
                 if (!StringUtils.isEmpty(cookie)) {
                     if (!GBDOptions.secureMode() || proxy.isSecure()) {
@@ -131,7 +132,7 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
                     logger.info(String.format("Proxy %s NOT added.", host.toString()));
                     proxy.forceInvalidate(false);
                 }
-            } catch (Exception ex) {
+            } catch (final Exception ex) {
                 logger.info(String.format("Not valid proxy string %s.", proxyItem));
             }
 

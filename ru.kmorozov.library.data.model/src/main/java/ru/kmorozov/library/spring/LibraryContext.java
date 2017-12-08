@@ -6,7 +6,7 @@ import ru.kmorozov.library.data.repository.BooksRepository;
 /**
  * Created by sbt-morozov-kv on 15.12.2016.
  */
-public class LibraryContext extends StaticApplicationContext {
+public final class LibraryContext extends StaticApplicationContext {
 
     public static final LibraryContext LIBRARY_CONTEXT = new LibraryContext();
 

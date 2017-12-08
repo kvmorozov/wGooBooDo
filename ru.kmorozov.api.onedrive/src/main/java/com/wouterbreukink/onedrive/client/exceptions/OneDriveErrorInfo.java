@@ -16,7 +16,7 @@ public class OneDriveErrorInfo {
         return error;
     }
 
-    public void setError(String error) {
+    public void setError(final String error) {
         this.error = error;
     }
 
@@ -24,7 +24,7 @@ public class OneDriveErrorInfo {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 

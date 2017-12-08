@@ -2,18 +2,19 @@ package com.wouterbreukink.onedrive;
 
 import com.wouterbreukink.onedrive.tasks.Task;
 
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class TaskQueue {
 
-    private final PriorityBlockingQueue<Task> queue = new PriorityBlockingQueue<>();
+    private final BlockingQueue<Task> queue = new PriorityBlockingQueue<>();
     private final Object suspendedMonitor = new Object();
     private final Object doneMonitor = new Object();
-    private AtomicInteger tasksInProgress = new AtomicInteger(0);
-    private volatile boolean suspended = false;
+    private final AtomicInteger tasksInProgress = new AtomicInteger(0);
+    private volatile boolean suspended;
 
-    public void add(Task t) {
+    public void add(final Task t) {
         tasksInProgress.incrementAndGet();
         queue.add(t);
     }
@@ -30,8 +31,8 @@ public class TaskQueue {
         return queue.take();
     }
 
-    public void done(Task t) {
-        if (tasksInProgress.decrementAndGet() == 0) {
+    public void done(final Task t) {
+        if (0 == tasksInProgress.decrementAndGet()) {
             synchronized (doneMonitor) {
                 doneMonitor.notifyAll();
             }
@@ -39,14 +40,14 @@ public class TaskQueue {
     }
 
     public void waitForCompletion() throws InterruptedException {
-        while (tasksInProgress.get() > 0) {
+        while (0 < tasksInProgress.get()) {
             synchronized (doneMonitor) {
                 doneMonitor.wait();
             }
         }
     }
 
-    public void suspend(int seconds) {
+    public void suspend(final int seconds) {
 
         synchronized (suspendedMonitor) {
 
@@ -59,7 +60,7 @@ public class TaskQueue {
 
         try {
             Thread.sleep(seconds * 1000);
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
             Thread.currentThread().interrupt();
         } finally {
             synchronized (suspendedMonitor) {

@@ -10,7 +10,7 @@ public class GoogleResponseException extends ResponseException {
 
     private final HttpResponseException hre;
 
-    public GoogleResponseException(HttpResponseException hre) {
+    public GoogleResponseException(final HttpResponseException hre) {
         this.hre = hre;
     }
 

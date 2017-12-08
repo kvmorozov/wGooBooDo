@@ -19,7 +19,7 @@ public class DownloadTask extends Task {
     private final boolean replace;
     private final int chunkSize;
 
-    public DownloadTask(TaskOptions options, File parent, OneDriveItem remoteFile, boolean replace, int chunkSize) {
+    public DownloadTask(final TaskOptions options, final File parent, final OneDriveItem remoteFile, final boolean replace, final int chunkSize) {
         super(options);
 
         this.parent = Preconditions.checkNotNull(parent);
@@ -32,7 +32,7 @@ public class DownloadTask extends Task {
         }
     }
 
-    public DownloadTask(TaskOptions options, File parent, OneDriveItem remoteFile, boolean replace) {
+    public DownloadTask(final TaskOptions options, final File parent, final OneDriveItem remoteFile, final boolean replace) {
         this(options, parent, remoteFile, replace, ResumableDownloader.MAXIMUM_CHUNK_SIZE);
     }
 
@@ -55,10 +55,10 @@ public class DownloadTask extends Task {
 
         if (remoteFile.isDirectory()) {
 
-            File newParent = fileSystem.createFolder(parent, remoteFile.getName());
+            final File newParent = fileSystem.createFolder(parent, remoteFile.getName());
             queue.add(new UpdatePropertiesTask(getTaskOptions(), remoteFile, newParent));
 
-            for (OneDriveItem item : api.getChildren(remoteFile)) {
+            for (final OneDriveItem item : api.getChildren(remoteFile)) {
                 queue.add(new DownloadTask(getTaskOptions(), newParent, item, false));
             }
 
@@ -77,31 +77,31 @@ public class DownloadTask extends Task {
                 downloadFile = fileSystem.createFile(parent, remoteFile.getName() + ".tmp");
 
                 // The progress reporter
-                ResumableDownloaderProgressListener progressListener = new ResumableDownloaderProgressListener() {
+                final ResumableDownloaderProgressListener progressListener = new ResumableDownloaderProgressListener() {
 
                     private long startTimeInner = System.currentTimeMillis();
 
                     @Override
-                    public void progressChanged(ResumableDownloader downloader) throws IOException {
+                    public void progressChanged(final ResumableDownloader downloader) {
 
                         switch (downloader.getDownloadState()) {
                             case MEDIA_IN_PROGRESS:
-                                long elapsedTimeInner = System.currentTimeMillis() - startTimeInner;
+                                final long elapsedTimeInner = System.currentTimeMillis() - startTimeInner;
 
                                 reporter.info(String.format("Downloaded chunk (progress %.1f%%) of %s (%s/s) for file %s",
                                                             downloader.getProgress() * 100,
                                                             LogUtils.readableFileSize(downloader.getChunkSize()),
-                                                            elapsedTimeInner > 0 ? LogUtils.readableFileSize(downloader.getChunkSize() / (elapsedTimeInner / 1000d)) : 0,
+                                        0 < elapsedTimeInner ? LogUtils.readableFileSize(downloader.getChunkSize() / (elapsedTimeInner / 1000d)) : 0,
                                                             remoteFile.getFullName()));
 
                                 startTimeInner = System.currentTimeMillis();
                                 break;
                             case MEDIA_COMPLETE:
-                                long elapsedTime = System.currentTimeMillis() - startTime;
+                                final long elapsedTime = System.currentTimeMillis() - startTime;
                                 reporter.info(String.format("Downloaded %s in %s (%s/s) of %s file %s",
                                                             LogUtils.readableFileSize(remoteFile.getSize()),
                                                             LogUtils.readableTime(elapsedTime),
-                                                            elapsedTime > 0 ? LogUtils.readableFileSize(remoteFile.getSize() / (elapsedTime / 1000d)) : 0,
+                                        0 < elapsedTime ? LogUtils.readableFileSize(remoteFile.getSize() / (elapsedTime / 1000d)) : 0,
                                                             replace ? "replaced" : "new",
                                                             remoteFile.getFullName()));
                         }
@@ -120,12 +120,12 @@ public class DownloadTask extends Task {
                         remoteFile.getCreatedDateTime(),
                         remoteFile.getLastModifiedDateTime());
 
-                File localFile = new File(parent, remoteFile.getName());
+                final File localFile = new File(parent, remoteFile.getName());
 
                 fileSystem.replaceFile(localFile, downloadFile);
                 reporter.fileDownloaded(replace, remoteFile.getSize());
-            } catch (Throwable e) {
-                if (downloadFile != null) {
+            } catch (final Throwable e) {
+                if (null != downloadFile) {
                     if (!downloadFile.delete()) {
                         reporter.warn("Unable to remove temporary file " + downloadFile.getPath());
                     }

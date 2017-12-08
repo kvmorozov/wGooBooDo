@@ -46,11 +46,11 @@ public class Storage {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
-    public void setStorageType(StorageType storageType) {
+    public void setStorageType(final StorageType storageType) {
         this.storageType = storageType;
     }
 
@@ -58,7 +58,7 @@ public class Storage {
         return url;
     }
 
-    public void setUrl(String url) {
+    public void setUrl(final String url) {
         this.url = url;
     }
 
@@ -66,7 +66,7 @@ public class Storage {
         return parent;
     }
 
-    public void setParent(Storage parent) {
+    public void setParent(final Storage parent) {
         this.parent = parent;
     }
 
@@ -74,7 +74,7 @@ public class Storage {
         return categories;
     }
 
-    public void setCategories(Set<Category> categories) {
+    public void setCategories(final Set<Category> categories) {
         this.categories = categories;
     }
 
@@ -82,7 +82,7 @@ public class Storage {
         return lastModifiedDateTime;
     }
 
-    public void setLastModifiedDateTime(Date lastModifiedDateTime) {
+    public void setLastModifiedDateTime(final Date lastModifiedDateTime) {
         this.lastModifiedDateTime = lastModifiedDateTime;
     }
 
@@ -90,12 +90,12 @@ public class Storage {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
-    public void addCategory(Category category) {
-        if (categories == null)
+    public void addCategory(final Category category) {
+        if (null == categories)
             categories = new HashSet<>();
 
         if (!categories.contains(category))
@@ -106,7 +106,7 @@ public class Storage {
         return storageInfo;
     }
 
-    public void setStorageInfo(StorageInfo storageInfo) {
+    public void setStorageInfo(final StorageInfo storageInfo) {
         this.storageInfo = storageInfo;
     }
 
@@ -115,11 +115,11 @@ public class Storage {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (null == o || getClass() != o.getClass()) return false;
 
-        Storage storage = (Storage) o;
+        final Storage storage = (Storage) o;
 
         return id.equals(storage.id);
 
@@ -134,7 +134,7 @@ public class Storage {
         return localPath;
     }
 
-    public void setLocalPath(String localPath) {
+    public void setLocalPath(final String localPath) {
         this.localPath = localPath;
     }
 }

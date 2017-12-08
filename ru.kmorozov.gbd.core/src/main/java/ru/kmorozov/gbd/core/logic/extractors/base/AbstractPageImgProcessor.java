@@ -27,18 +27,18 @@ public abstract class AbstractPageImgProcessor<T extends AbstractPage> extends A
     protected final HttpHostExt usedProxy;
     protected final Logger logger;
 
-    public AbstractPageImgProcessor(BookContext bookContext, T page, HttpHostExt usedProxy) {
+    protected AbstractPageImgProcessor(final BookContext bookContext, final T page, final HttpHostExt usedProxy) {
         this.bookContext = bookContext;
         this.page = page;
         this.usedProxy = usedProxy;
-        this.logger = ExecutionContext.INSTANCE.getLogger(getClass(), bookContext);
+        logger = ExecutionContext.INSTANCE.getLogger(getClass(), bookContext);
     }
 
-    protected boolean processImage(String imgUrl) {
+    protected boolean processImage(final String imgUrl) {
         return processImage(imgUrl, HttpHostExt.NO_PROXY);
     }
 
-    protected boolean processImage(String imgUrl, HttpHostExt proxy) {
+    protected boolean processImage(final String imgUrl, final HttpHostExt proxy) {
         if (GBDOptions.secureMode() && proxy.isLocal()) return false;
 
         File outputFile = null;
@@ -50,21 +50,21 @@ public abstract class AbstractPageImgProcessor<T extends AbstractPage> extends A
 
         try {
             resp = getContent(imgUrl, proxy, false);
-            inputStream = resp == null ? null : resp.getContent();
+            inputStream = null == resp ? null : resp.getContent();
 
-            if (inputStream == null) {
+            if (null == inputStream) {
                 logger.info(getErrorMsg(imgUrl, proxy));
                 return false;
             }
 
             int read, totalRead = 0;
-            byte[] bytes = new byte[dataChunk];
+            final byte[] bytes = new byte[dataChunk];
             boolean firstChunk = true, reloadFlag;
 
-            while ((read = inputStream.read(bytes)) != -1) {
+            while (-1 != (read = inputStream.read(bytes))) {
                 if (firstChunk) {
-                    String imgFormat = Images.getImageFormat(resp);
-                    if (imgFormat != null) {
+                    final String imgFormat = Images.getImageFormat(resp);
+                    if (null != imgFormat) {
 
                         if (page.loadingStarted.get()) return false;
 
@@ -110,32 +110,32 @@ public abstract class AbstractPageImgProcessor<T extends AbstractPage> extends A
             }
         } catch (SocketTimeoutException | SocketException | SSLException ste) {
             proxy.registerFailure();
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             ex.printStackTrace();
         } finally {
-            if (inputStream != null) {
+            if (null != inputStream) {
                 try {
                     inputStream.close();
-                } catch (IOException e) {
+                } catch (final IOException e) {
                     e.printStackTrace();
                 }
             }
-            if (outputStream != null) {
+            if (null != outputStream) {
                 try {
                     outputStream.close();
-                } catch (IOException e) {
+                } catch (final IOException e) {
                     e.printStackTrace();
                 }
             }
 
-            if (!page.dataProcessed.get() && outputFile != null) {
+            if (!page.dataProcessed.get() && null != outputFile) {
                 logger.info(String.format("Loading page %s failed!", page.getPid()));
                 outputFile.delete();
             }
 
             try {
-                if (resp != null) resp.close();
-            } catch (IOException e) {
+                if (null != resp) resp.close();
+            } catch (final IOException e) {
                 e.printStackTrace();
             }
         }
@@ -154,11 +154,11 @@ public abstract class AbstractPageImgProcessor<T extends AbstractPage> extends A
 
     @Override
     public String toString() {
-        return "Page processor:" + bookContext.toString();
+        return "Page processor:" + bookContext;
     }
 
     protected static int getImgWidth() {
-        return GBDOptions.getImageWidth() == 0 ? GoogleImageExtractor.DEFAULT_PAGE_WIDTH : GBDOptions.getImageWidth();
+        return 0 == GBDOptions.getImageWidth() ? GoogleImageExtractor.DEFAULT_PAGE_WIDTH : GBDOptions.getImageWidth();
     }
 
     protected abstract boolean validateOutput(File outputFile, int width);

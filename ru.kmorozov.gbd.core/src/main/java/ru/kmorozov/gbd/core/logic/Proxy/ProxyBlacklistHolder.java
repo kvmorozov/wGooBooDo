@@ -18,7 +18,7 @@ public final class ProxyBlacklistHolder {
     private static final String BL_FILE_NAME = "black.lst";
     private static final int DEAD_PROXY_TREASHOLD = 5000;
     private File blacklistFile;
-    private List<HttpHostExt> storedHosts = new CopyOnWriteArrayList<>();
+    private final Collection<HttpHostExt> storedHosts = new CopyOnWriteArrayList<>();
 
     private ProxyBlacklistHolder() {
         init();
@@ -28,29 +28,29 @@ public final class ProxyBlacklistHolder {
         blacklistFile = new File(System.getProperty("java.io.tmpdir") + File.separator + BL_FILE_NAME);
         if (!blacklistFile.exists()) try {
             blacklistFile.createNewFile();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
 
-        Charset charset = Charset.forName("UTF-8");
+        final Charset charset = Charset.forName("UTF-8");
         try (BufferedReader reader = Files.newBufferedReader(blacklistFile.toPath(), charset)) {
             String line;
-            while ((line = reader.readLine()) != null) {
+            while (null != (line = reader.readLine())) {
                 storedHosts.add(HttpHostExt.getProxyFromString(line));
             }
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
     }
 
     public boolean isProxyInBlacklist(final String proxyStr) {
-        Optional<HttpHostExt> host = storedHosts.parallelStream().filter(httpHostExt -> httpHostExt.isSameAsStr(proxyStr)).findFirst();
+        final Optional<HttpHostExt> host = storedHosts.parallelStream().filter(httpHostExt -> httpHostExt.isSameAsStr(proxyStr)).findFirst();
         return host.filter(httpHostExt -> !httpHostExt.isAvailable()).isPresent();
     }
 
-    public void updateBlacklist(Collection<HttpHostExt> currentProxyList) {
-        for (HttpHostExt proxy : currentProxyList) {
-            Optional<HttpHostExt> proxyInListOpt = storedHosts.parallelStream().filter(httpHostExt -> httpHostExt.equals(proxy)).findFirst();
+    public void updateBlacklist(final Iterable<HttpHostExt> currentProxyList) {
+        for (final HttpHostExt proxy : currentProxyList) {
+            final Optional<HttpHostExt> proxyInListOpt = storedHosts.parallelStream().filter(httpHostExt -> httpHostExt.equals(proxy)).findFirst();
             if (proxyInListOpt.isPresent()) {
                 proxyInListOpt.get().update(proxy);
             }
@@ -59,22 +59,22 @@ public final class ProxyBlacklistHolder {
             }
         }
 
-        List<HttpHostExt> deadProxyList = storedHosts.parallelStream().filter(HttpHostExt::isNotAvailable).limit(DEAD_PROXY_TREASHOLD).collect(Collectors.toList());
-        List<HttpHostExt> liveProxyList = storedHosts.parallelStream().filter(HttpHostExt::isAvailable).limit(DEAD_PROXY_TREASHOLD).collect(Collectors.toList());
+        final List<HttpHostExt> deadProxyList = storedHosts.parallelStream().filter(HttpHostExt::isNotAvailable).limit(DEAD_PROXY_TREASHOLD).collect(Collectors.toList());
+        final List<HttpHostExt> liveProxyList = storedHosts.parallelStream().filter(HttpHostExt::isAvailable).limit(DEAD_PROXY_TREASHOLD).collect(Collectors.toList());
 
         try (PrintWriter out = new PrintWriter(blacklistFile)) {
-            for (HttpHostExt host : liveProxyList)
+            for (final HttpHostExt host : liveProxyList)
                 out.write(host.getProxyString() + System.getProperty("line.separator"));
-            for (HttpHostExt host : deadProxyList)
+            for (final HttpHostExt host : deadProxyList)
                 out.write(host.getProxyString() + System.getProperty("line.separator"));
 
             out.flush();
-        } catch (FileNotFoundException e) {
+        } catch (final FileNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    public List<String> getWhiteList() {
+    public Collection<String> getWhiteList() {
         return storedHosts.parallelStream().filter(HttpHostExt::isAvailable).map(HttpHostExt::getProxyStringShort).collect(Collectors.toList());
     }
 }

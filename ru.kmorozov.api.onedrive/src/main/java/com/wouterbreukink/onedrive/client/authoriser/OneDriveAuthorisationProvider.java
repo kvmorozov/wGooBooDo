@@ -22,12 +22,15 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 class OneDriveAuthorisationProvider implements AuthorisationProvider {
+
+    private static final String[] EMPTY_STR_ARR = new String[0];
 
     static final HttpTransport HTTP_TRANSPORT = new ApacheHttpTransport();
     private static final Logger log = LogManager.getLogger(OneDriveAuthorisationProvider.class.getName());
@@ -37,7 +40,7 @@ class OneDriveAuthorisationProvider implements AuthorisationProvider {
     private Authorisation authorisation;
     private Date lastFetched;
 
-    public OneDriveAuthorisationProvider(Path keyFile) throws IOException {
+    OneDriveAuthorisationProvider(final Path keyFile) throws IOException {
 
         this.keyFile = Preconditions.checkNotNull(keyFile);
 
@@ -45,7 +48,7 @@ class OneDriveAuthorisationProvider implements AuthorisationProvider {
             throw new OneDriveAPIException(401, String.format("Specified key file '%s' cannot be found.", keyFile));
         }
 
-        String[] keyFileContents = readToken();
+        final String[] keyFileContents = readToken();
 
         switch (keyFileContents.length) {
             case 0:
@@ -57,8 +60,8 @@ class OneDriveAuthorisationProvider implements AuthorisationProvider {
                     throw new InvalidCodeException(null);
 
                 // If the user has pasted the entire URL then parse it
-                Pattern url = Pattern.compile("https://login.live.com/oauth20_desktop.srf.*code=(.*)&.*");
-                Matcher m = url.matcher(authCode);
+                final Pattern url = Pattern.compile("https://login.live.com/oauth20_desktop.srf.*code=(.*)&.*");
+                final Matcher m = url.matcher(authCode);
 
                 if (m.matches()) {
                     authCode = m.group(1);
@@ -94,7 +97,7 @@ class OneDriveAuthorisationProvider implements AuthorisationProvider {
 
     @Override
     public String getAccessToken() throws IOException {
-        if (authorisation != null) {
+        if (null != authorisation) {
 
             // Refresh if we know it is needed
             if (lastFetched.after(new Date(lastFetched.getTime() + authorisation.getExpiresIn() * 1000))) {
@@ -117,14 +120,14 @@ class OneDriveAuthorisationProvider implements AuthorisationProvider {
     private void getTokenFromCode(final String code) throws IOException {
         log.debug("Fetching authorisation token using authorisation code");
 
-        Map data = Collections.unmodifiableMap(Stream.of(
-                new AbstractMap.SimpleEntry<>("client_id", clientId),
-                new AbstractMap.SimpleEntry<>("code", code),
-                new AbstractMap.SimpleEntry<>("grant_type", "authorization_code"),
-                new AbstractMap.SimpleEntry<>("redirect_uri", "https://login.live.com/oauth20_desktop.srf"))
-                .collect(Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue)));
+        final Map data = Collections.unmodifiableMap(Stream.of(
+                new SimpleEntry<>("client_id", clientId),
+                new SimpleEntry<>("code", code),
+                new SimpleEntry<>("grant_type", "authorization_code"),
+                new SimpleEntry<>("redirect_uri", "https://login.live.com/oauth20_desktop.srf"))
+                .collect(Collectors.toMap(SimpleEntry::getKey, SimpleEntry::getValue)));
 
-        HttpRequest request =
+        final HttpRequest request =
                 HTTP_TRANSPORT.createRequestFactory().buildPostRequest(new GenericUrl("https://login.live.com/oauth20_token.srf"), new UrlEncodedContent(data));
 
         request.setParser(new JsonObjectParser(JsonUtils.JSON_FACTORY));
@@ -132,21 +135,21 @@ class OneDriveAuthorisationProvider implements AuthorisationProvider {
         processResponse(getResponse(request));
     }
 
-    private static HttpResponse getResponse(HttpRequest request) throws IOException {
-        HttpResponse response;
+    private static HttpResponse getResponse(final HttpRequest request) throws IOException {
+        final HttpResponse response;
 
         try {
             response = request.execute();
-        } catch (HttpResponseException hre) {
+        } catch (final HttpResponseException hre) {
             throw OneDriveExceptionFactory.getException(hre.getContent());
-        } catch (SSLHandshakeException she) {
+        } catch (final SSLHandshakeException she) {
             log.error("Failed to validate certificates!");
             if (she.getCause() instanceof ValidatorException)
                 if (she.getCause().getCause() instanceof SunCertPathBuilderException) {
-                    SunCertPathBuilderException certEx = (SunCertPathBuilderException) she.getCause().getCause();
-                    Iterator<BuildStep> steps = certEx.getAdjacencyList().iterator();
+                    final SunCertPathBuilderException certEx = (SunCertPathBuilderException) she.getCause().getCause();
+                    final Iterator<BuildStep> steps = certEx.getAdjacencyList().iterator();
                     while (steps.hasNext()) {
-                        BuildStep step = steps.next();
+                        final BuildStep step = steps.next();
                         log.info(step.getVertex().toString());
                     }
                 }
@@ -159,14 +162,14 @@ class OneDriveAuthorisationProvider implements AuthorisationProvider {
     private void getTokenFromRefreshToken(final String refreshToken) throws IOException {
         log.debug("Fetching authorisation token using refresh token");
 
-        Map data = Collections.unmodifiableMap(Stream.of(
-                new AbstractMap.SimpleEntry<>("client_id", clientId),
-                new AbstractMap.SimpleEntry<>("grant_type", "refresh_token"),
-                new AbstractMap.SimpleEntry<>("refresh_token", refreshToken),
-                new AbstractMap.SimpleEntry<>("redirect_uri", "https://login.live.com/oauth20_desktop.srf"))
-                .collect(Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue)));
+        final Map data = Collections.unmodifiableMap(Stream.of(
+                new SimpleEntry<>("client_id", clientId),
+                new SimpleEntry<>("grant_type", "refresh_token"),
+                new SimpleEntry<>("refresh_token", refreshToken),
+                new SimpleEntry<>("redirect_uri", "https://login.live.com/oauth20_desktop.srf"))
+                .collect(Collectors.toMap(SimpleEntry::getKey, SimpleEntry::getValue)));
 
-        HttpRequest request =
+        final HttpRequest request =
                 HTTP_TRANSPORT.createRequestFactory().buildPostRequest(new GenericUrl("https://login.live.com/oauth20_token.srf"), new UrlEncodedContent(data));
 
         request.setParser(new JsonObjectParser(JsonUtils.JSON_FACTORY));
@@ -174,11 +177,11 @@ class OneDriveAuthorisationProvider implements AuthorisationProvider {
         processResponse(getResponse(request));
     }
 
-    private void processResponse(HttpResponse response) throws IOException {
+    private void processResponse(final HttpResponse response) throws IOException {
         authorisation = response.parseAs(Authorisation.class);
 
         // Check for failures
-        if (response.getStatusCode() != 200 || authorisation.getError() != null) {
+        if (200 != response.getStatusCode() || null != authorisation.getError()) {
             throw new OneDriveAPIException(response.getStatusCode(),
                     String.format("Error code %d - %s (%s)",
                             response.getStatusCode(),
@@ -194,18 +197,18 @@ class OneDriveAuthorisationProvider implements AuthorisationProvider {
     private String[] readToken() {
         try {
             return Files.readAllLines(keyFile, Charset.defaultCharset()).toArray(new String[1]);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             log.error("Unable to read key file", e);
         }
 
-        return new String[0];
+        return EMPTY_STR_ARR;
     }
 
-    private void saveToken() throws OneDriveAPIException {
+    private void saveToken() {
         try {
-            String[] content = new String[]{clientId, authorisation.getRefreshToken()};
+            final String[] content = {clientId, authorisation.getRefreshToken()};
             Files.write(keyFile, Arrays.asList(content), Charset.defaultCharset());
-        } catch (IOException e) {
+        } catch (final IOException e) {
             log.error("Unable to write to key file ", e);
         }
     }

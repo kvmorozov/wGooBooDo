@@ -17,11 +17,11 @@ public class OneDriveWalkers {
     private static final int MAX_MAX_DEPTH = 100;
     private static OneDriveIterator<OneDriveItem> itr;
 
-    public static Stream<OneDriveItem> walk(OneDriveProvider api, int maxDepth, Predicate<OneDriveItem> skipCondition) throws IOException {
+    public static Stream<OneDriveItem> walk(final OneDriveProvider api, final int maxDepth, final Predicate<OneDriveItem> skipCondition) throws IOException {
         itr = new OneDriveIterator(api, api.getRoot(), maxDepth, skipCondition);
 
         try {
-            Stream<OneDriveItem> stream = StreamSupport.stream(Spliterators.spliteratorUnknownSize(itr, 1), false);
+            final Stream<OneDriveItem> stream = StreamSupport.stream(Spliterators.spliteratorUnknownSize(itr, 1), false);
             return stream.onClose(itr::close);
         } catch (RuntimeException | Error ex) {
             itr.close();
@@ -29,11 +29,11 @@ public class OneDriveWalkers {
         }
     }
 
-    public static Stream<OneDriveItem> walk(OneDriveProvider api, int maxDepth) throws IOException {
+    public static Stream<OneDriveItem> walk(final OneDriveProvider api, final int maxDepth) throws IOException {
         return walk(api, maxDepth, x -> false);
     }
 
-    public static Stream<OneDriveItem> walk(OneDriveProvider api, Predicate<OneDriveItem> skipCondition) throws IOException {
+    public static Stream<OneDriveItem> walk(final OneDriveProvider api, final Predicate<OneDriveItem> skipCondition) throws IOException {
         return walk(api, MAX_MAX_DEPTH, skipCondition);
     }
 

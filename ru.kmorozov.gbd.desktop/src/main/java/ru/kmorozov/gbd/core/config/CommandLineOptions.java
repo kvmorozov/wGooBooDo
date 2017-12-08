@@ -24,9 +24,9 @@ public class CommandLineOptions implements IGBDOptions {
 
     private CommandLine commandLine;
 
-    public CommandLineOptions(String[] commandLineArguments) {
-        CommandLineParser cmdLineParser = new DefaultParser();
-        Options options = new Options();
+    public CommandLineOptions(final String[] commandLineArguments) {
+        final CommandLineParser cmdLineParser = new DefaultParser();
+        final Options options = new Options();
 
         Option option = new Option(OPTION_BOOKID_SHORT, OPTION_BOOKID_LONG, true, "Book Id");
         option.setArgs(1);
@@ -72,21 +72,21 @@ public class CommandLineOptions implements IGBDOptions {
 
         try {
             commandLine = cmdLineParser.parse(options, commandLineArguments);
-        } catch (ParseException e) {
+        } catch (final ParseException e) {
             e.printStackTrace();
         }
     }
 
-    private String getStringOptionValue(String optionName) {
-        return commandLine.hasOption(optionName) && commandLine.getOptionValues(optionName) != null && commandLine.getOptionValues(optionName).length == 1
+    private String getStringOptionValue(final String optionName) {
+        return commandLine.hasOption(optionName) && null != commandLine.getOptionValues(optionName) && 1 == commandLine.getOptionValues(optionName).length
                 ? commandLine.getOptionValues(optionName)[0] : null;
     }
 
-    private int getIntOptionValue(String optionName) {
-        return commandLine.hasOption(optionName) && commandLine.getOptionValues(optionName).length == 1 ? Integer.parseInt(commandLine.getOptionValues(optionName)[0]) : 0;
+    private int getIntOptionValue(final String optionName) {
+        return commandLine.hasOption(optionName) && 1 == commandLine.getOptionValues(optionName).length ? Integer.parseInt(commandLine.getOptionValues(optionName)[0]) : 0;
     }
 
-    private boolean getBoolOptionValue(String optionName) {
+    private boolean getBoolOptionValue(final String optionName) {
         return commandLine.hasOption(optionName);
     }
 

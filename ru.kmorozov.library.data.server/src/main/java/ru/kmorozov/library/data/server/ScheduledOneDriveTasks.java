@@ -23,7 +23,7 @@ public class ScheduledOneDriveTasks {
     @Scheduled(fixedRate = SCHEDULE_INTERVAL)
     public void refreshOneDrive() throws IOException {
         logger.info("Scheduled refresh started");
-        oneLoader.load(oneDriveItem -> System.currentTimeMillis() - oneDriveItem.getLastModifiedDateTime().getTime() > Long.MAX_VALUE);
+        oneLoader.load(oneDriveItem -> Long.MAX_VALUE < System.currentTimeMillis() - oneDriveItem.getLastModifiedDateTime().getTime());
         logger.info("Scheduled refresh finished");
     }
 

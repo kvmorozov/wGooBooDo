@@ -43,19 +43,19 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
     private final BookContext bookContext;
     private final QueuedThreadPoolExecutor<GooglePageInfo> sigPageExecutor;
 
-    public GooglePageSigProcessor(BookContext bookContext, HttpHostExt proxy) {
+    GooglePageSigProcessor(final BookContext bookContext, final HttpHostExt proxy) {
         this.bookContext = bookContext;
         this.proxy = proxy;
 
         sigPageExecutor = new QueuedThreadPoolExecutor<>(bookContext.getPagesStream().filter(AbstractPage::isNotProcessed).count(), QueuedThreadPoolExecutor.THREAD_POOL_SIZE, GooglePageInfo::isProcessed,
-                                                         bookContext.toString() + '/' + proxy.toString());
+                bookContext.toString() + '/' + proxy);
     }
 
     @Override
     public void run() {
         if ((GBDOptions.secureMode() && proxy.isLocal()) || !proxy.isAvailable()) return;
 
-        if (!proxy.isLocal() && !(proxy.isAvailable() && proxy.getHost().getPort() > 0)) return;
+        if (!proxy.isLocal() && !(proxy.isAvailable() && 0 < proxy.getHost().getPort())) return;
 
         final IProgress psSigs = bookContext.getProgress().getSubProgress(bookContext.getBookInfo().getPages().getPages().length);
 
@@ -75,16 +75,16 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
 
     @Override
     public String toString() {
-        return "Sig processor:" + bookContext.toString();
+        return "Sig processor:" + bookContext;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
 
-        if (o == null || getClass() != o.getClass()) return false;
+        if (null == o || getClass() != o.getClass()) return false;
 
-        GooglePageSigProcessor that = (GooglePageSigProcessor) o;
+        final GooglePageSigProcessor that = (GooglePageSigProcessor) o;
 
         return new EqualsBuilder().append(proxy, that.proxy).append(bookContext, that.bookContext).isEquals();
     }
@@ -96,9 +96,9 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
 
     private class SigProcessorInternal implements IUniqueRunnable<GooglePageInfo> {
 
-        private GooglePageInfo page;
+        private final GooglePageInfo page;
 
-        SigProcessorInternal(GooglePageInfo page) {
+        SigProcessorInternal(final GooglePageInfo page) {
             this.page = page;
         }
 
@@ -106,15 +106,15 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
         public void run() {
             if (!proxy.isAvailable()) return;
 
-            if (page.dataProcessed.get() || page.getSig() != null || page.sigChecked.get() || page.loadingStarted.get()) return;
+            if (page.dataProcessed.get() || null != page.getSig() || page.sigChecked.get() || page.loadingStarted.get()) return;
 
             Response resp = null;
-            String baseUrl = GoogleImageExtractor.HTTPS_TEMPLATE.replace(GoogleImageExtractor.BOOK_ID_PLACEHOLDER, bookContext.getBookInfo().getBookId());
-            String rqUrl = baseUrl + GoogleImageExtractor.PAGES_REQUEST_TEMPLATE.replace(GoogleImageExtractor.RQ_PG_PLACEHOLDER, page.getPid());
+            final String baseUrl = GoogleImageExtractor.HTTPS_TEMPLATE.replace(GoogleImageExtractor.BOOK_ID_PLACEHOLDER, bookContext.getBookInfo().getBookId());
+            final String rqUrl = baseUrl + GoogleImageExtractor.PAGES_REQUEST_TEMPLATE.replace(GoogleImageExtractor.RQ_PG_PLACEHOLDER, page.getPid());
 
             try {
                 resp = getContent(rqUrl, proxy, true);
-                if (resp == null || resp.getContent() == null) {
+                if (null == resp || null == resp.getContent()) {
                     logger.finest(String.format(SIG_ERROR_TEMPLATE, rqUrl, proxy.toString()));
                     return;
                 }
@@ -134,23 +134,23 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
                 GooglePagesInfo framePages = null;
                 try {
                     framePages = Mapper.getGson().fromJson(respStr, GooglePagesInfo.class);
-                } catch (JsonParseException jpe) {
+                } catch (final JsonParseException jpe) {
                     logger.severe("Invalid JSON string: " + respStr);
                 }
 
-                if (framePages == null) return;
+                if (null == framePages) return;
 
-                GooglePageInfo[] pages = framePages.getPages();
-                for (GooglePageInfo framePage : pages)
-                    if (framePage.getSrc() != null) {
-                        GooglePageInfo _page = (GooglePageInfo) bookContext.getBookInfo().getPages().getPageByPid(framePage.getPid());
+                final GooglePageInfo[] pages = framePages.getPages();
+                for (final GooglePageInfo framePage : pages)
+                    if (null != framePage.getSrc()) {
+                        final GooglePageInfo _page = (GooglePageInfo) bookContext.getBookInfo().getPages().getPageByPid(framePage.getPid());
 
                         if (_page.dataProcessed.get()) continue;
 
-                        String _frameSrc = framePage.getSrc();
-                        if (_frameSrc != null) _page.setSrc(_frameSrc);
+                        final String _frameSrc = framePage.getSrc();
+                        if (null != _frameSrc) _page.setSrc(_frameSrc);
 
-                        if (_page.getSig() != null) {
+                        if (null != _page.getSig()) {
                             if (_page.getPid().equals(page.getPid())) {
                                 _page.sigChecked.set(true);
 
@@ -161,7 +161,7 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
                             }
                         }
 
-                        if (_page.getSrc() != null && _page.getSig() == null) logger.finest(String.format(SIG_WRONG_FORMAT, _page.getSrc()));
+                        if (null != _page.getSrc() && null == _page.getSig()) logger.finest(String.format(SIG_WRONG_FORMAT, _page.getSrc()));
                     }
             } catch (SocketTimeoutException | SocketException | NoHttpResponseException ce) {
                 if (!proxy.isLocal()) {
@@ -170,12 +170,12 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
                 }
 
                 if (!(ce instanceof SocketTimeoutException)) ce.printStackTrace();
-            } catch (Exception ex) {
+            } catch (final Exception ex) {
                 ex.printStackTrace();
             } finally {
                 try {
-                    if (resp != null) resp.close();
-                } catch (IOException e) {
+                    if (null != resp) resp.close();
+                } catch (final IOException e) {
                     e.printStackTrace();
                 }
             }

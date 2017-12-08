@@ -14,7 +14,7 @@ public class DeleteTask extends Task {
     private final OneDriveItem remoteFile;
     private final File localFile;
 
-    public DeleteTask(TaskOptions options, OneDriveItem remoteFile) {
+    public DeleteTask(final TaskOptions options, final OneDriveItem remoteFile) {
 
         super(options);
 
@@ -22,7 +22,7 @@ public class DeleteTask extends Task {
         this.localFile = null;
     }
 
-    public DeleteTask(TaskOptions options, File localFile) {
+    public DeleteTask(final TaskOptions options, final File localFile) {
 
         super(options);
 
@@ -36,7 +36,7 @@ public class DeleteTask extends Task {
 
     @Override
     public String toString() {
-        if (localFile != null) {
+        if (null != localFile) {
             return "Delete local file " + localFile.getPath();
         } else {
             return "Delete remote file " + remoteFile.getFullName();
@@ -45,7 +45,7 @@ public class DeleteTask extends Task {
 
     @Override
     protected void taskBody() throws IOException {
-        if (localFile != null) {
+        if (null != localFile) {
             fileSystem.delete(localFile);
             reporter.localDeleted();
             log.info("Deleted local file " + localFile.getPath());

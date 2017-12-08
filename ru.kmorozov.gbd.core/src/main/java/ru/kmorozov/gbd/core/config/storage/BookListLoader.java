@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -23,16 +24,15 @@ public class BookListLoader extends BaseLoader {
 
     static final BookListLoader BOOK_LIST_LOADER = new BookListLoader();
     private static final String INDEX_FILE_NAME = "books.index";
-    private boolean loadedFromIndex = false;
+    private boolean loadedFromIndex;
 
     protected BookListLoader() {
-        super();
     }
 
     public Set<String> getBookIdsList() {
-        File indexFile = getFileToLoad(false);
-        Set<String> result = loadFromDirNames();
-        if (indexFile != null) {
+        final File indexFile = getFileToLoad(false);
+        final Set<String> result = loadFromDirNames();
+        if (null != indexFile) {
             loadedFromIndex = true;
             result.addAll(loadFromIndex(indexFile));
         }
@@ -41,34 +41,34 @@ public class BookListLoader extends BaseLoader {
     }
 
     private Set<String> loadFromDirNames() {
-        Set<String> bookIdsList = new HashSet<>();
+        final Set<String> bookIdsList = new HashSet<>();
         try {
             Files.walk(Paths.get(GBDOptions.getBooksDir().toURI())).forEach(filePath -> {
                 if (filePath.toFile().isDirectory()) {
-                    String[] nameParts = filePath.toFile().getName().split(" ");
+                    final String[] nameParts = filePath.toFile().getName().split(" ");
                     if (isValidId(nameParts[nameParts.length - 1])) bookIdsList.add(nameParts[nameParts.length - 1]);
                 }
             });
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             ex.printStackTrace();
         }
 
         return bookIdsList;
     }
 
-    private Set<String> loadFromIndex(File indexFile) {
+    private Collection<String> loadFromIndex(final File indexFile) {
         Set<String> bookIdsList = new HashSet<>();
 
         try (Stream<String> idsStream = Files.lines(indexFile.toPath())) {
             bookIdsList = idsStream.filter(BookListLoader::isValidId).collect(Collectors.toSet());
-        } catch (IOException ioe) {
+        } catch (final IOException ioe) {
             ioe.printStackTrace();
         }
 
         return bookIdsList;
     }
 
-    private static boolean isValidId(String bookId) {
+    private static boolean isValidId(final String bookId) {
         return LibraryFactory.isValidId(bookId);
     }
 
@@ -77,7 +77,7 @@ public class BookListLoader extends BaseLoader {
 
         try (PrintWriter writer = new PrintWriter(getFileToLoad(true))) {
             ExecutionContext.INSTANCE.getBookIds().forEach(writer::println);
-        } catch (FileNotFoundException e) {
+        } catch (final FileNotFoundException e) {
             e.printStackTrace();
         }
     }

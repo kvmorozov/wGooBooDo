@@ -9,7 +9,7 @@ public class ShplBookData implements IBookData {
 
     private final String title;
 
-    public ShplBookData(String title) {
+    public ShplBookData(final String title) {
         this.title = title.trim();
     }
 

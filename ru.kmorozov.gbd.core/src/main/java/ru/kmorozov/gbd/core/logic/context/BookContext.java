@@ -34,7 +34,7 @@ public class BookContext {
     private IImageExtractor extractor;
     private long pagesBefore, pagesProcessed;
 
-    BookContext(String bookId, IProgress progress, IPostProcessor postProcessor) {
+    BookContext(final String bookId, final IProgress progress, final IPostProcessor postProcessor) {
         this.bookInfo = LibraryFactory.getMetadata(bookId).getBookExtractor(bookId).getBookInfo();
         this.progress = progress;
         this.postProcessor = postProcessor;
@@ -57,7 +57,7 @@ public class BookContext {
         return outputDir;
     }
 
-    public void setOutputDir(File outputDir) {
+    public void setOutputDir(final File outputDir) {
         this.outputDir = outputDir;
     }
 
@@ -65,7 +65,7 @@ public class BookContext {
         return progress;
     }
 
-    public IPostProcessor getPostProcessor() {
+    public Runnable getPostProcessor() {
         return postProcessor.getPostProcessor(this);
     }
 
@@ -81,7 +81,7 @@ public class BookContext {
         return pagesBefore;
     }
 
-    public void setPagesBefore(long pagesBefore) {
+    public void setPagesBefore(final long pagesBefore) {
         this.pagesBefore = pagesBefore;
     }
 
@@ -93,7 +93,7 @@ public class BookContext {
         return pagesProcessed;
     }
 
-    public void setPagesProcessed(long pagesProcessed) {
+    public void setPagesProcessed(final long pagesProcessed) {
         this.pagesProcessed = pagesProcessed;
     }
 
@@ -103,7 +103,7 @@ public class BookContext {
     }
 
     public IImageExtractor getExtractor() {
-        if (extractor == null) extractor = metadata.getExtractor(this);
+        if (null == extractor) extractor = metadata.getExtractor(this);
 
         return extractor;
     }

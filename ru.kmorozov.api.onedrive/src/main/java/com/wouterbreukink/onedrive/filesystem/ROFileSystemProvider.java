@@ -14,11 +14,11 @@ import java.util.zip.CheckedInputStream;
 
 class ROFileSystemProvider implements FileSystemProvider {
 
-    public void delete(File file) throws IOException {
+    public void delete(final File file) throws IOException {
         // Do nothing
     }
 
-    public File createFolder(File file, String name) throws IOException {
+    public File createFolder(final File file, final String name) throws IOException {
 
         return new File(file, name) {
             @Override
@@ -28,45 +28,45 @@ class ROFileSystemProvider implements FileSystemProvider {
         };
     }
 
-    public File createFile(File file, String name) throws IOException {
+    public File createFile(final File file, final String name) {
         return new File(file, name);
     }
 
-    public void replaceFile(File original, File replacement) throws IOException {
+    public void replaceFile(final File original, final File replacement) throws IOException {
         // Do nothing
     }
 
-    public void setAttributes(File downloadFile, Date created, Date lastModified) throws IOException {
+    public void setAttributes(final File downloadFile, final Date created, final Date lastModified) throws IOException {
         // Do nothing
     }
 
-    public boolean verifyCrc(File file, long crc) throws IOException {
+    public boolean verifyCrc(final File file, final long crc) throws IOException {
         return true;
     }
 
-    public FileMatch verifyMatch(File file, long crc, long fileSize, Date created, Date lastModified) throws IOException {
+    public FileMatch verifyMatch(final File file, final long crc, final long fileSize, Date created, Date lastModified) throws IOException {
 
         // Round to nearest second
         created = new Date((created.getTime() / 1000) * 1000);
         lastModified = new Date((lastModified.getTime() / 1000) * 1000);
 
-        BasicFileAttributes attr = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
+        final BasicFileAttributes attr = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
 
         // Timestamp rounded to the nearest second
-        Date localCreatedDate = new Date(attr.creationTime().to(TimeUnit.SECONDS) * 1000);
-        Date localModifiedDate = new Date(attr.lastModifiedTime().to(TimeUnit.SECONDS) * 1000);
+        final Date localCreatedDate = new Date(attr.creationTime().to(TimeUnit.SECONDS) * 1000);
+        final Date localModifiedDate = new Date(attr.lastModifiedTime().to(TimeUnit.SECONDS) * 1000);
 
-        boolean sizeMatches = fileSize == file.length();
-        boolean createdMatches = created.equals(localCreatedDate);
-        boolean modifiedMatches = lastModified.equals(localModifiedDate);
+        final boolean sizeMatches = fileSize == file.length();
+        final boolean createdMatches = created.equals(localCreatedDate);
+        final boolean modifiedMatches = lastModified.equals(localModifiedDate);
 
         if (!CommandLineOpts.getCommandLineOpts().useHash() && sizeMatches && createdMatches && modifiedMatches) {
             // Close enough!
             return FileMatch.YES;
         }
 
-        long localCrc = getChecksum(file);
-        boolean crcMatches = crc == localCrc;
+        final long localCrc = getChecksum(file);
+        final boolean crcMatches = crc == localCrc;
 
         // If the crc matches but the timestamps do not we won't upload the content again
         if (crcMatches && !(modifiedMatches && createdMatches)) {
@@ -80,20 +80,20 @@ class ROFileSystemProvider implements FileSystemProvider {
         }
     }
 
-    public FileMatch verifyMatch(File file, Date created, Date lastModified) throws IOException {
+    public FileMatch verifyMatch(final File file, Date created, Date lastModified) throws IOException {
 
         // Round to nearest second
         created = new Date((created.getTime() / 1000) * 1000);
         lastModified = new Date((lastModified.getTime() / 1000) * 1000);
 
-        BasicFileAttributes attr = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
+        final BasicFileAttributes attr = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
 
         // Timestamp rounded to the nearest second
-        Date localCreatedDate = new Date(attr.creationTime().to(TimeUnit.SECONDS) * 1000);
-        Date localModifiedDate = new Date(attr.lastModifiedTime().to(TimeUnit.SECONDS) * 1000);
+        final Date localCreatedDate = new Date(attr.creationTime().to(TimeUnit.SECONDS) * 1000);
+        final Date localModifiedDate = new Date(attr.lastModifiedTime().to(TimeUnit.SECONDS) * 1000);
 
-        boolean createdMatches = created.equals(localCreatedDate);
-        boolean modifiedMatches = lastModified.equals(localModifiedDate);
+        final boolean createdMatches = created.equals(localCreatedDate);
+        final boolean modifiedMatches = lastModified.equals(localModifiedDate);
 
         if (createdMatches && modifiedMatches) {
             return FileMatch.YES;
@@ -103,13 +103,12 @@ class ROFileSystemProvider implements FileSystemProvider {
         }
     }
 
-    public long getChecksum(File file) throws IOException {
+    public long getChecksum(final File file) throws IOException {
         // Compute CRC32 checksum
         try (CheckedInputStream cis = new CheckedInputStream(new FileInputStream(file), new CRC32())) {
-            byte[] buf = new byte[1024];
+            final byte[] buf = new byte[1024];
 
-            //noinspection StatementWithEmptyBody
-            while (cis.read(buf) >= 0) {
+            while (0 <= cis.read(buf)) {
             }
 
             return cis.getChecksum().getValue();

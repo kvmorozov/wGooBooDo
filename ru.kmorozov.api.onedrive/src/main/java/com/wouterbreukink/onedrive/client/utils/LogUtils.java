@@ -12,48 +12,48 @@ import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 
-public class LogUtils {
+public final class LogUtils {
 
     private LogUtils() {
     }
 
-    public static String readableFileSize(double size) {
+    public static String readableFileSize(final double size) {
         return readableFileSize((long) size);
     }
 
-    public static String readableFileSize(long size) {
-        if (size <= 0) return "0";
-        final String[] units = new String[]{"B", "KB", "MB", "GB", "TB"};
-        int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
+    public static String readableFileSize(final long size) {
+        if (0 >= size) return "0";
+        final String[] units = {"B", "KB", "MB", "GB", "TB"};
+        final int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
         return new DecimalFormat("#,##0.#").format(size / Math.pow(1024, digitGroups)) + ' ' + units[digitGroups];
     }
 
-    public static String readableTime(long ms) {
+    public static String readableTime(final long ms) {
 
-        if (ms < 1000) {
+        if (1000 > ms) {
             return ms + "ms";
-        } else if (ms < 60000) {
+        } else if (60000 > ms) {
             return String.format("%.1fs", ms / 1000d);
         } else {
-            long seconds = ms / 1000;
-            long s = seconds % 60;
-            long m = (seconds / 60) % 60;
-            long h = (seconds / (60 * 60)) % 24;
+            final long seconds = ms / 1000;
+            final long s = seconds % 60;
+            final long m = (seconds / 60) % 60;
+            final long h = (seconds / (60 * 60)) % 24;
             return String.format("%02d:%02d:%02d", h, m, s);
         }
     }
 
-    public static String addFileLogger(String logFile) {
+    public static String addFileLogger(final String logFile) {
 
-        LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
-        Configuration config = ctx.getConfiguration();
+        final LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
+        final Configuration config = ctx.getConfiguration();
 
         // Default log layout
-        Layout<? extends Serializable> layout =
+        final Layout<? extends Serializable> layout =
                 PatternLayout.createLayout("%d %p [%t] %m%n", null, null, null, Charset.defaultCharset(), true, true, null, null);
 
         // Create a new file appender for the given filename
-        FileAppender appender = FileAppender.createAppender(
+        final FileAppender appender = FileAppender.createAppender(
                 logFile,
                 "false",
                 "false",

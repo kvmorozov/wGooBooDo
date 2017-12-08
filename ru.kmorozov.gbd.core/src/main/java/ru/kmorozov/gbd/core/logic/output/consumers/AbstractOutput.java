@@ -4,22 +4,22 @@ import ru.kmorozov.gbd.core.logic.output.events.BaseEvent;
 import ru.kmorozov.gbd.core.logic.output.listeners.IEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 /**
  * Created by km on 15.12.2015.
  */
 public abstract class AbstractOutput implements IBookInfoOutput, IEventConsumer {
 
-    private final List<IEventListener> listeners = new ArrayList<>();
+    private final Collection<IEventListener> listeners = new ArrayList<>();
 
     @Override
-    public void addListener(IEventListener listener) {
+    public void addListener(final IEventListener listener) {
         listeners.add(listener);
     }
 
     @Override
-    public void consumeEvent(BaseEvent event) {
+    public void consumeEvent(final BaseEvent event) {
         listeners.stream().filter(listener -> listener.eventMatched(event)).forEachOrdered(listener -> listener.receiveEvent(event));
     }
 }

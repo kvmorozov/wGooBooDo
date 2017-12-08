@@ -2,6 +2,7 @@ package ru.kmorozov.gbd.core.logic.extractors.base;
 
 import org.apache.commons.io.IOUtils;
 import org.jsoup.Connection;
+import org.jsoup.Connection.Method;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import ru.kmorozov.gbd.core.config.storage.AbstractContextProvider;
@@ -27,11 +28,11 @@ public abstract class AbstractBookExtractor extends AbstractHttpProcessor {
     protected String bookId;
     protected BookInfo bookInfo;
 
-    protected AbstractBookExtractor(String bookId) {
+    protected AbstractBookExtractor(final String bookId) {
         this.bookId = bookId;
 
-        BookInfo storedBookInfo = AbstractContextProvider.getContextProvider().getBookInfo(bookId);
-        bookInfo = storedBookInfo == null ? findBookInfo() : storedBookInfo;
+        final BookInfo storedBookInfo = AbstractContextProvider.getContextProvider().getBookInfo(bookId);
+        bookInfo = null == storedBookInfo ? findBookInfo() : storedBookInfo;
     }
 
     protected abstract String getBookUrl();
@@ -45,37 +46,37 @@ public abstract class AbstractBookExtractor extends AbstractHttpProcessor {
         Document doc = null;
 
         try {
-            res = Jsoup.connect(getBookUrl()).userAgent(HttpConnections.USER_AGENT).followRedirects(false).timeout(20000).method(Connection.Method.GET).execute();
-        } catch (UnknownHostException uhe) {
+            res = Jsoup.connect(getBookUrl()).userAgent(HttpConnections.USER_AGENT).followRedirects(false).timeout(20000).method(Method.GET).execute();
+        } catch (final UnknownHostException uhe) {
             logger.severe("Not connected to Internet!");
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             try {
-                res = Jsoup.connect(getReserveBookUrl()).userAgent(HttpConnections.USER_AGENT).method(Connection.Method.GET).execute();
-            } catch (Exception ex1) {
+                res = Jsoup.connect(getReserveBookUrl()).userAgent(HttpConnections.USER_AGENT).method(Method.GET).execute();
+            } catch (final Exception ex1) {
                 throw new RuntimeException(ex1);
             }
         }
 
         try {
-            if (res != null) {
+            if (null != res) {
                 doc = res.parse();
             }
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
 
         return doc;
     }
 
-    protected Document getDocumentWithProxy(HttpHostExt proxy) {
-        Response resp = getContent(getBookUrl(), proxy, true);
+    protected Document getDocumentWithProxy(final HttpHostExt proxy) {
+        final Response resp = getContent(getBookUrl(), proxy, true);
 
-        if (resp == null) return null;
+        if (null == resp) return null;
         else {
             try (InputStream is = resp.getContent()) {
-                String respStr = IOUtils.toString(is, Charset.defaultCharset());
+                final String respStr = IOUtils.toString(is, Charset.defaultCharset());
                 return Jsoup.parse(respStr);
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 return null;
             }
         }

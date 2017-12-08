@@ -2,7 +2,9 @@ package ru.kmorozov.library.data.model.dto;
 
 import ru.kmorozov.library.data.model.book.Category;
 import ru.kmorozov.library.data.model.book.Storage;
+import ru.kmorozov.library.data.model.book.Storage.StorageType;
 
+import java.util.Collection;
 import java.util.Set;
 
 /**
@@ -11,7 +13,7 @@ import java.util.Set;
 public class StorageDTO {
 
     private String id;
-    private Storage.StorageType storageType;
+    private StorageType storageType;
     private String url, displayName;
     private String parentId;
     private long filesCount, lastChecked;
@@ -20,18 +22,18 @@ public class StorageDTO {
     public StorageDTO() {
     }
 
-    public StorageDTO(Storage storage) {
+    public StorageDTO(final Storage storage) {
         this(storage, false);
     }
 
-    public StorageDTO(Storage storage, boolean withCategories) {
+    public StorageDTO(final Storage storage, final boolean withCategories) {
         this.id = storage.getId();
         this.storageType = storage.getStorageType();
         this.url = storage.getUrl();
         this.displayName = storage.getName();
-        this.parentId = storage.getParent() == null ? null : storage.getParent().getId();
-        this.filesCount = storage.getStorageInfo() == null ? 0l : storage.getStorageInfo().getFilesCount();
-        this.lastChecked = storage.getStorageInfo() == null ? 0l : storage.getStorageInfo().getLastChecked();
+        this.parentId = null == storage.getParent() ? null : storage.getParent().getId();
+        this.filesCount = null == storage.getStorageInfo() ? 0l : storage.getStorageInfo().getFilesCount();
+        this.lastChecked = null == storage.getStorageInfo() ? 0l : storage.getStorageInfo().getLastChecked();
 
         if (withCategories)
             this.categories = storage.getCategories();
@@ -41,7 +43,7 @@ public class StorageDTO {
         return id;
     }
 
-    public Storage.StorageType getStorageType() {
+    public StorageType getStorageType() {
         return storageType;
     }
 
@@ -61,7 +63,7 @@ public class StorageDTO {
         return filesCount;
     }
 
-    public Set<Category> getCategories() {
+    public Collection<Category> getCategories() {
         return categories;
     }
 

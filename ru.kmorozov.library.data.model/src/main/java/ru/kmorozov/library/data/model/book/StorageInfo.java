@@ -15,7 +15,7 @@ public class StorageInfo {
     public StorageInfo() {
     }
 
-    public StorageInfo(long filesCount) {
+    public StorageInfo(final long filesCount) {
         this.filesCount = filesCount;
     }
 
@@ -23,7 +23,7 @@ public class StorageInfo {
         return filesCount;
     }
 
-    public void setFilesCount(long filesCount) {
+    public void setFilesCount(final long filesCount) {
         this.filesCount = filesCount;
     }
 
@@ -35,7 +35,7 @@ public class StorageInfo {
         return lastChecked;
     }
 
-    public void setLastChecked(long lastChecked) {
+    public void setLastChecked(final long lastChecked) {
         this.lastChecked = lastChecked;
     }
 }

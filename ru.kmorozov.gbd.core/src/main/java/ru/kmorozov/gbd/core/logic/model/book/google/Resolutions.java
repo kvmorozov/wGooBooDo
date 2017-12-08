@@ -9,12 +9,12 @@ public enum Resolutions {
 
     private final int resolution;
 
-    Resolutions(int resolution) {
+    Resolutions(final int resolution) {
         this.resolution = resolution;
     }
 
-    public static Resolutions getEnum(int value) {
-        for (Resolutions v : values())
+    public static Resolutions getEnum(final int value) {
+        for (final Resolutions v : values())
             if (v.resolution == value) return v;
 
         throw new IllegalArgumentException();

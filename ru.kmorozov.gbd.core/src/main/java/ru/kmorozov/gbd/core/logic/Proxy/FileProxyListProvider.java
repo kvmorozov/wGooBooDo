@@ -16,31 +16,31 @@ public class FileProxyListProvider extends AbstractProxyListProvider {
     }
 
     private void buildList() {
-        String proxyListFileName = GBDOptions.getProxyListFile();
-        if (proxyListFileName == null || proxyListFileName.length() == 0) return;
+        final String proxyListFileName = GBDOptions.getProxyListFile();
+        if (null == proxyListFileName || proxyListFileName.isEmpty()) return;
 
-        File proxyListFile = new File(proxyListFileName);
+        final File proxyListFile = new File(proxyListFileName);
         if (!proxyListFile.exists() && !proxyListFile.canRead()) return;
 
         try (InputStream is = new FileInputStream(proxyListFile)) {
             this.proxyItems = new HashSet(IOUtils.readLines(is, "UTF-8"));
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
     }
 
     @Override
     public void updateProxyList() {
-        String proxyListFileName = GBDOptions.getProxyListFile();
-        if (proxyListFileName == null || proxyListFileName.length() == 0) return;
+        final String proxyListFileName = GBDOptions.getProxyListFile();
+        if (null == proxyListFileName || proxyListFileName.isEmpty()) return;
 
-        File proxyListFile = new File(proxyListFileName);
+        final File proxyListFile = new File(proxyListFileName);
         if (!proxyListFile.exists() && !proxyListFile.canRead()) return;
 
         try (OutputStream os = new FileOutputStream(proxyListFile, false)) {
-            for (HttpHostExt proxy : proxyList)
+            for (final HttpHostExt proxy : proxyList)
                 if (!proxy.isLocal() && proxy.isAvailable()) IOUtils.write(String.format("%s %s%n", proxy.getHost().getHostName(), proxy.getHost().getPort()), os, "UTF-8");
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
     }

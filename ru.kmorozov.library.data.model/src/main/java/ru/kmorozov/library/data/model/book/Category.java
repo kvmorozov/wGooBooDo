@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,7 +32,7 @@ public class Category {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
@@ -39,7 +40,7 @@ public class Category {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -47,34 +48,34 @@ public class Category {
         return parents;
     }
 
-    public void setParents(Set<Category> parents) {
+    public void setParents(final Set<Category> parents) {
         this.parents = parents;
     }
 
-    public Set<Storage> getStorages() {
+    public Iterable<Storage> getStorages() {
         return storages;
     }
 
-    public void setStorages(Set<Storage> storages) {
+    public void setStorages(final Set<Storage> storages) {
         this.storages = storages;
     }
 
-    public void addStorage(Storage storage) {
-        if (storages == null)
+    public void addStorage(final Storage storage) {
+        if (null == storages)
             storages = new HashSet<>();
 
         storages.add(storage);
     }
 
-    public void addParents(Set<Category> items) {
-        if (parents == null)
+    public void addParents(final Collection<Category> items) {
+        if (null == parents)
             parents = new HashSet<>();
 
         parents.addAll(items);
     }
 
-    public void addParent(Category parent) {
-        if (parents == null)
+    public void addParent(final Category parent) {
+        if (null == parents)
             parents = new HashSet<>();
 
         if (!parents.contains(parent))
@@ -82,11 +83,11 @@ public class Category {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (null == o || getClass() != o.getClass()) return false;
 
-        Category category = (Category) o;
+        final Category category = (Category) o;
 
         return id.equals(category.id);
 

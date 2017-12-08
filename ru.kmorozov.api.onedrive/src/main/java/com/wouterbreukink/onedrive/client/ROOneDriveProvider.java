@@ -22,9 +22,11 @@ class ROOneDriveProvider implements OneDriveProvider {
 
     static final HttpTransport HTTP_TRANSPORT = new ApacheHttpTransport();
 
+    private static final String[] EMPTY_STR_ARR = new String[0];
+
     final HttpRequestFactory requestFactory;
 
-    public ROOneDriveProvider(final AuthorisationProvider authoriser) {
+    ROOneDriveProvider(final AuthorisationProvider authoriser) {
         requestFactory =
                 HTTP_TRANSPORT.createRequestFactory(request -> {
                     request.setParser(new JsonObjectParser(JsonUtils.JSON_FACTORY));
@@ -32,7 +34,7 @@ class ROOneDriveProvider implements OneDriveProvider {
                     request.setConnectTimeout(60000);
                     try {
                         request.getHeaders().setAuthorization("bearer " + authoriser.getAccessToken());
-                    } catch (IOException e) {
+                    } catch (final IOException e) {
                         throw Throwables.propagate(e);
                     }
 
@@ -42,100 +44,100 @@ class ROOneDriveProvider implements OneDriveProvider {
 
     @Override
     public Drive getDefaultDrive() throws IOException {
-        HttpRequest request = requestFactory.buildGetRequest(OneDriveUrl.defaultDrive());
+        final HttpRequest request = requestFactory.buildGetRequest(OneDriveUrl.defaultDrive());
         return request.execute().parseAs(Drive.class);
     }
 
     @Override
     public OneDriveItem getRoot() throws IOException {
-        HttpRequest request = requestFactory.buildGetRequest(OneDriveUrl.driveRoot());
-        Item response = request.execute().parseAs(Item.class);
+        final HttpRequest request = requestFactory.buildGetRequest(OneDriveUrl.driveRoot());
+        final Item response = request.execute().parseAs(Item.class);
         return OneDriveItem.FACTORY.create(response);
     }
 
     @Override
-    public OneDriveItem[] getChildren(OneDriveItem parent) throws IOException {
+    public OneDriveItem[] getChildren(final OneDriveItem parent) throws IOException {
         if (!parent.isDirectory()) {
             throw new IllegalArgumentException("Specified Item is not a folder");
         }
 
-        List<OneDriveItem> itemsToReturn = Lists.newArrayList();
+        final List<OneDriveItem> itemsToReturn = Lists.newArrayList();
 
         String token = null;
 
         do {
 
-            OneDriveUrl url = OneDriveUrl.children(parent.getId());
+            final OneDriveUrl url = OneDriveUrl.children(parent.getId());
 
-            if (token != null) {
+            if (null != token) {
                 url.setToken(token);
             }
 
-            HttpRequest request = requestFactory.buildGetRequest(url);
-            ItemSet items = request.execute().parseAs(ItemSet.class);
+            final HttpRequest request = requestFactory.buildGetRequest(url);
+            final ItemSet items = request.execute().parseAs(ItemSet.class);
 
-            for (Item i : items.getValue()) {
+            for (final Item i : items.getValue()) {
                 itemsToReturn.add(OneDriveItem.FACTORY.create(i));
             }
 
             token = items.getNextToken();
 
-        } while (token != null); // If we have a token for the next page we need to keep going
+        } while (null != token); // If we have a token for the next page we need to keep going
 
         return itemsToReturn.toArray(new OneDriveItem[itemsToReturn.size()]);
     }
 
     @Override
-    public OneDriveItem[] getChildren(String id) throws IOException {
-        List<OneDriveItem> itemsToReturn = Lists.newArrayList();
+    public OneDriveItem[] getChildren(final String id) throws IOException {
+        final List<OneDriveItem> itemsToReturn = Lists.newArrayList();
 
         String token = null;
 
         do {
 
-            OneDriveUrl url = OneDriveUrl.children(id);
+            final OneDriveUrl url = OneDriveUrl.children(id);
 
-            if (token != null) {
+            if (null != token) {
                 url.setToken(token);
             }
 
-            HttpRequest request = requestFactory.buildGetRequest(url);
-            ItemSet items = request.execute().parseAs(ItemSet.class);
+            final HttpRequest request = requestFactory.buildGetRequest(url);
+            final ItemSet items = request.execute().parseAs(ItemSet.class);
 
-            for (Item i : items.getValue()) {
+            for (final Item i : items.getValue()) {
                 itemsToReturn.add(OneDriveItem.FACTORY.create(i));
             }
 
             token = items.getNextToken();
 
-        } while (token != null); // If we have a token for the next page we need to keep going
+        } while (null != token); // If we have a token for the next page we need to keep going
 
         return itemsToReturn.toArray(new OneDriveItem[itemsToReturn.size()]);
     }
 
     @Override
-    public OneDriveItem getPath(String path) throws IOException {
+    public OneDriveItem getPath(final String path) throws IOException {
         try {
-            HttpRequest request = requestFactory.buildGetRequest(OneDriveUrl.getPath(path));
-            Item response = request.execute().parseAs(Item.class);
+            final HttpRequest request = requestFactory.buildGetRequest(OneDriveUrl.getPath(path));
+            final Item response = request.execute().parseAs(Item.class);
             return OneDriveItem.FACTORY.create(response);
-        } catch (HttpResponseException e) {
+        } catch (final HttpResponseException e) {
             throw new OneDriveAPIException(e.getStatusCode(), "Unable to get path", e);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new OneDriveAPIException(0, "Unable to get path", e);
         }
     }
 
     @Override
-    public OneDriveItem getItem(String id) throws IOException {
-        HttpRequest request = requestFactory.buildGetRequest(OneDriveUrl.item(id));
+    public OneDriveItem getItem(final String id) throws IOException {
+        final HttpRequest request = requestFactory.buildGetRequest(OneDriveUrl.item(id));
         request.setRetryOnExecuteIOException(true);
         request.setIOExceptionHandler(ResumableDownloader.ioExceptionHandler);
-        Item response = request.execute().parseAs(Item.class);
+        final Item response = request.execute().parseAs(Item.class);
         return OneDriveItem.FACTORY.create(response);
     }
 
-    public OneDriveItem replaceFile(OneDriveItem parent, File file) throws IOException {
+    public OneDriveItem replaceFile(final OneDriveItem parent, final File file) throws IOException {
 
         if (!parent.isDirectory()) {
             throw new IllegalArgumentException("Parent is not a folder");
@@ -144,7 +146,7 @@ class ROOneDriveProvider implements OneDriveProvider {
         return OneDriveItem.FACTORY.create(parent, file.getName(), file.isDirectory());
     }
 
-    public OneDriveItem uploadFile(OneDriveItem parent, File file) throws IOException {
+    public OneDriveItem uploadFile(final OneDriveItem parent, final File file) throws IOException {
 
         if (!parent.isDirectory()) {
             throw new IllegalArgumentException("Parent is not a folder");
@@ -154,39 +156,39 @@ class ROOneDriveProvider implements OneDriveProvider {
     }
 
     @Override
-    public OneDriveUploadSession startUploadSession(OneDriveItem parent, File file) throws IOException {
-        return new OneDriveUploadSession(parent, file, null, new String[0]);
+    public OneDriveUploadSession startUploadSession(final OneDriveItem parent, final File file) throws IOException {
+        return new OneDriveUploadSession(parent, file, null, EMPTY_STR_ARR);
     }
 
     @Override
-    public void uploadChunk(OneDriveUploadSession session) throws IOException {
+    public void uploadChunk(final OneDriveUploadSession session) throws IOException {
         session.setComplete(OneDriveItem.FACTORY.create(session.getParent(), session.getFile().getName(), session.getFile().isDirectory()));
     }
 
     @Override
-    public OneDriveItem updateFile(OneDriveItem item, Date createdDate, Date modifiedDate) throws IOException {
+    public OneDriveItem updateFile(final OneDriveItem item, final Date createdDate, final Date modifiedDate) throws IOException {
         // Do nothing, just return the unmodified item
         return item;
     }
 
     @Override
-    public OneDriveItem createFolder(OneDriveItem parent, File target) throws IOException {
+    public OneDriveItem createFolder(final OneDriveItem parent, final File target) throws IOException {
         // Return a dummy folder
         return OneDriveItem.FACTORY.create(parent, target.getName(), true);
     }
 
     @Override
-    public void download(OneDriveItem item, File target, ResumableDownloaderProgressListener progressListener, int chunkSize) throws IOException {
+    public void download(final OneDriveItem item, final File target, final ResumableDownloaderProgressListener progressListener, final int chunkSize) throws IOException {
         // Do nothing
     }
 
     @Override
-    public void download(OneDriveItem item, File target, ResumableDownloaderProgressListener progressListener) throws IOException {
+    public void download(final OneDriveItem item, final File target, final ResumableDownloaderProgressListener progressListener) throws IOException {
         // Do nothing
     }
 
     @Override
-    public void delete(OneDriveItem remoteFile) throws IOException {
+    public void delete(final OneDriveItem remoteFile) throws IOException {
         // Do nothing
     }
 }

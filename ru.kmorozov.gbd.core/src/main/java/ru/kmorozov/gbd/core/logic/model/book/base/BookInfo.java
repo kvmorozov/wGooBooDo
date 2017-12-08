@@ -16,7 +16,7 @@ public class BookInfo implements Serializable {
     public BookInfo() {
     }
 
-    public BookInfo(IBookData bookData, IPagesInfo pages, String bookId) {
+    public BookInfo(final IBookData bookData, final IPagesInfo pages, final String bookId) {
         this.bookData = bookData;
         this.pages = pages;
         this.bookId = bookId;
@@ -38,7 +38,7 @@ public class BookInfo implements Serializable {
         return lastPdfChecked;
     }
 
-    public void setLastPdfChecked(long lastPdfChecked) {
+    public void setLastPdfChecked(final long lastPdfChecked) {
         this.lastPdfChecked = lastPdfChecked;
     }
 }

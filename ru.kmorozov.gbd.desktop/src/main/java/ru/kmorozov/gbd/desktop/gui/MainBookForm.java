@@ -21,7 +21,7 @@ import javax.swing.*;
  */
 public class MainBookForm {
     private static MainBookForm INSTANCE;
-    private static ManageController manageController = new ManageController();
+    private static final ManageController manageController = new ManageController();
     private JTabbedPane tabbedPane1;
     private JPanel mainPanel, pProgress, pFooter, pManage;
     private JTextField tfBookId, tfRootOutDir, tfProxyListFile, tfBookTitle;
@@ -33,7 +33,7 @@ public class MainBookForm {
     private SwingWorker workerExtractor, workerPdfmaker;
 
     public MainBookForm() {
-        if (INSTANCE != null) return;
+        if (null != INSTANCE) return;
 
         INSTANCE = this;
 
@@ -48,23 +48,24 @@ public class MainBookForm {
 
         configureManage();
 
-        if (SystemConfigs.getResolution() > 0) cbResolution.setSelectedItem(Resolutions.getEnum(SystemConfigs.getResolution()));
+        if (0 < SystemConfigs.getResolution())
+            cbResolution.setSelectedItem(Resolutions.getEnum(SystemConfigs.getResolution()));
 
         bRootOutDir.addActionListener(e -> {
-            JFileChooser fcRootDir = new JFileChooser();
+            final JFileChooser fcRootDir = new JFileChooser();
             fcRootDir.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            int returnVal = fcRootDir.showOpenDialog(mainPanel);
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
+            final int returnVal = fcRootDir.showOpenDialog(mainPanel);
+            if (JFileChooser.APPROVE_OPTION == returnVal) {
                 tfRootOutDir.setText(fcRootDir.getSelectedFile().getAbsolutePath());
                 SystemConfigs.setRootDir(fcRootDir.getSelectedFile().getAbsolutePath());
             }
         });
 
         bProxyList.addActionListener(e -> {
-            JFileChooser fcProxyList = new JFileChooser();
+            final JFileChooser fcProxyList = new JFileChooser();
             fcProxyList.setFileSelectionMode(JFileChooser.FILES_ONLY);
-            int returnVal = fcProxyList.showOpenDialog(mainPanel);
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
+            final int returnVal = fcProxyList.showOpenDialog(mainPanel);
+            if (JFileChooser.APPROVE_OPTION == returnVal) {
                 tfProxyListFile.setText(fcProxyList.getSelectedFile().getAbsolutePath());
                 SystemConfigs.setProxyListFile(fcProxyList.getSelectedFile().getAbsolutePath());
             }
@@ -88,7 +89,7 @@ public class MainBookForm {
 
             workerExtractor.addPropertyChangeListener(event -> {
                 if ("progress".equals(event.getPropertyName()) && event.getSource() instanceof AbstractEventSource) {
-                    ProcessStatus status = (ProcessStatus) ((IEventSource) event.getSource()).getProcessStatus();
+                    final ProcessStatus status = (ProcessStatus) ((IEventSource) event.getSource()).getProcessStatus();
                     status.getProgressBar().setValue(status.get());
                 }
             });
@@ -100,7 +101,8 @@ public class MainBookForm {
         cbReload.addChangeListener(event -> SystemConfigs.setReload(((AbstractButton) event.getSource()).getModel().isSelected()));
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            if (workerExtractor != null && workerExtractor.getState() == SwingWorker.StateValue.STARTED) workerExtractor.cancel(true);
+            if (null != workerExtractor && SwingWorker.StateValue.STARTED == workerExtractor.getState())
+                workerExtractor.cancel(true);
         }));
 
         bMakeBook.addActionListener(e -> {
@@ -110,7 +112,7 @@ public class MainBookForm {
             workerPdfmaker = new SwingWorker<Void, Void>() {
 
                 @Override
-                protected Void doInBackground() throws Exception {
+                protected Void doInBackground() {
                     ExecutionContext.INSTANCE.addBookContext(new SingleBookProducer(tfBookId.getText()), new ProcessStatus(), new PdfMaker());
                     (new PdfMaker(ExecutionContext.INSTANCE.getContexts(false).get(0))).make();
 

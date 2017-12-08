@@ -5,7 +5,7 @@ package com.wouterbreukink.onedrive.client.exceptions;
  */
 public class InvalidCodeException extends OneDriveException {
 
-    public InvalidCodeException(OneDriveErrorInfo errorInfo) {
+    public InvalidCodeException(final OneDriveErrorInfo errorInfo) {
         super(errorInfo);
     }
 }

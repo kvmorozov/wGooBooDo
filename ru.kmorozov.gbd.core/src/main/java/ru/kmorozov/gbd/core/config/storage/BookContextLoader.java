@@ -21,10 +21,9 @@ public class BookContextLoader extends BaseLoader {
 
     static final BookContextLoader BOOK_CTX_LOADER = new BookContextLoader();
     private static final String CTX_FILE_NAME = "books.ctx";
-    private Map<String, BookInfo> booksInfo = new HashMap<>();
+    private final Map<String, BookInfo> booksInfo = new HashMap<>();
 
     public BookContextLoader() {
-        super();
 
         initContext();
     }
@@ -37,15 +36,15 @@ public class BookContextLoader extends BaseLoader {
     public void updateContext() {
         if (!StringUtils.isEmpty(GBDOptions.getBookId())) return;
 
-        List<BookInfo> runtimeBooksInfo = ExecutionContext.INSTANCE.getContexts(false).stream().map(BookContext::getBookInfo).collect(Collectors.toList());
-        for (BookInfo bookInfo : runtimeBooksInfo)
+        final List<BookInfo> runtimeBooksInfo = ExecutionContext.INSTANCE.getContexts(false).stream().map(BookContext::getBookInfo).collect(Collectors.toList());
+        for (final BookInfo bookInfo : runtimeBooksInfo)
             booksInfo.put(bookInfo.getBookId(), bookInfo);
 
         try {
             try (FileWriter writer = new FileWriter(getFileToLoad(true))) {
                 Mapper.getGson().toJson(new ArrayList<>(booksInfo.values()), writer);
             }
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
     }
@@ -56,11 +55,11 @@ public class BookContextLoader extends BaseLoader {
         refreshContext();
     }
 
-    public BookInfo getBookInfo(String bookId) {
+    public BookInfo getBookInfo(final String bookId) {
         return booksInfo.get(bookId);
     }
 
-    public Collection<BookInfo> getBooks() {
+    public Iterable<BookInfo> getBooks() {
         return booksInfo.values();
     }
 
@@ -69,20 +68,20 @@ public class BookContextLoader extends BaseLoader {
     }
 
     public void refreshContext() {
-        File contextFile = getFileToLoad(false);
-        if (contextFile == null) return;
+        final File contextFile = getFileToLoad(false);
+        if (null == contextFile) return;
 
         try {
-            BookInfo[] ctxObjArr;
+            final BookInfo[] ctxObjArr;
             try (FileReader reader = new FileReader(contextFile)) {
                 ctxObjArr = Mapper.getGson().fromJson(reader, BookInfo[].class);
             }
-            for (Object ctxObj : ctxObjArr)
+            for (final Object ctxObj : ctxObjArr)
                 if (ctxObj instanceof BookInfo) {
-                    BookInfo bookInfo = (BookInfo) ctxObj;
+                    final BookInfo bookInfo = (BookInfo) ctxObj;
                     booksInfo.put(bookInfo.getBookId(), bookInfo);
                 }
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
     }

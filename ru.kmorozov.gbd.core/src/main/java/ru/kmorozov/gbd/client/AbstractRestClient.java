@@ -35,7 +35,7 @@ public abstract class AbstractRestClient extends AbstractHttpProcessor {
         String paramName;
         Object value;
 
-        RestParam(String paramName, Object value) {
+        RestParam(final String paramName, final Object value) {
             this.paramName = paramName;
             this.value = value;
         }
@@ -43,18 +43,18 @@ public abstract class AbstractRestClient extends AbstractHttpProcessor {
 
     public boolean serviceAvailable() {
         try (Socket socket = new Socket()) {
-            URL serviceURL = new URL(DEFAULT_REST_SERVICE_URL);
+            final URL serviceURL = new URL(DEFAULT_REST_SERVICE_URL);
             socket.connect(new InetSocketAddress(serviceURL.getHost(), serviceURL.getPort()));
             return true;
-        } catch (IOException e) {
+        } catch (final IOException e) {
             return false;
         }
     }
 
-    private String getRawResult(String rqUrl) throws RestServiceUnavailableException {
+    private String getRawResult(final String rqUrl) throws RestServiceUnavailableException {
         try {
-            Response resp = getContent(rqUrl, HttpHostExt.NO_PROXY, true);
-            if (resp == null || resp.getContent() == null) {
+            final Response resp = getContent(rqUrl, HttpHostExt.NO_PROXY, true);
+            if (null == resp || null == resp.getContent()) {
                 logger.info("Rest service is unavailable!");
                 throw new RestServiceUnavailableException();
             }
@@ -65,26 +65,26 @@ public abstract class AbstractRestClient extends AbstractHttpProcessor {
                 logger.info("Rest service is unavailable! " + se.getMessage());
                 throw new RestServiceUnavailableException();
             }
-        } catch (IOException ioe) {
+        } catch (final IOException ioe) {
             logger.info("Rest service is unavailable! " + ioe.getMessage());
             throw new RestServiceUnavailableException();
         }
     }
 
-    protected <T> T getCallResult(String operation, Class<T> resultClass, RestParam... parameters) {
-        StringBuilder rqUrl = new StringBuilder(DEFAULT_REST_SERVICE_URL + operation);
+    protected <T> T getCallResult(final String operation, final Class<T> resultClass, final RestParam... parameters) {
+        final StringBuilder rqUrl = new StringBuilder(DEFAULT_REST_SERVICE_URL + operation);
 
-        if (parameters != null && parameters.length > 0) {
+        if (null != parameters && 0 < parameters.length) {
             rqUrl.append('?');
-            for (RestParam param : parameters)
-                rqUrl.append(param.paramName).append('=').append(param.value.toString()).append('&');
+            for (final RestParam param : parameters)
+                rqUrl.append(param.paramName).append('=').append(param.value).append('&');
         }
 
-        String rawResult;
+        final String rawResult;
 
         try {
             rawResult = getRawResult(rqUrl.toString());
-        } catch (RestServiceUnavailableException e) {
+        } catch (final RestServiceUnavailableException e) {
             logger.finest(String.format("Service %s call failed!", operation));
             return resultClass.equals(Boolean.class) ? (T) Boolean.FALSE : null;
         }

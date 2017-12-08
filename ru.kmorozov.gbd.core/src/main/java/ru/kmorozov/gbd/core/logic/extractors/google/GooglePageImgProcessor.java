@@ -16,17 +16,17 @@ class GooglePageImgProcessor extends AbstractPageImgProcessor<GooglePageInfo> {
 
     private static final String IMG_ERROR_TEMPLATE = "No img at %s with proxy %s";
 
-    public GooglePageImgProcessor(BookContext bookContext, GooglePageInfo page, HttpHostExt usedProxy) {
+    GooglePageImgProcessor(final BookContext bookContext, final GooglePageInfo page, final HttpHostExt usedProxy) {
         super(bookContext, page, usedProxy);
     }
 
-    private boolean processImageWithProxy(HttpHostExt proxy) {
+    private boolean processImageWithProxy(final HttpHostExt proxy) {
         return !(!proxy.isLocal() && !proxy.isAvailable()) &&
                 processImage(page.getImqRqUrl(bookContext.getBookInfo().getBookId(), GoogleImageExtractor.HTTPS_IMG_TEMPLATE, getImgWidth()), proxy);
     }
 
     @Override
-    protected String getErrorMsg(String imgUrl, HttpHostExt proxy) {
+    protected String getErrorMsg(final String imgUrl, final HttpHostExt proxy) {
         return String.format(IMG_ERROR_TEMPLATE, imgUrl, proxy.toString());
     }
 
@@ -51,7 +51,7 @@ class GooglePageImgProcessor extends AbstractPageImgProcessor<GooglePageInfo> {
     }
 
     @Override
-    protected boolean validateOutput(File outputFile, int width) {
+    protected boolean validateOutput(final File outputFile, final int width) {
         return !Images.isInvalidImage(outputFile, width);
     }
 }

@@ -1,6 +1,6 @@
 package ru.kmorozov.gbd.test.core;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
 import org.junit.Test;
 import ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor;
 import ru.kmorozov.gbd.core.utils.Images;
@@ -27,27 +27,27 @@ public class GoogleImageTest extends GbdTestBase {
 
     @Test
     public void testImageSimple() {
-        TestCase.assertFalse(Images.isInvalidImage(Paths.get(goodImg1), GoogleImageExtractor.DEFAULT_PAGE_WIDTH));
-        TestCase.assertFalse(Images.isInvalidImage(Paths.get(goodImg2), GoogleImageExtractor.DEFAULT_PAGE_WIDTH));
-        TestCase.assertFalse(Images.isInvalidImage(Paths.get(emptyImg), GoogleImageExtractor.DEFAULT_PAGE_WIDTH));
-        TestCase.assertTrue(Images.isInvalidImage(Paths.get(badImg1), GoogleImageExtractor.DEFAULT_PAGE_WIDTH));
+        Assert.assertFalse(Images.isInvalidImage(Paths.get(goodImg1), GoogleImageExtractor.DEFAULT_PAGE_WIDTH));
+        Assert.assertFalse(Images.isInvalidImage(Paths.get(goodImg2), GoogleImageExtractor.DEFAULT_PAGE_WIDTH));
+        Assert.assertFalse(Images.isInvalidImage(Paths.get(emptyImg), GoogleImageExtractor.DEFAULT_PAGE_WIDTH));
+        Assert.assertTrue(Images.isInvalidImage(Paths.get(badImg1), GoogleImageExtractor.DEFAULT_PAGE_WIDTH));
     }
 
     @Test
     public void testImageComplex() throws IOException {
-        BufferedImage bimgComplexGood = ImageIO.read(new File(complexGoodCase));
-        BufferedImage bimgEmpty = ImageIO.read(new File(badImg1));
+        final BufferedImage bimgComplexGood = ImageIO.read(new File(complexGoodCase));
+        final BufferedImage bimgEmpty = ImageIO.read(new File(badImg1));
 
         for (int width = 0; width < bimgComplexGood.getWidth(); width++)
             for (int height = 0; height < bimgComplexGood.getHeight(); height++) {
                 try {
-                    int rgb1 = bimgComplexGood.getRGB(width, height);
-                    int rgb2 = bimgEmpty.getRGB(width, height);
+                    final int rgb1 = bimgComplexGood.getRGB(width, height);
+                    final int rgb2 = bimgEmpty.getRGB(width, height);
                     if (rgb1 != rgb2) {
                         System.out.println(String.format("x = %d, y=%d, rgb1=%d, rgb2=%d", width, height, rgb1, rgb2));
                         break;
                     }
-                } catch (ArrayIndexOutOfBoundsException ex) {
+                } catch (final ArrayIndexOutOfBoundsException ex) {
                     System.out.println(String.format("x = %d, y=%d", width, height));
                     break;
                 }
@@ -55,6 +55,6 @@ public class GoogleImageTest extends GbdTestBase {
 
             }
 
-        TestCase.assertFalse(Images.isInvalidImage(Paths.get(complexGoodCase), GoogleImageExtractor.DEFAULT_PAGE_WIDTH));
+        Assert.assertFalse(Images.isInvalidImage(Paths.get(complexGoodCase), GoogleImageExtractor.DEFAULT_PAGE_WIDTH));
     }
 }

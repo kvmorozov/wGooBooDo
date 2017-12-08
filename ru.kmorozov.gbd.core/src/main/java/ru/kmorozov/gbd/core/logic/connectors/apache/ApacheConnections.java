@@ -3,6 +3,7 @@ package ru.kmorozov.gbd.core.logic.connectors.apache;
 import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.cookie.BasicCookieStore;
 import org.apache.hc.client5.http.cookie.CookieStore;
+import org.apache.hc.client5.http.cookie.SetCookie;
 import org.apache.hc.client5.http.impl.cookie.BasicClientCookie;
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
 import org.apache.hc.client5.http.impl.sync.CloseableHttpClient;
@@ -36,7 +37,7 @@ public final class ApacheConnections {
     private CloseableHttpClient noProxyClient;
 
     private ApacheConnections() {
-        PoolingHttpClientConnectionManager connPool = new PoolingHttpClientConnectionManager();
+        final PoolingHttpClientConnectionManager connPool = new PoolingHttpClientConnectionManager();
         connPool.setMaxTotal(200);
         connPool.setDefaultMaxPerRoute(200);
 
@@ -45,34 +46,34 @@ public final class ApacheConnections {
         builderWithTimeout = HttpClientBuilder.create().setUserAgent(HttpConnections.USER_AGENT).setConnectionManager(connPool);
 
         try {
-            SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, (arg0, arg1) -> true).build();
+            final SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, (arg0, arg1) -> true).build();
 //            builder.setSSLContext(sslContext);
 //            builderWithTimeout.setSSLContext(sslContext);
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             ex.printStackTrace();
         }
 
-        RequestConfig requestConfig = RequestConfig.copy(RequestConfig.DEFAULT)
-                                                   .setSocketTimeout(TimeValue.ofMillis(HttpConnector.CONNECT_TIMEOUT))
-                                                   .setConnectTimeout(TimeValue.ofMillis(HttpConnector.CONNECT_TIMEOUT))
-                                                   .setConnectionRequestTimeout(TimeValue.ofMillis(HttpConnector.CONNECT_TIMEOUT)).build();
+        final RequestConfig requestConfig = RequestConfig.copy(RequestConfig.DEFAULT)
+                .setSocketTimeout(TimeValue.ofMillis(HttpConnector.CONNECT_TIMEOUT))
+                .setConnectTimeout(TimeValue.ofMillis(HttpConnector.CONNECT_TIMEOUT))
+                .setConnectionRequestTimeout(TimeValue.ofMillis(HttpConnector.CONNECT_TIMEOUT)).build();
 
         builderWithTimeout.setDefaultRequestConfig(requestConfig);
     }
 
-    public HttpClient getClient(HttpHostExt proxy, boolean withTimeout) {
-        HttpClientBuilder _builder = withTimeout ? builderWithTimeout : builder;
+    public HttpClient getClient(final HttpHostExt proxy, final boolean withTimeout) {
+        final HttpClientBuilder _builder = withTimeout ? builderWithTimeout : builder;
         _builder.setDefaultCookieStore(getCookieStore(proxy));
 
         if (proxy.isLocal()) {
-            if (noProxyClient == null) noProxyClient = _builder.build();
+            if (null == noProxyClient) noProxyClient = _builder.build();
 
             return noProxyClient;
         }
         else {
-            Map<HttpHost, HttpClient> _map = withTimeout ? withTimeoutClientsMap : clientsMap;
+            final Map<HttpHost, HttpClient> _map = withTimeout ? withTimeoutClientsMap : clientsMap;
 
-            HttpHost host = new HttpHost(proxy.getHost().getAddress());
+            final HttpHost host = new HttpHost(proxy.getHost().getAddress());
 
             return _map.computeIfAbsent(host, k -> _builder.setProxy(host).build());
         }
@@ -80,28 +81,28 @@ public final class ApacheConnections {
 
     public void closeAllConnections() {
         try {
-            if (noProxyClient != null) noProxyClient.close();
+            if (null != noProxyClient) noProxyClient.close();
 
-            if (clientsMap != null) for (HttpClient client : clientsMap.values())
+            if (null != clientsMap) for (final HttpClient client : clientsMap.values())
                 ((Closeable) client).close();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
     }
 
-    private CookieStore getCookieStore(HttpHostExt proxy) {
+    private CookieStore getCookieStore(final HttpHostExt proxy) {
         CookieStore cookieStore = cookieStoreMap.get(proxy);
 
-        if (cookieStore == null) {
+        if (null == cookieStore) {
             synchronized (proxy) {
                 cookieStore = new BasicCookieStore();
-                String[] cookies = proxy.getHeaders().getCookie().split(";");
+                final String[] cookies = proxy.getHeaders().getCookie().split(";");
 
-                for (String cookieEntry : cookies) {
-                    String[] cookieParts = cookieEntry.split("=", 2);
+                for (final String cookieEntry : cookies) {
+                    final String[] cookieParts = cookieEntry.split("=", 2);
 
-                    if (cookieParts != null && cookieParts.length > 1 && LibraryFactory.needSetCookies()) {
-                        BasicClientCookie cookie = new BasicClientCookie(cookieParts[0], cookieParts[1]);
+                    if (null != cookieParts && 1 < cookieParts.length && LibraryFactory.needSetCookies()) {
+                        final SetCookie cookie = new BasicClientCookie(cookieParts[0], cookieParts[1]);
                         cookie.setDomain(".google.ru");
                         cookie.setPath("/");
                         cookieStore.addCookie(cookie);

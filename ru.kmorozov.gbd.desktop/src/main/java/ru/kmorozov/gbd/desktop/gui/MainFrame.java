@@ -13,7 +13,7 @@ public class MainFrame extends JFrame {
     public MainFrame() {
         super("wGooBooDo");
 
-        if (INSTANCE != null) return;
+        if (null != INSTANCE) return;
 
         INSTANCE = this;
 
@@ -22,9 +22,9 @@ public class MainFrame extends JFrame {
         setContentPane(new MainBookForm().getMainPanel());
         pack();
 
-        Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
-        int x = (int) ((dimension.getWidth() - getWidth()) / 2);
-        int y = (int) ((dimension.getHeight() - getHeight()) / 2);
+        final Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+        final int x = (int) ((dimension.getWidth() - getWidth()) / 2);
+        final int y = (int) ((dimension.getHeight() - getHeight()) / 2);
         setLocation(x, y);
     }
 

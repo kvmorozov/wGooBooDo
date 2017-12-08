@@ -16,12 +16,14 @@ import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
 import ru.kmorozov.gbd.core.logic.output.consumers.DummyBookInfoOutput;
 import ru.kmorozov.gbd.core.utils.Logger;
 import ru.kmorozov.library.data.loader.LoaderExecutor;
+import ru.kmorozov.library.data.loader.LoaderExecutor.State;
 import ru.kmorozov.library.data.loader.utils.BookUtils;
 import ru.kmorozov.library.data.loader.utils.DuplicatesProcessor;
 import ru.kmorozov.library.data.model.IDataRestServer;
 import ru.kmorozov.library.data.model.book.Book;
 import ru.kmorozov.library.data.model.book.Storage;
 import ru.kmorozov.library.data.model.dto.*;
+import ru.kmorozov.library.data.model.dto.ItemDTO.ItemType;
 import ru.kmorozov.library.data.repository.BooksRepository;
 import ru.kmorozov.library.data.repository.GoogleBooksRepository;
 import ru.kmorozov.library.data.repository.StorageRepository;
@@ -65,13 +67,13 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
 
     @Override
     @RequestMapping("/synchronizeGoogleBook")
-    public boolean synchronizeGoogleBook(@RequestParam(name = "bookId") String bookId) {
+    public boolean synchronizeGoogleBook(@RequestParam(name = "bookId") final String bookId) {
         try {
-            BookInfo existBookInfo = googleBooksRepository.findByBookId(bookId);
-            if (existBookInfo == null) {
-                if (googleBooksLoader == null) {
+            final BookInfo existBookInfo = googleBooksRepository.findByBookId(bookId);
+            if (null == existBookInfo) {
+                if (null == googleBooksLoader) {
                     synchronized (LibraryRestController.class) {
-                        if (googleBooksLoader == null) {
+                        if (null == googleBooksLoader) {
                             GBDOptions.init(new LocalSystemOptions());
                             ExecutionContext.initContext(new DummyBookInfoOutput(), false);
                             googleBooksLoader = new BookContextLoader();
@@ -79,15 +81,15 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
                     }
                 }
 
-                BookInfo loadedBookInfo = googleBooksLoader.getBookInfo(bookId);
+                final BookInfo loadedBookInfo = googleBooksLoader.getBookInfo(bookId);
 
-                if (loadedBookInfo != null) googleBooksRepository.save(loadedBookInfo);
+                if (null != loadedBookInfo) googleBooksRepository.save(loadedBookInfo);
             }
 
             logger.info("Synchronized Google book " + bookId);
 
             return true;
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             logger.info(String.format("Synchronization of Google book %s failed with %s", bookId, ex.getMessage()));
             return false;
         }
@@ -95,20 +97,20 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
 
     @Override
     @RequestMapping("/login")
-    public UserDTO login(@RequestParam(name = "login") String login) {
+    public UserDTO login(@RequestParam(name = "login") final String login) {
         return new UserDTO(login);
     }
 
     @Override
     @RequestMapping("/storagesByParentId")
-    public List<StorageDTO> getStoragesByParentId(@RequestParam(name = "storageId") String storageId) {
-        Storage parentStorage = StringUtils.isEmpty(storageId) ? null : storageRepository.findById(storageId).get();
+    public List<StorageDTO> getStoragesByParentId(@RequestParam(name = "storageId") final String storageId) {
+        final Storage parentStorage = StringUtils.isEmpty(storageId) ? null : storageRepository.findById(storageId).get();
 
-        List<Storage> realStorages = storageRepository.findAllByParent(parentStorage);
-        List<Book> linksInStorages = booksRepository.findAllByStorageAndBookInfoFormat(parentStorage, "LNK");
-        linksInStorages.stream().forEach(book -> loader.resolveLink(book));
-        List<Storage> linkedStorages = linksInStorages.stream()
-                .filter(lnk -> lnk.getLinkInfo() != null && lnk.getLinkInfo().getLinkedStorage() != null)
+        final List<Storage> realStorages = storageRepository.findAllByParent(parentStorage);
+        final List<Book> linksInStorages = booksRepository.findAllByStorageAndBookInfoFormat(parentStorage, "LNK");
+        linksInStorages.forEach(book -> loader.resolveLink(book));
+        final List<Storage> linkedStorages = linksInStorages.stream()
+                .filter(lnk -> null != lnk.getLinkInfo() && null != lnk.getLinkInfo().getLinkedStorage())
                 .map(lnk -> lnk.getLinkInfo().getLinkedStorage())
                 .collect(Collectors.toList());
 
@@ -119,9 +121,9 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
 
     @Override
     @RequestMapping("/booksByStorageId")
-    public List<BookDTO> getBooksByStorageId(@RequestParam(name = "storageId") String storageId) {
-        Storage storage = StringUtils.isEmpty(storageId) ? null : storageRepository.findById(storageId).get();
-        if (storage == null)
+    public List<BookDTO> getBooksByStorageId(@RequestParam(name = "storageId") final String storageId) {
+        final Storage storage = StringUtils.isEmpty(storageId) ? null : storageRepository.findById(storageId).get();
+        if (null == storage)
             return Collections.emptyList();
 
         return booksRepository.findAllByStorage(storage).stream()
@@ -134,8 +136,8 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
 
     @Override
     @RequestMapping("/itemsByStorageId")
-    public List<ItemDTO> getItemsByStorageId(String storageId) {
-        List<ItemDTO> result = getBooksByStorageId(storageId).stream().map(ItemDTO::new).collect(Collectors.toList());
+    public List<ItemDTO> getItemsByStorageId(final String storageId) {
+        final List<ItemDTO> result = getBooksByStorageId(storageId).stream().map(ItemDTO::new).collect(Collectors.toList());
         result.addAll(getStoragesByParentId(storageId).stream().map(ItemDTO::new).collect(Collectors.toList()));
 
         return result;
@@ -143,7 +145,7 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
 
     @Override
     @RequestMapping("/item")
-    public ItemDTO getItem(@RequestParam(name = "itemId") String itemId, @RequestParam(name = "itemType") ItemDTO.ItemType itemType, @RequestParam(name = "refresh") boolean refresh) {
+    public ItemDTO getItem(@RequestParam(name = "itemId") final String itemId, @RequestParam(name = "itemType") final ItemType itemType, @RequestParam(name = "refresh") final boolean refresh) {
         switch (itemType) {
             case book:
                 return new ItemDTO(new BookDTO(booksRepository.findById(itemId).get(), true));
@@ -151,7 +153,7 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
                 Storage storage = storageRepository.findById(itemId).get();
                 if (refresh)
                     storage = loader.refresh(storage);
-                ItemDTO item = new ItemDTO(new StorageDTO(storage, true));
+                final ItemDTO item = new ItemDTO(new StorageDTO(storage, true));
                 if (refresh)
                     item.setUpdated();
 
@@ -163,8 +165,8 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
 
     @Override
     @RequestMapping(value = "/updateLibrary", method = RequestMethod.POST)
-    public void updateLibrary(@RequestParam(name = "state") String stateString) {
-        LoaderExecutor.State state = LoaderExecutor.State.valueOf(stateString);
+    public void updateLibrary(@RequestParam(name = "state") final String stateString) {
+        final State state = State.valueOf(stateString);
 
         switch (state) {
             case STARTED:
@@ -180,8 +182,8 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
 
     @Override
     @RequestMapping("/downloadBook")
-    public BookDTO downloadBook(@RequestParam(name = "bookId") String bookId) {
-        Book book = booksRepository.findById(bookId).get();
+    public BookDTO downloadBook(@RequestParam(name = "bookId") final String bookId) {
+        final Book book = booksRepository.findById(bookId).get();
         if (BookUtils.bookLoaded(book))
             return new BookDTO(book, true);
         else {

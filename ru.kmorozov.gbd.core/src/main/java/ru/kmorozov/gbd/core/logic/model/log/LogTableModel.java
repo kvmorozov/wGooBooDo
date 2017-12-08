@@ -31,8 +31,8 @@ public final class LogTableModel extends AbstractTableModel {
     }
 
     @Override
-    public Object getValueAt(int rowIndex, int columnIndex) {
-        LogEvent logEntry = logEvents.get(rowIndex);
+    public Object getValueAt(final int rowIndex, final int columnIndex) {
+        final LogEvent logEntry = logEvents.get(rowIndex);
 
         switch (columnIndex) {
             case 0:
@@ -45,7 +45,7 @@ public final class LogTableModel extends AbstractTableModel {
     }
 
     @Override
-    public String getColumnName(int columnIndex) {
+    public String getColumnName(final int columnIndex) {
         switch (columnIndex) {
             case 0:
                 return "";
@@ -56,13 +56,13 @@ public final class LogTableModel extends AbstractTableModel {
         }
     }
 
-    public void addEvent(LogEvent event) {
+    public void addEvent(final LogEvent event) {
         logEvents.add(event);
         fireTableDataChanged();
     }
 
     @Override
-    public Class<?> getColumnClass(int columnIndex) {
+    public Class<?> getColumnClass(final int columnIndex) {
         switch (columnIndex) {
             case 0:
                 return JLabel.class;

@@ -11,12 +11,12 @@ public class SocketReporter extends TaskReporter {
     private static final Logger logger = Logger.getLogger(SocketReporter.class);
 
     @Override
-    public void info(String message) {
+    public void info(final String message) {
         EventSender.INSTANCE.sendInfo(logger, message);
     }
 
     @Override
-    public void warn(String message) {
+    public void warn(final String message) {
         EventSender.INSTANCE.sendInfo(logger, message);
     }
 }

@@ -20,7 +20,7 @@ public class FileContextProvider extends AbstractContextProvider {
     }
 
     @Override
-    public BookInfo getBookInfo(String bookId) {
+    public BookInfo getBookInfo(final String bookId) {
         return BookContextLoader.BOOK_CTX_LOADER.getBookInfo(bookId);
     }
 

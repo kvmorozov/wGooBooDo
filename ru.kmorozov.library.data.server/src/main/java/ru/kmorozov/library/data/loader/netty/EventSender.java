@@ -9,40 +9,40 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import java.io.Closeable;
 import java.io.IOException;
 
-public class EventSender implements Closeable {
+public final class EventSender implements Closeable {
 
     private static final Logger logger = Logger.getLogger(EventSender.class);
 
-    private String server;
-    private int port;
+    private final String server;
+    private final int port;
     private EventLoopGroup group;
     private Channel channel;
-    private boolean isInitCompleted = false;
+    private boolean isInitCompleted;
 
-    public static EventSender INSTANCE = new EventSender("localhost", 5252);
+    public static final EventSender INSTANCE = new EventSender("localhost", 5252);
 
-    private EventSender(String server, int port) {
+    private EventSender(final String server, final int port) {
         this.server = server;
         this.port = port;
     }
 
     private void init() {
         group = new NioEventLoopGroup();
-        Bootstrap bootstrap = new Bootstrap().group(group)
+        final Bootstrap bootstrap = new Bootstrap().group(group)
                 .channel(NioSocketChannel.class)
                 .handler(new ClientAdapterInitializer());
         try {
             channel = bootstrap.connect(server, port).sync().channel();
 
             isInitCompleted = true;
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
             group.shutdownGracefully();
 
             logger.error(e);
         }
     }
 
-    private void write(String msg) {
+    private void write(final String msg) {
         if (!isInitCompleted)
             init();
 
@@ -53,14 +53,14 @@ public class EventSender implements Closeable {
     }
 
     @Override
-    public void close() throws IOException {
+    public void close() {
         group.shutdownGracefully();
     }
 
-    public void sendInfo(Logger logger, String msg) {
+    public void sendInfo(final Logger logger, final String msg) {
         try {
             write(msg);
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             logger.error(ex.getMessage());
         }
 

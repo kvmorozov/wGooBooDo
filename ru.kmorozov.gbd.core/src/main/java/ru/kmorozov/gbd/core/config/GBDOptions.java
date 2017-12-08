@@ -14,7 +14,7 @@ public class GBDOptions {
 
     private static File booksDir;
 
-    public static void init(IGBDOptions optionHolder) {
+    public static void init(final IGBDOptions optionHolder) {
         INSTANCE = optionHolder;
     }
 
@@ -46,12 +46,12 @@ public class GBDOptions {
         return Strings.isNullOrEmpty(INSTANCE.pdfOptions()) ? PdfOptions.DEFAULT_MODE : PdfOptions.getOption(INSTANCE.pdfOptions());
     }
 
-    public static int getImageWidth(int defaultValue) {
-        return INSTANCE.getImageWidth() == 0 ? defaultValue : INSTANCE.getImageWidth();
+    public static int getImageWidth(final int defaultValue) {
+        return 0 == INSTANCE.getImageWidth() ? defaultValue : INSTANCE.getImageWidth();
     }
 
     public static boolean isValidDirectory() {
-        if (booksDir == null) booksDir = new File(GBDOptions.getOutputDir());
+        if (null == booksDir) booksDir = new File(getOutputDir());
 
         return booksDir.exists() && booksDir.isDirectory();
     }

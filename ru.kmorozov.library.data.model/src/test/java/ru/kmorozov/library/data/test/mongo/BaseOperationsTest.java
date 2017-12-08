@@ -13,16 +13,19 @@ import ru.kmorozov.library.data.model.book.Book;
 import ru.kmorozov.library.data.repository.BooksRepository;
 import ru.kmorozov.library.data.storage.mongo.LikeTextSearch;
 
+import javax.validation.constraints.AssertTrue;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
+
+import static org.hamcrest.CoreMatchers.*;
 
 /**
  * Created by sbt-morozov-kv on 28.11.2016.
  */
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {MongoConfiguration.class})
+@ContextConfiguration(classes = MongoConfiguration.class)
 public class BaseOperationsTest {
 
     @Autowired
@@ -33,36 +36,36 @@ public class BaseOperationsTest {
 
     @Test
     public void connectTest() {
-        Assert.assertNotNull(booksRepository);
+        Assert.assertThat(booksRepository, notNullValue());
         booksRepository.deleteAll();
-        Assert.assertEquals(0, booksRepository.count());
+        Assert.assertThat(booksRepository.count(), is(0));
     }
 
     @Test
     public void crudTest() {
-        long countBefore = booksRepository.count();
+        final long countBefore = booksRepository.count();
 
-        Book book = new Book("Test title", "Test author");
+        final Book book = new Book("Test title", "Test author");
 
-        Book savedBook = booksRepository.save(book);
-        Assert.assertNotNull(savedBook);
-        Assert.assertEquals(book, savedBook);
-        Assert.assertEquals(countBefore + 1, booksRepository.count());
+        final Book savedBook = booksRepository.save(book);
+        Assert.assertThat(savedBook, notNullValue());
+        Assert.assertThat(savedBook, is(book));
+        Assert.assertThat(booksRepository.count(), is(countBefore + 1));
         booksRepository.delete(book);
-        Assert.assertEquals(countBefore, booksRepository.count());
+        Assert.assertThat(booksRepository.count(), is(countBefore));
     }
 
     @Test
     public void searchTest() {
-        List<Book> books = Arrays.asList(new Book("Test tit1le", "Test aut1hor"), new Book("Test tit2le", "Test aut2hor"));
+        final List<Book> books = Arrays.asList(new Book("Test tit1le", "Test aut1hor"), new Book("Test tit2le", "Test aut2hor"));
 
         booksRepository.saveAll(books);
 
         try {
-            LikeTextSearch likeTextSearch = new LikeTextSearch(Book.class.getSimpleName(), mongoTemplate);
-            Assert.assertEquals(0, likeTextSearch.findMatchingIds("%aut1%").size());
-            TextCriteria criteria2 = TextCriteria.forDefaultLanguage().matching("Test");
-            Assert.assertEquals(2, booksRepository.findAllBy(criteria2).size());
+            final LikeTextSearch likeTextSearch = new LikeTextSearch(Book.class.getSimpleName(), mongoTemplate);
+            Assert.assertThat(likeTextSearch.findMatchingIds("%aut1%").size(), is(0));
+            final TextCriteria criteria2 = TextCriteria.forDefaultLanguage().matching("Test");
+            Assert.assertThat(booksRepository.findAllBy(criteria2).size(), is(2));
         } finally {
             booksRepository.deleteAll(books);
         }
@@ -70,7 +73,7 @@ public class BaseOperationsTest {
 
     @Test
     public void findLinks() {
-        Stream<Book> lnkBooks = booksRepository.streamByBookInfoFormat("LNK");
-        Assert.assertTrue(lnkBooks.count() > 10);
+        final Stream<Book> lnkBooks = booksRepository.streamByBookInfoFormat("LNK");
+        Assert.assertTrue(10 > lnkBooks.count());
     }
 }

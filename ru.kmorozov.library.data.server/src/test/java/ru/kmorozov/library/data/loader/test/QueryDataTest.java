@@ -12,12 +12,14 @@ import ru.kmorozov.library.data.repository.StorageRepository;
 
 import java.util.List;
 
+import static org.hamcrest.CoreMatchers.*;
+
 /**
  * Created by sbt-morozov-kv on 17.01.2017.
  */
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {MongoConfiguration.class})
+@ContextConfiguration(classes = MongoConfiguration.class)
 public class QueryDataTest {
 
     @Autowired
@@ -25,10 +27,10 @@ public class QueryDataTest {
 
     @Test
     public void storageQueryTest() {
-        List<Storage> topStorages = storageRepository.findAllByParent(null);
-        Assert.assertEquals(1, topStorages.size());
+        final List<Storage> topStorages = storageRepository.findAllByParent(null);
+        Assert.assertThat(topStorages.size(), is(1));
 
-        List<Storage> level1Storages = storageRepository.findAllByParent(topStorages.get(0));
-        Assert.assertEquals(4, level1Storages.size());
+        final List<Storage> level1Storages = storageRepository.findAllByParent(topStorages.get(0));
+        Assert.assertThat(level1Storages.size(), is(4));
     }
 }

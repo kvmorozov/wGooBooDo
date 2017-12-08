@@ -12,12 +12,12 @@ import java.io.File;
  */
 public class ShplPageImgProcessor extends AbstractPageImgProcessor<ShplPage> {
 
-    public ShplPageImgProcessor(BookContext bookContext, ShplPage page, HttpHostExt usedProxy) {
+    public ShplPageImgProcessor(final BookContext bookContext, final ShplPage page, final HttpHostExt usedProxy) {
         super(bookContext, page, usedProxy);
     }
 
     @Override
-    protected String getErrorMsg(String imgUrl, HttpHostExt proxy) {
+    protected String getErrorMsg(final String imgUrl, final HttpHostExt proxy) {
         return String.format("Cannot load data from %s", imgUrl);
     }
 
@@ -34,7 +34,7 @@ public class ShplPageImgProcessor extends AbstractPageImgProcessor<ShplPage> {
     }
 
     @Override
-    protected boolean validateOutput(File outputFile, int width) {
+    protected boolean validateOutput(final File outputFile, final int width) {
         return true;
     }
 }

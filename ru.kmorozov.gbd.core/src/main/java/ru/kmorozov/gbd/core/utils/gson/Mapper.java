@@ -15,10 +15,10 @@ public class Mapper {
     private static volatile Gson gson;
 
     public static Gson getGson() {
-        if (gson == null) {
+        if (null == gson) {
             synchronized (lockObj) {
-                if (gson == null) {
-                    GsonBuilder builder = new GsonBuilder();
+                if (null == gson) {
+                    final GsonBuilder builder = new GsonBuilder();
                     builder.registerTypeAdapter(IBookData.class, new IBookDataAdapter());
                     builder.registerTypeAdapter(IPagesInfo.class, new IPagesInfoAdapter());
                     builder.registerTypeAdapter(IPage.class, new IPageAdapter());

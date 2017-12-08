@@ -43,6 +43,7 @@ import java.io.IOException;
  * @author rmistry@google.com (Ravi Mistry)
  * @since 1.9
  */
+@FunctionalInterface
 public interface ResumableDownloaderProgressListener {
 
     /**
@@ -55,5 +56,5 @@ public interface ResumableDownloaderProgressListener {
      *
      * @param downloader Media HTTP downloader
      */
-    void progressChanged(ResumableDownloader downloader) throws IOException;
+    void progressChanged(ResumableDownloader downloader);
 }

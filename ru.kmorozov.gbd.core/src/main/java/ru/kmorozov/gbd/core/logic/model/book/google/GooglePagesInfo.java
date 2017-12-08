@@ -27,24 +27,24 @@ public class GooglePagesInfo implements IPagesInfo, Serializable {
     private transient Map<String, GooglePageInfo> pagesMap;
     private transient LinkedList<GooglePageInfo> pagesList;
 
-    private void addPage(GooglePageInfo page) {
+    private void addPage(final GooglePageInfo page) {
         pagesMap.put(page.getPid(), page);
         pagesList.add(page);
     }
 
     @Override
     public void build() {
-        List<GooglePageInfo> _pages = Arrays.asList(pages);
+        final List<GooglePageInfo> _pages = Arrays.asList(pages);
         pagesMap = new ConcurrentHashMap<>(_pages.size());
         pagesList = new LinkedList<>();
 
         _pages.sort(GooglePageInfo::compareTo);
 
         GooglePageInfo prevPage = null;
-        for (GooglePageInfo page : _pages) {
+        for (final GooglePageInfo page : _pages) {
             addPage(page);
 
-            if (prevPage != null && page.getOrder() - prevPage.getOrder() > 1) fillGap(prevPage, page);
+            if (null != prevPage && 1 < page.getOrder() - prevPage.getOrder()) fillGap(prevPage, page);
 
             prevPage = page;
         }
@@ -52,39 +52,39 @@ public class GooglePagesInfo implements IPagesInfo, Serializable {
         pages = pagesMap.values().toArray(new GooglePageInfo[pagesMap.size()]);
     }
 
-    private void fillGap(GooglePageInfo beginGap, GooglePageInfo endGap) {
+    private void fillGap(final GooglePageInfo beginGap, final GooglePageInfo endGap) {
         if (beginGap.isGapPage() || endGap.isGapPage()) return;
 
-        String beginPagePrefix = beginGap.getPrefix();
-        String endPagePrefix = endGap.getPrefix();
+        final String beginPagePrefix = beginGap.getPrefix();
+        final String endPagePrefix = endGap.getPrefix();
 
-        int beginPageNum = beginGap.getPageNum();
-        int endPageNum = endGap.getPageNum();
+        final int beginPageNum = beginGap.getPageNum();
+        final int endPageNum = endGap.getPageNum();
 
-        if (beginPageNum >= endPageNum && endPageNum > 1 && beginPagePrefix.equals(endPagePrefix))
+        if (beginPageNum >= endPageNum && 1 < endPageNum && beginPagePrefix.equals(endPagePrefix))
             logger.severe(String.format("Cannot fill gap between pages %s(order=%s) and %s(order=%s)", beginGap.getPid(), beginGap.getOrder(), endGap.getPid(), endGap.getOrder()));
 
         if (beginPagePrefix.equals(endPagePrefix)) {
             for (int index = beginGap.getOrder() + 1; index < endGap.getOrder(); index++) {
-                String pid = beginPageNum > 0 ? beginPagePrefix + (beginPageNum + index - beginGap.getOrder()) : beginGap.getPid() + '_' + index;
-                GooglePageInfo gapPage = new GooglePageInfo(pid, index);
+                final String pid = 0 < beginPageNum ? beginPagePrefix + (beginPageNum + index - beginGap.getOrder()) : beginGap.getPid() + '_' + index;
+                final GooglePageInfo gapPage = new GooglePageInfo(pid, index);
                 addPage(gapPage);
             }
 
-            if (beginPageNum > 0 && endPageNum > 0) for (int index = beginGap.getOrder() + 1; index < endGap.getOrder() - endPageNum; index++) {
-                GooglePageInfo gapPage = new GooglePageInfo(beginPagePrefix + String.valueOf(index + 1), index);
+            if (0 < beginPageNum && 0 < endPageNum) for (int index = beginGap.getOrder() + 1; index < endGap.getOrder() - endPageNum; index++) {
+                final GooglePageInfo gapPage = new GooglePageInfo(beginPagePrefix + (index + 1), index);
                 addPage(gapPage);
             }
         }
         else {
-            if (endPageNum >= 1) {
+            if (1 <= endPageNum) {
                 int pagesToCreate = endGap.getOrder() - beginGap.getOrder() - 1;
                 int pagesCreated = 0;
                 for (int index = 1; index <= pagesToCreate; index++) {
-                    if (endPageNum - index < 1) break;
-                    String newPagePidFromEnd = endPagePrefix + (endPageNum - index);
+                    if (1 > endPageNum - index) break;
+                    final String newPagePidFromEnd = endPagePrefix + (endPageNum - index);
                     if (!pagesMap.containsKey(newPagePidFromEnd) && !beginPagePrefix.contains(newPagePidFromEnd)) {
-                        GooglePageInfo gapPage = new GooglePageInfo(newPagePidFromEnd, endGap.getOrder() - index);
+                        final GooglePageInfo gapPage = new GooglePageInfo(newPagePidFromEnd, endGap.getOrder() - index);
                         addPage(gapPage);
                         pagesCreated++;
                     }
@@ -93,13 +93,13 @@ public class GooglePagesInfo implements IPagesInfo, Serializable {
                 if (pagesCreated < pagesToCreate) {
                     pagesToCreate -= pagesCreated;
                     for (int index = 1; index <= pagesToCreate; index++) {
-                        String newPagePidFromBegin = beginPagePrefix + (beginPageNum + index);
-                        GooglePageInfo gapPage = new GooglePageInfo(newPagePidFromBegin, beginGap.getOrder() + index);
+                        final String newPagePidFromBegin = beginPagePrefix + (beginPageNum + index);
+                        final GooglePageInfo gapPage = new GooglePageInfo(newPagePidFromBegin, beginGap.getOrder() + index);
                         addPage(gapPage);
                     }
                 }
             }
-            else if (beginPageNum > 1 && endPageNum < 0) {
+            else if (1 < beginPageNum && 0 > endPageNum) {
                 logger.severe(String.format("Cannot fill gap between pages %s(order=%s) and %s(order=%s)", beginGap.getPid(), beginGap.getOrder(), endGap.getPid(), endGap.getOrder()));
             }
         }
@@ -108,7 +108,7 @@ public class GooglePagesInfo implements IPagesInfo, Serializable {
     }
 
     @Override
-    public GooglePageInfo getPageByPid(String pid) {
+    public GooglePageInfo getPageByPid(final String pid) {
         return pagesMap.get(pid);
     }
 
@@ -117,41 +117,41 @@ public class GooglePagesInfo implements IPagesInfo, Serializable {
         return pages;
     }
 
-    public void setPages(GooglePageInfo[] pages) {
+    public void setPages(final GooglePageInfo[] pages) {
         this.pages = pages;
         this.pagesMap = new HashMap<>();
 
-        if (pages != null) for (GooglePageInfo page : pages)
+        if (null != pages) for (final GooglePageInfo page : pages)
             pagesMap.put(page.getPid(), page);
     }
 
     @Override
     public String getMissingPagesList() {
-        Predicate<GooglePageInfo> predicate = pageInfo -> !pageInfo.fileExists.get();
+        final Predicate<GooglePageInfo> predicate = pageInfo -> !pageInfo.fileExists.get();
         return getListByCondition(predicate);
     }
 
-    private static Pair<GooglePageInfo, GooglePageInfo> createPair(GooglePageInfo p1, GooglePageInfo p2) {
+    private static Pair<GooglePageInfo, GooglePageInfo> createPair(final GooglePageInfo p1, final GooglePageInfo p2) {
         return p1.getOrder() < p2.getOrder() ? new ImmutablePair<>(p1, p2) : new ImmutablePair<>(p2, p1);
     }
 
-    private String getListByCondition(Predicate<GooglePageInfo> condition) {
-        StringBuilder bList = new StringBuilder();
-        List<Pair<GooglePageInfo, GooglePageInfo>> pairs = new ArrayList<>();
+    private String getListByCondition(final Predicate<GooglePageInfo> condition) {
+        final StringBuilder bList = new StringBuilder();
+        final Collection<Pair<GooglePageInfo, GooglePageInfo>> pairs = new ArrayList<>();
 
         GooglePageInfo blockStart = null, prevPage = null;
 
-        long filteredCount = pagesList.stream().filter(condition).count();
-        GooglePageInfo lastPage = pagesList.getLast();
+        final long filteredCount = pagesList.stream().filter(condition).count();
+        final GooglePageInfo lastPage = pagesList.getLast();
 
-        for (GooglePageInfo currentPage : pagesList) {
-            if (condition.test(currentPage)) if (blockStart == null) {
+        for (final GooglePageInfo currentPage : pagesList) {
+            if (condition.test(currentPage)) if (null == blockStart) {
                 blockStart = currentPage;
             }
             else {
             }
             else {
-                if (blockStart == null) {
+                if (null == blockStart) {
                 }
                 else {
                     pairs.add(createPair(blockStart, prevPage));
@@ -159,16 +159,16 @@ public class GooglePagesInfo implements IPagesInfo, Serializable {
                 }
             }
 
-            if (currentPage.equals(lastPage) && blockStart != null) pairs.add(createPair(blockStart, currentPage));
+            if (currentPage.equals(lastPage) && null != blockStart) pairs.add(createPair(blockStart, currentPage));
 
             prevPage = currentPage;
         }
 
-        for (Pair<GooglePageInfo, GooglePageInfo> pair : pairs)
+        for (final Pair<GooglePageInfo, GooglePageInfo> pair : pairs)
             if (pair.getLeft() == pair.getRight()) bList.append(String.format("%s, ", pair.getLeft().getPid()));
             else bList.append(String.format("%s-%s, ", pair.getLeft().getPid(), pair.getRight().getPid()));
 
-        if (bList.length() > 0) {
+        if (0 < bList.length()) {
             bList.deleteCharAt(bList.length() - 1).deleteCharAt(bList.length() - 1);
             bList.append(String.format(". Total = %d/%d", filteredCount, pagesList.size()));
         }

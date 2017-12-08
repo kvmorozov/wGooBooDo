@@ -11,9 +11,9 @@ import java.util.Set;
  */
 public class SingleBookProducer implements IBookListProducer {
 
-    private Set<String> singletonSet;
+    private final Set<String> singletonSet;
 
-    public SingleBookProducer(String bookId) {
+    public SingleBookProducer(final String bookId) {
         singletonSet = new HashSet<>(Collections.singletonList(bookId));
     }
 

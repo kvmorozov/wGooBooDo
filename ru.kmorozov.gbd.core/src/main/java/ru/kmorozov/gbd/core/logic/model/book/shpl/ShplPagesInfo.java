@@ -10,9 +10,9 @@ import ru.kmorozov.gbd.core.logic.model.book.google.GooglePageInfo;
 public class ShplPagesInfo implements IPagesInfo {
 
     @SerializedName("page")
-    private ShplPage[] pages;
+    private final ShplPage[] pages;
 
-    public ShplPagesInfo(ShplPage[] pages) {
+    public ShplPagesInfo(final ShplPage[] pages) {
         this.pages = pages;
     }
 
@@ -32,7 +32,7 @@ public class ShplPagesInfo implements IPagesInfo {
     }
 
     @Override
-    public GooglePageInfo getPageByPid(String pid) {
+    public GooglePageInfo getPageByPid(final String pid) {
         return null;
     }
 }

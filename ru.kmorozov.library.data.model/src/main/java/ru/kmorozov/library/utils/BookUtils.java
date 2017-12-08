@@ -1,6 +1,6 @@
 package ru.kmorozov.library.utils;
 
-import ru.kmorozov.library.data.model.book.BookInfo;
+import ru.kmorozov.library.data.model.book.BookInfo.BookFormat;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -12,20 +12,20 @@ public class BookUtils {
 
     private static final Logger logger = Logger.getLogger(BookUtils.class.getName());
 
-    public static BookInfo.BookFormat getFormat(String fileName) {
-        for (BookInfo.BookFormat format : BookInfo.BookFormat.values())
+    public static BookFormat getFormat(final String fileName) {
+        for (final BookFormat format : BookFormat.values())
             if (fileName.endsWith(format.getExt()))
                 return format;
 
         logger.log(Level.INFO, "Unknown format for file " + fileName);
-        return BookInfo.BookFormat.UNKNOWN;
+        return BookFormat.UNKNOWN;
     }
 
-    public static String humanReadableByteCount(long bytes, boolean si) {
-        int unit = si ? 1000 : 1024;
+    public static String humanReadableByteCount(final long bytes, final boolean si) {
+        final int unit = si ? 1000 : 1024;
         if (bytes < unit) return bytes + " B";
-        int exp = (int) (Math.log(bytes) / Math.log(unit));
-        String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp-1) + (si ? "" : "i");
+        final int exp = (int) (Math.log(bytes) / Math.log(unit));
+        final String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp-1) + (si ? "" : "i");
         return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
     }
 }

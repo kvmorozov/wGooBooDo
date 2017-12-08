@@ -32,7 +32,7 @@ public class DuplicatesProcessor {
     protected BooksRepository booksRepository;
 
     public List<DuplicatedBookDTO> process() {
-        TypedAggregation<Book> booksAggregation = Aggregation.newAggregation(Book.class,
+        final TypedAggregation<Book> booksAggregation = Aggregation.newAggregation(Book.class,
                 Aggregation.group("bookInfo.size", "bookInfo.format")
                         .addToSet("bookId").as("bookIds")
                         .count().as("count"),
@@ -41,15 +41,15 @@ public class DuplicatesProcessor {
                 Aggregation.skip(0l)
         ).withOptions(new AggregationOptions(true, false, new Document("batchSize", 1000.0)));
 
-        AggregationResults<BooksBySize> results = mongoTemplate.aggregate(booksAggregation, BooksBySize.class);
+        final AggregationResults<BooksBySize> results = mongoTemplate.aggregate(booksAggregation, BooksBySize.class);
 
-        List<BooksBySize> booksBySizeList = converter.mapAggregationResults(BooksBySize.class, results.getRawResults(), "books");
+        final List<BooksBySize> booksBySizeList = converter.mapAggregationResults(BooksBySize.class, results.getRawResults(), "books");
 
         return booksBySizeList.stream().map(this::createDuplicateDTO).collect(Collectors.toList());
     }
 
-    private DuplicatedBookDTO createDuplicateDTO(BooksBySize book) {
-        DuplicatedBookDTO dto = new DuplicatedBookDTO(book);
+    private DuplicatedBookDTO createDuplicateDTO(final BooksBySize book) {
+        final DuplicatedBookDTO dto = new DuplicatedBookDTO(book);
         dto.setBooks(book.getBookIds().stream().map(id -> new BookDTO(booksRepository.findById(id).get(), false)).collect(Collectors.toList()));
 
         return dto;

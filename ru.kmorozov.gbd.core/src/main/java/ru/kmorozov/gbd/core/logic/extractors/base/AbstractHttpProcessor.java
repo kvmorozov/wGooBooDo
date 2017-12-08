@@ -21,9 +21,9 @@ public class AbstractHttpProcessor {
     private static List<HttpConnector> connectors;
     private static final Object LOCK = new Object();
 
-    private static List<HttpConnector> getConnectors() {
-        if (connectors == null || connectors.size() == 0) synchronized (LOCK) {
-            if (connectors == null || connectors.size() == 0) {
+    private static Iterable<HttpConnector> getConnectors() {
+        if (null == connectors || connectors.isEmpty()) synchronized (LOCK) {
+            if (null == connectors || connectors.isEmpty()) {
                 connectors = new ArrayList<>();
                 connectors.add(LibraryFactory.preferredConnector());
 //                if (ClassUtils.isClassExists("org.asynchttpclient.AsyncHttpClient")) connectors.add(new AsyncHttpConnector());
@@ -36,18 +36,18 @@ public class AbstractHttpProcessor {
         return connectors;
     }
 
-    protected static Response getContent(String rqUrl, HttpHostExt proxy, boolean withTimeout) {
+    protected static Response getContent(final String rqUrl, final HttpHostExt proxy, final boolean withTimeout) {
         try {
             Response resp = null;
-            for (HttpConnector connector : getConnectors()) {
+            for (final HttpConnector connector : getConnectors()) {
                 resp = connector.getContent(rqUrl, proxy, withTimeout);
-                resp = proxy.isLocal() ? resp : resp == null ? getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout) : resp;
-                if (resp != null)
+                resp = proxy.isLocal() ? resp : null == resp ? getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout) : resp;
+                if (null != resp)
                     return resp;
             }
 
             return resp;
-        } catch (ResponseException re) {
+        } catch (final ResponseException re) {
             switch (re.getStatusCode()) {
                 case HttpStatusCodes.STATUS_CODE_SERVICE_UNAVAILABLE:
                 case 413:
@@ -65,21 +65,21 @@ public class AbstractHttpProcessor {
         } catch (SocketException | SSLException se) {
             proxy.registerFailure();
             return proxy.isLocal() ? null : getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout);
-        } catch (IOException ioe) {
+        } catch (final IOException ioe) {
             proxy.registerFailure();
 
             // Если что-то более специфическое
             if (!ioe.getClass().equals(IOException.class)) ioe.printStackTrace();
 
             return proxy.isLocal() ? null : getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout);
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             ex.printStackTrace();
             return null;
         }
     }
 
     public static void close() {
-        for (HttpConnector connector : getConnectors())
+        for (final HttpConnector connector : getConnectors())
             connector.close();
     }
 }

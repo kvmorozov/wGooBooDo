@@ -41,7 +41,7 @@ public class GooglePageInfo extends AbstractPage implements Serializable, Compar
     }
 
     // Создание страниц для заполнения разрыва
-    public GooglePageInfo(String pid, int order) {
+    public GooglePageInfo(final String pid, final int order) {
         this.pid = pid;
         this.order = order;
 
@@ -62,23 +62,23 @@ public class GooglePageInfo extends AbstractPage implements Serializable, Compar
         return src;
     }
 
-    public void setSrc(String src) {
+    public void setSrc(final String src) {
         this.src = src;
     }
 
-    public void setWidth(int width) {
+    public void setWidth(final int width) {
         this.width = width;
     }
 
-    public String getSig() {
-        return src == null ? null : sig == null ? sig = src.substring(src.indexOf("sig=") + 4) : sig;
+    public CharSequence getSig() {
+        return null == src ? null : null == sig ? sig = src.substring(src.indexOf("sig=") + 4) : sig;
     }
 
     public boolean isGapPage() {
         return gapPage;
     }
 
-    public String getImqRqUrl(String bookId, String urlTemplate, int width) {
+    public String getImqRqUrl(final CharSequence bookId, final String urlTemplate, final int width) {
         return urlTemplate.replace(GoogleImageExtractor.BOOK_ID_PLACEHOLDER, bookId) + GoogleImageExtractor.IMG_REQUEST_TEMPLATE.replace(GoogleImageExtractor.RQ_PG_PLACEHOLDER, pid)
                                                                                                                                 .replace(GoogleImageExtractor.RQ_SIG_PLACEHOLDER, getSig())
                                                                                                                                 .replace(GoogleImageExtractor.RQ_WIDTH_PLACEHOLDER, String
@@ -98,9 +98,9 @@ public class GooglePageInfo extends AbstractPage implements Serializable, Compar
     private void parsePageNum() {
         boolean numFound = false;
         prefix = "";
-        StringBuilder strNum = new StringBuilder();
-        for (int i = pid.length() - 1; i >= 0; i--) {
-            char ch = pid.charAt(i);
+        final StringBuilder strNum = new StringBuilder();
+        for (int i = pid.length() - 1; 0 <= i; i--) {
+            final char ch = pid.charAt(i);
             if (!numFound && Character.isDigit(ch)) strNum.insert(0, ch);
             else if (!numFound && !Character.isDigit(ch)) {
                 numFound = true;
@@ -111,12 +111,12 @@ public class GooglePageInfo extends AbstractPage implements Serializable, Compar
 
         try {
             pageNum = Integer.parseInt(strNum.toString());
-        } catch (NumberFormatException ignored) {
+        } catch (final NumberFormatException ignored) {
         }
     }
 
     @Override
-    public int compareTo(GooglePageInfo anotherPage) {
+    public int compareTo(final GooglePageInfo anotherPage) {
         return this.getOrder().compareTo(anotherPage.getOrder());
     }
 }

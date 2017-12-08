@@ -14,8 +14,8 @@ import java.nio.file.Paths;
  */
 public class BookUtils {
 
-    public static BookDTO createBookDIO(Book book) {
-        BookDTO dto = new BookDTO(book, bookLoaded(book));
+    public static BookDTO createBookDIO(final Book book) {
+        final BookDTO dto = new BookDTO(book, bookLoaded(book));
         switch (book.getStorage().getStorageType()) {
             case LocalFileSystem:
                 dto.setPath(book.getBookInfo().getPath());
@@ -28,8 +28,8 @@ public class BookUtils {
         return dto;
     }
 
-    public static boolean bookLoaded(Book book) {
-        String bookPath = book.getStorage().getLocalPath() + File.separator + book.getBookInfo().getFileName();
+    public static boolean bookLoaded(final Book book) {
+        final String bookPath = book.getStorage().getLocalPath() + File.separator + book.getBookInfo().getFileName();
         if (!StringUtils.isEmpty(bookPath)) {
             if (Files.exists(Paths.get(bookPath)))
                 return true;

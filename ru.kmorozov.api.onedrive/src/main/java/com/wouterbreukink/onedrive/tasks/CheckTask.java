@@ -5,6 +5,7 @@ import com.google.api.client.util.Preconditions;
 import com.wouterbreukink.onedrive.CommandLineOpts;
 import com.wouterbreukink.onedrive.client.OneDriveItem;
 import com.wouterbreukink.onedrive.filesystem.FileSystemProvider;
+import com.wouterbreukink.onedrive.filesystem.FileSystemProvider.FileMatch;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,7 +20,7 @@ public class CheckTask extends Task {
     private final OneDriveItem remoteFile;
     private final File localFile;
 
-    public CheckTask(TaskOptions options, OneDriveItem remoteFile, File localFile) {
+    public CheckTask(final TaskOptions options, final OneDriveItem remoteFile, final File localFile) {
         super(options);
         this.remoteFile = Preconditions.checkNotNull(remoteFile);
         this.localFile = Preconditions.checkNotNull(localFile);
@@ -40,45 +41,44 @@ public class CheckTask extends Task {
         if (localFile.isDirectory() && remoteFile.isDirectory()) { // If we are syncing folders
 
             // Verify the timestamps
-            FileSystemProvider.FileMatch match = fileSystem.verifyMatch(
+            final FileMatch match = fileSystem.verifyMatch(
                     localFile,
                     remoteFile.getCreatedDateTime(),
                     remoteFile.getLastModifiedDateTime());
 
-            if (match == FileSystemProvider.FileMatch.NO) {
+            if (FileSystemProvider.FileMatch.NO == match) {
                 queue.add(new UpdatePropertiesTask(getTaskOptions(), remoteFile, localFile));
             }
 
-            OneDriveItem[] remoteFiles = api.getChildren(remoteFile);
+            final OneDriveItem[] remoteFiles = api.getChildren(remoteFile);
 
             // Index the local files
-            Map<String, File> localFileCache = Maps.newHashMap();
-            //noinspection ConstantConditions
+            final Map<String, File> localFileCache = Maps.newHashMap();
 
-            File[] files = localFile.listFiles();
-            if (files == null) {
+            final File[] files = localFile.listFiles();
+            if (null == files) {
                 log.warn("Unable to recurse into local directory " + localFile.getPath());
                 reporter.skipped();
                 return;
             }
 
-            for (File file : files) {
+            for (final File file : files) {
                 localFileCache.put(file.getName(), file);
             }
 
             // Iterate over all the remote files
-            for (OneDriveItem remoteFile : remoteFiles) {
+            for (final OneDriveItem remoteFile : remoteFiles) {
 
                 if (remoteFile.isDirectory() && !CommandLineOpts.getCommandLineOpts().isRecursive()) {
                     continue;
                 }
 
-                File localFile = localFileCache.remove(remoteFile.getName());
+                final File localFile = localFileCache.remove(remoteFile.getName());
                 processChild(remoteFile, localFile);
             }
 
             // Iterate over any local files we've not matched yet
-            for (File localFile : localFileCache.values()) {
+            for (final File localFile : localFileCache.values()) {
 
                 if (localFile.isDirectory() && !CommandLineOpts.getCommandLineOpts().isRecursive()) {
                     continue;
@@ -110,7 +110,7 @@ public class CheckTask extends Task {
         if (localFile.isFile() && !remoteFile.isDirectory()) { // If we are syncing files
 
             // Check if the remote file matches the local file
-            FileSystemProvider.FileMatch match = fileSystem.verifyMatch(
+            final FileMatch match = fileSystem.verifyMatch(
                     localFile, remoteFile.getCrc32(),
                     remoteFile.getSize(),
                     remoteFile.getCreatedDateTime(),
@@ -153,19 +153,19 @@ public class CheckTask extends Task {
         }
     }
 
-    private void processChild(OneDriveItem remoteFile, File localFile) {
+    private void processChild(final OneDriveItem remoteFile, final File localFile) {
 
-        if (remoteFile == null && localFile == null) {
+        if (null == remoteFile && null == localFile) {
             throw new IllegalArgumentException("Must specify at least one file");
         }
 
-        if (remoteFile != null && isIgnored(remoteFile) || localFile != null && isIgnored((localFile))) {
+        if (null != remoteFile && isIgnored(remoteFile) || null != localFile && isIgnored((localFile))) {
             reporter.skipped();
             return;
         }
 
-        boolean remoteOnly = localFile == null;
-        boolean localOnly = remoteFile == null;
+        final boolean remoteOnly = null == localFile;
+        final boolean localOnly = null == remoteFile;
 
         // Case 1: We only have the file remotely
         if (remoteOnly) {

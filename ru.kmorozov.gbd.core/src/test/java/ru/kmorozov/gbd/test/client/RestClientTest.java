@@ -1,6 +1,6 @@
 package ru.kmorozov.gbd.test.client;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
 import org.junit.Test;
 import ru.kmorozov.gbd.client.RestClient;
 import ru.kmorozov.gbd.test.GbdTestBase;
@@ -12,7 +12,7 @@ public class RestClientTest extends GbdTestBase {
 
     @Test
     public void connectTest() {
-        RestClient restClient = new RestClient();
-        TestCase.assertTrue(restClient.serviceAvailable());
+        final RestClient restClient = new RestClient();
+        Assert.assertTrue(restClient.serviceAvailable());
     }
 }

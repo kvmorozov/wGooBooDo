@@ -9,15 +9,15 @@ import ru.kmorozov.gbd.core.logic.library.metadata.ShplMetadata;
  */
 public final class LibraryFactory {
 
-    private static final ILibraryMetadata[] METADATA = new ILibraryMetadata[]{GoogleBooksMetadata.GOOGLE_METADATA, ShplMetadata.SHPL_METADATA};
+    private static final ILibraryMetadata[] METADATA = {GoogleBooksMetadata.GOOGLE_METADATA, ShplMetadata.SHPL_METADATA};
 
     private static ILibraryMetadata selectedMetadata;
 
     private LibraryFactory() {
     }
 
-    public static ILibraryMetadata getMetadata(String bookId) {
-        for (ILibraryMetadata _metadata : METADATA)
+    public static ILibraryMetadata getMetadata(final String bookId) {
+        for (final ILibraryMetadata _metadata : METADATA)
             if (_metadata.isValidId(bookId)) {
                 selectedMetadata = _metadata;
                 return _metadata;
@@ -26,8 +26,8 @@ public final class LibraryFactory {
         return null;
     }
 
-    public static boolean isValidId(String bookId) {
-        return getMetadata(bookId) != null;
+    public static boolean isValidId(final String bookId) {
+        return null != getMetadata(bookId);
     }
 
     public static boolean needSetCookies() {

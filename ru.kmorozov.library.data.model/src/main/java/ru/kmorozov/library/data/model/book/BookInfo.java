@@ -18,13 +18,13 @@ public class BookInfo {
         LNK("lnk"),
         UNKNOWN("");
 
-        String ext;
+        final String ext;
 
         public String getExt() {
             return ext;
         }
 
-        BookFormat(String ext) {
+        BookFormat(final String ext) {
             this.ext = ext;
         }
     }
@@ -44,7 +44,7 @@ public class BookInfo {
         return format;
     }
 
-    public void setFormat(BookFormat format) {
+    public void setFormat(final BookFormat format) {
         this.format = format;
     }
 
@@ -52,7 +52,7 @@ public class BookInfo {
         return fileName;
     }
 
-    public void setFileName(String fileName) {
+    public void setFileName(final String fileName) {
         this.fileName = fileName;
     }
 
@@ -60,17 +60,17 @@ public class BookInfo {
         return path;
     }
 
-    public void setPath(String path) {
+    public void setPath(final String path) {
         this.path = path;
     }
 
-    boolean isLink() {return format == BookFormat.LNK;}
+    boolean isLink() {return BookFormat.LNK == format;}
 
     public Date getLastModifiedDateTime() {
         return lastModifiedDateTime;
     }
 
-    public void setLastModifiedDateTime(Date lastModifiedDateTime) {
+    public void setLastModifiedDateTime(final Date lastModifiedDateTime) {
         this.lastModifiedDateTime = lastModifiedDateTime;
     }
 
@@ -78,7 +78,7 @@ public class BookInfo {
         return size;
     }
 
-    public void setSize(long size) {
+    public void setSize(final long size) {
         this.size = size;
     }
 }

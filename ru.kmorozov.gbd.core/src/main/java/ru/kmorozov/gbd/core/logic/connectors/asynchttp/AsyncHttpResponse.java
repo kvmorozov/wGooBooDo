@@ -12,24 +12,24 @@ public class AsyncHttpResponse implements ru.kmorozov.gbd.core.logic.connectors.
 
     private final Response response;
 
-    AsyncHttpResponse(Response response) {
+    AsyncHttpResponse(final Response response) {
         this.response = response;
     }
 
     @Override
-    public InputStream getContent() throws IOException {
-        return response == null ? null : response.getResponseBodyAsStream();
+    public InputStream getContent() {
+        return null == response ? null : response.getResponseBodyAsStream();
     }
 
     @Override
     public String getImageFormat() {
-        String rawContendType = response.getContentType();
+        final String rawContendType = response.getContentType();
 
         return rawContendType.startsWith("image/") ? rawContendType.split("/")[1] : "badFile";
     }
 
     @Override
-    public void close() throws IOException {
+    public void close() {
 
     }
 }

@@ -11,19 +11,19 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
 import java.util.Date;
 
-class RWFileSystemProvider extends ROFileSystemProvider implements FileSystemProvider {
+class RWFileSystemProvider extends ROFileSystemProvider {
 
-    private static void removeRecursive(Path path) throws IOException {
+    private static void removeRecursive(final Path path) throws IOException {
         Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
             @Override
-            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+            public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs)
                     throws IOException {
                 Files.delete(file);
                 return FileVisitResult.CONTINUE;
             }
 
             @Override
-            public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+            public FileVisitResult visitFileFailed(final Path file, final IOException exc) throws IOException {
                 // try to delete the file anyway, even if its attributes
                 // could not be read, since delete-only access is
                 // theoretically possible
@@ -32,8 +32,8 @@ class RWFileSystemProvider extends ROFileSystemProvider implements FileSystemPro
             }
 
             @Override
-            public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-                if (exc == null) {
+            public FileVisitResult postVisitDirectory(final Path dir, final IOException exc) throws IOException {
+                if (null == exc) {
                     Files.delete(dir);
                     return FileVisitResult.CONTINUE;
                 } else {
@@ -45,13 +45,13 @@ class RWFileSystemProvider extends ROFileSystemProvider implements FileSystemPro
     }
 
     @Override
-    public void delete(File file) throws IOException {
+    public void delete(final File file) throws IOException {
         removeRecursive(file.toPath());
     }
 
     @Override
-    public File createFolder(File file, String name) throws IOException {
-        File newFolder = new File(file, name);
+    public File createFolder(final File file, final String name) throws IOException {
+        final File newFolder = new File(file, name);
 
         if (!newFolder.mkdir()) {
             throw new IOException(String.format("Unable to create local directory '%s' in '%s'", name, file.getName()));
@@ -61,23 +61,18 @@ class RWFileSystemProvider extends ROFileSystemProvider implements FileSystemPro
     }
 
     @Override
-    public File createFile(File file, String name) throws IOException {
-        return new File(file, name);
-    }
-
-    @Override
-    public void replaceFile(File original, File replacement) throws IOException {
+    public void replaceFile(final File original, final File replacement) throws IOException {
         replaceFileInternal(original, replacement, 0, 10);
     }
 
-    private static void replaceFileInternal(File original, File replacement, int currentTry, int maxRetries) throws IOException {
+    private static void replaceFileInternal(final File original, final File replacement, final int currentTry, final int maxRetries) throws IOException {
         if (currentTry >= maxRetries)
             throw new IOException("Unable to replace local file" + original.getPath());
 
         if (original.exists() && !original.delete()) {
             try {
                 Thread.sleep(500);
-            } catch (InterruptedException e) {
+            } catch (final InterruptedException e) {
                 e.printStackTrace();
             }
 
@@ -87,7 +82,7 @@ class RWFileSystemProvider extends ROFileSystemProvider implements FileSystemPro
         if (!replacement.renameTo(original)) {
             try {
                 Thread.sleep(500);
-            } catch (InterruptedException e) {
+            } catch (final InterruptedException e) {
                 e.printStackTrace();
             }
 
@@ -96,15 +91,15 @@ class RWFileSystemProvider extends ROFileSystemProvider implements FileSystemPro
     }
 
     @Override
-    public void setAttributes(File downloadFile, Date created, Date lastModified) throws IOException {
-        BasicFileAttributeView attributes = Files.getFileAttributeView(downloadFile.toPath(), BasicFileAttributeView.class);
-        FileTime createdFt = FileTime.fromMillis(created.getTime());
-        FileTime lastModifiedFt = FileTime.fromMillis(lastModified.getTime());
+    public void setAttributes(final File downloadFile, final Date created, final Date lastModified) throws IOException {
+        final BasicFileAttributeView attributes = Files.getFileAttributeView(downloadFile.toPath(), BasicFileAttributeView.class);
+        final FileTime createdFt = FileTime.fromMillis(created.getTime());
+        final FileTime lastModifiedFt = FileTime.fromMillis(lastModified.getTime());
         attributes.setTimes(lastModifiedFt, lastModifiedFt, createdFt);
     }
 
     @Override
-    public boolean verifyCrc(File file, long crc) throws IOException {
+    public boolean verifyCrc(final File file, final long crc) throws IOException {
         return getChecksum(file) == crc;
     }
 }

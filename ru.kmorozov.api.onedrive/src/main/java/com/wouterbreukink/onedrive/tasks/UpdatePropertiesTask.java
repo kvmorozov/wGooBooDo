@@ -19,7 +19,7 @@ public class UpdatePropertiesTask extends Task {
     private final OneDriveItem remoteFile;
     private final File localFile;
 
-    public UpdatePropertiesTask(TaskOptions options, OneDriveItem remoteFile, File localFile) {
+    public UpdatePropertiesTask(final TaskOptions options, final OneDriveItem remoteFile, final File localFile) {
 
         super(options);
 
@@ -41,10 +41,10 @@ public class UpdatePropertiesTask extends Task {
 
         switch (CommandLineOpts.getCommandLineOpts().getDirection()) {
             case UP:
-                BasicFileAttributes attr = Files.readAttributes(localFile.toPath(), BasicFileAttributes.class);
+                final BasicFileAttributes attr = Files.readAttributes(localFile.toPath(), BasicFileAttributes.class);
                 // Timestamp rounded to the nearest second
-                Date localCreatedDate = new Date(attr.creationTime().to(TimeUnit.SECONDS) * 1000);
-                Date localModifiedDate = new Date(attr.lastModifiedTime().to(TimeUnit.SECONDS) * 1000);
+                final Date localCreatedDate = new Date(attr.creationTime().to(TimeUnit.SECONDS) * 1000);
+                final Date localModifiedDate = new Date(attr.lastModifiedTime().to(TimeUnit.SECONDS) * 1000);
 
                 api.updateFile(remoteFile, localCreatedDate, localModifiedDate);
 

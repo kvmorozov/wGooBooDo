@@ -18,17 +18,17 @@ public class ItemSet {
 
     public String getNextToken() {
 
-        if (nextPage == null) {
+        if (null == nextPage) {
             return null;
         }
 
-        String pattern = ".*skiptoken=(.*)";
+        final String pattern = ".*skiptoken=(.*)";
 
         // Create a Pattern object
-        Pattern r = Pattern.compile(pattern);
+        final Pattern r = Pattern.compile(pattern);
 
         // Now create matcher object.
-        Matcher m = r.matcher(nextPage);
+        final Matcher m = r.matcher(nextPage);
         if (m.find()) {
             return m.group(1);
         } else {

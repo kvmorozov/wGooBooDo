@@ -34,20 +34,20 @@ public class ItemDTO extends ResourceSupport {
     public ItemDTO() {
     }
 
-    public ItemDTO(StorageDTO storageDTO) {
+    public ItemDTO(final StorageDTO storageDTO) {
         this.itemId = storageDTO.getId();
         this.itemType = ItemType.storage;
         this.itemSubType = storageDTO.getStorageType();
         this.displayName = storageDTO.getDisplayName();
         this.filesCount = storageDTO.getFilesCount();
 
-        refreshStatus = System.currentTimeMillis() - storageDTO.getLastChecked() < ItemDTO.REFRESH_INTERVAL ? RefreshStatus.updated : RefreshStatus.dirty;
+        refreshStatus = ItemDTO.REFRESH_INTERVAL > System.currentTimeMillis() - storageDTO.getLastChecked() ? RefreshStatus.updated : RefreshStatus.dirty;
 
-        if (storageDTO.getCategories() != null)
+        if (null != storageDTO.getCategories())
             this.categories = storageDTO.getCategories().stream().map(CategoryDTO::new).collect(Collectors.toList());
     }
 
-    public ItemDTO(BookDTO bookDTO) {
+    public ItemDTO(final BookDTO bookDTO) {
         this.itemId = bookDTO.getId();
         this.itemType = ItemType.book;
         this.itemSubType = bookDTO.getFormat();

@@ -2,6 +2,7 @@ package ru.kmorozov.library.data.loader;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.kmorozov.library.data.loader.LoaderExecutor.State;
 import ru.kmorozov.library.data.model.book.Book;
 import ru.kmorozov.library.data.model.book.Category;
 import ru.kmorozov.library.data.model.book.Storage;
@@ -25,10 +26,10 @@ public class LocalDirectoryLoader extends BaseLoader {
 
     private static final Logger logger = Logger.getLogger(LocalDirectoryLoader.class);
 
-    private Path basePath;
-    private Win32ShellFolderManager2 shellFolderManager;
+    private final Path basePath;
+    private final Win32ShellFolderManager2 shellFolderManager;
 
-    public LocalDirectoryLoader(@Autowired String localBasePath) {
+    public LocalDirectoryLoader(@Autowired final String localBasePath) {
         this.basePath = Paths.get(localBasePath);
         this.shellFolderManager = new Win32ShellFolderManager2();
     }
@@ -36,49 +37,49 @@ public class LocalDirectoryLoader extends BaseLoader {
     @Override
     public void load() throws IOException {
         Files.walk(basePath).forEach(filePath -> {
-            ServerItem serverItem = new ServerItem(filePath);
+            final ServerItem serverItem = new ServerItem(filePath);
             if (serverItem.isDirectory()) {
-                Category category = getCategoryByServerItem(serverItem);
-                for (Storage storage : category.getStorages())
+                final Category category = getCategoryByServerItem(serverItem);
+                for (final Storage storage : category.getStorages())
                     try {
                         updateStorage(storage);
-                    } catch (IOException e) {
+                    } catch (final IOException e) {
                         logger.log(Level.ERROR, "Error when updating storage: " + e.getMessage());
                     }
             }
         });
 
-        setState(LoaderExecutor.State.STOPPED);
+        setState(State.STOPPED);
     }
 
     @Override
-    public void processLinks() throws IOException {
+    public void processLinks() {
         links.forEach(linkItem -> {
             try {
-                ShellFolder folder = shellFolderManager.createShellFolder(((Path) linkItem).toFile());
+                final ShellFolder folder = shellFolderManager.createShellFolder(((Path) linkItem).toFile());
                 if (folder.isLink()) {
                     ShellFolder link = folder.getLinkLocation();
                     if (!link.exists()) {
                         link = repairLink(link);
                     }
 
-                    Storage parentStorage = storageRepository.findByUrl(folder.getParent());
+                    final Storage parentStorage = storageRepository.findByUrl(folder.getParent());
                     Storage linkStorage = storageRepository.findByUrl(link.toString());
-                    if (linkStorage == null) {
+                    if (null == linkStorage) {
                         link = repairLink(link);
                         linkStorage = storageRepository.findByUrl(link.toString());
-                        if (linkStorage == null) {
-                            logger.log(Level.ERROR, "Invalid link: " + link.toString());
+                        if (null == linkStorage) {
+                            logger.log(Level.ERROR, "Invalid link: " + link);
                         }
                     }
 
-                    if (linkStorage != null && parentStorage != null) {
-                        Category linkCategory = linkStorage.getMainCategory();
+                    if (null != linkStorage && null != parentStorage) {
+                        final Category linkCategory = linkStorage.getMainCategory();
                         linkCategory.addParent(parentStorage.getMainCategory());
                         categoryRepository.save(linkCategory);
                     }
                 }
-            } catch (FileNotFoundException e) {
+            } catch (final FileNotFoundException e) {
                 e.printStackTrace();
             }
         });
@@ -89,7 +90,7 @@ public class LocalDirectoryLoader extends BaseLoader {
         return false;
     }
 
-    private ShellFolder repairLink(ShellFolder link) throws FileNotFoundException {
+    private ShellFolder repairLink(final ShellFolder link) throws FileNotFoundException {
         if (link.toString().startsWith("F:\\_Книги"))
             return shellFolderManager.createShellFolder(new File(link.toString().replace("F:\\_Книги", "J:\\_Книги")));
         else
@@ -97,22 +98,22 @@ public class LocalDirectoryLoader extends BaseLoader {
     }
 
     @Override
-    protected Stream<ServerItem> getItemsStreamByStorage(Storage storage) throws IOException {
+    protected Stream<ServerItem> getItemsStreamByStorage(final Storage storage) throws IOException {
         return Files.walk(Paths.get(storage.getUrl()), 1).map(ServerItem::new);
     }
 
     @Override
-    public Storage refresh(Storage storage) {
+    public Storage refresh(final Storage storage) {
         return storage;
     }
 
     @Override
-    public void resolveLink(Book lnkBook) {
+    public void resolveLink(final Book lnkBook) {
 
     }
 
     @Override
-    public void downloadBook(Book book) {
+    public void downloadBook(final Book book) {
 
     }
 }

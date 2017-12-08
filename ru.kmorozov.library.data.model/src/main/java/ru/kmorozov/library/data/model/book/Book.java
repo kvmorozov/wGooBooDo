@@ -29,7 +29,7 @@ public class Book {
     public Book() {
     }
 
-    public Book(String title, String author) {
+    public Book(final String title, final String author) {
         this.title = title;
         this.author = author;
     }
@@ -38,7 +38,7 @@ public class Book {
         return bookId;
     }
 
-    public void setBookId(String bookId) {
+    public void setBookId(final String bookId) {
         this.bookId = bookId;
     }
 
@@ -46,7 +46,7 @@ public class Book {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
         this.title = title;
     }
 
@@ -54,7 +54,7 @@ public class Book {
         return author;
     }
 
-    public void setAuthor(String author) {
+    public void setAuthor(final String author) {
         this.author = author;
     }
 
@@ -62,7 +62,7 @@ public class Book {
         return bookInfo;
     }
 
-    public void setBookInfo(BookInfo bookInfo) {
+    public void setBookInfo(final BookInfo bookInfo) {
         this.bookInfo = bookInfo;
     }
 
@@ -70,7 +70,7 @@ public class Book {
         return storage;
     }
 
-    public void setStorage(Storage storage) {
+    public void setStorage(final Storage storage) {
         this.storage = storage;
     }
 
@@ -82,7 +82,7 @@ public class Book {
         return linkInfo;
     }
 
-    public void setLinkInfo(LinkInfo linkInfo) {
+    public void setLinkInfo(final LinkInfo linkInfo) {
         this.linkInfo = linkInfo;
     }
 
@@ -91,16 +91,16 @@ public class Book {
     }
 
     public boolean isBrokenLink() {
-        return this.bookInfo.isLink() && ((this.linkInfo != null && this.linkInfo.isBroken() || this.linkInfo == null));
+        return this.bookInfo.isLink() && ((null != this.linkInfo && this.linkInfo.isBroken() || null == this.linkInfo));
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (title == null) return false;
+        if (null == o || getClass() != o.getClass()) return false;
+        if (null == title) return false;
 
-        Book book = (Book) o;
+        final Book book = (Book) o;
 
         if (!title.equals(book.title)) return false;
         return author.equals(book.author);
@@ -108,7 +108,7 @@ public class Book {
 
     @Override
     public int hashCode() {
-        if (title == null)
+        if (null == title)
             return super.hashCode();
 
         int result = title.hashCode();

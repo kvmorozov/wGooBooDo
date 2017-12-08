@@ -21,7 +21,7 @@ public class DbContextProvider extends AbstractContextProvider {
     }
 
     @Override
-    public BookInfo getBookInfo(String bookId) {
+    public BookInfo getBookInfo(final String bookId) {
         return null;
     }
 

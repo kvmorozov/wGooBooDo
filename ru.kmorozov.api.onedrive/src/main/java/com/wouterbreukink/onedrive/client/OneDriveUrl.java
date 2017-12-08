@@ -12,7 +12,7 @@ public class OneDriveUrl extends GenericUrl {
     @Key("$skiptoken")
     private String token;
 
-    public OneDriveUrl(String encodedUrl) {
+    public OneDriveUrl(final String encodedUrl) {
         super(encodedUrl);
     }
 
@@ -24,43 +24,43 @@ public class OneDriveUrl extends GenericUrl {
         return new OneDriveUrl(rootUrl + "/drive/root");
     }
 
-    public static OneDriveUrl children(String id) {
+    public static OneDriveUrl children(final String id) {
         return new OneDriveUrl(rootUrl + "/drive/items/" + id + "/children");
     }
 
-    public static OneDriveUrl putContent(String id, String name) {
+    public static OneDriveUrl putContent(final String id, final String name) {
         return new OneDriveUrl(rootUrl + "/drive/items/" + id + ":/" + encode(name) + ":/content");
     }
 
-    public static OneDriveUrl postMultiPart(String id) {
+    public static OneDriveUrl postMultiPart(final String id) {
         return new OneDriveUrl(rootUrl + "/drive/items/" + id + "/children");
     }
 
-    public static OneDriveUrl createUploadSession(String id, String name) {
+    public static OneDriveUrl createUploadSession(final String id, final String name) {
         return new OneDriveUrl(rootUrl + "/drive/items/" + id + ":/" + encode(name) + ":/upload.createSession");
     }
 
-    public static OneDriveUrl getPath(String path) {
+    public static OneDriveUrl getPath(final String path) {
         return new OneDriveUrl(rootUrl + "/drive/root:/" + encode(path).replace("%5C", "/"));
     }
 
-    public static GenericUrl item(String id) {
+    public static GenericUrl item(final String id) {
         return new OneDriveUrl(rootUrl + "/drive/items/" + id);
     }
 
-    public static GenericUrl content(String id) {
+    public static GenericUrl content(final String id) {
         return new OneDriveUrl(rootUrl + "/drive/items/" + id + "/content");
     }
 
-    private static String encode(String url) {
+    private static String encode(final String url) {
         try {
             return URLEncoder.encode(url, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
+        } catch (final UnsupportedEncodingException e) {
             return "";
         }
     }
 
-    public void setToken(String token) {
+    public void setToken(final String token) {
         this.token = token;
     }
 }

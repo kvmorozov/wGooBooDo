@@ -87,7 +87,7 @@ public interface OneDriveItem {
         public static OneDriveItem create(final Item item) {
             return new OneDriveItem() {
 
-                private OneDriveItem parent = create(item.getParentReference());
+                private final OneDriveItem parent = create(item.getParentReference());
 
                 @Override
                 public String getId() {
@@ -96,7 +96,7 @@ public interface OneDriveItem {
 
                 @Override
                 public boolean isDirectory() {
-                    return item.getFolder() != null;
+                    return null != item.getFolder();
                 }
 
                 @Override
@@ -145,7 +145,7 @@ public interface OneDriveItem {
             return new OneDriveItem() {
                 @Override
                 public String getId() {
-                    return parent == null ? null : parent.getId();
+                    return null == parent ? null : parent.getId();
                 }
 
                 @Override
@@ -160,15 +160,15 @@ public interface OneDriveItem {
 
                 public String getFullName() {
 
-                    if (parent.getPath() == null) {
+                    if (null == parent.getPath()) {
                         return null;
                     }
 
-                    int index = parent.getPath().indexOf(':');
+                    final int index = parent.getPath().indexOf(':');
 
                     try {
-                        return URLDecoder.decode(index > 0 ? parent.getPath().substring(index + 1) : parent.getPath(), "UTF-8") + '/';
-                    } catch (UnsupportedEncodingException e) {
+                        return URLDecoder.decode(0 < index ? parent.getPath().substring(index + 1) : parent.getPath(), "UTF-8") + '/';
+                    } catch (final UnsupportedEncodingException e) {
                         throw Throwables.propagate(e);
                     }
                 }

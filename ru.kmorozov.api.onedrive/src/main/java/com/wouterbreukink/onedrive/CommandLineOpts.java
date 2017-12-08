@@ -26,32 +26,32 @@ public class CommandLineOpts {
     private String remotePath;
 
     // Optional arguments
-    private boolean help = false;
-    private boolean useHash = false;
+    private boolean help;
+    private boolean useHash;
     private int threads = 5;
     private int tries = 3;
-    private boolean version = false;
-    private boolean recursive = false;
-    private int maxSizeKb = 0;
+    private boolean version;
+    private boolean recursive;
+    private int maxSizeKb;
     private Path keyFile = Paths.get("onedrive.key");
-    private boolean dryRun = false;
-    private String logFile = null;
+    private boolean dryRun;
+    private String logFile;
     private int splitAfter = 5;
-    private Set<String> ignored = null;
-    private boolean authorise = false;
+    private Set<String> ignored;
+    private boolean authorise;
 
     public static CommandLineOpts getCommandLineOpts() {
         return opts;
     }
 
-    public static void initialise(String[] args) throws ParseException {
+    public static void initialise(final String[] args) throws ParseException {
 
-        CommandLineParser parser = new DefaultParser();
-        CommandLine line = parser.parse(optionsToParse, args);
+        final CommandLineParser parser = new DefaultParser();
+        final CommandLine line = parser.parse(optionsToParse, args);
 
-        for (Option opt : line.getOptions()) {
+        for (final Option opt : line.getOptions()) {
             log.debug(String.format("Parsing command line option -%s, value = %s ",
-                    opt.getLongOpt() != null ? '-' + opt.getLongOpt() : opt.getOpt(),
+                    null != opt.getLongOpt() ? '-' + opt.getLongOpt() : opt.getOpt(),
                     opt.getValue()));
         }
 
@@ -71,8 +71,8 @@ public class CommandLineOpts {
         }
 
         if (line.hasOption("direction")) {
-            String chosen = line.getOptionValue("direction").toLowerCase();
-            if (!chosen.equals("up") && !chosen.equals("down")) {
+            final String chosen = line.getOptionValue("direction").toLowerCase();
+            if (!"up".equals(chosen) && !"down".equals(chosen)) {
                 throw new ParseException("Direction must be one of up or down");
             }
             opts.direction = Direction.valueOf(chosen.toUpperCase());
@@ -101,13 +101,13 @@ public class CommandLineOpts {
         if (line.hasOption("split-after")) {
             opts.splitAfter = Integer.parseInt(line.getOptionValue("split-after"));
 
-            if (opts.splitAfter > 60) {
+            if (60 < opts.splitAfter) {
                 throw new ParseException("maximum permissible value for split-after is 60");
             }
         }
 
         if (line.hasOption("ignore")) {
-            Path ignoreFile = Paths.get(line.getOptionValue("ignore"));
+            final Path ignoreFile = Paths.get(line.getOptionValue("ignore"));
             if (!Files.exists(ignoreFile)) {
                 throw new ParseException("specified ignore file does not exist");
             }
@@ -115,7 +115,7 @@ public class CommandLineOpts {
             try {
                 opts.ignored = Sets.newHashSet();
                 opts.ignored.addAll(Files.readAllLines(ignoreFile, Charset.defaultCharset()));
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 throw new ParseException(e.getMessage());
             }
         }
@@ -124,107 +124,107 @@ public class CommandLineOpts {
     }
 
     private static Options buildOptions() {
-        Option authorise = Option.builder("a")
+        final Option authorise = Option.builder("a")
                 .longOpt("authorise")
                 .desc("generate authorisation url")
                 .build();
 
-        Option hash = Option.builder("c")
+        final Option hash = Option.builder("c")
                 .longOpt("hash-compare")
                 .desc("always compare files by hash")
                 .build();
 
-        Option direction = Option.builder()
+        final Option direction = Option.builder()
                 .longOpt("direction")
                 .hasArg()
                 .argName("up|down")
                 .desc("direction of synchronisation.")
                 .build();
 
-        Option help = Option.builder("h")
+        final Option help = Option.builder("h")
                 .longOpt("help")
                 .desc("print this message")
                 .build();
 
-        Option ignore = Option.builder("i")
+        final Option ignore = Option.builder("i")
                 .longOpt("ignore")
                 .hasArg()
                 .argName("ignore_file")
                 .desc("ignore entry file")
                 .build();
 
-        Option keyFile = Option.builder("k")
+        final Option keyFile = Option.builder("k")
                 .longOpt("keyfile")
                 .hasArg()
                 .argName("file")
                 .desc("key file to use")
                 .build();
 
-        Option logLevel = Option.builder("L")
+        final Option logLevel = Option.builder("L")
                 .longOpt("log-level")
                 .hasArg()
                 .argName("level (1-7)")
                 .desc("controls the verbosity of logging")
                 .build();
 
-        Option localPath = Option.builder()
+        final Option localPath = Option.builder()
                 .longOpt("local")
                 .hasArg()
                 .argName("path")
                 .desc("the local path")
                 .build();
 
-        Option logFile = Option.builder()
+        final Option logFile = Option.builder()
                 .longOpt("logfile")
                 .hasArg()
                 .argName("file")
                 .desc("log to file")
                 .build();
 
-        Option maxSize = Option.builder("M")
+        final Option maxSize = Option.builder("M")
                 .longOpt("max-size")
                 .hasArg()
                 .argName("size_in_KB")
                 .desc("only process files smaller than <size> KB")
                 .build();
 
-        Option dryRun = Option.builder("n")
+        final Option dryRun = Option.builder("n")
                 .longOpt("dry-run")
                 .desc("only do a dry run without making changes")
                 .build();
 
-        Option recursive = Option.builder("r")
+        final Option recursive = Option.builder("r")
                 .longOpt("recursive")
                 .desc("recurse into directories")
                 .build();
 
-        Option remotePath = Option.builder()
+        final Option remotePath = Option.builder()
                 .longOpt("remote")
                 .hasArg()
                 .argName("path")
                 .desc("the remote path on OneDrive")
                 .build();
 
-        Option splitAfter = Option.builder("s")
+        final Option splitAfter = Option.builder("s")
                 .longOpt("split-after")
                 .hasArg()
                 .argName("size_in_MB")
                 .desc("use multi-part upload for big files")
                 .build();
 
-        Option threads = Option.builder("t")
+        final Option threads = Option.builder("t")
                 .longOpt("threads")
                 .hasArg()
                 .argName("count")
                 .desc("number of threads to use")
                 .build();
 
-        Option version = Option.builder("v")
+        final Option version = Option.builder("v")
                 .longOpt("version")
                 .desc("print the version information and exit")
                 .build();
 
-        Option retries = Option.builder("y")
+        final Option retries = Option.builder("y")
                 .longOpt("tries")
                 .hasArg()
                 .argName("count")
@@ -252,7 +252,7 @@ public class CommandLineOpts {
     }
 
     public static void printHelp() {
-        HelpFormatter formatter = new HelpFormatter();
+        final HelpFormatter formatter = new HelpFormatter();
         formatter.printHelp("onedrive-java-syncer", optionsToParse);
     }
 

@@ -7,7 +7,7 @@ public class BaseEvent {
 
     private final String eventInfo;
 
-    BaseEvent(String eventInfo) {
+    BaseEvent(final String eventInfo) {
         this.eventInfo = eventInfo;
     }
 

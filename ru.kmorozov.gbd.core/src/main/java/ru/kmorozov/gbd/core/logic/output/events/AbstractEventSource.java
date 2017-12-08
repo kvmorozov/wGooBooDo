@@ -14,7 +14,7 @@ public abstract class AbstractEventSource implements IEventSource {
         return _processStatus;
     }
 
-    protected void setProcessStatus(IProgress processStatus) {
+    protected void setProcessStatus(final IProgress processStatus) {
         this._processStatus = processStatus;
     }
 }

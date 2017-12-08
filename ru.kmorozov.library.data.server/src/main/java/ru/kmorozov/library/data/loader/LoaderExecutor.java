@@ -25,11 +25,11 @@ public class LoaderExecutor {
     private static final Executor loaderExecutor = Executors.newSingleThreadExecutor();
 
     public boolean isStarted() {
-        return oneLoader.getState() == State.STARTED;
+        return State.STARTED == oneLoader.getState();
     }
 
     public synchronized void start() {
-        if (oneLoader.getState() == State.STARTED)
+        if (State.STARTED == oneLoader.getState())
             throw new IllegalStateException("Loader is already started!");
 
         oneLoader.setState(State.STARTED);
@@ -45,15 +45,15 @@ public class LoaderExecutor {
         oneLoader.setState(State.PAUSED);
     }
 
-    public Storage refresh(Storage storage) {
+    public Storage refresh(final Storage storage) {
         return oneLoader.refresh(storage);
     }
 
-    public void resolveLink(Book lnkBook) {
+    public void resolveLink(final Book lnkBook) {
         oneLoader.resolveLink(lnkBook);
     }
 
-    public void downloadBook(Book book) {
+    public void downloadBook(final Book book) {
         oneLoader.downloadBook(book);
     }
 }

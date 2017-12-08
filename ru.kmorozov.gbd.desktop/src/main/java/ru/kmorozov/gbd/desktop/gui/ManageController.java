@@ -22,8 +22,8 @@ public class ManageController {
     public static void synchronize() {
         if (!restClient.serviceAvailable()) return;
 
-        BookContextLoader loader = new BookContextLoader();
-        for (BookInfo bookInfo : loader.getBooks())
+        final BookContextLoader loader = new BookContextLoader();
+        for (final BookInfo bookInfo : loader.getBooks())
             restClient.synchronizeGoogleBook(bookInfo.getBookId());
     }
 }

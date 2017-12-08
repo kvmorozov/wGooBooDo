@@ -16,7 +16,7 @@ public class WebProxyListProvider extends AbstractProxyListProvider {
     }
 
     private void buildList() {
-        List<String> candidateProxies = (new SslProxiesListProvider()).getProxyList();
+        final List<String> candidateProxies = (new SslProxiesListProvider()).getProxyList();
         candidateProxies.addAll((new SslProxiesListProvider()).getProxyList());
 
         this.proxyItems = candidateProxies.stream().filter(AbstractProxyListProvider::notBlacklisted).limit(20).collect(Collectors.toSet());

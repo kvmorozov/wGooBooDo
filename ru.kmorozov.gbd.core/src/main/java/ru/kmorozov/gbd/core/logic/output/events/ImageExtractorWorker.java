@@ -14,12 +14,12 @@ public class ImageExtractorWorker extends SwingWorker<Void, Void> implements IEv
 
     private IProgress _processStatus;
 
-    public ImageExtractorWorker(GoogleImageExtractor extractor) {
+    public ImageExtractorWorker(final GoogleImageExtractor extractor) {
         this.extractor = extractor;
     }
 
     @Override
-    protected Void doInBackground() throws Exception {
+    protected Void doInBackground() {
         extractor.process();
 
         return null;
@@ -30,7 +30,7 @@ public class ImageExtractorWorker extends SwingWorker<Void, Void> implements IEv
         return _processStatus;
     }
 
-    protected void setProcessStatus(IProgress processStatus) {
+    protected void setProcessStatus(final IProgress processStatus) {
         this._processStatus = processStatus;
     }
 }

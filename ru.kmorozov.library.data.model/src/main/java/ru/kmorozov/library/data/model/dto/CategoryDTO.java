@@ -13,7 +13,7 @@ public class CategoryDTO {
     public CategoryDTO() {
     }
 
-    public CategoryDTO(Category category) {
+    public CategoryDTO(final Category category) {
         this.id = category.getId();
         this.name = category.getName();
     }

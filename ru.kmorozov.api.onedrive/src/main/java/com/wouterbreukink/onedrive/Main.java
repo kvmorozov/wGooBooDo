@@ -7,8 +7,10 @@ import com.wouterbreukink.onedrive.client.authoriser.AuthorisationProvider;
 import com.wouterbreukink.onedrive.client.resources.Drive;
 import com.wouterbreukink.onedrive.client.utils.LogUtils;
 import com.wouterbreukink.onedrive.filesystem.FileSystemProvider;
+import com.wouterbreukink.onedrive.filesystem.FileSystemProvider.FACTORY;
 import com.wouterbreukink.onedrive.tasks.CheckTask;
 import com.wouterbreukink.onedrive.tasks.Task;
+import com.wouterbreukink.onedrive.tasks.Task.TaskOptions;
 import com.wouterbreukink.onedrive.tasks.TaskReporter;
 import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
@@ -40,12 +42,12 @@ public class Main {
 
     private static final Logger log = LogManager.getLogger(Main.class.getName());
 
-    public static void main(String[] args) throws Exception {
+    public static void main(final String[] args) throws Exception {
 
         // Parse command line args
         try {
             CommandLineOpts.initialise(args);
-        } catch (ParseException ex) {
+        } catch (final ParseException ex) {
             log.error("Unable to parse command line arguments - " + ex.getMessage());
             CommandLineOpts.printHelp();
             return;
@@ -57,14 +59,14 @@ public class Main {
         }
 
         if (CommandLineOpts.getCommandLineOpts().version()) {
-            String version = CommandLineOpts.getCommandLineOpts().getClass().getPackage().getImplementationVersion();
-            log.info("onedrive-java-client version " + (version != null ? version : "DEVELOPMENT"));
+            final String version = CommandLineOpts.getCommandLineOpts().getClass().getPackage().getImplementationVersion();
+            log.info("onedrive-java-client version " + (null != version ? version : "DEVELOPMENT"));
             return;
         }
 
         // Initialise a log file (if set)
-        if (CommandLineOpts.getCommandLineOpts().getLogFile() != null) {
-            String logFileName = LogUtils.addFileLogger(CommandLineOpts.getCommandLineOpts().getLogFile());
+        if (null != CommandLineOpts.getCommandLineOpts().getLogFile()) {
+            final String logFileName = LogUtils.addFileLogger(CommandLineOpts.getCommandLineOpts().getLogFile());
             log.info(String.format("Writing log output to %s", logFileName));
         }
 
@@ -73,42 +75,42 @@ public class Main {
             return;
         }
 
-        if (CommandLineOpts.getCommandLineOpts().getLocalPath() == null
-                || CommandLineOpts.getCommandLineOpts().getRemotePath() == null
-                || CommandLineOpts.getCommandLineOpts().getDirection() == null) {
+        if (null == CommandLineOpts.getCommandLineOpts().getLocalPath()
+                || null == CommandLineOpts.getCommandLineOpts().getRemotePath()
+                || null == CommandLineOpts.getCommandLineOpts().getDirection()) {
             log.error("Must specify --local, --remote and --direction");
             CommandLineOpts.printHelp();
             return;
         }
 
         // Initialise the OneDrive authorisation
-        AuthorisationProvider authoriser;
+        final AuthorisationProvider authoriser;
         try {
             authoriser = AuthorisationProvider.FACTORY.create(CommandLineOpts.getCommandLineOpts().getKeyFile());
             authoriser.getAccessToken();
-        } catch (OneDriveAPIException ex) {
+        } catch (final OneDriveAPIException ex) {
             log.error("Unable to authorise client: " + ex.getMessage());
             log.error("Re-run the application with --authorise");
             return;
         }
 
         // Initialise the providers
-        OneDriveProvider api;
-        FileSystemProvider fileSystem;
+        final OneDriveProvider api;
+        final FileSystemProvider fileSystem;
         if (CommandLineOpts.getCommandLineOpts().isDryRun()) {
             log.warn("This is a dry run - no changes will be made");
             api = OneDriveProvider.FACTORY.readOnlyApi(authoriser);
-            fileSystem = FileSystemProvider.FACTORY.readOnlyProvider();
+            fileSystem = FACTORY.readOnlyProvider();
         } else {
             api = OneDriveProvider.FACTORY.readWriteApi(authoriser);
-            fileSystem = FileSystemProvider.FACTORY.readWriteProvider();
+            fileSystem = FACTORY.readWriteProvider();
         }
 
         // Report on progress
-        TaskReporter reporter = new TaskReporter();
+        final TaskReporter reporter = new TaskReporter();
 
         // Get the primary drive
-        Drive primary = api.getDefaultDrive();
+        final Drive primary = api.getDefaultDrive();
 
         // Report quotas
         log.info(String.format("Using drive with id '%s' (%s). Usage %s of %s (%.2f%%)",
@@ -119,11 +121,11 @@ public class Main {
                                ((double) primary.getQuota().getUsed() / primary.getQuota().getTotal()) * 100));
 
         // Check the given root folder
-        OneDriveItem rootFolder;
+        final OneDriveItem rootFolder;
         try {
             rootFolder = api.getPath(CommandLineOpts.getCommandLineOpts().getRemotePath());
-        } catch (OneDriveAPIException e) {
-            if (e.getCode() == 404) {
+        } catch (final OneDriveAPIException e) {
+            if (404 == e.getCode()) {
                 log.error(String.format("Specified remote folder '%s' does not exist", CommandLineOpts.getCommandLineOpts().getRemotePath()));
             } else {
                 log.error(String.format("Unable to locate remote folder '%s' - %s", CommandLineOpts.getCommandLineOpts().getRemotePath(), e.getMessage()));
@@ -131,13 +133,13 @@ public class Main {
             return;
         }
 
-        if (rootFolder == null || !rootFolder.isDirectory()) {
+        if (null == rootFolder || !rootFolder.isDirectory()) {
             log.error(String.format("Specified root '%s' is not a folder", CommandLineOpts.getCommandLineOpts().getRemotePath()));
             return;
         }
 
         // Check the target folder
-        File localFolder = new File(CommandLineOpts.getCommandLineOpts().getLocalPath());
+        final File localFolder = new File(CommandLineOpts.getCommandLineOpts().getLocalPath());
 
         if (!localFolder.exists() || !localFolder.isDirectory()) {
             log.error(String.format("Specified local path '%s' is not a valid folder", CommandLineOpts.getCommandLineOpts().getLocalPath()));
@@ -148,27 +150,26 @@ public class Main {
 
         // Start synchronisation operation at the root
         final TaskQueue queue = new TaskQueue();
-        queue.add(new CheckTask(new Task.TaskOptions(queue, api, fileSystem, reporter), rootFolder, localFolder));
+        queue.add(new CheckTask(new TaskOptions(queue, api, fileSystem, reporter), rootFolder, localFolder));
 
         // Get a bunch of threads going
-        ExecutorService executorService = Executors.newFixedThreadPool(CommandLineOpts.getCommandLineOpts().getThreads());
+        final ExecutorService executorService = Executors.newFixedThreadPool(CommandLineOpts.getCommandLineOpts().getThreads());
 
         for (int i = 0; i < CommandLineOpts.getCommandLineOpts().getThreads(); i++) {
             executorService.submit(() -> {
                 try {
-                    //noinspection InfiniteLoopStatement
                     while (true) {
                         Task taskToRun = null;
                         try {
                             taskToRun = queue.take();
                             taskToRun.run();
                         } finally {
-                            if (taskToRun != null) {
+                            if (null != taskToRun) {
                                 queue.done(taskToRun);
                             }
                         }
                     }
-                } catch (InterruptedException e) {
+                } catch (final InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
             });

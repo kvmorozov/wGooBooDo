@@ -16,7 +16,7 @@ public class ProcessStatus implements IProgress {
     private JProgressBar prBar;
     private int maxValue;
 
-    public ProcessStatus(int maxValue) {
+    public ProcessStatus(final int maxValue) {
         this.maxValue = maxValue;
 
         start();
@@ -27,7 +27,7 @@ public class ProcessStatus implements IProgress {
     }
 
     @Override
-    public void resetMaxValue(int maxValue) {
+    public void resetMaxValue(final int maxValue) {
         this.maxValue = maxValue;
 
         start();
@@ -44,7 +44,7 @@ public class ProcessStatus implements IProgress {
 
     @Override
     public int incrementAndProgress() {
-        return maxValue == 0 ? 0 : Math.round(Math.min(inc() * 100 / maxValue, 100));
+        return 0 == maxValue ? 0 : Math.round(Math.min(inc() * 100 / maxValue, 100));
     }
 
     private void start() {
@@ -76,7 +76,7 @@ public class ProcessStatus implements IProgress {
     }
 
     @Override
-    public IProgress getSubProgress(int maxValue) {
+    public IProgress getSubProgress(final int maxValue) {
         return new ProcessStatus(maxValue);
     }
 }

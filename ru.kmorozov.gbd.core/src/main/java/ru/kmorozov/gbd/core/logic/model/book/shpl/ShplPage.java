@@ -24,7 +24,7 @@ public class ShplPage extends AbstractPage {
     public ShplPage() {
     }
 
-    public ShplPage(Integer order) {
+    public ShplPage(final Integer order) {
         this.order = order;
     }
 
@@ -38,7 +38,7 @@ public class ShplPage extends AbstractPage {
         return order;
     }
 
-    public void setOrder(Integer order) {
+    public void setOrder(final Integer order) {
         this.order = order;
     }
 

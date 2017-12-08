@@ -12,12 +12,12 @@ import javax.swing.*;
  */
 public class SwingBookInfoOutput extends AbstractOutput {
 
-    public SwingBookInfoOutput(MainBookForm form) {
+    public SwingBookInfoOutput(final MainBookForm form) {
         addListener(new SwingLogEventListener());
     }
 
     @Override
-    public void receiveBookInfo(BookInfo bookInfo) {
+    public void receiveBookInfo(final BookInfo bookInfo) {
         if (!SwingUtilities.isEventDispatchThread()) {
             SwingUtilities.invokeLater(() -> MainBookForm.getINSTANCE().getTfBookTitle().setText(bookInfo.getBookData().getTitle()));
         }

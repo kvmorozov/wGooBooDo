@@ -15,9 +15,9 @@ public abstract class AbstractProxyExtractor {
 
     public List<String> getProxyList() {
         try {
-            Document doc = Jsoup.connect(getProxyListUrl()).userAgent(HttpConnections.USER_AGENT).get();
+            final Document doc = Jsoup.connect(getProxyListUrl()).userAgent(HttpConnections.USER_AGENT).get();
             return extractProxyList(doc);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
 

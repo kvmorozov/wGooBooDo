@@ -10,7 +10,7 @@ public interface AuthorisationProvider {
     void refresh() throws IOException;
 
     class FACTORY {
-        public static AuthorisationProvider create(Path keyFile) throws IOException {
+        public static AuthorisationProvider create(final Path keyFile) throws IOException {
             return new OneDriveAuthorisationProvider(keyFile);
         }
 

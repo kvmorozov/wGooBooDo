@@ -2,6 +2,7 @@ package com.wouterbreukink.onedrive.client.walker;
 
 import com.wouterbreukink.onedrive.client.OneDriveItem;
 import com.wouterbreukink.onedrive.client.OneDriveProvider;
+import com.wouterbreukink.onedrive.client.walker.OneDriveWalker.Event;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -16,13 +17,13 @@ import java.util.function.Predicate;
 public class OneDriveIterator<T extends OneDriveItem> implements Iterator<OneDriveItem>, Closeable {
 
     private final OneDriveWalker walker;
-    private OneDriveWalker.Event next;
+    private Event next;
 
-    OneDriveIterator(OneDriveProvider api, T root, int maxDepth, Predicate<OneDriveItem> skipCondition) {
+    OneDriveIterator(final OneDriveProvider api, final T root, final int maxDepth, final Predicate<OneDriveItem> skipCondition) {
         this.walker = new OneDriveWalker(api, maxDepth, skipCondition);
         this.next = this.walker.walk(root);
 
-        assert this.next.type() == OneDriveWalker.EventType.ENTRY || this.next.type() == OneDriveWalker.EventType.START_DIRECTORY;
+        assert OneDriveWalker.EventType.ENTRY == this.next.type() || OneDriveWalker.EventType.START_DIRECTORY == this.next.type();
     }
 
     @Override
@@ -36,19 +37,19 @@ public class OneDriveIterator<T extends OneDriveItem> implements Iterator<OneDri
             throw new IllegalStateException();
         } else {
             this.fetchNextIfNeeded();
-            return this.next != null;
+            return null != this.next;
         }
     }
 
     private void fetchNextIfNeeded() {
-        if (this.next == null) {
-            for (OneDriveWalker.Event event = this.walker.next(); event != null; event = this.walker.next()) {
-                IOException exception = event.ioeException();
-                if (exception != null) {
+        if (null == this.next) {
+            for (Event event = this.walker.next(); null != event; event = this.walker.next()) {
+                final IOException exception = event.ioeException();
+                if (null != exception) {
                     throw new UncheckedIOException(exception);
                 }
 
-                if (event.type() != OneDriveWalker.EventType.END_DIRECTORY) {
+                if (OneDriveWalker.EventType.END_DIRECTORY != event.type()) {
                     this.next = event;
                     return;
                 }
@@ -62,10 +63,10 @@ public class OneDriveIterator<T extends OneDriveItem> implements Iterator<OneDri
             throw new IllegalStateException();
         } else {
             this.fetchNextIfNeeded();
-            if (this.next == null) {
+            if (null == this.next) {
                 throw new NoSuchElementException();
             } else {
-                OneDriveWalker.Event event = this.next;
+                final Event event = this.next;
                 this.next = null;
                 return event.getItem();
             }

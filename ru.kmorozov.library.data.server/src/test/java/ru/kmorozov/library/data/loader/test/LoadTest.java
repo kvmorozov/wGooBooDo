@@ -18,12 +18,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import static org.hamcrest.CoreMatchers.*;
+
 /**
  * Created by km on 26.12.2016.
  */
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {LoaderConfiguration.class})
+@ContextConfiguration(classes = LoaderConfiguration.class)
 public class LoadTest {
 
     private static final String MULTIPLE_LNK_DIR = "J:\\OneDrive\\_Книги\\Религиозные вопросы\\Христианство";
@@ -57,19 +59,19 @@ public class LoadTest {
     }
 
     @Test
-    public void loadLinksTestOneMiltiDir() throws IOException {
-        String[] names = MULTIPLE_LNK_DIR.split(delimiter);
+    public void loadLinksTestOneMiltiDir() {
+        final String[] names = MULTIPLE_LNK_DIR.split(delimiter);
         List<Storage> storages = storageRepository.findAllByName(names[names.length - 1]);
         String parentName = null;
 
-        for (int index = names.length - 1; index > 0; index--) {
-            if (storages.size() == 1)
+        for (int index = names.length - 1; 0 < index; index--) {
+            if (1 == storages.size())
                 break;
             else {
                 parentName = names[index - 1];
-                if (parentName != null) {
-                    List<Storage> filteredStorages = new ArrayList<>();
-                    for (Storage storage : storages)
+                if (null != parentName) {
+                    final List<Storage> filteredStorages = new ArrayList<>();
+                    for (final Storage storage : storages)
                         if (storage.getParent().getName().equals(parentName))
                             filteredStorages.add(storage);
 
@@ -78,6 +80,6 @@ public class LoadTest {
             }
         }
 
-        Assert.assertTrue(storages.size() == 1);
+        Assert.assertThat(1, is(storages.size()));
     }
 }

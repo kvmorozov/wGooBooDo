@@ -18,7 +18,7 @@ import ru.kmorozov.library.data.loader.utils.DuplicatesProcessor;
         MongoConverterUtils.class, DuplicatesProcessor.class})
 public class LibraryRestServer {
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         SpringApplication.run(LibraryRestServer.class, args);
     }
 }

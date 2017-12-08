@@ -1,7 +1,7 @@
 package ru.kmorozov.gbd.core.logic.connectors.google;
 
 import com.google.api.client.http.*;
-import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.http.javanet.NetHttpTransport.Builder;
 import org.apache.commons.lang3.StringUtils;
 import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
@@ -21,12 +21,12 @@ public class GoogleHttpConnector extends HttpConnector {
     private static final Map<String, HttpRequestFactory> httpFactoryMap = new ConcurrentHashMap<>();
 
     private HttpRequestFactory getFactory(final HttpHostExt proxy) {
-        String key = getProxyKey(proxy);
+        final String key = getProxyKey(proxy);
 
         HttpRequestFactory requestFactory = httpFactoryMap.get(key);
 
-        if (requestFactory == null) synchronized (proxy) {
-            requestFactory = new NetHttpTransport.Builder().setProxy(proxy.getProxy()).build().createRequestFactory();
+        if (null == requestFactory) synchronized (proxy) {
+            requestFactory = new Builder().setProxy(proxy.getProxy()).build().createRequestFactory();
 
             httpFactoryMap.put(key, requestFactory);
         }
@@ -34,44 +34,44 @@ public class GoogleHttpConnector extends HttpConnector {
         return requestFactory;
     }
 
-    public GoogleResponse getContent(String rqUrl, HttpHostExt proxy, boolean withTimeout) throws IOException {
+    public GoogleResponse getContent(final String rqUrl, final HttpHostExt proxy, final boolean withTimeout) throws IOException {
         try {
-            GenericUrl url = new GenericUrl(URI.create(rqUrl));
+            final GenericUrl url = new GenericUrl(URI.create(rqUrl));
 
             if ((GBDOptions.secureMode() && proxy.isLocal()) || !proxy.isAvailable()) return null;
 
-            HttpResponse resp;
-            HttpHeaders headers = proxy.getHeaders();
+            final HttpResponse resp;
+            final HttpHeaders headers = proxy.getHeaders();
             if ((rqUrl.contains("google") && !StringUtils.isEmpty(headers.getCookie()) && headers.getCookie().contains("NID")) || !rqUrl.contains("google")) {
-                HttpRequest req = getFactory(proxy).buildGetRequest(url).setConnectTimeout(withTimeout ? CONNECT_TIMEOUT : CONNECT_TIMEOUT * 10).setHeaders(headers);
+                final HttpRequest req = getFactory(proxy).buildGetRequest(url).setConnectTimeout(withTimeout ? CONNECT_TIMEOUT : CONNECT_TIMEOUT * 10).setHeaders(headers);
                 resp = getContent(req, proxy, 0);
             }
             else throw new RuntimeException("Invalid proxy config!");
 
-            if (resp == null) logger.finest(String.format("No response at url %s with proxy %s", url.toString(), proxy.toString()));
+            if (null == resp) logger.finest(String.format("No response at url %s with proxy %s", url.toString(), proxy.toString()));
 
             return new GoogleResponse(resp);
-        } catch (HttpResponseException hre) {
+        } catch (final HttpResponseException hre) {
             logger.severe("Connection error: " + hre.getMessage());
             throw new GoogleResponseException(hre);
         }
     }
 
-    private static HttpResponse getContent(HttpRequest req, HttpHostExt proxy, int attempt) throws IOException {
-        if (attempt >= MAX_RETRY_COUNT) {
+    private static HttpResponse getContent(final HttpRequest req, final HttpHostExt proxy, int attempt) throws IOException {
+        if (MAX_RETRY_COUNT <= attempt) {
             proxy.registerFailure();
             return null;
         }
 
-        if (attempt > 1) try {
+        if (1 < attempt) try {
             logger.finest(String.format("Attempt %d with %s url", attempt, req.getUrl().toString()));
             Thread.sleep(SLEEP_TIME * attempt);
-        } catch (InterruptedException ignored) {
+        } catch (final InterruptedException ignored) {
         }
 
         try {
             return req.execute();
-        } catch (SocketTimeoutException ste1) {
+        } catch (final SocketTimeoutException ste1) {
             proxy.registerFailure();
             return getContent(req, proxy, ++attempt);
         }

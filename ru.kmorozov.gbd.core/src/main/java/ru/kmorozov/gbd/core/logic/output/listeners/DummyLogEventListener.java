@@ -8,7 +8,7 @@ import ru.kmorozov.gbd.core.logic.output.events.BaseEvent;
 public class DummyLogEventListener extends AbstractLogEventListener {
 
     @Override
-    public void receiveEvent(BaseEvent event) {
+    public void receiveEvent(final BaseEvent event) {
         System.out.println(event.getEventInfo());
     }
 }

@@ -1,6 +1,7 @@
 package ru.kmorozov.library.data.loader;
 
 import com.wouterbreukink.onedrive.client.OneDriveProvider;
+import com.wouterbreukink.onedrive.client.OneDriveProvider.FACTORY;
 import com.wouterbreukink.onedrive.client.authoriser.AuthorisationProvider;
 import com.wouterbreukink.onedrive.client.authoriser.TokenFactory;
 import com.wouterbreukink.onedrive.client.exceptions.InvalidCodeException;
@@ -18,7 +19,7 @@ import java.io.IOException;
  */
 
 @Configuration
-@ComponentScan(basePackageClasses = {MongoConfiguration.class}, basePackages = {"ru.kmorozov.library.data.loader"})
+@ComponentScan(basePackageClasses = MongoConfiguration.class, basePackages = "ru.kmorozov.library.data.loader")
 public class LoaderConfiguration {
 
     private static final Logger logger = Logger.getLogger(LoaderConfiguration.class);
@@ -35,26 +36,26 @@ public class LoaderConfiguration {
     }
 
     @Bean
-    public OneDriveProvider api(@Autowired String oneDriveKeyFileName) {
-        File file = new File(getClass().getClassLoader().getResource(oneDriveKeyFileName).getFile());
+    public OneDriveProvider api(@Autowired final String oneDriveKeyFileName) {
+        final File file = new File(getClass().getClassLoader().getResource(oneDriveKeyFileName).getFile());
 
         AuthorisationProvider authoriser = null;
 
         try {
             authoriser = AuthorisationProvider.FACTORY.create(file.toPath());
-        } catch (InvalidCodeException cee) {
+        } catch (final InvalidCodeException cee) {
             if (TokenFactory.generateToken(oneDriveKeyFileName))
                 try {
                     authoriser = AuthorisationProvider.FACTORY.create(file.toPath());
-                } catch (IOException e) {
+                } catch (final IOException e) {
                     logger.error("OneDrive API init error", e);
                 }
             else
                 throw new RuntimeException(cee);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             logger.error("OneDrive API init error", e);
         }
 
-        return OneDriveProvider.FACTORY.readWriteApi(authoriser);
+        return FACTORY.readWriteApi(authoriser);
     }
 }

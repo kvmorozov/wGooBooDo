@@ -10,7 +10,7 @@ public interface FileSystemProvider {
 
     File createFolder(File file, String name) throws IOException;
 
-    File createFile(File file, String name) throws IOException;
+    File createFile(File file, String name);
 
     void replaceFile(File original, File replacement) throws IOException;
 

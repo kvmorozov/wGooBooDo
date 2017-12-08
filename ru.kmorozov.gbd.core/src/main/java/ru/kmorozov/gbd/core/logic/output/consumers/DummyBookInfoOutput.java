@@ -13,7 +13,7 @@ public class DummyBookInfoOutput extends AbstractOutput {
     }
 
     @Override
-    public void receiveBookInfo(BookInfo bookInfo) {
+    public void receiveBookInfo(final BookInfo bookInfo) {
 
     }
 }

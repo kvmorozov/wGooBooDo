@@ -14,7 +14,7 @@ public class GbdTestBase {
 
     @Before
     public void init() {
-        IGBDOptions options = Mockito.mock(IGBDOptions.class);
+        final IGBDOptions options = Mockito.mock(IGBDOptions.class);
         Mockito.when(options.secureMode()).thenReturn(false);
 
         ExecutionContext.initContext(new DummyBookInfoOutput(), true);

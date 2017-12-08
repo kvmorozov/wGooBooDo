@@ -5,8 +5,11 @@ import io.netty.util.HashedWheelTimer;
 import io.netty.util.Timer;
 import org.asynchttpclient.*;
 import org.asynchttpclient.AsyncHandler;
+import org.asynchttpclient.DefaultAsyncHttpClientConfig.Builder;
+import org.asynchttpclient.ListenableFuture.CompletedFailure;
 import org.asynchttpclient.channel.ChannelPool;
 import org.asynchttpclient.filter.FilterContext;
+import org.asynchttpclient.filter.FilterContext.FilterContextBuilder;
 import org.asynchttpclient.filter.FilterException;
 import org.asynchttpclient.filter.RequestFilter;
 import org.asynchttpclient.handler.resumable.ResumableAsyncHandler;
@@ -24,7 +27,7 @@ import java.util.function.Predicate;
  */
 public class SingleChannelHttpClient implements AsyncHttpClient {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(DefaultAsyncHttpClient.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultAsyncHttpClient.class);
     private final AsyncHttpClientConfig config;
     private final AtomicBoolean closed = new AtomicBoolean(false);
     private final ChannelManager channelManager;
@@ -50,7 +53,7 @@ public class SingleChannelHttpClient implements AsyncHttpClient {
      * IllegalStateException.
      */
     public SingleChannelHttpClient() {
-        this(new DefaultAsyncHttpClientConfig.Builder().build(), null);
+        this(new Builder().build(), null);
     }
 
     /**
@@ -61,20 +64,20 @@ public class SingleChannelHttpClient implements AsyncHttpClient {
      *
      * @param config a {@link DefaultAsyncHttpClientConfig}
      */
-    public SingleChannelHttpClient(AsyncHttpClientConfig config, ChannelManager channelManager) {
+    public SingleChannelHttpClient(final AsyncHttpClientConfig config, final ChannelManager channelManager) {
 
         this.config = config;
 
-        allowStopNettyTimer = config.getNettyTimer() == null;
+        allowStopNettyTimer = null == config.getNettyTimer();
         nettyTimer = allowStopNettyTimer ? newNettyTimer() : config.getNettyTimer();
 
-        this.channelManager = channelManager == null ? new ChannelManager(config, nettyTimer) : channelManager;
+        this.channelManager = null == channelManager ? new ChannelManager(config, nettyTimer) : channelManager;
         requestSender = new NettyRequestSender(config, channelManager, nettyTimer, new AsyncHttpClientState(closed));
         this.channelManager.configureBootstraps(requestSender);
     }
 
     private static Timer newNettyTimer() {
-        HashedWheelTimer timer = new HashedWheelTimer();
+        final HashedWheelTimer timer = new HashedWheelTimer();
         timer.start();
         return timer;
     }
@@ -84,13 +87,13 @@ public class SingleChannelHttpClient implements AsyncHttpClient {
         if (closed.compareAndSet(false, true)) {
             try {
                 channelManager.close();
-            } catch (Throwable t) {
+            } catch (final Throwable t) {
                 LOGGER.warn("Unexpected error on ChannelManager close", t);
             }
             if (allowStopNettyTimer) {
                 try {
                     nettyTimer.stop();
-                } catch (Throwable t) {
+                } catch (final Throwable t) {
                     LOGGER.warn("Unexpected error on HashedWheelTimer close", t);
                 }
             }
@@ -103,80 +106,80 @@ public class SingleChannelHttpClient implements AsyncHttpClient {
     }
 
     @Override
-    public SingleChannelHttpClient setSignatureCalculator(SignatureCalculator signatureCalculator) {
+    public SingleChannelHttpClient setSignatureCalculator(final SignatureCalculator signatureCalculator) {
         this.signatureCalculator = signatureCalculator;
         return this;
     }
 
     @Override
-    public BoundRequestBuilder prepareGet(String url) {
+    public BoundRequestBuilder prepareGet(final String url) {
         return requestBuilder("GET", url);
     }
 
     @Override
-    public BoundRequestBuilder prepareConnect(String url) {
+    public BoundRequestBuilder prepareConnect(final String url) {
         return requestBuilder("CONNECT", url);
     }
 
     @Override
-    public BoundRequestBuilder prepareOptions(String url) {
+    public BoundRequestBuilder prepareOptions(final String url) {
         return requestBuilder("OPTIONS", url);
     }
 
     @Override
-    public BoundRequestBuilder prepareHead(String url) {
+    public BoundRequestBuilder prepareHead(final String url) {
         return requestBuilder("HEAD", url);
     }
 
     @Override
-    public BoundRequestBuilder preparePost(String url) {
+    public BoundRequestBuilder preparePost(final String url) {
         return requestBuilder("POST", url);
     }
 
     @Override
-    public BoundRequestBuilder preparePut(String url) {
+    public BoundRequestBuilder preparePut(final String url) {
         return requestBuilder("PUT", url);
     }
 
     @Override
-    public BoundRequestBuilder prepareDelete(String url) {
+    public BoundRequestBuilder prepareDelete(final String url) {
         return requestBuilder("DELETE", url);
     }
 
     @Override
-    public BoundRequestBuilder preparePatch(String url) {
+    public BoundRequestBuilder preparePatch(final String url) {
         return requestBuilder("PATCH", url);
     }
 
     @Override
-    public BoundRequestBuilder prepareTrace(String url) {
+    public BoundRequestBuilder prepareTrace(final String url) {
         return requestBuilder("TRACE", url);
     }
 
     @Override
-    public BoundRequestBuilder prepareRequest(Request request) {
+    public BoundRequestBuilder prepareRequest(final Request request) {
         return requestBuilder(request);
     }
 
     @Override
-    public BoundRequestBuilder prepareRequest(RequestBuilder requestBuilder) {
+    public BoundRequestBuilder prepareRequest(final RequestBuilder requestBuilder) {
         return prepareRequest(requestBuilder.build());
     }
 
     @Override
-    public <T> ListenableFuture<T> executeRequest(Request request, org.asynchttpclient.AsyncHandler<T> handler) {
+    public <T> ListenableFuture<T> executeRequest(final Request request, final org.asynchttpclient.AsyncHandler<T> handler) {
 
         if (config.getRequestFilters().isEmpty()) {
             return execute(request, handler);
 
         }
         else {
-            FilterContext<T> fc = new FilterContext.FilterContextBuilder<T>().asyncHandler(handler).request(request).build();
+            FilterContext<T> fc = new FilterContextBuilder<T>().asyncHandler(handler).request(request).build();
             try {
                 fc = preProcessRequest(fc);
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 handler.onThrowable(e);
-                return new ListenableFuture.CompletedFailure<>("preProcessRequest failed", e);
+                return new CompletedFailure<>("preProcessRequest failed", e);
             }
 
             return execute(fc.getRequest(), fc.getAsyncHandler());
@@ -184,26 +187,26 @@ public class SingleChannelHttpClient implements AsyncHttpClient {
     }
 
     @Override
-    public <T> ListenableFuture<T> executeRequest(RequestBuilder requestBuilder, org.asynchttpclient.AsyncHandler<T> handler) {
+    public <T> ListenableFuture<T> executeRequest(final RequestBuilder requestBuilder, final org.asynchttpclient.AsyncHandler<T> handler) {
         return executeRequest(requestBuilder.build(), handler);
     }
 
     @Override
-    public ListenableFuture<Response> executeRequest(Request request) {
+    public ListenableFuture<Response> executeRequest(final Request request) {
         return executeRequest(request, new AsyncCompletionHandlerBase());
     }
 
     @Override
-    public ListenableFuture<Response> executeRequest(RequestBuilder requestBuilder) {
+    public ListenableFuture<Response> executeRequest(final RequestBuilder requestBuilder) {
         return executeRequest(requestBuilder.build());
     }
 
-    private <T> ListenableFuture<T> execute(Request request, final org.asynchttpclient.AsyncHandler<T> asyncHandler) {
+    private <T> ListenableFuture<T> execute(final Request request, final org.asynchttpclient.AsyncHandler<T> asyncHandler) {
         try {
             return requestSender.sendRequest(request, asyncHandler, null, false);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             asyncHandler.onThrowable(e);
-            return new ListenableFuture.CompletedFailure<>(e);
+            return new CompletedFailure<>(e);
         }
     }
 
@@ -215,7 +218,7 @@ public class SingleChannelHttpClient implements AsyncHttpClient {
      * @return {@link FilterContext}
      */
     private <T> FilterContext<T> preProcessRequest(FilterContext<T> fc) throws FilterException {
-        for (RequestFilter asyncFilter : config.getRequestFilters()) {
+        for (final RequestFilter asyncFilter : config.getRequestFilters()) {
             fc = asyncFilter.filter(fc);
             Assertions.assertNotNull(fc, "filterContext");
         }
@@ -225,12 +228,12 @@ public class SingleChannelHttpClient implements AsyncHttpClient {
             request = ResumableAsyncHandler.class.cast(fc.getAsyncHandler()).adjustRequestRange(request);
         }
 
-        if (request.getRangeOffset() != 0) {
-            RequestBuilder builder = new RequestBuilder(request);
+        if (0 != request.getRangeOffset()) {
+            final RequestBuilder builder = new RequestBuilder(request);
             builder.setHeader("Range", "bytes=" + request.getRangeOffset() + '-');
             request = builder.build();
         }
-        fc = new FilterContext.FilterContextBuilder<>(fc).request(request).build();
+        fc = new FilterContextBuilder<>(fc).request(request).build();
         return fc;
     }
 
@@ -248,7 +251,7 @@ public class SingleChannelHttpClient implements AsyncHttpClient {
     }
 
     @Override
-    public void flushChannelPoolPartitions(Predicate<Object> predicate) {
+    public void flushChannelPoolPartitions(final Predicate<Object> predicate) {
 
     }
 
@@ -257,11 +260,11 @@ public class SingleChannelHttpClient implements AsyncHttpClient {
         return null;
     }
 
-    protected BoundRequestBuilder requestBuilder(String method, String url) {
+    protected BoundRequestBuilder requestBuilder(final String method, final String url) {
         return new BoundRequestBuilder(this, method, config.isDisableUrlEncodingForBoundRequests()).setUrl(url).setSignatureCalculator(signatureCalculator);
     }
 
-    protected BoundRequestBuilder requestBuilder(Request prototype) {
+    protected BoundRequestBuilder requestBuilder(final Request prototype) {
         return new BoundRequestBuilder(this, prototype).setSignatureCalculator(signatureCalculator);
     }
 

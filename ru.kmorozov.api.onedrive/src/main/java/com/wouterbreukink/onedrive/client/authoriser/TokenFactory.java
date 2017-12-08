@@ -18,24 +18,24 @@ public class TokenFactory {
 
     private static final Logger log = LogManager.getLogger(TokenFactory.class.getName());
 
-    public static boolean generateToken(String oneDriveKeyFileName) {
+    public static boolean generateToken(final String oneDriveKeyFileName) {
         log.info("Starting generate token...");
         try {
-            WebDriver driver = new ChromeDriver();
+            final WebDriver driver = new ChromeDriver();
             driver.get(OneDriveAuthorisationProvider.getAuthString());
 
-            Wait<WebDriver> wait = new FluentWait(driver)
+            final Wait<WebDriver> wait = new FluentWait(driver)
                     .withTimeout(30, TimeUnit.MINUTES)
                     .pollingEvery(1, TimeUnit.SECONDS)
                     .ignoring(NoSuchElementException.class);
 
             final WebElement okButton = wait.until(driver1 -> driver1.findElement(By.id("idBtn_Accept")));
 
-            WebElement noButton = wait.until(driver12 -> {
+            final WebElement noButton = wait.until(driver12 -> {
                 try {
-                    WebElement button = driver12.findElement(By.id("idBtn_Accept"));
+                    final WebElement button = driver12.findElement(By.id("idBtn_Accept"));
                     return null;
-                } catch (NoSuchElementException nse) {
+                } catch (final NoSuchElementException nse) {
                     return okButton;
                 }
             });
@@ -48,7 +48,7 @@ public class TokenFactory {
             log.info("Token generated successfully!");
 
             return true;
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             log.info("Failed generate token!");
             return false;
         }

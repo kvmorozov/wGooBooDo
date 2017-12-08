@@ -19,17 +19,17 @@ public class JsonDateSerializer {
         df2.setTimeZone(TimeZone.getTimeZone("UTC"));
     }
 
-    public synchronized String serialize(Date value) {
+    public synchronized String serialize(final Date value) {
         return df.format(value);
     }
 
-    public synchronized Date deserialize(String value) {
+    public synchronized Date deserialize(final String value) {
         try {
             return df.parse(value);
-        } catch (ParseException e) {
+        } catch (final ParseException e) {
             try {
                 return df2.parse(value);
-            } catch (ParseException e1) {
+            } catch (final ParseException e1) {
                 throw Throwables.propagate(e);
             }
 
