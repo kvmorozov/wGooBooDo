@@ -1,5 +1,6 @@
 package ru.kmorozov.gbd.core.logic.extractors.google;
 
+import org.jsoup.nodes.DataNode;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
@@ -73,10 +74,10 @@ public class GoogleBookInfoExtractor extends AbstractBookExtractor {
         final Elements scripts = doc.select("script");
         for (final Element script : scripts) {
             final List<Node> childs = script.childNodes();
-            if (null != childs && !childs.isEmpty()) {
-                final String data = childs.get(0).attr("data");
+            if (null != childs && !childs.isEmpty() && childs.get(0) instanceof DataNode) {
+                final String data = ((DataNode) childs.get(0)).getWholeData();
 
-                if (null == data || data.isEmpty()) return null;
+                if (null == data || data.isEmpty()) continue;
 
                 if (data.startsWith(ADD_FLAGS_ATTRIBUTE) && 0 < data.indexOf(OC_RUN_ATTRIBUTE)) {
                     final int jsonStart = data.indexOf(OC_RUN_ATTRIBUTE) + OC_RUN_ATTRIBUTE.length() + 1;
