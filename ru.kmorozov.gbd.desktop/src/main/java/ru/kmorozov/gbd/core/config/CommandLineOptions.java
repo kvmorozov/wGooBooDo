@@ -31,7 +31,7 @@ public class CommandLineOptions implements IGBDOptions {
         Option option = new Option(OPTION_BOOKID_SHORT, OPTION_BOOKID_LONG, true, "Book Id");
         option.setArgs(1);
         option.setOptionalArg(false);
-        option.setArgName("Google bookId ");
+        option.setArgName("BookId ");
         options.addOption(option);
 
         option = new Option(OPTION_OUTDIR_SHORT, OPTION_OUTDIR_LONG, true, "output dir");
@@ -43,7 +43,7 @@ public class CommandLineOptions implements IGBDOptions {
         option = new Option(OPTION_PROXY_FILE_SHORT, OPTION_PROXY_FILE_LONG, true, "Proxy list file");
         option.setArgs(1);
         option.setOptionalArg(false);
-        option.setArgName("output directory ");
+        option.setArgName("proxy options ");
         options.addOption(option);
 
         option = new Option(OPTION_WIDTH_SHORT, OPTION_WIDTH_LONG, true, "Width");
