@@ -57,7 +57,7 @@ public final class ExecutionContext {
                 bookContextMap.computeIfAbsent(bookId, k -> new BookContext(bookId, progress, postProcessor));
             }
             catch(final Exception ex) {
-                logger.severe("Cannot add book " + bookId);
+                logger.severe("Cannot add book " + bookId + " because of " + ex.getMessage());
             }
         }
     }

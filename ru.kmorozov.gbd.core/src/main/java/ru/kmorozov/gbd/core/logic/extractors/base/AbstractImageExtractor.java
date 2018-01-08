@@ -102,16 +102,17 @@ public abstract class AbstractImageExtractor extends AbstractEventSource impleme
     private String getDirectoryName(final String baseOutputDirPath) {
         try {
             final Optional<Path> optPath = Files.find(Paths.get(baseOutputDirPath), 1, (path, basicFileAttributes) -> path.toString().contains(bookContext.getBookInfo().getBookData()
-                                                                                                                                                    .getVolumeId())).findAny();
+                                                                                                                                                          .getVolumeId())).findAny();
             if (optPath.isPresent()) return optPath.get().toString();
         } catch (final IOException ignored) {
         }
 
         final String directoryName = baseOutputDirPath + '\\' + bookContext.getBookInfo().getBookData().getTitle()
-                                                                     .replace(":", "")
-                                                                     .replace("<", "")
-                                                                     .replace(">", "")
-                                                                     .replace("/", ".");
+                                                                           .replace(":", "")
+                                                                           .replace("<", "")
+                                                                           .replace(">", "")
+                                                                           .replace("?", "")
+                                                                           .replace("/", ".");
         final String volumeId = bookContext.getBookInfo().getBookData().getVolumeId();
         return StringUtils.isEmpty(volumeId) ? directoryName : directoryName + ' ' + bookContext.getBookInfo().getBookData().getVolumeId();
     }

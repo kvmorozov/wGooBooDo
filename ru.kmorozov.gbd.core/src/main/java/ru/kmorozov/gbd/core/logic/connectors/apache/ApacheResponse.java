@@ -1,6 +1,6 @@
 package ru.kmorozov.gbd.core.logic.connectors.apache;
 
-import org.apache.hc.client5.http.impl.sync.CloseableHttpResponse;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import ru.kmorozov.gbd.core.logic.connectors.Response;
 

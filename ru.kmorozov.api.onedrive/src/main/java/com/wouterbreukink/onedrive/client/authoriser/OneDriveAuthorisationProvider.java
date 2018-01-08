@@ -21,8 +21,8 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -72,7 +72,8 @@ class OneDriveAuthorisationProvider implements AuthorisationProvider {
             case 2:
                 if (keyFileContents[0].equals(clientId)) {
                     getTokenFromRefreshToken(keyFileContents[1]);
-                } else {
+                }
+                else {
                     throw new OneDriveAPIException(401, "Key file does not match this application version.");
                 }
                 break;
@@ -89,10 +90,10 @@ class OneDriveAuthorisationProvider implements AuthorisationProvider {
 
     public static String getAuthString() {
         return String.format("%s?client_id=%s&response_type=code&scope=wl.signin%%20wl.offline_access%%20onedrive.readwrite&client_secret=%s&redirect_uri=%s",
-                "https://login.live.com/oauth20_authorize.srf",
-                clientId,
-                clientSecret,
-                "https://login.live.com/oauth20_desktop.srf");
+                             "https://login.live.com/oauth20_authorize.srf",
+                             clientId,
+                             clientSecret,
+                             "https://login.live.com/oauth20_desktop.srf");
     }
 
     @Override
@@ -107,7 +108,8 @@ class OneDriveAuthorisationProvider implements AuthorisationProvider {
             }
 
             return authorisation.getAccessToken();
-        } else {
+        }
+        else {
             throw new IllegalStateException("Authoriser has not been initialised");
         }
     }
@@ -125,7 +127,7 @@ class OneDriveAuthorisationProvider implements AuthorisationProvider {
                 new SimpleEntry<>("code", code),
                 new SimpleEntry<>("grant_type", "authorization_code"),
                 new SimpleEntry<>("redirect_uri", "https://login.live.com/oauth20_desktop.srf"))
-                .collect(Collectors.toMap(SimpleEntry::getKey, SimpleEntry::getValue)));
+                                                           .collect(Collectors.toMap(SimpleEntry::getKey, SimpleEntry::getValue)));
 
         final HttpRequest request =
                 HTTP_TRANSPORT.createRequestFactory().buildPostRequest(new GenericUrl("https://login.live.com/oauth20_token.srf"), new UrlEncodedContent(data));
@@ -167,7 +169,7 @@ class OneDriveAuthorisationProvider implements AuthorisationProvider {
                 new SimpleEntry<>("grant_type", "refresh_token"),
                 new SimpleEntry<>("refresh_token", refreshToken),
                 new SimpleEntry<>("redirect_uri", "https://login.live.com/oauth20_desktop.srf"))
-                .collect(Collectors.toMap(SimpleEntry::getKey, SimpleEntry::getValue)));
+                                                           .collect(Collectors.toMap(SimpleEntry::getKey, SimpleEntry::getValue)));
 
         final HttpRequest request =
                 HTTP_TRANSPORT.createRequestFactory().buildPostRequest(new GenericUrl("https://login.live.com/oauth20_token.srf"), new UrlEncodedContent(data));
@@ -183,10 +185,10 @@ class OneDriveAuthorisationProvider implements AuthorisationProvider {
         // Check for failures
         if (200 != response.getStatusCode() || null != authorisation.getError()) {
             throw new OneDriveAPIException(response.getStatusCode(),
-                    String.format("Error code %d - %s (%s)",
-                            response.getStatusCode(),
-                            authorisation.getError(),
-                            authorisation.getErrorDescription()));
+                                           String.format("Error code %d - %s (%s)",
+                                                         response.getStatusCode(),
+                                                         authorisation.getError(),
+                                                         authorisation.getErrorDescription()));
         }
 
         log.info("Fetched new authorisation token and refresh token for user " + authorisation.getUserId());

@@ -15,9 +15,15 @@ import java.util.stream.Collectors;
 public class SslProxiesListProvider extends AbstractProxyExtractor {
 
     private static final String PROXY_LIST_URL = "http://www.proxz.com/proxy_list_anonymous_us_0.html";
-    private static final String ipPortPattern = "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]):[0-9]+";
-    private static final Pattern pattern = Pattern.compile(ipPortPattern, Pattern.LITERAL);
-    private static boolean checkRegexp = false;
+    private static final String ipPortPattern = "^([0-9]|[0-9][0-9]|[01][0-9][0-9]|2[0-4][0-9]|25[0-5])\\." +
+            "([0-9]|[0-9][0-9]|[01][0-9][0-9]|2[0-4][0-9]|25[0-5])\\." +
+            "([0-9]|[0-9][0-9]|[01][0-9][0-9]|2[0-4][0-9]|25[0-5])\\." +
+            "([0-9]|[0-9][0-9]|[01][0-9][0-9]|2[0-4][0-9]|25[0-5])\\:" +
+            "([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9]|" +
+            "[1-5][0-9][0-9][0-9][0-9]|6[0-4][0-9][0-9][0-9]|" +
+            "65[0-4][0-9][0-9]|655[0-2][0-9]|6553[0-5])$";
+    private static final Pattern pattern = Pattern.compile(ipPortPattern);
+    private static boolean checkRegexp = true;
 
     @Override
     protected String getProxyListUrl() {

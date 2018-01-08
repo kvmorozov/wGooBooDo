@@ -1,8 +1,8 @@
 package ru.kmorozov.gbd.core.logic.connectors.apache;
 
-import org.apache.hc.client5.http.impl.sync.CloseableHttpResponse;
-import org.apache.hc.client5.http.sync.HttpClient;
-import org.apache.hc.client5.http.sync.methods.HttpGet;
+import org.apache.hc.client5.http.classic.HttpClient;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.core5.http.HttpResponse;
 import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;

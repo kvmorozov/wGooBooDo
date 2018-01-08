@@ -1,17 +1,16 @@
 package ru.kmorozov.gbd.core.logic.connectors.apache;
 
+import org.apache.hc.client5.http.classic.HttpClient;
 import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.cookie.BasicCookieStore;
 import org.apache.hc.client5.http.cookie.CookieStore;
 import org.apache.hc.client5.http.cookie.SetCookie;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
 import org.apache.hc.client5.http.impl.cookie.BasicClientCookie;
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
-import org.apache.hc.client5.http.impl.sync.CloseableHttpClient;
-import org.apache.hc.client5.http.impl.sync.HttpClientBuilder;
-import org.apache.hc.client5.http.sync.HttpClient;
 import org.apache.hc.core5.http.HttpHost;
 import org.apache.hc.core5.ssl.SSLContextBuilder;
-import org.apache.hc.core5.util.TimeValue;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector;
 import ru.kmorozov.gbd.core.logic.library.LibraryFactory;
@@ -22,6 +21,7 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by km on 22.05.2016.
@@ -54,9 +54,8 @@ public final class ApacheConnections {
         }
 
         final RequestConfig requestConfig = RequestConfig.copy(RequestConfig.DEFAULT)
-                .setSocketTimeout(TimeValue.ofMillis(HttpConnector.CONNECT_TIMEOUT))
-                .setConnectTimeout(TimeValue.ofMillis(HttpConnector.CONNECT_TIMEOUT))
-                .setConnectionRequestTimeout(TimeValue.ofMillis(HttpConnector.CONNECT_TIMEOUT)).build();
+                                                         .setConnectTimeout(HttpConnector.CONNECT_TIMEOUT, TimeUnit.MILLISECONDS)
+                                                         .setConnectionRequestTimeout(HttpConnector.CONNECT_TIMEOUT, TimeUnit.MILLISECONDS).build();
 
         builderWithTimeout.setDefaultRequestConfig(requestConfig);
     }
