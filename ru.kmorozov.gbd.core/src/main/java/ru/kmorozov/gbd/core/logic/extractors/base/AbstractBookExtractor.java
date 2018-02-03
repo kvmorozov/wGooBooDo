@@ -10,8 +10,8 @@ import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.connectors.Response;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
-import ru.kmorozov.gbd.core.utils.HttpConnections;
-import ru.kmorozov.gbd.core.utils.Logger;
+import ru.kmorozov.gbd.utils.HttpConnections;
+import ru.kmorozov.gbd.utils.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;

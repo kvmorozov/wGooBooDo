@@ -5,8 +5,8 @@ import org.apache.commons.lang3.StringUtils;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.connectors.Response;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractHttpProcessor;
-import ru.kmorozov.gbd.core.utils.Logger;
-import ru.kmorozov.gbd.core.utils.gson.Mapper;
+import ru.kmorozov.gbd.logger.Logger;
+import ru.kmorozov.gbd.utils.Mapper;
 
 import javax.net.ssl.SSLException;
 import java.io.IOException;

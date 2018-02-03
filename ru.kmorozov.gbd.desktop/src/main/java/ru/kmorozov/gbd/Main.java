@@ -5,10 +5,10 @@ import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.config.LocalSystemOptions;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.context.IBookListProducer;
-import ru.kmorozov.gbd.core.logic.output.consumers.DummyBookInfoOutput;
 import ru.kmorozov.gbd.desktop.gui.MainFrame;
 import ru.kmorozov.gbd.desktop.library.OptionsBasedProducer;
 import ru.kmorozov.gbd.desktop.output.progress.ProcessStatus;
+import ru.kmorozov.gbd.logger.output.DummyReceiver;
 import ru.kmorozov.gbd.pdf.PdfMaker;
 
 class Main {
@@ -18,7 +18,7 @@ class Main {
             GBDOptions.init(new CommandLineOptions(args));
 
             final IBookListProducer producer = new OptionsBasedProducer();
-            ExecutionContext.initContext(new DummyBookInfoOutput(), 1 == producer.getBookIds().size());
+            ExecutionContext.initContext(new DummyReceiver(), 1 == producer.getBookIds().size());
             ExecutionContext.INSTANCE.addBookContext(producer, new ProcessStatus(), new PdfMaker());
 
             ExecutionContext.INSTANCE.execute();

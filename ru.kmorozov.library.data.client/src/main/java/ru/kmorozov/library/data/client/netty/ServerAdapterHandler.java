@@ -7,7 +7,7 @@ import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.util.concurrent.GlobalEventExecutor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.kmorozov.gbd.core.utils.Logger;
+import ru.kmorozov.gbd.utils.Logger;
 import ru.kmorozov.library.data.client.WebSocketEventHandler;
 
 import java.util.Collection;

@@ -19,8 +19,6 @@ import java.util.concurrent.TimeUnit;
  */
 public class ShplImageExtractor extends AbstractImageExtractor {
 
-    public static final int DEFAULT_PAGE_WIDTH = 7;
-
     public ShplImageExtractor(final BookContext bookContext) {
         super(bookContext, ShplImageExtractor.class);
     }

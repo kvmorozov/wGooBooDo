@@ -14,7 +14,7 @@ import org.apache.hc.core5.ssl.SSLContextBuilder;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector;
 import ru.kmorozov.gbd.core.logic.library.LibraryFactory;
-import ru.kmorozov.gbd.core.utils.HttpConnections;
+import ru.kmorozov.gbd.utils.HttpConnections;
 
 import javax.net.ssl.SSLContext;
 import java.io.Closeable;

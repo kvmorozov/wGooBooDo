@@ -7,8 +7,8 @@ import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata;
 import ru.kmorozov.gbd.core.logic.library.LibraryFactory;
 import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage;
 import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
-import ru.kmorozov.gbd.core.logic.progress.IProgress;
-import ru.kmorozov.gbd.core.utils.QueuedThreadPoolExecutor;
+import ru.kmorozov.gbd.logger.progress.IProgress;
+import ru.kmorozov.gbd.utils.QueuedThreadPoolExecutor;
 
 import java.io.File;
 import java.util.Arrays;

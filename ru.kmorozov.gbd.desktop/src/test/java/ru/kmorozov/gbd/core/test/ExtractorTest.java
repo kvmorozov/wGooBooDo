@@ -20,7 +20,6 @@ import ru.kmorozov.gbd.core.logic.output.consumers.DummyBookInfoOutput;
 import ru.kmorozov.gbd.desktop.library.OptionsBasedProducer;
 import ru.kmorozov.gbd.desktop.library.SingleBookProducer;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;

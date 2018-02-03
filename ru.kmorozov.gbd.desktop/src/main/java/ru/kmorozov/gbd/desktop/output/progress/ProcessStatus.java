@@ -1,7 +1,7 @@
 package ru.kmorozov.gbd.desktop.output.progress;
 
 import ru.kmorozov.gbd.core.config.SystemConfigs;
-import ru.kmorozov.gbd.core.logic.progress.IProgress;
+import ru.kmorozov.gbd.logger.progress.IProgress;
 import ru.kmorozov.gbd.desktop.gui.MainBookForm;
 
 import javax.swing.*;

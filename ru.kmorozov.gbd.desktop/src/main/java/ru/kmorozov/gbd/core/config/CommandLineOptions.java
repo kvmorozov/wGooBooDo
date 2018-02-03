@@ -1,6 +1,7 @@
 package ru.kmorozov.gbd.core.config;
 
 import org.apache.commons.cli.*;
+import ru.kmorozov.gbd.core.config.options.CtxOptions;
 
 /**
  * Created by km on 06.12.2015.
@@ -21,6 +22,8 @@ public class CommandLineOptions implements IGBDOptions {
     private static final String OPTION_SECURE_MODE_LONG = "secure";
     private static final String OPTION_PDF_MODE_SHORT = "x";
     private static final String OPTION_PDF_MODE_LONG = "pdf";
+    private static final String OPTION_CTX_MODE_SHORT = "c";
+    private static final String OPTION_CTX_MODE_LONG = "ctx";
 
     private CommandLine commandLine;
 
@@ -70,6 +73,12 @@ public class CommandLineOptions implements IGBDOptions {
         option.setArgName("Pdf mode ");
         options.addOption(option);
 
+        option = new Option(OPTION_CTX_MODE_SHORT, OPTION_CTX_MODE_LONG, true, "CTX mode");
+        option.setArgs(2);
+        option.setOptionalArg(true);
+        option.setArgName("CTX mode ");
+        options.addOption(option);
+
         try {
             commandLine = cmdLineParser.parse(options, commandLineArguments);
         } catch (final ParseException e) {
@@ -80,6 +89,11 @@ public class CommandLineOptions implements IGBDOptions {
     private String getStringOptionValue(final String optionName) {
         return commandLine.hasOption(optionName) && null != commandLine.getOptionValues(optionName) && 1 == commandLine.getOptionValues(optionName).length
                 ? commandLine.getOptionValues(optionName)[0] : null;
+    }
+
+    private String[] getStringOptionValues(final String optionName) {
+        return commandLine.hasOption(optionName) && null != commandLine.getOptionValues(optionName)
+                ? commandLine.getOptionValues(optionName) : null;
     }
 
     private int getIntOptionValue(final String optionName) {
@@ -123,5 +137,11 @@ public class CommandLineOptions implements IGBDOptions {
     @Override
     public String pdfOptions() {
         return getStringOptionValue(OPTION_PDF_MODE_SHORT);
+    }
+
+    @Override
+    public CtxOptions ctxOptions() {
+        String[] ctxOpts = getStringOptionValues(OPTION_CTX_MODE_SHORT);
+        return ctxOpts == null || ctxOpts.length != 2 ? CtxOptions.DEFAULT_CTX_OPTIONS : new CtxOptions(ctxOpts[0], ctxOpts[1]);
     }
 }

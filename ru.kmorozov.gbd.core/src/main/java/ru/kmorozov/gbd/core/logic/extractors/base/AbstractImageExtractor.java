@@ -5,9 +5,9 @@ import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
-import ru.kmorozov.gbd.core.logic.output.consumers.AbstractOutput;
-import ru.kmorozov.gbd.core.logic.output.events.AbstractEventSource;
-import ru.kmorozov.gbd.core.utils.Logger;
+import ru.kmorozov.gbd.logger.Logger;
+import ru.kmorozov.gbd.logger.consumers.AbstractOutputReceiver;
+import ru.kmorozov.gbd.logger.events.AbstractEventSource;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public abstract class AbstractImageExtractor extends AbstractEventSource implements IUniqueRunnable<BookContext>, IImageExtractor {
 
-    protected final AbstractOutput output;
+    protected final AbstractOutputReceiver output;
     protected final BookContext bookContext;
     protected final AtomicBoolean initComplete = new AtomicBoolean(false);
     protected final Logger logger;
@@ -37,7 +37,6 @@ public abstract class AbstractImageExtractor extends AbstractEventSource impleme
 
         this.output = ExecutionContext.INSTANCE.getOutput();
     }
-
 
     @Override
     public BookContext getUniqueObject() {

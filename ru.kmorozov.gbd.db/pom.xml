@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>ru.kmorozov.gbd.db</artifactId>
+
+    <parent>
+        <groupId>ru.kmorozov.gbd</groupId>
+        <artifactId>parent</artifactId>
+        <version>2.1-b4</version>
+        <relativePath>../ru.kmorozov.gbd.parent/pom.xml</relativePath>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongo-java-driver</artifactId>
+            <version>LATEST</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.kmorozov.gbd</groupId>
+            <artifactId>ru.kmorozov.gbd.core.config</artifactId>
+            <version>${version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.kmorozov.gbd</groupId>
+            <artifactId>ru.kmorozov.gbd.core.logger</artifactId>
+            <version>${version}</version>
+        </dependency>
+    </dependencies>
+
+</project>

@@ -6,10 +6,10 @@ import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractHttpProcessor;
 import ru.kmorozov.gbd.core.logic.extractors.base.IImageExtractor;
 import ru.kmorozov.gbd.core.logic.extractors.base.IPostProcessor;
-import ru.kmorozov.gbd.core.logic.output.consumers.AbstractOutput;
-import ru.kmorozov.gbd.core.logic.progress.IProgress;
-import ru.kmorozov.gbd.core.utils.Logger;
-import ru.kmorozov.gbd.core.utils.QueuedThreadPoolExecutor;
+import ru.kmorozov.gbd.logger.progress.IProgress;
+import ru.kmorozov.gbd.logger.Logger;
+import ru.kmorozov.gbd.logger.consumers.AbstractOutputReceiver;
+import ru.kmorozov.gbd.utils.QueuedThreadPoolExecutor;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -25,17 +25,17 @@ public final class ExecutionContext {
     private static final AbstractContextProvider contextProvider = AbstractContextProvider.getContextProvider();
     public static ExecutionContext INSTANCE;
     private final boolean singleMode;
-    private final AbstractOutput output;
+    private final AbstractOutputReceiver output;
     private final Map<String, BookContext> bookContextMap = new HashMap<>();
     public QueuedThreadPoolExecutor<BookContext> bookExecutor;
     public QueuedThreadPoolExecutor<BookContext> pdfExecutor;
 
-    private ExecutionContext(final AbstractOutput output, final boolean singleMode) {
+    private ExecutionContext(final AbstractOutputReceiver output, final boolean singleMode) {
         this.output = output;
         this.singleMode = singleMode;
     }
 
-    public static synchronized void initContext(final AbstractOutput output, final boolean singleMode) {
+    public static synchronized void initContext(final AbstractOutputReceiver output, final boolean singleMode) {
         INSTANCE = new ExecutionContext(output, singleMode);
     }
 
@@ -68,7 +68,7 @@ public final class ExecutionContext {
         return contexts;
     }
 
-    public AbstractOutput getOutput() {
+    public AbstractOutputReceiver getOutput() {
         return output;
     }
 

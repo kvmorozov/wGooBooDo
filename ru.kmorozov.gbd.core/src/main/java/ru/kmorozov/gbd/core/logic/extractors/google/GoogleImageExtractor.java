@@ -10,7 +10,7 @@ import ru.kmorozov.gbd.core.logic.extractors.base.AbstractImageExtractor;
 import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage;
 import ru.kmorozov.gbd.core.logic.model.book.google.GoogleBookData;
 import ru.kmorozov.gbd.core.logic.model.book.google.GooglePageInfo;
-import ru.kmorozov.gbd.core.utils.Images;
+import ru.kmorozov.gbd.utils.Images;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -24,23 +24,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static ru.kmorozov.gbd.core.config.constants.GoogleConstants.DEFAULT_PAGE_WIDTH;
+
 /**
  * Created by km on 21.11.2015.
  */
 public class GoogleImageExtractor extends AbstractImageExtractor {
-
-    public static final int DEFAULT_PAGE_WIDTH = 1280;
-    public static final String HTTP_TEMPLATE = "http://books.google.ru/books?id=%BOOK_ID%";
-    public static final String HTTPS_TEMPLATE = "https://books.google.ru/books?id=%BOOK_ID%";
-    public static final String HTTPS_IMG_TEMPLATE = "https://books.google.ru/books/content?id=%BOOK_ID%";
-
-    public static final String BOOK_ID_PLACEHOLDER = "%BOOK_ID%";
-    public static final String RQ_PG_PLACEHOLDER = "%PG%";
-    public static final String RQ_SIG_PLACEHOLDER = "%SIG%";
-    public static final String RQ_WIDTH_PLACEHOLDER = "%WIDTH%";
-
-    public static final String PAGES_REQUEST_TEMPLATE = "&lpg=PP1&hl=en&pg=%PG%&jscmd=click3";
-    public static final String IMG_REQUEST_TEMPLATE = "&pg=%PG%&img=1&zoom=3&hl=ru&sig=%SIG%&w=%WIDTH%";
 
     private final AtomicInteger proxyReceived = new AtomicInteger(0);
     private final AtomicBoolean processingStarted = new AtomicBoolean(false);
@@ -148,7 +137,7 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
     @Override
     protected void prepareDirectory() {
         super.prepareDirectory();
-        bookContext.getBookInfo().getPages().build();
+        bookContext.getBookInfo().getPages().build(logger);
     }
 
     @Override

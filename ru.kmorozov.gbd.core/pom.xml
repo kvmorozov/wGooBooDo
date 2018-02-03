@@ -27,12 +27,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>LATEST</version>
-        </dependency>
-
-        <dependency>
             <groupId>com.google.http-client</groupId>
             <artifactId>google-http-client</artifactId>
             <version>LATEST</version>
@@ -49,12 +43,6 @@
             <artifactId>httpclient5</artifactId>
             <version>5.0-alpha3</version>
             <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>LATEST</version>
         </dependency>
 
         <dependency>
@@ -80,6 +68,24 @@
             <artifactId>okhttp</artifactId>
             <version>LATEST</version>
             <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.kmorozov.gbd</groupId>
+            <artifactId>ru.kmorozov.gbd.db</artifactId>
+            <version>${version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.kmorozov.gbd</groupId>
+            <artifactId>ru.kmorozov.gbd.core.logger</artifactId>
+            <version>${version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.kmorozov.gbd</groupId>
+            <artifactId>ru.kmorozov.gbd.core.config</artifactId>
+            <version>${version}</version>
         </dependency>
     </dependencies>
 

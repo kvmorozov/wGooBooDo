@@ -33,7 +33,7 @@
         <maven.compiler.source>1.9</maven.compiler.source>
         <maven.compiler.target>1.9</maven.compiler.target>
 
-        <spring-data-release-train>Kay-SR2</spring-data-release-train>
+        <spring-data-release-train>Kay-SR3</spring-data-release-train>
         <spring-version>LATEST</spring-version>
     </properties>
 

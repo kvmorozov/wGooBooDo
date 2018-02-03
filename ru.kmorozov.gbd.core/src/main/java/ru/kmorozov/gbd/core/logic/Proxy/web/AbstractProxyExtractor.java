@@ -2,7 +2,7 @@ package ru.kmorozov.gbd.core.logic.Proxy.web;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import ru.kmorozov.gbd.core.utils.HttpConnections;
+import ru.kmorozov.gbd.utils.HttpConnections;
 
 import java.io.IOException;
 import java.util.ArrayList;

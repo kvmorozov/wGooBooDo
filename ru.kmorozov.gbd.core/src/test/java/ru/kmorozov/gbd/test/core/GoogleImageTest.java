@@ -3,7 +3,7 @@ package ru.kmorozov.gbd.test.core;
 import org.junit.Assert;
 import org.junit.Test;
 import ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor;
-import ru.kmorozov.gbd.core.utils.Images;
+import ru.kmorozov.gbd.utils.Images;
 import ru.kmorozov.gbd.test.GbdTestBase;
 
 import javax.imageio.ImageIO;

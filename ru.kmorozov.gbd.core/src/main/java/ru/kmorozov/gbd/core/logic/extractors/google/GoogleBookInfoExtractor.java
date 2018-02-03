@@ -12,8 +12,8 @@ import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookExtractor;
 import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
 import ru.kmorozov.gbd.core.logic.model.book.google.GoogleBookData;
 import ru.kmorozov.gbd.core.logic.model.book.google.GooglePagesInfo;
-import ru.kmorozov.gbd.core.utils.Logger;
-import ru.kmorozov.gbd.core.utils.gson.Mapper;
+import ru.kmorozov.gbd.utils.Logger;
+import ru.kmorozov.gbd.utils.gson.Mapper;
 
 import java.util.List;
 

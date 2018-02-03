@@ -4,13 +4,12 @@ import ru.kmorozov.gbd.core.config.SystemConfigs;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor;
 import ru.kmorozov.gbd.core.logic.model.book.google.Resolutions;
-import ru.kmorozov.gbd.core.logic.model.log.LogIconColumnRenderer;
-import ru.kmorozov.gbd.core.logic.model.log.LogTableModel;
-import ru.kmorozov.gbd.core.logic.output.events.AbstractEventSource;
-import ru.kmorozov.gbd.core.logic.output.events.IEventSource;
-import ru.kmorozov.gbd.core.logic.output.events.ImageExtractorWorker;
+import ru.kmorozov.gbd.logger.events.AbstractEventSource;
+import ru.kmorozov.gbd.logger.events.IEventSource;
+import ru.kmorozov.gbd.logger.model.LogIconColumnRenderer;
+import ru.kmorozov.gbd.logger.model.LogTableModel;
 import ru.kmorozov.gbd.desktop.library.SingleBookProducer;
-import ru.kmorozov.gbd.desktop.output.consumers.SwingBookInfoOutput;
+import ru.kmorozov.gbd.desktop.output.consumers.SwingOutputReceiver;
 import ru.kmorozov.gbd.desktop.output.progress.ProcessStatus;
 import ru.kmorozov.gbd.pdf.PdfMaker;
 
@@ -37,7 +36,7 @@ public class MainBookForm {
 
         INSTANCE = this;
 
-        ExecutionContext.initContext(new SwingBookInfoOutput(this), true);
+        ExecutionContext.initContext(new SwingOutputReceiver(this), true);
 
         tfRootOutDir.setText(SystemConfigs.getRootDir());
         tfProxyListFile.setText(SystemConfigs.getProxyListFile());

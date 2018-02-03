@@ -7,8 +7,8 @@ import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor;
 import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage;
-import ru.kmorozov.gbd.core.utils.Images;
-import ru.kmorozov.gbd.core.utils.Logger;
+import ru.kmorozov.gbd.utils.Images;
+import ru.kmorozov.gbd.utils.Logger;
 
 import javax.net.ssl.SSLException;
 import java.io.*;
