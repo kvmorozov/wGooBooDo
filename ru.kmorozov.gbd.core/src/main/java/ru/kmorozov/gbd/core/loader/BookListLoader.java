@@ -20,15 +20,13 @@ import java.util.stream.Stream;
 /**
  * Created by sbt-morozov-kv on 14.11.2016.
  */
-public class BookListLoader extends BaseLoader {
+public class BookListLoader extends DirContextLoader {
 
-    static final BookListLoader BOOK_LIST_LOADER = new BookListLoader();
+    public static final BookListLoader BOOK_LIST_LOADER = new BookListLoader();
     private static final String INDEX_FILE_NAME = "books.index";
     private boolean loadedFromIndex;
 
-    protected BookListLoader() {
-    }
-
+    @Override
     public Set<String> getBookIdsList() {
         final File indexFile = getFileToLoad(false);
         final Set<String> result = loadFromDirNames();

@@ -2,6 +2,7 @@ package ru.kmorozov.gbd.utils;
 
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.extractors.base.IUniqueRunnable;
+import ru.kmorozov.gbd.logger.Logger;
 
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;

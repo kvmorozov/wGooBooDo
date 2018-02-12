@@ -3,6 +3,7 @@ package ru.kmorozov.gbd.utils;
 import org.apache.commons.io.FilenameUtils;
 import ru.kmorozov.gbd.core.logic.connectors.Response;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
+import ru.kmorozov.gbd.logger.Logger;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

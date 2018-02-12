@@ -11,14 +11,14 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.config.IGBDOptions;
-import ru.kmorozov.gbd.core.config.storage.AbstractContextProvider;
+import ru.kmorozov.gbd.core.logic.context.ContextProvider;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.extractors.google.GoogleBookInfoExtractor;
 import ru.kmorozov.gbd.core.logic.extractors.shpl.ShplBookExtractor;
 import ru.kmorozov.gbd.core.logic.library.metadata.ShplMetadata;
-import ru.kmorozov.gbd.core.logic.output.consumers.DummyBookInfoOutput;
 import ru.kmorozov.gbd.desktop.library.OptionsBasedProducer;
 import ru.kmorozov.gbd.desktop.library.SingleBookProducer;
+import ru.kmorozov.gbd.logger.output.DummyReceiver;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,7 +28,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 
 /**
  * Created by sbt-morozov-kv on 16.11.2016.
@@ -40,7 +41,7 @@ public class ExtractorTest {
 
     @Before
     public void initServer() {
-        ExecutionContext.initContext(new DummyBookInfoOutput(), true);
+        ExecutionContext.initContext(new DummyReceiver(), true);
         final IGBDOptions mockOptions = Mockito.mock(IGBDOptions.class);
         Mockito.when(mockOptions.getOutputDir()).thenReturn("E:\\Work\\gbd\\");
         Mockito.when(mockOptions.getProxyListFile()).thenReturn("E:\\Work\\gbd\\proxy.txt");
@@ -84,7 +85,7 @@ public class ExtractorTest {
 
     @Test
     public void bookContextLoadTest() {
-        final AbstractContextProvider contextProvider = AbstractContextProvider.getContextProvider();
+        final ContextProvider contextProvider = ContextProvider.getContextProvider();
 
         final int ctxSizeBefore = contextProvider.getContextSize();
         Assert.assertTrue(0 < ctxSizeBefore);

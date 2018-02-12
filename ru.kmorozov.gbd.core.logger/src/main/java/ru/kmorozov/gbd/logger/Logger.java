@@ -36,6 +36,22 @@ public final class Logger {
         eventConsumer.consumeEvent(new LogEvent(Level.SEVERE, prefix + msg));
     }
 
+    public void warn(final String msg) {
+        eventConsumer.consumeEvent(new LogEvent(Level.WARNING, prefix + msg));
+    }
+
+    public void error(final String msg) {
+        eventConsumer.consumeEvent(new LogEvent(Level.SEVERE, prefix + msg));
+    }
+
+    public void error(final Throwable ex) {
+        eventConsumer.consumeEvent(new LogEvent(Level.SEVERE, prefix + ex.getMessage()));
+    }
+
+    public void error(final String msg, final Throwable ex) {
+        eventConsumer.consumeEvent(new LogEvent(Level.SEVERE, prefix + msg + ":" + ex.getMessage()));
+    }
+
     public void finest(final String msg) {
         eventConsumer.consumeEvent(new LogEvent(Level.FINEST, prefix + msg));
     }

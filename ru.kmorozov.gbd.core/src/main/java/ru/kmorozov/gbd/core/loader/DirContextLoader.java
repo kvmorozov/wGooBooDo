@@ -2,6 +2,7 @@ package ru.kmorozov.gbd.core.loader;
 
 import org.apache.commons.lang3.StringUtils;
 import ru.kmorozov.gbd.core.config.GBDOptions;
+import ru.kmorozov.gbd.core.config.IBaseLoader;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
@@ -11,28 +12,28 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * Created by sbt-morozov-kv on 14.11.2016.
  */
-public class BookContextLoader extends BaseLoader {
+public class DirContextLoader implements IBaseLoader {
 
-    static final BookContextLoader BOOK_CTX_LOADER = new BookContextLoader();
+    static final DirContextLoader BOOK_CTX_LOADER = new DirContextLoader();
     private final Map<String, BookInfo> booksInfo = new HashMap<>();
 
-    public BookContextLoader() {
-
+    public DirContextLoader() {
         initContext();
     }
 
-    @Override
     protected String getLoadedFileName() {
         return GBDOptions.getCtxOptions().getConnectionParams();
+    }
+
+    @Override
+    public void updateIndex() {
+
     }
 
     public void updateContext() {
@@ -61,6 +62,11 @@ public class BookContextLoader extends BaseLoader {
         return booksInfo.get(bookId);
     }
 
+    @Override
+    public Set<String> getBookIdsList() {
+        return null;
+    }
+
     public Iterable<BookInfo> getBooks() {
         return booksInfo.values();
     }
@@ -86,5 +92,27 @@ public class BookContextLoader extends BaseLoader {
         } catch (final IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public boolean isValid() {
+        return GBDOptions.isValidDirectory();
+    }
+
+    protected File getFileToLoad(final boolean createIfNotExists) {
+        if (!GBDOptions.isValidDirectory()) return null;
+
+        final File indexFile = new File(GBDOptions.getOutputDir() + File.separator + getLoadedFileName());
+        if (indexFile.exists()) return indexFile;
+        else if (createIfNotExists) {
+            try {
+                indexFile.createNewFile();
+                return indexFile;
+            } catch (final IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return null;
     }
 }

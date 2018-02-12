@@ -2,15 +2,16 @@ package ru.kmorozov.gbd.test.core;
 
 import org.junit.Assert;
 import org.junit.Test;
-import ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor;
-import ru.kmorozov.gbd.utils.Images;
 import ru.kmorozov.gbd.test.GbdTestBase;
+import ru.kmorozov.gbd.utils.Images;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+
+import static ru.kmorozov.gbd.core.config.constants.GoogleConstants.DEFAULT_PAGE_WIDTH;
 
 /**
  * Created by km on 22.01.2017.
@@ -27,10 +28,10 @@ public class GoogleImageTest extends GbdTestBase {
 
     @Test
     public void testImageSimple() {
-        Assert.assertFalse(Images.isInvalidImage(Paths.get(goodImg1), GoogleImageExtractor.DEFAULT_PAGE_WIDTH));
-        Assert.assertFalse(Images.isInvalidImage(Paths.get(goodImg2), GoogleImageExtractor.DEFAULT_PAGE_WIDTH));
-        Assert.assertFalse(Images.isInvalidImage(Paths.get(emptyImg), GoogleImageExtractor.DEFAULT_PAGE_WIDTH));
-        Assert.assertTrue(Images.isInvalidImage(Paths.get(badImg1), GoogleImageExtractor.DEFAULT_PAGE_WIDTH));
+        Assert.assertFalse(Images.isInvalidImage(Paths.get(goodImg1), DEFAULT_PAGE_WIDTH));
+        Assert.assertFalse(Images.isInvalidImage(Paths.get(goodImg2), DEFAULT_PAGE_WIDTH));
+        Assert.assertFalse(Images.isInvalidImage(Paths.get(emptyImg), DEFAULT_PAGE_WIDTH));
+        Assert.assertTrue(Images.isInvalidImage(Paths.get(badImg1), DEFAULT_PAGE_WIDTH));
     }
 
     @Test
@@ -55,6 +56,6 @@ public class GoogleImageTest extends GbdTestBase {
 
             }
 
-        Assert.assertFalse(Images.isInvalidImage(Paths.get(complexGoodCase), GoogleImageExtractor.DEFAULT_PAGE_WIDTH));
+        Assert.assertFalse(Images.isInvalidImage(Paths.get(complexGoodCase), DEFAULT_PAGE_WIDTH));
     }
 }

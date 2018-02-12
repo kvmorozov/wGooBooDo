@@ -5,13 +5,13 @@ import org.jsoup.Connection;
 import org.jsoup.Connection.Method;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import ru.kmorozov.gbd.core.config.storage.AbstractContextProvider;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.connectors.Response;
+import ru.kmorozov.gbd.core.logic.context.ContextProvider;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
+import ru.kmorozov.gbd.logger.Logger;
 import ru.kmorozov.gbd.utils.HttpConnections;
-import ru.kmorozov.gbd.utils.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,7 +31,7 @@ public abstract class AbstractBookExtractor extends AbstractHttpProcessor {
     protected AbstractBookExtractor(final String bookId) {
         this.bookId = bookId;
 
-        final BookInfo storedBookInfo = AbstractContextProvider.getContextProvider().getBookInfo(bookId);
+        final BookInfo storedBookInfo = ContextProvider.getContextProvider().getBookInfo(bookId);
         bookInfo = null == storedBookInfo ? findBookInfo() : storedBookInfo;
     }
 

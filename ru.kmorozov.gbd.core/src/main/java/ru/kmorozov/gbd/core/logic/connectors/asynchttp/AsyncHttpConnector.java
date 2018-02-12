@@ -7,8 +7,8 @@ import io.netty.util.HashedWheelTimer;
 import io.netty.util.concurrent.DefaultThreadFactory;
 import org.asynchttpclient.AsyncHttpClient;
 import org.asynchttpclient.BoundRequestBuilder;
+import org.asynchttpclient.DefaultAsyncHttpClient;
 import org.asynchttpclient.DefaultAsyncHttpClientConfig;
-import org.asynchttpclient.netty.channel.ChannelManager;
 import org.asynchttpclient.netty.channel.DefaultChannelPool;
 import org.asynchttpclient.netty.ssl.DefaultSslEngineFactory;
 import org.asynchttpclient.proxy.ProxyServer.Builder;
@@ -32,7 +32,6 @@ public class AsyncHttpConnector extends HttpConnector {
     private final Object BUILDER_LOCK = new Object();
     private final Map<String, AsyncHttpClient> clientsMap = new ConcurrentHashMap<>();
     private volatile DefaultAsyncHttpClientConfig.Builder builder;
-    private volatile ChannelManager channelManager;
     private NioEventLoopGroup nioEventLoopGroup;
     private DefaultChannelPool pool;
     private HashedWheelTimer timer;
@@ -55,14 +54,13 @@ public class AsyncHttpConnector extends HttpConnector {
                 builder.setChannelPool(pool);
 
                 builder.setConnectTimeout(HttpConnector.CONNECT_TIMEOUT);
-
-                channelManager = new ChannelManager(builder.build(), timer);
             }
         }
 
         if (null == client) synchronized (proxy) {
-            if (!proxy.isLocal()) builder.setProxyServer(new Builder(proxy.getHost().getHostName(), proxy.getHost().getPort()).build());
-            client = new SingleChannelHttpClient(builder.build(), channelManager);
+            if (!proxy.isLocal())
+                builder.setProxyServer(new Builder(proxy.getHost().getHostName(), proxy.getHost().getPort()).build());
+            client = new DefaultAsyncHttpClient(builder.build());
 
             clientsMap.put(key, client);
         }
@@ -75,7 +73,8 @@ public class AsyncHttpConnector extends HttpConnector {
         final AsyncHttpClient client = getClient(proxy);
         final BoundRequestBuilder builder = client.prepareGet(url);
         for (final Entry<String, Object> headerItem : proxy.getHeaders().entrySet())
-            if (!"cookie".equals(headerItem.getKey())) builder.addHeader(headerItem.getKey(), headerItem.getValue().toString());
+            if (!"cookie".equals(headerItem.getKey()))
+                builder.addHeader(headerItem.getKey(), headerItem.getValue().toString());
 
         final String[] cookies = proxy.getHeaders().getCookie().split(";");
         for (final String cookieEntry : cookies) {

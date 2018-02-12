@@ -9,6 +9,8 @@ import ru.kmorozov.gbd.utils.Images;
 
 import java.io.File;
 
+import static ru.kmorozov.gbd.core.config.constants.GoogleConstants.HTTPS_IMG_TEMPLATE;
+
 /**
  * Created by km on 21.11.2015.
  */
@@ -22,7 +24,7 @@ class GooglePageImgProcessor extends AbstractPageImgProcessor<GooglePageInfo> {
 
     private boolean processImageWithProxy(final HttpHostExt proxy) {
         return !(!proxy.isLocal() && !proxy.isAvailable()) &&
-                processImage(page.getImqRqUrl(bookContext.getBookInfo().getBookId(), GoogleImageExtractor.HTTPS_IMG_TEMPLATE, getImgWidth()), proxy);
+                processImage(page.getImqRqUrl(bookContext.getBookInfo().getBookId(), HTTPS_IMG_TEMPLATE, getImgWidth()), proxy);
     }
 
     @Override

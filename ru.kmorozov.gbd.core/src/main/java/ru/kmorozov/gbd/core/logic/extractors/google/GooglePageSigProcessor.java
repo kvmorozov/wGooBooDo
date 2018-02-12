@@ -16,10 +16,10 @@ import ru.kmorozov.gbd.core.logic.extractors.base.IUniqueRunnable;
 import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage;
 import ru.kmorozov.gbd.core.logic.model.book.google.GooglePageInfo;
 import ru.kmorozov.gbd.core.logic.model.book.google.GooglePagesInfo;
+import ru.kmorozov.gbd.logger.Logger;
 import ru.kmorozov.gbd.logger.progress.IProgress;
-import ru.kmorozov.gbd.utils.Logger;
+import ru.kmorozov.gbd.utils.Mapper;
 import ru.kmorozov.gbd.utils.QueuedThreadPoolExecutor;
-import ru.kmorozov.gbd.utils.gson.Mapper;
 
 import javax.net.ssl.SSLException;
 import java.io.IOException;
@@ -28,6 +28,8 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.nio.charset.Charset;
 import java.util.concurrent.TimeUnit;
+
+import static ru.kmorozov.gbd.core.config.constants.GoogleConstants.*;
 
 /**
  * Created by km on 21.11.2015.
@@ -106,11 +108,12 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
         public void run() {
             if (!proxy.isAvailable()) return;
 
-            if (page.dataProcessed.get() || null != page.getSig() || page.sigChecked.get() || page.loadingStarted.get()) return;
+            if (page.dataProcessed.get() || null != page.getSig() || page.sigChecked.get() || page.loadingStarted.get())
+                return;
 
             Response resp = null;
-            final String baseUrl = GoogleImageExtractor.HTTPS_TEMPLATE.replace(GoogleImageExtractor.BOOK_ID_PLACEHOLDER, bookContext.getBookInfo().getBookId());
-            final String rqUrl = baseUrl + GoogleImageExtractor.PAGES_REQUEST_TEMPLATE.replace(GoogleImageExtractor.RQ_PG_PLACEHOLDER, page.getPid());
+            final String baseUrl = HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, bookContext.getBookInfo().getBookId());
+            final String rqUrl = baseUrl + PAGES_REQUEST_TEMPLATE.replace(RQ_PG_PLACEHOLDER, page.getPid());
 
             try {
                 resp = getContent(rqUrl, proxy, true);
@@ -161,7 +164,8 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
                             }
                         }
 
-                        if (null != _page.getSrc() && null == _page.getSig()) logger.finest(String.format(SIG_WRONG_FORMAT, _page.getSrc()));
+                        if (null != _page.getSrc() && null == _page.getSig())
+                            logger.finest(String.format(SIG_WRONG_FORMAT, _page.getSrc()));
                     }
             } catch (SocketTimeoutException | SocketException | NoHttpResponseException ce) {
                 if (!proxy.isLocal()) {

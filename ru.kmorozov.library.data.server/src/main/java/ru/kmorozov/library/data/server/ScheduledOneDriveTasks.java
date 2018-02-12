@@ -3,6 +3,7 @@ package ru.kmorozov.library.data.server;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import ru.kmorozov.gbd.logger.Logger;
 import ru.kmorozov.library.data.loader.OneDriveLoader;
 
 import java.io.IOException;

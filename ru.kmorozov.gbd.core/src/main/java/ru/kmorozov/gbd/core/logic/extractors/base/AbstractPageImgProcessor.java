@@ -5,15 +5,16 @@ import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.connectors.Response;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
-import ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor;
 import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage;
+import ru.kmorozov.gbd.logger.Logger;
 import ru.kmorozov.gbd.utils.Images;
-import ru.kmorozov.gbd.utils.Logger;
 
 import javax.net.ssl.SSLException;
 import java.io.*;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+
+import static ru.kmorozov.gbd.core.config.constants.GoogleConstants.DEFAULT_PAGE_WIDTH;
 
 /**
  * Created by sbt-morozov-kv on 18.11.2016.
@@ -76,13 +77,14 @@ public abstract class AbstractPageImgProcessor<T extends AbstractPage> extends A
                             page.dataProcessed.set(true);
                             return false;
                         }
-                    }
-                    else break;
+                    } else break;
 
                     if (outputFile.exists()) break;
 
-                    if (!proxy.isLocal()) logger.info(String.format("Started img %s for %s with %s Proxy", reloadFlag ? "RELOADING" : "processing", page.getPid(), proxy.toString()));
-                    else logger.info(String.format("Started img %s for %s without Proxy", reloadFlag ? "RELOADING" : "processing", page.getPid()));
+                    if (!proxy.isLocal())
+                        logger.info(String.format("Started img %s for %s with %s Proxy", reloadFlag ? "RELOADING" : "processing", page.getPid(), proxy.toString()));
+                    else
+                        logger.info(String.format("Started img %s for %s without Proxy", reloadFlag ? "RELOADING" : "processing", page.getPid()));
 
                     outputStream = new FileOutputStream(outputFile);
                 }
@@ -103,8 +105,7 @@ public abstract class AbstractPageImgProcessor<T extends AbstractPage> extends A
                 page.fileExists.set(true);
 
                 return true;
-            }
-            else {
+            } else {
                 outputFile.delete();
                 return false;
             }
@@ -158,7 +159,7 @@ public abstract class AbstractPageImgProcessor<T extends AbstractPage> extends A
     }
 
     protected static int getImgWidth() {
-        return 0 == GBDOptions.getImageWidth() ? GoogleImageExtractor.DEFAULT_PAGE_WIDTH : GBDOptions.getImageWidth();
+        return 0 == GBDOptions.getImageWidth() ? DEFAULT_PAGE_WIDTH : GBDOptions.getImageWidth();
     }
 
     protected abstract boolean validateOutput(File outputFile, int width);

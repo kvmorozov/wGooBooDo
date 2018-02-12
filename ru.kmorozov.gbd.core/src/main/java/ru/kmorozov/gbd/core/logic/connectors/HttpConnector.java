@@ -1,7 +1,7 @@
 package ru.kmorozov.gbd.core.logic.connectors;
 
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
-import ru.kmorozov.gbd.utils.Logger;
+import ru.kmorozov.gbd.logger.Logger;
 
 import java.io.IOException;
 

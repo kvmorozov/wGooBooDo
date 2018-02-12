@@ -9,18 +9,18 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.kmorozov.gbd.client.IRestClient;
 import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.config.LocalSystemOptions;
-import ru.kmorozov.gbd.core.loader.BookContextLoader;
+import ru.kmorozov.gbd.core.loader.DirContextLoader;
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
-import base.BookInfo;
-import ru.kmorozov.gbd.core.logic.output.consumers.DummyBookInfoOutput;
-import ru.kmorozov.gbd.utils.Logger;
+import ru.kmorozov.gbd.logger.Logger;
+import ru.kmorozov.gbd.logger.output.DummyReceiver;
 import ru.kmorozov.library.data.loader.LoaderExecutor;
 import ru.kmorozov.library.data.loader.LoaderExecutor.State;
 import ru.kmorozov.library.data.loader.utils.BookUtils;
 import ru.kmorozov.library.data.loader.utils.DuplicatesProcessor;
 import ru.kmorozov.library.data.model.IDataRestServer;
 import ru.kmorozov.library.data.model.book.Book;
+import ru.kmorozov.library.data.model.book.BookInfo;
 import ru.kmorozov.library.data.model.book.Storage;
 import ru.kmorozov.library.data.model.dto.*;
 import ru.kmorozov.library.data.model.dto.ItemDTO.ItemType;
@@ -57,7 +57,7 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
     @Autowired
     private DuplicatesProcessor duplicatesProcessor;
 
-    private static transient BookContextLoader googleBooksLoader;
+    private static transient DirContextLoader googleBooksLoader;
 
     @Override
     @RequestMapping("/ping")
@@ -75,15 +75,15 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
                     synchronized (LibraryRestController.class) {
                         if (null == googleBooksLoader) {
                             GBDOptions.init(new LocalSystemOptions());
-                            ExecutionContext.initContext(new DummyBookInfoOutput(), false);
-                            googleBooksLoader = new BookContextLoader();
+                            ExecutionContext.initContext(new DummyReceiver(), false);
+                            googleBooksLoader = new DirContextLoader();
                         }
                     }
                 }
 
-                final BookInfo loadedBookInfo = googleBooksLoader.getBookInfo(bookId);
+//                final BookInfo loadedBookInfo = googleBooksLoader.getBookInfo(bookId);
 
-                if (null != loadedBookInfo) googleBooksRepository.save(loadedBookInfo);
+//                if (null != loadedBookInfo) googleBooksRepository.save(loadedBookInfo);
             }
 
             logger.info("Synchronized Google book " + bookId);

@@ -1,6 +1,7 @@
 package ru.kmorozov.library.data.loader;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import ru.kmorozov.gbd.logger.Logger;
 import ru.kmorozov.library.data.loader.LoaderExecutor.State;
 import ru.kmorozov.library.data.loader.netty.EventSender;
 import ru.kmorozov.library.data.model.book.*;
@@ -41,17 +42,17 @@ public abstract class BaseLoader implements ILoader, Runnable {
         final long booksCount = booksRepository.count();
 
         if (0 < categoryCount) {
-            logger.log(Level.INFO, "Categories loaded: " + categoryCount);
+            logger.info("Categories loaded: " + categoryCount);
             categoryRepository.deleteAll();
         }
 
         if (0 < storageCount) {
-            logger.log(Level.INFO, "Storages loaded: " + storageCount);
+            logger.info("Storages loaded: " + storageCount);
             storageRepository.deleteAll();
         }
 
         if (0 < booksCount) {
-            logger.log(Level.INFO, "Books loaded: " + storageCount);
+            logger.info("Books loaded: " + storageCount);
             booksRepository.deleteAll();
         }
     }

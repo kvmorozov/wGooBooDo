@@ -1,6 +1,5 @@
 package ru.kmorozov.gbd.core.logic.context;
 
-import ru.kmorozov.gbd.core.config.storage.AbstractContextProvider;
 import ru.kmorozov.gbd.core.logic.Proxy.AbstractProxyListProvider;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractHttpProcessor;
@@ -22,7 +21,7 @@ public final class ExecutionContext {
     static final Logger logger = Logger.getLogger(ExecutionContext.class);
 
     private static final String EMPTY = "";
-    private static final AbstractContextProvider contextProvider = AbstractContextProvider.getContextProvider();
+    private static final ContextProvider contextProvider = ContextProvider.getContextProvider();
     public static ExecutionContext INSTANCE;
     private final boolean singleMode;
     private final AbstractOutputReceiver output;

@@ -5,15 +5,14 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
-import ru.kmorozov.gbd.core.config.options.PdfOptions;
 import ru.kmorozov.gbd.core.config.GBDOptions;
+import ru.kmorozov.gbd.core.config.options.PdfOptions;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.extractors.base.IPostProcessor;
-import ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor;
-import base.BookInfo;
+import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
+import ru.kmorozov.gbd.logger.Logger;
 import ru.kmorozov.gbd.utils.Images;
-import ru.kmorozov.gbd.utils.Logger;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -27,6 +26,8 @@ import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static ru.kmorozov.gbd.core.config.constants.GoogleConstants.DEFAULT_PAGE_WIDTH;
 
 /**
  * Created by km on 17.12.2015.
@@ -64,7 +65,8 @@ public class PdfMaker implements IPostProcessor {
             e.printStackTrace();
         }
 
-        if (null == pdfFile) pdfFile = new File(imgDir.getPath() + File.separator + bookInfo.getBookData().getTitle().replaceAll("[^А-Яа-яa-zA-Z0-9-]", " ") + ".pdf");
+        if (null == pdfFile)
+            pdfFile = new File(imgDir.getPath() + File.separator + bookInfo.getBookData().getTitle().replaceAll("[^А-Яа-яa-zA-Z0-9-]", " ") + ".pdf");
         try {
             if (Files.exists(pdfFile.toPath())) {
                 if (pdfFile.lastModified() < bookInfo.getLastPdfChecked()) existPages = bookContext.getPagesBefore();
@@ -73,8 +75,7 @@ public class PdfMaker implements IPostProcessor {
                 } catch (final Exception ex) {
                     pdfFile.createNewFile();
                 }
-            }
-            else pdfFile.createNewFile();
+            } else pdfFile.createNewFile();
         } catch (final IOException e) {
             e.printStackTrace();
             return;
@@ -86,13 +87,12 @@ public class PdfMaker implements IPostProcessor {
                 logger.finest("No new pages, exiting...");
                 bookInfo.setLastPdfChecked(System.currentTimeMillis());
                 return;
-            }
-            else logger.info(String.format("Rewriting pdf from %d to %d pages", existPages, imgCount));
+            } else logger.info(String.format("Rewriting pdf from %d to %d pages", existPages, imgCount));
         } catch (final IOException e) {
             e.printStackTrace();
         }
 
-        final int imgWidth = 0 == GBDOptions.getImageWidth() ? GoogleImageExtractor.DEFAULT_PAGE_WIDTH : GBDOptions.getImageWidth();
+        final int imgWidth = 0 == GBDOptions.getImageWidth() ? DEFAULT_PAGE_WIDTH : GBDOptions.getImageWidth();
 
         try (PDDocument document = new PDDocument()) {
             Files.list(imgDir.toPath()).filter(Images::isImageFile).sorted(Comparator.comparing(PdfMaker::getPagenum)).forEach(filePath -> {
@@ -103,19 +103,17 @@ public class PdfMaker implements IPostProcessor {
                         if (null == bimg) {
                             Files.delete(filePath);
                             logger.severe(String.format("Image %s was deleted!", filePath.getFileName()));
-                        }
-                        else {
+                        } else {
                             final float width = bimg.getWidth();
                             final float height = bimg.getHeight();
                             final PDPage page = new PDPage(new PDRectangle(width, height));
                             document.addPage(page);
                             final PDImageXObject img = PDImageXObject.createFromFile(filePath.toString(), document);
-                            try(PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
+                            try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
                                 contentStream.drawImage(img, 0, 0);
                             }
                         }
-                    }
-                    else {
+                    } else {
                         Files.delete(filePath);
                         logger.severe(String.format("Image %s was deleted!", filePath.getFileName()));
                     }

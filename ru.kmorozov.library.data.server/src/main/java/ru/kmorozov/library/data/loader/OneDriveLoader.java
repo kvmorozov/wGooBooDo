@@ -9,6 +9,7 @@ import com.wouterbreukink.onedrive.tasks.DownloadTask;
 import com.wouterbreukink.onedrive.tasks.Task.TaskOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.kmorozov.gbd.logger.Logger;
 import ru.kmorozov.library.data.loader.LoaderExecutor.State;
 import ru.kmorozov.library.data.loader.utils.ConsistencyUtils;
 import ru.kmorozov.library.data.loader.utils.WindowsShortcut;
@@ -63,7 +64,7 @@ public class OneDriveLoader extends BaseLoader {
                     try {
                         updateStorage(storage);
                     } catch (final IOException e) {
-                        logger.log(Level.ERROR, "Error when updating storage: " + e.getMessage());
+                        logger.error("Error when updating storage: " + e.getMessage());
                     }
             }
         });

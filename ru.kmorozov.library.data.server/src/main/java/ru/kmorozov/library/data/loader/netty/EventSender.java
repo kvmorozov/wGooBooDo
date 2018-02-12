@@ -5,9 +5,9 @@ import io.netty.channel.Channel;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import ru.kmorozov.gbd.logger.Logger;
 
 import java.io.Closeable;
-import java.io.IOException;
 
 public final class EventSender implements Closeable {
 

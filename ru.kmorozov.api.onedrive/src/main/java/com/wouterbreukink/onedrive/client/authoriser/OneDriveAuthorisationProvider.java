@@ -12,9 +12,6 @@ import com.wouterbreukink.onedrive.client.resources.Authorisation;
 import com.wouterbreukink.onedrive.client.utils.JsonUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import sun.security.provider.certpath.BuildStep;
-import sun.security.provider.certpath.SunCertPathBuilderException;
-import sun.security.validator.ValidatorException;
 
 import javax.net.ssl.SSLHandshakeException;
 import java.io.IOException;
@@ -22,7 +19,10 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.AbstractMap.SimpleEntry;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -146,15 +146,15 @@ class OneDriveAuthorisationProvider implements AuthorisationProvider {
             throw OneDriveExceptionFactory.getException(hre.getContent());
         } catch (final SSLHandshakeException she) {
             log.error("Failed to validate certificates!");
-            if (she.getCause() instanceof ValidatorException)
-                if (she.getCause().getCause() instanceof SunCertPathBuilderException) {
-                    final SunCertPathBuilderException certEx = (SunCertPathBuilderException) she.getCause().getCause();
-                    final Iterator<BuildStep> steps = certEx.getAdjacencyList().iterator();
-                    while (steps.hasNext()) {
-                        final BuildStep step = steps.next();
-                        log.info(step.getVertex().toString());
-                    }
-                }
+//            if (she.getCause() instanceof ValidatorException)
+//                if (she.getCause().getCause() instanceof SunCertPathBuilderException) {
+//                    final SunCertPathBuilderException certEx = (SunCertPathBuilderException) she.getCause().getCause();
+//                    final Iterator<BuildStep> steps = certEx.getAdjacencyList().iterator();
+//                    while (steps.hasNext()) {
+//                        final BuildStep step = steps.next();
+//                        log.info(step.getVertex().toString());
+//                    }
+//                }
             throw OneDriveExceptionFactory.getException(she.getMessage());
         }
 

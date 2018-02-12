@@ -5,8 +5,8 @@ import org.apache.commons.lang3.StringUtils;
 import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.logic.Proxy.web.WebProxyListProvider;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
+import ru.kmorozov.gbd.logger.Logger;
 import ru.kmorozov.gbd.utils.HttpConnections;
-import ru.kmorozov.gbd.utils.Logger;
 
 import java.net.InetSocketAddress;
 import java.util.Collection;
@@ -32,7 +32,8 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
     private final AtomicBoolean proxyListCompleted = new AtomicBoolean(false);
 
     public static AbstractProxyListProvider getInstance() {
-        if (null == INSTANCE) INSTANCE = null == GBDOptions.getProxyListFile() ? new WebProxyListProvider() : new FileProxyListProvider();
+        if (null == INSTANCE)
+            INSTANCE = null == GBDOptions.getProxyListFile() ? new WebProxyListProvider() : new FileProxyListProvider();
 
         return INSTANCE;
     }
@@ -122,13 +123,11 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
                 if (!StringUtils.isEmpty(cookie)) {
                     if (!GBDOptions.secureMode() || proxy.isSecure()) {
                         logger.info(String.format("%sroxy %s added.", GBDOptions.secureMode() ? proxy.isSecure() ? "Secure p" : "NOT secure p" : "P", host.toString()));
-                    }
-                    else {
+                    } else {
                         logger.info(String.format("NOT secure proxy %s NOT added.", host.toString()));
                         proxy.forceInvalidate(false);
                     }
-                }
-                else {
+                } else {
                     logger.info(String.format("Proxy %s NOT added.", host.toString()));
                     proxy.forceInvalidate(false);
                 }

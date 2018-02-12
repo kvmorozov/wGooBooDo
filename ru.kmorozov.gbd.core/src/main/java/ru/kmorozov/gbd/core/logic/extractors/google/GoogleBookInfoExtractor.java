@@ -12,10 +12,12 @@ import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookExtractor;
 import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
 import ru.kmorozov.gbd.core.logic.model.book.google.GoogleBookData;
 import ru.kmorozov.gbd.core.logic.model.book.google.GooglePagesInfo;
-import ru.kmorozov.gbd.utils.Logger;
-import ru.kmorozov.gbd.utils.gson.Mapper;
+import ru.kmorozov.gbd.logger.Logger;
+import ru.kmorozov.gbd.utils.Mapper;
 
 import java.util.List;
+
+import static ru.kmorozov.gbd.core.config.constants.GoogleConstants.*;
 
 /**
  * Created by km on 08.10.2016.
@@ -36,12 +38,12 @@ public class GoogleBookInfoExtractor extends AbstractBookExtractor {
 
     @Override
     protected String getBookUrl() {
-        return GoogleImageExtractor.HTTPS_TEMPLATE.replace(GoogleImageExtractor.BOOK_ID_PLACEHOLDER, bookId) + OPEN_PAGE_ADD_URL;
+        return HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, bookId) + OPEN_PAGE_ADD_URL;
     }
 
     @Override
     protected String getReserveBookUrl() {
-        return GoogleImageExtractor.HTTP_TEMPLATE.replace(GoogleImageExtractor.BOOK_ID_PLACEHOLDER, bookId) + OPEN_PAGE_ADD_URL;
+        return HTTP_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, bookId) + OPEN_PAGE_ADD_URL;
     }
 
     @Override

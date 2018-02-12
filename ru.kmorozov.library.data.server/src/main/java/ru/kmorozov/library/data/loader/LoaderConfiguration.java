@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import ru.kmorozov.gbd.logger.Logger;
 import ru.kmorozov.library.data.config.MongoConfiguration;
 
 import java.io.File;

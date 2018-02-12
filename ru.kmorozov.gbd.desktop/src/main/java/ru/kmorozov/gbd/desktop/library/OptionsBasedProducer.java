@@ -1,7 +1,7 @@
 package ru.kmorozov.gbd.desktop.library;
 
 import ru.kmorozov.gbd.core.config.GBDOptions;
-import ru.kmorozov.gbd.core.config.storage.AbstractContextProvider;
+import ru.kmorozov.gbd.core.logic.context.ContextProvider;
 import ru.kmorozov.gbd.core.logic.context.IBookListProducer;
 import ru.kmorozov.gbd.core.logic.library.LibraryFactory;
 
@@ -24,7 +24,7 @@ public class OptionsBasedProducer implements IBookListProducer {
             bookIdsList = new HashSet<>(Collections.singletonList(bookId));
         else if (null != bookDirName && !bookDirName.isEmpty()) {
             if (GBDOptions.isValidDirectory()) {
-                bookIdsList = AbstractContextProvider.getContextProvider().getBookIdsList();
+                bookIdsList = ContextProvider.getContextProvider().getBookIdsList();
             }
         }
 

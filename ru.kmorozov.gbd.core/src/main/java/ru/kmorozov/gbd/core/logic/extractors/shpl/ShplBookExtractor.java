@@ -10,7 +10,7 @@ import ru.kmorozov.gbd.core.logic.model.book.base.IBookData;
 import ru.kmorozov.gbd.core.logic.model.book.shpl.ShplBookData;
 import ru.kmorozov.gbd.core.logic.model.book.shpl.ShplPage;
 import ru.kmorozov.gbd.core.logic.model.book.shpl.ShplPagesInfo;
-import ru.kmorozov.gbd.utils.gson.Mapper;
+import ru.kmorozov.gbd.utils.Mapper;
 
 import java.util.List;
 
