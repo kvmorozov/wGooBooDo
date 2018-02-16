@@ -19,6 +19,8 @@ public final class EventSender implements Closeable {
     private Channel channel;
     private boolean isInitCompleted;
 
+    private boolean initIsNotPossible = false;
+
     public static final EventSender INSTANCE = new EventSender("localhost", 5252);
 
     private EventSender(final String server, final int port) {
@@ -39,12 +41,18 @@ public final class EventSender implements Closeable {
             group.shutdownGracefully();
 
             logger.error(e);
+        } catch (Exception ex) {
+            logger.error(ex.getMessage());
+            initIsNotPossible = true;
         }
     }
 
     private void write(final String msg) {
         if (!isInitCompleted)
-            init();
+            if (initIsNotPossible)
+                return;
+            else
+                init();
 
         if (isInitCompleted) {
             channel.write(msg);

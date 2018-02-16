@@ -18,7 +18,7 @@ public class TokenFactory {
 
     private static final Logger log = LogManager.getLogger(TokenFactory.class.getName());
 
-    public static boolean generateToken(final String oneDriveKeyFileName) {
+    public static boolean generateToken(final File oneDriveKeyFile) {
         log.info("Starting generate token...");
         try {
             final WebDriver driver = new ChromeDriver();
@@ -40,7 +40,7 @@ public class TokenFactory {
                 }
             });
 
-            try (PrintWriter writer = new PrintWriter(new File(TokenFactory.class.getClassLoader().getResource(oneDriveKeyFileName).getFile()))) {
+            try (PrintWriter writer = new PrintWriter(oneDriveKeyFile)) {
                 writer.write(driver.getCurrentUrl());
             }
 

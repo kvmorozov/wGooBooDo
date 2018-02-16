@@ -123,7 +123,7 @@ public abstract class BaseLoader implements ILoader, Runnable {
                 .forEach(serverItem -> {
                     if (!serverItem.isDirectory()) {
                         final BookFormat bookFormat = BookUtils.getFormat(serverItem.getName());
-                        if (BookInfo.BookFormat.UNKNOWN != bookFormat) {
+                        if (BookFormat.UNKNOWN != bookFormat) {
                             final Book existBook = booksRepository.findOneByBookInfoPath(serverItem.getUrl());
                             if (null == existBook) {
                                 final Book book = new Book();
@@ -132,6 +132,7 @@ public abstract class BaseLoader implements ILoader, Runnable {
                                 bookInfo.setFileName(serverItem.getName());
                                 bookInfo.setPath(serverItem.getUrl());
                                 bookInfo.setFormat(bookFormat);
+                                bookInfo.setLastModifiedDateTime(serverItem.getLastModifiedDateTime());
                                 bookInfo.setSize(serverItem.getSize());
 
                                 book.setBookInfo(bookInfo);

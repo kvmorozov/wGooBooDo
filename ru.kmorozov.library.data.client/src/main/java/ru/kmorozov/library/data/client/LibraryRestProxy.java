@@ -151,4 +151,9 @@ public class LibraryRestProxy implements IDataRestServer {
     public List<DuplicatedBookDTO> findDuplicates() {
         return getList("/findDuplicates", null, null, DuplicatedBookDTO[].class);
     }
+
+    @Override
+    public void synchronizeDb() {
+
+    }
 }

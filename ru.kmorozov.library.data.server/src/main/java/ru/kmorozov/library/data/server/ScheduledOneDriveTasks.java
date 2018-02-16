@@ -1,6 +1,7 @@
 package ru.kmorozov.library.data.server;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import ru.kmorozov.gbd.logger.Logger;
@@ -21,8 +22,14 @@ public class ScheduledOneDriveTasks {
     @Autowired
     private OneDriveLoader oneLoader;
 
+    @Value("${onedrive.scheduler.enabled}")
+    private boolean schedulerEnabled;
+
     @Scheduled(fixedRate = SCHEDULE_INTERVAL)
     public void refreshOneDrive() throws IOException {
+        if (!schedulerEnabled)
+            return;
+
         logger.info("Scheduled refresh started");
         oneLoader.load(oneDriveItem -> Long.MAX_VALUE < System.currentTimeMillis() - oneDriveItem.getLastModifiedDateTime().getTime());
         logger.info("Scheduled refresh finished");
@@ -30,6 +37,9 @@ public class ScheduledOneDriveTasks {
 
     @Scheduled(fixedRate = SCHEDULE_INTERVAL)
     public void processLinks() throws IOException {
+        if (!schedulerEnabled)
+            return;
+
         logger.info("Scheduled links processing started");
         oneLoader.processLinks();
         logger.info("Scheduled links processing finished");

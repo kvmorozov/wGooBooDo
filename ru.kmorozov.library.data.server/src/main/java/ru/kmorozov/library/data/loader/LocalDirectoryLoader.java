@@ -1,6 +1,6 @@
 package ru.kmorozov.library.data.loader;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.kmorozov.gbd.logger.Logger;
 import ru.kmorozov.library.data.loader.LoaderExecutor.State;
@@ -10,7 +10,6 @@ import ru.kmorozov.library.data.model.book.Storage;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
@@ -23,17 +22,14 @@ public class LocalDirectoryLoader extends BaseLoader {
 
     private static final Logger logger = Logger.getLogger(LocalDirectoryLoader.class);
 
-    private final Path basePath;
 //    private final Win32ShellFolderManager2 shellFolderManager;
 
-    public LocalDirectoryLoader(@Autowired final String localBasePath) {
-        this.basePath = Paths.get(localBasePath);
-//        this.shellFolderManager = new Win32ShellFolderManager2();
-    }
+    @Value("${library.local.directory}")
+    public String localBasePath;
 
     @Override
     public void load() throws IOException {
-        Files.walk(basePath).forEach(filePath -> {
+        Files.walk(Paths.get(localBasePath)).forEach(filePath -> {
             final ServerItem serverItem = new ServerItem(filePath);
             if (serverItem.isDirectory()) {
                 final Category category = getCategoryByServerItem(serverItem);

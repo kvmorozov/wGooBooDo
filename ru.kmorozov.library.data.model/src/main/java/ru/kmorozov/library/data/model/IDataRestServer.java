@@ -25,4 +25,6 @@ public interface IDataRestServer {
     BookDTO downloadBook(String bookId);
 
     List<DuplicatedBookDTO> findDuplicates();
+
+    void synchronizeDb();
 }

@@ -15,6 +15,7 @@ import com.wouterbreukink.onedrive.client.utils.JsonUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.SocketException;
 import java.util.Date;
 import java.util.List;
 
@@ -32,6 +33,7 @@ class ROOneDriveProvider implements OneDriveProvider {
                     request.setParser(new JsonObjectParser(JsonUtils.JSON_FACTORY));
                     request.setReadTimeout(60000);
                     request.setConnectTimeout(60000);
+                    request.setNumberOfRetries(5);
                     try {
                         request.getHeaders().setAuthorization("bearer " + authoriser.getAccessToken());
                     } catch (final IOException e) {
@@ -74,7 +76,15 @@ class ROOneDriveProvider implements OneDriveProvider {
             }
 
             final HttpRequest request = requestFactory.buildGetRequest(url);
-            final ItemSet items = request.execute().parseAs(ItemSet.class);
+            final HttpResponse response;
+
+            try {
+                response = request.execute();
+            } catch (SocketException se) {
+                return new OneDriveItem[]{};
+            }
+
+            final ItemSet items = response.parseAs(ItemSet.class);
 
             for (final Item i : items.getValue()) {
                 itemsToReturn.add(OneDriveItem.FACTORY.create(i));

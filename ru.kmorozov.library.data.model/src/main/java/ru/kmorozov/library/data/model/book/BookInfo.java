@@ -29,16 +29,26 @@ public class BookInfo {
         }
     }
 
-    BookFormat format;
+    private String bookId;
 
-    String fileName;
+    private BookFormat format;
 
-    Date lastModifiedDateTime;
+    private String fileName;
+
+    private Date lastModifiedDateTime;
 
     @Indexed(unique = true)
-    String path;
+    private String path;
 
     long size;
+
+    public String getBookId() {
+        return this.bookId;
+    }
+
+    public void setBookId(String bookId) {
+        this.bookId = bookId;
+    }
 
     public BookFormat getFormat() {
         return format;
