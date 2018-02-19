@@ -198,12 +198,17 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
     @Override
     @RequestMapping("/findDuplicates")
     public List<DuplicatedBookDTO> findDuplicates() {
-        return duplicatesProcessor.process();
+        return duplicatesProcessor.findDuplicates();
     }
 
     @Override
     @RequestMapping("/synchronizeDb")
     public void synchronizeDb() {
         loader.start();
+    }
+
+    @RequestMapping("/processDuplicates")
+    public void processDuplicates() {
+        duplicatesProcessor.processDuplicates();
     }
 }

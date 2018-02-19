@@ -5,7 +5,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import ru.kmorozov.library.data.config.MongoConfiguration;
-import ru.kmorozov.library.data.converters.mongo.MongoConverterUtils;
 import ru.kmorozov.library.data.loader.LoaderConfiguration;
 import ru.kmorozov.library.data.loader.utils.DuplicatesProcessor;
 
@@ -14,8 +13,8 @@ import ru.kmorozov.library.data.loader.utils.DuplicatesProcessor;
  */
 @SpringBootApplication
 @EnableScheduling
-@ComponentScan(basePackageClasses = {MongoConfiguration.class, LibraryRestController.class, LoaderConfiguration.class,
-        MongoConverterUtils.class, DuplicatesProcessor.class})
+@ComponentScan(basePackageClasses = {MongoConfiguration.class, LibraryRestController.class, LoaderConfiguration.class
+        , DuplicatesProcessor.class})
 public class LibraryRestServer {
 
     public static void main(final String[] args) {

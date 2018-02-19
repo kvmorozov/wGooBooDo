@@ -22,7 +22,7 @@ public class DuplicatedBookDTO {
 
     public DuplicatedBookDTO(final BooksBySize duplicatedBook) {
         this.count = duplicatedBook.getCount();
-        this.format = duplicatedBook.getFormat();
+        this.format = duplicatedBook.getFormat().name();
         this.size = duplicatedBook.getSize();
     }
 

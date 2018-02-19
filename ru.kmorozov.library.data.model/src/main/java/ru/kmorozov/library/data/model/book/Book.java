@@ -5,6 +5,8 @@ import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Set;
+
 /**
  * Created by sbt-morozov-kv on 28.11.2016.
  */
@@ -25,6 +27,9 @@ public class Book {
 
     @DBRef
     Storage storage;
+
+    @DBRef(lazy = true)
+    Set<Category> categories;
 
     public Book() {
     }
@@ -92,6 +97,14 @@ public class Book {
 
     public boolean isBrokenLink() {
         return this.bookInfo.isLink() && ((null != this.linkInfo && this.linkInfo.isBroken() || null == this.linkInfo));
+    }
+
+    public Set<Category> getCategories() {
+        return this.categories;
+    }
+
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
     }
 
     @Override
