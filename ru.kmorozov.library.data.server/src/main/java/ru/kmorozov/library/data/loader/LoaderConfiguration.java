@@ -45,6 +45,14 @@ public class LoaderConfiguration {
 
         final File keyFile = new File(keyResource == null ? oneDriveKeyFileName : keyResource.getFile() );
 
+        if (!keyFile.exists()) {
+            try {
+                keyFile.createNewFile();
+            } catch (IOException e) {
+                logger.error("Create keyFile error", e);
+            }
+        }
+
         AuthorisationProvider authoriser = null;
 
         try {
