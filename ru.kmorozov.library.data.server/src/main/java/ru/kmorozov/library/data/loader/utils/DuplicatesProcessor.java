@@ -75,7 +75,7 @@ public class DuplicatesProcessor {
                                 OneDriveItem bookItem = api.getItem(book.getBookInfo().getPath());
                                 api.delete(bookItem);
                             } catch (IOException e) {
-                                e.printStackTrace();
+                                logger.error(String.format("Failed delete OneDriveItem for %s : %s", mainBook.getBookInfo().getFileName(), e.getMessage()));
                             }
                         }
 
