@@ -54,6 +54,8 @@ public class OneDriveLoader extends BaseLoader {
     public void load(final Predicate<OneDriveItem> skipCondition) throws IOException {
         setState(State.STARTED);
 
+        logger.info("Sync db started.");
+
         OneDriveWalkers.walk(api, skipCondition).forEach(oneDriveItem -> {
             if (isStopped())
                 OneDriveWalkers.stopAll();
@@ -68,6 +70,8 @@ public class OneDriveLoader extends BaseLoader {
                     }
             }
         });
+
+        logger.info("Sync db completed.");
 
         setState(State.STOPPED);
     }

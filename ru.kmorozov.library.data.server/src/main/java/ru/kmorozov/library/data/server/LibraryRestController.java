@@ -16,8 +16,9 @@ import ru.kmorozov.gbd.logger.Logger;
 import ru.kmorozov.gbd.logger.output.DummyReceiver;
 import ru.kmorozov.library.data.loader.LoaderExecutor;
 import ru.kmorozov.library.data.loader.LoaderExecutor.State;
+import ru.kmorozov.library.data.loader.processors.JstorProcessor;
 import ru.kmorozov.library.data.loader.utils.BookUtils;
-import ru.kmorozov.library.data.loader.utils.DuplicatesProcessor;
+import ru.kmorozov.library.data.loader.processors.DuplicatesProcessor;
 import ru.kmorozov.library.data.model.IDataRestServer;
 import ru.kmorozov.library.data.model.book.Book;
 import ru.kmorozov.library.data.model.book.BookInfo;
@@ -56,6 +57,9 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
 
     @Autowired
     private DuplicatesProcessor duplicatesProcessor;
+
+    @Autowired
+    private JstorProcessor jstorProcessor;
 
     private static transient DirContextLoader googleBooksLoader;
 
@@ -210,5 +214,10 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
     @RequestMapping("/processDuplicates")
     public void processDuplicates() {
         duplicatesProcessor.processDuplicates();
+    }
+
+    @RequestMapping("/jstorUpdate")
+    public void jstorUpdate() {
+        jstorProcessor.process();
     }
 }

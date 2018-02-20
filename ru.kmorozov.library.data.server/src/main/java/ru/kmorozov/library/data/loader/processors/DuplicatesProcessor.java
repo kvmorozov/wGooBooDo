@@ -1,4 +1,4 @@
-package ru.kmorozov.library.data.loader.utils;
+package ru.kmorozov.library.data.loader.processors;
 
 import com.wouterbreukink.onedrive.client.OneDriveItem;
 import com.wouterbreukink.onedrive.client.OneDriveProvider;

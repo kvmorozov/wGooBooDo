@@ -155,10 +155,13 @@ public abstract class BaseLoader implements ILoader, Runnable {
                                 final long newSize = serverItem.getSize();
                                 final boolean sizeCondition = 0l == oldSize || oldSize != newSize;
 
-                                if (dateCondition || sizeCondition) {
+                                boolean storageCondition = !existBook.getStorage().equals(storage);
+
+                                if (dateCondition || sizeCondition || storageCondition) {
                                     existBook.getBookInfo().setFileName(serverItem.getName());
                                     existBook.getBookInfo().setLastModifiedDateTime(newDate);
                                     existBook.getBookInfo().setSize(newSize);
+                                    existBook.setStorage(storage);
                                     booksRepository.save(existBook);
 
                                     EventSender.INSTANCE.sendInfo(logger, "Updated file " + serverItem.getName());

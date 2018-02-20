@@ -2,6 +2,7 @@ package ru.kmorozov.library.data.repository;
 
 import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 import ru.kmorozov.library.data.model.book.Book;
 import ru.kmorozov.library.data.model.book.Storage;
 
@@ -25,4 +26,7 @@ public interface BooksRepository extends MongoRepository<Book, String> {
     Book findOneByBookInfoPath(String path);
 
     List<Book> findAllByBookInfoFileName(String fileName);
+
+    @Query("{ 'bookInfo.fileName' : { $regex: ?0 } }")
+    List<Book> findBooksByRegexBookInfoFileName(String regexp);
 }
