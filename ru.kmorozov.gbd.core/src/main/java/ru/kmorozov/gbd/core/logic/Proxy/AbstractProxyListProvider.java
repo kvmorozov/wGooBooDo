@@ -56,7 +56,7 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
     }
 
     private static String getCookie(final InetSocketAddress proxy) {
-        return HttpConnections.getCookieString(proxy);
+        return HttpConnections.getCookieString(proxy, UrlType.GOOGLE_BOOKS);
     }
 
     public void processProxyList() {

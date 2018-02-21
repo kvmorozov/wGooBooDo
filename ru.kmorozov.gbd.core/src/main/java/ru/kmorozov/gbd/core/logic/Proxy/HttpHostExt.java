@@ -182,11 +182,11 @@ public class HttpHostExt {
         return host.getAddress().getHostAddress() + ':' + host.getPort();
     }
 
-    public HttpHeaders getHeaders() {
+    public HttpHeaders getHeaders(UrlType urlType) {
         if (null == headers || null == headers.getCookie()) {
             synchronized (this) {
                 headers = HttpConnections.getHeaders(this);
-                if (null == headers.getCookie()) headers.setCookie(HttpConnections.getCookieString(host));
+                if (null == headers.getCookie()) headers.setCookie(HttpConnections.getCookieString(host, urlType));
                 if (null == headers.getCookie()) {
                     logger.severe(String.format("Cannot get cookies for proxy %s", this.toString()));
                     forceInvalidate(false);

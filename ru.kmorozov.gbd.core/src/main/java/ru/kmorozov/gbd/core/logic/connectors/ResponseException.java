@@ -7,5 +7,9 @@ import java.io.IOException;
  */
 public abstract class ResponseException extends IOException {
 
+    public ResponseException(IOException ex) {
+        super(ex);
+    }
+
     public abstract int getStatusCode();
 }

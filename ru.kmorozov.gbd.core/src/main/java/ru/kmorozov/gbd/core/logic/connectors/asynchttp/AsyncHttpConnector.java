@@ -72,11 +72,11 @@ public class AsyncHttpConnector extends HttpConnector {
     public Response getContent(final String url, final HttpHostExt proxy, final boolean withTimeout) {
         final AsyncHttpClient client = getClient(proxy);
         final BoundRequestBuilder builder = client.prepareGet(url);
-        for (final Entry<String, Object> headerItem : proxy.getHeaders().entrySet())
+        for (final Entry<String, Object> headerItem : proxy.getHeaders(getUrlType(url)).entrySet())
             if (!"cookie".equals(headerItem.getKey()))
                 builder.addHeader(headerItem.getKey(), headerItem.getValue().toString());
 
-        final String[] cookies = proxy.getHeaders().getCookie().split(";");
+        final String[] cookies = proxy.getHeaders(getUrlType(url)).getCookie().split(";");
         for (final String cookieEntry : cookies) {
             final String[] cookieParts = cookieEntry.split("=", 2);
             if (2 != cookieParts.length) continue;

@@ -11,6 +11,7 @@ public class GoogleResponseException extends ResponseException {
     private final HttpResponseException hre;
 
     public GoogleResponseException(final HttpResponseException hre) {
+        super(hre);
         this.hre = hre;
     }
 

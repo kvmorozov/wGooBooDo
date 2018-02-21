@@ -5,8 +5,8 @@ import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -33,16 +33,16 @@ public class Book {
     @DBRef(lazy = true)
     Set<Category> categories;
 
-    List<IdInfo> bookIds;
+    Map<IdType, String> bookIds;
 
     public Book() {
     }
 
-    public List<IdInfo> getBookIds() {
+    public Map<IdType, String> getBookIds() {
         return this.bookIds;
     }
 
-    public void setBookIds(List<IdInfo> bookIds) {
+    public void setBookIds(Map<IdType, String> bookIds) {
         this.bookIds = bookIds;
     }
 
@@ -141,8 +141,8 @@ public class Book {
         return result;
     }
 
-    public void addBookId(IdInfo bookId) {
-        bookIds = bookIds == null ? new ArrayList<>(1) : bookIds;
-        bookIds.add(bookId);
+    public void addBookId(IdType idType, String bookId) {
+        bookIds = bookIds == null ? new HashMap<>(1) : bookIds;
+        bookIds.put(idType, bookId);
     }
 }

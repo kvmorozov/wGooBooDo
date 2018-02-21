@@ -2,7 +2,6 @@ package ru.kmorozov.gbd.core.logic.connectors.google;
 
 import com.google.api.client.http.*;
 import com.google.api.client.http.javanet.NetHttpTransport.Builder;
-import org.apache.commons.lang3.StringUtils;
 import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector;
@@ -41,14 +40,16 @@ public class GoogleHttpConnector extends HttpConnector {
             if ((GBDOptions.secureMode() && proxy.isLocal()) || !proxy.isAvailable()) return null;
 
             final HttpResponse resp;
-            final HttpHeaders headers = proxy.getHeaders();
-            if ((rqUrl.contains("google") && !StringUtils.isEmpty(headers.getCookie()) && headers.getCookie().contains("NID")) || !rqUrl.contains("google")) {
-                final HttpRequest req = getFactory(proxy).buildGetRequest(url).setConnectTimeout(withTimeout ? CONNECT_TIMEOUT : CONNECT_TIMEOUT * 10).setHeaders(headers);
-                resp = getContent(req, proxy, 0);
-            }
-            else throw new RuntimeException("Invalid proxy config!");
+            if (validateProxy(rqUrl, proxy)) {
+                final HttpRequest req = getFactory(proxy).buildGetRequest(url).setConnectTimeout(withTimeout ? CONNECT_TIMEOUT : CONNECT_TIMEOUT * 10);
+                if (needHeaders(rqUrl))
+                    req.setHeaders(proxy.getHeaders(getUrlType(rqUrl)));
 
-            if (null == resp) logger.finest(String.format("No response at url %s with proxy %s", url.toString(), proxy.toString()));
+                resp = getContent(req, proxy, 0);
+            } else throw new RuntimeException("Invalid proxy config!");
+
+            if (null == resp)
+                logger.finest(String.format("No response at url %s with proxy %s", url.toString(), proxy.toString()));
 
             return new GoogleResponse(resp);
         } catch (final HttpResponseException hre) {

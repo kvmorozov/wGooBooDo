@@ -48,7 +48,7 @@ public class OkHttpConnector extends HttpConnector {
     public Response getContent(final String url, final HttpHostExt proxy, final boolean withTimeout) throws IOException {
         if ((GBDOptions.secureMode() && proxy.isLocal()) || !proxy.isAvailable()) return null;
 
-        final HttpHeaders googleHeaders = proxy.getHeaders();
+        final HttpHeaders googleHeaders = proxy.getHeaders(getUrlType(url));
         final List<String> headerItems = new ArrayList<>();
         for (final Entry<String, Object> headerItem : googleHeaders.entrySet()) {
             headerItems.add(headerItem.getKey());

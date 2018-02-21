@@ -2,13 +2,13 @@ package ru.kmorozov.library.data.config;
 
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
-import com.mongodb.reactivestreams.client.MongoClients;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
-import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * Created by sbt-morozov-kv on 28.11.2016.
@@ -34,17 +34,7 @@ public class MongoConfiguration extends AbstractMongoConfiguration {
     }
 
     @Override
-    protected String getMappingBasePackage() {
-        return "ru.kmorozov.library.data.model";
-    }
-
-    @Bean
-    public com.mongodb.reactivestreams.client.MongoClient reactiveMongoClient() {
-        return MongoClients.create(mongoUri);
-    }
-
-    @Bean
-    public ReactiveMongoTemplate reactiveMongoTemplate() {
-        return new ReactiveMongoTemplate(reactiveMongoClient(), getDatabaseName());
+    protected Collection<String> getMappingBasePackages() {
+        return Collections.singleton("ru.kmorozov.library.data.model");
     }
 }
