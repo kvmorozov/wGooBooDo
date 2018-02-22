@@ -27,6 +27,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class HttpHostExt {
 
     public static final HttpHostExt NO_PROXY = new HttpHostExt();
+
     private static final Logger logger = Logger.getLogger(HttpHostExt.class);
     private static final GenericUrl checkProxyUrl = new GenericUrl("http://mxtoolbox.com/WhatIsMyIP/");
     private static final int REMOTE_FAILURES_THRESHOLD = 15;
@@ -39,6 +40,8 @@ public class HttpHostExt {
     private String cookie;
     private boolean isSecure = true;
     private volatile HttpHeaders headers;
+
+    private volatile long lastUsedTimestamp;
 
     public HttpHostExt(final InetSocketAddress host, final String cookie) {
         this.host = host;
@@ -195,5 +198,13 @@ public class HttpHostExt {
         }
 
         return headers;
+    }
+
+    public void updateTimestamp() {
+        lastUsedTimestamp = System.currentTimeMillis();
+    }
+
+    public long getLastUsedTimestamp() {
+        return this.lastUsedTimestamp;
     }
 }

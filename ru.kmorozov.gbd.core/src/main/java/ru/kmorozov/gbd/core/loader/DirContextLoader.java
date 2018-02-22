@@ -53,7 +53,7 @@ public class DirContextLoader implements IBaseLoader {
     }
 
     private void initContext() {
-        if (!GBDOptions.isValidDirectory()) return;
+        if (!GBDOptions.isValidConfig()) return;
 
         refreshContext();
     }
@@ -96,11 +96,11 @@ public class DirContextLoader implements IBaseLoader {
 
     @Override
     public boolean isValid() {
-        return GBDOptions.isValidDirectory();
+        return GBDOptions.isValidConfig();
     }
 
     protected File getFileToLoad(final boolean createIfNotExists) {
-        if (!GBDOptions.isValidDirectory()) return null;
+        if (!GBDOptions.isValidConfig()) return null;
 
         final File indexFile = new File(GBDOptions.getOutputDir() + File.separator + getLoadedFileName());
         if (indexFile.exists()) return indexFile;

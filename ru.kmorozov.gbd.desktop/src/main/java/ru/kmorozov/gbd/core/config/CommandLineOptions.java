@@ -3,6 +3,8 @@ package ru.kmorozov.gbd.core.config;
 import org.apache.commons.cli.*;
 import ru.kmorozov.gbd.core.config.options.CtxOptions;
 
+import java.io.File;
+
 /**
  * Created by km on 06.12.2015.
  */
@@ -143,5 +145,12 @@ public class CommandLineOptions implements IGBDOptions {
     public CtxOptions ctxOptions() {
         String[] ctxOpts = getStringOptionValues(OPTION_CTX_MODE_SHORT);
         return ctxOpts == null || ctxOpts.length != 2 ? CtxOptions.DEFAULT_CTX_OPTIONS : new CtxOptions(ctxOpts[0], ctxOpts[1]);
+    }
+
+    @Override
+    public boolean isValid() {
+        File booksDir = new File(getOutputDir());
+
+        return booksDir.exists() && booksDir.isDirectory();
     }
 }

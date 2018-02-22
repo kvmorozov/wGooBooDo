@@ -23,7 +23,7 @@ public class OptionsBasedProducer implements IBookListProducer {
         if (null != bookId && !bookId.isEmpty() && LibraryFactory.isValidId(bookId))
             bookIdsList = new HashSet<>(Collections.singletonList(bookId));
         else if (null != bookDirName && !bookDirName.isEmpty()) {
-            if (GBDOptions.isValidDirectory()) {
+            if (GBDOptions.isValidConfig()) {
                 bookIdsList = ContextProvider.getContextProvider().getBookIdsList();
             }
         }

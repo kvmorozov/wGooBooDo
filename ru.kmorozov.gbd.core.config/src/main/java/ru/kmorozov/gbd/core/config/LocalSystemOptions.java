@@ -2,6 +2,8 @@ package ru.kmorozov.gbd.core.config;
 
 import ru.kmorozov.gbd.core.config.options.CtxOptions;
 
+import java.io.File;
+
 /**
  * Created by km on 06.12.2015.
  */
@@ -45,5 +47,12 @@ public class LocalSystemOptions implements IGBDOptions {
     @Override
     public CtxOptions ctxOptions() {
         return CtxOptions.DEFAULT_CTX_OPTIONS;
+    }
+
+    @Override
+    public boolean isValid() {
+        File booksDir = new File(getOutputDir());
+
+        return booksDir.exists() && booksDir.isDirectory();
     }
 }

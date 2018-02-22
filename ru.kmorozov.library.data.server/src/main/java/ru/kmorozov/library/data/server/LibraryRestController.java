@@ -7,18 +7,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.kmorozov.gbd.client.IRestClient;
-import ru.kmorozov.gbd.core.config.GBDOptions;
-import ru.kmorozov.gbd.core.config.LocalSystemOptions;
 import ru.kmorozov.gbd.core.loader.DirContextLoader;
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector;
-import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.logger.Logger;
-import ru.kmorozov.gbd.logger.output.DummyReceiver;
 import ru.kmorozov.library.data.loader.LoaderExecutor;
 import ru.kmorozov.library.data.loader.LoaderExecutor.State;
+import ru.kmorozov.library.data.loader.processors.DuplicatesProcessor;
 import ru.kmorozov.library.data.loader.processors.JstorProcessor;
 import ru.kmorozov.library.data.loader.utils.BookUtils;
-import ru.kmorozov.library.data.loader.processors.DuplicatesProcessor;
 import ru.kmorozov.library.data.model.IDataRestServer;
 import ru.kmorozov.library.data.model.book.Book;
 import ru.kmorozov.library.data.model.book.BookInfo;
@@ -78,8 +74,6 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
                 if (null == googleBooksLoader) {
                     synchronized (LibraryRestController.class) {
                         if (null == googleBooksLoader) {
-                            GBDOptions.init(new LocalSystemOptions());
-                            ExecutionContext.initContext(new DummyReceiver(), false);
                             googleBooksLoader = new DirContextLoader();
                         }
                     }

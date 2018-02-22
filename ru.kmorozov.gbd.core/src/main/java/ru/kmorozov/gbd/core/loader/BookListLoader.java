@@ -41,7 +41,7 @@ public class BookListLoader extends DirContextLoader {
     private Set<String> loadFromDirNames() {
         final Set<String> bookIdsList = new HashSet<>();
         try {
-            Files.walk(Paths.get(GBDOptions.getBooksDir().toURI())).forEach(filePath -> {
+            Files.walk(Paths.get(getBooksDir().toURI())).forEach(filePath -> {
                 if (filePath.toFile().isDirectory()) {
                     final String[] nameParts = filePath.toFile().getName().split(" ");
                     if (isValidId(nameParts[nameParts.length - 1])) bookIdsList.add(nameParts[nameParts.length - 1]);
@@ -52,6 +52,10 @@ public class BookListLoader extends DirContextLoader {
         }
 
         return bookIdsList;
+    }
+
+    private File getBooksDir() {
+        return new File(GBDOptions.getOutputDir());
     }
 
     private Collection<String> loadFromIndex(final File indexFile) {

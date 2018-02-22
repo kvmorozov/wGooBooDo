@@ -22,4 +22,6 @@ public interface IGBDOptions {
     String pdfOptions();
 
     CtxOptions ctxOptions();
+
+    boolean isValid();
 }

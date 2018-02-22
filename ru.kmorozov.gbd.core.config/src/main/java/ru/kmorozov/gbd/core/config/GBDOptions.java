@@ -4,16 +4,12 @@ import org.apache.commons.lang3.StringUtils;
 import ru.kmorozov.gbd.core.config.options.CtxOptions;
 import ru.kmorozov.gbd.core.config.options.PdfOptions;
 
-import java.io.File;
-
 /**
  * Created by km on 01.12.2015.
  */
 public class GBDOptions {
 
     private static IGBDOptions INSTANCE;
-
-    private static File booksDir;
 
     public static void init(final IGBDOptions optionHolder) {
         INSTANCE = optionHolder;
@@ -51,14 +47,8 @@ public class GBDOptions {
         return 0 == INSTANCE.getImageWidth() ? defaultValue : INSTANCE.getImageWidth();
     }
 
-    public static boolean isValidDirectory() {
-        if (null == booksDir) booksDir = new File(getOutputDir());
-
-        return booksDir.exists() && booksDir.isDirectory();
-    }
-
-    public static File getBooksDir() {
-        return booksDir;
+    public static boolean isValidConfig() {
+        return INSTANCE.isValid();
     }
 
     public static CtxOptions getCtxOptions() {

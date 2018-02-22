@@ -23,15 +23,17 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
 
     private static final String DEFAULT_PROXY_DELIMITER = ":";
 
-    private static final Logger logger = ExecutionContext.INSTANCE.getLogger("ProxyListProvider");
+    private static final Logger logger = Logger.getLogger(AbstractProxyListProvider.class);
 
     private static AbstractProxyListProvider INSTANCE;
 
     protected final Collection<HttpHostExt> proxyList = new HashSet<>();
     protected Set<String> proxyItems;
-    private final AtomicBoolean proxyListCompleted = new AtomicBoolean(false);
 
-    public static AbstractProxyListProvider getInstance() {
+    private final AtomicBoolean proxyListCompleted = new AtomicBoolean(false);
+    private final AtomicBoolean proxyListInitStarted = new AtomicBoolean(false);
+
+    public static IProxyListProvider getInstance() {
         if (null == INSTANCE)
             INSTANCE = null == GBDOptions.getProxyListFile() ? new WebProxyListProvider() : new FileProxyListProvider();
 
@@ -55,14 +57,21 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
         }
     }
 
-    private static String getCookie(final InetSocketAddress proxy) {
-        return HttpConnections.getCookieString(proxy, UrlType.GOOGLE_BOOKS);
-    }
+    @Override
+    public void processProxyList(UrlType urlType) {
+        if (proxyListCompleted.get() || proxyListInitStarted.get())
+            return;
 
-    public void processProxyList() {
+        proxyListInitStarted.set(true);
+
         for (final String proxyString : proxyItems)
             if (!Strings.isNullOrEmpty(proxyString))
-                (new Thread(new ProxyChecker(proxyString))).start();
+                (new Thread(new ProxyChecker(proxyString, urlType))).start();
+    }
+
+    @Override
+    public boolean proxyListCompleted() {
+        return proxyListCompleted.get();
     }
 
     @Override
@@ -83,6 +92,7 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
         return proxyList.parallelStream();
     }
 
+    @Override
     public Iterable<HttpHostExt> getProxyList() {
         return proxyList;
     }
@@ -91,6 +101,7 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
         return !ProxyBlacklistHolder.BLACKLIST.isProxyInBlacklist(proxyStr);
     }
 
+    @Override
     public int getProxyCount() {
         return proxyItems.size();
     }
@@ -98,15 +109,21 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
     private class ProxyChecker implements Runnable {
 
         private final String proxyStr;
+        private final UrlType urlType;
 
-        ProxyChecker(final String proxyStr) {
+        ProxyChecker(final String proxyStr, UrlType urlType) {
             this.proxyStr = proxyStr;
+            this.urlType = urlType;
         }
 
         @Override
         public void run() {
             final HttpHostExt host = processProxyItem(proxyStr);
-            ExecutionContext.INSTANCE.newProxyEvent(host);
+            ExecutionContext.sendProxyEvent(host);
+        }
+
+        private String getCookie(final InetSocketAddress proxy) {
+            return HttpConnections.getCookieString(proxy, urlType);
         }
 
         private HttpHostExt processProxyItem(final String proxyItem) {

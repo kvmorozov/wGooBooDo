@@ -38,6 +38,8 @@ public abstract class HttpConnector {
         if (response == null)
             throw new IOException("Cannot get document!");
 
+        proxy.updateTimestamp();
+
         return parser.parseInput(new StringReader(IOUtils.toString(response.getContent(), Charset.forName("UTF-8"))), url);
     }
 

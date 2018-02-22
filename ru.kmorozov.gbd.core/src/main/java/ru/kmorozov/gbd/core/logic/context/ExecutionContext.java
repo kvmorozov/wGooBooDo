@@ -2,12 +2,13 @@ package ru.kmorozov.gbd.core.logic.context;
 
 import ru.kmorozov.gbd.core.logic.Proxy.AbstractProxyListProvider;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
+import ru.kmorozov.gbd.core.logic.Proxy.UrlType;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractHttpProcessor;
 import ru.kmorozov.gbd.core.logic.extractors.base.IImageExtractor;
 import ru.kmorozov.gbd.core.logic.extractors.base.IPostProcessor;
-import ru.kmorozov.gbd.logger.progress.IProgress;
 import ru.kmorozov.gbd.logger.Logger;
 import ru.kmorozov.gbd.logger.consumers.AbstractOutputReceiver;
+import ru.kmorozov.gbd.logger.progress.IProgress;
 import ru.kmorozov.gbd.utils.QueuedThreadPoolExecutor;
 
 import java.util.*;
@@ -54,8 +55,7 @@ public final class ExecutionContext {
         for (final String bookId : idsProducer.getBookIds()) {
             try {
                 bookContextMap.computeIfAbsent(bookId, k -> new BookContext(bookId, progress, postProcessor));
-            }
-            catch(final Exception ex) {
+            } catch (final Exception ex) {
                 logger.severe("Cannot add book " + bookId + " because of " + ex.getMessage());
             }
         }
@@ -93,7 +93,7 @@ public final class ExecutionContext {
             bookExecutor.execute(extractor);
         }
 
-        AbstractProxyListProvider.getInstance().processProxyList();
+        AbstractProxyListProvider.getInstance().processProxyList(UrlType.GOOGLE_BOOKS);
 
         bookExecutor.terminate(10, TimeUnit.MINUTES);
         pdfExecutor.terminate(30, TimeUnit.MINUTES);
@@ -107,7 +107,12 @@ public final class ExecutionContext {
         AbstractHttpProcessor.close();
     }
 
-    public void newProxyEvent(final HttpHostExt proxy) {
+    public static void sendProxyEvent(final HttpHostExt proxy) {
+        if (INSTANCE != null)
+            INSTANCE.newProxyEvent(proxy);
+    }
+
+    private void newProxyEvent(final HttpHostExt proxy) {
         for (final BookContext bookContext : getContexts(true))
             bookContext.getExtractor().newProxyEvent(proxy);
     }

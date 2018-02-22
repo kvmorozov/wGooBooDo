@@ -44,4 +44,9 @@ public class ServerGBDOptions implements IGBDOptions {
     public CtxOptions ctxOptions() {
         return null;
     }
+
+    @Override
+    public boolean isValid() {
+        return true;
+    }
 }

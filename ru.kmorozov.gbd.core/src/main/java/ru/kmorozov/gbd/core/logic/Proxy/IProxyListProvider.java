@@ -12,4 +12,12 @@ public interface IProxyListProvider {
     void updateProxyList();
 
     Stream<HttpHostExt> getParallelProxyStream();
+
+    int getProxyCount();
+
+    void processProxyList(UrlType urlType);
+
+    Iterable<HttpHostExt> getProxyList();
+
+    boolean proxyListCompleted();
 }

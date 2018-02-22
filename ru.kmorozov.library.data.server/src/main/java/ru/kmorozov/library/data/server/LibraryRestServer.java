@@ -22,6 +22,7 @@ public class LibraryRestServer {
 
     public static void main(final String[] args) {
         GBDOptions.init(new ServerGBDOptions());
+
         SpringApplication.run(LibraryRestServer.class, args);
     }
 }

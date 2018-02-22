@@ -3,8 +3,9 @@ package ru.kmorozov.library.data.loader.processors;
 import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
-import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
+import ru.kmorozov.gbd.core.logic.Proxy.ManagedProxyListProvider;
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector;
 import ru.kmorozov.gbd.core.logic.connectors.Response;
 import ru.kmorozov.gbd.core.logic.connectors.google.GoogleHttpConnector;
@@ -25,6 +26,9 @@ public class JstorProcessor {
     @Value("${mongo.reactive.mode}")
     private boolean reactiveMode;
 
+    @Autowired
+    private ManagedProxyListProvider proxyProvider;
+
     protected static final Logger logger = Logger.getLogger(JstorProcessor.class);
 
     private static final HttpConnector connector = new GoogleHttpConnector();
@@ -34,6 +38,11 @@ public class JstorProcessor {
 
     @Autowired
     protected RxBooksRepository rxBooksRepository;
+
+    @Bean
+    public ManagedProxyListProvider proxyProvider() {
+        return new ManagedProxyListProvider(5000);
+    }
 
     public void process() {
         logger.info("Process JSTOR started.");
@@ -58,10 +67,10 @@ public class JstorProcessor {
 
         String doi = null;
         try {
-            Document doc = connector.getHtmlDocument(JSTOR_ARTICLE_PREFIX + jstorId, HttpHostExt.NO_PROXY, true);
+            Document doc = connector.getHtmlDocument(JSTOR_ARTICLE_PREFIX + jstorId, proxyProvider.getProxy(), true);
             doi = doc.getElementsByAttributeValue("name", "ST.discriminator").attr("content");
         } catch (IOException e) {
-            logger.warn(String.format("%s not a valid JSTOR id", jstorId));
+            logger.error(String.format("%s not a valid JSTOR id", jstorId), e);
             return;
         }
 
@@ -69,7 +78,7 @@ public class JstorProcessor {
         booksRepository.save(jstorBook);
 
         try {
-            Response resp = connector.getContent(JSTOR_CITATION_PREFIX + doi, HttpHostExt.NO_PROXY, true);
+            Response resp = connector.getContent(JSTOR_CITATION_PREFIX + doi, proxyProvider.getProxy(), true);
         } catch (IOException e) {
             logger.warn(String.format("Invalid DOI %s for %s", doi, jstorId));
             return;
