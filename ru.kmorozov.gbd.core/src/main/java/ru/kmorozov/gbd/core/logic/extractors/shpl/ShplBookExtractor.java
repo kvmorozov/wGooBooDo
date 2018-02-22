@@ -36,11 +36,6 @@ public class ShplBookExtractor extends AbstractBookExtractor {
     }
 
     @Override
-    public BookInfo getBookInfo() {
-        return bookInfo;
-    }
-
-    @Override
     protected BookInfo findBookInfo() {
         final Document defaultDocument = getDocumentWithoutProxy();
         return extractBookInfo(defaultDocument);

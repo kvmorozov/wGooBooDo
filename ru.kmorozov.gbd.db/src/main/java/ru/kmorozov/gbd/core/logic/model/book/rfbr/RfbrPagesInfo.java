@@ -1,24 +1,21 @@
-package ru.kmorozov.gbd.core.logic.model.book.shpl;
+package ru.kmorozov.gbd.core.logic.model.book.rfbr;
 
-import com.google.gson.annotations.SerializedName;
+import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage;
 import ru.kmorozov.gbd.core.logic.model.book.base.IPage;
 import ru.kmorozov.gbd.core.logic.model.book.base.IPagesInfo;
 import ru.kmorozov.gbd.logger.Logger;
 
-/**
- * Created by sbt-morozov-kv on 16.11.2016.
- */
-public class ShplPagesInfo implements IPagesInfo {
+public class RfbrPagesInfo implements IPagesInfo {
 
-    @SerializedName("page")
-    private final ShplPage[] pages;
+    private final RfbrPage[] pages;
 
-    public ShplPagesInfo(final ShplPage[] pages) {
+    public RfbrPagesInfo(final RfbrPage[] pages) {
         this.pages = pages;
     }
 
+
     @Override
-    public ShplPage[] getPages() {
+    public AbstractPage[] getPages() {
         return pages;
     }
 
@@ -33,7 +30,7 @@ public class ShplPagesInfo implements IPagesInfo {
     }
 
     @Override
-    public IPage getPageByPid(final String pid) {
+    public IPage getPageByPid(String pid) {
         return null;
     }
 }

@@ -27,4 +27,6 @@ public abstract class AbstractPage implements IPage {
     public boolean isNotProcessed() {
         return !isProcessed();
     }
+
+    public abstract String getImgUrl();
 }

@@ -82,5 +82,7 @@ public abstract class AbstractBookExtractor extends AbstractHttpProcessor {
         }
     }
 
-    public abstract BookInfo getBookInfo();
+    public BookInfo getBookInfo() {
+        return bookInfo;
+    }
 }

@@ -22,7 +22,6 @@ public final class ExecutionContext {
     static final Logger logger = Logger.getLogger(ExecutionContext.class);
 
     private static final String EMPTY = "";
-    private static final ContextProvider contextProvider = ContextProvider.getContextProvider();
     public static ExecutionContext INSTANCE;
     private final boolean singleMode;
     private final AbstractOutputReceiver output;
@@ -100,6 +99,8 @@ public final class ExecutionContext {
 
         final long totalProcessed = getContexts(false).stream().mapToLong(BookContext::getPagesProcessed).sum();
         getLogger("Total").info("Total pages processed: " + totalProcessed);
+
+        ContextProvider contextProvider = ContextProvider.getContextProvider();
 
         contextProvider.updateIndex();
         contextProvider.updateContext();

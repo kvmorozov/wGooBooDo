@@ -2,6 +2,7 @@ package ru.kmorozov.gbd.core.logic.library;
 
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector;
 import ru.kmorozov.gbd.core.logic.library.metadata.GoogleBooksMetadata;
+import ru.kmorozov.gbd.core.logic.library.metadata.RfbrMetadata;
 import ru.kmorozov.gbd.core.logic.library.metadata.ShplMetadata;
 
 /**
@@ -9,7 +10,7 @@ import ru.kmorozov.gbd.core.logic.library.metadata.ShplMetadata;
  */
 public final class LibraryFactory {
 
-    private static final ILibraryMetadata[] METADATA = {GoogleBooksMetadata.GOOGLE_METADATA, ShplMetadata.SHPL_METADATA};
+    private static final ILibraryMetadata[] METADATA = {GoogleBooksMetadata.GOOGLE_METADATA, ShplMetadata.SHPL_METADATA, RfbrMetadata.RFBR_METADATA};
 
     private static ILibraryMetadata selectedMetadata;
 

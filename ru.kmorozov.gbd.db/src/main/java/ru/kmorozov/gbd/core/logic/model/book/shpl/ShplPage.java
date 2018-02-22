@@ -42,6 +42,7 @@ public class ShplPage extends AbstractPage {
         this.order = order;
     }
 
+    @Override
     public String getImgUrl() {
         return String.format("http://elib.shpl.ru/pages/%s/zooms/%s", id, GBDOptions.getImageWidth(ShplConstants.DEFAULT_PAGE_WIDTH));
     }

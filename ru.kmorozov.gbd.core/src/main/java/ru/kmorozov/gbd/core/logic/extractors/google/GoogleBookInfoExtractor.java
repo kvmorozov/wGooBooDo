@@ -100,9 +100,4 @@ public class GoogleBookInfoExtractor extends AbstractBookExtractor {
 
         return null;
     }
-
-    @Override
-    public BookInfo getBookInfo() {
-        return bookInfo;
-    }
 }

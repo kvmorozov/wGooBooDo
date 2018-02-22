@@ -120,4 +120,9 @@ public class GooglePageInfo extends AbstractPage implements Serializable, Compar
     public int compareTo(final GooglePageInfo anotherPage) {
         return this.getOrder().compareTo(anotherPage.getOrder());
     }
+
+    @Override
+    public String getImgUrl() {
+        throw new UnsupportedOperationException();
+    }
 }
