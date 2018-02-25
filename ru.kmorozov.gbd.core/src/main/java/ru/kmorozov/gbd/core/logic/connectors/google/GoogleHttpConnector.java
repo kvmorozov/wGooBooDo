@@ -53,7 +53,7 @@ public class GoogleHttpConnector extends HttpConnector {
 
             return new GoogleResponse(resp);
         } catch (final HttpResponseException hre) {
-            logger.severe("Connection error: " + hre.getMessage());
+            logger.severe("Connection error: " + hre.getStatusMessage());
             throw new GoogleResponseException(hre);
         }
     }

@@ -26,16 +26,11 @@ public class BookListLoader extends DirContextLoader {
     private static final String INDEX_FILE_NAME = "books.index";
     private boolean loadedFromIndex;
 
+    private Set<String> bookIds;
+
     @Override
     public Set<String> getBookIdsList() {
-        final File indexFile = getFileToLoad(false);
-        final Set<String> result = loadFromDirNames();
-        if (null != indexFile) {
-            loadedFromIndex = true;
-            result.addAll(loadFromIndex(indexFile));
-        }
-
-        return result;
+        return bookIds;
     }
 
     private Set<String> loadFromDirNames() {
@@ -87,5 +82,17 @@ public class BookListLoader extends DirContextLoader {
     @Override
     protected String getLoadedFileName() {
         return INDEX_FILE_NAME;
+    }
+
+    @Override
+    public void refreshContext() {
+        super.refreshContext();
+
+        final File indexFile = getFileToLoad(false);
+        bookIds = loadFromDirNames();
+        if (null != indexFile) {
+            loadedFromIndex = true;
+            bookIds.addAll(loadFromIndex(indexFile));
+        }
     }
 }

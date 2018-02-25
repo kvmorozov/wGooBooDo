@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  */
 public class DirContextLoader implements IBaseLoader {
 
-    static final DirContextLoader BOOK_CTX_LOADER = new DirContextLoader();
+    public static final DirContextLoader BOOK_CTX_LOADER = new DirContextLoader();
     private final Map<String, BookInfo> booksInfo = new HashMap<>();
 
     public DirContextLoader() {
@@ -36,6 +36,7 @@ public class DirContextLoader implements IBaseLoader {
 
     }
 
+    @Override
     public void updateContext() {
         if (!StringUtils.isEmpty(GBDOptions.getBookId())) return;
 
@@ -64,7 +65,7 @@ public class DirContextLoader implements IBaseLoader {
 
     @Override
     public Set<String> getBookIdsList() {
-        return null;
+        return booksInfo.isEmpty() ? null : booksInfo.keySet();
     }
 
     public Iterable<BookInfo> getBooks() {
