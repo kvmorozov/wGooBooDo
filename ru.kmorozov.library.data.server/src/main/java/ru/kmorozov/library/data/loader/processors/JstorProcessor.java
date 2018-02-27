@@ -50,7 +50,7 @@ public class JstorProcessor {
 
     @Bean
     public ManagedProxyListProvider proxyProvider() {
-        return new ManagedProxyListProvider(EmptyProxyListProvider.INSTANCE, 5000);
+        return new ManagedProxyListProvider(EmptyProxyListProvider.INSTANCE, 500);
     }
 
     public void process() {
@@ -65,6 +65,7 @@ public class JstorProcessor {
             booksRepository
                     .findBooksByRegexBookInfoFileName("^\\d+.pdf")
                     .stream()
+                    .filter(book -> book.getBookInfo().getCustomFields() == null)
                     .forEach(this::processJstorBook);
 
         logger.info("Process JSTOR finished.");
