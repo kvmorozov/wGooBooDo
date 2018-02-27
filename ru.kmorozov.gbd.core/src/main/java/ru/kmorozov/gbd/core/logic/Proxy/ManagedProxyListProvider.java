@@ -31,7 +31,11 @@ public class ManagedProxyListProvider {
                 e.printStackTrace();
             }
 
-            opProxy = parentProvider.getParallelProxyStream().filter(this::checkReady).findFirst();
+            opProxy = parentProvider
+                    .getParallelProxyStream()
+                    .filter(this::checkReady)
+                    .filter(HttpHostExt::isAvailable)
+                    .findFirst();
         }
         while (!opProxy.isPresent());
 

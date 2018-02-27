@@ -8,12 +8,12 @@ import org.jsoup.parser.Parser;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.Proxy.UrlType;
 import ru.kmorozov.gbd.logger.Logger;
+import ru.kmorozov.gbd.utils.Mapper;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.nio.charset.Charset;
+import java.util.Map;
 
 /**
  * Created by km on 17.05.2016.
@@ -34,13 +34,27 @@ public abstract class HttpConnector {
     public abstract Response getContent(String url, HttpHostExt proxy, boolean withTimeout) throws IOException;
 
     public Document getHtmlDocument(String url, HttpHostExt proxy, boolean withTimeout) throws IOException {
-        Response response = getContent(url, proxy, withTimeout);
-        if (response == null)
-            throw new IOException("Cannot get document!");
+        try {
+            Response response = getContent(url, proxy, withTimeout);
+            if (response == null)
+                throw new IOException("Cannot get document!");
 
-        proxy.updateTimestamp();
+            return parser.parseInput(new StringReader(IOUtils.toString(response.getContent(), Charset.forName("UTF-8"))), url);
+        } finally {
+            proxy.updateTimestamp();
+        }
+    }
 
-        return parser.parseInput(new StringReader(IOUtils.toString(response.getContent(), Charset.forName("UTF-8"))), url);
+    public Map<String, String> getJsonMapDocument(String url, HttpHostExt proxy, boolean withTimeout) throws IOException {
+        try {
+            Response response = getContent(url, proxy, withTimeout);
+            if (response == null)
+                throw new IOException("Cannot get document!");
+
+            return Mapper.getGson().fromJson(IOUtils.toString(response.getContent(), Charset.forName("UTF-8")), Mapper.mapType);
+        } finally {
+            proxy.updateTimestamp();
+        }
     }
 
     public abstract void close();

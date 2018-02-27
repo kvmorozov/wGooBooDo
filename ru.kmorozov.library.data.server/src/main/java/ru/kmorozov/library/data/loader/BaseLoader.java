@@ -156,8 +156,9 @@ public abstract class BaseLoader implements ILoader, Runnable {
                                 final boolean sizeCondition = 0l == oldSize || oldSize != newSize;
 
                                 boolean storageCondition = !existBook.getStorage().equals(storage);
+                                boolean nameCondition = serverItem.getName().equals(existBook.getBookInfo().getFileName());
 
-                                if (dateCondition || sizeCondition || storageCondition) {
+                                if (dateCondition || sizeCondition || storageCondition || nameCondition) {
                                     existBook.getBookInfo().setFileName(serverItem.getName());
                                     existBook.getBookInfo().setLastModifiedDateTime(newDate);
                                     existBook.getBookInfo().setSize(newSize);
