@@ -9,7 +9,7 @@ import java.io.InputStream;
 /**
  * Created by km on 17.05.2016.
  */
-public class GoogleResponse implements Response {
+class GoogleResponse implements Response {
 
     private final HttpResponse resp;
 

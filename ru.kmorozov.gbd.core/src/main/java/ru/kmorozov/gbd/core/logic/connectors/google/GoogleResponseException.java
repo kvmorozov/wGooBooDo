@@ -6,7 +6,7 @@ import ru.kmorozov.gbd.core.logic.connectors.ResponseException;
 /**
  * Created by km on 17.05.2016.
  */
-public class GoogleResponseException extends ResponseException {
+class GoogleResponseException extends ResponseException {
 
     private final HttpResponseException hre;
 

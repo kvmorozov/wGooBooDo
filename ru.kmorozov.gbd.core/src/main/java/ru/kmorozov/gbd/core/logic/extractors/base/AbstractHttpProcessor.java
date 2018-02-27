@@ -79,7 +79,12 @@ public class AbstractHttpProcessor {
     }
 
     public static void close() {
-        for (final HttpConnector connector : getConnectors())
-            connector.close();
+        for (final HttpConnector connector : getConnectors()) {
+            try {
+                connector.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

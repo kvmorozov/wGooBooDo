@@ -1,6 +1,6 @@
 package ru.kmorozov.library.data.loader.processors;
 
-import org.jsoup.nodes.Document;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -12,12 +12,16 @@ import ru.kmorozov.gbd.core.logic.connectors.HttpConnector;
 import ru.kmorozov.gbd.core.logic.connectors.google.GoogleHttpConnector;
 import ru.kmorozov.gbd.logger.Logger;
 import ru.kmorozov.library.data.model.book.Book;
+import ru.kmorozov.library.data.model.book.BookInfo;
 import ru.kmorozov.library.data.model.book.IdType;
 import ru.kmorozov.library.data.repository.BooksRepository;
 import ru.kmorozov.library.data.repository.RxBooksRepository;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 public class JstorProcessor {
@@ -33,7 +37,10 @@ public class JstorProcessor {
 
     protected static final Logger logger = Logger.getLogger(JstorProcessor.class);
 
-    private static final HttpConnector connector = new GoogleHttpConnector();
+    @Autowired
+    private HttpConnector jstorConnector;
+
+    private static final HttpConnector doiConnector = new GoogleHttpConnector();
 
     @Autowired
     protected BooksRepository booksRepository;
@@ -57,7 +64,7 @@ public class JstorProcessor {
         else
             booksRepository
                     .findBooksByRegexBookInfoFileName("^\\d+.pdf")
-                    .parallelStream()
+                    .stream()
                     .forEach(this::processJstorBook);
 
         logger.info("Process JSTOR finished.");
@@ -71,8 +78,19 @@ public class JstorProcessor {
 
         String doi = null;
         try {
-            Document doc = connector.getHtmlDocument(JSTOR_ARTICLE_PREFIX + jstorId, proxy, true);
-            doi = doc.getElementsByAttributeValue("name", "ST.discriminator").attr("content");
+            String doc = jstorConnector.getString(JSTOR_ARTICLE_PREFIX + jstorId, proxy, true);
+            Optional<String> opDoi = Arrays.stream(doc.split("\\r?\\n"))
+                    .filter(s -> s.contains("ST.discriminator"))
+                    .findFirst();
+            if (opDoi.isPresent())
+                doi = Arrays.stream(opDoi.get().split(" "))
+                        .filter(s -> s.contains("content"))
+                        .map(s -> s.split("=")[1])
+                        .findFirst().get().replace("\"", "");
+            else {
+                logger.error(String.format("%s not a valid JSTOR id", jstorId));
+                return;
+            }
         } catch (IOException e) {
             logger.error(String.format("%s not a valid JSTOR id", jstorId), e);
             return;
@@ -82,10 +100,15 @@ public class JstorProcessor {
         booksRepository.save(jstorBook);
 
         try {
-            Map<String, String> doiMap = connector.getJsonMapDocument(JSTOR_CITATION_PREFIX + doi, proxy, true);
+            Map<String, String> doiMap = parseArticleData(doiConnector.getString(JSTOR_CITATION_PREFIX + doi, proxy, true));
             if (!doiMap.isEmpty()) {
+                jstorBook.getBookInfo().setBookType(BookInfo.BookType.ARTICLE);
+                jstorBook.getBookInfo().setCustomFields(doiMap);
+                booksRepository.save(jstorBook);
 
-            }
+                logger.info(String.format("Saved DOI data for %s", doi));
+            } else
+                logger.info(String.format("Not saved DOI data for %s", doi));
         } catch (IOException e) {
             logger.warn(String.format("Invalid DOI %s for %s", doi, jstorId));
             return;
@@ -93,5 +116,23 @@ public class JstorProcessor {
 
         jstorBook.addBookId(IdType.DOI, doi);
         booksRepository.save(jstorBook);
+    }
+
+    private Map<String, String> parseArticleData(String data) {
+        return Arrays.stream(data.split("\\r?\\n"))
+                .filter(s -> s.contains("="))
+                .map(s -> {
+                    String[] items = s.split("=");
+                    return items.length == 2 ? new ImmutablePair<>(formatItem(items[0]), formatItem(items[1])) : null;
+                })
+                .collect(Collectors.toMap(ImmutablePair::getLeft, ImmutablePair::getRight));
+    }
+
+    private String formatItem(String item) {
+        return item.trim()
+                .replace("{", "")
+                .replace("},", "")
+                .replace("}", "")
+                .trim();
     }
 }

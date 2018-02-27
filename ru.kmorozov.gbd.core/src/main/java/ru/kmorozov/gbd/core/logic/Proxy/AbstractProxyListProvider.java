@@ -30,7 +30,7 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
     protected final Collection<HttpHostExt> proxyList = new HashSet<>();
     protected Set<String> proxyItems;
 
-    private final AtomicBoolean proxyListCompleted = new AtomicBoolean(false);
+    protected final AtomicBoolean proxyListCompleted = new AtomicBoolean(false);
     private final AtomicBoolean proxyListInitStarted = new AtomicBoolean(false);
 
     public static IProxyListProvider getInstance() {

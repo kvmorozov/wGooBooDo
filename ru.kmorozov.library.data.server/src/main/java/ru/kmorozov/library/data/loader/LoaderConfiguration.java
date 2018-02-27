@@ -5,13 +5,13 @@ import com.wouterbreukink.onedrive.client.OneDriveProvider.FACTORY;
 import com.wouterbreukink.onedrive.client.authoriser.AuthorisationProvider;
 import com.wouterbreukink.onedrive.client.authoriser.TokenFactory;
 import com.wouterbreukink.onedrive.client.exceptions.InvalidCodeException;
-import com.wouterbreukink.onedrive.client.exceptions.OneDriveException;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import ru.kmorozov.gbd.core.logic.connectors.HttpConnector;
+import ru.kmorozov.gbd.core.logic.connectors.google.GoogleHttpConnector;
+import ru.kmorozov.gbd.core.logic.connectors.webdriver.WebDriverHttpConnector;
 import ru.kmorozov.gbd.logger.Logger;
 import ru.kmorozov.library.data.config.MongoConfiguration;
 
@@ -35,15 +35,18 @@ public class LoaderConfiguration {
     @Value("${webdriver.chrome.driver}")
     public String webdriverChromeDriverPath;
 
+    @Value("${library.http.connector.type}")
+    public String httpConnectorType;
+
     @Bean
-    public OneDriveProvider api() throws OneDriveException {
+    public OneDriveProvider api() {
         URL keyResource = getClass().getClassLoader().getResource(oneDriveKeyFileName);
 
         if (keyResource == null) {
             logger.warn("Key file not found, creating new...");
         }
 
-        final File keyFile = new File(keyResource == null ? oneDriveKeyFileName : keyResource.getFile() );
+        final File keyFile = new File(keyResource == null ? oneDriveKeyFileName : keyResource.getFile());
 
         if (!keyFile.exists()) {
             try {
@@ -72,5 +75,18 @@ public class LoaderConfiguration {
         }
 
         return FACTORY.readWriteApi(authoriser);
+    }
+
+    @Bean
+    public HttpConnector getConnector() {
+        switch (httpConnectorType) {
+            case "chrome":
+                System.setProperty("webdriver.chrome.driver", webdriverChromeDriverPath);
+                return new WebDriverHttpConnector();
+            case "google":
+                return new GoogleHttpConnector();
+            default:
+                return new GoogleHttpConnector();
+        }
     }
 }

@@ -18,7 +18,7 @@ import java.util.Map;
 /**
  * Created by km on 17.05.2016.
  */
-public abstract class HttpConnector {
+public abstract class HttpConnector implements AutoCloseable {
 
     public static final int CONNECT_TIMEOUT = 30000;
     protected static final Logger logger = Logger.getLogger(HttpConnector.class);
@@ -57,7 +57,17 @@ public abstract class HttpConnector {
         }
     }
 
-    public abstract void close();
+    public String getString(String url, HttpHostExt proxy, boolean withTimeout) throws IOException {
+        try {
+            Response response = getContent(url, proxy, withTimeout);
+            if (response == null)
+                throw new IOException("Cannot get document!");
+
+            return IOUtils.toString(response.getContent(), Charset.forName("UTF-8"));
+        } finally {
+            proxy.updateTimestamp();
+        }
+    }
 
     public UrlType getUrlType(String url) {
         if (url.contains("books.google"))

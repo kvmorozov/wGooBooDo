@@ -6,6 +6,8 @@ public class EmptyProxyListProvider extends AbstractProxyListProvider {
 
     private EmptyProxyListProvider() {
         proxyList.add(HttpHostExt.NO_PROXY);
+
+        proxyListCompleted.set(true);
     }
 
     @Override

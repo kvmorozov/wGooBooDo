@@ -33,6 +33,7 @@ public class GoogleHttpConnector extends HttpConnector {
         return requestFactory;
     }
 
+    @Override
     public GoogleResponse getContent(final String rqUrl, final HttpHostExt proxy, final boolean withTimeout) throws IOException {
         try {
             final GenericUrl url = new GenericUrl(URI.create(rqUrl));
