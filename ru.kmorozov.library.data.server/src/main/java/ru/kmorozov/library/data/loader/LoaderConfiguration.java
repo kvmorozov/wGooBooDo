@@ -39,6 +39,12 @@ public class LoaderConfiguration {
     @Value("${library.http.connector.type}")
     public String httpConnectorType;
 
+    @Value("${onedrive.user}")
+    public String oneDriveUser;
+
+    @Value("${onedrive.password}")
+    public String oneDrivePassword;
+
     @Bean
     public OneDriveProvider api() {
         URL keyResource = getClass().getClassLoader().getResource(oneDriveKeyFileName);
@@ -63,7 +69,7 @@ public class LoaderConfiguration {
             authoriser = AuthorisationProvider.FACTORY.create(keyFile.toPath());
         } catch (final InvalidCodeException cee) {
             System.setProperty("webdriver.chrome.driver", webdriverChromeDriverPath);
-            if (TokenFactory.generateToken(keyFile))
+            if (TokenFactory.generateToken(keyFile, oneDriveUser, oneDrivePassword))
                 try {
                     authoriser = AuthorisationProvider.FACTORY.create(keyFile.toPath());
                 } catch (final IOException e) {
