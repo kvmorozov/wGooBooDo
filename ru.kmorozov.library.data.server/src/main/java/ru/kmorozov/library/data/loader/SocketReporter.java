@@ -1,6 +1,6 @@
 package ru.kmorozov.library.data.loader;
 
-import com.kmorozov.onedrive.tasks.TaskReporter;
+import ru.kmorozov.onedrive.tasks.TaskReporter;
 import ru.kmorozov.gbd.logger.Logger;
 import ru.kmorozov.library.data.loader.netty.EventSender;
 

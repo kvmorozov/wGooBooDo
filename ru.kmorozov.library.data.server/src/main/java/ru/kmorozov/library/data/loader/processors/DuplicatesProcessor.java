@@ -1,7 +1,7 @@
 package ru.kmorozov.library.data.loader.processors;
 
-import com.kmorozov.onedrive.client.OneDriveItem;
-import com.kmorozov.onedrive.client.OneDriveProvider;
+import ru.kmorozov.onedrive.client.OneDriveItem;
+import ru.kmorozov.onedrive.client.OneDriveProvider;
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;

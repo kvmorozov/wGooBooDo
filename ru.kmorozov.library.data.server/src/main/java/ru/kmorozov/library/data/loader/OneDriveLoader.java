@@ -1,12 +1,12 @@
 package ru.kmorozov.library.data.loader;
 
-import com.kmorozov.onedrive.TaskQueue;
-import com.kmorozov.onedrive.client.OneDriveItem;
-import com.kmorozov.onedrive.client.OneDriveProvider;
-import com.kmorozov.onedrive.client.walker.OneDriveWalkers;
-import com.kmorozov.onedrive.filesystem.FileSystemProvider.FACTORY;
-import com.kmorozov.onedrive.tasks.DownloadTask;
-import com.kmorozov.onedrive.tasks.Task.TaskOptions;
+import ru.kmorozov.onedrive.TaskQueue;
+import ru.kmorozov.onedrive.client.OneDriveItem;
+import ru.kmorozov.onedrive.client.OneDriveProvider;
+import ru.kmorozov.onedrive.client.walker.OneDriveWalkers;
+import ru.kmorozov.onedrive.filesystem.FileSystemProvider.FACTORY;
+import ru.kmorozov.onedrive.tasks.DownloadTask;
+import ru.kmorozov.onedrive.tasks.Task.TaskOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.kmorozov.gbd.logger.Logger;

@@ -1,6 +1,6 @@
 package ru.kmorozov.library.data.loader;
 
-import com.kmorozov.onedrive.client.OneDriveItem;
+import ru.kmorozov.onedrive.client.OneDriveItem;
 import ru.kmorozov.library.data.model.book.BookInfo;
 import ru.kmorozov.library.data.model.book.BookInfo.BookFormat;
 import ru.kmorozov.library.data.model.book.Storage.StorageType;

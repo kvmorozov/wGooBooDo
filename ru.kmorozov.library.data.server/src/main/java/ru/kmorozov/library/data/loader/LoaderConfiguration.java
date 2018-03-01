@@ -1,10 +1,10 @@
 package ru.kmorozov.library.data.loader;
 
-import com.kmorozov.onedrive.client.OneDriveProvider;
-import com.kmorozov.onedrive.client.OneDriveProvider.FACTORY;
-import com.kmorozov.onedrive.client.authoriser.AuthorisationProvider;
-import com.kmorozov.onedrive.client.authoriser.TokenFactory;
-import com.kmorozov.onedrive.client.exceptions.InvalidCodeException;
+import ru.kmorozov.onedrive.client.OneDriveProvider;
+import ru.kmorozov.onedrive.client.OneDriveProvider.FACTORY;
+import ru.kmorozov.onedrive.client.authoriser.AuthorisationProvider;
+import ru.kmorozov.onedrive.client.authoriser.TokenFactory;
+import ru.kmorozov.onedrive.client.exceptions.InvalidCodeException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
