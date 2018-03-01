@@ -1,7 +1,7 @@
 package ru.kmorozov.library.data.loader.processors;
 
-import com.wouterbreukink.onedrive.client.OneDriveItem;
-import com.wouterbreukink.onedrive.client.OneDriveProvider;
+import com.kmorozov.onedrive.client.OneDriveItem;
+import com.kmorozov.onedrive.client.OneDriveProvider;
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -25,7 +25,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
-public class DuplicatesProcessor {
+public class DuplicatesProcessor implements IProcessor {
 
     protected static final Logger logger = Logger.getLogger(DuplicatesProcessor.class);
 
@@ -42,7 +42,8 @@ public class DuplicatesProcessor {
         return getDuplicates().stream().map(this::createDuplicateDTO).collect(Collectors.toList());
     }
 
-    public void processDuplicates() {
+    @Override
+    public void process() {
         logger.info("Process duplicates started.");
 
         for (BooksBySize duplicate : getDuplicates())

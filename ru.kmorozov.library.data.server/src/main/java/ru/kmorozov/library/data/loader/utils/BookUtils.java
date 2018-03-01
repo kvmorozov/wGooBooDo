@@ -1,6 +1,6 @@
 package ru.kmorozov.library.data.loader.utils;
 
-import com.wouterbreukink.onedrive.client.OneDriveUrl;
+import com.kmorozov.onedrive.client.OneDriveUrl;
 import org.springframework.util.StringUtils;
 import ru.kmorozov.library.data.model.book.Book;
 import ru.kmorozov.library.data.model.dto.BookDTO;

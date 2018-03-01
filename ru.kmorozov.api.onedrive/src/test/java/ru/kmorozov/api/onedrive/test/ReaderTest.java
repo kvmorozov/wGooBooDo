@@ -1,10 +1,10 @@
 package ru.kmorozov.api.onedrive.test;
 
-import com.wouterbreukink.onedrive.client.OneDriveItem;
-import com.wouterbreukink.onedrive.client.OneDriveProvider;
-import com.wouterbreukink.onedrive.client.OneDriveProvider.FACTORY;
-import com.wouterbreukink.onedrive.client.authoriser.AuthorisationProvider;
-import com.wouterbreukink.onedrive.client.walker.OneDriveWalkers;
+import com.kmorozov.onedrive.client.OneDriveItem;
+import com.kmorozov.onedrive.client.OneDriveProvider;
+import com.kmorozov.onedrive.client.OneDriveProvider.FACTORY;
+import com.kmorozov.onedrive.client.authoriser.AuthorisationProvider;
+import com.kmorozov.onedrive.client.walker.OneDriveWalkers;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
 import org.junit.Before;

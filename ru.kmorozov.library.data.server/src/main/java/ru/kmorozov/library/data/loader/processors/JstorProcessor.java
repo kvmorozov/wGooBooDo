@@ -4,6 +4,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import ru.kmorozov.gbd.core.logic.Proxy.EmptyProxyListProvider;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
@@ -23,8 +24,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Component
-public class JstorProcessor {
+@Component @Lazy
+public class JstorProcessor implements IProcessor {
 
     private static final String JSTOR_ARTICLE_PREFIX = "https://www.jstor.org/stable/";
     private static final String JSTOR_CITATION_PREFIX = "https://www.jstor.org/citation/text/";
@@ -37,7 +38,7 @@ public class JstorProcessor {
 
     protected static final Logger logger = Logger.getLogger(JstorProcessor.class);
 
-    @Autowired
+    @Autowired(required = false)
     private HttpConnector jstorConnector;
 
     private static final HttpConnector doiConnector = new GoogleHttpConnector();
@@ -53,6 +54,7 @@ public class JstorProcessor {
         return new ManagedProxyListProvider(EmptyProxyListProvider.INSTANCE, 500);
     }
 
+    @Override
     public void process() {
         logger.info("Process JSTOR started.");
 

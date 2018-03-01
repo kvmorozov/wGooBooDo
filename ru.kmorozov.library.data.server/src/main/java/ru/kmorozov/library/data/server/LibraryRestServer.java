@@ -9,6 +9,7 @@ import ru.kmorozov.library.data.config.MongoConfiguration;
 import ru.kmorozov.library.data.config.RxMongoConfiguration;
 import ru.kmorozov.library.data.loader.LoaderConfiguration;
 import ru.kmorozov.library.data.loader.processors.DuplicatesProcessor;
+import ru.kmorozov.library.data.loader.processors.GbdProcessor;
 import ru.kmorozov.library.data.loader.processors.JstorProcessor;
 
 /**
@@ -17,7 +18,7 @@ import ru.kmorozov.library.data.loader.processors.JstorProcessor;
 @SpringBootApplication
 @EnableScheduling
 @ComponentScan(basePackageClasses = {MongoConfiguration.class, LibraryRestController.class, LoaderConfiguration.class,
-        DuplicatesProcessor.class, JstorProcessor.class, RxMongoConfiguration.class})
+        DuplicatesProcessor.class, JstorProcessor.class, RxMongoConfiguration.class, GbdProcessor.class})
 public class LibraryRestServer {
 
     public static void main(final String[] args) {

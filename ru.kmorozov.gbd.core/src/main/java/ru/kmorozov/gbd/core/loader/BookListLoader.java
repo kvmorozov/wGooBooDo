@@ -23,7 +23,7 @@ import java.util.stream.Stream;
 public class BookListLoader extends DirContextLoader {
 
     public static final BookListLoader BOOK_LIST_LOADER = new BookListLoader();
-    private static final String INDEX_FILE_NAME = "books.index";
+    public static final String INDEX_FILE_NAME = "books.index";
     private boolean loadedFromIndex;
 
     private Set<String> bookIds;

@@ -1,6 +1,7 @@
 package ru.kmorozov.library.data.server;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,6 +14,7 @@ import ru.kmorozov.gbd.logger.Logger;
 import ru.kmorozov.library.data.loader.LoaderExecutor;
 import ru.kmorozov.library.data.loader.LoaderExecutor.State;
 import ru.kmorozov.library.data.loader.processors.DuplicatesProcessor;
+import ru.kmorozov.library.data.loader.processors.GbdProcessor;
 import ru.kmorozov.library.data.loader.processors.JstorProcessor;
 import ru.kmorozov.library.data.loader.utils.BookUtils;
 import ru.kmorozov.library.data.model.IDataRestServer;
@@ -39,23 +41,26 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
 
     protected static final Logger logger = Logger.getLogger(HttpConnector.class);
 
-    @Autowired
+    @Autowired @Lazy
     private GoogleBooksRepository googleBooksRepository;
 
-    @Autowired
+    @Autowired @Lazy
     private StorageRepository storageRepository;
 
-    @Autowired
+    @Autowired @Lazy
     private BooksRepository booksRepository;
 
-    @Autowired
+    @Autowired @Lazy
     private LoaderExecutor loader;
 
-    @Autowired
+    @Autowired @Lazy
     private DuplicatesProcessor duplicatesProcessor;
 
-    @Autowired
+    @Autowired @Lazy
     private JstorProcessor jstorProcessor;
+
+    @Autowired @Lazy
+    private GbdProcessor gbdProcessor;
 
     private static transient DirContextLoader googleBooksLoader;
 
@@ -207,11 +212,16 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
 
     @RequestMapping("/processDuplicates")
     public void processDuplicates() {
-        duplicatesProcessor.processDuplicates();
+        duplicatesProcessor.process();
     }
 
     @RequestMapping("/jstorUpdate")
     public void jstorUpdate() {
         jstorProcessor.process();
+    }
+
+    @RequestMapping("/gbdUpdate")
+    public void gbdUpdate() {
+        gbdProcessor.process();
     }
 }

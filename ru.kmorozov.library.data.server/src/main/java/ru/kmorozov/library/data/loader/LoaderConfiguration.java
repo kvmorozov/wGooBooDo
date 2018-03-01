@@ -1,14 +1,15 @@
 package ru.kmorozov.library.data.loader;
 
-import com.wouterbreukink.onedrive.client.OneDriveProvider;
-import com.wouterbreukink.onedrive.client.OneDriveProvider.FACTORY;
-import com.wouterbreukink.onedrive.client.authoriser.AuthorisationProvider;
-import com.wouterbreukink.onedrive.client.authoriser.TokenFactory;
-import com.wouterbreukink.onedrive.client.exceptions.InvalidCodeException;
+import com.kmorozov.onedrive.client.OneDriveProvider;
+import com.kmorozov.onedrive.client.OneDriveProvider.FACTORY;
+import com.kmorozov.onedrive.client.authoriser.AuthorisationProvider;
+import com.kmorozov.onedrive.client.authoriser.TokenFactory;
+import com.kmorozov.onedrive.client.exceptions.InvalidCodeException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector;
 import ru.kmorozov.gbd.core.logic.connectors.google.GoogleHttpConnector;
 import ru.kmorozov.gbd.core.logic.connectors.webdriver.WebDriverHttpConnector;
@@ -77,7 +78,7 @@ public class LoaderConfiguration {
         return FACTORY.readWriteApi(authoriser);
     }
 
-    @Bean
+    @Bean @Lazy
     public HttpConnector getConnector() {
         switch (httpConnectorType) {
             case "chrome":
