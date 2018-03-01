@@ -1,5 +1,6 @@
 package com.kmorozov.onedrive.client.authoriser;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
@@ -29,7 +30,24 @@ public class TokenFactory {
                     .pollingEvery(1, TimeUnit.SECONDS)
                     .ignoring(NoSuchElementException.class);
 
+            if (!StringUtils.isEmpty(user)) {
+                final WebElement loginEdit = wait.until(driver1 -> driver1.findElement(By.name("loginfmt")));
+                loginEdit.sendKeys(user);
+                final WebElement nextBtn = driver.findElement(By.className("btn-primary"));
+                if (nextBtn != null)
+                    nextBtn.click();
+            }
+
+            if (!StringUtils.isEmpty(password)) {
+                final WebElement pwdEdit = wait.until(driver1 -> driver1.findElement(By.name("passwd")));
+                pwdEdit.sendKeys(password);
+                final WebElement nextBtn = driver.findElement(By.className("btn-primary"));
+                if (nextBtn != null)
+                    nextBtn.click();
+            }
+
             final WebElement okButton = wait.until(driver1 -> driver1.findElement(By.id("idBtn_Accept")));
+            okButton.click();
 
             final WebElement noButton = wait.until(driver12 -> {
                 try {
