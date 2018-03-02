@@ -9,7 +9,7 @@ import ru.kmorozov.library.data.config.MongoConfiguration;
 import ru.kmorozov.library.data.config.RxMongoConfiguration;
 import ru.kmorozov.library.data.loader.LoaderConfiguration;
 import ru.kmorozov.library.data.loader.processors.DuplicatesProcessor;
-import ru.kmorozov.library.data.loader.processors.GbdProcessor;
+import ru.kmorozov.library.data.loader.processors.gbd.GbdProcessor;
 import ru.kmorozov.library.data.loader.processors.JstorProcessor;
 
 /**

@@ -5,14 +5,13 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
+import ru.kmorozov.gbd.core.config.IBaseLoader;
 import ru.kmorozov.gbd.core.logic.Proxy.AbstractProxyListProvider;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
-import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookExtractor;
 import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
 import ru.kmorozov.gbd.core.logic.model.book.google.GoogleBookData;
 import ru.kmorozov.gbd.core.logic.model.book.google.GooglePagesInfo;
-import ru.kmorozov.gbd.logger.Logger;
 import ru.kmorozov.gbd.utils.Mapper;
 
 import java.util.List;
@@ -24,8 +23,6 @@ import static ru.kmorozov.gbd.core.config.constants.GoogleConstants.*;
  */
 public class GoogleBookInfoExtractor extends AbstractBookExtractor {
 
-    private static final Logger logger = ExecutionContext.INSTANCE.getLogger(GoogleImageExtractor.class);
-
     private static final String ADD_FLAGS_ATTRIBUTE = "_OC_addFlags";
     private static final String OC_RUN_ATTRIBUTE = "_OC_Run";
     private static final String BOOK_INFO_START_TAG = "fullview";
@@ -34,6 +31,10 @@ public class GoogleBookInfoExtractor extends AbstractBookExtractor {
 
     public GoogleBookInfoExtractor(final String bookId) {
         super(bookId);
+    }
+
+    public GoogleBookInfoExtractor(final String bookId, IBaseLoader storedLoader) {
+        super(bookId, storedLoader);
     }
 
     @Override
@@ -47,7 +48,7 @@ public class GoogleBookInfoExtractor extends AbstractBookExtractor {
     }
 
     @Override
-    protected BookInfo findBookInfo() {
+    protected BookInfo findBookInfo() throws Exception {
         final Document defaultDocument = getDocumentWithoutProxy();
         try {
             final BookInfo defaultBookInfo = extractBookInfo(defaultDocument);
@@ -61,8 +62,7 @@ public class GoogleBookInfoExtractor extends AbstractBookExtractor {
                     if (null == proxyBookInfo) proxy.forceInvalidate(true);
                     else return proxyBookInfo;
                 }
-            }
-            else return defaultBookInfo;
+            } else return defaultBookInfo;
         } catch (final Exception e) {
             e.printStackTrace();
         }

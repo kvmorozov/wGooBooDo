@@ -31,7 +31,8 @@ public class BookInfo {
     }
 
     public enum BookType {
-        ARTICLE
+        ARTICLE,
+        GOOGLE_BOOK
     }
 
     private String bookId;

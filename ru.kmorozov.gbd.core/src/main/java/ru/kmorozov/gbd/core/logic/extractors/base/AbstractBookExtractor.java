@@ -5,6 +5,7 @@ import org.jsoup.Connection;
 import org.jsoup.Connection.Method;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import ru.kmorozov.gbd.core.config.IBaseLoader;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.connectors.Response;
 import ru.kmorozov.gbd.core.logic.context.ContextProvider;
@@ -28,20 +29,33 @@ public abstract class AbstractBookExtractor extends AbstractHttpProcessor {
     protected String bookId;
     protected BookInfo bookInfo;
 
+    public AbstractBookExtractor() {
+    }
+
     protected AbstractBookExtractor(final String bookId) {
+        this(bookId, ContextProvider.getContextProvider());
+    }
+
+    protected AbstractBookExtractor(final String bookId, IBaseLoader storedLoader) {
         this.bookId = bookId;
 
-        final BookInfo storedBookInfo = ContextProvider.getContextProvider().getBookInfo(bookId);
-        bookInfo = null == storedBookInfo ? findBookInfo() : storedBookInfo;
+        final BookInfo storedBookInfo = storedLoader == null ? storedLoader.getBookInfo(bookId) : null;
+        try {
+            bookInfo = null == storedBookInfo ? findBookInfo() : storedBookInfo;
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            bookInfo = null;
+        }
     }
 
     protected abstract String getBookUrl();
 
     protected abstract String getReserveBookUrl();
 
-    protected abstract BookInfo findBookInfo();
+    protected abstract BookInfo findBookInfo() throws Exception;
 
-    protected Document getDocumentWithoutProxy() {
+    protected Document getDocumentWithoutProxy() throws Exception {
         Connection.Response res = null;
         Document doc = null;
 
@@ -53,7 +67,7 @@ public abstract class AbstractBookExtractor extends AbstractHttpProcessor {
             try {
                 res = Jsoup.connect(getReserveBookUrl()).userAgent(HttpConnections.USER_AGENT).method(Method.GET).execute();
             } catch (final Exception ex1) {
-                throw new RuntimeException(ex1);
+                throw new Exception(ex1);
             }
         }
 

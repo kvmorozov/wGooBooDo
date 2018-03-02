@@ -6,6 +6,4 @@ package ru.kmorozov.gbd.client;
 public interface IRestClient {
 
     boolean ping();
-
-    boolean synchronizeGoogleBook(String bookId);
 }

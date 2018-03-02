@@ -37,7 +37,12 @@ public class ShplBookExtractor extends AbstractBookExtractor {
 
     @Override
     protected BookInfo findBookInfo() {
-        final Document defaultDocument = getDocumentWithoutProxy();
+        Document defaultDocument = null;
+        try {
+            defaultDocument = getDocumentWithoutProxy();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return extractBookInfo(defaultDocument);
     }
 

@@ -53,6 +53,11 @@ public class DirContextLoader implements IBaseLoader {
         }
     }
 
+    @Override
+    public void updateBookInfo(BookInfo bookInfo) {
+        throw new UnsupportedOperationException();
+    }
+
     private void initContext() {
         if (!GBDOptions.isValidConfig()) return;
 

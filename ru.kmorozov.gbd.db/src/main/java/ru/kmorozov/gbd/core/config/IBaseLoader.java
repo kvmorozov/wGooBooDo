@@ -16,6 +16,8 @@ public interface IBaseLoader {
 
     void updateContext();
 
+    void updateBookInfo(BookInfo bookInfo);
+
     BookInfo getBookInfo(String bookId);
 
     Set<String> getBookIdsList();

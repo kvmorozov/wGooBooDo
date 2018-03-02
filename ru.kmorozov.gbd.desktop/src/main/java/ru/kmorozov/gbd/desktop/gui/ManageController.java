@@ -23,7 +23,7 @@ public class ManageController {
         if (!restClient.serviceAvailable()) return;
 
         final DirContextLoader loader = new DirContextLoader();
-        for (final BookInfo bookInfo : loader.getBooks())
-            restClient.synchronizeGoogleBook(bookInfo.getBookId());
+        for (final BookInfo bookInfo : loader.getBooks());
+//            restClient.synchronizeGoogleBook(bookInfo.getBookId());
     }
 }

@@ -14,17 +14,15 @@ import ru.kmorozov.gbd.logger.Logger;
 import ru.kmorozov.library.data.loader.LoaderExecutor;
 import ru.kmorozov.library.data.loader.LoaderExecutor.State;
 import ru.kmorozov.library.data.loader.processors.DuplicatesProcessor;
-import ru.kmorozov.library.data.loader.processors.GbdProcessor;
 import ru.kmorozov.library.data.loader.processors.JstorProcessor;
+import ru.kmorozov.library.data.loader.processors.gbd.GbdProcessor;
 import ru.kmorozov.library.data.loader.utils.BookUtils;
 import ru.kmorozov.library.data.model.IDataRestServer;
 import ru.kmorozov.library.data.model.book.Book;
-import ru.kmorozov.library.data.model.book.BookInfo;
 import ru.kmorozov.library.data.model.book.Storage;
 import ru.kmorozov.library.data.model.dto.*;
 import ru.kmorozov.library.data.model.dto.ItemDTO.ItemType;
 import ru.kmorozov.library.data.repository.BooksRepository;
-import ru.kmorozov.library.data.repository.GoogleBooksRepository;
 import ru.kmorozov.library.data.repository.StorageRepository;
 
 import java.util.Collections;
@@ -40,9 +38,6 @@ import java.util.stream.Collectors;
 public class LibraryRestController implements IRestClient, IDataRestServer {
 
     protected static final Logger logger = Logger.getLogger(HttpConnector.class);
-
-    @Autowired @Lazy
-    private GoogleBooksRepository googleBooksRepository;
 
     @Autowired @Lazy
     private StorageRepository storageRepository;
@@ -68,34 +63,6 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
     @RequestMapping("/ping")
     public boolean ping() {
         return true;
-    }
-
-    @Override
-    @RequestMapping("/synchronizeGoogleBook")
-    public boolean synchronizeGoogleBook(@RequestParam(name = "bookId") final String bookId) {
-        try {
-            final BookInfo existBookInfo = googleBooksRepository.findByBookId(bookId);
-            if (null == existBookInfo) {
-                if (null == googleBooksLoader) {
-                    synchronized (LibraryRestController.class) {
-                        if (null == googleBooksLoader) {
-                            googleBooksLoader = new DirContextLoader();
-                        }
-                    }
-                }
-
-//                final BookInfo loadedBookInfo = googleBooksLoader.getBookInfo(bookId);
-
-//                if (null != loadedBookInfo) googleBooksRepository.save(loadedBookInfo);
-            }
-
-            logger.info("Synchronized Google book " + bookId);
-
-            return true;
-        } catch (final Exception ex) {
-            logger.info(String.format("Synchronization of Google book %s failed with %s", bookId, ex.getMessage()));
-            return false;
-        }
     }
 
     @Override

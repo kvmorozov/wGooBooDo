@@ -9,9 +9,4 @@ public class RestClient extends AbstractRestClient implements IRestClient {
     public boolean ping() {
         return getCallResult("ping", Boolean.class);
     }
-
-    @Override
-    public boolean synchronizeGoogleBook(final String bookId) {
-        return getCallResult("synchronizeGoogleBook", Boolean.class, new RestParam("bookId", bookId));
-    }
 }

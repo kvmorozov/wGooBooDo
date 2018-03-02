@@ -35,7 +35,11 @@ public class TokenFactory {
                 loginEdit.sendKeys(user);
                 final WebElement nextBtn = driver.findElement(By.className("btn-primary"));
                 if (nextBtn != null)
-                    nextBtn.click();
+                    try {
+                        nextBtn.click();
+                    } catch (Exception ex) {
+                        log.error("Failed generate token, continuing manually...", ex);
+                    }
             }
 
             if (!StringUtils.isEmpty(password)) {
@@ -43,11 +47,19 @@ public class TokenFactory {
                 pwdEdit.sendKeys(password);
                 final WebElement nextBtn = driver.findElement(By.className("btn-primary"));
                 if (nextBtn != null)
-                    nextBtn.click();
+                    try {
+                        nextBtn.click();
+                    } catch (Exception ex) {
+                        log.error("Failed generate token, continuing manually...", ex);
+                    }
             }
 
             final WebElement okButton = wait.until(driver1 -> driver1.findElement(By.id("idBtn_Accept")));
-            okButton.click();
+            try {
+                okButton.click();
+            } catch (Exception ex) {
+                log.error("Failed generate token, continuing manually...", ex);
+            }
 
             final WebElement noButton = wait.until(driver12 -> {
                 try {
@@ -67,7 +79,7 @@ public class TokenFactory {
 
             return true;
         } catch (final Exception ex) {
-            log.info("Failed generate token!");
+            log.error("Failed generate token!", ex);
             return false;
         }
     }

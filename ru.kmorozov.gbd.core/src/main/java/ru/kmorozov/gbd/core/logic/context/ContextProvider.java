@@ -2,7 +2,6 @@ package ru.kmorozov.gbd.core.logic.context;
 
 import ru.kmorozov.gbd.core.config.IBaseLoader;
 import ru.kmorozov.gbd.core.loader.BookListLoader;
-import ru.kmorozov.gbd.core.loader.DirContextLoader;
 import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
 
 import java.util.Set;
@@ -59,6 +58,11 @@ public class ContextProvider implements IBaseLoader {
     @Override
     public void updateContext() {
         loader.updateContext();
+    }
+
+    @Override
+    public void updateBookInfo(BookInfo bookInfo) {
+        loader.updateBookInfo(bookInfo);
     }
 
     @Override
