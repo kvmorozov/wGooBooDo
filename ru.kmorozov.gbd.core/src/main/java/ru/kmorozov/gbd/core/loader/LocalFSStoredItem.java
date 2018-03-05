@@ -10,15 +10,19 @@ import java.io.OutputStream;
 
 public class LocalFSStoredItem implements IStoredItem {
 
-    private final File outputFile;
-    private final LocalFSStorage storage;
+    protected File outputFile;
+    protected final LocalFSStorage storage;
+    protected final IPage page;
+    protected final String imgFormat;
 
     private OutputStream outputStream;
 
     public LocalFSStoredItem(LocalFSStorage storage, IPage page, String imgFormat) {
         this.storage = storage;
+        this.page = page;
+        this.imgFormat = imgFormat;
 
-        outputFile = new File(storage.getStorageDir().getPath() + '\\' + page.getOrder() + '_' + page.getPid() + '.' + imgFormat);
+        init();
     }
 
     @Override
@@ -51,5 +55,9 @@ public class LocalFSStoredItem implements IStoredItem {
     @Override
     public File asFile() {
         return outputFile;
+    }
+
+    protected void init() {
+        outputFile = new File(storage.getStorageDir().getPath() + '\\' + page.getOrder() + '_' + page.getPid() + '.' + imgFormat);
     }
 }

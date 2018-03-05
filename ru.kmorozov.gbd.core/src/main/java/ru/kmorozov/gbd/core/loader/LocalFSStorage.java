@@ -20,9 +20,7 @@ import java.util.stream.Stream;
 
 public class LocalFSStorage implements IStorage {
 
-    public static final LocalFSStorage DEFAULT_LOCAL_STORAGE = new LocalFSStorage(System.getProperty("java.io.tmpdir"));
-
-    private final File storageDir;
+    protected final File storageDir;
 
     public LocalFSStorage(String storageDirName) {
         storageDir = new File(storageDirName);

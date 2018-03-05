@@ -1,8 +1,8 @@
 package ru.kmorozov.library.data.server;
 
 import ru.kmorozov.gbd.core.config.IStoredItem;
-import ru.kmorozov.gbd.core.loader.LocalFSStorage;
 import ru.kmorozov.gbd.core.loader.LocalFSStoredItem;
+import ru.kmorozov.gbd.core.loader.TempLocalStorage;
 import ru.kmorozov.gbd.core.logic.model.book.base.IPage;
 import ru.kmorozov.onedrive.client.OneDriveItem;
 
@@ -22,7 +22,7 @@ public class ServerStoredItem implements IStoredItem {
         this.storage = storage;
         this.page = page;
 
-        localItem = new LocalFSStoredItem(LocalFSStorage.DEFAULT_LOCAL_STORAGE, page, imgFormat);
+        localItem = new LocalFSStoredItem(TempLocalStorage.DEFAULT_TEMP_STORAGE, page, imgFormat);
     }
 
     @Override
