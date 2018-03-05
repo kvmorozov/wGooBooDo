@@ -10,7 +10,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,7 +21,6 @@ import java.util.stream.Stream;
  */
 public class BookListLoader extends DirContextLoader {
 
-    public static final BookListLoader BOOK_LIST_LOADER = new BookListLoader();
     public static final String INDEX_FILE_NAME = "books.index";
     private boolean loadedFromIndex;
 
@@ -31,26 +29,6 @@ public class BookListLoader extends DirContextLoader {
     @Override
     public Set<String> getBookIdsList() {
         return bookIds;
-    }
-
-    private Set<String> loadFromDirNames() {
-        final Set<String> bookIdsList = new HashSet<>();
-        try {
-            Files.walk(Paths.get(getBooksDir().toURI())).forEach(filePath -> {
-                if (filePath.toFile().isDirectory()) {
-                    final String[] nameParts = filePath.toFile().getName().split(" ");
-                    if (isValidId(nameParts[nameParts.length - 1])) bookIdsList.add(nameParts[nameParts.length - 1]);
-                }
-            });
-        } catch (final Exception ex) {
-            ex.printStackTrace();
-        }
-
-        return bookIdsList;
-    }
-
-    private File getBooksDir() {
-        return new File(GBDOptions.getOutputDir());
     }
 
     private Collection<String> loadFromIndex(final File indexFile) {
@@ -65,10 +43,7 @@ public class BookListLoader extends DirContextLoader {
         return bookIdsList;
     }
 
-    private static boolean isValidId(final String bookId) {
-        return LibraryFactory.isValidId(bookId);
-    }
-
+    @Override
     public void updateIndex() {
         if (loadedFromIndex || !StringUtils.isEmpty(GBDOptions.getBookId())) return;
 
@@ -84,12 +59,16 @@ public class BookListLoader extends DirContextLoader {
         return INDEX_FILE_NAME;
     }
 
+    private static boolean isValidId(final String bookId) {
+        return LibraryFactory.isValidId(bookId);
+    }
+
     @Override
     public void refreshContext() {
         super.refreshContext();
 
         final File indexFile = getFileToLoad(false);
-        bookIds = loadFromDirNames();
+        bookIds = GBDOptions.getStorage().getBookIdsList();
         if (null != indexFile) {
             loadedFromIndex = true;
             bookIds.addAll(loadFromIndex(indexFile));

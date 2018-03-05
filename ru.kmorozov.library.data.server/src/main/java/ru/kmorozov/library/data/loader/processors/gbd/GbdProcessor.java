@@ -3,7 +3,9 @@ package ru.kmorozov.library.data.loader.processors.gbd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
+import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.loader.BookListLoader;
+import ru.kmorozov.gbd.core.logic.context.ContextProvider;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
 import ru.kmorozov.gbd.logger.Logger;
@@ -14,6 +16,7 @@ import ru.kmorozov.library.data.model.book.IdType;
 import ru.kmorozov.library.data.model.book.Storage;
 import ru.kmorozov.library.data.repository.BooksRepository;
 import ru.kmorozov.library.data.repository.StorageRepository;
+import ru.kmorozov.library.data.server.ServerGBDOptions;
 import ru.kmorozov.onedrive.client.OneDriveItem;
 import ru.kmorozov.onedrive.client.OneDriveProvider;
 
@@ -43,6 +46,14 @@ public class GbdProcessor implements IProcessor {
     @Autowired
     @Lazy
     private OneDriveContextLoader ctx;
+
+    @Autowired
+    @Lazy
+    private ServerProducer producer;
+
+    @Autowired
+    @Lazy
+    private DbContextLoader dbCtx;
 
     @Override
     public void process() {
@@ -94,5 +105,15 @@ public class GbdProcessor implements IProcessor {
         }
 
         return null;
+    }
+
+    public void load() {
+        GBDOptions.init(new ServerGBDOptions());
+
+        ContextProvider.setDefaultContextProvider(dbCtx);
+        ExecutionContext.initContext(new DummyReceiver(), 1 == producer.getBookIds().size());
+        ExecutionContext.INSTANCE.addBookContext(producer, new DummyProgress(), new ServerPdfMaker());
+
+        ExecutionContext.INSTANCE.execute();
     }
 }

@@ -1,6 +1,7 @@
 package ru.kmorozov.library.data.server;
 
 import ru.kmorozov.gbd.core.config.IGBDOptions;
+import ru.kmorozov.gbd.core.config.IStorage;
 import ru.kmorozov.gbd.core.config.options.CtxOptions;
 
 public class ServerGBDOptions implements IGBDOptions {
@@ -11,8 +12,8 @@ public class ServerGBDOptions implements IGBDOptions {
     }
 
     @Override
-    public String getOutputDir() {
-        return null;
+    public IStorage getStorage() {
+        return new ServerStorage();
     }
 
     @Override
@@ -43,10 +44,5 @@ public class ServerGBDOptions implements IGBDOptions {
     @Override
     public CtxOptions ctxOptions() {
         return null;
-    }
-
-    @Override
-    public boolean isValid() {
-        return true;
     }
 }

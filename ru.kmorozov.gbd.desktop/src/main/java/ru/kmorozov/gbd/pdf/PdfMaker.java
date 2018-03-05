@@ -7,6 +7,7 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.config.options.PdfOptions;
+import ru.kmorozov.gbd.core.loader.LocalFSStorage;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.extractors.base.IPostProcessor;
@@ -53,7 +54,7 @@ public class PdfMaker implements IPostProcessor {
 
         if (!bookContext.pdfCompleted.compareAndSet(false, true)) return;
 
-        final File imgDir = bookContext.getOutputDir();
+        final File imgDir = ((LocalFSStorage) bookContext.getStorage()).getStorageDir();
         long existPages = 0;
         final BookInfo bookInfo = bookContext.getBookInfo();
 

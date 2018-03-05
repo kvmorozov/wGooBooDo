@@ -1,13 +1,10 @@
 package ru.kmorozov.gbd.core.logic.extractors;
 
+import ru.kmorozov.gbd.core.config.IStoredItem;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractPageImgProcessor;
 import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage;
-import ru.kmorozov.gbd.core.logic.model.book.base.IPage;
-import ru.kmorozov.gbd.core.logic.model.book.shpl.ShplPage;
-
-import java.io.File;
 
 /**
  * Created by sbt-morozov-kv on 18.11.2016.
@@ -36,7 +33,7 @@ public class SimplePageImgProcessor<T extends AbstractPage> extends AbstractPage
     }
 
     @Override
-    protected boolean validateOutput(final File outputFile, final int width) {
+    protected boolean validateOutput(final IStoredItem storedItem, final int width) {
         return true;
     }
 }

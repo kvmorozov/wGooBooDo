@@ -1,8 +1,7 @@
 package ru.kmorozov.gbd.core.config;
 
 import ru.kmorozov.gbd.core.config.options.CtxOptions;
-
-import java.io.File;
+import ru.kmorozov.gbd.core.loader.LocalFSStorage;
 
 /**
  * Created by km on 06.12.2015.
@@ -15,8 +14,8 @@ public class LocalSystemOptions implements IGBDOptions {
     }
 
     @Override
-    public String getOutputDir() {
-        return SystemConfigs.getRootDir();
+    public IStorage getStorage() {
+        return new LocalFSStorage(SystemConfigs.getRootDir());
     }
 
     @Override
@@ -47,12 +46,5 @@ public class LocalSystemOptions implements IGBDOptions {
     @Override
     public CtxOptions ctxOptions() {
         return CtxOptions.DEFAULT_CTX_OPTIONS;
-    }
-
-    @Override
-    public boolean isValid() {
-        File booksDir = new File(getOutputDir());
-
-        return booksDir.exists() && booksDir.isDirectory();
     }
 }

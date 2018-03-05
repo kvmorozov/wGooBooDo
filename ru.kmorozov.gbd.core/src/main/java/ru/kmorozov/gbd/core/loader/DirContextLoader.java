@@ -108,7 +108,7 @@ public class DirContextLoader implements IBaseLoader {
     protected File getFileToLoad(final boolean createIfNotExists) {
         if (!GBDOptions.isValidConfig()) return null;
 
-        final File indexFile = new File(GBDOptions.getOutputDir() + File.separator + getLoadedFileName());
+        final File indexFile = new File(GBDOptions.getStorage() + File.separator + getLoadedFileName());
         if (indexFile.exists()) return indexFile;
         else if (createIfNotExists) {
             try {

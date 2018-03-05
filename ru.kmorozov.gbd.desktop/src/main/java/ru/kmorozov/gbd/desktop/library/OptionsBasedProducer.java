@@ -18,15 +18,12 @@ public class OptionsBasedProducer implements IBookListProducer {
 
     public OptionsBasedProducer() {
         final String bookId = GBDOptions.getBookId();
-        final String bookDirName = GBDOptions.getOutputDir();
 
         if (null != bookId && !bookId.isEmpty() && LibraryFactory.isValidId(bookId))
             bookIdsList = new HashSet<>(Collections.singletonList(bookId));
-        else if (null != bookDirName && !bookDirName.isEmpty()) {
-            if (GBDOptions.isValidConfig()) {
-                bookIdsList = ContextProvider.getContextProvider().getBookIdsList();
-            }
-        }
+        else if (GBDOptions.isValidConfig())
+            bookIdsList = ContextProvider.getContextProvider().getBookIdsList();
+
 
         if (null == bookIdsList || bookIdsList.isEmpty()) throw new RuntimeException("No books to load!");
     }

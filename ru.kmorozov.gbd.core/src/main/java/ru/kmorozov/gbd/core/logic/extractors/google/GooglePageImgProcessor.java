@@ -1,13 +1,12 @@
 package ru.kmorozov.gbd.core.logic.extractors.google;
 
+import ru.kmorozov.gbd.core.config.IStoredItem;
 import ru.kmorozov.gbd.core.logic.Proxy.AbstractProxyListProvider;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractPageImgProcessor;
 import ru.kmorozov.gbd.core.logic.model.book.google.GooglePageInfo;
 import ru.kmorozov.gbd.utils.Images;
-
-import java.io.File;
 
 import static ru.kmorozov.gbd.core.config.constants.GoogleConstants.HTTPS_IMG_TEMPLATE;
 
@@ -53,7 +52,7 @@ class GooglePageImgProcessor extends AbstractPageImgProcessor<GooglePageInfo> {
     }
 
     @Override
-    protected boolean validateOutput(final File outputFile, final int width) {
-        return !Images.isInvalidImage(outputFile, width);
+    protected boolean validateOutput(final IStoredItem storedItem, final int width) {
+        return !Images.isInvalidImage(storedItem.asFile(), width);
     }
 }

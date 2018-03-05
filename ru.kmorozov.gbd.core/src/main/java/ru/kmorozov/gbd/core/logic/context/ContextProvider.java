@@ -11,10 +11,10 @@ import java.util.Set;
  */
 public class ContextProvider implements IBaseLoader {
 
-    private static final String DB_CTX_PROVIDER_CLASS_NAME = "ru.kmorozov.gbd.core.config.storage.DbContextProvider";
+    private static final String DB_CTX_PROVIDER_CLASS_NAME = "ru.kmorozov.library.data.loader.processors.gbd.DbContextLoader";
 
     private static final Object LOCK_OBJ = new Object();
-    private static volatile ContextProvider contextProvider;
+    private static volatile IBaseLoader contextProvider;
 
     protected IBaseLoader loader;
 
@@ -22,7 +22,7 @@ public class ContextProvider implements IBaseLoader {
         this.loader = loader;
     }
 
-    public static ContextProvider getContextProvider() {
+    public static IBaseLoader getContextProvider() {
         if (null == contextProvider) {
             synchronized (LOCK_OBJ) {
                 if (null == contextProvider) if (classExists(DB_CTX_PROVIDER_CLASS_NAME)) {
@@ -39,6 +39,10 @@ public class ContextProvider implements IBaseLoader {
         }
 
         return contextProvider;
+    }
+
+    public static void setDefaultContextProvider(IBaseLoader _contextProvider) {
+        contextProvider = _contextProvider;
     }
 
     private static boolean classExists(final String className) {

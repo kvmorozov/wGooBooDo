@@ -9,7 +9,7 @@ public interface IGBDOptions {
 
     String getBookId();
 
-    String getOutputDir();
+    IStorage getStorage();
 
     String getProxyListFile();
 
@@ -22,6 +22,4 @@ public interface IGBDOptions {
     String pdfOptions();
 
     CtxOptions ctxOptions();
-
-    boolean isValid();
 }

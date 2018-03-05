@@ -1,6 +1,5 @@
 package ru.kmorozov.gbd.core.logic.extractors.base;
 
-import org.apache.commons.lang3.StringUtils;
 import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
@@ -9,13 +8,7 @@ import ru.kmorozov.gbd.logger.Logger;
 import ru.kmorozov.gbd.logger.consumers.AbstractOutputReceiver;
 import ru.kmorozov.gbd.logger.events.AbstractEventSource;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Collection;
-import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -55,7 +48,7 @@ public abstract class AbstractImageExtractor extends AbstractEventSource impleme
 
         if (!preCheck()) return;
 
-        prepareDirectory();
+        prepareStorage();
         scanDir();
 
         initComplete.set(true);
@@ -77,42 +70,15 @@ public abstract class AbstractImageExtractor extends AbstractEventSource impleme
         waitingProxy.forEach(this::newProxyEvent);
     }
 
-    protected void prepareDirectory() {
-        final String baseOutputDirPath = GBDOptions.getOutputDir();
-        if (null == baseOutputDirPath) return;
-
-        final File baseOutputDir = new File(baseOutputDirPath);
-        if (!baseOutputDir.exists()) if (!baseOutputDir.mkdir()) return;
+    protected void prepareStorage() {
+        if (!GBDOptions.getStorage().isValid()) return;
 
         logger.info(ExecutionContext.INSTANCE.isSingleMode() ? String.format("Working with %s", bookContext.getBookInfo().getBookData().getTitle()) : "Starting...");
 
-        bookContext.setOutputDir(new File(getDirectoryName(baseOutputDirPath)));
-        final File[] files = bookContext.getOutputDir().listFiles();
-        bookContext.getProgress().resetMaxValue(null == files ? 0 : files.length);
+        bookContext.setStorage(GBDOptions.getStorage().getChildStorage(bookContext.getBookInfo().getBookData()));
+        bookContext.getProgress().resetMaxValue(bookContext.getStorage().size());
 
-        if (!bookContext.getOutputDir().exists()) {
-            final boolean dirResult = bookContext.getOutputDir().mkdir();
-            if (!dirResult) {
-                logger.severe(String.format("Invalid book title: %s", bookContext.getBookInfo().getBookData().getTitle()));
-            }
-        }
-    }
-
-    private String getDirectoryName(final String baseOutputDirPath) {
-        try {
-            final Optional<Path> optPath = Files.find(Paths.get(baseOutputDirPath), 1, (path, basicFileAttributes) -> path.toString().contains(bookContext.getBookInfo().getBookData()
-                                                                                                                                                          .getVolumeId())).findAny();
-            if (optPath.isPresent()) return optPath.get().toString();
-        } catch (final IOException ignored) {
-        }
-
-        final String directoryName = baseOutputDirPath + '\\' + bookContext.getBookInfo().getBookData().getTitle()
-                                                                           .replace(":", "")
-                                                                           .replace("<", "")
-                                                                           .replace(">", "")
-                                                                           .replace("?", "")
-                                                                           .replace("/", ".");
-        final String volumeId = bookContext.getBookInfo().getBookData().getVolumeId();
-        return StringUtils.isEmpty(volumeId) ? directoryName : directoryName + ' ' + bookContext.getBookInfo().getBookData().getVolumeId();
+        if (!bookContext.getStorage().isValid())
+            logger.severe(String.format("Invalid book title: %s", bookContext.getBookInfo().getBookData().getTitle()));
     }
 }

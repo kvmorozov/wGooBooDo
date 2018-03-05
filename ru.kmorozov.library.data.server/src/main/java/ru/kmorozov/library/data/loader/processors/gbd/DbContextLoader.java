@@ -7,10 +7,14 @@ import ru.kmorozov.gbd.core.config.IBaseLoader;
 import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
 import ru.kmorozov.library.data.repository.GoogleBooksRepository;
 
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 public class DbContextLoader implements IBaseLoader {
+
+    private Map<String, BookInfo> booksMap;
 
     @Autowired
     @Lazy
@@ -37,17 +41,21 @@ public class DbContextLoader implements IBaseLoader {
 
     @Override
     public BookInfo getBookInfo(String bookId) {
-        return googleBooksRepository.findByBookId(bookId);
+        return booksMap.get(bookId);
     }
 
     @Override
     public Set<String> getBookIdsList() {
-        return null;
+        if (booksMap == null) {
+            booksMap = googleBooksRepository.findAll().stream().collect(Collectors.toMap(BookInfo::getBookId, s -> s));
+        }
+
+        return booksMap.keySet();
     }
 
     @Override
     public int getContextSize() {
-        return 0;
+        return booksMap.size();
     }
 
     @Override

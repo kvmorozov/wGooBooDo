@@ -19,8 +19,8 @@ public class GBDOptions {
         return INSTANCE.getBookId();
     }
 
-    public static String getOutputDir() {
-        return INSTANCE.getOutputDir();
+    public static IStorage getStorage() {
+        return INSTANCE.getStorage();
     }
 
     public static String getProxyListFile() {
@@ -48,7 +48,7 @@ public class GBDOptions {
     }
 
     public static boolean isValidConfig() {
-        return INSTANCE.isValid();
+        return INSTANCE.getStorage().isValid();
     }
 
     public static CtxOptions getCtxOptions() {

@@ -8,10 +8,6 @@ import ru.kmorozov.gbd.core.logic.model.book.base.IPage;
 import ru.kmorozov.gbd.core.logic.model.book.shpl.ShplPage;
 
 import java.io.IOException;
-import java.nio.file.FileVisitOption;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -25,11 +21,9 @@ public class ShplImageExtractor extends AbstractImageExtractor {
 
     @Override
     protected void scanDir() {
-        final Path outputPath = Paths.get(bookContext.getOutputDir().toURI());
-
         bookContext.getPagesStream().forEach(page -> {
             try {
-                if (1 == Files.find(outputPath, 1, (path, basicFileAttributes) -> path.toString().contains("\\" + page.getOrder() + '_' + page.getPid() + '.'), FileVisitOption.FOLLOW_LINKS).count()) {
+                if (bookContext.getStorage().isPageExists(page)) {
                     logger.severe(String.format("Page %s found in directory!", page.getPid()));
                     page.dataProcessed.set(true);
                     page.fileExists.set(true);

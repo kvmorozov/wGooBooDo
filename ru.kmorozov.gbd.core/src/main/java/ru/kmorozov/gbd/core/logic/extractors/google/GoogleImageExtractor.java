@@ -16,13 +16,12 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Stream;
 
 import static ru.kmorozov.gbd.core.config.constants.GoogleConstants.DEFAULT_PAGE_WIDTH;
 
@@ -41,12 +40,11 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
     @Override
     protected void scanDir() {
         final int imgWidth = 0 == GBDOptions.getImageWidth() ? DEFAULT_PAGE_WIDTH : GBDOptions.getImageWidth();
-        final Path outputPath = Paths.get(bookContext.getOutputDir().toURI());
 
         try {
             bookContext.getPagesStream().filter(AbstractPage::isFileExists).forEach(page -> {
                 try {
-                    if (0 == Files.find(outputPath, 1, (path, basicFileAttributes) -> path.toString().contains("\\" + page.getOrder() + '_' + page.getPid() + '.'), FileVisitOption.FOLLOW_LINKS).count()) {
+                    if (!bookContext.getStorage().isPageExists(page)) {
                         logger.severe(String.format("Page %s not found in directory!", page.getPid()));
                         page.dataProcessed.set(false);
                         page.fileExists.set(false);
@@ -56,7 +54,11 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
                 }
             });
 
-            Files.walk(outputPath).forEach(filePath -> {
+            Stream<Path> files = bookContext.getStorage().getFiles();
+            if (files == null)
+                return;
+
+            files.forEach(filePath -> {
                 setProgress(bookContext.getProgress().incrementAndProgress());
 
                 if (Images.isImageFile(filePath)) {
@@ -72,8 +74,7 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
                         } catch (final IOException e) {
                             e.printStackTrace();
                         }
-                    }
-                    else {
+                    } else {
                         try {
                             if (GBDOptions.reloadImages()) {
                                 final BufferedImage bimg = ImageIO.read(new File(filePath.toString()));
@@ -86,15 +87,13 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
                                     _page.dataProcessed.set(false);
                                     logger.severe(String.format("Page %s deleted!", _page.getPid()));
                                 }
-                            }
-                            else _page.dataProcessed.set(true);
+                            } else _page.dataProcessed.set(true);
 
                             if (Images.isInvalidImage(filePath, imgWidth)) {
                                 _page.dataProcessed.set(false);
                                 Files.delete(filePath);
                                 logger.severe(String.format("Page %s deleted!", _page.getPid()));
-                            }
-                            else if (_page.getOrder() != order && !_page.isGapPage()) {
+                            } else if (_page.getOrder() != order && !_page.isGapPage()) {
                                 final File oldFile = filePath.toFile();
                                 final File newFile = new File(filePath.toString().replace(order + "_", _page.getOrder() + "_"));
                                 if (!newFile.exists())
@@ -130,13 +129,12 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
         if (!Strings.isNullOrEmpty(((GoogleBookData) bookContext.getBookInfo().getBookData()).getFlags().getDownloadPdfUrl())) {
             logger.severe("There is direct url to download book. DIY!");
             return false;
-        }
-        else return true;
+        } else return true;
     }
 
     @Override
-    protected void prepareDirectory() {
-        super.prepareDirectory();
+    protected void prepareStorage() {
+        super.prepareStorage();
         bookContext.getBookInfo().getPages().build(logger);
     }
 

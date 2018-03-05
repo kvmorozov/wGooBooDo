@@ -10,7 +10,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import ru.kmorozov.gbd.core.config.GBDOptions;
+import ru.kmorozov.gbd.core.config.IBaseLoader;
 import ru.kmorozov.gbd.core.config.IGBDOptions;
+import ru.kmorozov.gbd.core.loader.LocalFSStorage;
 import ru.kmorozov.gbd.core.logic.context.ContextProvider;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.extractors.google.GoogleBookInfoExtractor;
@@ -43,7 +45,7 @@ public class ExtractorTest {
     public void initServer() {
         ExecutionContext.initContext(new DummyReceiver(), true);
         final IGBDOptions mockOptions = Mockito.mock(IGBDOptions.class);
-        Mockito.when(mockOptions.getOutputDir()).thenReturn("E:\\Work\\gbd\\");
+        Mockito.when(mockOptions.getStorage()).thenReturn(new LocalFSStorage("E:\\Work\\gbd\\"));
         Mockito.when(mockOptions.getProxyListFile()).thenReturn("E:\\Work\\gbd\\proxy.txt");
         GBDOptions.init(mockOptions);
 
@@ -85,7 +87,7 @@ public class ExtractorTest {
 
     @Test
     public void bookContextLoadTest() {
-        final ContextProvider contextProvider = ContextProvider.getContextProvider();
+        final IBaseLoader contextProvider = ContextProvider.getContextProvider();
 
         final int ctxSizeBefore = contextProvider.getContextSize();
         Assert.assertTrue(0 < ctxSizeBefore);

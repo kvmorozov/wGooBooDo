@@ -1,5 +1,6 @@
 package ru.kmorozov.gbd.core.logic.context;
 
+import ru.kmorozov.gbd.core.config.IStorage;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractHttpProcessor;
 import ru.kmorozov.gbd.core.logic.extractors.base.IImageExtractor;
 import ru.kmorozov.gbd.core.logic.extractors.base.IPostProcessor;
@@ -10,7 +11,6 @@ import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
 import ru.kmorozov.gbd.logger.progress.IProgress;
 import ru.kmorozov.gbd.utils.QueuedThreadPoolExecutor;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Predicate;
@@ -30,7 +30,7 @@ public class BookContext {
     private final ILibraryMetadata metadata;
     public AtomicBoolean started = new AtomicBoolean(false);
     public AtomicBoolean pdfCompleted = new AtomicBoolean(false);
-    private File outputDir;
+    private IStorage storage;
     private IImageExtractor extractor;
     private long pagesBefore, pagesProcessed;
 
@@ -53,12 +53,12 @@ public class BookContext {
         return bookInfo;
     }
 
-    public File getOutputDir() {
-        return outputDir;
+    public IStorage getStorage() {
+        return storage;
     }
 
-    public void setOutputDir(final File outputDir) {
-        this.outputDir = outputDir;
+    public void setStorage(final IStorage storage) {
+        this.storage = storage;
     }
 
     public IProgress getProgress() {

@@ -1,6 +1,7 @@
 package ru.kmorozov.gbd.core.logic.extractors.base;
 
 import ru.kmorozov.gbd.core.config.GBDOptions;
+import ru.kmorozov.gbd.core.config.IStoredItem;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.connectors.Response;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
@@ -10,7 +11,8 @@ import ru.kmorozov.gbd.logger.Logger;
 import ru.kmorozov.gbd.utils.Images;
 
 import javax.net.ssl.SSLException;
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 
@@ -42,10 +44,9 @@ public abstract class AbstractPageImgProcessor<T extends AbstractPage> extends A
     protected boolean processImage(final String imgUrl, final HttpHostExt proxy) {
         if (GBDOptions.secureMode() && proxy.isLocal()) return false;
 
-        File outputFile = null;
         Response resp = null;
         InputStream inputStream = null;
-        OutputStream outputStream = null;
+        IStoredItem storedItem = null;
 
         if (page.loadingStarted.get()) return false;
 
@@ -70,32 +71,30 @@ public abstract class AbstractPageImgProcessor<T extends AbstractPage> extends A
                         if (page.loadingStarted.get()) return false;
 
                         page.loadingStarted.set(true);
-                        outputFile = new File(bookContext.getOutputDir().getPath() + '\\' + page.getOrder() + '_' + page.getPid() + '.' + imgFormat);
+                        storedItem = bookContext.getStorage().getStoredItem(page, imgFormat);
 
-                        if (reloadFlag = outputFile.exists()) if (GBDOptions.reloadImages()) outputFile.delete();
+                        if (reloadFlag = storedItem.exists()) if (GBDOptions.reloadImages()) storedItem.delete();
                         else {
                             page.dataProcessed.set(true);
                             return false;
                         }
                     } else break;
 
-                    if (outputFile.exists()) break;
+                    if (storedItem.exists()) break;
 
                     if (!proxy.isLocal())
                         logger.info(String.format("Started img %s for %s with %s Proxy", reloadFlag ? "RELOADING" : "processing", page.getPid(), proxy.toString()));
                     else
                         logger.info(String.format("Started img %s for %s without Proxy", reloadFlag ? "RELOADING" : "processing", page.getPid()));
-
-                    outputStream = new FileOutputStream(outputFile);
                 }
 
                 firstChunk = false;
 
                 totalRead += read;
-                outputStream.write(bytes, 0, read);
+                storedItem.write(bytes, read);
             }
 
-            if (validateOutput(outputFile, getImgWidth())) {
+            if (validateOutput(storedItem, getImgWidth())) {
                 page.dataProcessed.set(true);
 
                 proxy.promoteProxy();
@@ -106,7 +105,7 @@ public abstract class AbstractPageImgProcessor<T extends AbstractPage> extends A
 
                 return true;
             } else {
-                outputFile.delete();
+                storedItem.delete();
                 return false;
             }
         } catch (SocketTimeoutException | SocketException | SSLException ste) {
@@ -121,17 +120,17 @@ public abstract class AbstractPageImgProcessor<T extends AbstractPage> extends A
                     e.printStackTrace();
                 }
             }
-            if (null != outputStream) {
+            if (null != storedItem) {
                 try {
-                    outputStream.close();
+                    storedItem.close();
                 } catch (final IOException e) {
                     e.printStackTrace();
                 }
             }
 
-            if (!page.dataProcessed.get() && null != outputFile) {
+            if (!page.dataProcessed.get() && null != storedItem) {
                 logger.info(String.format("Loading page %s failed!", page.getPid()));
-                outputFile.delete();
+                storedItem.delete();
             }
 
             try {
@@ -162,5 +161,5 @@ public abstract class AbstractPageImgProcessor<T extends AbstractPage> extends A
         return 0 == GBDOptions.getImageWidth() ? DEFAULT_PAGE_WIDTH : GBDOptions.getImageWidth();
     }
 
-    protected abstract boolean validateOutput(File outputFile, int width);
+    protected abstract boolean validateOutput(IStoredItem storedItem, int width);
 }

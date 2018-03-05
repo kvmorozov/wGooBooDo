@@ -191,4 +191,9 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
     public void gbdUpdate() {
         gbdProcessor.process();
     }
+
+    @RequestMapping("/gbdLoad")
+    public void gbdLoad() {
+        gbdProcessor.load();
+    }
 }
