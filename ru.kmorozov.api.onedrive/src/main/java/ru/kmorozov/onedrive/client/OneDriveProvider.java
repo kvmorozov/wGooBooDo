@@ -36,7 +36,7 @@ public interface OneDriveProvider {
 
     OneDriveItem updateFile(OneDriveItem item, Date createdDate, Date modifiedDate) throws IOException;
 
-    OneDriveItem createFolder(OneDriveItem parent, File target) throws IOException;
+    OneDriveItem createFolder(OneDriveItem parent, String name) throws IOException;
 
     void download(OneDriveItem item, File target, ResumableDownloaderProgressListener progressListener, int chunkSize) throws IOException;
 

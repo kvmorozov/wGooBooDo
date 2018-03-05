@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.kmorozov.gbd.client.IRestClient;
+import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.loader.DirContextLoader;
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector;
 import ru.kmorozov.gbd.logger.Logger;
@@ -70,6 +71,9 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
     public UserDTO login(@RequestParam(name = "login") final String login) {
         return new UserDTO(login);
     }
+
+    @Autowired
+    private ServerGBDOptions options;
 
     @Override
     @RequestMapping("/storagesByParentId")
@@ -194,6 +198,8 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
 
     @RequestMapping("/gbdLoad")
     public void gbdLoad() {
+        GBDOptions.init(options);
+
         gbdProcessor.load();
     }
 }

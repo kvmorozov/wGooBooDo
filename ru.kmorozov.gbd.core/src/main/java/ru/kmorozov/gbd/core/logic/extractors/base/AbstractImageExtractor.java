@@ -8,6 +8,7 @@ import ru.kmorozov.gbd.logger.Logger;
 import ru.kmorozov.gbd.logger.consumers.AbstractOutputReceiver;
 import ru.kmorozov.gbd.logger.events.AbstractEventSource;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -71,14 +72,18 @@ public abstract class AbstractImageExtractor extends AbstractEventSource impleme
     }
 
     protected void prepareStorage() {
-        if (!GBDOptions.getStorage().isValid()) return;
+        if (!GBDOptions.getStorage().isValidOrCreate()) return;
 
         logger.info(ExecutionContext.INSTANCE.isSingleMode() ? String.format("Working with %s", bookContext.getBookInfo().getBookData().getTitle()) : "Starting...");
 
-        bookContext.setStorage(GBDOptions.getStorage().getChildStorage(bookContext.getBookInfo().getBookData()));
-        bookContext.getProgress().resetMaxValue(bookContext.getStorage().size());
+        try {
+            bookContext.setStorage(GBDOptions.getStorage().getChildStorage(bookContext.getBookInfo().getBookData()));
+            bookContext.getProgress().resetMaxValue(bookContext.getStorage().size());
+        } catch (IOException e) {
+            logger.error(e);
+        }
 
-        if (!bookContext.getStorage().isValid())
+        if (!bookContext.getStorage().isValidOrCreate())
             logger.severe(String.format("Invalid book title: %s", bookContext.getBookInfo().getBookData().getTitle()));
     }
 }

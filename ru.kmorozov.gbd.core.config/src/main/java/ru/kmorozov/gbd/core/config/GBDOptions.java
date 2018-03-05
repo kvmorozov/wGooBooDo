@@ -48,7 +48,7 @@ public class GBDOptions {
     }
 
     public static boolean isValidConfig() {
-        return INSTANCE.getStorage().isValid();
+        return INSTANCE.getStorage().isValidOrCreate();
     }
 
     public static CtxOptions getCtxOptions() {

@@ -15,7 +15,7 @@ public class LocalFSStoredItem implements IStoredItem {
 
     private OutputStream outputStream;
 
-    LocalFSStoredItem(LocalFSStorage storage, IPage page, String imgFormat) {
+    public LocalFSStoredItem(LocalFSStorage storage, IPage page, String imgFormat) {
         this.storage = storage;
 
         outputFile = new File(storage.getStorageDir().getPath() + '\\' + page.getOrder() + '_' + page.getPid() + '.' + imgFormat);

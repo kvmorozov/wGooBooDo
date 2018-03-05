@@ -1,6 +1,7 @@
 package ru.kmorozov.library.data.loader.processors.gbd;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import ru.kmorozov.gbd.core.config.GBDOptions;
@@ -93,7 +94,8 @@ public class GbdProcessor implements IProcessor {
         logger.info("Process GBD finished.");
     }
 
-    private OneDriveItem getGbdRoot() {
+    @Bean
+    public OneDriveItem getGbdRoot() {
         try {
             OneDriveItem[] searchResults = api.search(BookListLoader.INDEX_FILE_NAME);
             if (searchResults != null && searchResults.length == 1)

@@ -20,6 +20,8 @@ import java.util.stream.Stream;
 
 public class LocalFSStorage implements IStorage {
 
+    public static final LocalFSStorage DEFAULT_LOCAL_STORAGE = new LocalFSStorage(System.getProperty("java.io.tmpdir"));
+
     private final File storageDir;
 
     public LocalFSStorage(String storageDirName) {
@@ -27,7 +29,7 @@ public class LocalFSStorage implements IStorage {
     }
 
     @Override
-    public boolean isValid() {
+    public boolean isValidOrCreate() {
         return storageDir.exists() ? storageDir.isDirectory() : storageDir.mkdir();
     }
 
@@ -56,19 +58,16 @@ public class LocalFSStorage implements IStorage {
     }
 
     @Override
-    public Set<String> getBookIdsList() {
+    public Set<String> getBookIdsList() throws IOException {
         final Set<String> bookIdsList = new HashSet<>();
-        try {
-            Files.walk(Paths.get(storageDir.toURI())).forEach(filePath -> {
-                if (filePath.toFile().isDirectory()) {
-                    final String[] nameParts = filePath.toFile().getName().split(" ");
-                    if (LibraryFactory.isValidId(nameParts[nameParts.length - 1]))
-                        bookIdsList.add(nameParts[nameParts.length - 1]);
-                }
-            });
-        } catch (final Exception ex) {
-            ex.printStackTrace();
-        }
+
+        Files.walk(Paths.get(storageDir.toURI())).forEach(filePath -> {
+            if (filePath.toFile().isDirectory()) {
+                final String[] nameParts = filePath.toFile().getName().split(" ");
+                if (LibraryFactory.isValidId(nameParts[nameParts.length - 1]))
+                    bookIdsList.add(nameParts[nameParts.length - 1]);
+            }
+        });
 
         return bookIdsList;
     }
@@ -87,6 +86,11 @@ public class LocalFSStorage implements IStorage {
     @Override
     public IStoredItem getStoredItem(IPage page, String imgFormat) throws IOException {
         return new LocalFSStoredItem(this, page, imgFormat);
+    }
+
+    @Override
+    public void refresh() {
+
     }
 
     public File getStorageDir() {

@@ -8,9 +8,9 @@ public interface IStoredItem {
 
     OutputStream getOutputStream() throws IOException;
 
-    boolean exists();
+    boolean exists() throws IOException;
 
-    void delete();
+    void delete() throws IOException;
 
     void close() throws IOException;
 

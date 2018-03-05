@@ -1,12 +1,12 @@
 package ru.kmorozov.onedrive.tasks;
 
 import com.google.api.client.util.Preconditions;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import ru.kmorozov.onedrive.CommandLineOpts;
 import ru.kmorozov.onedrive.client.OneDriveItem;
 import ru.kmorozov.onedrive.client.OneDriveUploadSession;
 import ru.kmorozov.onedrive.client.utils.LogUtils;
-import ru.kmorozov.onedrive.CommandLineOpts;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,7 +50,7 @@ public class UploadTask extends Task {
         }
 
         if (localFile.isDirectory()) {
-            final OneDriveItem newParent = api.createFolder(parent, localFile);
+            final OneDriveItem newParent = api.createFolder(parent, localFile.getName());
 
             for (final File f : localFile.listFiles()) {
                 queue.add(new UploadTask(getTaskOptions(), newParent, f, false));
@@ -84,19 +84,19 @@ public class UploadTask extends Task {
                         final long elapsedTimeInner = System.currentTimeMillis() - startTimeInner;
 
                         log.info(String.format("Uploaded chunk (progress %.1f%%) of %s (%s/s) for file %s",
-                                               ((double) session.getTotalUploaded() / session.getFile().length()) * 100,
-                                               LogUtils.readableFileSize(session.getLastUploaded()),
+                                ((double) session.getTotalUploaded() / session.getFile().length()) * 100,
+                                LogUtils.readableFileSize(session.getLastUploaded()),
                                 0 < elapsedTimeInner ? LogUtils.readableFileSize(session.getLastUploaded() / (elapsedTimeInner / 1000d)) : 0,
-                                               parent.getFullName() + localFile.getName()));
+                                parent.getFullName() + localFile.getName()));
 
                         // After a successful upload we'll reset the tryCount
                         tryCount = 0;
 
                     } catch (final IOException ex) {
                         log.warn(String.format("Encountered '%s' while uploading chunk of %s for file %s",
-                                               ex.getMessage(),
-                                               LogUtils.readableFileSize(session.getLastUploaded()),
-                                               parent.getFullName() + localFile.getName()));
+                                ex.getMessage(),
+                                LogUtils.readableFileSize(session.getLastUploaded()),
+                                parent.getFullName() + localFile.getName()));
 
                         tryCount++;
                     }
@@ -115,11 +115,11 @@ public class UploadTask extends Task {
             final long elapsedTime = System.currentTimeMillis() - startTime;
 
             log.info(String.format("Uploaded %s in %s (%s/s) to %s file %s",
-                                   LogUtils.readableFileSize(localFile.length()),
-                                   LogUtils.readableTime(elapsedTime),
+                    LogUtils.readableFileSize(localFile.length()),
+                    LogUtils.readableTime(elapsedTime),
                     0 < elapsedTime ? LogUtils.readableFileSize(localFile.length() / (elapsedTime / 1000d)) : 0,
-                                   replace ? "replace" : "new",
-                                   response.getFullName()));
+                    replace ? "replace" : "new",
+                    response.getFullName()));
 
             reporter.fileUploaded(replace, localFile.length());
         }

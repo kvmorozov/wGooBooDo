@@ -10,17 +10,19 @@ import java.util.stream.Stream;
 
 public interface IStorage {
 
-    boolean isValid();
+    boolean isValidOrCreate();
 
-    IStorage getChildStorage(IBookData bookData);
+    IStorage getChildStorage(IBookData bookData) throws IOException;
 
-    int size();
+    int size() throws IOException;
 
-    Set<String> getBookIdsList();
+    Set<String> getBookIdsList() throws IOException;
 
     boolean isPageExists(IPage page) throws IOException;
 
     Stream<Path> getFiles() throws IOException;
 
     IStoredItem getStoredItem(IPage page, String imgFormat) throws IOException;
+
+    void refresh();
 }

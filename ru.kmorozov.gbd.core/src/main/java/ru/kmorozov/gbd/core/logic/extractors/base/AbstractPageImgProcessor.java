@@ -44,14 +44,12 @@ public abstract class AbstractPageImgProcessor<T extends AbstractPage> extends A
     protected boolean processImage(final String imgUrl, final HttpHostExt proxy) {
         if (GBDOptions.secureMode() && proxy.isLocal()) return false;
 
-        Response resp = null;
         InputStream inputStream = null;
         IStoredItem storedItem = null;
 
         if (page.loadingStarted.get()) return false;
 
-        try {
-            resp = getContent(imgUrl, proxy, false);
+        try (Response resp = getContent(imgUrl, proxy, false)) {
             inputStream = null == resp ? null : resp.getContent();
 
             if (null == inputStream) {
@@ -130,13 +128,11 @@ public abstract class AbstractPageImgProcessor<T extends AbstractPage> extends A
 
             if (!page.dataProcessed.get() && null != storedItem) {
                 logger.info(String.format("Loading page %s failed!", page.getPid()));
-                storedItem.delete();
-            }
-
-            try {
-                if (null != resp) resp.close();
-            } catch (final IOException e) {
-                e.printStackTrace();
+                try {
+                    storedItem.delete();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
 

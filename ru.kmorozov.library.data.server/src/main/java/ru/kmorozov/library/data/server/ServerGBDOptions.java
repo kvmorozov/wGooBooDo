@@ -1,10 +1,24 @@
 package ru.kmorozov.library.data.server;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 import ru.kmorozov.gbd.core.config.IGBDOptions;
 import ru.kmorozov.gbd.core.config.IStorage;
 import ru.kmorozov.gbd.core.config.options.CtxOptions;
+import ru.kmorozov.onedrive.client.OneDriveItem;
+import ru.kmorozov.onedrive.client.OneDriveProvider;
 
+@Component
 public class ServerGBDOptions implements IGBDOptions {
+
+    @Autowired
+    @Lazy
+    private OneDriveProvider api;
+
+    @Autowired
+    @Lazy
+    private OneDriveItem root;
 
     @Override
     public String getBookId() {
@@ -13,7 +27,7 @@ public class ServerGBDOptions implements IGBDOptions {
 
     @Override
     public IStorage getStorage() {
-        return new ServerStorage();
+        return new ServerStorage(api, root);
     }
 
     @Override

@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.library.LibraryFactory;
+import ru.kmorozov.gbd.logger.Logger;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -20,6 +21,8 @@ import java.util.stream.Stream;
  * Created by sbt-morozov-kv on 14.11.2016.
  */
 public class BookListLoader extends DirContextLoader {
+
+    protected static final Logger logger = Logger.getLogger(BookListLoader.class);
 
     public static final String INDEX_FILE_NAME = "books.index";
     private boolean loadedFromIndex;
@@ -68,10 +71,14 @@ public class BookListLoader extends DirContextLoader {
         super.refreshContext();
 
         final File indexFile = getFileToLoad(false);
-        bookIds = GBDOptions.getStorage().getBookIdsList();
-        if (null != indexFile) {
-            loadedFromIndex = true;
-            bookIds.addAll(loadFromIndex(indexFile));
+        try {
+            bookIds = GBDOptions.getStorage().getBookIdsList();
+            if (null != indexFile) {
+                loadedFromIndex = true;
+                bookIds.addAll(loadFromIndex(indexFile));
+            }
+        } catch (Exception ex) {
+            logger.error(ex);
         }
     }
 }

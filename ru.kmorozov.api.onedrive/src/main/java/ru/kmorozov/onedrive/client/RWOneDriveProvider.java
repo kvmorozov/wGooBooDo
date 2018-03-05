@@ -5,16 +5,16 @@ import com.google.api.client.http.MultipartContent.Part;
 import com.google.api.client.http.json.JsonHttpContent;
 import com.google.api.client.util.IOUtils;
 import com.google.api.client.util.Key;
+import ru.kmorozov.onedrive.client.authoriser.AuthorisationProvider;
+import ru.kmorozov.onedrive.client.downloader.ResumableDownloader;
+import ru.kmorozov.onedrive.client.downloader.ResumableDownloaderProgressListener;
 import ru.kmorozov.onedrive.client.facets.FileFacet;
 import ru.kmorozov.onedrive.client.facets.FileSystemInfoFacet;
 import ru.kmorozov.onedrive.client.facets.FolderFacet;
 import ru.kmorozov.onedrive.client.resources.Item;
 import ru.kmorozov.onedrive.client.resources.UploadSession;
-import ru.kmorozov.onedrive.client.utils.JsonUtils;
-import ru.kmorozov.onedrive.client.authoriser.AuthorisationProvider;
-import ru.kmorozov.onedrive.client.downloader.ResumableDownloader;
-import ru.kmorozov.onedrive.client.downloader.ResumableDownloaderProgressListener;
 import ru.kmorozov.onedrive.client.serialization.JsonDateSerializer;
+import ru.kmorozov.onedrive.client.utils.JsonUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -22,6 +22,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Date;
 
@@ -31,6 +32,7 @@ class RWOneDriveProvider extends ROOneDriveProvider {
         super(authoriser);
     }
 
+    @Override
     public OneDriveItem replaceFile(final OneDriveItem parent, final File file) throws IOException {
         if (!parent.isDirectory()) {
             throw new IllegalArgumentException("Parent is not a folder");
@@ -48,6 +50,7 @@ class RWOneDriveProvider extends ROOneDriveProvider {
         return updateFile(item, new Date(attr.creationTime().toMillis()), new Date(attr.lastModifiedTime().toMillis()));
     }
 
+    @Override
     public OneDriveItem uploadFile(final OneDriveItem parent, final File file) throws IOException {
         if (!parent.isDirectory()) {
             throw new IllegalArgumentException("Parent is not a folder");
@@ -118,6 +121,7 @@ class RWOneDriveProvider extends ROOneDriveProvider {
         session.setComplete(item);
     }
 
+    @Override
     public OneDriveItem updateFile(final OneDriveItem item, final Date createdDate, final Date modifiedDate) throws IOException {
         final FileSystemInfoFacet fileSystem = new FileSystemInfoFacet();
         fileSystem.setCreatedDateTime(JsonDateSerializer.INSTANCE.serialize(createdDate));
@@ -133,8 +137,9 @@ class RWOneDriveProvider extends ROOneDriveProvider {
         return OneDriveItem.FACTORY.create(response);
     }
 
-    public OneDriveItem createFolder(final OneDriveItem parent, final File target) throws IOException {
-        final WriteFolderFacet newFolder = new WriteFolderFacet(target.getName());
+    @Override
+    public OneDriveItem createFolder(final OneDriveItem parent, final String name) throws IOException {
+        final WriteFolderFacet newFolder = new WriteFolderFacet(name);
 
         final HttpRequest request = requestFactory.buildPostRequest(
                 OneDriveUrl.children(parent.getId()),
@@ -144,12 +149,15 @@ class RWOneDriveProvider extends ROOneDriveProvider {
         OneDriveItem item = OneDriveItem.FACTORY.create(response);
 
         // Set the remote timestamps
-        final BasicFileAttributes attr = Files.readAttributes(target.toPath(), BasicFileAttributes.class);
-        item = updateFile(item, new Date(attr.creationTime().toMillis()), new Date(attr.lastModifiedTime().toMillis()));
+        if (Paths.get(name).toFile().exists()) {
+            final BasicFileAttributes attr = Files.readAttributes(Paths.get(name), BasicFileAttributes.class);
+            item = updateFile(item, new Date(attr.creationTime().toMillis()), new Date(attr.lastModifiedTime().toMillis()));
+        }
 
         return item;
     }
 
+    @Override
     public void download(final OneDriveItem item, final File target, final ResumableDownloaderProgressListener progressListener, final int chunkSize) throws IOException {
         FileOutputStream fos = null;
 
@@ -181,6 +189,7 @@ class RWOneDriveProvider extends ROOneDriveProvider {
         download(item, target, progressListener, ResumableDownloader.MAXIMUM_CHUNK_SIZE);
     }
 
+    @Override
     public void delete(final OneDriveItem remoteFile) throws IOException {
         final HttpRequest request = requestFactory.buildDeleteRequest(OneDriveUrl.item(remoteFile.getId()));
         request.execute();

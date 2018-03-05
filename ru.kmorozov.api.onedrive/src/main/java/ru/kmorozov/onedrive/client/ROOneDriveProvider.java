@@ -5,13 +5,13 @@ import com.google.api.client.http.apache.ApacheHttpTransport;
 import com.google.api.client.json.JsonObjectParser;
 import com.google.api.client.repackaged.com.google.common.base.Throwables;
 import com.google.api.client.util.Lists;
+import ru.kmorozov.onedrive.client.authoriser.AuthorisationProvider;
+import ru.kmorozov.onedrive.client.downloader.ResumableDownloader;
+import ru.kmorozov.onedrive.client.downloader.ResumableDownloaderProgressListener;
 import ru.kmorozov.onedrive.client.resources.Drive;
 import ru.kmorozov.onedrive.client.resources.Item;
 import ru.kmorozov.onedrive.client.resources.ItemSet;
 import ru.kmorozov.onedrive.client.utils.JsonUtils;
-import ru.kmorozov.onedrive.client.authoriser.AuthorisationProvider;
-import ru.kmorozov.onedrive.client.downloader.ResumableDownloader;
-import ru.kmorozov.onedrive.client.downloader.ResumableDownloaderProgressListener;
 
 import java.io.File;
 import java.io.IOException;
@@ -188,9 +188,9 @@ class ROOneDriveProvider implements OneDriveProvider {
     }
 
     @Override
-    public OneDriveItem createFolder(final OneDriveItem parent, final File target) throws IOException {
+    public OneDriveItem createFolder(final OneDriveItem parent, final String name) throws IOException {
         // Return a dummy folder
-        return OneDriveItem.FACTORY.create(parent, target.getName(), true);
+        return OneDriveItem.FACTORY.create(parent, name, true);
     }
 
     @Override
