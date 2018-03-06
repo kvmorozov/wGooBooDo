@@ -41,7 +41,7 @@ class OneDriveAuthorisationProvider implements AuthorisationProvider {
     private static final String scope = "files.readwrite.all";
     private static final String AUTH_URL = "https://login.microsoftonline.com/common/oauth2/v2.0/authorize";
     private static final String TOKEN_URL = "https://login.microsoftonline.com/common/oauth2/v2.0/token";
-    private static final String REDIRECT_URL = "https://login.live.com/oauth20_desktop.srf";
+    public static final String REDIRECT_URL = "https://ya.ru/";
 
     private Path keyFile;
     private Authorisation authorisation;
@@ -68,7 +68,7 @@ class OneDriveAuthorisationProvider implements AuthorisationProvider {
                     throw new InvalidCodeException(null);
 
                 // If the user has pasted the entire URL then parse it
-                final Pattern url = Pattern.compile(REDIRECT_URL + ".*code=(.*)&.*");
+                final Pattern url = Pattern.compile(REDIRECT_URL + ".*code=(.*)");
                 final Matcher m = url.matcher(authCode);
 
                 if (m.matches()) {

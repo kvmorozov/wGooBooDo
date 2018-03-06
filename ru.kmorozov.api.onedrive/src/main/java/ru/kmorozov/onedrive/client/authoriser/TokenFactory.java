@@ -14,6 +14,7 @@ import org.openqa.selenium.support.ui.Wait;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 public class TokenFactory {
 
@@ -54,21 +55,23 @@ public class TokenFactory {
                     }
             }
 
-            final WebElement okButton = wait.until(driver1 -> driver1.findElement(By.id("idBtn_Accept")));
-            try {
-                okButton.click();
-            } catch (Exception ex) {
-                log.error("Failed generate token, continuing manually...", ex);
-            }
-
-            final WebElement noButton = wait.until(driver12 -> {
+            if (!Pattern.compile(OneDriveAuthorisationProvider.REDIRECT_URL + ".*code=(.*)").matcher(driver.getCurrentUrl()).matches()) {
+                final WebElement okButton = wait.until(driver1 -> driver1.findElement(By.id("idBtn_Accept")));
                 try {
-                    final WebElement button = driver12.findElement(By.id("idBtn_Accept"));
-                    return null;
-                } catch (final NoSuchElementException nse) {
-                    return okButton;
+                    okButton.click();
+                } catch (Exception ex) {
+                    log.error("Failed generate token, continuing manually...", ex);
                 }
-            });
+
+                final WebElement noButton = wait.until(driver12 -> {
+                    try {
+                        final WebElement button = driver12.findElement(By.id("idBtn_Accept"));
+                        return null;
+                    } catch (final NoSuchElementException nse) {
+                        return okButton;
+                    }
+                });
+            }
 
             try (PrintWriter writer = new PrintWriter(oneDriveKeyFile)) {
                 writer.write(driver.getCurrentUrl());
