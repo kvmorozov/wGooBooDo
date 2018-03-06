@@ -10,12 +10,12 @@ public interface AuthorisationProvider {
     void refresh() throws IOException;
 
     class FACTORY {
-        public static AuthorisationProvider create(final Path keyFile) throws IOException {
-            return new OneDriveAuthorisationProvider(keyFile);
+        public static AuthorisationProvider create(final Path keyFile, String clientId, String clientSecret) throws IOException {
+            return new OneDriveAuthorisationProvider(keyFile, clientId, clientSecret);
         }
 
-        public static void printAuthInstructions() {
-            OneDriveAuthorisationProvider.printAuthInstructions();
+        public static void printAuthInstructions(String clientId) {
+            OneDriveAuthorisationProvider.printAuthInstructions(clientId);
         }
     }
 }

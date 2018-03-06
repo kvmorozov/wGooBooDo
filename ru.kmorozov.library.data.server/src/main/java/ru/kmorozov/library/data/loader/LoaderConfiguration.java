@@ -45,6 +45,12 @@ public class LoaderConfiguration {
     @Value("${onedrive.password}")
     public String oneDrivePassword;
 
+    @Value("${onedrive.clientId}")
+    public String onedriveClientId;
+
+    @Value("${onedrive.clientSecret}")
+    public String onedriveClientSecret;
+
     @Bean
     public OneDriveProvider api() {
         URL keyResource = getClass().getClassLoader().getResource(oneDriveKeyFileName);
@@ -66,12 +72,12 @@ public class LoaderConfiguration {
         AuthorisationProvider authoriser = null;
 
         try {
-            authoriser = AuthorisationProvider.FACTORY.create(keyFile.toPath());
+            authoriser = AuthorisationProvider.FACTORY.create(keyFile.toPath(), onedriveClientId, onedriveClientSecret);
         } catch (final InvalidCodeException cee) {
             System.setProperty("webdriver.chrome.driver", webdriverChromeDriverPath);
-            if (TokenFactory.generateToken(keyFile, oneDriveUser, oneDrivePassword))
+            if (TokenFactory.generateToken(keyFile, oneDriveUser, oneDrivePassword, onedriveClientId))
                 try {
-                    authoriser = AuthorisationProvider.FACTORY.create(keyFile.toPath());
+                    authoriser = AuthorisationProvider.FACTORY.create(keyFile.toPath(), onedriveClientId, onedriveClientSecret);
                 } catch (final IOException e) {
                     logger.error("OneDrive API init error", e);
                 }

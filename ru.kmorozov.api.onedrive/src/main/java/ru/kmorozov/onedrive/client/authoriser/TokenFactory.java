@@ -19,11 +19,11 @@ public class TokenFactory {
 
     private static final Logger log = LogManager.getLogger(TokenFactory.class.getName());
 
-    public static boolean generateToken(final File oneDriveKeyFile, final String user, final String password) {
+    public static boolean generateToken(final File oneDriveKeyFile, final String user, final String password, String clientId) {
         log.info("Starting generate token...");
         try {
             final WebDriver driver = new ChromeDriver();
-            driver.get(OneDriveAuthorisationProvider.getAuthString());
+            driver.get(OneDriveAuthorisationProvider.getAuthString(clientId));
 
             final Wait<WebDriver> wait = new FluentWait(driver)
                     .withTimeout(30, TimeUnit.MINUTES)
@@ -82,9 +82,5 @@ public class TokenFactory {
             log.error("Failed generate token!", ex);
             return false;
         }
-    }
-
-    public static boolean generateToken(final File oneDriveKeyFile) {
-        return generateToken(oneDriveKeyFile, null, null);
     }
 }

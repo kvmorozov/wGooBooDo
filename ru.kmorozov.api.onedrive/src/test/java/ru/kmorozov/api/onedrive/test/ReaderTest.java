@@ -24,7 +24,7 @@ public class ReaderTest {
     public void initApi() throws IOException {
         final File file = new File(getClass().getClassLoader().getResource("onedrive.key").getFile());
 
-        final AuthorisationProvider authoriser = AuthorisationProvider.FACTORY.create(file.toPath());
+        final AuthorisationProvider authoriser = AuthorisationProvider.FACTORY.create(file.toPath(), null, null);
         api = FACTORY.readOnlyApi(authoriser);
     }
 

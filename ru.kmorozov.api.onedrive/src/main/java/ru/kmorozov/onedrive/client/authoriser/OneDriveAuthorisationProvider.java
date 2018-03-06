@@ -5,13 +5,13 @@ import com.google.api.client.http.apache.ApacheHttpTransport;
 import com.google.api.client.json.JsonObjectParser;
 import com.google.api.client.repackaged.com.google.common.base.Strings;
 import com.google.api.client.util.Preconditions;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ru.kmorozov.onedrive.client.OneDriveAPIException;
 import ru.kmorozov.onedrive.client.exceptions.InvalidCodeException;
 import ru.kmorozov.onedrive.client.exceptions.OneDriveExceptionFactory;
 import ru.kmorozov.onedrive.client.resources.Authorisation;
 import ru.kmorozov.onedrive.client.utils.JsonUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.net.ssl.SSLHandshakeException;
 import java.io.IOException;
@@ -34,14 +34,23 @@ class OneDriveAuthorisationProvider implements AuthorisationProvider {
 
     static final HttpTransport HTTP_TRANSPORT = new ApacheHttpTransport();
     private static final Logger log = LogManager.getLogger(OneDriveAuthorisationProvider.class.getName());
-    private static final String clientId = "48d253ca-e07d-4214-a7a3-60a1bc13e5a4";
+
+    private final String clientId;
+    private final String clientSecret;
+
+    private static final String scope = "files.readwrite.all";
+    private static final String AUTH_URL = "https://login.microsoftonline.com/common/oauth2/v2.0/authorize";
+    private static final String TOKEN_URL = "https://login.microsoftonline.com/common/oauth2/v2.0/token";
+    private static final String REDIRECT_URL = "https://login.live.com/oauth20_desktop.srf";
+
     private Path keyFile;
     private Authorisation authorisation;
     private Date lastFetched;
 
-    OneDriveAuthorisationProvider(final Path keyFile) throws IOException {
-
+    OneDriveAuthorisationProvider(final Path keyFile, String clientId, String clientSecret) throws IOException {
         this.keyFile = Preconditions.checkNotNull(keyFile);
+        this.clientId = clientId;
+        this.clientSecret = clientSecret;
 
         if (!Files.exists(keyFile) || !Files.isRegularFile(keyFile)) {
             throw new OneDriveAPIException(401, String.format("Specified key file '%s' cannot be found.", keyFile));
@@ -59,7 +68,7 @@ class OneDriveAuthorisationProvider implements AuthorisationProvider {
                     throw new InvalidCodeException(null);
 
                 // If the user has pasted the entire URL then parse it
-                final Pattern url = Pattern.compile("https://login.live.com/oauth20_desktop.srf.*code=(.*)&.*");
+                final Pattern url = Pattern.compile(REDIRECT_URL + ".*code=(.*)&.*");
                 final Matcher m = url.matcher(authCode);
 
                 if (m.matches()) {
@@ -71,8 +80,7 @@ class OneDriveAuthorisationProvider implements AuthorisationProvider {
             case 2:
                 if (keyFileContents[0].equals(clientId)) {
                     getTokenFromRefreshToken(keyFileContents[1]);
-                }
-                else {
+                } else {
                     throw new OneDriveAPIException(401, "Key file does not match this application version.");
                 }
                 break;
@@ -81,17 +89,18 @@ class OneDriveAuthorisationProvider implements AuthorisationProvider {
         }
     }
 
-    public static void printAuthInstructions() {
+    public static void printAuthInstructions(String clientId) {
         log.info("To authorise this application ou must generate an authorisation token");
         log.info("Open the following in a browser, sign on, wait until you are redirected to a blank page and then store the url in the address bar in your key file.");
-        log.info("Authorisation URL: " + getAuthString());
+        log.info("Authorisation URL: " + getAuthString(clientId));
     }
 
-    public static String getAuthString() {
-        return String.format("%s?client_id=%s&response_type=code&scope=Files.Read.All%%20Files.ReadWrite.All%%20Sites.Read.All%%20Sites.ReadWrite.All&redirect_uri=%s",
-                             "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
-                             clientId,
-                             "https://login.live.com/oauth20_desktop.srf");
+    public static String getAuthString(String clientId) {
+        return String.format("%s?client_id=%s&response_type=code&scope=%s&redirect_uri=%s",
+                AUTH_URL,
+                clientId,
+                scope,
+                REDIRECT_URL);
     }
 
     @Override
@@ -106,8 +115,7 @@ class OneDriveAuthorisationProvider implements AuthorisationProvider {
             }
 
             return authorisation.getAccessToken();
-        }
-        else {
+        } else {
             throw new IllegalStateException("Authoriser has not been initialised");
         }
     }
@@ -123,12 +131,13 @@ class OneDriveAuthorisationProvider implements AuthorisationProvider {
         final Map data = Collections.unmodifiableMap(Stream.of(
                 new SimpleEntry<>("client_id", clientId),
                 new SimpleEntry<>("code", code),
+                new SimpleEntry<>("client_secret", clientSecret),
                 new SimpleEntry<>("grant_type", "authorization_code"),
-                new SimpleEntry<>("redirect_uri", "https://login.live.com/oauth20_desktop.srf"))
-                                                           .collect(Collectors.toMap(SimpleEntry::getKey, SimpleEntry::getValue)));
+                new SimpleEntry<>("redirect_uri", REDIRECT_URL))
+                .collect(Collectors.toMap(SimpleEntry::getKey, SimpleEntry::getValue)));
 
         final HttpRequest request =
-                HTTP_TRANSPORT.createRequestFactory().buildPostRequest(new GenericUrl("https://login.live.com/oauth20_token.srf"), new UrlEncodedContent(data));
+                HTTP_TRANSPORT.createRequestFactory().buildPostRequest(new GenericUrl(TOKEN_URL), new UrlEncodedContent(data));
 
         request.setParser(new JsonObjectParser(JsonUtils.JSON_FACTORY));
 
@@ -164,13 +173,14 @@ class OneDriveAuthorisationProvider implements AuthorisationProvider {
 
         final Map data = Collections.unmodifiableMap(Stream.of(
                 new SimpleEntry<>("client_id", clientId),
+                new SimpleEntry<>("client_secret", clientSecret),
                 new SimpleEntry<>("grant_type", "refresh_token"),
                 new SimpleEntry<>("refresh_token", refreshToken),
-                new SimpleEntry<>("redirect_uri", "https://login.live.com/oauth20_desktop.srf"))
-                                                           .collect(Collectors.toMap(SimpleEntry::getKey, SimpleEntry::getValue)));
+                new SimpleEntry<>("redirect_uri", REDIRECT_URL))
+                .collect(Collectors.toMap(SimpleEntry::getKey, SimpleEntry::getValue)));
 
         final HttpRequest request =
-                HTTP_TRANSPORT.createRequestFactory().buildPostRequest(new GenericUrl("https://login.live.com/oauth20_token.srf"), new UrlEncodedContent(data));
+                HTTP_TRANSPORT.createRequestFactory().buildPostRequest(new GenericUrl(TOKEN_URL), new UrlEncodedContent(data));
 
         request.setParser(new JsonObjectParser(JsonUtils.JSON_FACTORY));
 
@@ -183,10 +193,10 @@ class OneDriveAuthorisationProvider implements AuthorisationProvider {
         // Check for failures
         if (200 != response.getStatusCode() || null != authorisation.getError()) {
             throw new OneDriveAPIException(response.getStatusCode(),
-                                           String.format("Error code %d - %s (%s)",
-                                                         response.getStatusCode(),
-                                                         authorisation.getError(),
-                                                         authorisation.getErrorDescription()));
+                    String.format("Error code %d - %s (%s)",
+                            response.getStatusCode(),
+                            authorisation.getError(),
+                            authorisation.getErrorDescription()));
         }
 
         log.info("Fetched new authorisation token and refresh token for user " + authorisation.getUserId());

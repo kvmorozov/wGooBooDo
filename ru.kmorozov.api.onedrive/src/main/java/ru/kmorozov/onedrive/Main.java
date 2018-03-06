@@ -69,7 +69,7 @@ public class Main {
         }
 
         if (CommandLineOpts.getCommandLineOpts().isAuthorise()) {
-            AuthorisationProvider.FACTORY.printAuthInstructions();
+            AuthorisationProvider.FACTORY.printAuthInstructions("CLIENT_ID");
             return;
         }
 
@@ -84,7 +84,7 @@ public class Main {
         // Initialise the OneDrive authorisation
         final AuthorisationProvider authoriser;
         try {
-            authoriser = AuthorisationProvider.FACTORY.create(CommandLineOpts.getCommandLineOpts().getKeyFile());
+            authoriser = AuthorisationProvider.FACTORY.create(CommandLineOpts.getCommandLineOpts().getKeyFile(), null, null);
             authoriser.getAccessToken();
         } catch (final OneDriveAPIException ex) {
             log.error("Unable to authorise client: " + ex.getMessage());
