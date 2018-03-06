@@ -113,6 +113,7 @@ public class GbdProcessor implements IProcessor {
         GBDOptions.init(new ServerGBDOptions());
 
         ContextProvider.setDefaultContextProvider(dbCtx);
+
         ExecutionContext.initContext(new DummyReceiver(), 1 == producer.getBookIds().size());
         ExecutionContext.INSTANCE.addBookContext(producer, new DummyProgress(), new ServerPdfMaker());
 

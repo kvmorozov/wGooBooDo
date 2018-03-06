@@ -46,7 +46,7 @@ public class TokenFactory {
             if (!StringUtils.isEmpty(password)) {
                 final WebElement pwdEdit = wait.until(driver1 -> driver1.findElement(By.name("passwd")));
                 pwdEdit.sendKeys(password);
-                final WebElement nextBtn = driver.findElement(By.className("btn-primary"));
+                final WebElement nextBtn = wait.until(driver1 -> driver.findElement(By.className("btn-primary")));
                 if (nextBtn != null)
                     try {
                         nextBtn.click();

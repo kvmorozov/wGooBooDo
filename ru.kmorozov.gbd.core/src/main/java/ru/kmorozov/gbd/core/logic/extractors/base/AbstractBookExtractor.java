@@ -39,7 +39,7 @@ public abstract class AbstractBookExtractor extends AbstractHttpProcessor {
     protected AbstractBookExtractor(final String bookId, IBaseLoader storedLoader) {
         this.bookId = bookId;
 
-        final BookInfo storedBookInfo = storedLoader == null ? storedLoader.getBookInfo(bookId) : null;
+        final BookInfo storedBookInfo = storedLoader == null ? null : storedLoader.getBookInfo(bookId);
         try {
             bookInfo = null == storedBookInfo ? findBookInfo() : storedBookInfo;
         } catch (Exception e) {

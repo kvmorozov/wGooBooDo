@@ -5,6 +5,7 @@ import com.google.api.client.http.apache.ApacheHttpTransport;
 import com.google.api.client.json.JsonObjectParser;
 import com.google.api.client.repackaged.com.google.common.base.Strings;
 import com.google.api.client.util.Preconditions;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.kmorozov.onedrive.client.OneDriveAPIException;
@@ -170,6 +171,9 @@ class OneDriveAuthorisationProvider implements AuthorisationProvider {
 
     private void getTokenFromRefreshToken(final String refreshToken) throws IOException {
         log.debug("Fetching authorisation token using refresh token");
+
+        if (StringUtils.isEmpty(refreshToken))
+            throw new InvalidCodeException(null);
 
         final Map data = Collections.unmodifiableMap(Stream.of(
                 new SimpleEntry<>("client_id", clientId),

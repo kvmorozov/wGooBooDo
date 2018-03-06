@@ -9,7 +9,6 @@ import ru.kmorozov.library.data.repository.GoogleBooksRepository;
 
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Component
 public class DbContextLoader implements IBaseLoader {
@@ -41,15 +40,16 @@ public class DbContextLoader implements IBaseLoader {
 
     @Override
     public BookInfo getBookInfo(String bookId) {
-        return booksMap.get(bookId);
+        BookInfo info = booksMap.get(bookId);
+        if (info == null) {
+            info = googleBooksRepository.findByBookId(bookId);
+            booksMap.put(bookId, info);
+        }
+        return info;
     }
 
     @Override
     public Set<String> getBookIdsList() {
-        if (booksMap == null) {
-            booksMap = googleBooksRepository.findAll().stream().collect(Collectors.toMap(BookInfo::getBookId, s -> s));
-        }
-
         return booksMap.keySet();
     }
 
@@ -67,4 +67,5 @@ public class DbContextLoader implements IBaseLoader {
     public boolean isValid() {
         return false;
     }
+
 }
