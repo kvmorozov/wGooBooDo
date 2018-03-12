@@ -52,7 +52,7 @@ public class LocalFSStorage implements IStorage {
 
     @Override
     public int size() {
-        return storageDir.listFiles().length;
+        return storageDir.listFiles() == null ? 0 : storageDir.listFiles().length;
     }
 
     @Override

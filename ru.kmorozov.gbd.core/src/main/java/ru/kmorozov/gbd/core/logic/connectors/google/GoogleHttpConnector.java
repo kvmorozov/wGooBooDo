@@ -42,7 +42,9 @@ public class GoogleHttpConnector extends HttpConnector {
 
             final HttpResponse resp;
             if (validateProxy(rqUrl, proxy)) {
-                final HttpRequest req = getFactory(proxy).buildGetRequest(url).setConnectTimeout(withTimeout ? CONNECT_TIMEOUT : CONNECT_TIMEOUT * 10);
+                final HttpRequest req = getFactory(proxy).buildGetRequest(url)
+                        .setConnectTimeout(withTimeout ? CONNECT_TIMEOUT : CONNECT_TIMEOUT * 10)
+                        .setSuppressUserAgentSuffix(true);
                 if (needHeaders(rqUrl))
                     req.setHeaders(proxy.getHeaders(getUrlType(rqUrl)));
 
@@ -50,7 +52,7 @@ public class GoogleHttpConnector extends HttpConnector {
             } else throw new RuntimeException("Invalid proxy config!");
 
             if (null == resp)
-                logger.finest(String.format("No response at url %s with proxy %s", url.toString(), proxy.toString()));
+                logger.finest(String.format("No response at url %s with proxy %s", rqUrl, proxy.toString()));
 
             return new GoogleResponse(resp);
         } catch (final HttpResponseException hre) {
@@ -59,7 +61,7 @@ public class GoogleHttpConnector extends HttpConnector {
         }
     }
 
-    private static HttpResponse getContent(final HttpRequest req, final HttpHostExt proxy, int attempt) throws IOException {
+    private HttpResponse getContent(final HttpRequest req, final HttpHostExt proxy, int attempt) throws IOException {
         if (MAX_RETRY_COUNT <= attempt) {
             proxy.registerFailure();
             return null;

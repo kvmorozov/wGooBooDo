@@ -27,7 +27,7 @@ public class LocalFSStoredItem implements IStoredItem {
 
     @Override
     public OutputStream getOutputStream() throws IOException {
-        return outputStream = new FileOutputStream(outputFile);
+        return outputStream = outputStream == null ? new FileOutputStream(outputFile) : outputStream;
     }
 
     @Override
@@ -48,8 +48,7 @@ public class LocalFSStoredItem implements IStoredItem {
 
     @Override
     public void write(byte[] bytes, int read) throws IOException {
-        if (outputStream != null)
-            outputStream.write(bytes, 0, read);
+        getOutputStream().write(bytes, 0, read);
     }
 
     @Override
