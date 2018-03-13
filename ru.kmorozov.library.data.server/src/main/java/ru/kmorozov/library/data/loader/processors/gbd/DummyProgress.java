@@ -21,7 +21,7 @@ public class DummyProgress implements IProgress {
 
     @Override
     public IProgress getSubProgress(int maxValue) {
-        return null;
+        return new DummyProgress();
     }
 
     @Override

@@ -74,7 +74,7 @@ public class ServerStorage implements IStorage {
     public boolean isPageExists(IPage page) throws IOException {
         for (OneDriveItem child : getChildren())
             if (!child.isDirectory())
-                if (child.getName().contains("\\" + page.getOrder() + '_' + page.getPid() + '.'))
+                if (child.getName().contains(page.getOrder() + "_" + page.getPid() + "."))
                     return true;
 
         return false;

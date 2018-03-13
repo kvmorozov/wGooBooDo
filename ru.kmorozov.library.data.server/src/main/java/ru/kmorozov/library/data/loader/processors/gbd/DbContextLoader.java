@@ -4,16 +4,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import ru.kmorozov.gbd.core.config.IBaseLoader;
+import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage;
 import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
 import ru.kmorozov.library.data.repository.GoogleBooksRepository;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 @Component
 public class DbContextLoader implements IBaseLoader {
 
-    private Map<String, BookInfo> booksMap;
+    private Map<String, BookInfo> booksMap = new HashMap<>();
 
     @Autowired
     @Lazy
@@ -43,6 +45,10 @@ public class DbContextLoader implements IBaseLoader {
         BookInfo info = booksMap.get(bookId);
         if (info == null) {
             info = googleBooksRepository.findByBookId(bookId);
+
+            for (AbstractPage page : info.getPages().getPages())
+                page.fileExists.set(true);
+
             booksMap.put(bookId, info);
         }
         return info;

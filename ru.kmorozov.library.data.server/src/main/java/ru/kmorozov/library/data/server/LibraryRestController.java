@@ -197,9 +197,9 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
     }
 
     @RequestMapping("/gbdLoad")
-    public void gbdLoad() {
+    public void gbdLoad(@RequestParam(name = "bookId", required = false) final String bookId) {
         GBDOptions.init(options);
 
-        gbdProcessor.load();
+        gbdProcessor.load(bookId);
     }
 }

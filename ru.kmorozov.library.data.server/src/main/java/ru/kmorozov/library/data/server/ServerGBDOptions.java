@@ -12,6 +12,8 @@ import ru.kmorozov.onedrive.client.OneDriveProvider;
 @Component
 public class ServerGBDOptions implements IGBDOptions {
 
+    private String bookId;
+
     @Autowired
     @Lazy
     private OneDriveProvider api;
@@ -22,7 +24,7 @@ public class ServerGBDOptions implements IGBDOptions {
 
     @Override
     public String getBookId() {
-        return null;
+        return bookId;
     }
 
     @Override
@@ -58,5 +60,9 @@ public class ServerGBDOptions implements IGBDOptions {
     @Override
     public CtxOptions ctxOptions() {
         return null;
+    }
+
+    public void setBookId(String bookId) {
+        this.bookId = bookId;
     }
 }

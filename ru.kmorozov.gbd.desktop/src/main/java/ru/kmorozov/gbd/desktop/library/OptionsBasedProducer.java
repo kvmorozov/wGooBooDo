@@ -1,5 +1,6 @@
 package ru.kmorozov.gbd.desktop.library;
 
+import org.apache.commons.lang3.StringUtils;
 import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.logic.context.ContextProvider;
 import ru.kmorozov.gbd.core.logic.context.IBookListProducer;
@@ -19,7 +20,7 @@ public class OptionsBasedProducer implements IBookListProducer {
     public OptionsBasedProducer() {
         final String bookId = GBDOptions.getBookId();
 
-        if (null != bookId && !bookId.isEmpty() && LibraryFactory.isValidId(bookId))
+        if (!StringUtils.isEmpty(bookId) && LibraryFactory.isValidId(bookId))
             bookIdsList = new HashSet<>(Collections.singletonList(bookId));
         else if (GBDOptions.isValidConfig())
             bookIdsList = ContextProvider.getContextProvider().getBookIdsList();

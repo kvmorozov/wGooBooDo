@@ -56,6 +56,9 @@ public class GbdProcessor implements IProcessor {
     @Lazy
     private DbContextLoader dbCtx;
 
+    @Autowired
+    private ServerGBDOptions options;
+
     @Override
     public void process() {
         logger.info("Process GBD started.");
@@ -109,8 +112,9 @@ public class GbdProcessor implements IProcessor {
         return null;
     }
 
-    public void load() {
-        GBDOptions.init(new ServerGBDOptions());
+    public void load(String bookId) {
+        options.setBookId(bookId);
+        GBDOptions.init(options);
 
         ContextProvider.setDefaultContextProvider(dbCtx);
 

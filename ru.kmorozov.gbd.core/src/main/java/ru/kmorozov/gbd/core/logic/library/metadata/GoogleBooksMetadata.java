@@ -2,7 +2,6 @@ package ru.kmorozov.gbd.core.logic.library.metadata;
 
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector;
 import ru.kmorozov.gbd.core.logic.connectors.google.GoogleHttpConnector;
-import ru.kmorozov.gbd.core.logic.connectors.http2native.Http2Connector;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookExtractor;
 import ru.kmorozov.gbd.core.logic.extractors.base.IImageExtractor;
@@ -42,6 +41,6 @@ public final class GoogleBooksMetadata implements ILibraryMetadata {
 
     @Override
     public HttpConnector preferredConnector() {
-        return new Http2Connector();
+        return new GoogleHttpConnector();
     }
 }
