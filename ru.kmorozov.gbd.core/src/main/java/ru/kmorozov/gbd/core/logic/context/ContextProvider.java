@@ -36,6 +36,8 @@ public class ContextProvider implements IBaseLoader {
                 if (null == contextProvider || !contextProvider.isValid())
                     contextProvider = new ContextProvider(BookListLoader.BOOK_CTX_LOADER);
             }
+
+            contextProvider.updateContext();
         }
 
         return contextProvider;
