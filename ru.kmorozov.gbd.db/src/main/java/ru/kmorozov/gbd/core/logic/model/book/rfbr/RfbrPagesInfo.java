@@ -3,7 +3,6 @@ package ru.kmorozov.gbd.core.logic.model.book.rfbr;
 import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage;
 import ru.kmorozov.gbd.core.logic.model.book.base.IPage;
 import ru.kmorozov.gbd.core.logic.model.book.base.IPagesInfo;
-import ru.kmorozov.gbd.logger.Logger;
 
 public class RfbrPagesInfo implements IPagesInfo {
 
@@ -25,7 +24,7 @@ public class RfbrPagesInfo implements IPagesInfo {
     }
 
     @Override
-    public void build(Logger logger) {
+    public void build() {
 
     }
 

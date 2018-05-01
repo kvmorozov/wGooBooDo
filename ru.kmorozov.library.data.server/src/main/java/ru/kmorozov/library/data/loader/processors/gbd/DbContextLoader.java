@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import ru.kmorozov.gbd.core.config.IBaseLoader;
 import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage;
 import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
+import ru.kmorozov.gbd.core.logic.model.book.base.IPage;
 import ru.kmorozov.library.data.repository.GoogleBooksRepository;
 
 import java.util.HashMap;
@@ -46,8 +47,8 @@ public class DbContextLoader implements IBaseLoader {
         if (info == null) {
             info = googleBooksRepository.findByBookId(bookId);
 
-            for (AbstractPage page : info.getPages().getPages())
-                page.fileExists.set(true);
+            for (IPage page : info.getPages().getPages())
+                ((AbstractPage) page).setFileExists(true);
 
             booksMap.put(bookId, info);
         }

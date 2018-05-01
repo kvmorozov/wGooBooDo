@@ -60,7 +60,7 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-transport-native-epoll</artifactId>
-            <version>4.1.21.Final</version>
+            <version>4.1.23.Final</version>
         </dependency>
 
         <dependency>
@@ -130,7 +130,7 @@
                 <dependency>
                     <groupId>io.netty</groupId>
                     <artifactId>netty-handler</artifactId>
-                    <version>4.1.21.Final</version>
+                    <version>4.1.23.Final</version>
                 </dependency>
             </dependencies>
         </profile>

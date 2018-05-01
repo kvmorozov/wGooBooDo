@@ -4,6 +4,7 @@ import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractImageExtractor;
+import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage;
 import ru.kmorozov.gbd.core.logic.model.book.base.IPage;
 import ru.kmorozov.gbd.core.logic.model.book.shpl.ShplPage;
 
@@ -25,8 +26,8 @@ public class ShplImageExtractor extends AbstractImageExtractor {
             try {
                 if (bookContext.getStorage().isPageExists(page)) {
                     logger.severe(String.format("Page %s found in directory!", page.getPid()));
-                    page.dataProcessed.set(true);
-                    page.fileExists.set(true);
+                    ((AbstractPage) page).setDataProcessed(true);
+                    ((AbstractPage) page).setFileExists(true);
                 }
             } catch (final IOException e) {
                 e.printStackTrace();
@@ -70,7 +71,7 @@ public class ShplImageExtractor extends AbstractImageExtractor {
 
             logger.info(bookContext.getBookInfo().getPages().getMissingPagesList());
 
-            final long pagesAfter = bookContext.getPagesStream().filter(pageInfo -> pageInfo.dataProcessed.get()).count();
+            final long pagesAfter = bookContext.getPagesStream().filter(pageInfo -> pageInfo.isDataProcessed()).count();
 
             logger.info(String.format("Processed %s pages", pagesAfter - bookContext.getPagesBefore()));
 

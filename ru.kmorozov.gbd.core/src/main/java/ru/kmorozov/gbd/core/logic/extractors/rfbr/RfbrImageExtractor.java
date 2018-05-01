@@ -56,7 +56,7 @@ public class RfbrImageExtractor extends AbstractImageExtractor {
 
             logger.info(bookContext.getBookInfo().getPages().getMissingPagesList());
 
-            final long pagesAfter = bookContext.getPagesStream().filter(pageInfo -> pageInfo.dataProcessed.get()).count();
+            final long pagesAfter = bookContext.getPagesStream().filter(pageInfo -> pageInfo.isDataProcessed()).count();
 
             logger.info(String.format("Processed %s pages", pagesAfter - bookContext.getPagesBefore()));
 

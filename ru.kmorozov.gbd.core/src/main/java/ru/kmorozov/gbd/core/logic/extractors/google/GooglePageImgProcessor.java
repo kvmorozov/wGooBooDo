@@ -38,7 +38,7 @@ class GooglePageImgProcessor extends AbstractPageImgProcessor<GooglePageInfo> {
 
     @Override
     public void run() {
-        if (page.dataProcessed.get()) return;
+        if (page.isDataProcessed()) return;
 
         if (!processImageWithProxy(usedProxy)) {
             // Пробуем скачать страницу с без прокси, если не получилось с той прокси, с помощью которой узнали sig

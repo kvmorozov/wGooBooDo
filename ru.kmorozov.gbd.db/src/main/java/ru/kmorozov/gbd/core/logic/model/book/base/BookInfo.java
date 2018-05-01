@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Created by km on 28.11.2015.
  */
-public class BookInfo implements Serializable, ILoggableObject {
+public class BookInfo implements Serializable, ILoggableObject, IBookInfo {
 
     private IBookData bookData;
     private IPagesInfo pages;
@@ -24,14 +24,17 @@ public class BookInfo implements Serializable, ILoggableObject {
         this.bookId = bookId;
     }
 
+    @Override
     public IBookData getBookData() {
         return bookData;
     }
 
+    @Override
     public IPagesInfo getPages() {
         return pages;
     }
 
+    @Override
     public String getBookId() {
         return bookId;
     }

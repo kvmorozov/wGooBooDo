@@ -7,17 +7,29 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public abstract class AbstractPage implements IPage {
 
-    public AtomicBoolean sigChecked = new AtomicBoolean(false);
-    public AtomicBoolean dataProcessed = new AtomicBoolean(false);
-    public AtomicBoolean fileExists = new AtomicBoolean(false);
-    public AtomicBoolean loadingStarted = new AtomicBoolean(false);
+    private AtomicBoolean sigChecked = new AtomicBoolean(false);
+    private AtomicBoolean dataProcessed = new AtomicBoolean(false);
+    private AtomicBoolean fileExists = new AtomicBoolean(false);
+    private AtomicBoolean loadingStarted = new AtomicBoolean(false);
 
+    @Override
     public boolean isDataProcessed() {
         return dataProcessed.get();
     }
 
+    @Override
     public boolean isFileExists() {
         return fileExists.get();
+    }
+
+    @Override
+    public boolean isSigChecked() {
+        return sigChecked.get();
+    }
+
+    @Override
+    public boolean isLoadingStarted() {
+        return loadingStarted.get();
     }
 
     public boolean isProcessed() {
@@ -29,4 +41,20 @@ public abstract class AbstractPage implements IPage {
     }
 
     public abstract String getImgUrl();
+
+    public void setSigChecked(boolean value) {
+        sigChecked.set(value);
+    }
+
+    public void setDataProcessed(boolean value) {
+        dataProcessed.set(value);
+    }
+
+    public void setFileExists(boolean value) {
+        fileExists.set(value);
+    }
+
+    public void setLoadingStarted(boolean value) {
+        loadingStarted.set(value);
+    }
 }

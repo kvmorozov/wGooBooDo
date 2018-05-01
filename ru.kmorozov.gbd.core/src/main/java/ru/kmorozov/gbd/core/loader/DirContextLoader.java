@@ -3,15 +3,12 @@ package ru.kmorozov.gbd.core.loader;
 import org.apache.commons.lang3.StringUtils;
 import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.config.IBaseLoader;
+import ru.kmorozov.gbd.core.config.IIndex;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
-import ru.kmorozov.gbd.utils.Mapper;
+import ru.kmorozov.gbd.core.logic.model.book.base.IBookInfo;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -40,17 +37,14 @@ public class DirContextLoader implements IBaseLoader {
     public void updateContext() {
         if (!StringUtils.isEmpty(GBDOptions.getBookId())) return;
 
+        if (ExecutionContext.INSTANCE == null)
+            return;
+
         final List<BookInfo> runtimeBooksInfo = ExecutionContext.INSTANCE.getContexts(false).stream().map(BookContext::getBookInfo).collect(Collectors.toList());
         for (final BookInfo bookInfo : runtimeBooksInfo)
             booksInfo.put(bookInfo.getBookId(), bookInfo);
 
-        try {
-            try (FileWriter writer = new FileWriter(getFileToLoad(true))) {
-                Mapper.getGson().toJson(new ArrayList<>(booksInfo.values()), writer);
-            }
-        } catch (final IOException e) {
-            e.printStackTrace();
-        }
+        getIndex(true).updateIndex((new ArrayList<>(booksInfo.values())));
     }
 
     @Override
@@ -70,7 +64,7 @@ public class DirContextLoader implements IBaseLoader {
 
     @Override
     public Set<String> getBookIdsList() {
-        return booksInfo.isEmpty() ? null : booksInfo.keySet();
+        return booksInfo.isEmpty() ? new HashSet<>() : booksInfo.keySet();
     }
 
     public Iterable<BookInfo> getBooks() {
@@ -82,22 +76,16 @@ public class DirContextLoader implements IBaseLoader {
     }
 
     public void refreshContext() {
-        final File contextFile = getFileToLoad(false);
-        if (null == contextFile) return;
+        final IIndex index = getIndex(false);
+        if (null == index) return;
 
-        try {
-            final BookInfo[] ctxObjArr;
-            try (FileReader reader = new FileReader(contextFile)) {
-                ctxObjArr = Mapper.getGson().fromJson(reader, BookInfo[].class);
+        final IBookInfo[] ctxObjArr = index.getBooks();
+
+        for (final Object ctxObj : ctxObjArr)
+            if (ctxObj instanceof BookInfo) {
+                final BookInfo bookInfo = (BookInfo) ctxObj;
+                booksInfo.put(bookInfo.getBookId(), bookInfo);
             }
-            for (final Object ctxObj : ctxObjArr)
-                if (ctxObj instanceof BookInfo) {
-                    final BookInfo bookInfo = (BookInfo) ctxObj;
-                    booksInfo.put(bookInfo.getBookId(), bookInfo);
-                }
-        } catch (final IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -105,20 +93,9 @@ public class DirContextLoader implements IBaseLoader {
         return GBDOptions.isValidConfig();
     }
 
-    protected File getFileToLoad(final boolean createIfNotExists) {
+    protected IIndex getIndex(final boolean createIfNotExists) {
         if (!GBDOptions.isValidConfig()) return null;
 
-        final File indexFile = new File(GBDOptions.getStorage() + File.separator + getLoadedFileName());
-        if (indexFile.exists()) return indexFile;
-        else if (createIfNotExists) {
-            try {
-                indexFile.createNewFile();
-                return indexFile;
-            } catch (final IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return null;
+        return GBDOptions.getStorage().getIndex(getLoadedFileName(), createIfNotExists);
     }
 }

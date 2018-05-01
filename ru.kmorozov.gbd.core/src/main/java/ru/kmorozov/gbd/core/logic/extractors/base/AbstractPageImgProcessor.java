@@ -47,7 +47,7 @@ public abstract class AbstractPageImgProcessor<T extends AbstractPage> extends A
         InputStream inputStream = null;
         IStoredItem storedItem = null;
 
-        if (page.loadingStarted.get()) return false;
+        if (page.isLoadingStarted()) return false;
 
         try (Response resp = getContent(imgUrl, proxy, false)) {
             inputStream = null == resp ? null : resp.getContent();
@@ -66,14 +66,14 @@ public abstract class AbstractPageImgProcessor<T extends AbstractPage> extends A
                     final String imgFormat = Images.getImageFormat(resp);
                     if (null != imgFormat) {
 
-                        if (page.loadingStarted.get()) return false;
+                        if (page.isLoadingStarted()) return false;
 
-                        page.loadingStarted.set(true);
+                        page.setLoadingStarted(true);
                         storedItem = bookContext.getStorage().getStoredItem(page, imgFormat);
 
                         if (reloadFlag = storedItem.exists()) if (GBDOptions.reloadImages()) storedItem.delete();
                         else {
-                            page.dataProcessed.set(true);
+                            page.setDataProcessed(true);
                             return false;
                         }
                     } else break;
@@ -93,13 +93,13 @@ public abstract class AbstractPageImgProcessor<T extends AbstractPage> extends A
             }
 
             if (validateOutput(storedItem, getImgWidth())) {
-                page.dataProcessed.set(true);
+                page.setDataProcessed(true);
 
                 proxy.promoteProxy();
 
                 logger.info(getSuccessMsg());
-                page.dataProcessed.set(true);
-                page.fileExists.set(true);
+                page.setDataProcessed(true);
+                page.setFileExists(true);
 
                 return true;
             } else {
@@ -126,7 +126,7 @@ public abstract class AbstractPageImgProcessor<T extends AbstractPage> extends A
                 }
             }
 
-            if (!page.dataProcessed.get() && null != storedItem) {
+            if (!page.isDataProcessed() && null != storedItem) {
                 logger.info(String.format("Loading page %s failed!", page.getPid()));
                 try {
                     storedItem.delete();

@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import ru.kmorozov.gbd.core.config.GBDOptions;
-import ru.kmorozov.gbd.core.loader.BookListLoader;
+import ru.kmorozov.gbd.core.loader.DirContextLoader;
 import ru.kmorozov.gbd.core.logic.context.ContextProvider;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
@@ -100,7 +100,7 @@ public class GbdProcessor implements IProcessor {
     @Bean
     public OneDriveItem getGbdRoot() {
         try {
-            OneDriveItem[] searchResults = api.search(BookListLoader.INDEX_FILE_NAME);
+            OneDriveItem[] searchResults = api.search("books.ctx");
             if (searchResults != null && searchResults.length == 1)
                 return searchResults[0].getParent();
             else

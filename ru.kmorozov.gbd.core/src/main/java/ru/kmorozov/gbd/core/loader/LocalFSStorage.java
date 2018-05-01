@@ -1,6 +1,7 @@
 package ru.kmorozov.gbd.core.loader;
 
 import org.apache.commons.lang3.StringUtils;
+import ru.kmorozov.gbd.core.config.IIndex;
 import ru.kmorozov.gbd.core.config.IStorage;
 import ru.kmorozov.gbd.core.config.IStoredItem;
 import ru.kmorozov.gbd.core.logic.library.LibraryFactory;
@@ -93,5 +94,10 @@ public class LocalFSStorage implements IStorage {
 
     public File getStorageDir() {
         return this.storageDir;
+    }
+
+    @Override
+    public IIndex getIndex(String indexName, boolean createIfNotExists) {
+        return new LocalFSIndex(this, indexName, createIfNotExists);
     }
 }

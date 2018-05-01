@@ -49,7 +49,7 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
         this.bookContext = bookContext;
         this.proxy = proxy;
 
-        sigPageExecutor = new QueuedThreadPoolExecutor<>(bookContext.getPagesStream().filter(AbstractPage::isNotProcessed).count(), QueuedThreadPoolExecutor.THREAD_POOL_SIZE, GooglePageInfo::isProcessed,
+        sigPageExecutor = new QueuedThreadPoolExecutor<>(bookContext.getPagesStream().filter(p -> ((AbstractPage) p).isNotProcessed()).count(), QueuedThreadPoolExecutor.THREAD_POOL_SIZE, GooglePageInfo::isProcessed,
                 bookContext.toString() + '/' + proxy);
     }
 
@@ -61,7 +61,7 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
 
         final IProgress psSigs = bookContext.getProgress().getSubProgress(bookContext.getBookInfo().getPages().getPages().length);
 
-        bookContext.getPagesStream().filter(AbstractPage::isNotProcessed).forEach(page -> {
+        bookContext.getPagesStream().filter(p -> ((AbstractPage) p).isNotProcessed()).forEach(page -> {
             psSigs.inc();
             sigPageExecutor.execute(new SigProcessorInternal((GooglePageInfo) page));
         });
@@ -108,7 +108,7 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
         public void run() {
             if (!proxy.isAvailable()) return;
 
-            if (page.dataProcessed.get() || null != page.getSig() || page.sigChecked.get() || page.loadingStarted.get())
+            if (page.isDataProcessed() || null != page.getSig() || page.isSigChecked() || page.isLoadingStarted())
                 return;
 
             Response resp = null;
@@ -148,14 +148,14 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
                     if (null != framePage.getSrc()) {
                         final GooglePageInfo _page = (GooglePageInfo) bookContext.getBookInfo().getPages().getPageByPid(framePage.getPid());
 
-                        if (_page.dataProcessed.get()) continue;
+                        if (_page.isDataProcessed()) continue;
 
                         final String _frameSrc = framePage.getSrc();
                         if (null != _frameSrc) _page.setSrc(_frameSrc);
 
                         if (null != _page.getSig()) {
                             if (_page.getPid().equals(page.getPid())) {
-                                _page.sigChecked.set(true);
+                                _page.setSigChecked(true);
 
                                 proxy.promoteProxy();
 

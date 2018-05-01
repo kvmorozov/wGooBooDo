@@ -8,6 +8,7 @@ import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata;
 import ru.kmorozov.gbd.core.logic.library.LibraryFactory;
 import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage;
 import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
+import ru.kmorozov.gbd.core.logic.model.book.base.IPage;
 import ru.kmorozov.gbd.logger.progress.IProgress;
 import ru.kmorozov.gbd.utils.QueuedThreadPoolExecutor;
 
@@ -40,7 +41,7 @@ public class BookContext {
         this.postProcessor = postProcessor;
         this.metadata = LibraryFactory.getMetadata(bookId);
 
-        pagesBefore = getPagesStream().filter(pageInfo -> pageInfo.fileExists.get()).count();
+        pagesBefore = getPagesStream().filter(pageInfo -> pageInfo.isFileExists()).count();
         sigExecutor = new QueuedThreadPoolExecutor<>(1, QueuedThreadPoolExecutor.THREAD_POOL_SIZE, x -> true, "Sig_" + bookId);
         imgExecutor = new QueuedThreadPoolExecutor<>(0, QueuedThreadPoolExecutor.THREAD_POOL_SIZE, pagePredicate, "Img_" + bookId);
     }
@@ -85,7 +86,7 @@ public class BookContext {
         this.pagesBefore = pagesBefore;
     }
 
-    public Stream<AbstractPage> getPagesStream() {
+    public Stream<IPage> getPagesStream() {
         return Arrays.stream(bookInfo.getPages().getPages());
     }
 

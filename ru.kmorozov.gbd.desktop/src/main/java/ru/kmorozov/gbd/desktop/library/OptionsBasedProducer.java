@@ -15,7 +15,7 @@ import java.util.Set;
  */
 public class OptionsBasedProducer implements IBookListProducer {
 
-    private Set<String> bookIdsList;
+    private Set<String> bookIdsList = new HashSet<>();
 
     public OptionsBasedProducer() {
         final String bookId = GBDOptions.getBookId();
@@ -24,9 +24,6 @@ public class OptionsBasedProducer implements IBookListProducer {
             bookIdsList = new HashSet<>(Collections.singletonList(bookId));
         else if (GBDOptions.isValidConfig())
             bookIdsList = ContextProvider.getContextProvider().getBookIdsList();
-
-
-        if (null == bookIdsList || bookIdsList.isEmpty()) throw new RuntimeException("No books to load!");
     }
 
     @Override

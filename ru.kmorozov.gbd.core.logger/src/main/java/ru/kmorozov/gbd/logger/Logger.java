@@ -14,7 +14,7 @@ public final class Logger {
     private final IEventConsumer eventConsumer;
     private final String name, prefix;
 
-    private Logger(final IEventConsumer eventConsumer, final String name, final String prefix) {
+    public Logger(final IEventConsumer eventConsumer, final String name, final String prefix) {
         this.eventConsumer = eventConsumer;
         this.name = name;
         this.prefix = prefix;

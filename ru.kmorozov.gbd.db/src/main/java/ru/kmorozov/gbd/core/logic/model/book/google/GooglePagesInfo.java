@@ -5,6 +5,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import ru.kmorozov.gbd.core.logic.model.book.base.IPagesInfo;
 import ru.kmorozov.gbd.logger.Logger;
+import ru.kmorozov.gbd.logger.output.DummyReceiver;
 
 import java.io.Serializable;
 import java.util.*;
@@ -30,7 +31,7 @@ public class GooglePagesInfo implements IPagesInfo, Serializable {
     }
 
     @Override
-    public void build(Logger logger) {
+    public void build() {
         final List<GooglePageInfo> _pages = Arrays.asList(pages);
         pagesMap = new ConcurrentHashMap<>(_pages.size());
         pagesList = new LinkedList<>();
@@ -41,7 +42,7 @@ public class GooglePagesInfo implements IPagesInfo, Serializable {
         for (final GooglePageInfo page : _pages) {
             addPage(page);
 
-            if (null != prevPage && 1 < page.getOrder() - prevPage.getOrder()) fillGap(prevPage, page, logger);
+            if (null != prevPage && 1 < page.getOrder() - prevPage.getOrder()) fillGap(prevPage, page);
 
             prevPage = page;
         }
@@ -49,7 +50,9 @@ public class GooglePagesInfo implements IPagesInfo, Serializable {
         pages = pagesMap.values().toArray(new GooglePageInfo[pagesMap.size()]);
     }
 
-    private void fillGap(final GooglePageInfo beginGap, final GooglePageInfo endGap, Logger logger) {
+    private void fillGap(final GooglePageInfo beginGap, final GooglePageInfo endGap) {
+        Logger logger = new Logger(new DummyReceiver(), "gapFinder", ": ");;
+
         if (beginGap.isGapPage() || endGap.isGapPage()) return;
 
         final String beginPagePrefix = beginGap.getPrefix();
@@ -68,12 +71,12 @@ public class GooglePagesInfo implements IPagesInfo, Serializable {
                 addPage(gapPage);
             }
 
-            if (0 < beginPageNum && 0 < endPageNum) for (int index = beginGap.getOrder() + 1; index < endGap.getOrder() - endPageNum; index++) {
-                final GooglePageInfo gapPage = new GooglePageInfo(beginPagePrefix + (index + 1), index);
-                addPage(gapPage);
-            }
-        }
-        else {
+            if (0 < beginPageNum && 0 < endPageNum)
+                for (int index = beginGap.getOrder() + 1; index < endGap.getOrder() - endPageNum; index++) {
+                    final GooglePageInfo gapPage = new GooglePageInfo(beginPagePrefix + (index + 1), index);
+                    addPage(gapPage);
+                }
+        } else {
             if (1 <= endPageNum) {
                 int pagesToCreate = endGap.getOrder() - beginGap.getOrder() - 1;
                 int pagesCreated = 0;
@@ -84,8 +87,7 @@ public class GooglePagesInfo implements IPagesInfo, Serializable {
                         final GooglePageInfo gapPage = new GooglePageInfo(newPagePidFromEnd, endGap.getOrder() - index);
                         addPage(gapPage);
                         pagesCreated++;
-                    }
-                    else break;
+                    } else break;
                 }
                 if (pagesCreated < pagesToCreate) {
                     pagesToCreate -= pagesCreated;
@@ -95,8 +97,7 @@ public class GooglePagesInfo implements IPagesInfo, Serializable {
                         addPage(gapPage);
                     }
                 }
-            }
-            else if (1 < beginPageNum && 0 > endPageNum) {
+            } else if (1 < beginPageNum && 0 > endPageNum) {
                 logger.severe(String.format("Cannot fill gap between pages %s(order=%s) and %s(order=%s)", beginGap.getPid(), beginGap.getOrder(), endGap.getPid(), endGap.getOrder()));
             }
         }
@@ -124,7 +125,7 @@ public class GooglePagesInfo implements IPagesInfo, Serializable {
 
     @Override
     public String getMissingPagesList() {
-        final Predicate<GooglePageInfo> predicate = pageInfo -> !pageInfo.fileExists.get();
+        final Predicate<GooglePageInfo> predicate = pageInfo -> !pageInfo.isFileExists();
         return getListByCondition(predicate);
     }
 
@@ -144,13 +145,11 @@ public class GooglePagesInfo implements IPagesInfo, Serializable {
         for (final GooglePageInfo currentPage : pagesList) {
             if (condition.test(currentPage)) if (null == blockStart) {
                 blockStart = currentPage;
-            }
-            else {
+            } else {
             }
             else {
                 if (null == blockStart) {
-                }
-                else {
+                } else {
                     pairs.add(createPair(blockStart, prevPage));
                     blockStart = null;
                 }

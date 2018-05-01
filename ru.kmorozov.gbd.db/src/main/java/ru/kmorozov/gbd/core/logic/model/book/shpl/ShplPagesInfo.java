@@ -3,7 +3,6 @@ package ru.kmorozov.gbd.core.logic.model.book.shpl;
 import com.google.gson.annotations.SerializedName;
 import ru.kmorozov.gbd.core.logic.model.book.base.IPage;
 import ru.kmorozov.gbd.core.logic.model.book.base.IPagesInfo;
-import ru.kmorozov.gbd.logger.Logger;
 
 /**
  * Created by sbt-morozov-kv on 16.11.2016.
@@ -28,7 +27,7 @@ public class ShplPagesInfo implements IPagesInfo {
     }
 
     @Override
-    public void build(Logger logger) {
+    public void build() {
 
     }
 

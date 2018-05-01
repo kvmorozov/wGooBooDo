@@ -27,7 +27,7 @@ public class SimplePageImgProcessor<T extends AbstractPage> extends AbstractPage
 
     @Override
     public void run() {
-        if (page.dataProcessed.get()) return;
+        if (page.isDataProcessed()) return;
 
         processImage(page.getImgUrl());
     }

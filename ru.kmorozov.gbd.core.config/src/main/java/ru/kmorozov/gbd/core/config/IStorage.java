@@ -25,4 +25,6 @@ public interface IStorage {
     IStoredItem getStoredItem(IPage page, String imgFormat) throws IOException;
 
     void refresh();
+
+    IIndex getIndex(String indexName, boolean createIfNotExists);
 }
