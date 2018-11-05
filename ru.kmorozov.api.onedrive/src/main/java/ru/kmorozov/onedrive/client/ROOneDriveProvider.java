@@ -1,9 +1,12 @@
 package ru.kmorozov.onedrive.client;
 
-import com.google.api.client.http.*;
+import com.google.api.client.http.HttpRequest;
+import com.google.api.client.http.HttpRequestFactory;
+import com.google.api.client.http.HttpResponse;
+import com.google.api.client.http.HttpResponseException;
+import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.apache.ApacheHttpTransport;
 import com.google.api.client.json.JsonObjectParser;
-import com.google.api.client.repackaged.com.google.common.base.Throwables;
 import com.google.api.client.util.Lists;
 import ru.kmorozov.onedrive.client.authoriser.AuthorisationProvider;
 import ru.kmorozov.onedrive.client.downloader.ResumableDownloader;
@@ -39,7 +42,7 @@ class ROOneDriveProvider implements OneDriveProvider {
                     try {
                         request.getHeaders().setAuthorization("bearer " + authoriser.getAccessToken());
                     } catch (final IOException e) {
-                        throw Throwables.propagate(e);
+                        throw e;
                     }
 
                     request.setUnsuccessfulResponseHandler(new OneDriveResponseHandler(authoriser));

@@ -5,7 +5,7 @@ import ru.kmorozov.gbd.core.logic.Proxy.AbstractProxyListProvider;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractPageImgProcessor;
-import ru.kmorozov.gbd.core.logic.model.book.google.GooglePageInfo;
+import ru.kmorozov.db.core.logic.model.book.google.GooglePageInfo;
 import ru.kmorozov.gbd.utils.Images;
 
 import static ru.kmorozov.gbd.core.config.constants.GoogleConstants.HTTPS_IMG_TEMPLATE;

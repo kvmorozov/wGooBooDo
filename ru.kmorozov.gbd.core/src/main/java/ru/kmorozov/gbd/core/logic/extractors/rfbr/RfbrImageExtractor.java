@@ -5,7 +5,7 @@ import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractImageExtractor;
 import ru.kmorozov.gbd.core.logic.model.book.base.IPage;
-import ru.kmorozov.gbd.core.logic.model.book.rfbr.RfbrPage;
+import ru.kmorozov.db.core.logic.model.book.rfbr.RfbrPage;
 
 import java.util.concurrent.TimeUnit;
 

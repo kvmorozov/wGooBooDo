@@ -1,11 +1,11 @@
 package ru.kmorozov.gbd.core.logic.connectors.http2native;
 
-import jdk.incubator.http.HttpResponse;
 import ru.kmorozov.gbd.core.logic.connectors.Response;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.http.HttpResponse;
 
 public class Http2Response implements Response {
 

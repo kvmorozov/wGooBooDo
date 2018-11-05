@@ -11,7 +11,7 @@ import ru.kmorozov.gbd.core.loader.LocalFSStorage;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.extractors.base.IPostProcessor;
-import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
+import ru.kmorozov.db.core.logic.model.book.base.BookInfo;
 import ru.kmorozov.gbd.logger.Logger;
 import ru.kmorozov.gbd.utils.Images;
 

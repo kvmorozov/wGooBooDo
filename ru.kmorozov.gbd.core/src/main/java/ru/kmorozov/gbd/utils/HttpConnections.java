@@ -8,7 +8,7 @@ import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.Proxy.UrlType;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
-import ru.kmorozov.gbd.core.logic.model.book.google.GoogleBookData;
+import ru.kmorozov.db.core.logic.model.book.google.GoogleBookData;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

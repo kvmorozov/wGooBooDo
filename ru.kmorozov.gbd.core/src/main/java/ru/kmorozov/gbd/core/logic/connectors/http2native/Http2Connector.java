@@ -1,9 +1,6 @@
 package ru.kmorozov.gbd.core.logic.connectors.http2native;
 
 import com.google.api.client.http.HttpHeaders;
-import jdk.incubator.http.HttpClient;
-import jdk.incubator.http.HttpRequest;
-import jdk.incubator.http.HttpResponse;
 import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector;
@@ -12,6 +9,9 @@ import java.io.IOException;
 import java.net.ProxySelector;
 import java.net.SocketTimeoutException;
 import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -80,7 +80,7 @@ public class Http2Connector extends HttpConnector {
         }
 
         try {
-            return DEFAULT_CLIENT.send(req, HttpResponse.BodyHandler.asByteArray());
+            return DEFAULT_CLIENT.send(req, HttpResponse.BodyHandlers.ofByteArray());
         } catch (final SocketTimeoutException | InterruptedException ste1) {
             proxy.registerFailure();
             return getContent(req, proxy, ++attempt);

@@ -7,7 +7,7 @@ import ru.kmorozov.gbd.core.logic.extractors.base.IPostProcessor;
 import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata;
 import ru.kmorozov.gbd.core.logic.library.LibraryFactory;
 import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage;
-import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
+import ru.kmorozov.db.core.logic.model.book.base.BookInfo;
 import ru.kmorozov.gbd.core.logic.model.book.base.IPage;
 import ru.kmorozov.gbd.logger.progress.IProgress;
 import ru.kmorozov.gbd.utils.QueuedThreadPoolExecutor;

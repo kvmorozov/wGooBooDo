@@ -10,7 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import ru.kmorozov.gbd.core.config.GBDOptions;
-import ru.kmorozov.gbd.core.config.IBaseLoader;
+import ru.kmorozov.db.core.config.IBaseLoader;
 import ru.kmorozov.gbd.core.config.IGBDOptions;
 import ru.kmorozov.gbd.core.loader.LocalFSStorage;
 import ru.kmorozov.gbd.core.logic.context.ContextProvider;

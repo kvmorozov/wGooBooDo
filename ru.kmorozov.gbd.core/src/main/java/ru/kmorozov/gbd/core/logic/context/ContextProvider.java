@@ -1,8 +1,8 @@
 package ru.kmorozov.gbd.core.logic.context;
 
-import ru.kmorozov.gbd.core.config.IBaseLoader;
+import ru.kmorozov.db.core.config.IBaseLoader;
 import ru.kmorozov.gbd.core.loader.DirContextLoader;
-import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
+import ru.kmorozov.db.core.logic.model.book.base.BookInfo;
 
 import java.util.Set;
 

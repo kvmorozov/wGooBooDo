@@ -2,11 +2,11 @@ package ru.kmorozov.gbd.core.loader;
 
 import org.apache.commons.lang3.StringUtils;
 import ru.kmorozov.gbd.core.config.GBDOptions;
-import ru.kmorozov.gbd.core.config.IBaseLoader;
+import ru.kmorozov.db.core.config.IBaseLoader;
 import ru.kmorozov.gbd.core.config.IIndex;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
-import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
+import ru.kmorozov.db.core.logic.model.book.base.BookInfo;
 import ru.kmorozov.gbd.core.logic.model.book.base.IBookInfo;
 
 import java.util.*;

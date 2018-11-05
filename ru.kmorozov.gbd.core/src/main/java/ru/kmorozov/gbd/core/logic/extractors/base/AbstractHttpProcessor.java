@@ -55,7 +55,7 @@ public class AbstractHttpProcessor {
                     break;
                 case HttpStatusCodes.STATUS_CODE_NOT_FOUND:
                 case HttpStatusCodes.STATUS_CODE_BAD_GATEWAY:
-                    proxy.registerFailure();
+                    proxy.forceInvalidate(true);
                     break;
                 default:
                     re.printStackTrace();

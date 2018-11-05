@@ -5,14 +5,14 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
-import ru.kmorozov.gbd.core.config.IBaseLoader;
+import ru.kmorozov.db.core.config.IBaseLoader;
 import ru.kmorozov.gbd.core.logic.Proxy.AbstractProxyListProvider;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookExtractor;
-import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
-import ru.kmorozov.gbd.core.logic.model.book.google.GoogleBookData;
-import ru.kmorozov.gbd.core.logic.model.book.google.GooglePagesInfo;
-import ru.kmorozov.gbd.utils.Mapper;
+import ru.kmorozov.db.core.logic.model.book.base.BookInfo;
+import ru.kmorozov.db.core.logic.model.book.google.GoogleBookData;
+import ru.kmorozov.db.core.logic.model.book.google.GooglePagesInfo;
+import ru.kmorozov.db.utils.Mapper;
 
 import java.util.List;
 

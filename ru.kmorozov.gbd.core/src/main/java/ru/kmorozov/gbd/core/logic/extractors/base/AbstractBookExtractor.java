@@ -5,12 +5,12 @@ import org.jsoup.Connection;
 import org.jsoup.Connection.Method;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import ru.kmorozov.gbd.core.config.IBaseLoader;
+import ru.kmorozov.db.core.config.IBaseLoader;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.connectors.Response;
 import ru.kmorozov.gbd.core.logic.context.ContextProvider;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
-import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
+import ru.kmorozov.db.core.logic.model.book.base.BookInfo;
 import ru.kmorozov.gbd.logger.Logger;
 import ru.kmorozov.gbd.utils.HttpConnections;
 

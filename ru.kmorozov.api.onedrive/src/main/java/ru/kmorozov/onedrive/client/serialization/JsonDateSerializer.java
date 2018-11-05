@@ -1,7 +1,5 @@
 package ru.kmorozov.onedrive.client.serialization;
 
-import com.google.api.client.repackaged.com.google.common.base.Throwables;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,14 +21,14 @@ public class JsonDateSerializer {
         return df.format(value);
     }
 
-    public synchronized Date deserialize(final String value) {
+    public synchronized Date deserialize(final String value) throws ParseException {
         try {
             return df.parse(value);
         } catch (final ParseException e) {
             try {
                 return df2.parse(value);
             } catch (final ParseException e1) {
-                throw Throwables.propagate(e);
+                throw e;
             }
 
         }

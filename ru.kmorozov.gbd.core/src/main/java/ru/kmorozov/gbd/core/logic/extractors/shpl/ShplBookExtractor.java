@@ -5,12 +5,12 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookExtractor;
-import ru.kmorozov.gbd.core.logic.model.book.base.BookInfo;
+import ru.kmorozov.db.core.logic.model.book.base.BookInfo;
 import ru.kmorozov.gbd.core.logic.model.book.base.IBookData;
-import ru.kmorozov.gbd.core.logic.model.book.shpl.ShplBookData;
-import ru.kmorozov.gbd.core.logic.model.book.shpl.ShplPage;
-import ru.kmorozov.gbd.core.logic.model.book.shpl.ShplPagesInfo;
-import ru.kmorozov.gbd.utils.Mapper;
+import ru.kmorozov.db.core.logic.model.book.shpl.ShplBookData;
+import ru.kmorozov.db.core.logic.model.book.shpl.ShplPage;
+import ru.kmorozov.db.core.logic.model.book.shpl.ShplPagesInfo;
+import ru.kmorozov.db.utils.Mapper;
 
 import java.util.List;
 

@@ -8,6 +8,7 @@ import ru.kmorozov.onedrive.client.serialization.JsonDateSerializer;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.text.ParseException;
 import java.util.Date;
 
 public interface OneDriveItem {
@@ -121,12 +122,24 @@ public interface OneDriveItem {
 
                 @Override
                 public Date getCreatedDateTime() {
-                    return JsonDateSerializer.INSTANCE.deserialize(item.getFileSystemInfo().getCreatedDateTime());
+                    try {
+                        return JsonDateSerializer.INSTANCE.deserialize(item.getFileSystemInfo().getCreatedDateTime());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+
+                        return new Date();
+                    }
                 }
 
                 @Override
                 public Date getLastModifiedDateTime() {
-                    return JsonDateSerializer.INSTANCE.deserialize(item.getFileSystemInfo().getLastModifiedDateTime());
+                    try {
+                        return JsonDateSerializer.INSTANCE.deserialize(item.getFileSystemInfo().getLastModifiedDateTime());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+
+                        return new Date();
+                    }
                 }
 
                 @Override

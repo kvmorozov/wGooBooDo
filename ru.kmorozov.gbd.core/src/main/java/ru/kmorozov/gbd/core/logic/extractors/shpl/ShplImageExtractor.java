@@ -6,7 +6,7 @@ import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractImageExtractor;
 import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage;
 import ru.kmorozov.gbd.core.logic.model.book.base.IPage;
-import ru.kmorozov.gbd.core.logic.model.book.shpl.ShplPage;
+import ru.kmorozov.db.core.logic.model.book.shpl.ShplPage;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;

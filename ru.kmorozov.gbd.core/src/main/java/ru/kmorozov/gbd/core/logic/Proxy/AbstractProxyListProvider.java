@@ -1,6 +1,6 @@
 package ru.kmorozov.gbd.core.logic.Proxy;
 
-import com.google.api.client.repackaged.com.google.common.base.Strings;
+import com.google.common.base.Strings;
 import org.apache.commons.lang3.StringUtils;
 import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.logic.Proxy.web.WebProxyListProvider;

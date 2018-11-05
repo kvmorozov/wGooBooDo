@@ -3,7 +3,7 @@ package ru.kmorozov.gbd.desktop.gui;
 import ru.kmorozov.gbd.core.config.SystemConfigs;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor;
-import ru.kmorozov.gbd.core.logic.model.book.google.Resolutions;
+import ru.kmorozov.db.core.logic.model.book.google.Resolutions;
 import ru.kmorozov.gbd.logger.events.AbstractEventSource;
 import ru.kmorozov.gbd.logger.events.IEventSource;
 import ru.kmorozov.gbd.logger.model.LogIconColumnRenderer;

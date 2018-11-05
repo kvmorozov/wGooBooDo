@@ -14,11 +14,11 @@ import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractHttpProcessor;
 import ru.kmorozov.gbd.core.logic.extractors.base.IUniqueRunnable;
 import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage;
-import ru.kmorozov.gbd.core.logic.model.book.google.GooglePageInfo;
-import ru.kmorozov.gbd.core.logic.model.book.google.GooglePagesInfo;
+import ru.kmorozov.db.core.logic.model.book.google.GooglePageInfo;
+import ru.kmorozov.db.core.logic.model.book.google.GooglePagesInfo;
 import ru.kmorozov.gbd.logger.Logger;
 import ru.kmorozov.gbd.logger.progress.IProgress;
-import ru.kmorozov.gbd.utils.Mapper;
+import ru.kmorozov.db.utils.Mapper;
 import ru.kmorozov.gbd.utils.QueuedThreadPoolExecutor;
 
 import javax.net.ssl.SSLException;
