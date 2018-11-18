@@ -16,8 +16,8 @@ public class ConsistencyUtils {
         if (!DEDUPLCATION_ENABLED)
             return books;
 
-        final Collection<String> uniquePaths;
-        final Collection<Book> deduplicatedBooks;
+        final Collection<String> uniquePaths = new ArrayList<>();
+        final Collection<Book> deduplicatedBooks  = new ArrayList<>();
         for (final Book book : books)
             if (uniquePaths.add(book.getBookInfo().getPath()))
                 deduplicatedBooks.add(book);
