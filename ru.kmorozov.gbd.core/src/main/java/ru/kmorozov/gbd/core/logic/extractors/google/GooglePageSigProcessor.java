@@ -1,7 +1,6 @@
 package ru.kmorozov.gbd.core.logic.extractors.google;
 
 import com.google.gson.JsonParseException;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.hc.core5.http.NoHttpResponseException;
@@ -132,7 +131,7 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
 
                 }
 
-                if (StringUtils.isEmpty(respStr)) {
+                if (respStr.isBlank()) {
                     logger.finest(String.format(SIG_ERROR_TEMPLATE, rqUrl, proxy.toString()));
                     return;
                 }

@@ -17,4 +17,9 @@ module ru.kmorozov.gbd.core {
     requires io.netty.common;
     requires io.netty.transport;
     requires org.apache.commons.io;
+    requires io.netty.handler;
+    requires okhttp3;
+    requires selenium.api;
+    requires selenium.chrome.driver;
+    requires selenium.support;
 }
