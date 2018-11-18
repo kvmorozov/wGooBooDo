@@ -4,6 +4,10 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ru.kmorozov.api.onedrive/ru.kmorozov.api.onedrive.iml" filepath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/ru.kmorozov.api.onedrive.iml" />
       <module fileurl="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/ru.kmorozov.gbd.core.iml" filepath="$PROJECT_DIR$/ru.kmorozov.gbd.core/ru.kmorozov.gbd.core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ru.kmorozov.gbd.core.config/ru.kmorozov.gbd.core.config.iml" filepath="$PROJECT_DIR$/ru.kmorozov.gbd.core.config/ru.kmorozov.gbd.core.config.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ru.kmorozov.gbd.core.logger/ru.kmorozov.gbd.core.logger.iml" filepath="$PROJECT_DIR$/ru.kmorozov.gbd.core.logger/ru.kmorozov.gbd.core.logger.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ru.kmorozov.gbd.db/ru.kmorozov.gbd.db.iml" filepath="$PROJECT_DIR$/ru.kmorozov.gbd.db/ru.kmorozov.gbd.db.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ru.kmorozov.gbd.db.mongo/ru.kmorozov.gbd.db.mongo.iml" filepath="$PROJECT_DIR$/ru.kmorozov.gbd.db.mongo/ru.kmorozov.gbd.db.mongo.iml" />
       <module fileurl="file://$PROJECT_DIR$/ru.kmorozov.gbd.desktop/ru.kmorozov.gbd.desktop.iml" filepath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/ru.kmorozov.gbd.desktop.iml" />
       <module fileurl="file://$PROJECT_DIR$/ru.kmorozov.gbd.desktop.app/ru.kmorozov.gbd.desktop.app.iml" filepath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop.app/ru.kmorozov.gbd.desktop.app.iml" />
       <module fileurl="file://$PROJECT_DIR$/ru.kmorozov.gbd.parent/ru.kmorozov.gbd.parent.iml" filepath="$PROJECT_DIR$/ru.kmorozov.gbd.parent/ru.kmorozov.gbd.parent.iml" />
