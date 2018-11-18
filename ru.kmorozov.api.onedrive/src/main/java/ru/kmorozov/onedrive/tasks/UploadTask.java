@@ -65,7 +65,7 @@ public class UploadTask extends Task {
             final long startTime = System.currentTimeMillis();
 
             final OneDriveItem response;
-            if (localFile.length() > CommandLineOpts.getCommandLineOpts().getSplitAfter() * 1024 * 1024) {
+            if (localFile.length() > (long) (CommandLineOpts.getCommandLineOpts().getSplitAfter() * 1024 * 1024)) {
 
                 int tryCount = 0;
                 final OneDriveUploadSession session = api.startUploadSession(parent, localFile);
@@ -84,9 +84,9 @@ public class UploadTask extends Task {
                         final long elapsedTimeInner = System.currentTimeMillis() - startTimeInner;
 
                         log.info(String.format("Uploaded chunk (progress %.1f%%) of %s (%s/s) for file %s",
-                                ((double) session.getTotalUploaded() / session.getFile().length()) * 100,
+                                ((double) session.getTotalUploaded() / (double) session.getFile().length()) * 100.0,
                                 LogUtils.readableFileSize(session.getLastUploaded()),
-                                0 < elapsedTimeInner ? LogUtils.readableFileSize(session.getLastUploaded() / (elapsedTimeInner / 1000d)) : 0,
+                                0L < elapsedTimeInner ? LogUtils.readableFileSize((double) session.getLastUploaded() / ((double) elapsedTimeInner / 1000.0d)) : 0,
                                 parent.getFullName() + localFile.getName()));
 
                         // After a successful upload we'll reset the tryCount
@@ -117,7 +117,7 @@ public class UploadTask extends Task {
             log.info(String.format("Uploaded %s in %s (%s/s) to %s file %s",
                     LogUtils.readableFileSize(localFile.length()),
                     LogUtils.readableTime(elapsedTime),
-                    0 < elapsedTime ? LogUtils.readableFileSize(localFile.length() / (elapsedTime / 1000d)) : 0,
+                    0L < elapsedTime ? LogUtils.readableFileSize((double) localFile.length() / ((double) elapsedTime / 1000.0d)) : 0,
                     replace ? "replace" : "new",
                     response.getFullName()));
 

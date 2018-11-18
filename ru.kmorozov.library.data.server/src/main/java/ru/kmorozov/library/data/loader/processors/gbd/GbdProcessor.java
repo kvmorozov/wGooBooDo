@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.logic.context.ContextProvider;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
-import ru.kmorozov.db.core.logic.model.book.base.BookInfo;
+import ru.kmorozov.db.core.logic.model.book.BookInfo;
 import ru.kmorozov.gbd.logger.Logger;
 import ru.kmorozov.gbd.logger.output.DummyReceiver;
 import ru.kmorozov.library.data.loader.processors.IProcessor;

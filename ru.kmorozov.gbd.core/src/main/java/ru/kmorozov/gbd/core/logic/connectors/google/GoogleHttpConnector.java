@@ -69,7 +69,7 @@ public class GoogleHttpConnector extends HttpConnector {
 
         if (1 < attempt) try {
             logger.finest(String.format("Attempt %d with %s url", attempt, req.getUrl().toString()));
-            Thread.sleep(SLEEP_TIME * attempt);
+            Thread.sleep((long) (SLEEP_TIME * attempt));
         } catch (final InterruptedException ignored) {
         }
 

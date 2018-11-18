@@ -109,7 +109,7 @@ class OneDriveAuthorisationProvider implements AuthorisationProvider {
         if (null != authorisation) {
 
             // Refresh if we know it is needed
-            if (lastFetched.after(new Date(lastFetched.getTime() + authorisation.getExpiresIn() * 1000))) {
+            if (lastFetched.after(new Date(lastFetched.getTime() + (long) (authorisation.getExpiresIn() * 1000)))) {
                 log.info("Authorisation token has expired - refreshing");
                 getTokenFromRefreshToken(authorisation.getRefreshToken());
                 saveToken();

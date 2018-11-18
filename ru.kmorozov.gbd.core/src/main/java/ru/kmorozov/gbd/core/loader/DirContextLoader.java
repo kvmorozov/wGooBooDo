@@ -6,7 +6,7 @@ import ru.kmorozov.db.core.config.IBaseLoader;
 import ru.kmorozov.gbd.core.config.IIndex;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
-import ru.kmorozov.db.core.logic.model.book.base.BookInfo;
+import ru.kmorozov.db.core.logic.model.book.BookInfo;
 import ru.kmorozov.gbd.core.logic.model.book.base.IBookInfo;
 
 import java.util.*;

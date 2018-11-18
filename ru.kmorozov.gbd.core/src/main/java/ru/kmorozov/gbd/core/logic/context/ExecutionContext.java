@@ -62,7 +62,7 @@ public final class ExecutionContext {
     }
 
     public List<BookContext> getContexts(final boolean shuffle) {
-        final List<BookContext> contexts = Arrays.asList(bookContextMap.values().toArray(new BookContext[bookContextMap.values().size()]));
+        final List<BookContext> contexts = Arrays.asList(bookContextMap.values().toArray(new BookContext[0]));
         if (shuffle) Collections.shuffle(contexts);
         return contexts;
     }
@@ -84,8 +84,8 @@ public final class ExecutionContext {
     }
 
     public void execute() {
-        bookExecutor = new QueuedThreadPoolExecutor<>(bookContextMap.size(), 5, BookContext::isImgStarted, "bookExecutor");
-        pdfExecutor = new QueuedThreadPoolExecutor<>(bookContextMap.size(), 5, BookContext::isPdfCompleted, "pdfExecutor");
+        bookExecutor = new QueuedThreadPoolExecutor<>((long) bookContextMap.size(), 5, BookContext::isImgStarted, "bookExecutor");
+        pdfExecutor = new QueuedThreadPoolExecutor<>((long) bookContextMap.size(), 5, BookContext::isPdfCompleted, "pdfExecutor");
 
         for (final BookContext bookContext : getContexts(true)) {
             final IImageExtractor extractor = bookContext.getExtractor();
@@ -95,8 +95,8 @@ public final class ExecutionContext {
 
         AbstractProxyListProvider.getInstance().processProxyList(UrlType.GOOGLE_BOOKS);
 
-        bookExecutor.terminate(10, TimeUnit.MINUTES);
-        pdfExecutor.terminate(30, TimeUnit.MINUTES);
+        bookExecutor.terminate(10L, TimeUnit.MINUTES);
+        pdfExecutor.terminate(30L, TimeUnit.MINUTES);
 
         final long totalProcessed = getContexts(false).stream().mapToLong(BookContext::getPagesProcessed).sum();
         getLogger("Total").info("Total pages processed: " + totalProcessed);

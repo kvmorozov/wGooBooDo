@@ -19,7 +19,7 @@ public class QueuedThreadPoolExecutor<T> extends ThreadPoolExecutor {
     public static final int THREAD_POOL_SIZE = 10;
     private static final Logger logger = ExecutionContext.INSTANCE.getLogger("Executor");
     private static final int RETENTION_QUEUE_SIZE = 200;
-    private static final long MAX_LIVE_TIME = TimeUnit.HOURS.toMillis(1);
+    private static final long MAX_LIVE_TIME = TimeUnit.HOURS.toMillis(1L);
     private final long timeStart;
     private final Map<T, IUniqueRunnable<T>> uniqueMap = new ConcurrentHashMap<>();
     private final Predicate<T> completeChecker;
@@ -27,7 +27,7 @@ public class QueuedThreadPoolExecutor<T> extends ThreadPoolExecutor {
     private final String description;
 
     public QueuedThreadPoolExecutor(final long needProcessCount, final int threadPoolSize, final Predicate<T> completeChecker, final String description) {
-        super(threadPoolSize, threadPoolSize, 0, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(RETENTION_QUEUE_SIZE));
+        super(threadPoolSize, threadPoolSize, 0L, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(RETENTION_QUEUE_SIZE));
         this.needProcessCount = needProcessCount;
         this.timeStart = System.currentTimeMillis();
         this.completeChecker = completeChecker;
@@ -49,27 +49,27 @@ public class QueuedThreadPoolExecutor<T> extends ThreadPoolExecutor {
     public void terminate(final long timeout, final TimeUnit unit) {
         final Long liveTime = Math.min(unit.toMillis(timeout), MAX_LIVE_TIME);
         int counter = 0;
-        long submitted = 0;
+        long submitted = 0L;
         while (true) try {
             final long completed = uniqueMap.keySet().stream().filter(completeChecker).count();
             if ((getCompletedTaskCount() == getTaskCount() && getCompletedTaskCount() >= needProcessCount) || System.currentTimeMillis() - timeStart > liveTime) break;
             if (0 == ++counter % 100) {
-                if (0 < needProcessCount)
+                if (0L < needProcessCount)
                     logger.finest(String.format("Waiting for %s %d sec (%d of %d completed, %d tasks finished of %d submitted, %d in queue)", description, counter, completed,
                                                 needProcessCount, getCompletedTaskCount(), getTaskCount(), getQueue().size()));
 
-                if (submitted == getTaskCount() && 0 < getTaskCount() && submitted < needProcessCount) {
+                if (submitted == getTaskCount() && 0L < getTaskCount() && submitted < needProcessCount) {
                     logger.severe(String.format("Nothing was submitted to %s, set needProcessCount to %d", description, submitted));
                     needProcessCount = submitted;
                 }
                 else submitted = getTaskCount();
             }
-            Thread.sleep(1000);
+            Thread.sleep(1000L);
         } catch (final InterruptedException e) {
             logger.severe("Wait interrupted for " + description);
         }
 
-        if (0 < needProcessCount)
+        if (0L < needProcessCount)
             logger.finest(String.format("Terminating working threads for %s after %s sec (%s of %s completed, %s tasks finished of %s submitted)", description, counter, uniqueMap.keySet()
                                                                                                                                                                                   .stream()
                                                                                                                                                                                   .filter(completeChecker).count(), needProcessCount, getCompletedTaskCount(), getTaskCount()));

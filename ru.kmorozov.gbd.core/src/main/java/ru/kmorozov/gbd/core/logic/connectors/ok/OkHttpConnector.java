@@ -36,7 +36,7 @@ public class OkHttpConnector extends HttpConnector {
         OkHttpClient requestFactory = factoryMap.get(key);
 
         if (null == requestFactory) synchronized (proxy) {
-            requestFactory = new OkHttpClient.Builder().proxy(proxy.getProxy()).connectTimeout(withTimeout ? CONNECT_TIMEOUT : CONNECT_TIMEOUT * 10, TimeUnit.MILLISECONDS).build();
+            requestFactory = new OkHttpClient.Builder().proxy(proxy.getProxy()).connectTimeout((long) (withTimeout ? CONNECT_TIMEOUT : CONNECT_TIMEOUT * 10), TimeUnit.MILLISECONDS).build();
 
             factoryMap.put(key, requestFactory);
         }
@@ -55,7 +55,7 @@ public class OkHttpConnector extends HttpConnector {
             headerItems.add(headerItem.getValue().toString());
         }
 
-        final Headers okHeaders = Headers.of(headerItems.toArray(new String[headerItems.size()]));
+        final Headers okHeaders = Headers.of(headerItems.toArray(new String[0]));
 
         final Request request = new Builder().url(url).headers(okHeaders).build();
         final okhttp3.Response response = getContent(request, proxy, withTimeout, 0);
@@ -74,7 +74,7 @@ public class OkHttpConnector extends HttpConnector {
 
         if (0 < attempt) try {
             logger.finest(String.format("Attempt %d with %s url", attempt, request.url().toString()));
-            Thread.sleep(SLEEP_TIME * attempt);
+            Thread.sleep((long) (SLEEP_TIME * attempt));
         } catch (final InterruptedException ignored) {
         }
 

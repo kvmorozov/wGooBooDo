@@ -160,7 +160,7 @@ public class OneDriveLoader extends BaseLoader {
     private Storage getStorageByLink(final String lnkFileName) {
         final String[] names = lnkFileName.split(delimiter);
         List<Storage> storages = storageRepository.findAllByName(names[names.length - 1]);
-        String parentName = null;
+        String parentName;
 
         for (int index = names.length - 1; 0 < index; index--) {
             if (1 == storages.size())
@@ -183,7 +183,7 @@ public class OneDriveLoader extends BaseLoader {
 
     @Override
     public Storage refresh(final Storage storage) {
-        if (ItemDTO.REFRESH_INTERVAL > System.currentTimeMillis() - storage.getStorageInfo().getLastChecked())
+        if ((long) ItemDTO.REFRESH_INTERVAL > System.currentTimeMillis() - storage.getStorageInfo().getLastChecked())
             return storage;
 
         try {
@@ -213,7 +213,7 @@ public class OneDriveLoader extends BaseLoader {
             book.getStorage().setLocalPath(DEFAULT_PARENT);
             storageRepository.save(book.getStorage());
 
-            final int itemPartSize = 0 < bookItem.getSize() ? (int) bookItem.getSize() / 5 : Integer.MAX_VALUE;
+            final int itemPartSize = 0L < bookItem.getSize() ? (int) bookItem.getSize() / 5 : Integer.MAX_VALUE;
 
             final Runnable task = new DownloadTask(
                     new TaskOptions(new TaskQueue(), api, FACTORY.readWriteProvider(), new SocketReporter()),

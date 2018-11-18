@@ -1,7 +1,7 @@
 package ru.kmorozov.gbd.core.loader;
 
 import ru.kmorozov.gbd.core.config.IIndex;
-import ru.kmorozov.db.core.logic.model.book.base.BookInfo;
+import ru.kmorozov.db.core.logic.model.book.BookInfo;
 import ru.kmorozov.gbd.core.logic.model.book.base.IBookInfo;
 import ru.kmorozov.db.utils.Mapper;
 

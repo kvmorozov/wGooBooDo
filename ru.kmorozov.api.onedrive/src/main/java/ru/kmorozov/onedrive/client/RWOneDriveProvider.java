@@ -103,9 +103,9 @@ class RWOneDriveProvider extends ROOneDriveProvider {
                 new GenericUrl(session.getUploadUrl()),
                 new ByteArrayContent(null, bytesToUpload));
 
-        request.getHeaders().setContentRange(String.format("bytes %d-%d/%d", session.getTotalUploaded(), session.getTotalUploaded() + bytesToUpload.length - 1, session.getFile().length()));
+        request.getHeaders().setContentRange(String.format("bytes %d-%d/%d", session.getTotalUploaded(), session.getTotalUploaded() + (long) bytesToUpload.length - 1L, session.getFile().length()));
 
-        if (session.getTotalUploaded() + bytesToUpload.length < session.getFile().length()) {
+        if (session.getTotalUploaded() + (long) bytesToUpload.length < session.getFile().length()) {
             final UploadSession response = request.execute().parseAs(UploadSession.class);
             session.setRanges(response.getNextExpectedRanges());
             return;
@@ -168,7 +168,7 @@ class RWOneDriveProvider extends ROOneDriveProvider {
 
             downloader.setChunkSize(chunkSize);
 
-            if (chunkSize < item.getSize()) {
+            if ((long) chunkSize < item.getSize()) {
                 // We need to fix the first byte, ranged OneDrive API is bugged
                 if (target.getPath().endsWith(".pdf.tmp"))
                     IOUtils.copy(new ByteArrayInputStream("%".getBytes(StandardCharsets.US_ASCII)), fos);

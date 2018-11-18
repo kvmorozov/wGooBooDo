@@ -2,7 +2,7 @@ package ru.kmorozov.gbd.core.logic.extractors.rfbr;
 
 import org.jsoup.nodes.Document;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookExtractor;
-import ru.kmorozov.db.core.logic.model.book.base.BookInfo;
+import ru.kmorozov.db.core.logic.model.book.BookInfo;
 import ru.kmorozov.gbd.core.logic.model.book.base.IBookData;
 import ru.kmorozov.db.core.logic.model.book.rfbr.RfbrBookData;
 import ru.kmorozov.db.core.logic.model.book.rfbr.RfbrPage;

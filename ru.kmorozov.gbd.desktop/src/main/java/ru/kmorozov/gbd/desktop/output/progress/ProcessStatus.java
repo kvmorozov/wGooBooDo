@@ -44,7 +44,7 @@ public class ProcessStatus implements IProgress {
 
     @Override
     public int incrementAndProgress() {
-        return 0 == maxValue ? 0 : Math.round(Math.min(inc() * 100 / maxValue, 100));
+        return 0 == maxValue ? 0 : Math.round((float) Math.min(inc() * 100 / maxValue, 100));
     }
 
     private void start() {

@@ -88,7 +88,7 @@ public class AsyncHttpConnector extends HttpConnector {
         }
 
         try {
-            return new AsyncHttpResponse(builder.execute(new AsyncHandler(proxy)).get(HttpConnector.CONNECT_TIMEOUT, TimeUnit.MILLISECONDS));
+            return new AsyncHttpResponse(builder.execute(new AsyncHandler(proxy)).get((long) HttpConnector.CONNECT_TIMEOUT, TimeUnit.MILLISECONDS));
         } catch (InterruptedException | ExecutionException | TimeoutException ex) {
             return null;
         } finally {

@@ -96,7 +96,7 @@ public class DuplicatesProcessor implements IProcessor {
                         .count().as("count"),
                 Aggregation.match(Criteria.where("count").gt(1.0)),
                 Aggregation.project("bookIds", "count", "size", "format"),
-                Aggregation.skip(0l)
+                Aggregation.skip(0L)
         ).withOptions(new AggregationOptions(true, false, new Document("batchSize", 1000.0)));
 
         final AggregationResults<BooksBySize> results = mongoTemplate.aggregate(booksAggregation, BooksBySize.class);

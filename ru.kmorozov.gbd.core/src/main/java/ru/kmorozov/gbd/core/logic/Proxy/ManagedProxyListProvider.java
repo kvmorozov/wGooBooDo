@@ -23,10 +23,10 @@ public class ManagedProxyListProvider {
         if (!parentProvider.proxyListCompleted())
             parentProvider.processProxyList(UrlType.JSTOR);
 
-        Optional<HttpHostExt> opProxy = null;
+        Optional<HttpHostExt> opProxy;
         do {
             try {
-                Thread.sleep(100);
+                Thread.sleep(100L);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -43,6 +43,6 @@ public class ManagedProxyListProvider {
     }
 
     private boolean checkReady(HttpHostExt proxy) {
-        return System.currentTimeMillis() - proxy.getLastUsedTimestamp() > timeout;
+        return System.currentTimeMillis() - proxy.getLastUsedTimestamp() > (long) timeout;
     }
 }

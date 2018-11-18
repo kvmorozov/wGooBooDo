@@ -73,7 +73,7 @@ public class LocalFSStorage implements IStorage {
 
     @Override
     public boolean isPageExists(IPage page) throws IOException {
-        return 0 == Files.find(storageDir.toPath(), 1,
+        return 0L == Files.find(storageDir.toPath(), 1,
                 (path, basicFileAttributes) -> path.toString().contains(page.getOrder() + '_' + page.getPid() + '.'),
                 FileVisitOption.FOLLOW_LINKS).count();
     }

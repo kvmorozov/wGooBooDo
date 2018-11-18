@@ -166,7 +166,7 @@ public class OneDriveWalker implements Closeable {
     enum EventType {
         START_DIRECTORY,
         END_DIRECTORY,
-        ENTRY;
+        ENTRY
     }
 
     private class DirectoryNode {

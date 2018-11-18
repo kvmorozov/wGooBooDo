@@ -32,8 +32,8 @@ public class StorageDTO {
         this.url = storage.getUrl();
         this.displayName = storage.getName();
         this.parentId = null == storage.getParent() ? null : storage.getParent().getId();
-        this.filesCount = null == storage.getStorageInfo() ? 0l : storage.getStorageInfo().getFilesCount();
-        this.lastChecked = null == storage.getStorageInfo() ? 0l : storage.getStorageInfo().getLastChecked();
+        this.filesCount = null == storage.getStorageInfo() ? 0L : storage.getStorageInfo().getFilesCount();
+        this.lastChecked = null == storage.getStorageInfo() ? 0L : storage.getStorageInfo().getLastChecked();
 
         if (withCategories)
             this.categories = storage.getCategories();

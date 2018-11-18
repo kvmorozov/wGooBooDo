@@ -34,7 +34,7 @@ public class OneDriveUploadSession {
 
             final String s = stringRanges[i].substring(stringRanges[i].indexOf('-') + 1);
 
-            long end = 0;
+            long end = 0L;
             if (!s.isEmpty()) {
                 end = Long.parseLong(s);
             }

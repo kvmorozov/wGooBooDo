@@ -1,7 +1,5 @@
 package ru.kmorozov.gbd.core.logic.model.book.base;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 /**
  * Created by sbt-morozov-kv on 17.11.2016.
  */

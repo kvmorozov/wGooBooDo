@@ -20,7 +20,7 @@ public class HashesFacet {
     public long getCrc32() {
         // OneDrive does not always return a hash
         if (null == crc32Hash) {
-            return 0;
+            return 0L;
         }
 
         final String reversed = crc32Hash.substring(6, 8) + crc32Hash.substring(4, 6) + crc32Hash.substring(2, 4) + crc32Hash.substring(0, 2);

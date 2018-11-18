@@ -78,8 +78,7 @@ public class Category {
         if (null == parents)
             parents = new HashSet<>();
 
-        if (!parents.contains(parent))
-            parents.add(parent);
+        parents.add(parent);
     }
 
     @Override

@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.Proxy.Type;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,7 +56,7 @@ public final class HttpConnections {
 
             if (null == resp) return "";
 
-            return ((List<String>) resp.getHeaders().get("set-cookie")).stream()
+            return ((Collection<String>) resp.getHeaders().get("set-cookie")).stream()
                     .map(s -> s.split(";")[0]).collect(Collectors.joining(";"));
         } catch (final Exception e) {
             return null;

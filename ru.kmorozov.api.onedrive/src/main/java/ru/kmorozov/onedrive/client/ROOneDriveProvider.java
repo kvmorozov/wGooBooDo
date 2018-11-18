@@ -103,7 +103,7 @@ class ROOneDriveProvider implements OneDriveProvider {
 
         } while (null != token); // If we have a token for the next page we need to keep going
 
-        return itemsToReturn.toArray(new OneDriveItem[itemsToReturn.size()]);
+        return itemsToReturn.toArray(new OneDriveItem[0]);
     }
 
     @Override
@@ -131,7 +131,7 @@ class ROOneDriveProvider implements OneDriveProvider {
 
         } while (null != token); // If we have a token for the next page we need to keep going
 
-        return itemsToReturn.toArray(new OneDriveItem[itemsToReturn.size()]);
+        return itemsToReturn.toArray(new OneDriveItem[0]);
     }
 
     @Override
@@ -236,6 +236,6 @@ class ROOneDriveProvider implements OneDriveProvider {
 
         } while (null != token); // If we have a token for the next page we need to keep going
 
-        return itemsToReturn.toArray(new OneDriveItem[itemsToReturn.size()]);
+        return itemsToReturn.toArray(new OneDriveItem[0]);
     }
 }

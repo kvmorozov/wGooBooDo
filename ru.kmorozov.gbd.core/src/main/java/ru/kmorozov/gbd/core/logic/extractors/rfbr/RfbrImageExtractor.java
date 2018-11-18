@@ -50,7 +50,7 @@ public class RfbrImageExtractor extends AbstractImageExtractor {
             for (final IPage page : bookContext.getBookInfo().getPages().getPages())
                 bookContext.imgExecutor.execute(new RfbrPageImgProcessor(bookContext, (RfbrPage) page, HttpHostExt.NO_PROXY));
 
-            bookContext.imgExecutor.terminate(20, TimeUnit.MINUTES);
+            bookContext.imgExecutor.terminate(20L, TimeUnit.MINUTES);
 
             ExecutionContext.INSTANCE.updateProxyList();
 

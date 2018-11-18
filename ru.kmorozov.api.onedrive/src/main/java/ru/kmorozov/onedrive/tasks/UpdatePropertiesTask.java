@@ -43,8 +43,8 @@ public class UpdatePropertiesTask extends Task {
             case UP:
                 final BasicFileAttributes attr = Files.readAttributes(localFile.toPath(), BasicFileAttributes.class);
                 // Timestamp rounded to the nearest second
-                final Date localCreatedDate = new Date(attr.creationTime().to(TimeUnit.SECONDS) * 1000);
-                final Date localModifiedDate = new Date(attr.lastModifiedTime().to(TimeUnit.SECONDS) * 1000);
+                final Date localCreatedDate = new Date(attr.creationTime().to(TimeUnit.SECONDS) * 1000L);
+                final Date localModifiedDate = new Date(attr.lastModifiedTime().to(TimeUnit.SECONDS) * 1000L);
 
                 api.updateFile(remoteFile, localCreatedDate, localModifiedDate);
 

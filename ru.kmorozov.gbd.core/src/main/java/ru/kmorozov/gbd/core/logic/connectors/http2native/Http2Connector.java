@@ -46,7 +46,7 @@ public class Http2Connector extends HttpConnector {
             final HttpResponse resp;
             if (validateProxy(rqUrl, proxy)) {
                 final HttpRequest.Builder reqBuilder = HttpRequest.newBuilder()
-                        .uri(uri).GET().timeout(Duration.ofMillis(withTimeout ? CONNECT_TIMEOUT : CONNECT_TIMEOUT * 10));
+                        .uri(uri).GET().timeout(Duration.ofMillis((long) (withTimeout ? CONNECT_TIMEOUT : CONNECT_TIMEOUT * 10)));
 
                 if (needHeaders(rqUrl)) {
                     HttpHeaders headers = proxy.getHeaders(getUrlType(rqUrl));
@@ -75,7 +75,7 @@ public class Http2Connector extends HttpConnector {
 
         if (1 < attempt) try {
             logger.finest(String.format("Attempt %d with %s url", attempt, req.uri().toString()));
-            Thread.sleep(SLEEP_TIME * attempt);
+            Thread.sleep((long) (SLEEP_TIME * attempt));
         } catch (final InterruptedException ignored) {
         }
 

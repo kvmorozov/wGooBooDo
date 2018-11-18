@@ -63,7 +63,7 @@ public abstract class AbstractImageExtractor extends AbstractEventSource impleme
 
         while (!initComplete.get()) {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(1000L);
             } catch (final InterruptedException e) {
                 e.printStackTrace();
             }

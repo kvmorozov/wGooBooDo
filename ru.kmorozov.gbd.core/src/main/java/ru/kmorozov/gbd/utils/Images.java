@@ -46,7 +46,7 @@ public class Images {
 
         switch (imgWidth) {
             case 1280:
-                if (96183 <= fileSize && 97200 > fileSize) {
+                if (96183L <= fileSize && 97200L > fileSize) {
                     try {
                         final BufferedImage bimg = ImageIO.read(imgfile);
                         return 1670 == bimg.getHeight();

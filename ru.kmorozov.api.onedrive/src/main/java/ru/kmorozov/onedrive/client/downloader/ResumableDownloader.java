@@ -94,7 +94,7 @@ public final class ResumableDownloader {
     /**
      * The total number of bytes downloaded by this downloader.
      */
-    private long bytesDownloaded = 1;
+    private long bytesDownloaded = 1L;
     /**
      * The last byte position of the media file we want to download, default value is {@code -1}.
      * <p>
@@ -102,7 +102,7 @@ public final class ResumableDownloader {
      * If its value is {@code -1} it means there is no upper limit on the byte position.
      * </p>
      */
-    private long lastBytePos = -1;
+    private long lastBytePos = -1L;
 
     private long totalSize;
 
@@ -179,12 +179,12 @@ public final class ResumableDownloader {
 
         // Download the media content in chunks.
         while (true) {
-            long currentRequestLastBytePos = bytesDownloaded + chunkSize - 1;
-            if (-1 != lastBytePos) {
+            long currentRequestLastBytePos = bytesDownloaded + (long) chunkSize - 1L;
+            if (-1L != lastBytePos) {
                 // If last byte position has been specified use it iff it is smaller than the chunksize.
                 currentRequestLastBytePos = Math.min(lastBytePos, currentRequestLastBytePos);
             }
-            HttpResponse response = null;
+            HttpResponse response;
 
             try {
                 response = executeCurrentRequest(
@@ -233,17 +233,16 @@ public final class ResumableDownloader {
         // set Range header (if necessary)
 
         boolean chunked = false;
-        if (0 != bytesDownloaded || -1 != currentRequestLastBytePos) {
+        if (0L != bytesDownloaded || -1L != currentRequestLastBytePos) {
             final StringBuilder rangeHeader = new StringBuilder();
             rangeHeader.append("bytes=");
-            if (0 == totalSize || totalSize - currentRequestLastBytePos > chunkSize)
+            if (0L == totalSize || totalSize - currentRequestLastBytePos > (long) chunkSize)
                 rangeHeader.append(bytesDownloaded).append('-').append(currentRequestLastBytePos);
             else
                 rangeHeader.append('-').append(totalSize - bytesDownloaded);
 
             request.getHeaders().setRange(rangeHeader.toString());
 
-            chunked = true;
         }
 
         request.setRetryOnExecuteIOException(true);
@@ -274,11 +273,11 @@ public final class ResumableDownloader {
             return 0L;
         }
         return Long.parseLong(
-                rangeHeader.substring(rangeHeader.indexOf('-') + 1, rangeHeader.indexOf('/'))) + 1;
+                rangeHeader.substring(rangeHeader.indexOf('-') + 1, rangeHeader.indexOf('/'))) + 1L;
     }
 
     private void setTotalSize(final String rangeHeader) {
-        if (0 < totalSize)
+        if (0L < totalSize)
             return;
 
         totalSize = Long.parseLong(rangeHeader.substring(rangeHeader.indexOf('/') + 1));
@@ -300,7 +299,7 @@ public final class ResumableDownloader {
      * @param bytesDownloaded The total number of bytes downloaded
      */
     public ResumableDownloader setBytesDownloaded(final long bytesDownloaded) {
-        Preconditions.checkArgument(0 <= bytesDownloaded);
+        Preconditions.checkArgument(0L <= bytesDownloaded);
         this.bytesDownloaded = bytesDownloaded;
         return this;
     }
@@ -322,9 +321,9 @@ public final class ResumableDownloader {
      * @since 1.13
      */
     public ResumableDownloader setContentRange(final long firstBytePos, final int lastBytePos) {
-        Preconditions.checkArgument(lastBytePos >= firstBytePos);
+        Preconditions.checkArgument((long) lastBytePos >= firstBytePos);
         setBytesDownloaded(firstBytePos);
-        this.lastBytePos = lastBytePos;
+        this.lastBytePos = (long) lastBytePos;
         return this;
     }
 
@@ -339,7 +338,7 @@ public final class ResumableDownloader {
         if (null == rangeHeader) {
             return;
         }
-        if (0 == mediaContentLength) {
+        if (0L == mediaContentLength) {
             mediaContentLength = Long.parseLong(rangeHeader.substring(rangeHeader.indexOf('/') + 1));
         }
     }
@@ -458,7 +457,7 @@ public final class ResumableDownloader {
      * @return the download progress
      */
     public double getProgress() {
-        return 0 == mediaContentLength ? 0 : (double) bytesDownloaded / mediaContentLength;
+        return 0L == mediaContentLength ? (double) 0 : (double) bytesDownloaded / (double) mediaContentLength;
     }
 
     /**

@@ -71,7 +71,7 @@ class RWFileSystemProvider extends ROFileSystemProvider {
 
         if (original.exists() && !original.delete()) {
             try {
-                Thread.sleep(500);
+                Thread.sleep(500L);
             } catch (final InterruptedException e) {
                 e.printStackTrace();
             }
@@ -81,7 +81,7 @@ class RWFileSystemProvider extends ROFileSystemProvider {
 
         if (!replacement.renameTo(original)) {
             try {
-                Thread.sleep(500);
+                Thread.sleep(500L);
             } catch (final InterruptedException e) {
                 e.printStackTrace();
             }

@@ -9,7 +9,7 @@ import ru.kmorozov.db.core.config.IBaseLoader;
 import ru.kmorozov.gbd.core.logic.Proxy.AbstractProxyListProvider;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookExtractor;
-import ru.kmorozov.db.core.logic.model.book.base.BookInfo;
+import ru.kmorozov.db.core.logic.model.book.BookInfo;
 import ru.kmorozov.db.core.logic.model.book.google.GoogleBookData;
 import ru.kmorozov.db.core.logic.model.book.google.GooglePagesInfo;
 import ru.kmorozov.db.utils.Mapper;

@@ -27,8 +27,8 @@ public class TokenFactory {
             driver.get(OneDriveAuthorisationProvider.getAuthString(clientId));
 
             final Wait<WebDriver> wait = new FluentWait(driver)
-                    .withTimeout(30, TimeUnit.MINUTES)
-                    .pollingEvery(1, TimeUnit.SECONDS)
+                    .withTimeout(30L, TimeUnit.MINUTES)
+                    .pollingEvery(1L, TimeUnit.SECONDS)
                     .ignoring(NoSuchElementException.class);
 
             if (!StringUtils.isEmpty(user)) {

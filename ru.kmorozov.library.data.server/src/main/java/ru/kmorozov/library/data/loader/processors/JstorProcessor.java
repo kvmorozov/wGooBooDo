@@ -79,7 +79,7 @@ public class JstorProcessor implements IProcessor {
 
         HttpHostExt proxy = proxyProvider.getProxy();
 
-        String doi = null;
+        String doi;
         try {
             String doc = jstorConnector.getString(JSTOR_ARTICLE_PREFIX + jstorId, proxy, true);
             Optional<String> opDoi = Arrays.stream(doc.split("\\r?\\n"))

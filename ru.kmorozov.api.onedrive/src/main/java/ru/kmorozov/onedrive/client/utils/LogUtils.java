@@ -22,23 +22,23 @@ public final class LogUtils {
     }
 
     public static String readableFileSize(final long size) {
-        if (0 >= size) return "0";
+        if (0L >= size) return "0";
         final String[] units = {"B", "KB", "MB", "GB", "TB"};
-        final int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
-        return new DecimalFormat("#,##0.#").format(size / Math.pow(1024, digitGroups)) + ' ' + units[digitGroups];
+        final int digitGroups = (int) (Math.log10((double) size) / Math.log10(1024.0));
+        return new DecimalFormat("#,##0.#").format((double) size / Math.pow(1024.0, (double) digitGroups)) + ' ' + units[digitGroups];
     }
 
     public static String readableTime(final long ms) {
 
-        if (1000 > ms) {
+        if (1000L > ms) {
             return ms + "ms";
-        } else if (60000 > ms) {
-            return String.format("%.1fs", ms / 1000d);
+        } else if (60000L > ms) {
+            return String.format("%.1fs", (double) ms / 1000.0d);
         } else {
-            final long seconds = ms / 1000;
-            final long s = seconds % 60;
-            final long m = (seconds / 60) % 60;
-            final long h = (seconds / (60 * 60)) % 24;
+            final long seconds = ms / 1000L;
+            final long s = seconds % 60L;
+            final long m = (seconds / 60L) % 60L;
+            final long h = (seconds / (long) (60 * 60)) % 24L;
             return String.format("%02d:%02d:%02d", h, m, s);
         }
     }

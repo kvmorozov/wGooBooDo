@@ -1,4 +1,4 @@
-package ru.kmorozov.db.core.logic.model.book.base;
+package ru.kmorozov.db.core.logic.model.book;
 
 import ru.kmorozov.gbd.core.logic.model.book.base.IBookData;
 import ru.kmorozov.gbd.core.logic.model.book.base.IBookInfo;
@@ -52,6 +52,6 @@ public class BookInfo implements Serializable, ILoggableObject, IBookInfo {
 
     @Override
     public String getDescription() {
-        return getBookData().getTitle();
+        return bookData.getTitle();
     }
 }

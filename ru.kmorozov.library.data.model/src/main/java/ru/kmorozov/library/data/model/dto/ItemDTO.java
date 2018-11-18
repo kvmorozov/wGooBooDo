@@ -41,7 +41,7 @@ public class ItemDTO extends ResourceSupport {
         this.displayName = storageDTO.getDisplayName();
         this.filesCount = storageDTO.getFilesCount();
 
-        refreshStatus = ItemDTO.REFRESH_INTERVAL > System.currentTimeMillis() - storageDTO.getLastChecked() ? RefreshStatus.updated : RefreshStatus.dirty;
+        refreshStatus = (long) ItemDTO.REFRESH_INTERVAL > System.currentTimeMillis() - storageDTO.getLastChecked() ? RefreshStatus.updated : RefreshStatus.dirty;
 
         if (null != storageDTO.getCategories())
             this.categories = storageDTO.getCategories().stream().map(CategoryDTO::new).collect(Collectors.toList());

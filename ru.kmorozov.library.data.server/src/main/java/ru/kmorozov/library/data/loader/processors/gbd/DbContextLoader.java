@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import ru.kmorozov.db.core.config.IBaseLoader;
 import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage;
-import ru.kmorozov.db.core.logic.model.book.base.BookInfo;
+import ru.kmorozov.db.core.logic.model.book.BookInfo;
 import ru.kmorozov.gbd.core.logic.model.book.base.IPage;
 import ru.kmorozov.library.data.repository.GoogleBooksRepository;
 

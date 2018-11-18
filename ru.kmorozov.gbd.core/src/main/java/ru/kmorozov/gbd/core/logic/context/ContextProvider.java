@@ -2,7 +2,7 @@ package ru.kmorozov.gbd.core.logic.context;
 
 import ru.kmorozov.db.core.config.IBaseLoader;
 import ru.kmorozov.gbd.core.loader.DirContextLoader;
-import ru.kmorozov.db.core.logic.model.book.base.BookInfo;
+import ru.kmorozov.db.core.logic.model.book.BookInfo;
 
 import java.util.Set;
 
@@ -27,7 +27,7 @@ public class ContextProvider implements IBaseLoader {
             synchronized (LOCK_OBJ) {
                 if (null == contextProvider) if (classExists(DB_CTX_PROVIDER_CLASS_NAME)) {
                     try {
-                        contextProvider = (ContextProvider) Class.forName(DB_CTX_PROVIDER_CLASS_NAME).getDeclaredConstructor().newInstance();
+                        contextProvider = (IBaseLoader) Class.forName(DB_CTX_PROVIDER_CLASS_NAME).getDeclaredConstructor().newInstance();
                     } catch (final Exception e) {
                         e.printStackTrace();
                     }

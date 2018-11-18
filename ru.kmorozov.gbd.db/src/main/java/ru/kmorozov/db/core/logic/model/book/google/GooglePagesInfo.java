@@ -47,11 +47,11 @@ public class GooglePagesInfo implements IPagesInfo, Serializable {
             prevPage = page;
         }
 
-        pages = pagesMap.values().toArray(new GooglePageInfo[pagesMap.size()]);
+        pages = pagesMap.values().toArray(new GooglePageInfo[0]);
     }
 
     private void fillGap(final GooglePageInfo beginGap, final GooglePageInfo endGap) {
-        Logger logger = new Logger(new DummyReceiver(), "gapFinder", ": ");;
+        Logger logger = new Logger(new DummyReceiver(), "gapFinder", ": ");
 
         if (beginGap.isGapPage() || endGap.isGapPage()) return;
 

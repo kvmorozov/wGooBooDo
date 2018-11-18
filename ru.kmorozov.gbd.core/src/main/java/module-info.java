@@ -12,4 +12,9 @@ module ru.kmorozov.gbd.core {
     requires com.google.common;
     requires java.desktop;
     requires gson;
+    requires httpclient5;
+    requires async.http.client;
+    requires io.netty.codec.http;
+    requires io.netty.common;
+    requires io.netty.transport;
 }

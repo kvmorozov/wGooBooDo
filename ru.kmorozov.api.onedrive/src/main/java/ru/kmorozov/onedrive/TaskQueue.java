@@ -59,7 +59,7 @@ public class TaskQueue {
         }
 
         try {
-            Thread.sleep(seconds * 1000);
+            Thread.sleep((long) (seconds * 1000));
         } catch (final InterruptedException e) {
             Thread.currentThread().interrupt();
         } finally {

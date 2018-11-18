@@ -62,7 +62,7 @@ public class LoadTest {
     public void loadLinksTestOneMiltiDir() {
         final String[] names = MULTIPLE_LNK_DIR.split(delimiter);
         List<Storage> storages = storageRepository.findAllByName(names[names.length - 1]);
-        String parentName = null;
+        String parentName;
 
         for (int index = names.length - 1; 0 < index; index--) {
             if (1 == storages.size())

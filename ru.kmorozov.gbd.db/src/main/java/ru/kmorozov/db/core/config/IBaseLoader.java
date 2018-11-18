@@ -1,6 +1,6 @@
 package ru.kmorozov.db.core.config;
 
-import ru.kmorozov.db.core.logic.model.book.base.BookInfo;
+import ru.kmorozov.db.core.logic.model.book.BookInfo;
 
 import java.util.Set;
 

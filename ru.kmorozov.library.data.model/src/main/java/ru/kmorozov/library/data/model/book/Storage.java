@@ -98,8 +98,7 @@ public class Storage {
         if (null == categories)
             categories = new HashSet<>();
 
-        if (!categories.contains(category))
-            categories.add(category);
+        categories.add(category);
     }
 
     public StorageInfo getStorageInfo() {

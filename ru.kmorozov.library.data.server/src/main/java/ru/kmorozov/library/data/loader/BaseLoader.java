@@ -41,17 +41,17 @@ public abstract class BaseLoader implements ILoader, Runnable {
         final long storageCount = storageRepository.count();
         final long booksCount = booksRepository.count();
 
-        if (0 < categoryCount) {
+        if (0L < categoryCount) {
             logger.info("Categories loaded: " + categoryCount);
             categoryRepository.deleteAll();
         }
 
-        if (0 < storageCount) {
+        if (0L < storageCount) {
             logger.info("Storages loaded: " + storageCount);
             storageRepository.deleteAll();
         }
 
-        if (0 < booksCount) {
+        if (0L < booksCount) {
             logger.info("Books loaded: " + storageCount);
             booksRepository.deleteAll();
         }
@@ -153,7 +153,7 @@ public abstract class BaseLoader implements ILoader, Runnable {
 
                                 final long oldSize = existBook.getBookInfo().getSize();
                                 final long newSize = serverItem.getSize();
-                                final boolean sizeCondition = 0l == oldSize || oldSize != newSize;
+                                final boolean sizeCondition = 0L == oldSize || oldSize != newSize;
 
                                 boolean storageCondition = !existBook.getStorage().equals(storage);
                                 boolean nameCondition = serverItem.getName().equals(existBook.getBookInfo().getFileName());

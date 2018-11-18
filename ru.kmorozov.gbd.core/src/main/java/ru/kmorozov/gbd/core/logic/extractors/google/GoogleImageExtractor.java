@@ -83,7 +83,7 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
                                 _page.setDataProcessed(bimg.getWidth() >= imgWidth);
 
                                 // 1.4 - эмпирически, высота переменная
-                                if (bimg.getWidth() * 1.4 > bimg.getHeight()) {
+                                if ((double) bimg.getWidth() * 1.4 > (double) bimg.getHeight()) {
                                     Files.delete(filePath);
                                     _page.setDataProcessed(false);
                                     logger.severe(String.format("Page %s deleted!", _page.getPid()));
@@ -167,11 +167,11 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
             if (0 >= proxyNeeded) {
                 if (!processingStarted.compareAndSet(false, true)) return;
 
-                bookContext.sigExecutor.terminate(10, TimeUnit.MINUTES);
+                bookContext.sigExecutor.terminate(10L, TimeUnit.MINUTES);
 
                 bookContext.getPagesStream().filter(page -> !page.isDataProcessed() && null != ((GooglePageInfo) page).getSig()).forEach(page -> bookContext.imgExecutor.execute(new GooglePageImgProcessor(bookContext, (GooglePageInfo) page, HttpHostExt.NO_PROXY)));
 
-                bookContext.imgExecutor.terminate(10, TimeUnit.MINUTES);
+                bookContext.imgExecutor.terminate(10L, TimeUnit.MINUTES);
 
                 logger.info(bookContext.getBookInfo().getPages().getMissingPagesList());
 

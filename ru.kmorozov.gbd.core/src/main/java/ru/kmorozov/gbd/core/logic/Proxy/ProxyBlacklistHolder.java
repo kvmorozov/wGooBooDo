@@ -59,8 +59,8 @@ public final class ProxyBlacklistHolder {
             }
         }
 
-        final List<HttpHostExt> deadProxyList = storedHosts.parallelStream().filter(HttpHostExt::isNotAvailable).limit(DEAD_PROXY_TREASHOLD).collect(Collectors.toList());
-        final List<HttpHostExt> liveProxyList = storedHosts.parallelStream().filter(HttpHostExt::isAvailable).limit(DEAD_PROXY_TREASHOLD).collect(Collectors.toList());
+        final List<HttpHostExt> deadProxyList = storedHosts.parallelStream().filter(HttpHostExt::isNotAvailable).limit((long) DEAD_PROXY_TREASHOLD).collect(Collectors.toList());
+        final List<HttpHostExt> liveProxyList = storedHosts.parallelStream().filter(HttpHostExt::isAvailable).limit((long) DEAD_PROXY_TREASHOLD).collect(Collectors.toList());
 
         try (PrintWriter out = new PrintWriter(blacklistFile)) {
             for (final HttpHostExt host : liveProxyList)

@@ -116,7 +116,7 @@ public class Main {
                                primary.getDriveType(),
                                LogUtils.readableFileSize(primary.getQuota().getUsed()),
                                LogUtils.readableFileSize(primary.getQuota().getTotal()),
-                               ((double) primary.getQuota().getUsed() / primary.getQuota().getTotal()) * 100));
+                               ((double) primary.getQuota().getUsed() / (double) primary.getQuota().getTotal()) * 100.0));
 
         // Check the given root folder
         final OneDriveItem rootFolder;

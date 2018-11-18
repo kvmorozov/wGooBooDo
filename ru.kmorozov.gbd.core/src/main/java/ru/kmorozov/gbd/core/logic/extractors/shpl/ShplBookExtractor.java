@@ -5,7 +5,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookExtractor;
-import ru.kmorozov.db.core.logic.model.book.base.BookInfo;
+import ru.kmorozov.db.core.logic.model.book.BookInfo;
 import ru.kmorozov.gbd.core.logic.model.book.base.IBookData;
 import ru.kmorozov.db.core.logic.model.book.shpl.ShplBookData;
 import ru.kmorozov.db.core.logic.model.book.shpl.ShplPage;

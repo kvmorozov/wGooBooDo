@@ -84,23 +84,23 @@ public class TaskReporter {
         }
 
         if (0 < same) {
-            log.info(String.format("Skipped %d unchanged file%s", same, plural(same)));
+            log.info(String.format("Skipped %d unchanged file%s", same, plural((long) same)));
         }
 
         if (0 < skipped) {
-            log.info(String.format("Skipped %d ignored file%s", skipped, plural(skipped)));
+            log.info(String.format("Skipped %d ignored file%s", skipped, plural((long) skipped)));
         }
 
         if (0 < localDeleted) {
-            log.info(String.format("Deleted %d local file%s", localDeleted, plural(skipped)));
+            log.info(String.format("Deleted %d local file%s", localDeleted, plural((long) skipped)));
         }
 
         if (0 < remoteDeleted) {
-            log.info(String.format("Deleted %d remote file%s", remoteDeleted, plural(skipped)));
+            log.info(String.format("Deleted %d remote file%s", remoteDeleted, plural((long) skipped)));
         }
 
         if (0 < propsUpdated) {
-            log.info(String.format("Updated timestamps on %d file%s", propsUpdated, plural(skipped)));
+            log.info(String.format("Updated timestamps on %d file%s", propsUpdated, plural((long) skipped)));
         }
 
         if (0 < newUploaded || 0 < replaceUploaded) {
@@ -110,14 +110,14 @@ public class TaskReporter {
             uploadedResult.append(
                     String.format("Uploaded %d file%s (%s) - ",
                                   newUploaded + replaceUploaded,
-                                  plural(newUploaded + replaceUploaded),
+                                  plural((long) (newUploaded + replaceUploaded)),
                                   LogUtils.readableFileSize(newUploadedSize + replaceUploadedSize)));
 
             if (0 < newUploaded) {
                 uploadedResult.append(
                         String.format("%d new file%s (%s) ",
                                       newUploaded,
-                                      plural(newUploaded),
+                                      plural((long) newUploaded),
                                       LogUtils.readableFileSize(newUploadedSize)));
             }
 
@@ -125,7 +125,7 @@ public class TaskReporter {
                 uploadedResult.append(
                         String.format("%d new file%s (%s) ",
                                       replaceUploaded,
-                                      plural(replaceUploaded),
+                                      plural((long) replaceUploaded),
                                       LogUtils.readableFileSize(replaceUploadedSize)));
             }
 
@@ -138,14 +138,14 @@ public class TaskReporter {
             downloadedResult.append(
                     String.format("Downloaded %d file%s (%s) - ",
                                   newDownloaded + replaceDownloaded,
-                                  plural(newDownloaded + replaceDownloaded),
+                                  plural((long) (newDownloaded + replaceDownloaded)),
                                   LogUtils.readableFileSize(newDownloadedSize + replaceDownloadedSize)));
 
             if (0 < newDownloaded) {
                 downloadedResult.append(
                         String.format("%d new file%s (%s) ",
                                       newDownloaded,
-                                      plural(newDownloaded),
+                                      plural((long) newDownloaded),
                                       LogUtils.readableFileSize(newDownloadedSize)));
             }
 
@@ -153,7 +153,7 @@ public class TaskReporter {
                 downloadedResult.append(
                         String.format("%d new file%s (%s) ",
                                       replaceDownloaded,
-                                      plural(replaceDownloaded),
+                                      plural((long) replaceDownloaded),
                                       LogUtils.readableFileSize(replaceDownloadedSize)));
             }
 
@@ -165,7 +165,7 @@ public class TaskReporter {
     }
 
     private static String plural(final long same) {
-        return 1 == same ? "" : "s";
+        return 1L == same ? "" : "s";
     }
 
     public void setTaskLogger(final Logger taskLogger) {

@@ -65,7 +65,7 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
             psSigs.inc();
             sigPageExecutor.execute(new SigProcessorInternal((GooglePageInfo) page));
         });
-        sigPageExecutor.terminate(3, TimeUnit.MINUTES);
+        sigPageExecutor.terminate(3L, TimeUnit.MINUTES);
 
         psSigs.finish();
     }

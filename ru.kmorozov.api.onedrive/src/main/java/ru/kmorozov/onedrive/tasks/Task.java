@@ -49,10 +49,10 @@ public abstract class Task implements Runnable, Comparable<Task> {
 
     private static boolean isSizeInvalid(final String filename, final long size) {
         final int maxSizeKb = CommandLineOpts.getCommandLineOpts().getMaxSizeKb();
-        if (0 < maxSizeKb && size > maxSizeKb * 1024) {
+        if (0 < maxSizeKb && size > (long) (maxSizeKb * 1024)) {
             log.debug(String.format("Skipping file %s - size is %dKB (bigger than maximum of %dKB)",
                     filename,
-                    size / 1024,
+                    size / 1024L,
                     maxSizeKb));
             return true;
         }

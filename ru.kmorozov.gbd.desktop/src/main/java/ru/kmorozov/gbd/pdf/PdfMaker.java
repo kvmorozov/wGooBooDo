@@ -11,7 +11,7 @@ import ru.kmorozov.gbd.core.loader.LocalFSStorage;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.extractors.base.IPostProcessor;
-import ru.kmorozov.db.core.logic.model.book.base.BookInfo;
+import ru.kmorozov.db.core.logic.model.book.BookInfo;
 import ru.kmorozov.gbd.logger.Logger;
 import ru.kmorozov.gbd.utils.Images;
 
@@ -55,7 +55,7 @@ public class PdfMaker implements IPostProcessor {
         if (!bookContext.pdfCompleted.compareAndSet(false, true)) return;
 
         final File imgDir = ((LocalFSStorage) bookContext.getStorage()).getStorageDir();
-        long existPages = 0;
+        long existPages = 0L;
         final BookInfo bookInfo = bookContext.getBookInfo();
 
         File pdfFile = null;
@@ -72,7 +72,7 @@ public class PdfMaker implements IPostProcessor {
             if (Files.exists(pdfFile.toPath())) {
                 if (pdfFile.lastModified() < bookInfo.getLastPdfChecked()) existPages = bookContext.getPagesBefore();
                 else try (PDDocument existDocument = PDDocument.load(pdfFile)) {
-                    existPages = existDocument.getNumberOfPages();
+                    existPages = (long) existDocument.getNumberOfPages();
                 } catch (final Exception ex) {
                     pdfFile.createNewFile();
                 }
@@ -105,13 +105,13 @@ public class PdfMaker implements IPostProcessor {
                             Files.delete(filePath);
                             logger.severe(String.format("Image %s was deleted!", filePath.getFileName()));
                         } else {
-                            final float width = bimg.getWidth();
-                            final float height = bimg.getHeight();
+                            final float width = (float) bimg.getWidth();
+                            final float height = (float) bimg.getHeight();
                             final PDPage page = new PDPage(new PDRectangle(width, height));
                             document.addPage(page);
                             final PDImageXObject img = PDImageXObject.createFromFile(filePath.toString(), document);
                             try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
-                                contentStream.drawImage(img, 0, 0);
+                                contentStream.drawImage(img, (float) 0, (float) 0);
                             }
                         }
                     } else {

@@ -31,7 +31,7 @@ public class ApacheHttpConnector extends HttpConnector {
 
         if (0 < attempt) try {
             logger.finest(String.format("Attempt %d with %s url", attempt, req.getRequestUri()));
-            Thread.sleep(SLEEP_TIME * attempt);
+            Thread.sleep((long) (SLEEP_TIME * attempt));
         } catch (final InterruptedException ignored) {
         }
 

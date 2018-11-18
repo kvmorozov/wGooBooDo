@@ -89,9 +89,9 @@ public class DownloadTask extends Task {
                                 final long elapsedTimeInner = System.currentTimeMillis() - startTimeInner;
 
                                 reporter.info(String.format("Downloaded chunk (progress %.1f%%) of %s (%s/s) for file %s",
-                                                            downloader.getProgress() * 100,
-                                                            LogUtils.readableFileSize(downloader.getChunkSize()),
-                                        0 < elapsedTimeInner ? LogUtils.readableFileSize(downloader.getChunkSize() / (elapsedTimeInner / 1000d)) : 0,
+                                                            downloader.getProgress() * 100.0,
+                                                            LogUtils.readableFileSize((long) downloader.getChunkSize()),
+                                        0L < elapsedTimeInner ? LogUtils.readableFileSize((double) downloader.getChunkSize() / ((double) elapsedTimeInner / 1000.0d)) : 0,
                                                             remoteFile.getFullName()));
 
                                 startTimeInner = System.currentTimeMillis();
@@ -101,7 +101,7 @@ public class DownloadTask extends Task {
                                 reporter.info(String.format("Downloaded %s in %s (%s/s) of %s file %s",
                                                             LogUtils.readableFileSize(remoteFile.getSize()),
                                                             LogUtils.readableTime(elapsedTime),
-                                        0 < elapsedTime ? LogUtils.readableFileSize(remoteFile.getSize() / (elapsedTime / 1000d)) : 0,
+                                        0L < elapsedTime ? LogUtils.readableFileSize((double) remoteFile.getSize() / ((double) elapsedTime / 1000.0d)) : 0,
                                                             replace ? "replaced" : "new",
                                                             remoteFile.getFullName()));
                         }

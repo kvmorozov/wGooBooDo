@@ -55,8 +55,8 @@ public final class ApacheConnections {
         }
 
         final RequestConfig requestConfig = RequestConfig.copy(RequestConfig.DEFAULT)
-                                                         .setConnectTimeout(HttpConnector.CONNECT_TIMEOUT, TimeUnit.MILLISECONDS)
-                                                         .setConnectionRequestTimeout(HttpConnector.CONNECT_TIMEOUT, TimeUnit.MILLISECONDS).build();
+                                                         .setConnectTimeout((long) HttpConnector.CONNECT_TIMEOUT, TimeUnit.MILLISECONDS)
+                                                         .setConnectionRequestTimeout((long) HttpConnector.CONNECT_TIMEOUT, TimeUnit.MILLISECONDS).build();
 
         builderWithTimeout.setDefaultRequestConfig(requestConfig);
     }

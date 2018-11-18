@@ -2,7 +2,6 @@ package ru.kmorozov.gbd.core.logic.connectors.ok;
 
 import ru.kmorozov.gbd.core.logic.connectors.Response;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 /**

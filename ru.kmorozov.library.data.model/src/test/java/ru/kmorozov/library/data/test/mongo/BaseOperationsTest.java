@@ -13,7 +13,6 @@ import ru.kmorozov.library.data.model.book.Book;
 import ru.kmorozov.library.data.repository.BooksRepository;
 import ru.kmorozov.library.data.storage.mongo.LikeTextSearch;
 
-import javax.validation.constraints.AssertTrue;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
@@ -50,7 +49,7 @@ public class BaseOperationsTest {
         final Book savedBook = booksRepository.save(book);
         Assert.assertThat(savedBook, notNullValue());
         Assert.assertThat(savedBook, is(book));
-        Assert.assertThat(booksRepository.count(), is(countBefore + 1));
+        Assert.assertThat(booksRepository.count(), is(countBefore + 1L));
         booksRepository.delete(book);
         Assert.assertThat(booksRepository.count(), is(countBefore));
     }
@@ -74,6 +73,6 @@ public class BaseOperationsTest {
     @Test
     public void findLinks() {
         final Stream<Book> lnkBooks = booksRepository.streamByBookInfoFormat("LNK");
-        Assert.assertTrue(10 > lnkBooks.count());
+        Assert.assertTrue(10L > lnkBooks.count());
     }
 }

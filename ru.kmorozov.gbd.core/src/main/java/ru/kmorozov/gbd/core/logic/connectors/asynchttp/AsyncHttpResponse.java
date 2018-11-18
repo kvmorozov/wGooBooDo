@@ -2,7 +2,6 @@ package ru.kmorozov.gbd.core.logic.connectors.asynchttp;
 
 import org.asynchttpclient.Response;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 /**

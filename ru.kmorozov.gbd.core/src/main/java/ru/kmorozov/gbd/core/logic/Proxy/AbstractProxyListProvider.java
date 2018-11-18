@@ -77,14 +77,14 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
     @Override
     public void invalidatedProxyListener() {
         final long liveProxyCount = proxyList.stream().filter(HttpHostExt::isAvailable).count();
-        if (0 == liveProxyCount && GBDOptions.secureMode()) throw new RuntimeException("No more proxies!");
+        if (0L == liveProxyCount && GBDOptions.secureMode()) throw new RuntimeException("No more proxies!");
     }
 
     @Override
     public Stream<HttpHostExt> getParallelProxyStream() {
         if (!proxyListCompleted.get()) {
             try {
-                Thread.sleep(500);
+                Thread.sleep(500L);
             } catch (final InterruptedException e) {
                 e.printStackTrace();
             }

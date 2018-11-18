@@ -2,7 +2,7 @@ package ru.kmorozov.gbd.desktop.gui;
 
 import ru.kmorozov.gbd.client.RestClient;
 import ru.kmorozov.gbd.core.loader.DirContextLoader;
-import ru.kmorozov.db.core.logic.model.book.base.BookInfo;
+import ru.kmorozov.db.core.logic.model.book.BookInfo;
 
 /**
  * Created by sbt-morozov-kv on 15.12.2016.

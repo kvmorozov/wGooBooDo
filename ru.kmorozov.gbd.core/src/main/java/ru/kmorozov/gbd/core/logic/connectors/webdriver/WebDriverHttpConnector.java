@@ -25,8 +25,8 @@ public class WebDriverHttpConnector extends HttpConnector {
         driver.get(url);
 
         final Wait<WebDriver> wait = new FluentWait(driver)
-                .withTimeout(CONNECT_TIMEOUT, TimeUnit.MILLISECONDS)
-                .pollingEvery(1, TimeUnit.SECONDS)
+                .withTimeout((long) CONNECT_TIMEOUT, TimeUnit.MILLISECONDS)
+                .pollingEvery(1L, TimeUnit.SECONDS)
                 .ignoring(NoSuchElementException.class);
 
         return new WebDriverResponse(driver.getPageSource());

@@ -23,8 +23,8 @@ public class MainFrame extends JFrame {
         pack();
 
         final Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
-        final int x = (int) ((dimension.getWidth() - getWidth()) / 2);
-        final int y = (int) ((dimension.getHeight() - getHeight()) / 2);
+        final int x = (int) ((dimension.getWidth() - (double) getWidth()) / 2.0);
+        final int y = (int) ((dimension.getHeight() - (double) getHeight()) / 2.0);
         setLocation(x, y);
     }
 

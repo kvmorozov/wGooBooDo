@@ -55,12 +55,12 @@ public interface OneDriveItem {
 
                 @Override
                 public long getCrc32() {
-                    return 0;
+                    return 0L;
                 }
 
                 @Override
                 public long getSize() {
-                    return 0;
+                    return 0L;
                 }
 
                 @Override
@@ -188,12 +188,12 @@ public interface OneDriveItem {
 
                 @Override
                 public long getCrc32() {
-                    return 0;
+                    return 0L;
                 }
 
                 @Override
                 public long getSize() {
-                    return 0;
+                    return 0L;
                 }
 
                 @Override

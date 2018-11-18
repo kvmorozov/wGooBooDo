@@ -47,14 +47,14 @@ class ROFileSystemProvider implements FileSystemProvider {
     public FileMatch verifyMatch(final File file, final long crc, final long fileSize, Date created, Date lastModified) throws IOException {
 
         // Round to nearest second
-        created = new Date((created.getTime() / 1000) * 1000);
-        lastModified = new Date((lastModified.getTime() / 1000) * 1000);
+        created = new Date((created.getTime() / 1000L) * 1000L);
+        lastModified = new Date((lastModified.getTime() / 1000L) * 1000L);
 
         final BasicFileAttributes attr = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
 
         // Timestamp rounded to the nearest second
-        final Date localCreatedDate = new Date(attr.creationTime().to(TimeUnit.SECONDS) * 1000);
-        final Date localModifiedDate = new Date(attr.lastModifiedTime().to(TimeUnit.SECONDS) * 1000);
+        final Date localCreatedDate = new Date(attr.creationTime().to(TimeUnit.SECONDS) * 1000L);
+        final Date localModifiedDate = new Date(attr.lastModifiedTime().to(TimeUnit.SECONDS) * 1000L);
 
         final boolean sizeMatches = fileSize == file.length();
         final boolean createdMatches = created.equals(localCreatedDate);
@@ -83,14 +83,14 @@ class ROFileSystemProvider implements FileSystemProvider {
     public FileMatch verifyMatch(final File file, Date created, Date lastModified) throws IOException {
 
         // Round to nearest second
-        created = new Date((created.getTime() / 1000) * 1000);
-        lastModified = new Date((lastModified.getTime() / 1000) * 1000);
+        created = new Date((created.getTime() / 1000L) * 1000L);
+        lastModified = new Date((lastModified.getTime() / 1000L) * 1000L);
 
         final BasicFileAttributes attr = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
 
         // Timestamp rounded to the nearest second
-        final Date localCreatedDate = new Date(attr.creationTime().to(TimeUnit.SECONDS) * 1000);
-        final Date localModifiedDate = new Date(attr.lastModifiedTime().to(TimeUnit.SECONDS) * 1000);
+        final Date localCreatedDate = new Date(attr.creationTime().to(TimeUnit.SECONDS) * 1000L);
+        final Date localModifiedDate = new Date(attr.lastModifiedTime().to(TimeUnit.SECONDS) * 1000L);
 
         final boolean createdMatches = created.equals(localCreatedDate);
         final boolean modifiedMatches = lastModified.equals(localModifiedDate);
