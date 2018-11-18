@@ -29,10 +29,10 @@
       <module name="ru.kmorozov.gbd.desktop" target="11" />
       <module name="ru.kmorozov.gbd.desktop.app" target="11" />
       <module name="ru.kmorozov.gbd.parent" target="11" />
-      <module name="ru.kmorozov.library.data.client" target="1.9" />
+      <module name="ru.kmorozov.library.data.client" target="1.11" />
       <module name="ru.kmorozov.library.data.model" target="1.9" />
-      <module name="ru.kmorozov.library.data.server" target="1.9" />
-      <module name="ru.kmorozov.library.parent" target="1.9" />
+      <module name="ru.kmorozov.library.data.server" target="1.11" />
+      <module name="ru.kmorozov.library.parent" target="1.11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
