@@ -1,11 +1,13 @@
 package ru.kmorozov.gbd.core.logic.extractors.google;
 
 import com.google.gson.JsonParseException;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.hc.core5.http.NoHttpResponseException;
+import ru.kmorozov.db.core.logic.model.book.google.GooglePageInfo;
+import ru.kmorozov.db.core.logic.model.book.google.GooglePagesInfo;
+import ru.kmorozov.db.utils.Mapper;
 import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.connectors.Response;
@@ -14,11 +16,8 @@ import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractHttpProcessor;
 import ru.kmorozov.gbd.core.logic.extractors.base.IUniqueRunnable;
 import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage;
-import ru.kmorozov.db.core.logic.model.book.google.GooglePageInfo;
-import ru.kmorozov.db.core.logic.model.book.google.GooglePagesInfo;
 import ru.kmorozov.gbd.logger.Logger;
 import ru.kmorozov.gbd.logger.progress.IProgress;
-import ru.kmorozov.db.utils.Mapper;
 import ru.kmorozov.gbd.utils.QueuedThreadPoolExecutor;
 
 import javax.net.ssl.SSLException;
@@ -27,9 +26,13 @@ import java.io.InputStream;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
-import static ru.kmorozov.gbd.core.config.constants.GoogleConstants.*;
+import static ru.kmorozov.gbd.core.config.constants.GoogleConstants.BOOK_ID_PLACEHOLDER;
+import static ru.kmorozov.gbd.core.config.constants.GoogleConstants.HTTPS_TEMPLATE;
+import static ru.kmorozov.gbd.core.config.constants.GoogleConstants.PAGES_REQUEST_TEMPLATE;
+import static ru.kmorozov.gbd.core.config.constants.GoogleConstants.RQ_PG_PLACEHOLDER;
 
 /**
  * Created by km on 21.11.2015.
@@ -124,7 +127,7 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
 
                 String respStr = null;
                 try (InputStream is = resp.getContent()) {
-                    respStr = IOUtils.toString(is, Charset.defaultCharset());
+                    respStr = new String(is.readAllBytes(), Charset.defaultCharset());
                 } catch (SocketException | SSLException se) {
 
                 }
@@ -143,30 +146,31 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
 
                 if (null == framePages) return;
 
-                final GooglePageInfo[] pages = framePages.getPages();
-                for (final GooglePageInfo framePage : pages)
-                    if (null != framePage.getSrc()) {
-                        final GooglePageInfo _page = (GooglePageInfo) bookContext.getBookInfo().getPages().getPageByPid(framePage.getPid());
+                Arrays.asList(framePages.getPages())
+                        .stream()
+                        .filter(page -> null != page.getSrc())
+                        .forEach(framePage -> {
+                            final GooglePageInfo _page = (GooglePageInfo) bookContext.getBookInfo().getPages().getPageByPid(framePage.getPid());
 
-                        if (_page.isDataProcessed()) continue;
+                            if (_page.isDataProcessed()) return;
 
-                        final String _frameSrc = framePage.getSrc();
-                        if (null != _frameSrc) _page.setSrc(_frameSrc);
+                            final String _frameSrc = framePage.getSrc();
+                            if (null != _frameSrc) _page.setSrc(_frameSrc);
 
-                        if (null != _page.getSig()) {
-                            if (_page.getPid().equals(page.getPid())) {
-                                _page.setSigChecked(true);
+                            if (null != _page.getSig()) {
+                                if (_page.getPid().equals(page.getPid())) {
+                                    _page.setSigChecked(true);
 
-                                proxy.promoteProxy();
+                                    proxy.promoteProxy();
 
-                                // Если есть возможность - пытаемся грузить страницу сразу
-                                bookContext.imgExecutor.execute(new GooglePageImgProcessor(bookContext, _page, proxy));
+                                    // Если есть возможность - пытаемся грузить страницу сразу
+                                    bookContext.imgExecutor.execute(new GooglePageImgProcessor(bookContext, _page, proxy));
+                                }
                             }
-                        }
 
-                        if (null != _page.getSrc() && null == _page.getSig())
-                            logger.finest(String.format(SIG_WRONG_FORMAT, _page.getSrc()));
-                    }
+                            if (null != _page.getSrc() && null == _page.getSig())
+                                logger.finest(String.format(SIG_WRONG_FORMAT, _page.getSrc()));
+                        });
             } catch (SocketTimeoutException | SocketException | NoHttpResponseException ce) {
                 if (!proxy.isLocal()) {
                     proxy.registerFailure();

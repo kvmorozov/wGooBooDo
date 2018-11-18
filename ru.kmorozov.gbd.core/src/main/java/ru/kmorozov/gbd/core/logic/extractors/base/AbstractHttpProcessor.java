@@ -23,14 +23,8 @@ public class AbstractHttpProcessor {
 
     private static Iterable<HttpConnector> getConnectors() {
         if (null == connectors || connectors.isEmpty()) synchronized (LOCK) {
-            if (null == connectors || connectors.isEmpty()) {
-                connectors = new ArrayList<>();
-                connectors.add(LibraryFactory.preferredConnector());
-//                if (ClassUtils.isClassExists("org.asynchttpclient.AsyncHttpClient")) connectors.add(new AsyncHttpConnector());
-//                if (ClassUtils.isClassExists("okhttp3.OkHttpClient")) connectors.add(new OkHttpConnector());
-//                if (ClassUtils.isClassExists("org.apache.hc.client5.http.sync.HttpClient")) connectors.add(new ApacheHttpConnector());
-//                if (ClassUtils.isClassExists("com.google.api.client.http.HttpRequestFactory")) connectors.add(new GoogleHttpConnector());
-            }
+            if (null == connectors || connectors.isEmpty())
+                connectors = LibraryFactory.preferredConnectors();
         }
 
         return connectors;

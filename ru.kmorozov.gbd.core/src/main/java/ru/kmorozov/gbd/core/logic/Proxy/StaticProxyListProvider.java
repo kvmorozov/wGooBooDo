@@ -1,10 +1,8 @@
 package ru.kmorozov.gbd.core.logic.Proxy;
 
-import org.apache.commons.io.IOUtils;
-
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashSet;
+import java.util.stream.Collectors;
 
 /**
  * Created by km on 27.11.2015.
@@ -19,7 +17,7 @@ public class StaticProxyListProvider extends AbstractProxyListProvider {
 
     private void buildList() {
         try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(PROXY_LIST_RES)) {
-            this.proxyItems = new HashSet(IOUtils.readLines(is, "UTF-8"));
+            this.proxyItems = new String(is.readAllBytes(), "UTF-8").lines().collect(Collectors.toSet());
         } catch (final IOException e) {
             e.printStackTrace();
         }

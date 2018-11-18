@@ -1,13 +1,19 @@
 package ru.kmorozov.gbd.core.logic.library.metadata;
 
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector;
+import ru.kmorozov.gbd.core.logic.connectors.asynchttp.AsyncHttpConnector;
 import ru.kmorozov.gbd.core.logic.connectors.google.GoogleHttpConnector;
+import ru.kmorozov.gbd.core.logic.connectors.http2native.Http2Connector;
+import ru.kmorozov.gbd.core.logic.connectors.ok.OkHttpConnector;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookExtractor;
 import ru.kmorozov.gbd.core.logic.extractors.base.IImageExtractor;
 import ru.kmorozov.gbd.core.logic.extractors.google.GoogleBookInfoExtractor;
 import ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor;
 import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by sbt-morozov-kv on 15.11.2016.
@@ -40,7 +46,7 @@ public final class GoogleBooksMetadata implements ILibraryMetadata {
     }
 
     @Override
-    public HttpConnector preferredConnector() {
-        return new GoogleHttpConnector();
+    public List<HttpConnector> preferredConnectors() {
+        return Arrays.asList(new Http2Connector(), new GoogleHttpConnector(), new AsyncHttpConnector(), new OkHttpConnector());
     }
 }

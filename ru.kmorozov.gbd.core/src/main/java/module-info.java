@@ -1,7 +1,6 @@
 module ru.kmorozov.gbd.core {
     requires java.net.http;
     requires com.google.api.client;
-    requires org.apache.commons.io;
     requires org.jsoup;
     requires org.apache.commons.lang3;
 
@@ -17,4 +16,5 @@ module ru.kmorozov.gbd.core {
     requires io.netty.codec.http;
     requires io.netty.common;
     requires io.netty.transport;
+    requires org.apache.commons.io;
 }

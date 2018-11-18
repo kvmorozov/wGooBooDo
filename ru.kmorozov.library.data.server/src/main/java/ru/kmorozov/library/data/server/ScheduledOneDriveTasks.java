@@ -16,7 +16,7 @@ import java.io.IOException;
 @Component
 public class ScheduledOneDriveTasks {
 
-    private static final long SCHEDULE_INTERVAL = (long) (1 * 60 * 60 * 1000);
+    private static final long SCHEDULE_INTERVAL = 1 * 60 * 60 * 1000;
     private static final Logger logger = Logger.getLogger(ScheduledOneDriveTasks.class);
 
     @Autowired

@@ -1,12 +1,11 @@
 package ru.kmorozov.gbd.client;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import ru.kmorozov.db.utils.Mapper;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.connectors.Response;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractHttpProcessor;
 import ru.kmorozov.gbd.logger.Logger;
-import ru.kmorozov.db.utils.Mapper;
 
 import javax.net.ssl.SSLException;
 import java.io.IOException;
@@ -60,7 +59,7 @@ public abstract class AbstractRestClient extends AbstractHttpProcessor {
             }
 
             try (InputStream is = resp.getContent()) {
-                return IOUtils.toString(is, Charset.defaultCharset());
+                return new String(is.readAllBytes(), Charset.defaultCharset());
             } catch (SocketException | SSLException se) {
                 logger.info("Rest service is unavailable! " + se.getMessage());
                 throw new RestServiceUnavailableException();

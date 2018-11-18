@@ -9,6 +9,9 @@ import ru.kmorozov.gbd.core.logic.extractors.shpl.ShplBookExtractor;
 import ru.kmorozov.gbd.core.logic.extractors.shpl.ShplImageExtractor;
 import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Created by sbt-morozov-kv on 15.11.2016.
  */
@@ -42,7 +45,7 @@ public final class ShplMetadata implements ILibraryMetadata {
     }
 
     @Override
-    public HttpConnector preferredConnector() {
-        return new ApacheHttpConnector();
+    public List<HttpConnector> preferredConnectors() {
+        return Arrays.asList(new ApacheHttpConnector());
     }
 }

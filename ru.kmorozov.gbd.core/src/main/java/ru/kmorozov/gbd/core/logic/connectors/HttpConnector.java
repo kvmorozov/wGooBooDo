@@ -1,14 +1,13 @@
 package ru.kmorozov.gbd.core.logic.connectors;
 
 import com.google.api.client.http.HttpHeaders;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.parser.Parser;
+import ru.kmorozov.db.utils.Mapper;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.Proxy.UrlType;
 import ru.kmorozov.gbd.logger.Logger;
-import ru.kmorozov.db.utils.Mapper;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -39,7 +38,7 @@ public abstract class HttpConnector implements AutoCloseable {
             if (response == null)
                 throw new IOException("Cannot get document!");
 
-            return parser.parseInput(new StringReader(IOUtils.toString(response.getContent(), Charset.forName("UTF-8"))), url);
+            return parser.parseInput(new StringReader(new String(response.getContent().readAllBytes(), Charset.forName("UTF-8"))), url);
         } finally {
             proxy.updateTimestamp();
         }
@@ -51,7 +50,7 @@ public abstract class HttpConnector implements AutoCloseable {
             if (response == null)
                 throw new IOException("Cannot get document!");
 
-            return Mapper.getGson().fromJson(IOUtils.toString(response.getContent(), Charset.forName("UTF-8")), Mapper.mapType);
+            return Mapper.getGson().fromJson(new String(response.getContent().readAllBytes(), Charset.forName("UTF-8")), Mapper.mapType);
         } finally {
             proxy.updateTimestamp();
         }
@@ -63,7 +62,7 @@ public abstract class HttpConnector implements AutoCloseable {
             if (response == null)
                 throw new IOException("Cannot get document!");
 
-            return IOUtils.toString(response.getContent(), Charset.forName("UTF-8"));
+            return new String(response.getContent().readAllBytes(), Charset.forName("UTF-8"));
         } finally {
             proxy.updateTimestamp();
         }

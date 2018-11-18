@@ -25,7 +25,7 @@
     <orderEntry type="module" module-name="ru.kmorozov.gbd.core" />
     <orderEntry type="library" name="Maven: org.jsoup:jsoup:1.11.3" level="project" />
     <orderEntry type="library" name="Maven: commons-io:commons-io:2.6" level="project" />
-    <orderEntry type="library" name="Maven: com.google.http-client:google-http-client:1.26.0" level="project" />
+    <orderEntry type="library" name="Maven: com.google.http-client:google-http-client:1.27.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.findbugs:jsr305:3.0.2" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpclient:4.5.5" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore:4.4.9" level="project" />
@@ -56,8 +56,8 @@
     <orderEntry type="library" name="Maven: io.netty:netty-buffer:4.1.30.Final" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-transport-native-unix-common:4.1.30.Final" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-transport:4.1.30.Final" level="project" />
-    <orderEntry type="library" name="Maven: com.squareup.okhttp3:okhttp:3.11.0" level="project" />
-    <orderEntry type="library" name="Maven: com.squareup.okio:okio:1.14.0" level="project" />
+    <orderEntry type="library" name="Maven: com.squareup.okhttp3:okhttp:3.12.0" level="project" />
+    <orderEntry type="library" name="Maven: com.squareup.okio:okio:1.15.0" level="project" />
     <orderEntry type="module" module-name="ru.kmorozov.gbd.db" />
     <orderEntry type="library" name="Maven: org.mongodb:mongo-java-driver:3.6.3" level="project" />
     <orderEntry type="module" module-name="ru.kmorozov.gbd.core.logger" />
@@ -85,10 +85,10 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.mockito:mockito-all:2.0.2-beta" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.8.1" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.8.5" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.jetty:jetty-server:9.4.12.v20180830" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.jetty:jetty-server:9.4.14.v20181114" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: javax.servlet:javax.servlet-api:3.1.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.jetty:jetty-http:9.4.12.v20180830" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.jetty:jetty-util:9.4.12.v20180830" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.jetty:jetty-io:9.4.12.v20180830" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.jetty:jetty-http:9.4.14.v20181114" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.jetty:jetty-util:9.4.14.v20181114" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.jetty:jetty-io:9.4.14.v20181114" level="project" />
   </component>
 </module>

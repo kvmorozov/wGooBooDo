@@ -1,16 +1,15 @@
 package ru.kmorozov.gbd.core.logic.extractors.base;
 
-import org.apache.commons.io.IOUtils;
 import org.jsoup.Connection;
 import org.jsoup.Connection.Method;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import ru.kmorozov.db.core.config.IBaseLoader;
+import ru.kmorozov.db.core.logic.model.book.BookInfo;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.connectors.Response;
 import ru.kmorozov.gbd.core.logic.context.ContextProvider;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
-import ru.kmorozov.db.core.logic.model.book.BookInfo;
 import ru.kmorozov.gbd.logger.Logger;
 import ru.kmorozov.gbd.utils.HttpConnections;
 
@@ -88,7 +87,7 @@ public abstract class AbstractBookExtractor extends AbstractHttpProcessor {
         if (null == resp) return null;
         else {
             try (InputStream is = resp.getContent()) {
-                final String respStr = IOUtils.toString(is, Charset.defaultCharset());
+                final String respStr = new String(is.readAllBytes(), Charset.defaultCharset());
                 return Jsoup.parse(respStr);
             } catch (final IOException e) {
                 return null;

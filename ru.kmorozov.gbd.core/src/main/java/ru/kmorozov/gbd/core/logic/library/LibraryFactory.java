@@ -5,6 +5,8 @@ import ru.kmorozov.gbd.core.logic.library.metadata.GoogleBooksMetadata;
 import ru.kmorozov.gbd.core.logic.library.metadata.RfbrMetadata;
 import ru.kmorozov.gbd.core.logic.library.metadata.ShplMetadata;
 
+import java.util.List;
+
 /**
  * Created by sbt-morozov-kv on 15.11.2016.
  */
@@ -35,7 +37,7 @@ public final class LibraryFactory {
         return selectedMetadata.needSetCookies();
     }
 
-    public static HttpConnector preferredConnector() {
-        return selectedMetadata.preferredConnector();
+    public static List<HttpConnector> preferredConnectors() {
+        return selectedMetadata.preferredConnectors();
     }
 }

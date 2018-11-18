@@ -6,7 +6,6 @@ import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.javanet.NetHttpTransport.Builder;
 import com.google.common.base.Strings;
-import org.apache.commons.io.IOUtils;
 import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.logger.Logger;
 import ru.kmorozov.gbd.utils.HttpConnections;
@@ -79,7 +78,7 @@ public class HttpHostExt {
             if (null != resp) {
                 try (InputStream is = resp.getContent()) {
                     if (null != is) {
-                        final String respStr = IOUtils.toString(is, Charset.defaultCharset());
+                        final String respStr = new String(is.readAllBytes(), Charset.defaultCharset());
                         return !respStr.contains(InetAddress.getLocalHost().getHostName());
                     }
                 }
@@ -138,7 +137,8 @@ public class HttpHostExt {
             if (isAvailable()) {
                 failureCount.addAndGet(5);
                 available.set(false);
-                if (reportFailure) logger.info(String.format("Proxy %s force-invalidated!", null == host ? NO_PROXY_STR : host.toString()));
+                if (reportFailure)
+                    logger.info(String.format("Proxy %s force-invalidated!", null == host ? NO_PROXY_STR : host.toString()));
             }
         }
     }
@@ -188,11 +188,13 @@ public class HttpHostExt {
     public HttpHeaders getHeaders(UrlType urlType) {
         if (null == headers || null == headers.getCookie()) {
             synchronized (this) {
-                headers = HttpConnections.getHeaders(this);
-                if (null == headers.getCookie()) headers.setCookie(HttpConnections.getCookieString(host, urlType));
-                if (null == headers.getCookie()) {
-                    logger.severe(String.format("Cannot get cookies for proxy %s", this.toString()));
-                    forceInvalidate(false);
+                if (null == headers || null == headers.getCookie()) {
+                    headers = HttpConnections.getHeaders(this);
+                    if (null == headers.getCookie()) headers.setCookie(HttpConnections.getCookieString(host, urlType));
+                    if (null == headers.getCookie()) {
+                        logger.severe(String.format("Cannot get cookies for proxy %s", this.toString()));
+                        forceInvalidate(false);
+                    }
                 }
             }
         }

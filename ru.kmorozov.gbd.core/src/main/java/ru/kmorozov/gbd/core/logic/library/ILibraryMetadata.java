@@ -5,6 +5,8 @@ import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookExtractor;
 import ru.kmorozov.gbd.core.logic.extractors.base.IImageExtractor;
 
+import java.util.List;
+
 /**
  * Created by sbt-morozov-kv on 15.11.2016.
  */
@@ -18,5 +20,5 @@ public interface ILibraryMetadata {
 
     boolean needSetCookies();
 
-    HttpConnector preferredConnector();
+    List<HttpConnector> preferredConnectors();
 }

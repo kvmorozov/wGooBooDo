@@ -1,7 +1,8 @@
 package ru.kmorozov.gbd.core.logic.extractors.google;
 
 import com.google.common.base.Strings;
-import org.apache.commons.io.FilenameUtils;
+import ru.kmorozov.db.core.logic.model.book.google.GoogleBookData;
+import ru.kmorozov.db.core.logic.model.book.google.GooglePageInfo;
 import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
@@ -9,8 +10,6 @@ import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractImageExtractor;
 import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage;
 import ru.kmorozov.gbd.core.logic.model.book.base.IPage;
-import ru.kmorozov.db.core.logic.model.book.google.GoogleBookData;
-import ru.kmorozov.db.core.logic.model.book.google.GooglePageInfo;
 import ru.kmorozov.gbd.utils.Images;
 
 import javax.imageio.ImageIO;
@@ -63,8 +62,8 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
                 setProgress(bookContext.getProgress().incrementAndProgress());
 
                 if (Images.isImageFile(filePath)) {
-                    final String fileName = FilenameUtils.getBaseName(filePath.toString());
-                    final String[] nameParts = fileName.split("_");
+                    final String fileName = filePath.getFileName().toString();
+                    final String[] nameParts = fileName.split("\\.")[0].split("_");
                     final GooglePageInfo _page = (GooglePageInfo) bookContext.getBookInfo().getPages().getPageByPid(nameParts[1]);
                     final int order = Integer.valueOf(nameParts[0]);
                     if (null == _page) {

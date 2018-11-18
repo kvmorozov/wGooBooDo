@@ -10,6 +10,9 @@ import ru.kmorozov.gbd.core.logic.extractors.rfbr.RfbrBookExtractor;
 import ru.kmorozov.gbd.core.logic.extractors.rfbr.RfbrImageExtractor;
 import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata;
 
+import java.util.Arrays;
+import java.util.List;
+
 public final class RfbrMetadata implements ILibraryMetadata {
 
     public static final RfbrMetadata RFBR_METADATA = new RfbrMetadata();
@@ -35,7 +38,7 @@ public final class RfbrMetadata implements ILibraryMetadata {
     }
 
     @Override
-    public HttpConnector preferredConnector() {
-        return new ApacheHttpConnector();
+    public List<HttpConnector> preferredConnectors() {
+        return Arrays.asList(new ApacheHttpConnector());
     }
 }
