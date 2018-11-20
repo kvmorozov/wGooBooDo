@@ -47,6 +47,6 @@ public final class GoogleBooksMetadata implements ILibraryMetadata {
 
     @Override
     public List<HttpConnector> preferredConnectors() {
-        return Arrays.asList(new Http2Connector(), new GoogleHttpConnector(), new AsyncHttpConnector(), new OkHttpConnector());
+        return Arrays.asList(new GoogleHttpConnector(), new AsyncHttpConnector(), new OkHttpConnector());
     }
 }
