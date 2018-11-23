@@ -4,13 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
+import ru.kmorozov.db.core.logic.model.book.BookInfo;
 import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.logic.context.ContextProvider;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
-import ru.kmorozov.db.core.logic.model.book.BookInfo;
 import ru.kmorozov.gbd.logger.Logger;
 import ru.kmorozov.gbd.logger.output.DummyReceiver;
-import ru.kmorozov.library.data.loader.processors.IProcessor;
+import ru.kmorozov.library.data.loader.processors.IGbdProcessor;
 import ru.kmorozov.library.data.model.book.Book;
 import ru.kmorozov.library.data.model.book.IdType;
 import ru.kmorozov.library.data.model.book.Storage;
@@ -27,7 +27,7 @@ import static ru.kmorozov.library.data.model.book.BookInfo.BookFormat.PDF;
 import static ru.kmorozov.library.data.model.book.BookInfo.BookType.GOOGLE_BOOK;
 
 @Component
-public class GbdProcessor implements IProcessor {
+public class GbdProcessor implements IGbdProcessor {
 
     protected static final Logger logger = Logger.getLogger(GbdProcessor.class);
 
@@ -111,6 +111,7 @@ public class GbdProcessor implements IProcessor {
         return null;
     }
 
+    @Override
     public void load(String bookId) {
         options.setBookId(bookId);
         GBDOptions.init(options);

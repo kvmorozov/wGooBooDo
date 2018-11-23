@@ -39,6 +39,9 @@
     <option name="GENERATE_NO_WARNINGS" value="true" />
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="ru.kmorozov.gbd.core" options="" />
+      <module name="ru.kmorozov.library.data.client" options="-parameters" />
+      <module name="ru.kmorozov.library.data.model" options="-parameters" />
+      <module name="ru.kmorozov.library.data.server" options="-parameters" />
     </option>
   </component>
 </project>

@@ -8,21 +8,24 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.kmorozov.gbd.client.IRestClient;
-import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.loader.DirContextLoader;
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector;
 import ru.kmorozov.gbd.logger.Logger;
 import ru.kmorozov.library.data.loader.LoaderExecutor;
 import ru.kmorozov.library.data.loader.LoaderExecutor.State;
 import ru.kmorozov.library.data.loader.processors.DuplicatesProcessor;
+import ru.kmorozov.library.data.loader.processors.IGbdProcessor;
 import ru.kmorozov.library.data.loader.processors.JstorProcessor;
-import ru.kmorozov.library.data.loader.processors.gbd.GbdProcessor;
 import ru.kmorozov.library.data.loader.utils.BookUtils;
 import ru.kmorozov.library.data.model.IDataRestServer;
 import ru.kmorozov.library.data.model.book.Book;
 import ru.kmorozov.library.data.model.book.Storage;
-import ru.kmorozov.library.data.model.dto.*;
+import ru.kmorozov.library.data.model.dto.BookDTO;
+import ru.kmorozov.library.data.model.dto.DuplicatedBookDTO;
+import ru.kmorozov.library.data.model.dto.ItemDTO;
 import ru.kmorozov.library.data.model.dto.ItemDTO.ItemType;
+import ru.kmorozov.library.data.model.dto.StorageDTO;
+import ru.kmorozov.library.data.model.dto.UserDTO;
 import ru.kmorozov.library.data.repository.BooksRepository;
 import ru.kmorozov.library.data.repository.StorageRepository;
 
@@ -56,7 +59,7 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
     private JstorProcessor jstorProcessor;
 
     @Autowired @Lazy
-    private GbdProcessor gbdProcessor;
+    private IGbdProcessor gbdProcessor;
 
     private static transient DirContextLoader googleBooksLoader;
 
@@ -198,8 +201,6 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
 
     @RequestMapping("/gbdLoad")
     public void gbdLoad(@RequestParam(name = "bookId", required = false) final String bookId) {
-        GBDOptions.init(options);
-
         gbdProcessor.load(bookId);
     }
 }
