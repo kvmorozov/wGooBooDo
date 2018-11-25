@@ -48,7 +48,7 @@ public class LoaderConfiguration {
     @Value("${onedrive.clientSecret}")
     public String onedriveClientSecret;
 
-    @Bean
+    @Bean @Lazy
     public OneDriveProvider api() {
         URL keyResource = getClass().getClassLoader().getResource(oneDriveKeyFileName);
 

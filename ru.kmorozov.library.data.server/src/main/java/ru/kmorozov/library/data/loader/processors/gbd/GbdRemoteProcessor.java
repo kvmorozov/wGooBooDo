@@ -101,7 +101,7 @@ public class GbdRemoteProcessor implements IGbdProcessor {
         logger.info("Process GBD finished.");
     }
 
-    @Bean
+    @Bean @Lazy
     public OneDriveItem getGbdRoot() {
         try {
             OneDriveItem[] searchResults = api.search("books.ctx");

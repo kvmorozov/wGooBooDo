@@ -2,6 +2,7 @@ package ru.kmorozov.library.data.loader.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Conditional;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import ru.kmorozov.gbd.logger.Logger;
 import ru.kmorozov.library.data.loader.SocketReporter;
@@ -47,7 +48,7 @@ public class OneDriveLoader extends StoredLoader {
     private static final String delimiter = Pattern.quote(File.separator);
     private static final String DEFAULT_PARENT = "E:\\tmp";
 
-    @Autowired
+    @Autowired @Lazy
     private OneDriveProvider api;
 
     @Override

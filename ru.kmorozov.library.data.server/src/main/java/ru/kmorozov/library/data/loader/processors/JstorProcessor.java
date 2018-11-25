@@ -4,6 +4,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import ru.kmorozov.gbd.core.logic.Proxy.EmptyProxyListProvider;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
@@ -36,7 +37,7 @@ public class JstorProcessor implements IProcessor {
 
     protected static final Logger logger = Logger.getLogger(JstorProcessor.class);
 
-    @Autowired(required = false)
+    @Autowired @Lazy
     private HttpConnector jstorConnector;
 
     private static final HttpConnector doiConnector = new GoogleHttpConnector();

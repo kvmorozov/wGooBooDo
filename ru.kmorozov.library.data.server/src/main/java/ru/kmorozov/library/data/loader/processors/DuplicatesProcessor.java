@@ -2,6 +2,7 @@ package ru.kmorozov.library.data.loader.processors;
 
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOptions;
@@ -35,7 +36,7 @@ public class DuplicatesProcessor implements IProcessor {
     @Autowired
     protected BooksRepository booksRepository;
 
-    @Autowired
+    @Autowired @Lazy
     private OneDriveProvider api;
 
     public List<DuplicatedBookDTO> findDuplicates() {

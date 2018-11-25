@@ -81,6 +81,7 @@ public class TokenFactory {
             }
 
             driver.close();
+            driver.quit();
             log.info("Token generated successfully!");
 
             return true;
