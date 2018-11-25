@@ -13,8 +13,11 @@ import org.openqa.selenium.support.ui.Wait;
 
 import java.io.File;
 import java.io.PrintWriter;
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
 import java.util.regex.Pattern;
+
+import static java.time.temporal.ChronoUnit.MINUTES;
+import static java.time.temporal.ChronoUnit.SECONDS;
 
 public class TokenFactory {
 
@@ -27,8 +30,8 @@ public class TokenFactory {
             driver.get(OneDriveAuthorisationProvider.getAuthString(clientId));
 
             final Wait<WebDriver> wait = new FluentWait(driver)
-                    .withTimeout(30L, TimeUnit.MINUTES)
-                    .pollingEvery(1L, TimeUnit.SECONDS)
+                    .withTimeout(Duration.of(30, MINUTES))
+                    .pollingEvery(Duration.of(1, SECONDS))
                     .ignoring(NoSuchElementException.class);
 
             if (!StringUtils.isEmpty(user)) {

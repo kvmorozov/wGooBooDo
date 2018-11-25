@@ -10,7 +10,10 @@ import ru.kmorozov.gbd.core.logic.connectors.HttpConnector;
 import ru.kmorozov.gbd.core.logic.connectors.Response;
 
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
+
+import static java.time.temporal.ChronoUnit.MILLIS;
+import static java.time.temporal.ChronoUnit.SECONDS;
 
 public class WebDriverHttpConnector extends HttpConnector {
 
@@ -25,8 +28,8 @@ public class WebDriverHttpConnector extends HttpConnector {
         driver.get(url);
 
         final Wait<WebDriver> wait = new FluentWait(driver)
-                .withTimeout((long) CONNECT_TIMEOUT, TimeUnit.MILLISECONDS)
-                .pollingEvery(1L, TimeUnit.SECONDS)
+                .withTimeout(Duration.of(CONNECT_TIMEOUT, MILLIS))
+                .pollingEvery(Duration.of(1, SECONDS))
                 .ignoring(NoSuchElementException.class);
 
         return new WebDriverResponse(driver.getPageSource());
