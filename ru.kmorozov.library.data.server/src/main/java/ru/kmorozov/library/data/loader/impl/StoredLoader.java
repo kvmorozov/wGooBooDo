@@ -1,31 +1,25 @@
-package ru.kmorozov.library.data.loader;
+package ru.kmorozov.library.data.loader.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.kmorozov.gbd.logger.Logger;
-import ru.kmorozov.library.data.loader.LoaderExecutor.State;
 import ru.kmorozov.library.data.loader.netty.EventSender;
-import ru.kmorozov.library.data.model.book.*;
-import ru.kmorozov.library.data.model.book.BookInfo.BookFormat;
+import ru.kmorozov.library.data.model.book.Book;
+import ru.kmorozov.library.data.model.book.BookInfo;
+import ru.kmorozov.library.data.model.book.Category;
+import ru.kmorozov.library.data.model.book.Storage;
+import ru.kmorozov.library.data.model.book.StorageInfo;
 import ru.kmorozov.library.data.repository.BooksRepository;
 import ru.kmorozov.library.data.repository.CategoryRepository;
 import ru.kmorozov.library.data.repository.StorageRepository;
 import ru.kmorozov.library.utils.BookUtils;
 
 import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Stream;
 
-/**
- * Created by sbt-morozov-kv on 14.03.2017.
- */
-public abstract class BaseLoader implements ILoader, Runnable {
+public abstract class StoredLoader extends BaseLoader{
 
-    private static final Logger logger = Logger.getLogger(BaseLoader.class);
-    protected Collection<Object> links = new ArrayList<>();
-    protected volatile State state = State.STOPPED;
+    private static final Logger logger = Logger.getLogger(StoredLoader.class);
 
     @Autowired
     protected CategoryRepository categoryRepository;
@@ -122,8 +116,8 @@ public abstract class BaseLoader implements ILoader, Runnable {
                 .filter(ServerItem::isLoadableOrLink)
                 .forEach(serverItem -> {
                     if (!serverItem.isDirectory()) {
-                        final BookFormat bookFormat = BookUtils.getFormat(serverItem.getName());
-                        if (BookFormat.UNKNOWN != bookFormat) {
+                        final BookInfo.BookFormat bookFormat = BookUtils.getFormat(serverItem.getName());
+                        if (BookInfo.BookFormat.UNKNOWN != bookFormat) {
                             final Book existBook = booksRepository.findOneByBookInfoPath(serverItem.getUrl());
                             if (null == existBook) {
                                 final Book book = new Book();
@@ -177,29 +171,4 @@ public abstract class BaseLoader implements ILoader, Runnable {
         storage.setStorageInfo(storageInfo);
         storageRepository.save(storage);
     }
-
-    @Override
-    public void run() {
-        try {
-            load();
-        } catch (IOException | UncheckedIOException e) {
-            this.state = State.STOPPED;
-
-            e.printStackTrace();
-        }
-    }
-
-    void setState(final State state) {
-        this.state = state;
-    }
-
-    State getState() {
-        return state;
-    }
-
-    public boolean isStopped() {
-        return LoaderExecutor.State.STOPPED == state;
-    }
-
-    public abstract Storage refresh(Storage storage);
 }

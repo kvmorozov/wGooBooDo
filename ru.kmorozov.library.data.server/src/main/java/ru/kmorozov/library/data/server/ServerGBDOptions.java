@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import ru.kmorozov.gbd.core.config.IGBDOptions;
 import ru.kmorozov.gbd.core.config.IStorage;
 import ru.kmorozov.gbd.core.config.options.CtxOptions;
+import ru.kmorozov.library.data.server.storage.ServerStorage;
 import ru.kmorozov.onedrive.client.OneDriveItem;
 import ru.kmorozov.onedrive.client.OneDriveProvider;
 

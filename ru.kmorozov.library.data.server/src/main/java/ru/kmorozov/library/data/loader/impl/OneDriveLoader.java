@@ -1,16 +1,11 @@
-package ru.kmorozov.library.data.loader;
+package ru.kmorozov.library.data.loader.impl;
 
-import ru.kmorozov.onedrive.TaskQueue;
-import ru.kmorozov.onedrive.client.OneDriveItem;
-import ru.kmorozov.onedrive.client.OneDriveProvider;
-import ru.kmorozov.onedrive.client.walker.OneDriveWalkers;
-import ru.kmorozov.onedrive.filesystem.FileSystemProvider.FACTORY;
-import ru.kmorozov.onedrive.tasks.DownloadTask;
-import ru.kmorozov.onedrive.tasks.Task.TaskOptions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Component;
 import ru.kmorozov.gbd.logger.Logger;
-import ru.kmorozov.library.data.loader.LoaderExecutor.State;
+import ru.kmorozov.library.data.loader.SocketReporter;
+import ru.kmorozov.library.data.loader.impl.LoaderExecutor.State;
 import ru.kmorozov.library.data.loader.utils.ConsistencyUtils;
 import ru.kmorozov.library.data.loader.utils.WindowsShortcut;
 import ru.kmorozov.library.data.model.book.Book;
@@ -18,6 +13,14 @@ import ru.kmorozov.library.data.model.book.Category;
 import ru.kmorozov.library.data.model.book.LinkInfo;
 import ru.kmorozov.library.data.model.book.Storage;
 import ru.kmorozov.library.data.model.dto.ItemDTO;
+import ru.kmorozov.library.data.server.condition.StorageEnabledCondition;
+import ru.kmorozov.onedrive.TaskQueue;
+import ru.kmorozov.onedrive.client.OneDriveItem;
+import ru.kmorozov.onedrive.client.OneDriveProvider;
+import ru.kmorozov.onedrive.client.walker.OneDriveWalkers;
+import ru.kmorozov.onedrive.filesystem.FileSystemProvider.FACTORY;
+import ru.kmorozov.onedrive.tasks.DownloadTask;
+import ru.kmorozov.onedrive.tasks.Task.TaskOptions;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,7 +40,8 @@ import java.util.stream.Stream;
  */
 
 @Component
-public class OneDriveLoader extends BaseLoader {
+@Conditional(StorageEnabledCondition.class)
+public class OneDriveLoader extends StoredLoader {
 
     private static final Logger logger = Logger.getLogger(OneDriveLoader.class);
     private static final String delimiter = Pattern.quote(File.separator);

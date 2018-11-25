@@ -1,20 +1,18 @@
 package ru.kmorozov.library.data.loader;
 
-import ru.kmorozov.onedrive.client.OneDriveProvider;
-import ru.kmorozov.onedrive.client.OneDriveProvider.FACTORY;
-import ru.kmorozov.onedrive.client.authoriser.AuthorisationProvider;
-import ru.kmorozov.onedrive.client.authoriser.TokenFactory;
-import ru.kmorozov.onedrive.client.exceptions.InvalidCodeException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector;
 import ru.kmorozov.gbd.core.logic.connectors.google.GoogleHttpConnector;
 import ru.kmorozov.gbd.core.logic.connectors.webdriver.WebDriverHttpConnector;
 import ru.kmorozov.gbd.logger.Logger;
-import ru.kmorozov.library.data.config.MongoConfiguration;
+import ru.kmorozov.onedrive.client.OneDriveProvider;
+import ru.kmorozov.onedrive.client.OneDriveProvider.FACTORY;
+import ru.kmorozov.onedrive.client.authoriser.AuthorisationProvider;
+import ru.kmorozov.onedrive.client.authoriser.TokenFactory;
+import ru.kmorozov.onedrive.client.exceptions.InvalidCodeException;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,7 +23,6 @@ import java.net.URL;
  */
 
 @Configuration
-@ComponentScan(basePackageClasses = MongoConfiguration.class, basePackages = "ru.kmorozov.library.data.loader")
 public class LoaderConfiguration {
 
     private static final Logger logger = Logger.getLogger(LoaderConfiguration.class);
@@ -90,7 +87,8 @@ public class LoaderConfiguration {
         return FACTORY.readWriteApi(authoriser);
     }
 
-    @Bean @Lazy
+    @Bean
+    @Lazy
     public HttpConnector getConnector() {
         switch (httpConnectorType) {
             case "chrome":

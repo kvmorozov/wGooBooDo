@@ -1,7 +1,5 @@
 package ru.kmorozov.library.data.loader.processors;
 
-import ru.kmorozov.onedrive.client.OneDriveItem;
-import ru.kmorozov.onedrive.client.OneDriveProvider;
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -18,6 +16,8 @@ import ru.kmorozov.library.data.model.dto.DuplicatedBookDTO;
 import ru.kmorozov.library.data.model.dto.results.BooksBySize;
 import ru.kmorozov.library.data.repository.BooksRepository;
 import ru.kmorozov.library.utils.BookUtils;
+import ru.kmorozov.onedrive.client.OneDriveItem;
+import ru.kmorozov.onedrive.client.OneDriveProvider;
 
 import java.io.IOException;
 import java.util.List;

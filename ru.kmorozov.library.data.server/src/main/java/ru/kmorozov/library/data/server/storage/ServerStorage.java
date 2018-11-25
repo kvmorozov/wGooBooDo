@@ -1,4 +1,4 @@
-package ru.kmorozov.library.data.server;
+package ru.kmorozov.library.data.server.storage;
 
 import org.apache.commons.lang3.StringUtils;
 import ru.kmorozov.gbd.core.config.IIndex;

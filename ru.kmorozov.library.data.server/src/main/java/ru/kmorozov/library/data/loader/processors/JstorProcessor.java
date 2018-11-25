@@ -4,7 +4,6 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import ru.kmorozov.gbd.core.logic.Proxy.EmptyProxyListProvider;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
@@ -16,7 +15,6 @@ import ru.kmorozov.library.data.model.book.Book;
 import ru.kmorozov.library.data.model.book.BookInfo;
 import ru.kmorozov.library.data.model.book.IdType;
 import ru.kmorozov.library.data.repository.BooksRepository;
-import ru.kmorozov.library.data.repository.RxBooksRepository;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -24,7 +22,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Component @Lazy
+@Component
 public class JstorProcessor implements IProcessor {
 
     private static final String JSTOR_ARTICLE_PREFIX = "https://www.jstor.org/stable/";
@@ -46,9 +44,6 @@ public class JstorProcessor implements IProcessor {
     @Autowired
     protected BooksRepository booksRepository;
 
-    @Autowired
-    protected RxBooksRepository rxBooksRepository;
-
     @Bean
     public ManagedProxyListProvider proxyProvider() {
         return new ManagedProxyListProvider(EmptyProxyListProvider.INSTANCE, 500);
@@ -58,17 +53,11 @@ public class JstorProcessor implements IProcessor {
     public void process() {
         logger.info("Process JSTOR started.");
 
-        if (reactiveMode)
-            rxBooksRepository
-                    .findBooksByRegexBookInfoFileName("^\\d+.pdf")
-                    .subscribe()
-                    .dispose();
-        else
-            booksRepository
-                    .findBooksByRegexBookInfoFileName("^\\d+.pdf")
-                    .stream()
-                    .filter(book -> book.getBookInfo().getCustomFields() == null)
-                    .forEach(this::processJstorBook);
+        booksRepository
+                .findBooksByRegexBookInfoFileName("^\\d+.pdf")
+                .stream()
+                .filter(book -> book.getBookInfo().getCustomFields() == null)
+                .forEach(this::processJstorBook);
 
         logger.info("Process JSTOR finished.");
     }

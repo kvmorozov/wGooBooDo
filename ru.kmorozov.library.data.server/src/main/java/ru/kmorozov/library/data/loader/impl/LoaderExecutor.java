@@ -1,9 +1,12 @@
-package ru.kmorozov.library.data.loader;
+package ru.kmorozov.library.data.loader.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Conditional;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import ru.kmorozov.library.data.model.book.Book;
 import ru.kmorozov.library.data.model.book.Storage;
+import ru.kmorozov.library.data.server.condition.StorageEnabledCondition;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -13,13 +16,14 @@ import java.util.concurrent.Executors;
  */
 
 @Component
+@Conditional(StorageEnabledCondition.class)
 public class LoaderExecutor {
 
     public enum State {
         STARTED, STOPPED, PAUSED
     }
 
-    @Autowired
+    @Autowired @Lazy
     private OneDriveLoader oneLoader;
 
     private static final Executor loaderExecutor = Executors.newSingleThreadExecutor();

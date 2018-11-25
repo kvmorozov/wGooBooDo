@@ -5,7 +5,6 @@ import com.mongodb.MongoClientURI;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -15,7 +14,6 @@ import java.util.Collections;
  */
 
 @Configuration
-@EnableMongoRepositories(basePackages = "ru.kmorozov.library.data.repository")
 public class MongoConfiguration extends AbstractMongoConfiguration {
 
     public static final String BOOKS_MONGO_DB_NAME = "BOOKS";

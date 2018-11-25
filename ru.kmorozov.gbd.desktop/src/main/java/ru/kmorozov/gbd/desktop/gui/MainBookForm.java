@@ -1,16 +1,16 @@
 package ru.kmorozov.gbd.desktop.gui;
 
+import ru.kmorozov.db.core.logic.model.book.google.Resolutions;
 import ru.kmorozov.gbd.core.config.SystemConfigs;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor;
-import ru.kmorozov.db.core.logic.model.book.google.Resolutions;
+import ru.kmorozov.gbd.desktop.library.SingleBookProducer;
+import ru.kmorozov.gbd.desktop.output.consumers.SwingOutputReceiver;
+import ru.kmorozov.gbd.desktop.output.progress.ProcessStatus;
 import ru.kmorozov.gbd.logger.events.AbstractEventSource;
 import ru.kmorozov.gbd.logger.events.IEventSource;
 import ru.kmorozov.gbd.logger.model.LogIconColumnRenderer;
 import ru.kmorozov.gbd.logger.model.LogTableModel;
-import ru.kmorozov.gbd.desktop.library.SingleBookProducer;
-import ru.kmorozov.gbd.desktop.output.consumers.SwingOutputReceiver;
-import ru.kmorozov.gbd.desktop.output.progress.ProcessStatus;
 import ru.kmorozov.gbd.pdf.PdfMaker;
 
 import javax.swing.*;
@@ -20,7 +20,6 @@ import javax.swing.*;
  */
 public class MainBookForm {
     private static MainBookForm INSTANCE;
-    private static final ManageController manageController = new ManageController();
     private JTabbedPane tabbedPane1;
     private JPanel mainPanel, pProgress, pFooter, pManage;
     private JTextField tfBookId, tfRootOutDir, tfProxyListFile, tfBookTitle;
@@ -44,8 +43,6 @@ public class MainBookForm {
         cbResolution.setModel(new DefaultComboBoxModel<>(Resolutions.values()));
         cbReload.setSelected(SystemConfigs.getReload());
         cbSecureMode.setSelected(SystemConfigs.getSecureMode());
-
-        configureManage();
 
         if (0 < SystemConfigs.getResolution())
             cbResolution.setSelectedItem(Resolutions.getEnum(SystemConfigs.getResolution()));
@@ -147,11 +144,5 @@ public class MainBookForm {
 
     public JPanel getProgressPanel() {
         return pProgress;
-    }
-
-    private void configureManage() {
-        tabbedPane1.setEnabledAt(2, ManageController.isManageAllowed());
-        bImport.setVisible(ManageController.isImportAllowed());
-        bImport.addActionListener(e -> ManageController.synchronize());
     }
 }

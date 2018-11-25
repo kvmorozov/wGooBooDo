@@ -2,6 +2,8 @@ package ru.kmorozov.library.data.loader.processors.gbd;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import ru.kmorozov.db.core.logic.model.book.BookInfo;
@@ -17,6 +19,7 @@ import ru.kmorozov.library.data.model.book.Storage;
 import ru.kmorozov.library.data.repository.BooksRepository;
 import ru.kmorozov.library.data.repository.StorageRepository;
 import ru.kmorozov.library.data.server.ServerGBDOptions;
+import ru.kmorozov.library.data.server.condition.StorageEnabledCondition;
 import ru.kmorozov.onedrive.client.OneDriveItem;
 import ru.kmorozov.onedrive.client.OneDriveProvider;
 
@@ -27,9 +30,11 @@ import static ru.kmorozov.library.data.model.book.BookInfo.BookFormat.PDF;
 import static ru.kmorozov.library.data.model.book.BookInfo.BookType.GOOGLE_BOOK;
 
 @Component
-public class GbdProcessor implements IGbdProcessor {
+@ComponentScan(basePackageClasses = {OneDriveContextLoader.class, ServerProducer.class, DbContextLoader.class, ServerGBDOptions.class})
+@Conditional(StorageEnabledCondition.class)
+public class GbdRemoteProcessor implements IGbdProcessor {
 
-    protected static final Logger logger = Logger.getLogger(GbdProcessor.class);
+    protected static final Logger logger = Logger.getLogger(GbdRemoteProcessor.class);
 
     @Autowired
     @Lazy

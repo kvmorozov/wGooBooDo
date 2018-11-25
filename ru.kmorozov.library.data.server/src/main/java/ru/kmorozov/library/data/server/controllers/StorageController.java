@@ -1,21 +1,21 @@
-package ru.kmorozov.library.data.server;
+package ru.kmorozov.library.data.server.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.kmorozov.gbd.client.IRestClient;
-import ru.kmorozov.gbd.core.loader.DirContextLoader;
-import ru.kmorozov.gbd.core.logic.connectors.HttpConnector;
 import ru.kmorozov.gbd.logger.Logger;
-import ru.kmorozov.library.data.loader.LoaderExecutor;
-import ru.kmorozov.library.data.loader.LoaderExecutor.State;
+import ru.kmorozov.library.data.loader.LoaderConfiguration;
+import ru.kmorozov.library.data.loader.impl.LoaderExecutor;
 import ru.kmorozov.library.data.loader.processors.DuplicatesProcessor;
-import ru.kmorozov.library.data.loader.processors.IGbdProcessor;
 import ru.kmorozov.library.data.loader.processors.JstorProcessor;
+import ru.kmorozov.library.data.loader.processors.gbd.GbdRemoteProcessor;
 import ru.kmorozov.library.data.loader.utils.BookUtils;
 import ru.kmorozov.library.data.model.IDataRestServer;
 import ru.kmorozov.library.data.model.book.Book;
@@ -23,51 +23,48 @@ import ru.kmorozov.library.data.model.book.Storage;
 import ru.kmorozov.library.data.model.dto.BookDTO;
 import ru.kmorozov.library.data.model.dto.DuplicatedBookDTO;
 import ru.kmorozov.library.data.model.dto.ItemDTO;
-import ru.kmorozov.library.data.model.dto.ItemDTO.ItemType;
 import ru.kmorozov.library.data.model.dto.StorageDTO;
 import ru.kmorozov.library.data.model.dto.UserDTO;
 import ru.kmorozov.library.data.repository.BooksRepository;
 import ru.kmorozov.library.data.repository.StorageRepository;
+import ru.kmorozov.library.data.server.condition.StorageEnabledCondition;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-/**
- * Created by km on 19.12.2016.
- */
-
 @RestController
-public class LibraryRestController implements IRestClient, IDataRestServer {
+@EnableMongoRepositories(basePackages = "ru.kmorozov.library.data.repository")
+@ComponentScan(basePackageClasses = {LoaderConfiguration.class, LoaderExecutor.class, DuplicatesProcessor.class, GbdRemoteProcessor.class, LoaderExecutor.class, JstorProcessor.class})
+@Conditional(StorageEnabledCondition.class)
+public class StorageController implements IDataRestServer {
 
-    protected static final Logger logger = Logger.getLogger(HttpConnector.class);
+    protected static final Logger logger = Logger.getLogger(StorageController.class);
 
-    @Autowired @Lazy
+    @Autowired
+    @Lazy
     private StorageRepository storageRepository;
 
-    @Autowired @Lazy
+    @Autowired
+    @Lazy
     private BooksRepository booksRepository;
 
-    @Autowired @Lazy
+    @Autowired
+    @Lazy
     private LoaderExecutor loader;
 
-    @Autowired @Lazy
+    @Autowired
+    @Lazy
     private DuplicatesProcessor duplicatesProcessor;
 
-    @Autowired @Lazy
+    @Autowired
+    @Lazy
     private JstorProcessor jstorProcessor;
 
-    @Autowired @Lazy
-    private IGbdProcessor gbdProcessor;
-
-    private static transient DirContextLoader googleBooksLoader;
-
-    @Override
-    @RequestMapping("/ping")
-    public boolean ping() {
-        return true;
-    }
+    @Autowired
+    @Lazy
+    private GbdRemoteProcessor gbdProcessor;
 
     @Override
     @RequestMapping("/login")
@@ -75,8 +72,10 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
         return new UserDTO(login);
     }
 
-    @Autowired
-    private ServerGBDOptions options;
+    @RequestMapping("/jstorUpdate")
+    public void jstorUpdate() {
+        jstorProcessor.process();
+    }
 
     @Override
     @RequestMapping("/storagesByParentId")
@@ -122,7 +121,7 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
 
     @Override
     @RequestMapping("/item")
-    public ItemDTO getItem(@RequestParam(name = "itemId") final String itemId, @RequestParam(name = "itemType") final ItemType itemType, @RequestParam(name = "refresh") final boolean refresh) {
+    public ItemDTO getItem(@RequestParam(name = "itemId") final String itemId, @RequestParam(name = "itemType") final ItemDTO.ItemType itemType, @RequestParam(name = "refresh") final boolean refresh) {
         switch (itemType) {
             case book:
                 return new ItemDTO(new BookDTO(booksRepository.findById(itemId).get(), true));
@@ -143,7 +142,7 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
     @Override
     @RequestMapping(value = "/updateLibrary", method = RequestMethod.POST)
     public void updateLibrary(@RequestParam(name = "state") final String stateString) {
-        final State state = State.valueOf(stateString);
+        final LoaderExecutor.State state = LoaderExecutor.State.valueOf(stateString);
 
         switch (state) {
             case STARTED:
@@ -189,18 +188,9 @@ public class LibraryRestController implements IRestClient, IDataRestServer {
         duplicatesProcessor.process();
     }
 
-    @RequestMapping("/jstorUpdate")
-    public void jstorUpdate() {
-        jstorProcessor.process();
-    }
-
-    @RequestMapping("/gbdUpdate")
-    public void gbdUpdate() {
-        gbdProcessor.process();
-    }
-
-    @RequestMapping("/gbdLoad")
+    @RequestMapping("/gbdLoadRemote")
     public void gbdLoad(@RequestParam(name = "bookId", required = false) final String bookId) {
         gbdProcessor.load(bookId);
     }
+
 }

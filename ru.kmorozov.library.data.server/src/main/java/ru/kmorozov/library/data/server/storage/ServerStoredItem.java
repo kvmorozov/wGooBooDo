@@ -1,4 +1,4 @@
-package ru.kmorozov.library.data.server;
+package ru.kmorozov.library.data.server.storage;
 
 import ru.kmorozov.gbd.core.config.IStoredItem;
 import ru.kmorozov.gbd.core.loader.LocalFSStoredItem;

@@ -1,4 +1,4 @@
-package ru.kmorozov.library.data.loader;
+package ru.kmorozov.library.data.loader.impl;
 
 import ru.kmorozov.onedrive.client.OneDriveItem;
 import ru.kmorozov.library.data.model.book.BookInfo;

@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.kmorozov.library.data.loader.LoaderConfiguration;
-import ru.kmorozov.library.data.loader.LocalDirectoryLoader;
-import ru.kmorozov.library.data.loader.OneDriveLoader;
+import ru.kmorozov.library.data.loader.impl.LocalDirectoryLoader;
+import ru.kmorozov.library.data.loader.impl.OneDriveLoader;
 import ru.kmorozov.library.data.model.book.Storage;
 import ru.kmorozov.library.data.repository.StorageRepository;
 
