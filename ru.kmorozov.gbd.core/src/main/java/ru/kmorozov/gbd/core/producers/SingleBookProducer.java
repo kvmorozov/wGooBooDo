@@ -1,4 +1,4 @@
-package ru.kmorozov.gbd.desktop.library;
+package ru.kmorozov.gbd.core.producers;
 
 import ru.kmorozov.gbd.core.logic.context.IBookListProducer;
 

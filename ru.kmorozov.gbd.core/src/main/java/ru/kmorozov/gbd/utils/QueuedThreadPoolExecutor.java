@@ -52,17 +52,17 @@ public class QueuedThreadPoolExecutor<T> extends ThreadPoolExecutor {
         long submitted = 0L;
         while (true) try {
             final long completed = uniqueMap.keySet().stream().filter(completeChecker).count();
-            if ((getCompletedTaskCount() == getTaskCount() && getCompletedTaskCount() >= needProcessCount) || System.currentTimeMillis() - timeStart > liveTime) break;
+            if ((getCompletedTaskCount() == getTaskCount() && getCompletedTaskCount() >= needProcessCount) || System.currentTimeMillis() - timeStart > liveTime)
+                break;
             if (0 == ++counter % 100) {
                 if (0L < needProcessCount)
                     logger.finest(String.format("Waiting for %s %d sec (%d of %d completed, %d tasks finished of %d submitted, %d in queue)", description, counter, completed,
-                                                needProcessCount, getCompletedTaskCount(), getTaskCount(), getQueue().size()));
+                            needProcessCount, getCompletedTaskCount(), getTaskCount(), getQueue().size()));
 
                 if (submitted == getTaskCount() && 0L < getTaskCount() && submitted < needProcessCount) {
                     logger.severe(String.format("Nothing was submitted to %s, set needProcessCount to %d", description, submitted));
                     needProcessCount = submitted;
-                }
-                else submitted = getTaskCount();
+                } else submitted = getTaskCount();
             }
             Thread.sleep(1000L);
         } catch (final InterruptedException e) {
@@ -71,8 +71,8 @@ public class QueuedThreadPoolExecutor<T> extends ThreadPoolExecutor {
 
         if (0L < needProcessCount)
             logger.finest(String.format("Terminating working threads for %s after %s sec (%s of %s completed, %s tasks finished of %s submitted)", description, counter, uniqueMap.keySet()
-                                                                                                                                                                                  .stream()
-                                                                                                                                                                                  .filter(completeChecker).count(), needProcessCount, getCompletedTaskCount(), getTaskCount()));
+                    .stream()
+                    .filter(completeChecker).count(), needProcessCount, getCompletedTaskCount(), getTaskCount()));
         shutdownNow();
 
         uniqueMap.clear();
@@ -80,12 +80,14 @@ public class QueuedThreadPoolExecutor<T> extends ThreadPoolExecutor {
 
     @Override
     public void execute(final Runnable command) {
+        if (command == null)
+            return;
+
         if (command instanceof IUniqueRunnable) {
             final T uniqueObj = ((IUniqueRunnable<T>) command).getUniqueObject();
             synchronized (uniqueObj) {
                 if (null == uniqueMap.put(uniqueObj, (IUniqueRunnable<T>) command)) super.execute(command);
             }
-        }
-        else super.execute(command);
+        } else super.execute(command);
     }
 }

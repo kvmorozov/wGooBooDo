@@ -4,7 +4,7 @@ import ru.kmorozov.db.core.logic.model.book.google.Resolutions;
 import ru.kmorozov.gbd.core.config.SystemConfigs;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor;
-import ru.kmorozov.gbd.desktop.library.SingleBookProducer;
+import ru.kmorozov.gbd.core.producers.SingleBookProducer;
 import ru.kmorozov.gbd.desktop.output.consumers.SwingOutputReceiver;
 import ru.kmorozov.gbd.desktop.output.progress.ProcessStatus;
 import ru.kmorozov.gbd.logger.events.AbstractEventSource;

@@ -1,17 +1,35 @@
 package ru.kmorozov.library.data.loader.processors.gbd;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.core.loader.DirContextLoader;
+import ru.kmorozov.gbd.core.logic.context.ContextProvider;
+import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
+import ru.kmorozov.gbd.core.logic.context.IBookListProducer;
+import ru.kmorozov.gbd.core.producers.SingleBookProducer;
+import ru.kmorozov.gbd.logger.output.DummyReceiver;
 import ru.kmorozov.library.data.loader.processors.IGbdProcessor;
+import ru.kmorozov.library.data.server.options.LocalServerGBDOptions;
 
 @Component
 public class GbdLocalProcessor implements IGbdProcessor {
 
-    private static transient DirContextLoader googleBooksLoader;
+    @Autowired()
+    private LocalServerGBDOptions options;
 
     @Override
     public void load(String bookId) {
+        options.setBookId(bookId);
+        GBDOptions.init(options);
 
+        ContextProvider.setDefaultContextProvider(DirContextLoader.BOOK_CTX_LOADER);
+        IBookListProducer producer = new SingleBookProducer(bookId);
+
+        ExecutionContext.initContext(new DummyReceiver(), 1 == producer.getBookIds().size());
+        ExecutionContext.INSTANCE.addBookContext(producer, new DummyProgress(), new ServerPdfMaker());
+
+        ExecutionContext.INSTANCE.execute();
     }
 
     @Override

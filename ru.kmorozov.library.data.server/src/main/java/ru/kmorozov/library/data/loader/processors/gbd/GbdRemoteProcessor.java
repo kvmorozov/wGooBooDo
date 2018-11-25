@@ -1,6 +1,7 @@
 package ru.kmorozov.library.data.loader.processors.gbd;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Conditional;
@@ -18,7 +19,7 @@ import ru.kmorozov.library.data.model.book.IdType;
 import ru.kmorozov.library.data.model.book.Storage;
 import ru.kmorozov.library.data.repository.BooksRepository;
 import ru.kmorozov.library.data.repository.StorageRepository;
-import ru.kmorozov.library.data.server.ServerGBDOptions;
+import ru.kmorozov.library.data.server.options.ServerGBDOptions;
 import ru.kmorozov.library.data.server.condition.StorageEnabledCondition;
 import ru.kmorozov.onedrive.client.OneDriveItem;
 import ru.kmorozov.onedrive.client.OneDriveProvider;
@@ -61,6 +62,7 @@ public class GbdRemoteProcessor implements IGbdProcessor {
     private DbContextLoader dbCtx;
 
     @Autowired
+    @Qualifier("remote")
     private ServerGBDOptions options;
 
     @Override

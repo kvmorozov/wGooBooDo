@@ -6,7 +6,7 @@ import ru.kmorozov.gbd.core.config.LocalSystemOptions;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.context.IBookListProducer;
 import ru.kmorozov.gbd.desktop.gui.MainFrame;
-import ru.kmorozov.gbd.desktop.library.OptionsBasedProducer;
+import ru.kmorozov.gbd.core.producers.OptionsBasedProducer;
 import ru.kmorozov.gbd.desktop.output.progress.ProcessStatus;
 import ru.kmorozov.gbd.logger.output.DummyReceiver;
 import ru.kmorozov.gbd.pdf.PdfMaker;

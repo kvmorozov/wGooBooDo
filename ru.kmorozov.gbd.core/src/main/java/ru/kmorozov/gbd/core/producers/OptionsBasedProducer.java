@@ -1,4 +1,4 @@
-package ru.kmorozov.gbd.desktop.library;
+package ru.kmorozov.gbd.core.producers;
 
 import org.apache.commons.lang3.StringUtils;
 import ru.kmorozov.gbd.core.config.GBDOptions;

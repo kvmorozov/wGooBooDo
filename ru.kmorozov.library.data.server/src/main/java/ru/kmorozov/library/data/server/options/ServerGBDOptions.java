@@ -1,6 +1,7 @@
-package ru.kmorozov.library.data.server;
+package ru.kmorozov.library.data.server.options;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import ru.kmorozov.gbd.core.config.IGBDOptions;
@@ -11,9 +12,8 @@ import ru.kmorozov.onedrive.client.OneDriveItem;
 import ru.kmorozov.onedrive.client.OneDriveProvider;
 
 @Component
-public class ServerGBDOptions implements IGBDOptions {
-
-    private String bookId;
+@Qualifier("remote")
+public class ServerGBDOptions extends AbstractServerGBDOptions {
 
     @Autowired
     @Lazy
@@ -24,38 +24,8 @@ public class ServerGBDOptions implements IGBDOptions {
     private OneDriveItem root;
 
     @Override
-    public String getBookId() {
-        return bookId;
-    }
-
-    @Override
     public IStorage getStorage() {
         return new ServerStorage(api, root);
-    }
-
-    @Override
-    public String getProxyListFile() {
-        return null;
-    }
-
-    @Override
-    public int getImageWidth() {
-        return 0;
-    }
-
-    @Override
-    public boolean reloadImages() {
-        return false;
-    }
-
-    @Override
-    public boolean secureMode() {
-        return false;
-    }
-
-    @Override
-    public String pdfOptions() {
-        return null;
     }
 
     @Override
@@ -63,7 +33,4 @@ public class ServerGBDOptions implements IGBDOptions {
         return null;
     }
 
-    public void setBookId(String bookId) {
-        this.bookId = bookId;
-    }
 }

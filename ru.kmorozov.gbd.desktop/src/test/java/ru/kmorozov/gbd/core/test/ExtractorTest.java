@@ -18,8 +18,8 @@ import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.extractors.google.GoogleBookInfoExtractor;
 import ru.kmorozov.gbd.core.logic.extractors.shpl.ShplBookExtractor;
 import ru.kmorozov.gbd.core.logic.library.metadata.ShplMetadata;
-import ru.kmorozov.gbd.desktop.library.OptionsBasedProducer;
-import ru.kmorozov.gbd.desktop.library.SingleBookProducer;
+import ru.kmorozov.gbd.core.producers.OptionsBasedProducer;
+import ru.kmorozov.gbd.core.producers.SingleBookProducer;
 import ru.kmorozov.gbd.logger.output.DummyReceiver;
 
 import javax.servlet.http.HttpServletRequest;
