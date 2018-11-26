@@ -3,7 +3,7 @@ package ru.kmorozov.library.data.loader.processors.gbd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
-import ru.kmorozov.db.core.config.IBaseLoader;
+import ru.kmorozov.db.core.config.IContextLoader;
 import ru.kmorozov.db.core.logic.model.book.BookInfo;
 import ru.kmorozov.gbd.core.logic.extractors.google.GoogleBookInfoExtractor;
 import ru.kmorozov.gbd.logger.Logger;
@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.Set;
 
 @Component
-public class OneDriveContextLoader implements IBaseLoader {
+public class OneDriveContextLoader implements IContextLoader {
 
     protected static final Logger logger = Logger.getLogger(OneDriveContextLoader.class);
 

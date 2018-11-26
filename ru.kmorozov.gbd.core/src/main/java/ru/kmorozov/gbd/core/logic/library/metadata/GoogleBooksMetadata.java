@@ -1,5 +1,6 @@
 package ru.kmorozov.gbd.core.logic.library.metadata;
 
+import ru.kmorozov.db.core.config.IContextLoader;
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector;
 import ru.kmorozov.gbd.core.logic.connectors.asynchttp.AsyncHttpConnector;
 import ru.kmorozov.gbd.core.logic.connectors.google.GoogleHttpConnector;
@@ -38,6 +39,11 @@ public final class GoogleBooksMetadata implements ILibraryMetadata {
     @Override
     public AbstractBookExtractor getBookExtractor(final String bookId) {
         return new GoogleBookInfoExtractor(bookId);
+    }
+
+    @Override
+    public AbstractBookExtractor getBookExtractor(String bookId, IContextLoader storedLoader) {
+        return new GoogleBookInfoExtractor(bookId, storedLoader);
     }
 
     @Override

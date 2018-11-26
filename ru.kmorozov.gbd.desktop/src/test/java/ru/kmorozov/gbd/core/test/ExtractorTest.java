@@ -10,7 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import ru.kmorozov.gbd.core.config.GBDOptions;
-import ru.kmorozov.db.core.config.IBaseLoader;
+import ru.kmorozov.db.core.config.IContextLoader;
 import ru.kmorozov.gbd.core.config.IGBDOptions;
 import ru.kmorozov.gbd.core.loader.LocalFSStorage;
 import ru.kmorozov.gbd.core.logic.context.ContextProvider;
@@ -87,7 +87,7 @@ public class ExtractorTest {
 
     @Test
     public void bookContextLoadTest() {
-        final IBaseLoader contextProvider = ContextProvider.getContextProvider();
+        final IContextLoader contextProvider = ContextProvider.getContextProvider();
 
         final int ctxSizeBefore = contextProvider.getContextSize();
         Assert.assertTrue(0 < ctxSizeBefore);

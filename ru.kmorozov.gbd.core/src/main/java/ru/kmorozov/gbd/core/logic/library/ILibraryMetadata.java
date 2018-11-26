@@ -1,5 +1,6 @@
 package ru.kmorozov.gbd.core.logic.library;
 
+import ru.kmorozov.db.core.config.IContextLoader;
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookExtractor;
@@ -17,6 +18,8 @@ public interface ILibraryMetadata {
     IImageExtractor getExtractor(BookContext bookContext);
 
     AbstractBookExtractor getBookExtractor(String bookId);
+
+    AbstractBookExtractor getBookExtractor(String bookId, IContextLoader storedLoader);
 
     boolean needSetCookies();
 

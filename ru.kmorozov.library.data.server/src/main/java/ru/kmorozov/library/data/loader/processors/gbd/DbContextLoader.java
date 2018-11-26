@@ -3,7 +3,7 @@ package ru.kmorozov.library.data.loader.processors.gbd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
-import ru.kmorozov.db.core.config.IBaseLoader;
+import ru.kmorozov.db.core.config.IContextLoader;
 import ru.kmorozov.db.core.logic.model.book.BookInfo;
 import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage;
 import ru.kmorozov.gbd.core.logic.model.book.base.IPage;
@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Set;
 
 @Component
-public class DbContextLoader implements IBaseLoader {
+public class DbContextLoader implements IContextLoader {
 
     private Map<String, BookInfo> booksMap = new HashMap<>();
 

@@ -2,7 +2,7 @@ package ru.kmorozov.gbd.core.loader;
 
 import org.apache.commons.lang3.StringUtils;
 import ru.kmorozov.gbd.core.config.GBDOptions;
-import ru.kmorozov.db.core.config.IBaseLoader;
+import ru.kmorozov.db.core.config.IContextLoader;
 import ru.kmorozov.gbd.core.config.IIndex;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 /**
  * Created by sbt-morozov-kv on 14.11.2016.
  */
-public class DirContextLoader implements IBaseLoader {
+public class DirContextLoader implements IContextLoader {
 
     public static final DirContextLoader BOOK_CTX_LOADER = new DirContextLoader();
     private final Map<String, BookInfo> booksInfo = new HashMap<>();

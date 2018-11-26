@@ -1,6 +1,6 @@
 package ru.kmorozov.gbd.core.logic.context;
 
-import ru.kmorozov.db.core.config.IBaseLoader;
+import ru.kmorozov.db.core.config.IContextLoader;
 import ru.kmorozov.gbd.core.logic.Proxy.AbstractProxyListProvider;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.Proxy.UrlType;
@@ -101,7 +101,7 @@ public final class ExecutionContext {
         final long totalProcessed = getContexts(false).stream().mapToLong(BookContext::getPagesProcessed).sum();
         getLogger("Total").info("Total pages processed: " + totalProcessed);
 
-        IBaseLoader contextProvider = ContextProvider.getContextProvider();
+        IContextLoader contextProvider = ContextProvider.getContextProvider();
 
         contextProvider.updateIndex();
         contextProvider.updateContext();

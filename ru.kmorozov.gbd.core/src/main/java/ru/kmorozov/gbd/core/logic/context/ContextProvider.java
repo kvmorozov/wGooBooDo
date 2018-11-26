@@ -1,6 +1,6 @@
 package ru.kmorozov.gbd.core.logic.context;
 
-import ru.kmorozov.db.core.config.IBaseLoader;
+import ru.kmorozov.db.core.config.IContextLoader;
 import ru.kmorozov.gbd.core.loader.DirContextLoader;
 import ru.kmorozov.db.core.logic.model.book.BookInfo;
 
@@ -9,25 +9,25 @@ import java.util.Set;
 /**
  * Created by sbt-morozov-kv on 02.12.2016.
  */
-public class ContextProvider implements IBaseLoader {
+public class ContextProvider implements IContextLoader {
 
     private static final String DB_CTX_PROVIDER_CLASS_NAME = "ru.kmorozov.library.data.loader.processors.gbd.DbContextLoader";
 
     private static final Object LOCK_OBJ = new Object();
-    private static volatile IBaseLoader contextProvider;
+    private static volatile IContextLoader contextProvider;
 
-    protected IBaseLoader loader;
+    protected IContextLoader loader;
 
-    public ContextProvider(IBaseLoader loader) {
+    public ContextProvider(IContextLoader loader) {
         this.loader = loader;
     }
 
-    public static IBaseLoader getContextProvider() {
+    public static IContextLoader getContextProvider() {
         if (null == contextProvider) {
             synchronized (LOCK_OBJ) {
                 if (null == contextProvider) if (classExists(DB_CTX_PROVIDER_CLASS_NAME)) {
                     try {
-                        contextProvider = (IBaseLoader) Class.forName(DB_CTX_PROVIDER_CLASS_NAME).getDeclaredConstructor().newInstance();
+                        contextProvider = (IContextLoader) Class.forName(DB_CTX_PROVIDER_CLASS_NAME).getDeclaredConstructor().newInstance();
                     } catch (final Exception e) {
                         e.printStackTrace();
                     }
@@ -43,7 +43,7 @@ public class ContextProvider implements IBaseLoader {
         return contextProvider;
     }
 
-    public static void setDefaultContextProvider(IBaseLoader _contextProvider) {
+    public static void setDefaultContextProvider(IContextLoader _contextProvider) {
         contextProvider = _contextProvider;
     }
 

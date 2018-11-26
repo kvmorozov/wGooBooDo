@@ -5,7 +5,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
-import ru.kmorozov.db.core.config.IBaseLoader;
+import ru.kmorozov.db.core.config.IContextLoader;
 import ru.kmorozov.gbd.core.logic.Proxy.AbstractProxyListProvider;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookExtractor;
@@ -33,7 +33,7 @@ public class GoogleBookInfoExtractor extends AbstractBookExtractor {
         super(bookId);
     }
 
-    public GoogleBookInfoExtractor(final String bookId, IBaseLoader storedLoader) {
+    public GoogleBookInfoExtractor(final String bookId, IContextLoader storedLoader) {
         super(bookId, storedLoader);
     }
 

@@ -4,7 +4,7 @@ import org.jsoup.Connection;
 import org.jsoup.Connection.Method;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import ru.kmorozov.db.core.config.IBaseLoader;
+import ru.kmorozov.db.core.config.IContextLoader;
 import ru.kmorozov.db.core.logic.model.book.BookInfo;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.connectors.Response;
@@ -35,7 +35,7 @@ public abstract class AbstractBookExtractor extends AbstractHttpProcessor {
         this(bookId, ContextProvider.getContextProvider());
     }
 
-    protected AbstractBookExtractor(final String bookId, IBaseLoader storedLoader) {
+    protected AbstractBookExtractor(final String bookId, IContextLoader storedLoader) {
         this.bookId = bookId;
 
         final BookInfo storedBookInfo = storedLoader == null ? null : storedLoader.getBookInfo(bookId);

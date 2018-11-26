@@ -1,6 +1,7 @@
 package ru.kmorozov.gbd.core.logic.library.metadata;
 
 import org.apache.commons.lang3.StringUtils;
+import ru.kmorozov.db.core.config.IContextLoader;
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector;
 import ru.kmorozov.gbd.core.logic.connectors.apache.ApacheHttpConnector;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
@@ -30,6 +31,11 @@ public final class RfbrMetadata implements ILibraryMetadata {
     @Override
     public AbstractBookExtractor getBookExtractor(String bookId) {
         return new RfbrBookExtractor(bookId);
+    }
+
+    @Override
+    public AbstractBookExtractor getBookExtractor(String bookId, IContextLoader storedLoader) {
+        return getBookExtractor(bookId);
     }
 
     @Override

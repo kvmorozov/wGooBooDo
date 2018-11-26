@@ -7,7 +7,7 @@ import java.util.Set;
 /**
  * Created by sbt-morozov-kv on 14.11.2016.
  */
-public interface IBaseLoader {
+public interface IContextLoader {
 
     void updateIndex();
 
