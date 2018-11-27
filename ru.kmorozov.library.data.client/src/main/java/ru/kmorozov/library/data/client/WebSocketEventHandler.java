@@ -14,11 +14,11 @@ public class WebSocketEventHandler {
     private final SimpMessagingTemplate websocket;
 
     @Autowired
-    public WebSocketEventHandler(SimpMessagingTemplate websocket) {
+    public WebSocketEventHandler(final SimpMessagingTemplate websocket) {
         this.websocket = websocket;
     }
 
-    public void sendInfo(String message) {
-        websocket.convertAndSend(WebSocketConfiguration.MESSAGE_PREFIX + "/info", message);
+    public void sendInfo(final String message) {
+        this.websocket.convertAndSend(WebSocketConfiguration.MESSAGE_PREFIX + "/info", message);
     }
 }

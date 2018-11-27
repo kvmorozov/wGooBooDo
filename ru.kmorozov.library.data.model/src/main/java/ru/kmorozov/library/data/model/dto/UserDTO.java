@@ -13,18 +13,18 @@ public class UserDTO extends ResourceSupport {
     private String login;
 
     public UserDTO() {
-        this(UserDTO.DEFAULT_USERNAME);
+        this(DEFAULT_USERNAME);
     }
 
-    public UserDTO(String login) {
-        this.login = StringUtils.isEmpty(login) ? UserDTO.DEFAULT_USERNAME : login;
+    public UserDTO(final String login) {
+        this.login = StringUtils.isEmpty(login) ? DEFAULT_USERNAME : login;
     }
 
     public String getLogin() {
-        return this.login;
+        return login;
     }
 
-    public void setLogin(String login) {
+    public void setLogin(final String login) {
         this.login = login;
     }
 }

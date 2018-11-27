@@ -7,16 +7,16 @@ public class BaseEvent {
 
     private final String eventInfo;
 
-    BaseEvent(String eventInfo) {
+    BaseEvent(final String eventInfo) {
         this.eventInfo = eventInfo;
     }
 
     public String getEventInfo() {
-        return this.eventInfo;
+        return eventInfo;
     }
 
     @Override
     public String toString() {
-        return this.eventInfo;
+        return eventInfo;
     }
 }

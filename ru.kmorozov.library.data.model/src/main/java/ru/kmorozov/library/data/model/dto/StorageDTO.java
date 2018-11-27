@@ -2,6 +2,7 @@ package ru.kmorozov.library.data.model.dto;
 
 import ru.kmorozov.library.data.model.book.Category;
 import ru.kmorozov.library.data.model.book.Storage;
+import ru.kmorozov.library.data.model.book.Storage.StorageType;
 
 import java.util.Collection;
 import java.util.Set;
@@ -12,7 +13,7 @@ import java.util.Set;
 public class StorageDTO {
 
     private String id;
-    private Storage.StorageType storageType;
+    private StorageType storageType;
     private String url, displayName;
     private String parentId;
     private long filesCount, lastChecked;
@@ -21,52 +22,52 @@ public class StorageDTO {
     public StorageDTO() {
     }
 
-    public StorageDTO(Storage storage) {
+    public StorageDTO(final Storage storage) {
         this(storage, false);
     }
 
-    public StorageDTO(Storage storage, boolean withCategories) {
-        id = storage.getId();
-        storageType = storage.getStorageType();
-        url = storage.getUrl();
-        displayName = storage.getName();
-        parentId = null == storage.getParent() ? null : storage.getParent().getId();
-        filesCount = null == storage.getStorageInfo() ? 0L : storage.getStorageInfo().getFilesCount();
-        lastChecked = null == storage.getStorageInfo() ? 0L : storage.getStorageInfo().getLastChecked();
+    public StorageDTO(final Storage storage, final boolean withCategories) {
+        this.id = storage.getId();
+        this.storageType = storage.getStorageType();
+        this.url = storage.getUrl();
+        this.displayName = storage.getName();
+        this.parentId = null == storage.getParent() ? null : storage.getParent().getId();
+        this.filesCount = null == storage.getStorageInfo() ? 0L : storage.getStorageInfo().getFilesCount();
+        this.lastChecked = null == storage.getStorageInfo() ? 0L : storage.getStorageInfo().getLastChecked();
 
         if (withCategories)
-            categories = storage.getCategories();
+            this.categories = storage.getCategories();
     }
 
     public String getId() {
-        return this.id;
+        return id;
     }
 
-    public Storage.StorageType getStorageType() {
-        return this.storageType;
+    public StorageType getStorageType() {
+        return storageType;
     }
 
     public String getUrl() {
-        return this.url;
+        return url;
     }
 
     public String getParentId() {
-        return this.parentId;
+        return parentId;
     }
 
     public String getDisplayName() {
-        return this.displayName;
+        return displayName;
     }
 
     public long getFilesCount() {
-        return this.filesCount;
+        return filesCount;
     }
 
     public Collection<Category> getCategories() {
-        return this.categories;
+        return categories;
     }
 
     public long getLastChecked() {
-        return this.lastChecked;
+        return lastChecked;
     }
 }

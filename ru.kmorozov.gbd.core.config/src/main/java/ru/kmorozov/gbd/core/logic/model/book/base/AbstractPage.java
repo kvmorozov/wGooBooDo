@@ -14,47 +14,47 @@ public abstract class AbstractPage implements IPage {
 
     @Override
     public boolean isDataProcessed() {
-        return this.dataProcessed.get();
+        return dataProcessed.get();
     }
 
     @Override
     public boolean isFileExists() {
-        return this.fileExists.get();
+        return fileExists.get();
     }
 
     @Override
     public boolean isSigChecked() {
-        return this.sigChecked.get();
+        return sigChecked.get();
     }
 
     @Override
     public boolean isLoadingStarted() {
-        return this.loadingStarted.get();
+        return loadingStarted.get();
     }
 
     public boolean isProcessed() {
-        return this.isDataProcessed() || this.sigChecked.get() || this.isFileExists();
+        return isDataProcessed() || sigChecked.get() || isFileExists();
     }
 
     public boolean isNotProcessed() {
-        return !this.isProcessed();
+        return !isProcessed();
     }
 
     public abstract String getImgUrl();
 
-    public void setSigChecked(final boolean value) {
-        this.sigChecked.set(value);
+    public void setSigChecked(boolean value) {
+        sigChecked.set(value);
     }
 
-    public void setDataProcessed(final boolean value) {
-        this.dataProcessed.set(value);
+    public void setDataProcessed(boolean value) {
+        dataProcessed.set(value);
     }
 
-    public void setFileExists(final boolean value) {
-        this.fileExists.set(value);
+    public void setFileExists(boolean value) {
+        fileExists.set(value);
     }
 
-    public void setLoadingStarted(final boolean value) {
-        this.loadingStarted.set(value);
+    public void setLoadingStarted(boolean value) {
+        loadingStarted.set(value);
     }
 }

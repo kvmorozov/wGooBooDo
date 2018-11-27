@@ -9,7 +9,7 @@ import java.io.IOException;
  */
 public class OneDriveExceptionFactory {
 
-    public static OneDriveException getException(String content) {
+    public static OneDriveException getException(final String content) {
         OneDriveErrorInfo errorInfo = null;
 
         try {
@@ -21,7 +21,7 @@ public class OneDriveExceptionFactory {
                 default:
                     return new OneDriveException(errorInfo);
             }
-        } catch (IOException ignored) {
+        } catch (final IOException ignored) {
         }
         return new OneDriveException(errorInfo);
     }

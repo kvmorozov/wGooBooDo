@@ -2,31 +2,31 @@ package ru.kmorozov.gbd.core.config.options;
 
 public class CtxOptions {
 
-    public static final CtxOptions DEFAULT_CTX_OPTIONS = new CtxOptions(CtxOptions.CtxMode.FILE, "books.ctx");
+    public static final CtxOptions DEFAULT_CTX_OPTIONS = new CtxOptions(CtxMode.FILE, "books.ctx");
 
     public enum CtxMode {
         FILE,
         MONGO
     }
 
-    private final CtxOptions.CtxMode ctxMode;
+    private final CtxMode ctxMode;
     private final String connectionParams;
 
-    public CtxOptions(final String ctxMode, final String connectionParams) {
-        this.ctxMode = CtxOptions.CtxMode.valueOf(ctxMode);
+    public CtxOptions(String ctxMode, String connectionParams) {
+        this.ctxMode = CtxMode.valueOf(ctxMode);
         this.connectionParams = connectionParams;
     }
 
-    CtxOptions(final CtxOptions.CtxMode ctxMode, final String connectionParams) {
+    CtxOptions(CtxMode ctxMode, String connectionParams) {
         this.ctxMode = ctxMode;
         this.connectionParams = connectionParams;
     }
 
-    public CtxOptions.CtxMode getCtxMode() {
-        return ctxMode;
+    public CtxMode getCtxMode() {
+        return this.ctxMode;
     }
 
     public String getConnectionParams() {
-        return connectionParams;
+        return this.connectionParams;
     }
 }

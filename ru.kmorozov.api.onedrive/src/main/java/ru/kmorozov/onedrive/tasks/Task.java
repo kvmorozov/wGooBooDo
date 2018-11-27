@@ -27,30 +27,30 @@ public abstract class Task implements Runnable, Comparable<Task> {
     private final int id;
     private int attempt;
 
-    protected Task(Task.TaskOptions options) {
-        queue = Preconditions.checkNotNull(options.getQueue());
-        api = Preconditions.checkNotNull(options.getApi());
-        fileSystem = Preconditions.checkNotNull(options.getFileSystem());
-        reporter = Preconditions.checkNotNull(options.getReporter());
+    protected Task(final TaskOptions options) {
+        this.queue = Preconditions.checkNotNull(options.getQueue());
+        this.api = Preconditions.checkNotNull(options.getApi());
+        this.fileSystem = Preconditions.checkNotNull(options.getFileSystem());
+        this.reporter = Preconditions.checkNotNull(options.getReporter());
 
-        this.reporter.setTaskLogger(Task.log);
+        reporter.setTaskLogger(log);
 
-        id = Task.taskIdCounter.getAndIncrement();
-        attempt = 0;
+        this.id = taskIdCounter.getAndIncrement();
+        this.attempt = 0;
     }
 
-    protected static boolean isSizeInvalid(File localFile) {
-        return Task.isSizeInvalid(localFile.getPath(), localFile.length());
+    protected static boolean isSizeInvalid(final File localFile) {
+        return isSizeInvalid(localFile.getPath(), localFile.length());
     }
 
-    protected static boolean isSizeInvalid(OneDriveItem remoteFile) {
-        return Task.isSizeInvalid(remoteFile.getFullName(), remoteFile.getSize());
+    protected static boolean isSizeInvalid(final OneDriveItem remoteFile) {
+        return isSizeInvalid(remoteFile.getFullName(), remoteFile.getSize());
     }
 
-    private static boolean isSizeInvalid(String filename, long size) {
-        int maxSizeKb = CommandLineOpts.getCommandLineOpts().getMaxSizeKb();
+    private static boolean isSizeInvalid(final String filename, final long size) {
+        final int maxSizeKb = CommandLineOpts.getCommandLineOpts().getMaxSizeKb();
         if (0 < maxSizeKb && size > (long) (maxSizeKb * 1024)) {
-            Task.log.debug(String.format("Skipping file %s - size is %dKB (bigger than maximum of %dKB)",
+            log.debug(String.format("Skipping file %s - size is %dKB (bigger than maximum of %dKB)",
                     filename,
                     size / 1024L,
                     maxSizeKb));
@@ -60,33 +60,33 @@ public abstract class Task implements Runnable, Comparable<Task> {
         return false;
     }
 
-    protected static boolean isIgnored(OneDriveItem remoteFile) {
-        boolean ignored = Task.isIgnored(remoteFile.getName() + (remoteFile.isDirectory() ? File.separator : ""));
+    protected static boolean isIgnored(final OneDriveItem remoteFile) {
+        final boolean ignored = isIgnored(remoteFile.getName() + (remoteFile.isDirectory() ? File.separator : ""));
 
         if (ignored) {
-            Task.log.debug(String.format("Skipping ignored remote file %s", remoteFile.getFullName()));
+            log.debug(String.format("Skipping ignored remote file %s", remoteFile.getFullName()));
         }
 
         return ignored;
     }
 
-    protected static boolean isIgnored(File localFile) {
-        boolean ignored = Task.isIgnored(localFile.getName() + (localFile.isDirectory() ? File.separator : ""));
+    protected static boolean isIgnored(final File localFile) {
+        final boolean ignored = isIgnored(localFile.getName() + (localFile.isDirectory() ? File.separator : ""));
 
         if (ignored) {
-            Task.log.debug(String.format("Skipping ignored local file %s", localFile.getPath()));
+            log.debug(String.format("Skipping ignored local file %s", localFile.getPath()));
         }
 
         return ignored;
     }
 
-    private static boolean isIgnored(String name) {
-        Set<String> ignoredSet = CommandLineOpts.getCommandLineOpts().getIgnored();
+    private static boolean isIgnored(final String name) {
+        final Set<String> ignoredSet = CommandLineOpts.getCommandLineOpts().getIgnored();
         return null != ignoredSet && ignoredSet.contains(name);
     }
 
-    protected Task.TaskOptions getTaskOptions() {
-        return new Task.TaskOptions(this.queue, this.api, this.fileSystem, this.reporter);
+    protected TaskOptions getTaskOptions() {
+        return new TaskOptions(queue, api, fileSystem, reporter);
     }
 
     protected abstract int priority();
@@ -94,51 +94,51 @@ public abstract class Task implements Runnable, Comparable<Task> {
     protected abstract void taskBody() throws IOException;
 
     protected String getId() {
-        return id + ":" + attempt;
+        return this.id + ":" + this.attempt;
     }
 
     public void run() {
-        this.attempt++;
+        attempt++;
         try {
-            Task.log.debug(String.format("Starting task %d:%d - %s", this.id, this.attempt, toString()));
-            this.taskBody();
+            log.debug(String.format("Starting task %d:%d - %s", id, attempt, this.toString()));
+            taskBody();
             return;
-        } catch (HttpResponseException ex) {
+        } catch (final HttpResponseException ex) {
 
             switch (ex.getStatusCode()) {
                 case 401:
-                    Task.log.warn(String.format("Task %s encountered %s", this.getId(), ex.getMessage()));
+                    log.warn(String.format("Task %s encountered %s", getId(), ex.getMessage()));
                     break;
                 case 500:
                 case 502:
                 case 503:
                 case 504:
-                    Task.log.warn(String.format("Task %s encountered %s - sleeping 10 seconds", this.getId(), ex.getMessage()));
-                    this.queue.suspend(10);
+                    log.warn(String.format("Task %s encountered %s - sleeping 10 seconds", getId(), ex.getMessage()));
+                    queue.suspend(10);
                     break;
                 case 429:
                 case 509:
-                    Task.log.warn(String.format("Task %s encountered %s - sleeping 60 seconds", this.getId(), ex.getMessage()));
-                    this.queue.suspend(60);
+                    log.warn(String.format("Task %s encountered %s - sleeping 60 seconds", getId(), ex.getMessage()));
+                    queue.suspend(60);
                     break;
                 default:
-                    Task.log.warn(String.format("Task %s encountered %s", this.getId(), ex.getMessage()));
+                    log.warn(String.format("Task %s encountered %s", getId(), ex.getMessage()));
             }
-        } catch (Exception ex) {
-            Task.log.error(String.format("Task %s encountered exception", this.getId()), ex);
-            this.queue.suspend(1);
+        } catch (final Exception ex) {
+            log.error(String.format("Task %s encountered exception", getId()), ex);
+            queue.suspend(1);
         }
 
-        if (this.attempt < CommandLineOpts.getCommandLineOpts().getTries()) {
-            this.queue.add(this);
+        if (attempt < CommandLineOpts.getCommandLineOpts().getTries()) {
+            queue.add(this);
         } else {
-            this.reporter.error();
-            Task.log.error(String.format("Task %d did not complete - %s", this.id, toString()));
+            reporter.error();
+            log.error(String.format("Task %d did not complete - %s", id, this.toString()));
         }
     }
 
-    public int compareTo(Task o) {
-        return o.priority() - this.priority();
+    public int compareTo(final Task o) {
+        return o.priority() - priority();
     }
 
     public static class TaskOptions {
@@ -148,7 +148,7 @@ public abstract class Task implements Runnable, Comparable<Task> {
         private final FileSystemProvider fileSystem;
         private final TaskReporter reporter;
 
-        public TaskOptions(TaskQueue queue, OneDriveProvider api, FileSystemProvider fileSystem, TaskReporter reporter) {
+        public TaskOptions(final TaskQueue queue, final OneDriveProvider api, final FileSystemProvider fileSystem, final TaskReporter reporter) {
             this.queue = queue;
             this.api = api;
             this.fileSystem = fileSystem;
@@ -156,19 +156,19 @@ public abstract class Task implements Runnable, Comparable<Task> {
         }
 
         public TaskQueue getQueue() {
-            return this.queue;
+            return queue;
         }
 
         public OneDriveProvider getApi() {
-            return this.api;
+            return api;
         }
 
         public FileSystemProvider getFileSystem() {
-            return this.fileSystem;
+            return fileSystem;
         }
 
         public TaskReporter getReporter() {
-            return this.reporter;
+            return reporter;
         }
     }
 }

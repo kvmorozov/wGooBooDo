@@ -10,7 +10,7 @@ import ru.kmorozov.db.core.logic.model.book.shpl.ShplPage;
  */
 public class ShplPageImgProcessor extends SimplePageImgProcessor<ShplPage> {
 
-    public ShplPageImgProcessor(final BookContext bookContext, final ShplPage page, final HttpHostExt usedProxy) {
+    public ShplPageImgProcessor(BookContext bookContext, ShplPage page, HttpHostExt usedProxy) {
         super(bookContext, page, usedProxy);
     }
 }

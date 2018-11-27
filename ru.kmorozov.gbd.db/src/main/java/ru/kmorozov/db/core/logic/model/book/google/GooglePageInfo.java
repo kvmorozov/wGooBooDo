@@ -42,83 +42,83 @@ public class GooglePageInfo extends AbstractPage implements Serializable, Compar
     }
 
     // Создание страниц для заполнения разрыва
-    public GooglePageInfo(String pid, int order) {
+    public GooglePageInfo(final String pid, final int order) {
         this.pid = pid;
         this.order = order;
 
-        this.gapPage = true;
+        gapPage = true;
     }
 
     @Override
     public String getPid() {
-        return this.pid;
+        return pid;
     }
 
     @Override
     public Integer getOrder() {
-        return this.order;
+        return order;
     }
 
     public String getSrc() {
-        return this.src;
+        return src;
     }
 
-    public void setSrc(String src) {
+    public void setSrc(final String src) {
         this.src = src;
     }
 
-    public void setWidth(int width) {
+    public void setWidth(final int width) {
         this.width = width;
     }
 
     public CharSequence getSig() {
-        return null == this.src ? null : null == this.sig ? this.sig = this.src.substring(this.src.indexOf("sig=") + 4) : this.sig;
+        return null == src ? null : null == sig ? sig = src.substring(src.indexOf("sig=") + 4) : sig;
     }
 
     public boolean isGapPage() {
-        return this.gapPage;
+        return gapPage;
     }
 
-    public String getImqRqUrl(CharSequence bookId, String urlTemplate, int width) {
-        return urlTemplate.replace(BOOK_ID_PLACEHOLDER, bookId) + IMG_REQUEST_TEMPLATE.replace(RQ_PG_PLACEHOLDER, this.pid)
-                                                                                      .replace(RQ_SIG_PLACEHOLDER, this.getSig())
+    public String getImqRqUrl(final CharSequence bookId, final String urlTemplate, final int width) {
+        return urlTemplate.replace(BOOK_ID_PLACEHOLDER, bookId) + IMG_REQUEST_TEMPLATE.replace(RQ_PG_PLACEHOLDER, pid)
+                                                                                      .replace(RQ_SIG_PLACEHOLDER, getSig())
                                                                                       .replace(RQ_WIDTH_PLACEHOLDER, String
                                                                                               .valueOf(width));
     }
 
     public String getPrefix() {
-        if (StringUtils.isEmpty(this.prefix)) this.parsePageNum();
+        if (StringUtils.isEmpty(prefix)) parsePageNum();
 
-        return this.prefix;
+        return prefix;
     }
 
     public int getPageNum() {
-        return this.pageNum;
+        return pageNum;
     }
 
     private void parsePageNum() {
         boolean numFound = false;
-        this.prefix = "";
-        StringBuilder strNum = new StringBuilder();
-        for (int i = this.pid.length() - 1; 0 <= i; i--) {
-            char ch = this.pid.charAt(i);
+        prefix = "";
+        final StringBuilder strNum = new StringBuilder();
+        for (int i = pid.length() - 1; 0 <= i; i--) {
+            final char ch = pid.charAt(i);
             if (!numFound && Character.isDigit(ch)) strNum.insert(0, ch);
             else if (!numFound && !Character.isDigit(ch)) {
                 numFound = true;
-                this.prefix = ch + this.prefix;
+                prefix = ch + prefix;
             }
-            else this.prefix = ch + this.prefix;
+            else prefix = ch + prefix;
         }
 
         try {
-            this.pageNum = Integer.parseInt(strNum.toString());
-        } catch (NumberFormatException ignored) {
+            pageNum = Integer.parseInt(strNum.toString());
+        } catch (final NumberFormatException ignored) {
         }
     }
 
     @Override
-    public int compareTo(GooglePageInfo anotherPage) {
-        return getOrder().compareTo(anotherPage.getOrder());
+    public int compareTo(final GooglePageInfo anotherPage) {
+        return this.getOrder().compareTo(anotherPage.getOrder());
     }
 
     @Override

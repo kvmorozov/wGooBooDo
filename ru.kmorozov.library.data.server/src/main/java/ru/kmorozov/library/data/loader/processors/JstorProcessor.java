@@ -14,7 +14,6 @@ import ru.kmorozov.gbd.core.logic.connectors.google.GoogleHttpConnector;
 import ru.kmorozov.gbd.logger.Logger;
 import ru.kmorozov.library.data.model.book.Book;
 import ru.kmorozov.library.data.model.book.BookInfo;
-import ru.kmorozov.library.data.model.book.BookInfo.BookType;
 import ru.kmorozov.library.data.model.book.IdType;
 import ru.kmorozov.library.data.repository.BooksRepository;
 
@@ -53,27 +52,27 @@ public class JstorProcessor implements IProcessor {
 
     @Override
     public void process() {
-        JstorProcessor.logger.info("Process JSTOR started.");
+        logger.info("Process JSTOR started.");
 
-        this.booksRepository
+        booksRepository
                 .findBooksByRegexBookInfoFileName("^\\d+.pdf")
                 .stream()
                 .filter(book -> book.getBookInfo().getCustomFields() == null)
                 .forEach(this::processJstorBook);
 
-        JstorProcessor.logger.info("Process JSTOR finished.");
+        logger.info("Process JSTOR finished.");
     }
 
-    private void processJstorBook(final Book jstorBook) {
-        final String fileName = jstorBook.getBookInfo().getFileName();
-        final String jstorId = fileName.substring(0, fileName.length() - 4);
+    private void processJstorBook(Book jstorBook) {
+        String fileName = jstorBook.getBookInfo().getFileName();
+        String jstorId = fileName.substring(0, fileName.length() - 4);
 
-        final HttpHostExt proxy = this.proxyProvider.getProxy();
+        HttpHostExt proxy = proxyProvider.getProxy();
 
-        final String doi;
+        String doi;
         try {
-            final String doc = this.jstorConnector.getString(JstorProcessor.JSTOR_ARTICLE_PREFIX + jstorId, proxy, true);
-            final Optional<String> opDoi = Arrays.stream(doc.split("\\r?\\n"))
+            String doc = jstorConnector.getString(JSTOR_ARTICLE_PREFIX + jstorId, proxy, true);
+            Optional<String> opDoi = Arrays.stream(doc.split("\\r?\\n"))
                     .filter(s -> s.contains("ST.discriminator"))
                     .findFirst();
             if (opDoi.isPresent())
@@ -82,47 +81,47 @@ public class JstorProcessor implements IProcessor {
                         .map(s -> s.split("=")[1])
                         .findFirst().get().replace("\"", "");
             else {
-                JstorProcessor.logger.error(String.format("%s not a valid JSTOR id", jstorId));
+                logger.error(String.format("%s not a valid JSTOR id", jstorId));
                 return;
             }
-        } catch (final IOException e) {
-            JstorProcessor.logger.error(String.format("%s not a valid JSTOR id", jstorId), e);
+        } catch (IOException e) {
+            logger.error(String.format("%s not a valid JSTOR id", jstorId), e);
             return;
         }
 
         jstorBook.addBookId(IdType.JSTOR, jstorId);
-        this.booksRepository.save(jstorBook);
+        booksRepository.save(jstorBook);
 
         try {
-            final Map<String, String> doiMap = this.parseArticleData(JstorProcessor.doiConnector.getString(JstorProcessor.JSTOR_CITATION_PREFIX + doi, proxy, true));
+            Map<String, String> doiMap = parseArticleData(doiConnector.getString(JSTOR_CITATION_PREFIX + doi, proxy, true));
             if (!doiMap.isEmpty()) {
-                jstorBook.getBookInfo().setBookType(BookType.ARTICLE);
+                jstorBook.getBookInfo().setBookType(BookInfo.BookType.ARTICLE);
                 jstorBook.getBookInfo().setCustomFields(doiMap);
-                this.booksRepository.save(jstorBook);
+                booksRepository.save(jstorBook);
 
-                JstorProcessor.logger.info(String.format("Saved DOI data for %s", doi));
+                logger.info(String.format("Saved DOI data for %s", doi));
             } else
-                JstorProcessor.logger.info(String.format("Not saved DOI data for %s", doi));
-        } catch (final IOException e) {
-            JstorProcessor.logger.warn(String.format("Invalid DOI %s for %s", doi, jstorId));
+                logger.info(String.format("Not saved DOI data for %s", doi));
+        } catch (IOException e) {
+            logger.warn(String.format("Invalid DOI %s for %s", doi, jstorId));
             return;
         }
 
         jstorBook.addBookId(IdType.DOI, doi);
-        this.booksRepository.save(jstorBook);
+        booksRepository.save(jstorBook);
     }
 
-    private Map<String, String> parseArticleData(final String data) {
+    private Map<String, String> parseArticleData(String data) {
         return Arrays.stream(data.split("\\r?\\n"))
                 .filter(s -> s.contains("="))
                 .map(s -> {
                     String[] items = s.split("=");
-                    return items.length == 2 ? new ImmutablePair<>(this.formatItem(items[0]), this.formatItem(items[1])) : null;
+                    return items.length == 2 ? new ImmutablePair<>(formatItem(items[0]), formatItem(items[1])) : null;
                 })
                 .collect(Collectors.toMap(ImmutablePair::getLeft, ImmutablePair::getRight));
     }
 
-    private String formatItem(final String item) {
+    private String formatItem(String item) {
         return item.trim()
                 .replace("{", "")
                 .replace("},", "")

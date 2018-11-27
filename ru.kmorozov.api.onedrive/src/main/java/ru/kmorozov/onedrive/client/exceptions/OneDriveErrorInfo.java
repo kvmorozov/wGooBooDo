@@ -13,26 +13,26 @@ public class OneDriveErrorInfo {
     String description;
 
     public String getError() {
-        return this.error;
+        return error;
     }
 
-    public void setError(String error) {
+    public void setError(final String error) {
         this.error = error;
     }
 
     public String getDescription() {
-        return this.description;
+        return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
     @Override
     public String toString() {
         return "OneDriveErrorInfo{" +
-                "error='" + this.error + '\'' +
-                ", description='" + this.description + '\'' +
+                "error='" + error + '\'' +
+                ", description='" + description + '\'' +
                 '}';
     }
 }

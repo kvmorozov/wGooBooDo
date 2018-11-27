@@ -7,7 +7,7 @@ import java.io.IOException;
  */
 public abstract class ResponseException extends IOException {
 
-    public ResponseException(final IOException ex) {
+    public ResponseException(IOException ex) {
         super(ex);
     }
 

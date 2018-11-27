@@ -7,6 +7,7 @@ import ru.kmorozov.onedrive.CommandLineOpts;
 import ru.kmorozov.onedrive.client.OneDriveItem;
 import ru.kmorozov.onedrive.client.OneDriveUploadSession;
 import ru.kmorozov.onedrive.client.utils.LogUtils;
+import ru.kmorozov.onedrive.tasks.Task.TaskOptions;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,7 +20,7 @@ public class UploadTask extends Task {
     private final File localFile;
     private final boolean replace;
 
-    public UploadTask(Task.TaskOptions options, OneDriveItem parent, File localFile, boolean replace) {
+    public UploadTask(final TaskOptions options, final OneDriveItem parent, final File localFile, final boolean replace) {
 
         super(options);
 
@@ -38,40 +39,40 @@ public class UploadTask extends Task {
 
     @Override
     public String toString() {
-        return "Upload " + this.parent.getFullName() + this.localFile.getName();
+        return "Upload " + parent.getFullName() + localFile.getName();
     }
 
     @Override
     protected void taskBody() throws IOException {
 
-        if (Task.isIgnored(this.localFile)) {
-            this.reporter.skipped();
+        if (Task.isIgnored(localFile)) {
+            reporter.skipped();
             return;
         }
 
-        if (this.localFile.isDirectory()) {
-            OneDriveItem newParent = this.api.createFolder(this.parent, this.localFile.getName());
+        if (localFile.isDirectory()) {
+            final OneDriveItem newParent = api.createFolder(parent, localFile.getName());
 
-            for (File f : this.localFile.listFiles()) {
-                this.queue.add(new UploadTask(this.getTaskOptions(), newParent, f, false));
+            for (final File f : localFile.listFiles()) {
+                queue.add(new UploadTask(getTaskOptions(), newParent, f, false));
             }
         } else {
 
-            if (Task.isSizeInvalid(this.localFile)) {
-                this.reporter.skipped();
+            if (Task.isSizeInvalid(localFile)) {
+                reporter.skipped();
                 return;
             }
 
-            long startTime = System.currentTimeMillis();
+            final long startTime = System.currentTimeMillis();
 
-            OneDriveItem response;
-            if (this.localFile.length() > (long) (CommandLineOpts.getCommandLineOpts().getSplitAfter() * 1024 * 1024)) {
+            final OneDriveItem response;
+            if (localFile.length() > (long) (CommandLineOpts.getCommandLineOpts().getSplitAfter() * 1024 * 1024)) {
 
                 int tryCount = 0;
-                OneDriveUploadSession session = this.api.startUploadSession(this.parent, this.localFile);
+                final OneDriveUploadSession session = api.startUploadSession(parent, localFile);
 
                 while (!session.isComplete()) {
-                    long startTimeInner = System.currentTimeMillis();
+                    final long startTimeInner = System.currentTimeMillis();
 
                     try {
                         // We don't want to keep retrying infinitely
@@ -79,24 +80,24 @@ public class UploadTask extends Task {
                             break;
                         }
 
-                        this.api.uploadChunk(session);
+                        api.uploadChunk(session);
 
-                        long elapsedTimeInner = System.currentTimeMillis() - startTimeInner;
+                        final long elapsedTimeInner = System.currentTimeMillis() - startTimeInner;
 
-                        UploadTask.log.info(String.format("Uploaded chunk (progress %.1f%%) of %s (%s/s) for file %s",
+                        log.info(String.format("Uploaded chunk (progress %.1f%%) of %s (%s/s) for file %s",
                                 ((double) session.getTotalUploaded() / (double) session.getFile().length()) * 100.0,
                                 LogUtils.readableFileSize(session.getLastUploaded()),
                                 0L < elapsedTimeInner ? LogUtils.readableFileSize((double) session.getLastUploaded() / ((double) elapsedTimeInner / 1000.0d)) : 0,
-                                this.parent.getFullName() + this.localFile.getName()));
+                                parent.getFullName() + localFile.getName()));
 
                         // After a successful upload we'll reset the tryCount
                         tryCount = 0;
 
-                    } catch (IOException ex) {
-                        UploadTask.log.warn(String.format("Encountered '%s' while uploading chunk of %s for file %s",
+                    } catch (final IOException ex) {
+                        log.warn(String.format("Encountered '%s' while uploading chunk of %s for file %s",
                                 ex.getMessage(),
                                 LogUtils.readableFileSize(session.getLastUploaded()),
-                                this.parent.getFullName() + this.localFile.getName()));
+                                parent.getFullName() + localFile.getName()));
 
                         tryCount++;
                     }
@@ -109,19 +110,19 @@ public class UploadTask extends Task {
                 response = session.getItem();
 
             } else {
-                response = this.replace ? this.api.replaceFile(this.parent, this.localFile) : this.api.uploadFile(this.parent, this.localFile);
+                response = replace ? api.replaceFile(parent, localFile) : api.uploadFile(parent, localFile);
             }
 
-            long elapsedTime = System.currentTimeMillis() - startTime;
+            final long elapsedTime = System.currentTimeMillis() - startTime;
 
-            UploadTask.log.info(String.format("Uploaded %s in %s (%s/s) to %s file %s",
-                    LogUtils.readableFileSize(this.localFile.length()),
+            log.info(String.format("Uploaded %s in %s (%s/s) to %s file %s",
+                    LogUtils.readableFileSize(localFile.length()),
                     LogUtils.readableTime(elapsedTime),
-                    0L < elapsedTime ? LogUtils.readableFileSize((double) this.localFile.length() / ((double) elapsedTime / 1000.0d)) : 0,
-                    this.replace ? "replace" : "new",
+                    0L < elapsedTime ? LogUtils.readableFileSize((double) localFile.length() / ((double) elapsedTime / 1000.0d)) : 0,
+                    replace ? "replace" : "new",
                     response.getFullName()));
 
-            this.reporter.fileUploaded(this.replace, this.localFile.length());
+            reporter.fileUploaded(replace, localFile.length());
         }
     }
 }

@@ -20,24 +20,24 @@ public class WebDriverHttpConnector extends HttpConnector {
     protected WebDriver driver;
 
     public WebDriverHttpConnector() {
-        this.driver = new ChromeDriver();
+        driver = new ChromeDriver();
     }
 
     @Override
-    public Response getContent(final String url, final HttpHostExt proxy, final boolean withTimeout) throws IOException {
-        this.driver.get(url);
+    public Response getContent(String url, HttpHostExt proxy, boolean withTimeout) throws IOException {
+        driver.get(url);
 
-        Wait<WebDriver> wait = new FluentWait(this.driver)
+        final Wait<WebDriver> wait = new FluentWait(driver)
                 .withTimeout(Duration.of(HttpConnector.CONNECT_TIMEOUT, MILLIS))
                 .pollingEvery(Duration.of(1, SECONDS))
                 .ignoring(NoSuchElementException.class);
 
-        return new WebDriverResponse(this.driver.getPageSource());
+        return new WebDriverResponse(driver.getPageSource());
     }
 
     @Override
     public void close() {
-        if (this.driver != null)
-            this.driver.close();
+        if (driver != null)
+            driver.close();
     }
 }

@@ -19,35 +19,35 @@ public class LikeTextSearch {
     private final String collectionName;
     private final MongoTemplate mongoTemplate;
 
-    public LikeTextSearch(String collectionName, MongoTemplate mongoTemplate) {
+    public LikeTextSearch(final String collectionName, final MongoTemplate mongoTemplate) {
         this.collectionName = collectionName;
         this.mongoTemplate = mongoTemplate;
     }
 
-    public Collection<ObjectId> findMatchingIds(String searchString) {
-        Document result = this.executeFullTextSearch(searchString);
-        return LikeTextSearch.extractSearchResultIds(result);
+    public Collection<ObjectId> findMatchingIds(final String searchString) {
+        final Document result = executeFullTextSearch(searchString);
+        return extractSearchResultIds(result);
     }
 
-    private Document executeFullTextSearch(String searchString) {
-        Document textSearch = new Document();
-        textSearch.put("$text", this.collectionName);
+    private Document executeFullTextSearch(final String searchString) {
+        final Document textSearch = new Document();
+        textSearch.put("$text", collectionName);
         textSearch.put("search", searchString);
-        textSearch.put("limit", LikeTextSearch.SEARCH_LIMIT); // override default of 100
+        textSearch.put("limit", SEARCH_LIMIT); // override default of 100
         textSearch.put("project", new Document("_id", 1));
-        return this.mongoTemplate.executeCommand(textSearch);
+        return mongoTemplate.executeCommand(textSearch);
     }
 
-    private static Collection<ObjectId> extractSearchResultIds(Document commandResult) {
-        Collection<ObjectId> objectIds = new HashSet<>();
-        Iterable resultList = (Iterable) commandResult.get("results");
+    private static Collection<ObjectId> extractSearchResultIds(final Document commandResult) {
+        final Collection<ObjectId> objectIds = new HashSet<>();
+        final Iterable resultList = (Iterable) commandResult.get("results");
 
         if (null == resultList) return Collections.emptyList();
 
-        for (Object aResultList : resultList) {
-            BasicDBObject resultContainer = (BasicDBObject) aResultList;
-            BasicDBObject resultObj = (BasicDBObject) resultContainer.get("obj");
-            ObjectId resultId = (ObjectId) resultObj.get("_id");
+        for (final Object aResultList : resultList) {
+            final BasicDBObject resultContainer = (BasicDBObject) aResultList;
+            final BasicDBObject resultObj = (BasicDBObject) resultContainer.get("obj");
+            final ObjectId resultId = (ObjectId) resultObj.get("_id");
             objectIds.add(resultId);
         }
         return objectIds;

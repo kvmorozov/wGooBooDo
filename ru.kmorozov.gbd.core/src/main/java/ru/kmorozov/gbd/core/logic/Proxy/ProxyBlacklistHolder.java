@@ -21,60 +21,60 @@ public final class ProxyBlacklistHolder {
     private final Collection<HttpHostExt> storedHosts = new CopyOnWriteArrayList<>();
 
     private ProxyBlacklistHolder() {
-        this.init();
+        init();
     }
 
     private void init() {
-        this.blacklistFile = new File(System.getProperty("java.io.tmpdir") + File.separator + ProxyBlacklistHolder.BL_FILE_NAME);
-        if (!this.blacklistFile.exists()) try {
-            this.blacklistFile.createNewFile();
-        } catch (IOException e) {
+        blacklistFile = new File(System.getProperty("java.io.tmpdir") + File.separator + BL_FILE_NAME);
+        if (!blacklistFile.exists()) try {
+            blacklistFile.createNewFile();
+        } catch (final IOException e) {
             e.printStackTrace();
         }
 
-        Charset charset = Charset.forName("UTF-8");
-        try (final BufferedReader reader = Files.newBufferedReader(this.blacklistFile.toPath(), charset)) {
+        final Charset charset = Charset.forName("UTF-8");
+        try (BufferedReader reader = Files.newBufferedReader(blacklistFile.toPath(), charset)) {
             String line;
             while (null != (line = reader.readLine())) {
-                this.storedHosts.add(HttpHostExt.getProxyFromString(line));
+                storedHosts.add(HttpHostExt.getProxyFromString(line));
             }
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
     }
 
-    public boolean isProxyInBlacklist(String proxyStr) {
-        Optional<HttpHostExt> host = this.storedHosts.parallelStream().filter(httpHostExt -> httpHostExt.isSameAsStr(proxyStr)).findFirst();
+    public boolean isProxyInBlacklist(final String proxyStr) {
+        final Optional<HttpHostExt> host = storedHosts.parallelStream().filter(httpHostExt -> httpHostExt.isSameAsStr(proxyStr)).findFirst();
         return host.filter(httpHostExt -> !httpHostExt.isAvailable()).isPresent();
     }
 
-    public void updateBlacklist(Iterable<HttpHostExt> currentProxyList) {
-        for (HttpHostExt proxy : currentProxyList) {
-            Optional<HttpHostExt> proxyInListOpt = this.storedHosts.parallelStream().filter(httpHostExt -> httpHostExt.equals(proxy)).findFirst();
+    public void updateBlacklist(final Iterable<HttpHostExt> currentProxyList) {
+        for (final HttpHostExt proxy : currentProxyList) {
+            final Optional<HttpHostExt> proxyInListOpt = storedHosts.parallelStream().filter(httpHostExt -> httpHostExt.equals(proxy)).findFirst();
             if (proxyInListOpt.isPresent()) {
                 proxyInListOpt.get().update(proxy);
             }
             else {
-                this.storedHosts.add(proxy);
+                storedHosts.add(proxy);
             }
         }
 
-        List<HttpHostExt> deadProxyList = this.storedHosts.parallelStream().filter(HttpHostExt::isNotAvailable).limit((long) ProxyBlacklistHolder.DEAD_PROXY_TREASHOLD).collect(Collectors.toList());
-        List<HttpHostExt> liveProxyList = this.storedHosts.parallelStream().filter(HttpHostExt::isAvailable).limit((long) ProxyBlacklistHolder.DEAD_PROXY_TREASHOLD).collect(Collectors.toList());
+        final List<HttpHostExt> deadProxyList = storedHosts.parallelStream().filter(HttpHostExt::isNotAvailable).limit((long) DEAD_PROXY_TREASHOLD).collect(Collectors.toList());
+        final List<HttpHostExt> liveProxyList = storedHosts.parallelStream().filter(HttpHostExt::isAvailable).limit((long) DEAD_PROXY_TREASHOLD).collect(Collectors.toList());
 
-        try (final PrintWriter out = new PrintWriter(this.blacklistFile)) {
-            for (HttpHostExt host : liveProxyList)
+        try (PrintWriter out = new PrintWriter(blacklistFile)) {
+            for (final HttpHostExt host : liveProxyList)
                 out.write(host.getProxyString() + System.getProperty("line.separator"));
-            for (HttpHostExt host : deadProxyList)
+            for (final HttpHostExt host : deadProxyList)
                 out.write(host.getProxyString() + System.getProperty("line.separator"));
 
             out.flush();
-        } catch (FileNotFoundException e) {
+        } catch (final FileNotFoundException e) {
             e.printStackTrace();
         }
     }
 
     public Collection<String> getWhiteList() {
-        return this.storedHosts.parallelStream().filter(HttpHostExt::isAvailable).map(HttpHostExt::getProxyStringShort).collect(Collectors.toList());
+        return storedHosts.parallelStream().filter(HttpHostExt::isAvailable).map(HttpHostExt::getProxyStringShort).collect(Collectors.toList());
     }
 }

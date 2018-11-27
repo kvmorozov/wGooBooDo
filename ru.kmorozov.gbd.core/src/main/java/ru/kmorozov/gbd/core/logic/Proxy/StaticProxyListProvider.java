@@ -13,13 +13,13 @@ public class StaticProxyListProvider extends AbstractProxyListProvider {
     private static final String PROXY_LIST_RES = "proxy/list1";
 
     StaticProxyListProvider() {
-        this.buildList();
+        buildList();
     }
 
     private void buildList() {
-        try (final InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(StaticProxyListProvider.PROXY_LIST_RES)) {
-            proxyItems = new String(is.readAllBytes(), StandardCharsets.UTF_8).lines().collect(Collectors.toSet());
-        } catch (IOException e) {
+        try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(PROXY_LIST_RES)) {
+            this.proxyItems = new String(is.readAllBytes(), StandardCharsets.UTF_8).lines().collect(Collectors.toSet());
+        } catch (final IOException e) {
             e.printStackTrace();
         }
     }

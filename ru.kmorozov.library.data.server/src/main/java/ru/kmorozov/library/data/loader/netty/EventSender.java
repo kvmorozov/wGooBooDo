@@ -23,52 +23,52 @@ public final class EventSender implements Closeable {
 
     public static final EventSender INSTANCE = new EventSender("localhost", 5252);
 
-    private EventSender(String server, int port) {
+    private EventSender(final String server, final int port) {
         this.server = server;
         this.port = port;
     }
 
     private void init() {
-        this.group = new NioEventLoopGroup();
-        Bootstrap bootstrap = new Bootstrap().group(this.group)
+        group = new NioEventLoopGroup();
+        final Bootstrap bootstrap = new Bootstrap().group(group)
                 .channel(NioSocketChannel.class)
                 .handler(new ClientAdapterInitializer());
         try {
-            this.channel = bootstrap.connect(this.server, this.port).sync().channel();
+            channel = bootstrap.connect(server, port).sync().channel();
 
-            this.isInitCompleted = true;
-        } catch (InterruptedException e) {
-            this.group.shutdownGracefully();
+            isInitCompleted = true;
+        } catch (final InterruptedException e) {
+            group.shutdownGracefully();
 
-            EventSender.logger.error(e);
-        } catch (final Exception ex) {
-            EventSender.logger.error(ex.getMessage());
-            this.initIsNotPossible = true;
+            logger.error(e);
+        } catch (Exception ex) {
+            logger.error(ex.getMessage());
+            initIsNotPossible = true;
         }
     }
 
-    private void write(String msg) {
-        if (!this.isInitCompleted)
-            if (this.initIsNotPossible)
+    private void write(final String msg) {
+        if (!isInitCompleted)
+            if (initIsNotPossible)
                 return;
             else
-                this.init();
+                init();
 
-        if (this.isInitCompleted) {
-            this.channel.write(msg);
-            this.channel.flush();
+        if (isInitCompleted) {
+            channel.write(msg);
+            channel.flush();
         }
     }
 
     @Override
     public void close() {
-        this.group.shutdownGracefully();
+        group.shutdownGracefully();
     }
 
-    public void sendInfo(Logger logger, String msg) {
+    public void sendInfo(final Logger logger, final String msg) {
         try {
-            this.write(msg);
-        } catch (Exception ex) {
+            write(msg);
+        } catch (final Exception ex) {
             logger.error(ex.getMessage());
         }
 

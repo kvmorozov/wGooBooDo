@@ -8,7 +8,7 @@ public abstract class AbstractServerGBDOptions implements IGBDOptions {
 
     @Override
     public String getBookId() {
-        return this.bookId;
+        return bookId;
     }
 
     @Override
@@ -36,7 +36,7 @@ public abstract class AbstractServerGBDOptions implements IGBDOptions {
         return null;
     }
 
-    public void setBookId(final String bookId) {
+    public void setBookId(String bookId) {
         this.bookId = bookId;
     }
 

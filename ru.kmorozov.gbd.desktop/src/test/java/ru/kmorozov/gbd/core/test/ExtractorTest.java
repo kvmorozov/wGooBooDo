@@ -2,6 +2,7 @@ package ru.kmorozov.gbd.core.test;
 
 import org.apache.commons.io.IOUtils;
 import org.eclipse.jetty.http.MimeTypes;
+import org.eclipse.jetty.http.MimeTypes.Type;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.DefaultHandler;
@@ -44,28 +45,28 @@ public class ExtractorTest {
     @Before
     public void initServer() {
         ExecutionContext.initContext(new DummyReceiver(), true);
-        IGBDOptions mockOptions = Mockito.mock(IGBDOptions.class);
+        final IGBDOptions mockOptions = Mockito.mock(IGBDOptions.class);
         Mockito.when(mockOptions.getStorage()).thenReturn(new LocalFSStorage("E:\\Work\\gbd\\"));
         Mockito.when(mockOptions.getProxyListFile()).thenReturn("E:\\Work\\gbd\\proxy.txt");
         GBDOptions.init(mockOptions);
 
-        Server server = new Server(80);
+        final Server server = new Server(80);
         server.setHandler(new DefaultHandler() {
 
             @Override
-            public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException {
+            public void handle(final String target, final Request baseRequest, final HttpServletRequest request, final HttpServletResponse response) throws IOException {
                 response.setStatus(200);
-                response.setContentType(MimeTypes.Type.TEXT_HTML.toString());
+                response.setContentType(Type.TEXT_HTML.toString());
 
                 String resFileName = null;
-                if (request.getRequestURI().contains(ShplMetadata.SHPL_BASE_URL)) resFileName = ExtractorTest.SHPL_HTML_RESOURCE;
-                else if (request.getRequestURI().contains("google")) resFileName = ExtractorTest.GOOGLE_HTML_RESOURCE;
+                if (request.getRequestURI().contains(ShplMetadata.SHPL_BASE_URL)) resFileName = SHPL_HTML_RESOURCE;
+                else if (request.getRequestURI().contains("google")) resFileName = GOOGLE_HTML_RESOURCE;
 
                 if (null == resFileName) return;
 
-                File res = new File(this.getClass().getClassLoader().getResource(resFileName).getFile());
-                String data = IOUtils.toString(new FileInputStream(res), Charset.forName("UTF-8"));
-                try (final OutputStream os = response.getOutputStream()) {
+                final File res = new File(getClass().getClassLoader().getResource(resFileName).getFile());
+                final String data = IOUtils.toString(new FileInputStream(res), Charset.forName("UTF-8"));
+                try (OutputStream os = response.getOutputStream()) {
                     os.write(data.getBytes());
                 }
             }
@@ -73,23 +74,23 @@ public class ExtractorTest {
 
         try {
             server.start();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }
 
     @Test
     public void shplBookInfoTest() {
-        ShplBookExtractor extractor = new ShplBookExtractor("http://localhost");
+        final ShplBookExtractor extractor = new ShplBookExtractor("http://localhost");
 
         Assert.assertThat(extractor.getBookInfo(), notNullValue());
     }
 
     @Test
     public void bookContextLoadTest() {
-        IContextLoader contextProvider = ContextProvider.getContextProvider();
+        final IContextLoader contextProvider = ContextProvider.getContextProvider();
 
-        int ctxSizeBefore = contextProvider.getContextSize();
+        final int ctxSizeBefore = contextProvider.getContextSize();
         Assert.assertTrue(0 < ctxSizeBefore);
 
         ExecutionContext.INSTANCE.addBookContext(new OptionsBasedProducer(), null, null);
@@ -98,13 +99,13 @@ public class ExtractorTest {
         contextProvider.updateContext();
         contextProvider.refreshContext();
 
-        int ctxSizeAfter = contextProvider.getContextSize();
+        final int ctxSizeAfter = contextProvider.getContextSize();
         Assert.assertThat(ctxSizeAfter, is(ctxSizeBefore + 1));
     }
 
     @Test
     public void googleExtractorTest() {
-        GoogleBookInfoExtractor extractor = new GoogleBookInfoExtractor("test") {
+        final GoogleBookInfoExtractor extractor = new GoogleBookInfoExtractor("test") {
             @Override
             protected String getBookUrl() {
                 return "http://localhost/google";

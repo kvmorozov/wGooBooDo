@@ -21,7 +21,7 @@ public class BookInfo implements Serializable, ILoggableObject, IBookInfo {
     public BookInfo() {
     }
 
-    public BookInfo(IBookData bookData, IPagesInfo pages, String bookId) {
+    public BookInfo(final IBookData bookData, final IPagesInfo pages, final String bookId) {
         this.bookData = bookData;
         this.pages = pages;
         this.bookId = bookId;
@@ -29,29 +29,29 @@ public class BookInfo implements Serializable, ILoggableObject, IBookInfo {
 
     @Override
     public IBookData getBookData() {
-        return this.bookData;
+        return bookData;
     }
 
     @Override
     public IPagesInfo getPages() {
-        return this.pages;
+        return pages;
     }
 
     @Override
     public String getBookId() {
-        return this.bookId;
+        return bookId;
     }
 
     public long getLastPdfChecked() {
-        return this.lastPdfChecked;
+        return lastPdfChecked;
     }
 
-    public void setLastPdfChecked(long lastPdfChecked) {
+    public void setLastPdfChecked(final long lastPdfChecked) {
         this.lastPdfChecked = lastPdfChecked;
     }
 
     @Override
     public String getDescription() {
-        return this.bookData.getTitle();
+        return bookData.getTitle();
     }
 }

@@ -12,14 +12,14 @@ public class IdentitySet {
     private Identity device;
 
     public Identity getUser() {
-        return this.user;
+        return user;
     }
 
     public Identity getApplication() {
-        return this.application;
+        return application;
     }
 
     public Identity getDevice() {
-        return this.device;
+        return device;
     }
 }

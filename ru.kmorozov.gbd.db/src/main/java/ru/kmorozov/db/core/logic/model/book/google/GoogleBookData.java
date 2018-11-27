@@ -81,19 +81,19 @@ public class GoogleBookData implements IBookData, Serializable {
 
     @Override
     public String getTitle() {
-        return this.title;
+        return title;
     }
 
     @Override
     public String getVolumeId() {
-        return this.volumeId;
+        return volumeId;
     }
 
     public VolumeResultFlags getFlags() {
-        return this.volumeresult;
+        return volumeresult;
     }
 
     public URI getBaseUrl() {
-        return URI.create(HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, this.volumeId));
+        return URI.create(HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, volumeId));
     }
 }

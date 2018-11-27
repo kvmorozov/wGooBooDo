@@ -13,14 +13,14 @@ import java.lang.reflect.Type;
 public class IPagesInfoAdapter implements JsonSerializer<IPagesInfo>, JsonDeserializer<IPagesInfo> {
 
     @Override
-    public IPagesInfo deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        JsonObject jsonObject = json.getAsJsonObject();
+    public IPagesInfo deserialize(final JsonElement json, final Type typeOfT, final JsonDeserializationContext context) throws JsonParseException {
+        final JsonObject jsonObject = json.getAsJsonObject();
 
         return context.deserialize(jsonObject, null == jsonObject.get("prefix") ? ShplPagesInfo.class : GooglePagesInfo.class);
     }
 
     @Override
-    public JsonElement serialize(IPagesInfo src, Type typeOfSrc, JsonSerializationContext context) {
+    public JsonElement serialize(final IPagesInfo src, final Type typeOfSrc, final JsonSerializationContext context) {
         return context.serialize(src);
     }
 }

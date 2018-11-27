@@ -10,10 +10,10 @@ public class FileFacet {
     private HashesFacet hashes;
 
     public String getMimeType() {
-        return this.mimeType;
+        return mimeType;
     }
 
     public HashesFacet getHashes() {
-        return this.hashes;
+        return hashes;
     }
 }

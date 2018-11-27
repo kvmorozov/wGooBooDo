@@ -28,11 +28,11 @@ public class LibraryRestController {
 
     @RequestMapping("/gbdUpdate")
     public void gbdUpdate() {
-        this.gbdProcessor.process();
+        gbdProcessor.process();
     }
 
     @RequestMapping("/gbdLoadLocal")
-    public void gbdLoad(@RequestParam(name = "bookId", required = false) String bookId) {
-        this.gbdProcessor.load(bookId);
+    public void gbdLoad(@RequestParam(name = "bookId", required = false) final String bookId) {
+        gbdProcessor.load(bookId);
     }
 }

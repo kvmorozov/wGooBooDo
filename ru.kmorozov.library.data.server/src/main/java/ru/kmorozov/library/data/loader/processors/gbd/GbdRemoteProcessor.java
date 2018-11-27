@@ -67,66 +67,66 @@ public class GbdRemoteProcessor implements IGbdProcessor {
 
     @Override
     public void process() {
-        GbdRemoteProcessor.logger.info("Process GBD started.");
+        logger.info("Process GBD started.");
 
-        final OneDriveItem gbdRoot = this.getGbdRoot();
+        OneDriveItem gbdRoot = getGbdRoot();
         if (gbdRoot == null) {
-            GbdRemoteProcessor.logger.error("GBD root not found, exiting.");
+            logger.error("GBD root not found, exiting.");
             return;
         }
 
         ExecutionContext.initContext(new DummyReceiver(), true);
 
-        this.ctx.initContext(gbdRoot);
-        if (!this.ctx.getBookIdsList().isEmpty())
-            for (final String bookId : this.ctx.getBookIdsList()) {
-                final BookInfo bookInfo = this.ctx.getBookInfo(bookId);
+        ctx.initContext(gbdRoot);
+        if (!ctx.getBookIdsList().isEmpty())
+            for (String bookId : ctx.getBookIdsList()) {
+                BookInfo bookInfo = ctx.getBookInfo(bookId);
                 if (bookInfo != null) {
-                    final OneDriveItem dirItem = this.ctx.getBookDir(bookId);
-                    final Storage storage = this.storageRepository.findByUrl(dirItem.getId());
-                    final Optional<Book> opBook = this.booksRepository.findAllByStorage(storage)
+                    OneDriveItem dirItem = ctx.getBookDir(bookId);
+                    Storage storage = storageRepository.findByUrl(dirItem.getId());
+                    Optional<Book> opBook = booksRepository.findAllByStorage(storage)
                             .stream().filter(book -> book.getBookInfo().getFormat() == PDF).findFirst();
                     if (opBook.isPresent()) {
-                        final Book book = opBook.get();
+                        Book book = opBook.get();
                         book.addBookId(IdType.GOOGLE_BOOK_ID, bookId);
                         book.getBookInfo().setBookType(GOOGLE_BOOK);
 
-                        this.booksRepository.save(book);
+                        booksRepository.save(book);
 
-                        this.ctx.updateBookInfo(bookInfo);
+                        ctx.updateBookInfo(bookInfo);
 
-                        GbdRemoteProcessor.logger.info(String.format("BookId %s processed.", bookId));
+                        logger.info(String.format("BookId %s processed.", bookId));
                     }
                 }
             }
 
-        GbdRemoteProcessor.logger.info("Process GBD finished.");
+        logger.info("Process GBD finished.");
     }
 
     @Bean @Lazy
     public OneDriveItem getGbdRoot() {
         try {
-            final OneDriveItem[] searchResults = this.api.search("books.ctx");
+            OneDriveItem[] searchResults = api.search("books.ctx");
             if (searchResults != null && searchResults.length == 1)
                 return searchResults[0].getParent();
             else
-                GbdRemoteProcessor.logger.error("Cannot find GBD root!");
-        } catch (final IOException e) {
-            GbdRemoteProcessor.logger.error("Search error", e);
+                logger.error("Cannot find GBD root!");
+        } catch (IOException e) {
+            logger.error("Search error", e);
         }
 
         return null;
     }
 
     @Override
-    public void load(final String bookId) {
-        this.options.setBookId(bookId);
-        GBDOptions.init(this.options);
+    public void load(String bookId) {
+        options.setBookId(bookId);
+        GBDOptions.init(options);
 
-        ContextProvider.setDefaultContextProvider(this.dbCtx);
+        ContextProvider.setDefaultContextProvider(dbCtx);
 
-        ExecutionContext.initContext(new DummyReceiver(), 1 == this.producer.getBookIds().size());
-        ExecutionContext.INSTANCE.addBookContext(this.producer, new DummyProgress(), new ServerPdfMaker());
+        ExecutionContext.initContext(new DummyReceiver(), 1 == producer.getBookIds().size());
+        ExecutionContext.INSTANCE.addBookContext(producer, new DummyProgress(), new ServerPdfMaker());
 
         ExecutionContext.INSTANCE.execute();
     }

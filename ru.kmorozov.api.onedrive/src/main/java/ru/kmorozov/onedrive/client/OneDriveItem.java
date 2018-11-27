@@ -35,7 +35,7 @@ public interface OneDriveItem {
 
     class FACTORY {
 
-        public static OneDriveItem create(OneDriveItem parent, String name, boolean isDirectory) {
+        public static OneDriveItem create(final OneDriveItem parent, final String name, final boolean isDirectory) {
 
             return new OneDriveItem() {
                 public String getId() {
@@ -86,10 +86,10 @@ public interface OneDriveItem {
             };
         }
 
-        public static OneDriveItem create(Item item) {
+        public static OneDriveItem create(final Item item) {
             return new OneDriveItem() {
 
-                private final OneDriveItem parent = FACTORY.create(item.getParentReference());
+                private final OneDriveItem parent = create(item.getParentReference());
 
                 @Override
                 public String getId() {
@@ -108,7 +108,7 @@ public interface OneDriveItem {
 
                 @Override
                 public String getFullName() {
-                    return this.parent.getFullName() + item.getName() + (this.isDirectory() ? "/" : "");
+                    return parent.getFullName() + item.getName() + (isDirectory() ? "/" : "");
                 }
 
                 @Override
@@ -125,7 +125,7 @@ public interface OneDriveItem {
                 public Date getCreatedDateTime() {
                     try {
                         return JsonDateSerializer.INSTANCE.deserialize(item.getFileSystemInfo().getCreatedDateTime());
-                    } catch (final ParseException e) {
+                    } catch (ParseException e) {
                         e.printStackTrace();
 
                         return new Date();
@@ -136,7 +136,7 @@ public interface OneDriveItem {
                 public Date getLastModifiedDateTime() {
                     try {
                         return JsonDateSerializer.INSTANCE.deserialize(item.getFileSystemInfo().getLastModifiedDateTime());
-                    } catch (final ParseException e) {
+                    } catch (ParseException e) {
                         e.printStackTrace();
 
                         return new Date();
@@ -145,7 +145,7 @@ public interface OneDriveItem {
 
                 @Override
                 public OneDriveItem getParent() {
-                    return this.parent;
+                    return parent;
                 }
 
                 @Override
@@ -155,7 +155,7 @@ public interface OneDriveItem {
             };
         }
 
-        public static OneDriveItem create(ItemReference parent) {
+        public static OneDriveItem create(final ItemReference parent) {
             return new OneDriveItem() {
                 @Override
                 public String getId() {
@@ -178,7 +178,7 @@ public interface OneDriveItem {
                         return null;
                     }
 
-                    int index = parent.getPath().indexOf(':');
+                    final int index = parent.getPath().indexOf(':');
 
                     return URLDecoder.decode(0 < index ? parent.getPath().substring(index + 1) : parent.getPath(), StandardCharsets.UTF_8) + '/';
                 }

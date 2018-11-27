@@ -26,67 +26,67 @@ public class QueuedThreadPoolExecutor<T> extends ThreadPoolExecutor {
     private long needProcessCount;
     private final String description;
 
-    public QueuedThreadPoolExecutor(long needProcessCount, int threadPoolSize, Predicate<T> completeChecker, String description) {
-        super(threadPoolSize, threadPoolSize, 0L, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(QueuedThreadPoolExecutor.RETENTION_QUEUE_SIZE));
+    public QueuedThreadPoolExecutor(final long needProcessCount, final int threadPoolSize, final Predicate<T> completeChecker, final String description) {
+        super(threadPoolSize, threadPoolSize, 0L, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(RETENTION_QUEUE_SIZE));
         this.needProcessCount = needProcessCount;
-        timeStart = System.currentTimeMillis();
+        this.timeStart = System.currentTimeMillis();
         this.completeChecker = completeChecker;
         this.description = description;
 
-        this.setRejectedExecutionHandler((r, executor) -> {
+        setRejectedExecutionHandler((r, executor) -> {
             try {
                 if (r instanceof IUniqueRunnable) {
                     synchronized (((IUniqueRunnable<T>) r).getUniqueObject()) {
-                        if (!completeChecker.test(((IUniqueRunnable<T>) r).getUniqueObject())) this.getQueue().put(r);
+                        if (!completeChecker.test(((IUniqueRunnable<T>) r).getUniqueObject())) getQueue().put(r);
                     }
                 }
-            } catch (InterruptedException e) {
+            } catch (final InterruptedException e) {
                 e.printStackTrace();
             }
         });
     }
 
-    public void terminate(long timeout, TimeUnit unit) {
-        Long liveTime = Math.min(unit.toMillis(timeout), QueuedThreadPoolExecutor.MAX_LIVE_TIME);
+    public void terminate(final long timeout, final TimeUnit unit) {
+        final Long liveTime = Math.min(unit.toMillis(timeout), MAX_LIVE_TIME);
         int counter = 0;
         long submitted = 0L;
         while (true) try {
-            long completed = this.uniqueMap.keySet().stream().filter(this.completeChecker).count();
-            if ((this.getCompletedTaskCount() == this.getTaskCount() && this.getCompletedTaskCount() >= this.needProcessCount) || System.currentTimeMillis() - this.timeStart > liveTime)
+            final long completed = uniqueMap.keySet().stream().filter(completeChecker).count();
+            if ((getCompletedTaskCount() == getTaskCount() && getCompletedTaskCount() >= needProcessCount) || System.currentTimeMillis() - timeStart > liveTime)
                 break;
             if (0 == ++counter % 100) {
-                if (0L < this.needProcessCount)
-                    QueuedThreadPoolExecutor.logger.finest(String.format("Waiting for %s %d sec (%d of %d completed, %d tasks finished of %d submitted, %d in queue)", this.description, counter, completed,
-                            this.needProcessCount, this.getCompletedTaskCount(), this.getTaskCount(), this.getQueue().size()));
+                if (0L < needProcessCount)
+                    logger.finest(String.format("Waiting for %s %d sec (%d of %d completed, %d tasks finished of %d submitted, %d in queue)", description, counter, completed,
+                            needProcessCount, getCompletedTaskCount(), getTaskCount(), getQueue().size()));
 
-                if (submitted == this.getTaskCount() && 0L < this.getTaskCount() && submitted < this.needProcessCount) {
-                    QueuedThreadPoolExecutor.logger.severe(String.format("Nothing was submitted to %s, set needProcessCount to %d", this.description, submitted));
-                    this.needProcessCount = submitted;
-                } else submitted = this.getTaskCount();
+                if (submitted == getTaskCount() && 0L < getTaskCount() && submitted < needProcessCount) {
+                    logger.severe(String.format("Nothing was submitted to %s, set needProcessCount to %d", description, submitted));
+                    needProcessCount = submitted;
+                } else submitted = getTaskCount();
             }
             Thread.sleep(1000L);
-        } catch (InterruptedException e) {
-            QueuedThreadPoolExecutor.logger.severe("Wait interrupted for " + this.description);
+        } catch (final InterruptedException e) {
+            logger.severe("Wait interrupted for " + description);
         }
 
-        if (0L < this.needProcessCount)
-            QueuedThreadPoolExecutor.logger.finest(String.format("Terminating working threads for %s after %s sec (%s of %s completed, %s tasks finished of %s submitted)", this.description, counter, this.uniqueMap.keySet()
+        if (0L < needProcessCount)
+            logger.finest(String.format("Terminating working threads for %s after %s sec (%s of %s completed, %s tasks finished of %s submitted)", description, counter, uniqueMap.keySet()
                     .stream()
-                    .filter(this.completeChecker).count(), this.needProcessCount, this.getCompletedTaskCount(), this.getTaskCount()));
-        this.shutdownNow();
+                    .filter(completeChecker).count(), needProcessCount, getCompletedTaskCount(), getTaskCount()));
+        shutdownNow();
 
-        this.uniqueMap.clear();
+        uniqueMap.clear();
     }
 
     @Override
-    public void execute(Runnable command) {
+    public void execute(final Runnable command) {
         if (command == null)
             return;
 
         if (command instanceof IUniqueRunnable) {
-            T uniqueObj = ((IUniqueRunnable<T>) command).getUniqueObject();
+            final T uniqueObj = ((IUniqueRunnable<T>) command).getUniqueObject();
             synchronized (uniqueObj) {
-                if (null == this.uniqueMap.put(uniqueObj, (IUniqueRunnable<T>) command)) super.execute(command);
+                if (null == uniqueMap.put(uniqueObj, (IUniqueRunnable<T>) command)) super.execute(command);
             }
         } else super.execute(command);
     }

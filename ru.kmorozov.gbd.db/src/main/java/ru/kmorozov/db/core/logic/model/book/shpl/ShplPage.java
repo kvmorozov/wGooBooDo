@@ -24,26 +24,26 @@ public class ShplPage extends AbstractPage {
     public ShplPage() {
     }
 
-    public ShplPage(Integer order) {
+    public ShplPage(final Integer order) {
         this.order = order;
     }
 
     @Override
     public String getPid() {
-        return this.id;
+        return id;
     }
 
     @Override
     public Integer getOrder() {
-        return this.order;
+        return order;
     }
 
-    public void setOrder(Integer order) {
+    public void setOrder(final Integer order) {
         this.order = order;
     }
 
     @Override
     public String getImgUrl() {
-        return String.format("http://elib.shpl.ru/pages/%s/zooms/%s", this.id, GBDOptions.getImageWidth(ShplConstants.DEFAULT_PAGE_WIDTH));
+        return String.format("http://elib.shpl.ru/pages/%s/zooms/%s", id, GBDOptions.getImageWidth(ShplConstants.DEFAULT_PAGE_WIDTH));
     }
 }

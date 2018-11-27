@@ -19,11 +19,11 @@ public class GbdLocalProcessor implements IGbdProcessor {
     private LocalServerGBDOptions options;
 
     @Override
-    public void load(final String bookId) {
-        this.options.setBookId(bookId);
-        GBDOptions.init(this.options);
+    public void load(String bookId) {
+        options.setBookId(bookId);
+        GBDOptions.init(options);
 
-        final IBookListProducer producer = new SingleBookProducer(bookId);
+        IBookListProducer producer = new SingleBookProducer(bookId);
         ContextProvider.setDefaultContextProvider(new ListBasedContextLoader(producer));
 
         ExecutionContext.initContext(new DummyReceiver(), 1 == producer.getBookIds().size());

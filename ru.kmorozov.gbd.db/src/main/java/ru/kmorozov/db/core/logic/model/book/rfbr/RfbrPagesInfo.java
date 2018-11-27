@@ -8,14 +8,14 @@ public class RfbrPagesInfo implements IPagesInfo {
 
     private final RfbrPage[] pages;
 
-    public RfbrPagesInfo(RfbrPage[] pages) {
+    public RfbrPagesInfo(final RfbrPage[] pages) {
         this.pages = pages;
     }
 
 
     @Override
     public AbstractPage[] getPages() {
-        return this.pages;
+        return pages;
     }
 
     @Override
@@ -29,7 +29,7 @@ public class RfbrPagesInfo implements IPagesInfo {
     }
 
     @Override
-    public IPage getPageByPid(final String pid) {
+    public IPage getPageByPid(String pid) {
         return null;
     }
 }

@@ -12,35 +12,35 @@ import java.util.HashSet;
 public class FileProxyListProvider extends AbstractProxyListProvider {
 
     FileProxyListProvider() {
-        this.buildList();
+        buildList();
     }
 
     private void buildList() {
-        String proxyListFileName = GBDOptions.getProxyListFile();
+        final String proxyListFileName = GBDOptions.getProxyListFile();
         if (null == proxyListFileName || proxyListFileName.isEmpty()) return;
 
-        File proxyListFile = new File(proxyListFileName);
+        final File proxyListFile = new File(proxyListFileName);
         if (!proxyListFile.exists() && !proxyListFile.canRead()) return;
 
-        try (final InputStream is = new FileInputStream(proxyListFile)) {
-            proxyItems = new HashSet(IOUtils.readLines(is, "UTF-8"));
-        } catch (IOException e) {
+        try (InputStream is = new FileInputStream(proxyListFile)) {
+            this.proxyItems = new HashSet(IOUtils.readLines(is, "UTF-8"));
+        } catch (final IOException e) {
             e.printStackTrace();
         }
     }
 
     @Override
     public void updateProxyList() {
-        String proxyListFileName = GBDOptions.getProxyListFile();
+        final String proxyListFileName = GBDOptions.getProxyListFile();
         if (null == proxyListFileName || proxyListFileName.isEmpty()) return;
 
-        File proxyListFile = new File(proxyListFileName);
+        final File proxyListFile = new File(proxyListFileName);
         if (!proxyListFile.exists() && !proxyListFile.canRead()) return;
 
-        try (final OutputStream os = new FileOutputStream(proxyListFile, false)) {
-            for (HttpHostExt proxy : this.proxyList)
+        try (OutputStream os = new FileOutputStream(proxyListFile, false)) {
+            for (final HttpHostExt proxy : proxyList)
                 if (!proxy.isLocal() && proxy.isAvailable()) IOUtils.write(String.format("%s %s%n", proxy.getHost().getHostName(), proxy.getHost().getPort()), os, "UTF-8");
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
     }

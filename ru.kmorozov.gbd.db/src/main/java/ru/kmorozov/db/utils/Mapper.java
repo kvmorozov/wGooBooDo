@@ -25,19 +25,19 @@ public class Mapper {
     private static volatile Gson gson;
 
     public static Gson getGson() {
-        if (null == Mapper.gson) {
-            synchronized (Mapper.lockObj) {
-                if (null == Mapper.gson) {
-                    GsonBuilder builder = new GsonBuilder();
+        if (null == gson) {
+            synchronized (lockObj) {
+                if (null == gson) {
+                    final GsonBuilder builder = new GsonBuilder();
                     builder.registerTypeAdapter(IBookData.class, new IBookDataAdapter());
                     builder.registerTypeAdapter(IPagesInfo.class, new IPagesInfoAdapter());
                     builder.registerTypeAdapter(IPage.class, new IPageAdapter());
-                    Mapper.gson = builder.create();
+                    gson = builder.create();
                 }
             }
         }
 
-        return Mapper.gson;
+        return gson;
     }
 
 }

@@ -1,6 +1,7 @@
 package ru.kmorozov.onedrive.client;
 
 import com.google.api.client.http.*;
+import com.google.api.client.http.MultipartContent.Part;
 import com.google.api.client.http.json.JsonHttpContent;
 import com.google.api.client.util.IOUtils;
 import com.google.api.client.util.Key;
@@ -27,54 +28,54 @@ import java.util.Date;
 
 class RWOneDriveProvider extends ROOneDriveProvider {
 
-    RWOneDriveProvider(AuthorisationProvider authoriser) {
+    RWOneDriveProvider(final AuthorisationProvider authoriser) {
         super(authoriser);
     }
 
     @Override
-    public OneDriveItem replaceFile(OneDriveItem parent, File file) throws IOException {
+    public OneDriveItem replaceFile(final OneDriveItem parent, final File file) throws IOException {
         if (!parent.isDirectory()) {
             throw new IllegalArgumentException("Parent is not a folder");
         }
 
-        HttpRequest request = this.requestFactory.buildPutRequest(
+        final HttpRequest request = requestFactory.buildPutRequest(
                 OneDriveUrl.putContent(parent.getId(), file.getName()),
                 new FileContent(null, file));
 
-        Item response = request.execute().parseAs(Item.class);
-        OneDriveItem item = OneDriveItem.FACTORY.create(response);
+        final Item response = request.execute().parseAs(Item.class);
+        final OneDriveItem item = OneDriveItem.FACTORY.create(response);
 
         // Now update the item
-        BasicFileAttributes attr = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
-        return this.updateFile(item, new Date(attr.creationTime().toMillis()), new Date(attr.lastModifiedTime().toMillis()));
+        final BasicFileAttributes attr = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
+        return updateFile(item, new Date(attr.creationTime().toMillis()), new Date(attr.lastModifiedTime().toMillis()));
     }
 
     @Override
-    public OneDriveItem uploadFile(OneDriveItem parent, File file) throws IOException {
+    public OneDriveItem uploadFile(final OneDriveItem parent, final File file) throws IOException {
         if (!parent.isDirectory()) {
             throw new IllegalArgumentException("Parent is not a folder");
         }
 
         // Generate the update item
-        BasicFileAttributes attr = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
-        FileSystemInfoFacet fsi = new FileSystemInfoFacet();
+        final BasicFileAttributes attr = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
+        final FileSystemInfoFacet fsi = new FileSystemInfoFacet();
         fsi.setLastModifiedDateTime(JsonDateSerializer.INSTANCE.serialize(new Date(attr.lastModifiedTime().toMillis())));
         fsi.setCreatedDateTime(JsonDateSerializer.INSTANCE.serialize(new Date(attr.creationTime().toMillis())));
-        RWOneDriveProvider.WriteItemFacet itemToWrite = new RWOneDriveProvider.WriteItemFacet(file.getName(), fsi, true, false);
+        final WriteItemFacet itemToWrite = new WriteItemFacet(file.getName(), fsi, true, false);
 
-        MultipartContent content = new MultipartContent()
-                .addPart(new MultipartContent.Part(
+        final MultipartContent content = new MultipartContent()
+                .addPart(new Part(
                         new HttpHeaders()
                                 .set("Content-ID", "<metadata>")
                                 .setAcceptEncoding(null),
                         new JsonHttpContent(JsonUtils.JSON_FACTORY, itemToWrite)))
-                .addPart(new MultipartContent.Part(
+                .addPart(new Part(
                         new HttpHeaders()
                                 .set("Content-ID", "<content>")
                                 .setAcceptEncoding(null),
                         new FileContent(null, file)));
 
-        HttpRequest request = this.requestFactory.buildPostRequest(
+        final HttpRequest request = requestFactory.buildPostRequest(
                 OneDriveUrl.postMultiPart(parent.getId()), content);
 
         request.setLoggingEnabled(true);
@@ -83,29 +84,29 @@ class RWOneDriveProvider extends ROOneDriveProvider {
     }
 
     @Override
-    public OneDriveUploadSession startUploadSession(OneDriveItem parent, File file) throws IOException {
-        HttpRequest request = this.requestFactory.buildPostRequest(
+    public OneDriveUploadSession startUploadSession(final OneDriveItem parent, final File file) throws IOException {
+        final HttpRequest request = requestFactory.buildPostRequest(
                 OneDriveUrl.createUploadSession(parent.getId(), file.getName()),
-                new JsonHttpContent(JsonUtils.JSON_FACTORY, new RWOneDriveProvider.UploadSessionFacet(file.getName())));
+                new JsonHttpContent(JsonUtils.JSON_FACTORY, new UploadSessionFacet(file.getName())));
 
-        UploadSession session = request.execute().parseAs(UploadSession.class);
+        final UploadSession session = request.execute().parseAs(UploadSession.class);
 
         return new OneDriveUploadSession(parent, file, session.getUploadUrl(), session.getNextExpectedRanges());
     }
 
     @Override
-    public void uploadChunk(OneDriveUploadSession session) throws IOException {
-        byte[] bytesToUpload = session.getChunk();
+    public void uploadChunk(final OneDriveUploadSession session) throws IOException {
+        final byte[] bytesToUpload = session.getChunk();
         OneDriveItem item;
 
-        HttpRequest request = this.requestFactory.buildPutRequest(
+        final HttpRequest request = requestFactory.buildPutRequest(
                 new GenericUrl(session.getUploadUrl()),
                 new ByteArrayContent(null, bytesToUpload));
 
         request.getHeaders().setContentRange(String.format("bytes %d-%d/%d", session.getTotalUploaded(), session.getTotalUploaded() + (long) bytesToUpload.length - 1L, session.getFile().length()));
 
         if (session.getTotalUploaded() + (long) bytesToUpload.length < session.getFile().length()) {
-            UploadSession response = request.execute().parseAs(UploadSession.class);
+            final UploadSession response = request.execute().parseAs(UploadSession.class);
             session.setRanges(response.getNextExpectedRanges());
             return;
         } else {
@@ -113,56 +114,56 @@ class RWOneDriveProvider extends ROOneDriveProvider {
         }
 
         // If this is the final chunk then set the properties
-        BasicFileAttributes attr = Files.readAttributes(session.getFile().toPath(), BasicFileAttributes.class);
-        item = this.updateFile(item, new Date(attr.creationTime().toMillis()), new Date(attr.lastModifiedTime().toMillis()));
+        final BasicFileAttributes attr = Files.readAttributes(session.getFile().toPath(), BasicFileAttributes.class);
+        item = updateFile(item, new Date(attr.creationTime().toMillis()), new Date(attr.lastModifiedTime().toMillis()));
 
         // Upload session is now complete
         session.setComplete(item);
     }
 
     @Override
-    public OneDriveItem updateFile(OneDriveItem item, Date createdDate, Date modifiedDate) throws IOException {
-        FileSystemInfoFacet fileSystem = new FileSystemInfoFacet();
+    public OneDriveItem updateFile(final OneDriveItem item, final Date createdDate, final Date modifiedDate) throws IOException {
+        final FileSystemInfoFacet fileSystem = new FileSystemInfoFacet();
         fileSystem.setCreatedDateTime(JsonDateSerializer.INSTANCE.serialize(createdDate));
         fileSystem.setLastModifiedDateTime(JsonDateSerializer.INSTANCE.serialize(modifiedDate));
 
-        RWOneDriveProvider.WriteItemFacet updateItem = new RWOneDriveProvider.WriteItemFacet(item.getName(), fileSystem, false, item.isDirectory());
+        final WriteItemFacet updateItem = new WriteItemFacet(item.getName(), fileSystem, false, item.isDirectory());
 
-        HttpRequest request = this.requestFactory.buildPatchRequest(
+        final HttpRequest request = requestFactory.buildPatchRequest(
                 OneDriveUrl.item(item.getId()),
                 new JsonHttpContent(JsonUtils.JSON_FACTORY, updateItem));
 
-        Item response = request.execute().parseAs(Item.class);
+        final Item response = request.execute().parseAs(Item.class);
         return OneDriveItem.FACTORY.create(response);
     }
 
     @Override
-    public OneDriveItem createFolder(OneDriveItem parent, String name) throws IOException {
-        RWOneDriveProvider.WriteFolderFacet newFolder = new RWOneDriveProvider.WriteFolderFacet(name);
+    public OneDriveItem createFolder(final OneDriveItem parent, final String name) throws IOException {
+        final WriteFolderFacet newFolder = new WriteFolderFacet(name);
 
-        HttpRequest request = this.requestFactory.buildPostRequest(
+        final HttpRequest request = requestFactory.buildPostRequest(
                 OneDriveUrl.children(parent.getId()),
                 new JsonHttpContent(JsonUtils.JSON_FACTORY, newFolder));
 
-        Item response = request.execute().parseAs(Item.class);
+        final Item response = request.execute().parseAs(Item.class);
         OneDriveItem item = OneDriveItem.FACTORY.create(response);
 
         // Set the remote timestamps
         if (Paths.get(name).toFile().exists()) {
-            BasicFileAttributes attr = Files.readAttributes(Paths.get(name), BasicFileAttributes.class);
-            item = this.updateFile(item, new Date(attr.creationTime().toMillis()), new Date(attr.lastModifiedTime().toMillis()));
+            final BasicFileAttributes attr = Files.readAttributes(Paths.get(name), BasicFileAttributes.class);
+            item = updateFile(item, new Date(attr.creationTime().toMillis()), new Date(attr.lastModifiedTime().toMillis()));
         }
 
         return item;
     }
 
     @Override
-    public void download(OneDriveItem item, File target, ResumableDownloaderProgressListener progressListener, int chunkSize) throws IOException {
+    public void download(final OneDriveItem item, final File target, final ResumableDownloaderProgressListener progressListener, final int chunkSize) throws IOException {
         FileOutputStream fos = null;
 
         try {
             fos = new FileOutputStream(target);
-            ResumableDownloader downloader = new ResumableDownloader(ROOneDriveProvider.HTTP_TRANSPORT, this.requestFactory.getInitializer());
+            final ResumableDownloader downloader = new ResumableDownloader(ROOneDriveProvider.HTTP_TRANSPORT, requestFactory.getInitializer());
             downloader.setProgressListener(progressListener);
 
             downloader.setChunkSize(chunkSize);
@@ -174,7 +175,7 @@ class RWOneDriveProvider extends ROOneDriveProvider {
             }
 
             downloader.download(OneDriveUrl.content(item.getId()), fos);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new OneDriveAPIException(0, "Unable to download file", e);
         } finally {
             if (null != fos) {
@@ -184,13 +185,13 @@ class RWOneDriveProvider extends ROOneDriveProvider {
     }
 
     @Override
-    public void download(OneDriveItem item, File target, ResumableDownloaderProgressListener progressListener) throws IOException {
-        this.download(item, target, progressListener, ResumableDownloader.MAXIMUM_CHUNK_SIZE);
+    public void download(final OneDriveItem item, final File target, final ResumableDownloaderProgressListener progressListener) throws IOException {
+        download(item, target, progressListener, ResumableDownloader.MAXIMUM_CHUNK_SIZE);
     }
 
     @Override
-    public void delete(OneDriveItem remoteFile) throws IOException {
-        HttpRequest request = this.requestFactory.buildDeleteRequest(OneDriveUrl.item(remoteFile.getId()));
+    public void delete(final OneDriveItem remoteFile) throws IOException {
+        final HttpRequest request = requestFactory.buildDeleteRequest(OneDriveUrl.item(remoteFile.getId()));
         request.execute();
     }
 
@@ -200,17 +201,17 @@ class RWOneDriveProvider extends ROOneDriveProvider {
         @Key
         private final FolderFacet folder;
 
-        WriteFolderFacet(String name) {
+        WriteFolderFacet(final String name) {
             this.name = name;
-            folder = new FolderFacet();
+            this.folder = new FolderFacet();
         }
 
         public String getName() {
-            return this.name;
+            return name;
         }
 
         public FolderFacet getFolder() {
-            return this.folder;
+            return folder;
         }
     }
 
@@ -226,15 +227,15 @@ class RWOneDriveProvider extends ROOneDriveProvider {
         @Key("@content.sourceUrl")
         private final String multipart;
 
-        WriteItemFacet(String name, FileSystemInfoFacet fileSystemInfo, boolean multipart, boolean isDirectory) {
+        WriteItemFacet(final String name, final FileSystemInfoFacet fileSystemInfo, final boolean multipart, final boolean isDirectory) {
             this.name = name;
             this.fileSystemInfo = fileSystemInfo;
             this.multipart = multipart ? "cid:content" : null;
 
             if (isDirectory) {
-                folder = new FolderFacet();
+                this.folder = new FolderFacet();
             } else {
-                file = new FileFacet();
+                this.file = new FileFacet();
             }
         }
     }
@@ -242,14 +243,14 @@ class RWOneDriveProvider extends ROOneDriveProvider {
     static final class UploadSessionFacet {
 
         @Key
-        private final RWOneDriveProvider.UploadSessionFacet.FileDetail item;
+        private final FileDetail item;
 
-        private UploadSessionFacet(String name) {
-            item = new RWOneDriveProvider.UploadSessionFacet.FileDetail(name);
+        private UploadSessionFacet(final String name) {
+            this.item = new FileDetail(name);
         }
 
-        public RWOneDriveProvider.UploadSessionFacet.FileDetail getItem() {
-            return this.item;
+        public FileDetail getItem() {
+            return item;
         }
 
         public static class FileDetail {
@@ -260,12 +261,12 @@ class RWOneDriveProvider extends ROOneDriveProvider {
             @Key("@name.conflictBehavior")
             private final String conflictBehavior = "replace";
 
-            public FileDetail(String name) {
+            public FileDetail(final String name) {
                 this.name = name;
             }
 
             public String getName() {
-                return this.name;
+                return name;
             }
         }
     }

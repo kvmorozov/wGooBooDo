@@ -14,7 +14,7 @@ public class TempLocalStorage extends LocalFSStorage {
     }
 
     @Override
-    public IStoredItem getStoredItem(final IPage page, final String imgFormat) throws IOException {
+    public IStoredItem getStoredItem(IPage page, String imgFormat) throws IOException {
         return new TempLocalItem(this, page, imgFormat);
     }
 }

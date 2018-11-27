@@ -11,14 +11,14 @@ class WebDriverResponse implements Response {
 
     private final String response;
 
-    WebDriverResponse(final String response) {
+    WebDriverResponse(String response) {
         this.response = response;
     }
 
 
     @Override
     public InputStream getContent() throws IOException {
-        return new CharSequenceInputStream(this.response, Charset.forName("UTF-8"));
+        return new CharSequenceInputStream(response, Charset.forName("UTF-8"));
     }
 
     @Override

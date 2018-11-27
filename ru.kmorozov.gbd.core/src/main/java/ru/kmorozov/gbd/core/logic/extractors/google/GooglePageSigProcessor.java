@@ -47,27 +47,27 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
     private final BookContext bookContext;
     private final QueuedThreadPoolExecutor<GooglePageInfo> sigPageExecutor;
 
-    GooglePageSigProcessor(BookContext bookContext, HttpHostExt proxy) {
+    GooglePageSigProcessor(final BookContext bookContext, final HttpHostExt proxy) {
         this.bookContext = bookContext;
         this.proxy = proxy;
 
-        this.sigPageExecutor = new QueuedThreadPoolExecutor<>(bookContext.getPagesStream().filter(p -> ((AbstractPage) p).isNotProcessed()).count(), QueuedThreadPoolExecutor.THREAD_POOL_SIZE, GooglePageInfo::isProcessed,
+        sigPageExecutor = new QueuedThreadPoolExecutor<>(bookContext.getPagesStream().filter(p -> ((AbstractPage) p).isNotProcessed()).count(), QueuedThreadPoolExecutor.THREAD_POOL_SIZE, GooglePageInfo::isProcessed,
                 bookContext.toString() + '/' + proxy);
     }
 
     @Override
     public void run() {
-        if ((GBDOptions.secureMode() && this.proxy.isLocal()) || !this.proxy.isAvailable()) return;
+        if ((GBDOptions.secureMode() && proxy.isLocal()) || !proxy.isAvailable()) return;
 
-        if (!this.proxy.isLocal() && !(this.proxy.isAvailable() && 0 < this.proxy.getHost().getPort())) return;
+        if (!proxy.isLocal() && !(proxy.isAvailable() && 0 < proxy.getHost().getPort())) return;
 
-        IProgress psSigs = this.bookContext.getProgress().getSubProgress(this.bookContext.getBookInfo().getPages().getPages().length);
+        final IProgress psSigs = bookContext.getProgress().getSubProgress(bookContext.getBookInfo().getPages().getPages().length);
 
-        this.bookContext.getPagesStream().filter(p -> ((AbstractPage) p).isNotProcessed()).forEach(page -> {
+        bookContext.getPagesStream().filter(p -> ((AbstractPage) p).isNotProcessed()).forEach(page -> {
             psSigs.inc();
-            this.sigPageExecutor.execute(new SigProcessorInternal((GooglePageInfo) page));
+            sigPageExecutor.execute(new SigProcessorInternal((GooglePageInfo) page));
         });
-        this.sigPageExecutor.terminate(3L, TimeUnit.MINUTES);
+        sigPageExecutor.terminate(3L, TimeUnit.MINUTES);
 
         psSigs.finish();
     }
@@ -79,68 +79,68 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
 
     @Override
     public String toString() {
-        return "Sig processor:" + this.bookContext;
+        return "Sig processor:" + bookContext;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
 
-        if (null == o || this.getClass() != o.getClass()) return false;
+        if (null == o || getClass() != o.getClass()) return false;
 
-        GooglePageSigProcessor that = (GooglePageSigProcessor) o;
+        final GooglePageSigProcessor that = (GooglePageSigProcessor) o;
 
-        return new EqualsBuilder().append(this.proxy, that.proxy).append(this.bookContext, that.bookContext).isEquals();
+        return new EqualsBuilder().append(proxy, that.proxy).append(bookContext, that.bookContext).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(this.proxy).append(this.bookContext).toHashCode();
+        return new HashCodeBuilder(17, 37).append(proxy).append(bookContext).toHashCode();
     }
 
     private class SigProcessorInternal implements IUniqueRunnable<GooglePageInfo> {
 
         private final GooglePageInfo page;
 
-        SigProcessorInternal(GooglePageInfo page) {
+        SigProcessorInternal(final GooglePageInfo page) {
             this.page = page;
         }
 
         @Override
         public void run() {
-            if (!GooglePageSigProcessor.this.proxy.isAvailable()) return;
+            if (!proxy.isAvailable()) return;
 
-            if (this.page.isDataProcessed() || null != this.page.getSig() || this.page.isSigChecked() || this.page.isLoadingStarted())
+            if (page.isDataProcessed() || null != page.getSig() || page.isSigChecked() || page.isLoadingStarted())
                 return;
 
             Response resp = null;
-            String baseUrl = HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, GooglePageSigProcessor.this.bookContext.getBookInfo().getBookId());
-            String rqUrl = baseUrl + PAGES_REQUEST_TEMPLATE.replace(RQ_PG_PLACEHOLDER, this.page.getPid());
+            final String baseUrl = HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, bookContext.getBookInfo().getBookId());
+            final String rqUrl = baseUrl + PAGES_REQUEST_TEMPLATE.replace(RQ_PG_PLACEHOLDER, page.getPid());
 
             try {
-                resp = AbstractHttpProcessor.getContent(rqUrl, GooglePageSigProcessor.this.proxy, true);
+                resp = AbstractHttpProcessor.getContent(rqUrl, proxy, true);
                 if (null == resp || null == resp.getContent()) {
-                    GooglePageSigProcessor.logger.finest(String.format(GooglePageSigProcessor.SIG_ERROR_TEMPLATE, rqUrl, GooglePageSigProcessor.this.proxy.toString()));
+                    logger.finest(String.format(SIG_ERROR_TEMPLATE, rqUrl, proxy.toString()));
                     return;
                 }
 
                 String respStr = null;
-                try (final InputStream is = resp.getContent()) {
+                try (InputStream is = resp.getContent()) {
                     respStr = new String(is.readAllBytes(), Charset.defaultCharset());
-                } catch (final SocketException | SSLException se) {
+                } catch (SocketException | SSLException se) {
 
                 }
 
                 if (respStr.isBlank()) {
-                    GooglePageSigProcessor.logger.finest(String.format(GooglePageSigProcessor.SIG_ERROR_TEMPLATE, rqUrl, GooglePageSigProcessor.this.proxy.toString()));
+                    logger.finest(String.format(SIG_ERROR_TEMPLATE, rqUrl, proxy.toString()));
                     return;
                 }
 
                 GooglePagesInfo framePages = null;
                 try {
                     framePages = Mapper.getGson().fromJson(respStr, GooglePagesInfo.class);
-                } catch (JsonParseException jpe) {
-                    GooglePageSigProcessor.logger.severe("Invalid JSON string: " + respStr);
+                } catch (final JsonParseException jpe) {
+                    logger.severe("Invalid JSON string: " + respStr);
                 }
 
                 if (null == framePages) return;
@@ -149,40 +149,40 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
                         .stream()
                         .filter(page -> null != page.getSrc())
                         .forEach(framePage -> {
-                            GooglePageInfo _page = (GooglePageInfo) GooglePageSigProcessor.this.bookContext.getBookInfo().getPages().getPageByPid(framePage.getPid());
+                            final GooglePageInfo _page = (GooglePageInfo) bookContext.getBookInfo().getPages().getPageByPid(framePage.getPid());
 
                             if (_page.isDataProcessed()) return;
 
-                            String _frameSrc = framePage.getSrc();
+                            final String _frameSrc = framePage.getSrc();
                             if (null != _frameSrc) _page.setSrc(_frameSrc);
 
                             if (null != _page.getSig()) {
-                                if (_page.getPid().equals(this.page.getPid())) {
+                                if (_page.getPid().equals(page.getPid())) {
                                     _page.setSigChecked(true);
 
-                                    GooglePageSigProcessor.this.proxy.promoteProxy();
+                                    proxy.promoteProxy();
 
                                     // Если есть возможность - пытаемся грузить страницу сразу
-                                    GooglePageSigProcessor.this.bookContext.imgExecutor.execute(new GooglePageImgProcessor(GooglePageSigProcessor.this.bookContext, _page, GooglePageSigProcessor.this.proxy));
+                                    bookContext.imgExecutor.execute(new GooglePageImgProcessor(bookContext, _page, proxy));
                                 }
                             }
 
                             if (null != _page.getSrc() && null == _page.getSig())
-                                GooglePageSigProcessor.logger.finest(String.format(GooglePageSigProcessor.SIG_WRONG_FORMAT, _page.getSrc()));
+                                logger.finest(String.format(SIG_WRONG_FORMAT, _page.getSrc()));
                         });
-            } catch (final SocketTimeoutException | SocketException | NoHttpResponseException ce) {
-                if (!GooglePageSigProcessor.this.proxy.isLocal()) {
-                    GooglePageSigProcessor.this.proxy.registerFailure();
-                    GooglePageSigProcessor.logger.info(String.format("Proxy %s failed!", GooglePageSigProcessor.this.proxy.toString()));
+            } catch (SocketTimeoutException | SocketException | NoHttpResponseException ce) {
+                if (!proxy.isLocal()) {
+                    proxy.registerFailure();
+                    logger.info(String.format("Proxy %s failed!", proxy.toString()));
                 }
 
                 if (!(ce instanceof SocketTimeoutException)) ce.printStackTrace();
-            } catch (Exception ex) {
+            } catch (final Exception ex) {
                 ex.printStackTrace();
             } finally {
                 try {
                     if (null != resp) resp.close();
-                } catch (IOException e) {
+                } catch (final IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -190,7 +190,7 @@ class GooglePageSigProcessor extends AbstractHttpProcessor implements IUniqueRun
 
         @Override
         public GooglePageInfo getUniqueObject() {
-            return this.page;
+            return page;
         }
     }
 }

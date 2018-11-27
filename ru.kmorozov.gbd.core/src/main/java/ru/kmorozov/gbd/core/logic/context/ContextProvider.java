@@ -18,81 +18,81 @@ public class ContextProvider implements IContextLoader {
 
     protected IContextLoader loader;
 
-    public ContextProvider(final IContextLoader loader) {
+    public ContextProvider(IContextLoader loader) {
         this.loader = loader;
     }
 
     public static IContextLoader getContextProvider() {
-        if (null == ContextProvider.contextProvider) {
-            synchronized (ContextProvider.LOCK_OBJ) {
-                if (null == ContextProvider.contextProvider) if (ContextProvider.classExists(ContextProvider.DB_CTX_PROVIDER_CLASS_NAME)) {
+        if (null == contextProvider) {
+            synchronized (LOCK_OBJ) {
+                if (null == contextProvider) if (classExists(DB_CTX_PROVIDER_CLASS_NAME)) {
                     try {
-                        ContextProvider.contextProvider = (IContextLoader) Class.forName(ContextProvider.DB_CTX_PROVIDER_CLASS_NAME).getDeclaredConstructor().newInstance();
-                    } catch (Exception e) {
+                        contextProvider = (IContextLoader) Class.forName(DB_CTX_PROVIDER_CLASS_NAME).getDeclaredConstructor().newInstance();
+                    } catch (final Exception e) {
                         e.printStackTrace();
                     }
                 }
 
-                if (null == ContextProvider.contextProvider || !ContextProvider.contextProvider.isValid())
-                    ContextProvider.contextProvider = new ContextProvider(DirContextLoader.BOOK_CTX_LOADER);
+                if (null == contextProvider || !contextProvider.isValid())
+                    contextProvider = new ContextProvider(DirContextLoader.BOOK_CTX_LOADER);
             }
 
-            ContextProvider.contextProvider.updateContext();
+            contextProvider.updateContext();
         }
 
-        return ContextProvider.contextProvider;
+        return contextProvider;
     }
 
-    public static void setDefaultContextProvider(final IContextLoader _contextProvider) {
-        ContextProvider.contextProvider = _contextProvider;
+    public static void setDefaultContextProvider(IContextLoader _contextProvider) {
+        contextProvider = _contextProvider;
     }
 
-    private static boolean classExists(String className) {
+    private static boolean classExists(final String className) {
         try {
             Class.forName(className);
             return true;
-        } catch (ClassNotFoundException cnfe) {
+        } catch (final ClassNotFoundException cnfe) {
             return false;
         }
     }
 
     @Override
     public void updateIndex() {
-        this.loader.updateIndex();
+        loader.updateIndex();
     }
 
     @Override
     public void updateContext() {
-        this.loader.updateContext();
+        loader.updateContext();
     }
 
     @Override
-    public void updateBookInfo(final BookInfo bookInfo) {
-        this.loader.updateBookInfo(bookInfo);
+    public void updateBookInfo(BookInfo bookInfo) {
+        loader.updateBookInfo(bookInfo);
     }
 
     @Override
-    public BookInfo getBookInfo(final String bookId) {
-        return this.loader.getBookInfo(bookId);
+    public BookInfo getBookInfo(String bookId) {
+        return loader.getBookInfo(bookId);
     }
 
     @Override
     public Set<String> getBookIdsList() {
-        return this.loader.getBookIdsList();
+        return loader.getBookIdsList();
     }
 
     @Override
     public int getContextSize() {
-        return this.loader.getContextSize();
+        return loader.getContextSize();
     }
 
     @Override
     public void refreshContext() {
-        this.loader.refreshContext();
+        loader.refreshContext();
     }
 
     @Override
     public boolean isValid() {
-        return this.loader.isValid();
+        return loader.isValid();
     }
 }

@@ -21,12 +21,12 @@ public class OneDriveWalker implements Closeable {
 
     private static final boolean followLinks = true;
     private final OneDriveProvider api;
-    private final Deque<OneDriveWalker.DirectoryNode> stack = new ArrayDeque();
+    private final Deque<DirectoryNode> stack = new ArrayDeque();
     private final int maxDepth;
     private boolean closed;
     private final Predicate<OneDriveItem> skipCondition;
 
-    OneDriveWalker(OneDriveProvider api, int maxDepth, Predicate<OneDriveItem> skipCondition) {
+    OneDriveWalker(final OneDriveProvider api, final int maxDepth, final Predicate<OneDriveItem> skipCondition) {
         this.api = api;
         this.maxDepth = maxDepth;
         this.skipCondition = skipCondition;
@@ -34,31 +34,31 @@ public class OneDriveWalker implements Closeable {
 
     @Override
     public void close() {
-        if (!closed) {
+        if (!this.closed) {
             while (true) {
-                if (stack.isEmpty()) {
-                    closed = true;
+                if (this.stack.isEmpty()) {
+                    this.closed = true;
                     break;
                 }
 
-                pop();
+                this.pop();
             }
         }
     }
 
     private void pop() {
-        if (!stack.isEmpty()) {
-            OneDriveWalker.DirectoryNode node = stack.pop();
+        if (!this.stack.isEmpty()) {
+            final DirectoryNode node = this.stack.pop();
 
             node.stream().close();
         }
     }
 
-    OneDriveWalker.Event walk(OneDriveItem root) {
-        if (closed) {
+    Event walk(final OneDriveItem root) {
+        if (this.closed) {
             throw new IllegalStateException("Closed");
         } else {
-            OneDriveWalker.Event event = visit(root);
+            final Event event = this.visit(root);
 
             assert null != event;
 
@@ -69,53 +69,53 @@ public class OneDriveWalker implements Closeable {
     /**
      * Based on {@link java.nio.file.FileTreeWalker#visit}
      */
-    private OneDriveWalker.Event visit(OneDriveItem item) {
-        int size = stack.size();
-        if (size < maxDepth && item.isDirectory()) {
-            if (followLinks && OneDriveWalker.wouldLoop(item)) {
-                return new OneDriveWalker.Event(OneDriveWalker.EventType.ENTRY, item, new OneDriveException(item.toString()));
+    private Event visit(final OneDriveItem item) {
+        final int size = this.stack.size();
+        if (size < this.maxDepth && item.isDirectory()) {
+            if (OneDriveWalker.followLinks && wouldLoop(item)) {
+                return new Event(EventType.ENTRY, item, new OneDriveException(item.toString()));
             } else {
-                Stream<OneDriveItem> itemStream;
+                final Stream<OneDriveItem> itemStream;
 
                 try {
-                    itemStream = Arrays.stream(this.api.getChildren(item));
-                } catch (IOException ioe) {
-                    return new OneDriveWalker.Event(OneDriveWalker.EventType.ENTRY, item, ioe);
+                    itemStream = Arrays.stream(api.getChildren(item));
+                } catch (final IOException ioe) {
+                    return new Event(EventType.ENTRY, item, ioe);
                 }
 
-                stack.push(new OneDriveWalker.DirectoryNode(item, item.getId(), itemStream));
-                return new OneDriveWalker.Event(OneDriveWalker.EventType.START_DIRECTORY, item);
+                this.stack.push(new DirectoryNode(item, item.getId(), itemStream));
+                return new Event(EventType.START_DIRECTORY, item);
             }
         } else {
-            return new OneDriveWalker.Event(OneDriveWalker.EventType.ENTRY, item);
+            return new Event(EventType.ENTRY, item);
         }
     }
 
     /**
      * TODO сделать проверку на зацикливание, по аналогии с {@link java.nio.file.FileTreeWalker#wouldLoop}
      */
-    private static boolean wouldLoop(OneDriveItem item) {
+    private static boolean wouldLoop(final OneDriveItem item) {
         return false;
     }
 
     public boolean isOpen() {
-        return !closed;
+        return !this.closed;
     }
 
     /**
      * Based on {@link java.nio.file.FileTreeWalker#next}
      */
-    OneDriveWalker.Event next() {
-        OneDriveWalker.DirectoryNode node = stack.peek();
+    Event next() {
+        final DirectoryNode node = this.stack.peek();
         if (null == node) {
             return null;
         } else {
-            OneDriveWalker.Event event;
+            Event event;
             do {
                 OneDriveItem item = null;
-                IOException exception = null;
+                final IOException exception = null;
                 if (!node.skipped()) {
-                    Iterator<OneDriveItem> iterator = node.iterator();
+                    final Iterator<OneDriveItem> iterator = node.iterator();
 
                     if (iterator.hasNext())
                         item = iterator.next();
@@ -124,11 +124,11 @@ public class OneDriveWalker implements Closeable {
                 if (null == item) {
                     node.stream().close();
 
-                    stack.pop();
-                    return new OneDriveWalker.Event(OneDriveWalker.EventType.END_DIRECTORY, node.item(), exception);
+                    this.stack.pop();
+                    return new Event(EventType.END_DIRECTORY, node.item(), exception);
                 }
 
-                event = visit(item);
+                event = this.visit(item);
             } while (null == event);
 
             return event;
@@ -136,30 +136,30 @@ public class OneDriveWalker implements Closeable {
     }
 
     static class Event {
-        private final OneDriveWalker.EventType type;
+        private final EventType type;
         private final OneDriveItem item;
         private final IOException ioe;
 
-        Event(OneDriveWalker.EventType type, OneDriveItem item, IOException ioe) {
+        Event(final EventType type, final OneDriveItem item, final IOException ioe) {
             this.type = type;
             this.item = item;
             this.ioe = ioe;
         }
 
-        Event(OneDriveWalker.EventType type, OneDriveItem item) {
+        Event(final EventType type, final OneDriveItem item) {
             this(type, item, null);
         }
 
-        public OneDriveWalker.EventType type() {
-            return this.type;
+        public EventType type() {
+            return type;
         }
 
         public IOException ioeException() {
-            return this.ioe;
+            return ioe;
         }
 
         public OneDriveItem getItem() {
-            return this.item;
+            return item;
         }
     }
 
@@ -175,27 +175,27 @@ public class OneDriveWalker implements Closeable {
         private final Stream<OneDriveItem> stream;
         private final Iterator<OneDriveItem> iterator;
 
-        DirectoryNode(OneDriveItem item, Object key, Stream<OneDriveItem> stream) {
+        DirectoryNode(final OneDriveItem item, final Object key, final Stream<OneDriveItem> stream) {
             this.item = item;
             this.key = key;
             this.stream = stream;
-            iterator = stream.iterator();
+            this.iterator = stream.iterator();
         }
 
         OneDriveItem item() {
-            return item;
+            return this.item;
         }
 
         BaseStream stream() {
-            return stream;
+            return this.stream;
         }
 
         Iterator<OneDriveItem> iterator() {
-            return iterator;
+            return this.iterator;
         }
 
         boolean skipped() {
-            return OneDriveWalker.this.skipCondition.test(this.item);
+            return skipCondition.test(item);
         }
     }
 }

@@ -39,110 +39,110 @@ public class Book {
     }
 
     public Map<IdType, String> getBookIds() {
-        return bookIds;
+        return this.bookIds;
     }
 
-    public void setBookIds(final Map<IdType, String> bookIds) {
+    public void setBookIds(Map<IdType, String> bookIds) {
         this.bookIds = bookIds;
     }
 
-    public Book(String title, String author) {
+    public Book(final String title, final String author) {
         this.title = title;
         this.author = author;
     }
 
     public String getBookId() {
-        return this.bookId;
+        return bookId;
     }
 
-    public void setBookId(String bookId) {
+    public void setBookId(final String bookId) {
         this.bookId = bookId;
     }
 
     public String getTitle() {
-        return this.title;
+        return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
         this.title = title;
     }
 
     public String getAuthor() {
-        return this.author;
+        return author;
     }
 
-    public void setAuthor(String author) {
+    public void setAuthor(final String author) {
         this.author = author;
     }
 
     public BookInfo getBookInfo() {
-        return this.bookInfo;
+        return bookInfo;
     }
 
-    public void setBookInfo(BookInfo bookInfo) {
+    public void setBookInfo(final BookInfo bookInfo) {
         this.bookInfo = bookInfo;
     }
 
     public Storage getStorage() {
-        return this.storage;
+        return storage;
     }
 
-    public void setStorage(Storage storage) {
+    public void setStorage(final Storage storage) {
         this.storage = storage;
     }
 
     public String getBookKey() {
-        return this.bookInfo.getFileName();
+        return bookInfo.getFileName();
     }
 
     public LinkInfo getLinkInfo() {
-        return this.linkInfo;
+        return linkInfo;
     }
 
-    public void setLinkInfo(LinkInfo linkInfo) {
+    public void setLinkInfo(final LinkInfo linkInfo) {
         this.linkInfo = linkInfo;
     }
 
     public boolean isLink() {
-        return bookInfo.isLink();
+        return this.bookInfo.isLink();
     }
 
     public boolean isBrokenLink() {
-        return bookInfo.isLink() && ((null == linkInfo || linkInfo.isBroken()));
+        return this.bookInfo.isLink() && ((null == this.linkInfo || this.linkInfo.isBroken()));
     }
 
     public Set<Category> getCategories() {
-        return categories;
+        return this.categories;
     }
 
-    public void setCategories(final Set<Category> categories) {
+    public void setCategories(Set<Category> categories) {
         this.categories = categories;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
-        if (null == o || this.getClass() != o.getClass()) return false;
-        if (null == this.title) return false;
+        if (null == o || getClass() != o.getClass()) return false;
+        if (null == title) return false;
 
-        Book book = (Book) o;
+        final Book book = (Book) o;
 
-        if (!this.title.equals(book.title)) return false;
-        return this.author.equals(book.author);
+        if (!title.equals(book.title)) return false;
+        return author.equals(book.author);
     }
 
     @Override
     public int hashCode() {
-        if (null == this.title)
+        if (null == title)
             return super.hashCode();
 
-        int result = this.title.hashCode();
-        result = 31 * result + this.author.hashCode();
+        int result = title.hashCode();
+        result = 31 * result + author.hashCode();
         return result;
     }
 
-    public void addBookId(final IdType idType, final String bookId) {
-        this.bookIds = this.bookIds == null ? new HashMap<>(1) : this.bookIds;
-        this.bookIds.put(idType, bookId);
+    public void addBookId(IdType idType, String bookId) {
+        bookIds = bookIds == null ? new HashMap<>(1) : bookIds;
+        bookIds.put(idType, bookId);
     }
 }

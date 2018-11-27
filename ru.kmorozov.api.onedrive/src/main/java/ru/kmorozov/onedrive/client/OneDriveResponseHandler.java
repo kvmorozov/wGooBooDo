@@ -18,27 +18,27 @@ class OneDriveResponseHandler implements HttpUnsuccessfulResponseHandler {
     private final BackOff backOff = new ExponentialBackOff();
     private final AuthorisationProvider authoriser;
 
-    OneDriveResponseHandler(AuthorisationProvider authoriser) {
+    OneDriveResponseHandler(final AuthorisationProvider authoriser) {
         this.authoriser = authoriser;
     }
 
     @Override
-    public boolean handleResponse(HttpRequest request, HttpResponse response, boolean supportsRetry) throws IOException {
+    public boolean handleResponse(final HttpRequest request, final HttpResponse response, final boolean supportsRetry) throws IOException {
 
         if (!supportsRetry) {
             return false;
         }
 
         if (HttpStatusCodes.STATUS_CODE_UNAUTHORIZED == response.getStatusCode()) {
-            this.authoriser.refresh();
+            authoriser.refresh();
             return true;
         }
 
         // check if back-off is required for this response
-        if (OneDriveResponseHandler.isRequired(response)) {
+        if (isRequired(response)) {
             try {
-                return BackOffUtils.next(this.sleeper, this.backOff);
-            } catch (InterruptedException exception) {
+                return BackOffUtils.next(sleeper, backOff);
+            } catch (final InterruptedException exception) {
                 // ignore
             }
         }
@@ -46,7 +46,7 @@ class OneDriveResponseHandler implements HttpUnsuccessfulResponseHandler {
         return false;
     }
 
-    public static boolean isRequired(HttpResponse httpResponse) {
+    public static boolean isRequired(final HttpResponse httpResponse) {
         return 5 == httpResponse.getStatusCode() / 100 || 429 == httpResponse.getStatusCode();
     }
 

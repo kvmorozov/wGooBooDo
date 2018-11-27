@@ -43,25 +43,25 @@ public class LoadTest {
     @Test
     public void categoryLoadTestFs() throws IOException {
 //        fsLoader.clear();
-        this.fsLoader.load();
-        this.fsLoader.processLinks();
+        fsLoader.load();
+        fsLoader.processLinks();
     }
 
     @Test
     public void categoryLoadTestOne() throws IOException {
-        this.oneLoader.clear();
-        this.oneLoader.load();
+        oneLoader.clear();
+        oneLoader.load();
     }
 
     @Test
     public void loadLinksTestOne() throws IOException {
-        this.oneLoader.processLinks();
+        oneLoader.processLinks();
     }
 
     @Test
     public void loadLinksTestOneMiltiDir() {
-        String[] names = LoadTest.MULTIPLE_LNK_DIR.split(LoadTest.delimiter);
-        List<Storage> storages = this.storageRepository.findAllByName(names[names.length - 1]);
+        final String[] names = MULTIPLE_LNK_DIR.split(delimiter);
+        List<Storage> storages = storageRepository.findAllByName(names[names.length - 1]);
         String parentName;
 
         for (int index = names.length - 1; 0 < index; index--) {
@@ -70,8 +70,8 @@ public class LoadTest {
             else {
                 parentName = names[index - 1];
                 if (null != parentName) {
-                    List<Storage> filteredStorages = new ArrayList<>();
-                    for (Storage storage : storages)
+                    final List<Storage> filteredStorages = new ArrayList<>();
+                    for (final Storage storage : storages)
                         if (storage.getParent().getName().equals(parentName))
                             filteredStorages.add(storage);
 

@@ -19,48 +19,48 @@ public class ServerStoredItem implements IStoredItem {
     private final LocalFSStoredItem localItem;
     private OneDriveItem remoteItem;
 
-    ServerStoredItem(final ServerStorage storage, final IPage page, final String imgFormat) {
+    ServerStoredItem(ServerStorage storage, IPage page, String imgFormat) {
         this.storage = storage;
         this.page = page;
 
-        this.localItem = new TempLocalItem(TempLocalStorage.DEFAULT_TEMP_STORAGE, page, imgFormat);
+        localItem = new TempLocalItem(TempLocalStorage.DEFAULT_TEMP_STORAGE, page, imgFormat);
     }
 
     @Override
     public OutputStream getOutputStream() throws IOException {
-        return this.localItem.getOutputStream();
+        return localItem.getOutputStream();
     }
 
     @Override
     public boolean exists() throws IOException {
-        return this.storage.isPageExists(this.page);
+        return storage.isPageExists(page);
     }
 
     @Override
     public void delete() throws IOException {
-        if (this.remoteItem != null)
-            this.storage.deleteItem(this.remoteItem);
+        if (remoteItem != null)
+            storage.deleteItem(remoteItem);
 
-        if (this.localItem.exists())
-            this.localItem.delete();
+        if (localItem.exists())
+            localItem.delete();
     }
 
     @Override
     public void close() throws IOException {
-        this.remoteItem = this.storage.saveItem(this);
+        remoteItem = storage.saveItem(this);
     }
 
     @Override
-    public void write(final byte[] bytes, final int read) throws IOException {
-        this.localItem.write(bytes, read);
+    public void write(byte[] bytes, int read) throws IOException {
+        localItem.write(bytes, read);
     }
 
     @Override
     public File asFile() {
-        return this.localItem.asFile();
+        return localItem.asFile();
     }
 
     public IPage getPage() {
-        return page;
+        return this.page;
     }
 }

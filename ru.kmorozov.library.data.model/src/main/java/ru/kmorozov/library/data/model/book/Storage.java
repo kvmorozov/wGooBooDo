@@ -24,7 +24,7 @@ public class Storage {
     @Id
     String id;
 
-    Storage.StorageType storageType;
+    StorageType storageType;
     String url, name;
     Date lastModifiedDateTime;
 
@@ -38,102 +38,102 @@ public class Storage {
 
     String localPath;
 
-    public Storage.StorageType getStorageType() {
-        return this.storageType;
+    public StorageType getStorageType() {
+        return storageType;
     }
 
     public String getId() {
-        return this.id;
+        return id;
     }
 
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
-    public void setStorageType(Storage.StorageType storageType) {
+    public void setStorageType(final StorageType storageType) {
         this.storageType = storageType;
     }
 
     public String getUrl() {
-        return this.url;
+        return url;
     }
 
-    public void setUrl(String url) {
+    public void setUrl(final String url) {
         this.url = url;
     }
 
     public Storage getParent() {
-        return this.parent;
+        return parent;
     }
 
-    public void setParent(Storage parent) {
+    public void setParent(final Storage parent) {
         this.parent = parent;
     }
 
     public Set<Category> getCategories() {
-        return this.categories;
+        return categories;
     }
 
-    public void setCategories(Set<Category> categories) {
+    public void setCategories(final Set<Category> categories) {
         this.categories = categories;
     }
 
     public Date getLastModifiedDateTime() {
-        return this.lastModifiedDateTime;
+        return lastModifiedDateTime;
     }
 
-    public void setLastModifiedDateTime(Date lastModifiedDateTime) {
+    public void setLastModifiedDateTime(final Date lastModifiedDateTime) {
         this.lastModifiedDateTime = lastModifiedDateTime;
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
-    public void addCategory(Category category) {
-        if (null == this.categories)
-            this.categories = new HashSet<>();
+    public void addCategory(final Category category) {
+        if (null == categories)
+            categories = new HashSet<>();
 
-        this.categories.add(category);
+        categories.add(category);
     }
 
     public StorageInfo getStorageInfo() {
-        return this.storageInfo;
+        return storageInfo;
     }
 
-    public void setStorageInfo(StorageInfo storageInfo) {
+    public void setStorageInfo(final StorageInfo storageInfo) {
         this.storageInfo = storageInfo;
     }
 
     public Category getMainCategory() {
-        return CollectionUtils.isEmpty(this.categories) ? null : (Category) this.categories.toArray()[0];
+        return CollectionUtils.isEmpty(categories) ? null : (Category) categories.toArray()[0];
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
-        if (null == o || this.getClass() != o.getClass()) return false;
+        if (null == o || getClass() != o.getClass()) return false;
 
-        Storage storage = (Storage) o;
+        final Storage storage = (Storage) o;
 
-        return this.id.equals(storage.id);
+        return id.equals(storage.id);
 
     }
 
     @Override
     public int hashCode() {
-        return this.id.hashCode();
+        return id.hashCode();
     }
 
     public String getLocalPath() {
-        return this.localPath;
+        return localPath;
     }
 
-    public void setLocalPath(String localPath) {
+    public void setLocalPath(final String localPath) {
         this.localPath = localPath;
     }
 }

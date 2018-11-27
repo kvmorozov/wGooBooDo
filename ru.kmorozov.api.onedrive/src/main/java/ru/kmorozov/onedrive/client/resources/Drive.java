@@ -18,18 +18,18 @@ public class Drive {
     private QuotaFacet quota;
 
     public String getId() {
-        return this.id;
+        return id;
     }
 
     public String getDriveType() {
-        return this.driveType;
+        return driveType;
     }
 
     public IdentitySet getOwner() {
-        return this.owner;
+        return owner;
     }
 
     public QuotaFacet getQuota() {
-        return this.quota;
+        return quota;
     }
 }

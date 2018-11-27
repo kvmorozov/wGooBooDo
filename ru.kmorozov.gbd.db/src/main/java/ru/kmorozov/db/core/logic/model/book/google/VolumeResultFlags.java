@@ -25,6 +25,6 @@ public class VolumeResultFlags implements Serializable {
     private String downloadPdfUrl;
 
     public String getDownloadPdfUrl() {
-        return this.downloadPdfUrl;
+        return downloadPdfUrl;
     }
 }

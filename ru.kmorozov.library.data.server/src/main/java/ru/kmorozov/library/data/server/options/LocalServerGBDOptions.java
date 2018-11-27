@@ -16,7 +16,7 @@ public class LocalServerGBDOptions extends AbstractServerGBDOptions {
 
     @Override
     public IStorage getStorage() {
-        return new LocalFSStorage(this.localLibraryPath);
+        return new LocalFSStorage(localLibraryPath);
     }
 
     @Override

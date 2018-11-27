@@ -28,17 +28,17 @@ public class ServerProducer implements IBookListProducer {
 
     @Override
     public Set<String> getBookIds() {
-        String bookId = GBDOptions.getBookId();
+        final String bookId = GBDOptions.getBookId();
 
         if (!StringUtils.isEmpty(bookId) && LibraryFactory.isValidId(bookId))
-            this.ids = new HashSet<>(Collections.singletonList(bookId));
+            ids = new HashSet<>(Collections.singletonList(bookId));
 
-        if (this.ids == null)
-            if (StringUtils.isEmpty(this.defaultIds))
-                this.ids = this.dbCtx.getBookIdsList();
+        if (ids == null)
+            if (StringUtils.isEmpty(defaultIds))
+                ids = dbCtx.getBookIdsList();
             else
-                this.ids = new HashSet(Arrays.asList(this.defaultIds.split(",")));
+                ids = new HashSet(Arrays.asList(defaultIds.split(",")));
 
-        return this.ids;
+        return ids;
     }
 }

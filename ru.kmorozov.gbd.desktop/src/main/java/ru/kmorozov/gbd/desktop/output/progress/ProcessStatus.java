@@ -16,10 +16,10 @@ public class ProcessStatus implements IProgress {
     private JProgressBar prBar;
     private int maxValue;
 
-    public ProcessStatus(int maxValue) {
+    public ProcessStatus(final int maxValue) {
         this.maxValue = maxValue;
 
-        this.start();
+        start();
     }
 
     public ProcessStatus() {
@@ -27,36 +27,36 @@ public class ProcessStatus implements IProgress {
     }
 
     @Override
-    public void resetMaxValue(int maxValue) {
+    public void resetMaxValue(final int maxValue) {
         this.maxValue = maxValue;
 
-        this.start();
+        start();
     }
 
     @Override
     public int inc() {
-        return this.value.incrementAndGet();
+        return value.incrementAndGet();
     }
 
     public int get() {
-        return this.value.get();
+        return value.get();
     }
 
     @Override
     public int incrementAndProgress() {
-        return 0 == this.maxValue ? 0 : Math.round((float) Math.min(this.inc() * 100 / this.maxValue, 100));
+        return 0 == maxValue ? 0 : Math.round((float) Math.min(inc() * 100 / maxValue, 100));
     }
 
     private void start() {
         if (SystemConfigs.isConsoleMode()) return;
 
-        this.prBar = new JProgressBar();
-        this.prBar.setMinimum(0);
-        this.prBar.setMinimum(this.maxValue);
-        this.prBar.setIndeterminate(false);
+        prBar = new JProgressBar();
+        prBar.setMinimum(0);
+        prBar.setMinimum(maxValue);
+        prBar.setIndeterminate(false);
 
         SwingUtilities.invokeLater(() -> {
-            MainBookForm.getINSTANCE().getProgressPanel().add(this.prBar);
+            MainBookForm.getINSTANCE().getProgressPanel().add(prBar);
             SwingUtilities.updateComponentTreeUI(MainBookForm.getINSTANCE().getProgressPanel());
         });
     }
@@ -66,17 +66,17 @@ public class ProcessStatus implements IProgress {
         if (SystemConfigs.isConsoleMode()) return;
 
         SwingUtilities.invokeLater(() -> {
-            MainBookForm.getINSTANCE().getProgressPanel().remove(this.prBar);
+            MainBookForm.getINSTANCE().getProgressPanel().remove(prBar);
             SwingUtilities.updateComponentTreeUI(MainBookForm.getINSTANCE().getProgressPanel());
         });
     }
 
     public JProgressBar getProgressBar() {
-        return this.prBar;
+        return prBar;
     }
 
     @Override
-    public IProgress getSubProgress(int maxValue) {
+    public IProgress getSubProgress(final int maxValue) {
         return new ProcessStatus(maxValue);
     }
 }

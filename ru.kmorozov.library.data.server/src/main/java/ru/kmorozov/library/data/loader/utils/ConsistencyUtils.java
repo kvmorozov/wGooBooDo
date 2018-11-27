@@ -12,13 +12,13 @@ public class ConsistencyUtils {
 
     private static final boolean DEDUPLCATION_ENABLED = false;
 
-    public static Collection<Book> deduplicate(Collection<Book> books, CrudRepository booksRepository) {
-        if (!ConsistencyUtils.DEDUPLCATION_ENABLED)
+    public static Collection<Book> deduplicate(final Collection<Book> books, final CrudRepository booksRepository) {
+        if (!DEDUPLCATION_ENABLED)
             return books;
 
-        Collection<String> uniquePaths = new ArrayList<>();
-        Collection<Book> deduplicatedBooks  = new ArrayList<>();
-        for (Book book : books)
+        final Collection<String> uniquePaths = new ArrayList<>();
+        final Collection<Book> deduplicatedBooks  = new ArrayList<>();
+        for (final Book book : books)
             if (uniquePaths.add(book.getBookInfo().getPath()))
                 deduplicatedBooks.add(book);
             else

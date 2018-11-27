@@ -33,36 +33,36 @@ public class DbContextLoader implements IContextLoader {
     }
 
     @Override
-    public void updateBookInfo(final BookInfo bookInfo) {
-        final BookInfo existBookInfo = this.googleBooksRepository.findByBookId(bookInfo.getBookId());
+    public void updateBookInfo(BookInfo bookInfo) {
+        BookInfo existBookInfo = googleBooksRepository.findByBookId(bookInfo.getBookId());
         if (existBookInfo != null)
-            this.googleBooksRepository.delete(existBookInfo);
+            googleBooksRepository.delete(existBookInfo);
 
-        this.googleBooksRepository.save(bookInfo);
+        googleBooksRepository.save(bookInfo);
     }
 
     @Override
-    public BookInfo getBookInfo(final String bookId) {
-        BookInfo info = this.booksMap.get(bookId);
+    public BookInfo getBookInfo(String bookId) {
+        BookInfo info = booksMap.get(bookId);
         if (info == null) {
-            info = this.googleBooksRepository.findByBookId(bookId);
+            info = googleBooksRepository.findByBookId(bookId);
 
-            for (final IPage page : info.getPages().getPages())
+            for (IPage page : info.getPages().getPages())
                 ((AbstractPage) page).setFileExists(true);
 
-            this.booksMap.put(bookId, info);
+            booksMap.put(bookId, info);
         }
         return info;
     }
 
     @Override
     public Set<String> getBookIdsList() {
-        return this.booksMap.keySet();
+        return booksMap.keySet();
     }
 
     @Override
     public int getContextSize() {
-        return this.booksMap.size();
+        return booksMap.size();
     }
 
     @Override

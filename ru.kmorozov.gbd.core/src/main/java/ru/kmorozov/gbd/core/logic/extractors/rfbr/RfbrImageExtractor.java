@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 public class RfbrImageExtractor extends AbstractImageExtractor {
 
-    public RfbrImageExtractor(final BookContext bookContext) {
+    public RfbrImageExtractor(BookContext bookContext) {
         super(bookContext, RfbrImageExtractor.class);
     }
 
@@ -26,7 +26,7 @@ public class RfbrImageExtractor extends AbstractImageExtractor {
     }
 
     @Override
-    public void newProxyEvent(final HttpHostExt proxy) {
+    public void newProxyEvent(HttpHostExt proxy) {
         if (!proxy.isLocal()) return;
 
         (new Thread(new EventProcessor(proxy))).start();
@@ -36,32 +36,32 @@ public class RfbrImageExtractor extends AbstractImageExtractor {
 
         private final HttpHostExt proxy;
 
-        EventProcessor(HttpHostExt proxy) {
+        EventProcessor(final HttpHostExt proxy) {
             this.proxy = proxy;
         }
 
         @Override
         public void run() {
-            while (!RfbrImageExtractor.this.initComplete.get()) {
-                RfbrImageExtractor.this.waitingProxy.add(this.proxy);
+            while (!initComplete.get()) {
+                waitingProxy.add(proxy);
                 return;
             }
 
-            for (IPage page : RfbrImageExtractor.this.bookContext.getBookInfo().getPages().getPages())
-                RfbrImageExtractor.this.bookContext.imgExecutor.execute(new RfbrPageImgProcessor(RfbrImageExtractor.this.bookContext, (RfbrPage) page, HttpHostExt.NO_PROXY));
+            for (final IPage page : bookContext.getBookInfo().getPages().getPages())
+                bookContext.imgExecutor.execute(new RfbrPageImgProcessor(bookContext, (RfbrPage) page, HttpHostExt.NO_PROXY));
 
-            RfbrImageExtractor.this.bookContext.imgExecutor.terminate(20L, TimeUnit.MINUTES);
+            bookContext.imgExecutor.terminate(20L, TimeUnit.MINUTES);
 
             ExecutionContext.INSTANCE.updateProxyList();
 
-            RfbrImageExtractor.this.logger.info(RfbrImageExtractor.this.bookContext.getBookInfo().getPages().getMissingPagesList());
+            logger.info(bookContext.getBookInfo().getPages().getMissingPagesList());
 
-            long pagesAfter = RfbrImageExtractor.this.bookContext.getPagesStream().filter(pageInfo -> pageInfo.isDataProcessed()).count();
+            final long pagesAfter = bookContext.getPagesStream().filter(pageInfo -> pageInfo.isDataProcessed()).count();
 
-            RfbrImageExtractor.this.logger.info(String.format("Processed %s pages", pagesAfter - RfbrImageExtractor.this.bookContext.getPagesBefore()));
+            logger.info(String.format("Processed %s pages", pagesAfter - bookContext.getPagesBefore()));
 
-            synchronized (RfbrImageExtractor.this.bookContext) {
-                ExecutionContext.INSTANCE.postProcessBook(RfbrImageExtractor.this.bookContext);
+            synchronized (bookContext) {
+                ExecutionContext.INSTANCE.postProcessBook(bookContext);
             }
         }
     }

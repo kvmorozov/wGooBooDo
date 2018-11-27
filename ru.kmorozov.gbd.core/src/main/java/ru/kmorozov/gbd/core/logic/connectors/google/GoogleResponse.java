@@ -13,18 +13,18 @@ class GoogleResponse implements Response {
 
     private final HttpResponse resp;
 
-    GoogleResponse(HttpResponse resp) {
+    GoogleResponse(final HttpResponse resp) {
         this.resp = resp;
     }
 
     @Override
     public InputStream getContent() throws IOException {
-        return null == this.resp ? null : this.resp.getContent();
+        return null == resp ? null : resp.getContent();
     }
 
     @Override
     public String getImageFormat() {
-        return this.resp.getMediaType().getSubType();
+        return resp.getMediaType().getSubType();
     }
 
     @Override

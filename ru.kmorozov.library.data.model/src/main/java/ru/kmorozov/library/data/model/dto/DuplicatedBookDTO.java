@@ -20,17 +20,17 @@ public class DuplicatedBookDTO {
     public DuplicatedBookDTO() {
     }
 
-    public DuplicatedBookDTO(BooksBySize duplicatedBook) {
-        count = duplicatedBook.getCount();
-        format = duplicatedBook.getFormat().name();
-        size = duplicatedBook.getSize();
+    public DuplicatedBookDTO(final BooksBySize duplicatedBook) {
+        this.count = duplicatedBook.getCount();
+        this.format = duplicatedBook.getFormat().name();
+        this.size = duplicatedBook.getSize();
     }
 
     public List<BookDTO> getBooks() {
-        return this.books;
+        return books;
     }
 
-    public void setBooks(List<BookDTO> books) {
+    public void setBooks(final List<BookDTO> books) {
         this.books = books;
     }
 }

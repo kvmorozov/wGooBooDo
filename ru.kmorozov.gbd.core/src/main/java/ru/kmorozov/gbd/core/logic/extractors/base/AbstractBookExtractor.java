@@ -1,6 +1,7 @@
 package ru.kmorozov.gbd.core.logic.extractors.base;
 
 import org.jsoup.Connection;
+import org.jsoup.Connection.Method;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import ru.kmorozov.db.core.config.IContextLoader;
@@ -30,20 +31,20 @@ public abstract class AbstractBookExtractor extends AbstractHttpProcessor {
     public AbstractBookExtractor() {
     }
 
-    protected AbstractBookExtractor(String bookId) {
+    protected AbstractBookExtractor(final String bookId) {
         this(bookId, ContextProvider.getContextProvider());
     }
 
-    protected AbstractBookExtractor(String bookId, final IContextLoader storedLoader) {
+    protected AbstractBookExtractor(final String bookId, IContextLoader storedLoader) {
         this.bookId = bookId;
 
-        BookInfo storedBookInfo = storedLoader == null ? null : storedLoader.getBookInfo(bookId);
+        final BookInfo storedBookInfo = storedLoader == null ? null : storedLoader.getBookInfo(bookId);
         try {
-            this.bookInfo = null == storedBookInfo ? this.findBookInfo() : storedBookInfo;
-        } catch (final Exception e) {
+            bookInfo = null == storedBookInfo ? findBookInfo() : storedBookInfo;
+        } catch (Exception e) {
             e.printStackTrace();
 
-            this.bookInfo = null;
+            bookInfo = null;
         }
     }
 
@@ -58,13 +59,13 @@ public abstract class AbstractBookExtractor extends AbstractHttpProcessor {
         Document doc = null;
 
         try {
-            res = Jsoup.connect(this.getBookUrl()).userAgent(HttpConnections.USER_AGENT).followRedirects(false).timeout(20000).method(Connection.Method.GET).execute();
-        } catch (UnknownHostException uhe) {
-            AbstractBookExtractor.logger.severe("Not connected to Internet!");
-        } catch (Exception ex) {
+            res = Jsoup.connect(getBookUrl()).userAgent(HttpConnections.USER_AGENT).followRedirects(false).timeout(20000).method(Method.GET).execute();
+        } catch (final UnknownHostException uhe) {
+            logger.severe("Not connected to Internet!");
+        } catch (final Exception ex) {
             try {
-                res = Jsoup.connect(this.getReserveBookUrl()).userAgent(HttpConnections.USER_AGENT).method(Connection.Method.GET).execute();
-            } catch (Exception ex1) {
+                res = Jsoup.connect(getReserveBookUrl()).userAgent(HttpConnections.USER_AGENT).method(Method.GET).execute();
+            } catch (final Exception ex1) {
                 throw new Exception(ex1);
             }
         }
@@ -73,28 +74,28 @@ public abstract class AbstractBookExtractor extends AbstractHttpProcessor {
             if (null != res) {
                 doc = res.parse();
             }
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
 
         return doc;
     }
 
-    protected Document getDocumentWithProxy(HttpHostExt proxy) {
-        Response resp = AbstractHttpProcessor.getContent(this.getBookUrl(), proxy, true);
+    protected Document getDocumentWithProxy(final HttpHostExt proxy) {
+        final Response resp = AbstractHttpProcessor.getContent(getBookUrl(), proxy, true);
 
         if (null == resp) return null;
         else {
-            try (final InputStream is = resp.getContent()) {
-                String respStr = new String(is.readAllBytes(), Charset.defaultCharset());
+            try (InputStream is = resp.getContent()) {
+                final String respStr = new String(is.readAllBytes(), Charset.defaultCharset());
                 return Jsoup.parse(respStr);
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 return null;
             }
         }
     }
 
     public BookInfo getBookInfo() {
-        return this.bookInfo;
+        return bookInfo;
     }
 }

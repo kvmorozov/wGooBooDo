@@ -1,7 +1,6 @@
 package ru.kmorozov.library.data.model.dto.results;
 
 import ru.kmorozov.library.data.model.book.BookInfo;
-import ru.kmorozov.library.data.model.book.BookInfo.BookFormat;
 
 import java.util.Collection;
 import java.util.List;
@@ -17,37 +16,37 @@ public class BooksBySize {
 
     private Long size;
 
-    private BookFormat format;
+    private BookInfo.BookFormat format;
 
     public Collection<String> getBookIds() {
-        return this.bookIds;
+        return bookIds;
     }
 
-    public void setBookIds(List<String> bookIds) {
+    public void setBookIds(final List<String> bookIds) {
         this.bookIds = bookIds;
     }
 
     public Integer getCount() {
-        return this.count;
+        return count;
     }
 
-    public void setCount(Integer count) {
+    public void setCount(final Integer count) {
         this.count = count;
     }
 
     public Long getSize() {
-        return this.size;
+        return size;
     }
 
-    public void setSize(Long size) {
+    public void setSize(final Long size) {
         this.size = size;
     }
 
-    public BookFormat getFormat() {
-        return this.format;
+    public BookInfo.BookFormat getFormat() {
+        return format;
     }
 
-    public void setFormat(BookFormat format) {
+    public void setFormat(final BookInfo.BookFormat format) {
         this.format = format;
     }
 }

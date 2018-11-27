@@ -12,12 +12,12 @@ import javax.swing.*;
  */
 public class SwingOutputReceiver extends AbstractOutputReceiver {
 
-    public SwingOutputReceiver(MainBookForm form) {
-        this.addListener(new SwingLogEventListener());
+    public SwingOutputReceiver(final MainBookForm form) {
+        addListener(new SwingLogEventListener());
     }
 
     @Override
-    public void receive(ILoggableObject bookInfo) {
+    public void receive(final ILoggableObject bookInfo) {
         if (!SwingUtilities.isEventDispatchThread()) {
             SwingUtilities.invokeLater(() -> MainBookForm.getINSTANCE().getTfBookTitle().setText(bookInfo.getDescription()));
         }

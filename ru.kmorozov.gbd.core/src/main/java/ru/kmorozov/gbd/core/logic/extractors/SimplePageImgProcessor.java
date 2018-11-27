@@ -11,29 +11,29 @@ import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage;
  */
 public class SimplePageImgProcessor<T extends AbstractPage> extends AbstractPageImgProcessor {
 
-    public SimplePageImgProcessor(BookContext bookContext, T page, HttpHostExt usedProxy) {
+    public SimplePageImgProcessor(final BookContext bookContext, final T page, final HttpHostExt usedProxy) {
         super(bookContext, page, usedProxy);
     }
 
     @Override
-    protected String getErrorMsg(String imgUrl, HttpHostExt proxy) {
+    protected String getErrorMsg(final String imgUrl, final HttpHostExt proxy) {
         return String.format("Cannot load data from %s", imgUrl);
     }
 
     @Override
     protected String getSuccessMsg() {
-        return String.format("Finished img processing for %s", this.page.getPid());
+        return String.format("Finished img processing for %s", page.getPid());
     }
 
     @Override
     public void run() {
-        if (this.page.isDataProcessed()) return;
+        if (page.isDataProcessed()) return;
 
-        this.processImage(this.page.getImgUrl());
+        processImage(page.getImgUrl());
     }
 
     @Override
-    protected boolean validateOutput(IStoredItem storedItem, int width) {
+    protected boolean validateOutput(final IStoredItem storedItem, final int width) {
         return true;
     }
 }

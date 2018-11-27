@@ -26,23 +26,23 @@ public final class ShplMetadata implements ILibraryMetadata {
     }
 
     @Override
-    public boolean isValidId(String bookId) {
-        return null != bookId && bookId.contains(ShplMetadata.SHPL_BASE_URL);
+    public boolean isValidId(final String bookId) {
+        return null != bookId && bookId.contains(SHPL_BASE_URL);
     }
 
     @Override
-    public IImageExtractor getExtractor(BookContext bookContext) {
+    public IImageExtractor getExtractor(final BookContext bookContext) {
         return new ShplImageExtractor(bookContext);
     }
 
     @Override
-    public AbstractBookExtractor getBookExtractor(String bookId) {
+    public AbstractBookExtractor getBookExtractor(final String bookId) {
         return new ShplBookExtractor(bookId);
     }
 
     @Override
-    public AbstractBookExtractor getBookExtractor(final String bookId, final IContextLoader storedLoader) {
-        return this.getBookExtractor(bookId);
+    public AbstractBookExtractor getBookExtractor(String bookId, IContextLoader storedLoader) {
+        return getBookExtractor(bookId);
     }
 
     @Override

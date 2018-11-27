@@ -24,46 +24,46 @@ public class ServerStorage implements IStorage {
 
     private OneDriveItem[] children;
 
-    public ServerStorage(final OneDriveProvider api, final OneDriveItem root) {
+    public ServerStorage(OneDriveProvider api, OneDriveItem root) {
         this.api = api;
         this.root = root;
     }
 
     @Override
     public boolean isValidOrCreate() {
-        return this.root != null && this.root.isDirectory();
+        return root != null && root.isDirectory();
     }
 
     @Override
-    public IStorage getChildStorage(final IBookData bookData) throws IOException {
-        for (final OneDriveItem child : this.getChildren())
+    public IStorage getChildStorage(IBookData bookData) throws IOException {
+        for (OneDriveItem child : getChildren())
             if (child.getName().contains(bookData.getVolumeId()))
-                return new ServerStorage(this.api, child);
+                return new ServerStorage(api, child);
 
-        String volumeId = bookData.getVolumeId();
-        String normalizedName = bookData.getTitle()
+        final String volumeId = bookData.getVolumeId();
+        final String normalizedName = bookData.getTitle()
                 .replace(":", "")
                 .replace("<", "")
                 .replace(">", "")
                 .replace("?", "")
                 .replace("/", ".");
-        String childName = StringUtils.isEmpty(volumeId) ? normalizedName : normalizedName + ' ' + bookData.getVolumeId();
+        final String childName = StringUtils.isEmpty(volumeId) ? normalizedName : normalizedName + ' ' + bookData.getVolumeId();
 
-        return new ServerStorage(this.api, this.api.createFolder(this.root, childName));
+        return new ServerStorage(api, api.createFolder(root, childName));
     }
 
     @Override
     public int size() throws IOException {
-        return this.api.getChildren(this.root).length;
+        return api.getChildren(root).length;
     }
 
     @Override
     public Set<String> getBookIdsList() throws IOException {
-        Set<String> bookIdsList = new HashSet<>();
+        final Set<String> bookIdsList = new HashSet<>();
 
-        for (final OneDriveItem child : this.getChildren())
+        for (OneDriveItem child : getChildren())
             if (child.isDirectory()) {
-                String[] nameParts = child.getName().split(" ");
+                final String[] nameParts = child.getName().split(" ");
                 if (LibraryFactory.isValidId(nameParts[nameParts.length - 1]))
                     bookIdsList.add(nameParts[nameParts.length - 1]);
             }
@@ -72,8 +72,8 @@ public class ServerStorage implements IStorage {
     }
 
     @Override
-    public boolean isPageExists(final IPage page) throws IOException {
-        for (final OneDriveItem child : this.getChildren())
+    public boolean isPageExists(IPage page) throws IOException {
+        for (OneDriveItem child : getChildren())
             if (!child.isDirectory())
                 if (child.getName().contains(page.getOrder() + "_" + page.getPid() + "."))
                     return true;
@@ -87,35 +87,35 @@ public class ServerStorage implements IStorage {
     }
 
     @Override
-    public IStoredItem getStoredItem(final IPage page, final String imgFormat) throws IOException {
+    public IStoredItem getStoredItem(IPage page, String imgFormat) throws IOException {
         return new ServerStoredItem(this, page, imgFormat);
     }
 
     @Override
     public void refresh() {
-        this.children = null;
+        children = null;
     }
 
     @Override
-    public IIndex getIndex(final String indexName, final boolean createIfNotExists) {
+    public IIndex getIndex(String indexName, boolean createIfNotExists) {
         return null;
     }
 
     private OneDriveItem[] getChildren() throws IOException {
-        if (this.children == null)
-            this.children = this.api.getChildren(this.root);
+        if (children == null)
+            children = api.getChildren(root);
 
-        return this.children;
+        return children;
     }
 
-    void deleteItem(final OneDriveItem item) throws IOException {
-        this.api.delete(item);
+    void deleteItem(OneDriveItem item) throws IOException {
+        api.delete(item);
     }
 
-    OneDriveItem saveItem(final ServerStoredItem item) throws IOException {
-        final OneDriveItem result = this.isPageExists(item.getPage()) ? this.api.replaceFile(this.root, item.asFile()) : this.api.uploadFile(this.root, item.asFile());
+    OneDriveItem saveItem(ServerStoredItem item) throws IOException {
+        OneDriveItem result = isPageExists(item.getPage()) ? api.replaceFile(root, item.asFile()) : api.uploadFile(root, item.asFile());
 
-        this.refresh();
+        refresh();
 
         return result;
     }

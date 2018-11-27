@@ -16,14 +16,14 @@ public class LocalFSIndex implements IIndex {
     private final File indexFile;
     private final LocalFSStorage storage;
 
-    public LocalFSIndex(final LocalFSStorage storage, final String indexName, final boolean createIfNotExists) {
+    public LocalFSIndex(LocalFSStorage storage, String indexName, boolean createIfNotExists) {
         this.storage = storage;
 
-        this.indexFile = new File(storage.getStorageDir().getPath() + File.separator + indexName);
-        if (!this.indexFile.exists() && createIfNotExists) {
+        indexFile = new File(storage.getStorageDir().getPath() + File.separator + indexName);
+        if (!indexFile.exists() && createIfNotExists) {
             try {
-                this.indexFile.createNewFile();
-            } catch (IOException e) {
+                indexFile.createNewFile();
+            } catch (final IOException e) {
                 e.printStackTrace();
             }
         }
@@ -32,9 +32,9 @@ public class LocalFSIndex implements IIndex {
     @Override
     public IBookInfo[] getBooks() {
         BookInfo[] ctxObjArr = null;
-        try (final FileReader reader = new FileReader(this.indexFile)) {
+        try (FileReader reader = new FileReader(indexFile)) {
             ctxObjArr = Mapper.getGson().fromJson(reader, BookInfo[].class);
-        } catch (final Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -42,12 +42,12 @@ public class LocalFSIndex implements IIndex {
     }
 
     @Override
-    public void updateIndex(final List<IBookInfo> books) {
+    public void updateIndex(List<IBookInfo> books) {
         try {
-            try (final FileWriter writer = new FileWriter(this.indexFile)) {
+            try (FileWriter writer = new FileWriter(indexFile)) {
                 Mapper.getGson().toJson(books, writer);
             }
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
     }

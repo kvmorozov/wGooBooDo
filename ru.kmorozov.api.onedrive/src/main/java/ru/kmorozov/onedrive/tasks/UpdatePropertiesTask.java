@@ -5,6 +5,7 @@ import ru.kmorozov.onedrive.client.OneDriveItem;
 import ru.kmorozov.onedrive.CommandLineOpts;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ru.kmorozov.onedrive.tasks.Task.TaskOptions;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,7 +20,7 @@ public class UpdatePropertiesTask extends Task {
     private final OneDriveItem remoteFile;
     private final File localFile;
 
-    public UpdatePropertiesTask(Task.TaskOptions options, OneDriveItem remoteFile, File localFile) {
+    public UpdatePropertiesTask(final TaskOptions options, final OneDriveItem remoteFile, final File localFile) {
 
         super(options);
 
@@ -33,7 +34,7 @@ public class UpdatePropertiesTask extends Task {
 
     @Override
     public String toString() {
-        return "Update properties for " + this.remoteFile.getFullName();
+        return "Update properties for " + remoteFile.getFullName();
     }
 
     @Override
@@ -41,25 +42,25 @@ public class UpdatePropertiesTask extends Task {
 
         switch (CommandLineOpts.getCommandLineOpts().getDirection()) {
             case UP:
-                BasicFileAttributes attr = Files.readAttributes(this.localFile.toPath(), BasicFileAttributes.class);
+                final BasicFileAttributes attr = Files.readAttributes(localFile.toPath(), BasicFileAttributes.class);
                 // Timestamp rounded to the nearest second
-                Date localCreatedDate = new Date(attr.creationTime().to(TimeUnit.SECONDS) * 1000L);
-                Date localModifiedDate = new Date(attr.lastModifiedTime().to(TimeUnit.SECONDS) * 1000L);
+                final Date localCreatedDate = new Date(attr.creationTime().to(TimeUnit.SECONDS) * 1000L);
+                final Date localModifiedDate = new Date(attr.lastModifiedTime().to(TimeUnit.SECONDS) * 1000L);
 
-                this.api.updateFile(this.remoteFile, localCreatedDate, localModifiedDate);
+                api.updateFile(remoteFile, localCreatedDate, localModifiedDate);
 
-                UpdatePropertiesTask.log.info("Updated remote timestamps for item " + this.remoteFile.getFullName());
+                log.info("Updated remote timestamps for item " + remoteFile.getFullName());
 
                 break;
             case DOWN:
-                this.fileSystem.setAttributes(this.localFile, this.remoteFile.getCreatedDateTime(), this.remoteFile.getLastModifiedDateTime());
-                UpdatePropertiesTask.log.info("Updated local timestamps for item " + this.remoteFile.getFullName());
+                fileSystem.setAttributes(localFile, remoteFile.getCreatedDateTime(), remoteFile.getLastModifiedDateTime());
+                log.info("Updated local timestamps for item " + remoteFile.getFullName());
                 break;
             default:
                 throw new IllegalStateException("Unsupported direction " + CommandLineOpts.getCommandLineOpts().getDirection());
         }
 
-        this.reporter.propertiesUpdated();
+        reporter.propertiesUpdated();
     }
 }
 

@@ -17,43 +17,43 @@ public final class LogUtils {
     private LogUtils() {
     }
 
-    public static String readableFileSize(double size) {
-        return LogUtils.readableFileSize((long) size);
+    public static String readableFileSize(final double size) {
+        return readableFileSize((long) size);
     }
 
-    public static String readableFileSize(long size) {
+    public static String readableFileSize(final long size) {
         if (0L >= size) return "0";
-        String[] units = {"B", "KB", "MB", "GB", "TB"};
-        int digitGroups = (int) (Math.log10((double) size) / Math.log10(1024.0));
+        final String[] units = {"B", "KB", "MB", "GB", "TB"};
+        final int digitGroups = (int) (Math.log10((double) size) / Math.log10(1024.0));
         return new DecimalFormat("#,##0.#").format((double) size / Math.pow(1024.0, (double) digitGroups)) + ' ' + units[digitGroups];
     }
 
-    public static String readableTime(long ms) {
+    public static String readableTime(final long ms) {
 
         if (1000L > ms) {
             return ms + "ms";
         } else if (60000L > ms) {
             return String.format("%.1fs", (double) ms / 1000.0d);
         } else {
-            long seconds = ms / 1000L;
-            long s = seconds % 60L;
-            long m = (seconds / 60L) % 60L;
-            long h = (seconds / (long) (60 * 60)) % 24L;
+            final long seconds = ms / 1000L;
+            final long s = seconds % 60L;
+            final long m = (seconds / 60L) % 60L;
+            final long h = (seconds / (long) (60 * 60)) % 24L;
             return String.format("%02d:%02d:%02d", h, m, s);
         }
     }
 
-    public static String addFileLogger(String logFile) {
+    public static String addFileLogger(final String logFile) {
 
-        LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
-        Configuration config = ctx.getConfiguration();
+        final LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
+        final Configuration config = ctx.getConfiguration();
 
         // Default log layout
-        Layout<? extends Serializable> layout =
+        final Layout<? extends Serializable> layout =
                 PatternLayout.createLayout("%d %p [%t] %m%n", null, null, null, Charset.defaultCharset(), true, true, null, null);
 
         // Create a new file appender for the given filename
-        FileAppender appender = FileAppender.createAppender(
+        final FileAppender appender = FileAppender.createAppender(
                 logFile,
                 "false",
                 "false",

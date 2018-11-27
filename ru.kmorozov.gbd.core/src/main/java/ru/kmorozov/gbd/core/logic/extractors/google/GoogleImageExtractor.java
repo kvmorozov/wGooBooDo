@@ -33,51 +33,51 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
     private final AtomicInteger proxyReceived = new AtomicInteger(0);
     private final AtomicBoolean processingStarted = new AtomicBoolean(false);
 
-    public GoogleImageExtractor(BookContext bookContext) {
+    public GoogleImageExtractor(final BookContext bookContext) {
         super(bookContext, GoogleImageExtractor.class);
     }
 
     @Override
     protected void restoreState() {
-        int imgWidth = 0 == GBDOptions.getImageWidth() ? DEFAULT_PAGE_WIDTH : GBDOptions.getImageWidth();
+        final int imgWidth = 0 == GBDOptions.getImageWidth() ? DEFAULT_PAGE_WIDTH : GBDOptions.getImageWidth();
 
         try {
-            this.bookContext.getPagesStream().filter(IPage::isFileExists).forEach(page -> {
+            bookContext.getPagesStream().filter(IPage::isFileExists).forEach(page -> {
                 try {
-                    if (!this.bookContext.getStorage().isPageExists(page)) {
-                        this.logger.severe(String.format("Page %s not found in directory!", page.getPid()));
+                    if (!bookContext.getStorage().isPageExists(page)) {
+                        logger.severe(String.format("Page %s not found in directory!", page.getPid()));
                         ((AbstractPage) page).setDataProcessed(false);
                         ((AbstractPage) page).setFileExists(false);
                     }
-                } catch (IOException e) {
+                } catch (final IOException e) {
                     e.printStackTrace();
                 }
             });
 
-            final Stream<Path> files = this.bookContext.getStorage().getFiles();
+            Stream<Path> files = bookContext.getStorage().getFiles();
             if (files == null)
                 return;
 
             files.forEach(filePath -> {
-                this.setProgress(this.bookContext.getProgress().incrementAndProgress());
+                setProgress(bookContext.getProgress().incrementAndProgress());
 
                 if (Images.isImageFile(filePath)) {
-                    String fileName = filePath.getFileName().toString();
-                    String[] nameParts = fileName.split("\\.")[0].split("_");
-                    GooglePageInfo _page = (GooglePageInfo) this.bookContext.getBookInfo().getPages().getPageByPid(nameParts[1]);
-                    int order = Integer.valueOf(nameParts[0]);
+                    final String fileName = filePath.getFileName().toString();
+                    final String[] nameParts = fileName.split("\\.")[0].split("_");
+                    final GooglePageInfo _page = (GooglePageInfo) bookContext.getBookInfo().getPages().getPageByPid(nameParts[1]);
+                    final int order = Integer.valueOf(nameParts[0]);
                     if (null == _page) {
-                        this.logger.severe(String.format("Page %s not found!", fileName));
+                        logger.severe(String.format("Page %s not found!", fileName));
                         try {
                             Files.delete(filePath);
-                            this.logger.severe(String.format("Page %s deleted!", fileName));
-                        } catch (IOException e) {
+                            logger.severe(String.format("Page %s deleted!", fileName));
+                        } catch (final IOException e) {
                             e.printStackTrace();
                         }
                     } else {
                         try {
                             if (GBDOptions.reloadImages()) {
-                                BufferedImage bimg = ImageIO.read(new File(filePath.toString()));
+                                final BufferedImage bimg = ImageIO.read(new File(filePath.toString()));
                                 _page.setWidth(bimg.getWidth());
                                 _page.setDataProcessed(bimg.getWidth() >= imgWidth);
 
@@ -85,49 +85,49 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
                                 if ((double) bimg.getWidth() * 1.4 > (double) bimg.getHeight()) {
                                     Files.delete(filePath);
                                     _page.setDataProcessed(false);
-                                    this.logger.severe(String.format("Page %s deleted!", _page.getPid()));
+                                    logger.severe(String.format("Page %s deleted!", _page.getPid()));
                                 }
                             } else _page.setDataProcessed(true);
 
                             if (Images.isInvalidImage(filePath, imgWidth)) {
                                 _page.setDataProcessed(false);
                                 Files.delete(filePath);
-                                this.logger.severe(String.format("Page %s deleted!", _page.getPid()));
+                                logger.severe(String.format("Page %s deleted!", _page.getPid()));
                             } else if (_page.getOrder() != order && !_page.isGapPage()) {
-                                File oldFile = filePath.toFile();
-                                File newFile = new File(filePath.toString().replace(order + "_", _page.getOrder() + "_"));
+                                final File oldFile = filePath.toFile();
+                                final File newFile = new File(filePath.toString().replace(order + "_", _page.getOrder() + "_"));
                                 if (!newFile.exists())
                                     oldFile.renameTo(newFile);
                                 _page.setDataProcessed(true);
-                                this.logger.severe(String.format("Page %s renamed!", _page.getPid()));
+                                logger.severe(String.format("Page %s renamed!", _page.getPid()));
                             }
-                        } catch (IOException e) {
+                        } catch (final IOException e) {
                             // Значит файл с ошибкой
                             (new File(filePath.toString())).delete();
                             _page.setDataProcessed(false);
-                            this.logger.severe(String.format("Page %s deleted!", _page.getPid()));
+                            logger.severe(String.format("Page %s deleted!", _page.getPid()));
                         }
 
                         _page.setFileExists(true);
                     }
                 }
             });
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         } finally {
-            if (null != this.bookContext.getProgress()) this.bookContext.getProgress().finish();
+            if (null != bookContext.getProgress()) bookContext.getProgress().finish();
         }
 
-        this.bookContext.setPagesBefore(this.bookContext.getPagesStream().filter(IPage::isFileExists).count());
+        bookContext.setPagesBefore(bookContext.getPagesStream().filter(IPage::isFileExists).count());
     }
 
-    private void setProgress(int i) {
+    private void setProgress(final int i) {
     }
 
     @Override
     protected boolean preCheck() {
-        if (!Strings.isNullOrEmpty(((GoogleBookData) this.bookContext.getBookInfo().getBookData()).getFlags().getDownloadPdfUrl())) {
-            this.logger.severe("There is direct url to download book. DIY!");
+        if (!Strings.isNullOrEmpty(((GoogleBookData) bookContext.getBookInfo().getBookData()).getFlags().getDownloadPdfUrl())) {
+            logger.severe("There is direct url to download book. DIY!");
             return false;
         } else return true;
     }
@@ -135,11 +135,11 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
     @Override
     protected void prepareStorage() {
         super.prepareStorage();
-        this.bookContext.getBookInfo().getPages().build();
+        bookContext.getBookInfo().getPages().build();
     }
 
     @Override
-    public void newProxyEvent(HttpHostExt proxy) {
+    public void newProxyEvent(final HttpHostExt proxy) {
         if (null != proxy)
             (new Thread(new EventProcessor(proxy))).start();
     }
@@ -148,38 +148,38 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
 
         private final HttpHostExt proxy;
 
-        EventProcessor(HttpHostExt proxy) {
+        EventProcessor(final HttpHostExt proxy) {
             this.proxy = proxy;
         }
 
         @Override
         public void run() {
-            while (!GoogleImageExtractor.this.initComplete.get()) {
-                GoogleImageExtractor.this.waitingProxy.add(this.proxy);
+            while (!initComplete.get()) {
+                waitingProxy.add(proxy);
                 return;
             }
 
-            if (this.proxy.isAvailable()) GoogleImageExtractor.this.bookContext.sigExecutor.execute(new GooglePageSigProcessor(GoogleImageExtractor.this.bookContext, this.proxy));
+            if (proxy.isAvailable()) bookContext.sigExecutor.execute(new GooglePageSigProcessor(bookContext, proxy));
 
-            int proxyNeeded = ExecutionContext.getProxyCount() - GoogleImageExtractor.this.proxyReceived.incrementAndGet();
+            final int proxyNeeded = ExecutionContext.getProxyCount() - proxyReceived.incrementAndGet();
 
             if (0 >= proxyNeeded) {
-                if (!GoogleImageExtractor.this.processingStarted.compareAndSet(false, true)) return;
+                if (!processingStarted.compareAndSet(false, true)) return;
 
-                GoogleImageExtractor.this.bookContext.sigExecutor.terminate(10L, TimeUnit.MINUTES);
+                bookContext.sigExecutor.terminate(10L, TimeUnit.MINUTES);
 
-                GoogleImageExtractor.this.bookContext.getPagesStream().filter(page -> !page.isDataProcessed() && null != ((GooglePageInfo) page).getSig()).forEach(page -> GoogleImageExtractor.this.bookContext.imgExecutor.execute(new GooglePageImgProcessor(GoogleImageExtractor.this.bookContext, (GooglePageInfo) page, HttpHostExt.NO_PROXY)));
+                bookContext.getPagesStream().filter(page -> !page.isDataProcessed() && null != ((GooglePageInfo) page).getSig()).forEach(page -> bookContext.imgExecutor.execute(new GooglePageImgProcessor(bookContext, (GooglePageInfo) page, HttpHostExt.NO_PROXY)));
 
-                GoogleImageExtractor.this.bookContext.imgExecutor.terminate(10L, TimeUnit.MINUTES);
+                bookContext.imgExecutor.terminate(10L, TimeUnit.MINUTES);
 
-                GoogleImageExtractor.this.logger.info(GoogleImageExtractor.this.bookContext.getBookInfo().getPages().getMissingPagesList());
+                logger.info(bookContext.getBookInfo().getPages().getMissingPagesList());
 
-                long pagesAfter = GoogleImageExtractor.this.bookContext.getPagesStream().filter(pageInfo -> pageInfo.isDataProcessed()).count();
+                final long pagesAfter = bookContext.getPagesStream().filter(pageInfo -> pageInfo.isDataProcessed()).count();
 
-                GoogleImageExtractor.this.bookContext.setPagesProcessed(pagesAfter - GoogleImageExtractor.this.bookContext.getPagesBefore());
-                GoogleImageExtractor.this.logger.info(String.format("Processed %s pages", GoogleImageExtractor.this.bookContext.getPagesProcessed()));
+                bookContext.setPagesProcessed(pagesAfter - bookContext.getPagesBefore());
+                logger.info(String.format("Processed %s pages", bookContext.getPagesProcessed()));
 
-                ExecutionContext.INSTANCE.postProcessBook(GoogleImageExtractor.this.bookContext);
+                ExecutionContext.INSTANCE.postProcessBook(bookContext);
             }
         }
     }

@@ -40,20 +40,20 @@ public class DuplicatesProcessor implements IProcessor {
     private OneDriveProvider api;
 
     public List<DuplicatedBookDTO> findDuplicates() {
-        return this.getDuplicates().stream().map(this::createDuplicateDTO).collect(Collectors.toList());
+        return getDuplicates().stream().map(this::createDuplicateDTO).collect(Collectors.toList());
     }
 
     @Override
     public void process() {
-        DuplicatesProcessor.logger.info("Process duplicates started.");
+        logger.info("Process duplicates started.");
 
-        for (final BooksBySize duplicate : this.getDuplicates())
+        for (BooksBySize duplicate : getDuplicates())
             switch (duplicate.getFormat()) {
                 case DJVU:
                 case PDF:
-                    final List<Book> books = duplicate.getBookIds()
+                    List<Book> books = duplicate.getBookIds()
                             .stream()
-                            .map(id -> this.booksRepository.findById(id))
+                            .map(id -> booksRepository.findById(id))
                             .filter(Optional::isPresent)
                             .map(Optional::get)
                             .collect(Collectors.toList());
@@ -61,37 +61,37 @@ public class DuplicatesProcessor implements IProcessor {
                     if (books.size() < 2)
                         continue;
 
-                    final Book mainBook = books.get(0);
+                    Book mainBook = books.get(0);
 
-                    for (final Book book : books)
+                    for (Book book : books)
                         BookUtils.mergeCategories(book, mainBook);
 
-                    this.booksRepository.save(mainBook);
+                    booksRepository.save(mainBook);
 
-                    for (final Book book : books)
+                    for (Book book : books)
                         if (book == mainBook)
                             continue;
                         else {
-                            this.booksRepository.delete(book);
+                            booksRepository.delete(book);
                             try {
-                                final OneDriveItem bookItem = this.api.getItem(book.getBookInfo().getPath());
-                                this.api.delete(bookItem);
-                            } catch (final IOException e) {
-                                DuplicatesProcessor.logger.error(String.format("Failed delete OneDriveItem for %s : %s", mainBook.getBookInfo().getFileName(), e.getMessage()));
+                                OneDriveItem bookItem = api.getItem(book.getBookInfo().getPath());
+                                api.delete(bookItem);
+                            } catch (IOException e) {
+                                logger.error(String.format("Failed delete OneDriveItem for %s : %s", mainBook.getBookInfo().getFileName(), e.getMessage()));
                             }
                         }
 
-                    DuplicatesProcessor.logger.info(String.format("Duplicates for %s processed.", mainBook.getBookInfo().getFileName()));
+                    logger.info(String.format("Duplicates for %s processed.", mainBook.getBookInfo().getFileName()));
 
                     break;
                 default:
             }
 
-        DuplicatesProcessor.logger.info("Process duplicates finished.");
+        logger.info("Process duplicates finished.");
     }
 
     private List<BooksBySize> getDuplicates() {
-        TypedAggregation<Book> booksAggregation = Aggregation.newAggregation(Book.class,
+        final TypedAggregation<Book> booksAggregation = Aggregation.newAggregation(Book.class,
                 Aggregation.group("bookInfo.size", "bookInfo.format")
                         .addToSet("bookId").as("bookIds")
                         .count().as("count"),
@@ -100,14 +100,14 @@ public class DuplicatesProcessor implements IProcessor {
                 Aggregation.skip(0L)
         ).withOptions(new AggregationOptions(true, false, new Document("batchSize", 1000.0)));
 
-        AggregationResults<BooksBySize> results = this.mongoTemplate.aggregate(booksAggregation, BooksBySize.class);
+        final AggregationResults<BooksBySize> results = mongoTemplate.aggregate(booksAggregation, BooksBySize.class);
 
         return results.getMappedResults();
     }
 
-    private DuplicatedBookDTO createDuplicateDTO(BooksBySize book) {
-        DuplicatedBookDTO dto = new DuplicatedBookDTO(book);
-        dto.setBooks(book.getBookIds().stream().map(id -> new BookDTO(this.booksRepository.findById(id).get(), false)).collect(Collectors.toList()));
+    private DuplicatedBookDTO createDuplicateDTO(final BooksBySize book) {
+        final DuplicatedBookDTO dto = new DuplicatedBookDTO(book);
+        dto.setBooks(book.getBookIds().stream().map(id -> new BookDTO(booksRepository.findById(id).get(), false)).collect(Collectors.toList()));
 
         return dto;
     }

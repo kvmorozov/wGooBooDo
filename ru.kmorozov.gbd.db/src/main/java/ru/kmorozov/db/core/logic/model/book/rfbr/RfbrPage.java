@@ -7,7 +7,7 @@ public class RfbrPage extends AbstractPage {
     private final String bookId;
     private final int order;
 
-    public RfbrPage(final String bookId, final int order) {
+    public RfbrPage(String bookId, int order) {
         this.bookId = bookId;
         this.order = order;
     }
@@ -15,16 +15,16 @@ public class RfbrPage extends AbstractPage {
 
     @Override
     public String getPid() {
-        return String.valueOf(this.order);
+        return String.valueOf(order);
     }
 
     @Override
     public Integer getOrder() {
-        return this.order;
+        return order;
     }
 
     @Override
     public String getImgUrl() {
-        return String.format("http://www.rfbr.ru/rffi/djvu_page?objectId=%s&width=1000&page=%d", this.bookId, this.order);
+        return String.format("http://www.rfbr.ru/rffi/djvu_page?objectId=%s&width=1000&page=%d", bookId, order);
     }
 }

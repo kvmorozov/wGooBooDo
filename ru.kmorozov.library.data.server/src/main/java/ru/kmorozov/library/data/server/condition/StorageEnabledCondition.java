@@ -7,7 +7,7 @@ import org.springframework.core.type.AnnotatedTypeMetadata;
 public class StorageEnabledCondition implements Condition {
 
     @Override
-    public boolean matches(final ConditionContext conditionContext, final AnnotatedTypeMetadata annotatedTypeMetadata) {
+    public boolean matches(ConditionContext conditionContext, AnnotatedTypeMetadata annotatedTypeMetadata) {
         return Boolean.valueOf(conditionContext.getEnvironment().getProperty("rest.controllers.storage.enabled"));
     }
 }

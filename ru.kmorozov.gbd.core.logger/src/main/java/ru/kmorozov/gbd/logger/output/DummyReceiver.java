@@ -10,11 +10,11 @@ import ru.kmorozov.gbd.logger.model.ILoggableObject;
 public class DummyReceiver extends AbstractOutputReceiver {
 
     public DummyReceiver() {
-        this.addListener(new DummyLogEventListener());
+        addListener(new DummyLogEventListener());
     }
 
     @Override
-    public void receive(ILoggableObject bookInfo) {
+    public void receive(final ILoggableObject bookInfo) {
 
     }
 }

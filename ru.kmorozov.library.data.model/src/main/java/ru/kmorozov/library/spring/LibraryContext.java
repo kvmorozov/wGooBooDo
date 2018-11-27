@@ -11,6 +11,6 @@ public final class LibraryContext extends StaticApplicationContext {
     public static final LibraryContext LIBRARY_CONTEXT = new LibraryContext();
 
     private LibraryContext() {
-        this.registerSingleton("booksRepository", BooksRepository.class);
+        registerSingleton("booksRepository", BooksRepository.class);
     }
 }

@@ -13,16 +13,16 @@ public class CategoryDTO {
     public CategoryDTO() {
     }
 
-    public CategoryDTO(Category category) {
-        id = category.getId();
-        name = category.getName();
+    public CategoryDTO(final Category category) {
+        this.id = category.getId();
+        this.name = category.getName();
     }
 
     public String getId() {
-        return this.id;
+        return id;
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 }

@@ -22,10 +22,10 @@ public class BookInfo {
         final String ext;
 
         public String getExt() {
-            return this.ext;
+            return ext;
         }
 
-        BookFormat(String ext) {
+        BookFormat(final String ext) {
             this.ext = ext;
         }
     }
@@ -37,9 +37,9 @@ public class BookInfo {
 
     private String bookId;
 
-    private BookInfo.BookFormat format;
+    private BookFormat format;
 
-    private BookInfo.BookType bookType;
+    private BookType bookType;
 
     private String fileName;
 
@@ -53,70 +53,70 @@ public class BookInfo {
     private Map<String, String> customFields;
 
     public String getBookId() {
-        return bookId;
+        return this.bookId;
     }
 
-    public void setBookId(final String bookId) {
+    public void setBookId(String bookId) {
         this.bookId = bookId;
     }
 
-    public BookInfo.BookFormat getFormat() {
-        return this.format;
+    public BookFormat getFormat() {
+        return format;
     }
 
-    public void setFormat(BookInfo.BookFormat format) {
+    public void setFormat(final BookFormat format) {
         this.format = format;
     }
 
     public String getFileName() {
-        return this.fileName;
+        return fileName;
     }
 
-    public void setFileName(String fileName) {
+    public void setFileName(final String fileName) {
         this.fileName = fileName;
     }
 
     public String getPath() {
-        return this.path;
+        return path;
     }
 
-    public void setPath(String path) {
+    public void setPath(final String path) {
         this.path = path;
     }
 
     boolean isLink() {
-        return BookInfo.BookFormat.LNK == this.format;
+        return BookFormat.LNK == format;
     }
 
     public Date getLastModifiedDateTime() {
-        return this.lastModifiedDateTime;
+        return lastModifiedDateTime;
     }
 
-    public void setLastModifiedDateTime(Date lastModifiedDateTime) {
+    public void setLastModifiedDateTime(final Date lastModifiedDateTime) {
         this.lastModifiedDateTime = lastModifiedDateTime;
     }
 
     public long getSize() {
-        return this.size;
+        return size;
     }
 
-    public void setSize(long size) {
+    public void setSize(final long size) {
         this.size = size;
     }
 
-    public BookInfo.BookType getBookType() {
-        return bookType;
+    public BookType getBookType() {
+        return this.bookType;
     }
 
-    public void setBookType(final BookInfo.BookType bookType) {
+    public void setBookType(BookType bookType) {
         this.bookType = bookType;
     }
 
     public Map<String, String> getCustomFields() {
-        return customFields;
+        return this.customFields;
     }
 
-    public void setCustomFields(final Map<String, String> customFields) {
+    public void setCustomFields(Map<String, String> customFields) {
         if (this.customFields == null || this.customFields.isEmpty())
             this.customFields = customFields;
         else

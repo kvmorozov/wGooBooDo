@@ -15,55 +15,55 @@ public class OneDriveUrl extends GenericUrl {
     @Key("$skiptoken")
     private String token;
 
-    public OneDriveUrl(String encodedUrl) {
+    public OneDriveUrl(final String encodedUrl) {
         super(encodedUrl);
     }
 
     public static OneDriveUrl defaultDrive() {
-        return new OneDriveUrl(OneDriveUrl.rootUrl + "/drive");
+        return new OneDriveUrl(rootUrl + "/drive");
     }
 
     public static OneDriveUrl driveRoot() {
-        return new OneDriveUrl(OneDriveUrl.rootUrl + "/drive/root");
+        return new OneDriveUrl(rootUrl + "/drive/root");
     }
 
-    public static OneDriveUrl children(String id) {
-        return new OneDriveUrl(OneDriveUrl.rootUrl + "/drive/items/" + id + "/children");
+    public static OneDriveUrl children(final String id) {
+        return new OneDriveUrl(rootUrl + "/drive/items/" + id + "/children");
     }
 
-    public static OneDriveUrl putContent(String id, String name) {
-        return new OneDriveUrl(OneDriveUrl.rootUrl + "/drive/items/" + id + ":/" + OneDriveUrl.encode(name) + ":/content");
+    public static OneDriveUrl putContent(final String id, final String name) {
+        return new OneDriveUrl(rootUrl + "/drive/items/" + id + ":/" + encode(name) + ":/content");
     }
 
-    public static OneDriveUrl postMultiPart(String id) {
-        return new OneDriveUrl(OneDriveUrl.rootUrl + "/drive/items/" + id + "/children");
+    public static OneDriveUrl postMultiPart(final String id) {
+        return new OneDriveUrl(rootUrl + "/drive/items/" + id + "/children");
     }
 
-    public static OneDriveUrl createUploadSession(String id, String name) {
-        return new OneDriveUrl(OneDriveUrl.rootUrl + "/drive/items/" + id + ":/" + OneDriveUrl.encode(name) + ":/upload.createSession");
+    public static OneDriveUrl createUploadSession(final String id, final String name) {
+        return new OneDriveUrl(rootUrl + "/drive/items/" + id + ":/" + encode(name) + ":/upload.createSession");
     }
 
-    public static OneDriveUrl getPath(String path) {
-        return new OneDriveUrl(OneDriveUrl.rootUrl + "/drive/root:/" + OneDriveUrl.encode(path).replace("%5C", "/"));
+    public static OneDriveUrl getPath(final String path) {
+        return new OneDriveUrl(rootUrl + "/drive/root:/" + encode(path).replace("%5C", "/"));
     }
 
-    public static GenericUrl item(String id) {
-        return new OneDriveUrl(OneDriveUrl.rootUrl + "/drive/items/" + id);
+    public static GenericUrl item(final String id) {
+        return new OneDriveUrl(rootUrl + "/drive/items/" + id);
     }
 
-    public static GenericUrl content(String id) {
-        return new OneDriveUrl(OneDriveUrl.rootUrl + "/drive/items/" + id + "/content");
+    public static GenericUrl content(final String id) {
+        return new OneDriveUrl(rootUrl + "/drive/items/" + id + "/content");
     }
 
-    public static OneDriveUrl search(Drive drive, String query) {
-        return new OneDriveUrl(OneDriveUrl.rootUrl + "/drives/" + drive.getId() + "/root/search(q='{" + query + "}')");
+    public static OneDriveUrl search(final Drive drive, final String query) {
+        return new OneDriveUrl(rootUrl + "/drives/" + drive.getId() + "/root/search(q='{" + query + "}')");
     }
 
-    private static String encode(String url) {
+    private static String encode(final String url) {
         return URLEncoder.encode(url, StandardCharsets.UTF_8);
     }
 
-    public void setToken(String token) {
+    public void setToken(final String token) {
         this.token = token;
     }
 }

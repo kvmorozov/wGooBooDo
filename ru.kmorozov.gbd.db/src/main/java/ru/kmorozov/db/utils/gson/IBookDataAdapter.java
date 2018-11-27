@@ -13,14 +13,14 @@ import java.lang.reflect.Type;
 public class IBookDataAdapter implements JsonSerializer<IBookData>, JsonDeserializer<IBookData> {
 
     @Override
-    public IBookData deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        JsonObject jsonObject = json.getAsJsonObject();
+    public IBookData deserialize(final JsonElement json, final Type typeOfT, final JsonDeserializationContext context) throws JsonParseException {
+        final JsonObject jsonObject = json.getAsJsonObject();
 
         return context.deserialize(jsonObject, null == jsonObject.get("fullview") ? ShplBookData.class : GoogleBookData.class);
     }
 
     @Override
-    public JsonElement serialize(IBookData src, Type typeOfSrc, JsonSerializationContext context) {
+    public JsonElement serialize(final IBookData src, final Type typeOfSrc, final JsonSerializationContext context) {
         return context.serialize(src);
     }
 }

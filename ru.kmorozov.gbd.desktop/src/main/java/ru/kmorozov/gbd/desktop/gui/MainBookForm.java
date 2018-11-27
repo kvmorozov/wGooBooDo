@@ -14,7 +14,6 @@ import ru.kmorozov.gbd.logger.model.LogTableModel;
 import ru.kmorozov.gbd.pdf.PdfMaker;
 
 import javax.swing.*;
-import javax.swing.SwingWorker.StateValue;
 
 /**
  * Created by km on 05.12.2015.
@@ -32,85 +31,85 @@ public class MainBookForm {
     private SwingWorker workerExtractor, workerPdfmaker;
 
     public MainBookForm() {
-        if (null != MainBookForm.INSTANCE) return;
+        if (null != INSTANCE) return;
 
-        MainBookForm.INSTANCE = this;
+        INSTANCE = this;
 
         ExecutionContext.initContext(new SwingOutputReceiver(this), true);
 
-        this.tfRootOutDir.setText(SystemConfigs.getRootDir());
-        this.tfProxyListFile.setText(SystemConfigs.getProxyListFile());
-        this.tfBookId.setText(SystemConfigs.getLastBookId());
-        this.cbResolution.setModel(new DefaultComboBoxModel<>(Resolutions.values()));
-        this.cbReload.setSelected(SystemConfigs.getReload());
-        this.cbSecureMode.setSelected(SystemConfigs.getSecureMode());
+        tfRootOutDir.setText(SystemConfigs.getRootDir());
+        tfProxyListFile.setText(SystemConfigs.getProxyListFile());
+        tfBookId.setText(SystemConfigs.getLastBookId());
+        cbResolution.setModel(new DefaultComboBoxModel<>(Resolutions.values()));
+        cbReload.setSelected(SystemConfigs.getReload());
+        cbSecureMode.setSelected(SystemConfigs.getSecureMode());
 
         if (0 < SystemConfigs.getResolution())
-            this.cbResolution.setSelectedItem(Resolutions.getEnum(SystemConfigs.getResolution()));
+            cbResolution.setSelectedItem(Resolutions.getEnum(SystemConfigs.getResolution()));
 
-        this.bRootOutDir.addActionListener(e -> {
-            JFileChooser fcRootDir = new JFileChooser();
+        bRootOutDir.addActionListener(e -> {
+            final JFileChooser fcRootDir = new JFileChooser();
             fcRootDir.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            int returnVal = fcRootDir.showOpenDialog(this.mainPanel);
+            final int returnVal = fcRootDir.showOpenDialog(mainPanel);
             if (JFileChooser.APPROVE_OPTION == returnVal) {
-                this.tfRootOutDir.setText(fcRootDir.getSelectedFile().getAbsolutePath());
+                tfRootOutDir.setText(fcRootDir.getSelectedFile().getAbsolutePath());
                 SystemConfigs.setRootDir(fcRootDir.getSelectedFile().getAbsolutePath());
             }
         });
 
-        this.bProxyList.addActionListener(e -> {
-            JFileChooser fcProxyList = new JFileChooser();
+        bProxyList.addActionListener(e -> {
+            final JFileChooser fcProxyList = new JFileChooser();
             fcProxyList.setFileSelectionMode(JFileChooser.FILES_ONLY);
-            int returnVal = fcProxyList.showOpenDialog(this.mainPanel);
+            final int returnVal = fcProxyList.showOpenDialog(mainPanel);
             if (JFileChooser.APPROVE_OPTION == returnVal) {
-                this.tfProxyListFile.setText(fcProxyList.getSelectedFile().getAbsolutePath());
+                tfProxyListFile.setText(fcProxyList.getSelectedFile().getAbsolutePath());
                 SystemConfigs.setProxyListFile(fcProxyList.getSelectedFile().getAbsolutePath());
             }
         });
 
-        this.bLoad.addActionListener(e -> {
-            SystemConfigs.setLastBookId(this.tfBookId.getText());
-            this.bLoad.setEnabled(false);
-            this.bMakeBook.setEnabled(false);
+        bLoad.addActionListener(e -> {
+            SystemConfigs.setLastBookId(tfBookId.getText());
+            bLoad.setEnabled(false);
+            bMakeBook.setEnabled(false);
 
 
-            ExecutionContext.INSTANCE.addBookContext(new SingleBookProducer(this.tfBookId.getText()), new ProcessStatus(), new PdfMaker());
-            this.workerExtractor = new ImageExtractorWorker(new GoogleImageExtractor(ExecutionContext.INSTANCE.getContexts(false).get(0))) {
+            ExecutionContext.INSTANCE.addBookContext(new SingleBookProducer(tfBookId.getText()), new ProcessStatus(), new PdfMaker());
+            workerExtractor = new ImageExtractorWorker(new GoogleImageExtractor(ExecutionContext.INSTANCE.getContexts(false).get(0))) {
 
                 @Override
                 public void done() {
-                    MainBookForm.this.bLoad.setEnabled(true);
-                    MainBookForm.this.bMakeBook.setEnabled(true);
+                    bLoad.setEnabled(true);
+                    bMakeBook.setEnabled(true);
                 }
             };
 
-            this.workerExtractor.addPropertyChangeListener(event -> {
+            workerExtractor.addPropertyChangeListener(event -> {
                 if ("progress".equals(event.getPropertyName()) && event.getSource() instanceof AbstractEventSource) {
-                    ProcessStatus status = (ProcessStatus) ((IEventSource) event.getSource()).getProcessStatus();
+                    final ProcessStatus status = (ProcessStatus) ((IEventSource) event.getSource()).getProcessStatus();
                     status.getProgressBar().setValue(status.get());
                 }
             });
 
-            this.workerExtractor.execute();
+            workerExtractor.execute();
         });
 
-        this.cbResolution.addItemListener(event -> SystemConfigs.setResolution(((Resolutions) event.getItem()).getResolution()));
-        this.cbReload.addChangeListener(event -> SystemConfigs.setReload(((AbstractButton) event.getSource()).getModel().isSelected()));
+        cbResolution.addItemListener(event -> SystemConfigs.setResolution(((Resolutions) event.getItem()).getResolution()));
+        cbReload.addChangeListener(event -> SystemConfigs.setReload(((AbstractButton) event.getSource()).getModel().isSelected()));
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            if (null != this.workerExtractor && StateValue.STARTED == this.workerExtractor.getState())
-                this.workerExtractor.cancel(true);
+            if (null != workerExtractor && SwingWorker.StateValue.STARTED == workerExtractor.getState())
+                workerExtractor.cancel(true);
         }));
 
-        this.bMakeBook.addActionListener(e -> {
-            this.bLoad.setEnabled(false);
-            this.bMakeBook.setEnabled(false);
+        bMakeBook.addActionListener(e -> {
+            bLoad.setEnabled(false);
+            bMakeBook.setEnabled(false);
 
-            this.workerPdfmaker = new SwingWorker<Void, Void>() {
+            workerPdfmaker = new SwingWorker<Void, Void>() {
 
                 @Override
                 protected Void doInBackground() {
-                    ExecutionContext.INSTANCE.addBookContext(new SingleBookProducer(MainBookForm.this.tfBookId.getText()), new ProcessStatus(), new PdfMaker());
+                    ExecutionContext.INSTANCE.addBookContext(new SingleBookProducer(tfBookId.getText()), new ProcessStatus(), new PdfMaker());
                     (new PdfMaker(ExecutionContext.INSTANCE.getContexts(false).get(0))).make();
 
                     return null;
@@ -118,32 +117,32 @@ public class MainBookForm {
 
                 @Override
                 public void done() {
-                    MainBookForm.this.bLoad.setEnabled(true);
-                    MainBookForm.this.bMakeBook.setEnabled(true);
+                    bLoad.setEnabled(true);
+                    bMakeBook.setEnabled(true);
                 }
             };
 
-            this.workerPdfmaker.execute();
+            workerPdfmaker.execute();
         });
 
-        this.tLog.setModel(LogTableModel.INSTANCE);
-        this.tLog.getColumnModel().getColumn(0).setCellRenderer(new LogIconColumnRenderer());
-        this.tLog.getColumnModel().getColumn(0).setMaxWidth(20);
+        tLog.setModel(LogTableModel.INSTANCE);
+        tLog.getColumnModel().getColumn(0).setCellRenderer(new LogIconColumnRenderer());
+        tLog.getColumnModel().getColumn(0).setMaxWidth(20);
     }
 
     public static MainBookForm getINSTANCE() {
-        return MainBookForm.INSTANCE;
+        return INSTANCE;
     }
 
     public JPanel getMainPanel() {
-        return this.mainPanel;
+        return mainPanel;
     }
 
     public JTextField getTfBookTitle() {
-        return this.tfBookTitle;
+        return tfBookTitle;
     }
 
     public JPanel getProgressPanel() {
-        return this.pProgress;
+        return pProgress;
     }
 }

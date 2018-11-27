@@ -2,6 +2,7 @@ package ru.kmorozov.library.data.model.dto;
 
 import ru.kmorozov.library.data.model.book.Book;
 import ru.kmorozov.library.data.model.book.BookInfo;
+import ru.kmorozov.library.data.model.book.BookInfo.BookFormat;
 import ru.kmorozov.library.utils.BookUtils;
 
 /**
@@ -10,75 +11,75 @@ import ru.kmorozov.library.utils.BookUtils;
 public class BookDTO {
 
     private String id;
-    private BookInfo.BookFormat format;
+    private BookFormat format;
     private String title, path, localPath, size;
     private boolean loaded;
 
     public BookDTO() {
     }
 
-    public BookDTO(Book book, boolean loaded) {
-        id = book.getBookId();
-        format = book.getBookInfo().getFormat();
-        title = null == book.getTitle() ? book.getBookInfo().getFileName() : book.getTitle();
-        localPath = book.getBookInfo().getFileName();
+    public BookDTO(final Book book, final boolean loaded) {
+        this.id = book.getBookId();
+        this.format = book.getBookInfo().getFormat();
+        this.title = null == book.getTitle() ? book.getBookInfo().getFileName() : book.getTitle();
+        this.localPath = book.getBookInfo().getFileName();
         this.loaded = loaded;
-        size = BookUtils.humanReadableByteCount(book.getBookInfo().getSize(), true);
+        this.size = BookUtils.humanReadableByteCount(book.getBookInfo().getSize(), true);
     }
 
     public String getId() {
-        return this.id;
+        return id;
     }
 
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
-    public BookInfo.BookFormat getFormat() {
-        return this.format;
+    public BookFormat getFormat() {
+        return format;
     }
 
     public String getTitle() {
-        return this.title;
+        return title;
     }
 
     public String getPath() {
-        return this.path;
+        return path;
     }
 
-    public void setPath(String path) {
+    public void setPath(final String path) {
         this.path = path;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
         this.title = title;
     }
 
     public String getLocalPath() {
-        return this.localPath;
+        return localPath;
     }
 
-    public void setFormat(BookInfo.BookFormat format) {
+    public void setFormat(final BookFormat format) {
         this.format = format;
     }
 
-    public void setLocalPath(String localPath) {
+    public void setLocalPath(final String localPath) {
         this.localPath = localPath;
     }
 
     public boolean isLoaded() {
-        return this.loaded;
+        return loaded;
     }
 
-    public void setLoaded(boolean loaded) {
+    public void setLoaded(final boolean loaded) {
         this.loaded = loaded;
     }
 
     public String getSize() {
-        return this.size;
+        return size;
     }
 
-    public void setSize(String size) {
+    public void setSize(final String size) {
         this.size = size;
     }
 }

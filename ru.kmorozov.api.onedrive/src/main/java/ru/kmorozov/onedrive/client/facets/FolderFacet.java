@@ -8,6 +8,6 @@ public class FolderFacet {
     private long childCount;
 
     public long getChildCount() {
-        return this.childCount;
+        return childCount;
     }
 }

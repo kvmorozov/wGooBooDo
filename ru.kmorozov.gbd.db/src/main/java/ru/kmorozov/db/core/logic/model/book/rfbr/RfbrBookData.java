@@ -6,17 +6,17 @@ public class RfbrBookData implements IBookData {
 
     private final String bookId;
 
-    public RfbrBookData(final String bookId) {
+    public RfbrBookData(String bookId) {
         this.bookId = bookId;
     }
 
     @Override
     public String getTitle() {
-        return this.bookId;
+        return bookId;
     }
 
     @Override
     public String getVolumeId() {
-        return this.bookId;
+        return bookId;
     }
 }

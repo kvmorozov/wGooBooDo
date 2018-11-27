@@ -21,7 +21,7 @@ public class DirContextLoader implements IContextLoader {
     private final Map<String, BookInfo> booksInfo = new HashMap<>();
 
     public DirContextLoader() {
-        this.initContext();
+        initContext();
     }
 
     protected String getLoadedFileName() {
@@ -40,51 +40,51 @@ public class DirContextLoader implements IContextLoader {
         if (ExecutionContext.INSTANCE == null)
             return;
 
-        List<BookInfo> runtimeBooksInfo = ExecutionContext.INSTANCE.getContexts(false).stream().map(BookContext::getBookInfo).collect(Collectors.toList());
-        for (BookInfo bookInfo : runtimeBooksInfo)
-            this.booksInfo.put(bookInfo.getBookId(), bookInfo);
+        final List<BookInfo> runtimeBooksInfo = ExecutionContext.INSTANCE.getContexts(false).stream().map(BookContext::getBookInfo).collect(Collectors.toList());
+        for (final BookInfo bookInfo : runtimeBooksInfo)
+            booksInfo.put(bookInfo.getBookId(), bookInfo);
 
-        this.getIndex(true).updateIndex((new ArrayList<>(this.booksInfo.values())));
+        getIndex(true).updateIndex((new ArrayList<>(booksInfo.values())));
     }
 
     @Override
-    public void updateBookInfo(final BookInfo bookInfo) {
+    public void updateBookInfo(BookInfo bookInfo) {
         throw new UnsupportedOperationException();
     }
 
     private void initContext() {
         if (!GBDOptions.isValidConfig()) return;
 
-        this.refreshContext();
+        refreshContext();
     }
 
-    public BookInfo getBookInfo(String bookId) {
-        return this.booksInfo.get(bookId);
+    public BookInfo getBookInfo(final String bookId) {
+        return booksInfo.get(bookId);
     }
 
     @Override
     public Set<String> getBookIdsList() {
-        return this.booksInfo.isEmpty() ? new HashSet<>() : this.booksInfo.keySet();
+        return booksInfo.isEmpty() ? new HashSet<>() : booksInfo.keySet();
     }
 
     public Iterable<BookInfo> getBooks() {
-        return this.booksInfo.values();
+        return booksInfo.values();
     }
 
     public int getContextSize() {
-        return this.booksInfo.size();
+        return booksInfo.size();
     }
 
     public void refreshContext() {
-        IIndex index = this.getIndex(false);
+        final IIndex index = getIndex(false);
         if (null == index) return;
 
-        IBookInfo[] ctxObjArr = index.getBooks();
+        final IBookInfo[] ctxObjArr = index.getBooks();
 
-        for (Object ctxObj : ctxObjArr)
+        for (final Object ctxObj : ctxObjArr)
             if (ctxObj instanceof BookInfo) {
-                BookInfo bookInfo = (BookInfo) ctxObj;
-                this.booksInfo.put(bookInfo.getBookId(), bookInfo);
+                final BookInfo bookInfo = (BookInfo) ctxObj;
+                booksInfo.put(bookInfo.getBookId(), bookInfo);
             }
     }
 
@@ -93,9 +93,9 @@ public class DirContextLoader implements IContextLoader {
         return GBDOptions.isValidConfig();
     }
 
-    protected IIndex getIndex(boolean createIfNotExists) {
+    protected IIndex getIndex(final boolean createIfNotExists) {
         if (!GBDOptions.isValidConfig()) return null;
 
-        return GBDOptions.getStorage().getIndex(this.getLoadedFileName(), createIfNotExists);
+        return GBDOptions.getStorage().getIndex(getLoadedFileName(), createIfNotExists);
     }
 }

@@ -22,34 +22,34 @@ public class Authorisation {
     private String errorDescription;
 
     public String getTokenType() {
-        return this.tokenType;
+        return tokenType;
     }
 
     public int getExpiresIn() {
-        return this.expiresIn;
+        return expiresIn;
     }
 
     public String getScope() {
-        return this.scope;
+        return scope;
     }
 
     public String getAccessToken() {
-        return this.accessToken;
+        return accessToken;
     }
 
     public String getRefreshToken() {
-        return this.refreshToken;
+        return refreshToken;
     }
 
     public String getUserId() {
-        return this.userId;
+        return userId;
     }
 
     public String getError() {
-        return this.error;
+        return error;
     }
 
     public String getErrorDescription() {
-        return this.errorDescription;
+        return errorDescription;
     }
 }

@@ -12,15 +12,15 @@ import java.util.stream.Collectors;
 public class WebProxyListProvider extends AbstractProxyListProvider {
 
     public WebProxyListProvider() {
-        this.buildList();
+        buildList();
     }
 
     private void buildList() {
-        List<String> candidateProxies = (new SslProxiesListProvider()).getProxyList();
+        final List<String> candidateProxies = (new SslProxiesListProvider()).getProxyList();
         candidateProxies.addAll((new SslProxiesListProvider()).getProxyList());
 
-        proxyItems = candidateProxies.stream().filter(AbstractProxyListProvider::notBlacklisted).limit(20L).collect(Collectors.toSet());
-        proxyItems.addAll(ProxyBlacklistHolder.BLACKLIST.getWhiteList());
+        this.proxyItems = candidateProxies.stream().filter(AbstractProxyListProvider::notBlacklisted).limit(20L).collect(Collectors.toSet());
+        this.proxyItems.addAll(ProxyBlacklistHolder.BLACKLIST.getWhiteList());
     }
 
     @Override

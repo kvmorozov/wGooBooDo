@@ -7,7 +7,7 @@ import ru.kmorozov.onedrive.filesystem.FileSystemProvider;
 import ru.kmorozov.onedrive.CommandLineOpts;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ru.kmorozov.onedrive.filesystem.FileSystemProvider.FileMatch;
+import ru.kmorozov.onedrive.tasks.Task.TaskOptions;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +20,7 @@ public class CheckTask extends Task {
     private final OneDriveItem remoteFile;
     private final File localFile;
 
-    public CheckTask(Task.TaskOptions options, OneDriveItem remoteFile, File localFile) {
+    public CheckTask(final TaskOptions options, final OneDriveItem remoteFile, final File localFile) {
         super(options);
         this.remoteFile = Preconditions.checkNotNull(remoteFile);
         this.localFile = Preconditions.checkNotNull(localFile);
@@ -32,59 +32,59 @@ public class CheckTask extends Task {
 
     @Override
     public String toString() {
-        return String.format("Checking %s %s", this.remoteFile.isDirectory() ? "folder" : "file", this.remoteFile.getFullName());
+        return String.format("Checking %s %s", remoteFile.isDirectory() ? "folder" : "file", remoteFile.getFullName());
     }
 
     @Override
     protected void taskBody() throws IOException {
 
-        if (this.localFile.isDirectory() && this.remoteFile.isDirectory()) { // If we are syncing folders
+        if (localFile.isDirectory() && remoteFile.isDirectory()) { // If we are syncing folders
 
             // Verify the timestamps
-            FileMatch match = this.fileSystem.verifyMatch(
-                    this.localFile,
-                    this.remoteFile.getCreatedDateTime(),
-                    this.remoteFile.getLastModifiedDateTime());
+            final FileSystemProvider.FileMatch match = fileSystem.verifyMatch(
+                    localFile,
+                    remoteFile.getCreatedDateTime(),
+                    remoteFile.getLastModifiedDateTime());
 
-            if (FileMatch.NO == match) {
-                this.queue.add(new UpdatePropertiesTask(this.getTaskOptions(), this.remoteFile, this.localFile));
+            if (FileSystemProvider.FileMatch.NO == match) {
+                queue.add(new UpdatePropertiesTask(getTaskOptions(), remoteFile, localFile));
             }
 
-            OneDriveItem[] remoteFiles = this.api.getChildren(this.remoteFile);
+            final OneDriveItem[] remoteFiles = api.getChildren(remoteFile);
 
             // Index the local files
-            Map<String, File> localFileCache = Maps.newHashMap();
+            final Map<String, File> localFileCache = Maps.newHashMap();
 
-            File[] files = this.localFile.listFiles();
+            final File[] files = localFile.listFiles();
             if (null == files) {
-                CheckTask.log.warn("Unable to recurse into local directory " + this.localFile.getPath());
-                this.reporter.skipped();
+                log.warn("Unable to recurse into local directory " + localFile.getPath());
+                reporter.skipped();
                 return;
             }
 
-            for (File file : files) {
+            for (final File file : files) {
                 localFileCache.put(file.getName(), file);
             }
 
             // Iterate over all the remote files
-            for (OneDriveItem remoteFile : remoteFiles) {
+            for (final OneDriveItem remoteFile : remoteFiles) {
 
                 if (remoteFile.isDirectory() && !CommandLineOpts.getCommandLineOpts().isRecursive()) {
                     continue;
                 }
 
-                File localFile = localFileCache.remove(remoteFile.getName());
-                this.processChild(remoteFile, localFile);
+                final File localFile = localFileCache.remove(remoteFile.getName());
+                processChild(remoteFile, localFile);
             }
 
             // Iterate over any local files we've not matched yet
-            for (File localFile : localFileCache.values()) {
+            for (final File localFile : localFileCache.values()) {
 
                 if (localFile.isDirectory() && !CommandLineOpts.getCommandLineOpts().isRecursive()) {
                     continue;
                 }
 
-                this.processChild(null, localFile);
+                processChild(null, localFile);
             }
 
             return;
@@ -94,58 +94,58 @@ public class CheckTask extends Task {
         // Skip if the file size is too big or if the file is ignored
         switch (CommandLineOpts.getCommandLineOpts().getDirection()) {
             case UP:
-                if (Task.isSizeInvalid(this.localFile) || Task.isIgnored(this.localFile)) {
-                    this.reporter.skipped();
+                if (Task.isSizeInvalid(localFile) || Task.isIgnored(localFile)) {
+                    reporter.skipped();
                     return;
                 }
                 break;
             case DOWN:
-                if (Task.isSizeInvalid(this.remoteFile) || Task.isIgnored(this.remoteFile)) {
-                    this.reporter.skipped();
+                if (Task.isSizeInvalid(remoteFile) || Task.isIgnored(remoteFile)) {
+                    reporter.skipped();
                     return;
                 }
                 break;
         }
 
-        if (this.localFile.isFile() && !this.remoteFile.isDirectory()) { // If we are syncing files
+        if (localFile.isFile() && !remoteFile.isDirectory()) { // If we are syncing files
 
             // Check if the remote file matches the local file
-            FileMatch match = this.fileSystem.verifyMatch(
-                    this.localFile, this.remoteFile.getCrc32(),
-                    this.remoteFile.getSize(),
-                    this.remoteFile.getCreatedDateTime(),
-                    this.remoteFile.getLastModifiedDateTime());
+            final FileSystemProvider.FileMatch match = fileSystem.verifyMatch(
+                    localFile, remoteFile.getCrc32(),
+                    remoteFile.getSize(),
+                    remoteFile.getCreatedDateTime(),
+                    remoteFile.getLastModifiedDateTime());
 
             switch (match) {
                 case NO:
                     switch (CommandLineOpts.getCommandLineOpts().getDirection()) {
                         case UP:
-                            this.queue.add(new UploadTask(this.getTaskOptions(), this.remoteFile.getParent(), this.localFile, true));
+                            queue.add(new UploadTask(getTaskOptions(), remoteFile.getParent(), localFile, true));
                             break;
                         case DOWN:
-                            this.queue.add(new DownloadTask(this.getTaskOptions(), this.localFile.getParentFile(), this.remoteFile, true));
+                            queue.add(new DownloadTask(getTaskOptions(), localFile.getParentFile(), remoteFile, true));
                             break;
                         default:
                             throw new IllegalStateException("Unsupported direction " + CommandLineOpts.getCommandLineOpts().getDirection());
                     }
                     break;
                 case CRC:
-                    this.queue.add(new UpdatePropertiesTask(this.getTaskOptions(), this.remoteFile, this.localFile));
+                    queue.add(new UpdatePropertiesTask(getTaskOptions(), remoteFile, localFile));
                     break;
                 case YES:
-                    this.reporter.same();
+                    reporter.same();
                     break;
             }
 
         } else { // Resolve cases where remote and local disagree over whether the item is a file or folder
             switch (CommandLineOpts.getCommandLineOpts().getDirection()) {
                 case UP:
-                    new DeleteTask(this.getTaskOptions(), this.remoteFile).taskBody(); // Execute immediately
-                    this.queue.add(new UploadTask(this.getTaskOptions(), this.remoteFile.getParent(), this.localFile, true));
+                    new DeleteTask(getTaskOptions(), remoteFile).taskBody(); // Execute immediately
+                    queue.add(new UploadTask(getTaskOptions(), remoteFile.getParent(), localFile, true));
                     break;
                 case DOWN:
-                    new DeleteTask(this.getTaskOptions(), this.localFile).taskBody(); // Execute immediately
-                    this.queue.add(new DownloadTask(this.getTaskOptions(), this.localFile.getParentFile(), this.remoteFile, true));
+                    new DeleteTask(getTaskOptions(), localFile).taskBody(); // Execute immediately
+                    queue.add(new DownloadTask(getTaskOptions(), localFile.getParentFile(), remoteFile, true));
                     break;
                 default:
                     throw new IllegalStateException("Unsupported direction " + CommandLineOpts.getCommandLineOpts().getDirection());
@@ -153,28 +153,28 @@ public class CheckTask extends Task {
         }
     }
 
-    private void processChild(OneDriveItem remoteFile, File localFile) {
+    private void processChild(final OneDriveItem remoteFile, final File localFile) {
 
         if (null == remoteFile && null == localFile) {
             throw new IllegalArgumentException("Must specify at least one file");
         }
 
         if (null != remoteFile && Task.isIgnored(remoteFile) || null != localFile && Task.isIgnored((localFile))) {
-            this.reporter.skipped();
+            reporter.skipped();
             return;
         }
 
-        boolean remoteOnly = null == localFile;
-        boolean localOnly = null == remoteFile;
+        final boolean remoteOnly = null == localFile;
+        final boolean localOnly = null == remoteFile;
 
         // Case 1: We only have the file remotely
         if (remoteOnly) {
             switch (CommandLineOpts.getCommandLineOpts().getDirection()) {
                 case UP:
-                    this.queue.add(new DeleteTask(this.getTaskOptions(), remoteFile));
+                    queue.add(new DeleteTask(getTaskOptions(), remoteFile));
                     break;
                 case DOWN:
-                    this.queue.add(new DownloadTask(this.getTaskOptions(), this.localFile, remoteFile, false));
+                    queue.add(new DownloadTask(getTaskOptions(), this.localFile, remoteFile, false));
                     break;
                 default:
                     throw new IllegalStateException("Unsupported direction " + CommandLineOpts.getCommandLineOpts().getDirection());
@@ -185,10 +185,10 @@ public class CheckTask extends Task {
         else if (localOnly) {
             switch (CommandLineOpts.getCommandLineOpts().getDirection()) {
                 case UP:
-                    this.queue.add(new UploadTask(this.getTaskOptions(), this.remoteFile, localFile, false));
+                    queue.add(new UploadTask(getTaskOptions(), this.remoteFile, localFile, false));
                     break;
                 case DOWN:
-                    this.queue.add(new DeleteTask(this.getTaskOptions(), localFile));
+                    queue.add(new DeleteTask(getTaskOptions(), localFile));
                     break;
                 default:
                     throw new IllegalStateException("Unsupported direction " + CommandLineOpts.getCommandLineOpts().getDirection());
@@ -197,7 +197,7 @@ public class CheckTask extends Task {
 
         // Case 3: We have the file in both locations
         else {
-            this.queue.add(new CheckTask(this.getTaskOptions(), remoteFile, localFile));
+            queue.add(new CheckTask(getTaskOptions(), remoteFile, localFile));
         }
     }
 }

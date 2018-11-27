@@ -28,121 +28,121 @@ public class CommandLineOptions implements IGBDOptions {
 
     private CommandLine commandLine;
 
-    public CommandLineOptions(String[] commandLineArguments) {
-        CommandLineParser cmdLineParser = new DefaultParser();
-        Options options = new Options();
+    public CommandLineOptions(final String[] commandLineArguments) {
+        final CommandLineParser cmdLineParser = new DefaultParser();
+        final Options options = new Options();
 
-        Option option = new Option(CommandLineOptions.OPTION_BOOKID_SHORT, CommandLineOptions.OPTION_BOOKID_LONG, true, "Book Id");
+        Option option = new Option(OPTION_BOOKID_SHORT, OPTION_BOOKID_LONG, true, "Book Id");
         option.setArgs(1);
         option.setOptionalArg(false);
         option.setArgName("BookId ");
         options.addOption(option);
 
-        option = new Option(CommandLineOptions.OPTION_OUTDIR_SHORT, CommandLineOptions.OPTION_OUTDIR_LONG, true, "output dir");
+        option = new Option(OPTION_OUTDIR_SHORT, OPTION_OUTDIR_LONG, true, "output dir");
         option.setArgs(1);
         option.setOptionalArg(false);
         option.setArgName("output directory ");
         options.addOption(option);
 
-        option = new Option(CommandLineOptions.OPTION_PROXY_FILE_SHORT, CommandLineOptions.OPTION_PROXY_FILE_LONG, true, "Proxy list file");
+        option = new Option(OPTION_PROXY_FILE_SHORT, OPTION_PROXY_FILE_LONG, true, "Proxy list file");
         option.setArgs(1);
         option.setOptionalArg(false);
         option.setArgName("proxy options ");
         options.addOption(option);
 
-        option = new Option(CommandLineOptions.OPTION_WIDTH_SHORT, CommandLineOptions.OPTION_WIDTH_LONG, true, "Width");
+        option = new Option(OPTION_WIDTH_SHORT, OPTION_WIDTH_LONG, true, "Width");
         option.setArgs(1);
         option.setOptionalArg(true);
         option.setArgName("Width ");
         options.addOption(option);
 
-        option = new Option(CommandLineOptions.OPTION_IMG_RELOAD_SHORT, CommandLineOptions.OPTION_IMG_RELOAD_LONG, true, "Reload images");
+        option = new Option(OPTION_IMG_RELOAD_SHORT, OPTION_IMG_RELOAD_LONG, true, "Reload images");
         option.setArgs(0);
         option.setOptionalArg(true);
         option.setArgName("Reload images ");
         options.addOption(option);
 
-        option = new Option(CommandLineOptions.OPTION_SECURE_MODE_SHORT, CommandLineOptions.OPTION_SECURE_MODE_LONG, true, "Secure mode");
+        option = new Option(OPTION_SECURE_MODE_SHORT, OPTION_SECURE_MODE_LONG, true, "Secure mode");
         option.setArgs(0);
         option.setOptionalArg(true);
         option.setArgName("Secure mode ");
         options.addOption(option);
 
-        option = new Option(CommandLineOptions.OPTION_PDF_MODE_SHORT, CommandLineOptions.OPTION_PDF_MODE_LONG, true, "Pdf mode");
+        option = new Option(OPTION_PDF_MODE_SHORT, OPTION_PDF_MODE_LONG, true, "Pdf mode");
         option.setArgs(1);
         option.setOptionalArg(true);
         option.setArgName("Pdf mode ");
         options.addOption(option);
 
-        option = new Option(CommandLineOptions.OPTION_CTX_MODE_SHORT, CommandLineOptions.OPTION_CTX_MODE_LONG, true, "CTX mode");
+        option = new Option(OPTION_CTX_MODE_SHORT, OPTION_CTX_MODE_LONG, true, "CTX mode");
         option.setArgs(2);
         option.setOptionalArg(true);
         option.setArgName("CTX mode ");
         options.addOption(option);
 
         try {
-            this.commandLine = cmdLineParser.parse(options, commandLineArguments);
-        } catch (ParseException e) {
+            commandLine = cmdLineParser.parse(options, commandLineArguments);
+        } catch (final ParseException e) {
             e.printStackTrace();
         }
     }
 
-    private String getStringOptionValue(String optionName) {
-        return this.commandLine.hasOption(optionName) && null != this.commandLine.getOptionValues(optionName) && 1 == this.commandLine.getOptionValues(optionName).length
-                ? this.commandLine.getOptionValues(optionName)[0] : null;
+    private String getStringOptionValue(final String optionName) {
+        return commandLine.hasOption(optionName) && null != commandLine.getOptionValues(optionName) && 1 == commandLine.getOptionValues(optionName).length
+                ? commandLine.getOptionValues(optionName)[0] : null;
     }
 
-    private String[] getStringOptionValues(String optionName) {
-        return this.commandLine.hasOption(optionName) && null != this.commandLine.getOptionValues(optionName)
-                ? this.commandLine.getOptionValues(optionName) : null;
+    private String[] getStringOptionValues(final String optionName) {
+        return commandLine.hasOption(optionName) && null != commandLine.getOptionValues(optionName)
+                ? commandLine.getOptionValues(optionName) : null;
     }
 
-    private int getIntOptionValue(String optionName) {
-        return this.commandLine.hasOption(optionName) && 1 == this.commandLine.getOptionValues(optionName).length ? Integer.parseInt(this.commandLine.getOptionValues(optionName)[0]) : 0;
+    private int getIntOptionValue(final String optionName) {
+        return commandLine.hasOption(optionName) && 1 == commandLine.getOptionValues(optionName).length ? Integer.parseInt(commandLine.getOptionValues(optionName)[0]) : 0;
     }
 
-    private boolean getBoolOptionValue(String optionName) {
-        return this.commandLine.hasOption(optionName);
+    private boolean getBoolOptionValue(final String optionName) {
+        return commandLine.hasOption(optionName);
     }
 
     @Override
     public String getBookId() {
-        return this.getStringOptionValue(CommandLineOptions.OPTION_BOOKID_SHORT);
+        return getStringOptionValue(OPTION_BOOKID_SHORT);
     }
 
     @Override
     public IStorage getStorage() {
-        return new LocalFSStorage(this.getStringOptionValue(CommandLineOptions.OPTION_OUTDIR_SHORT));
+        return new LocalFSStorage(getStringOptionValue(OPTION_OUTDIR_SHORT));
     }
 
     @Override
     public String getProxyListFile() {
-        return this.getStringOptionValue(CommandLineOptions.OPTION_PROXY_FILE_SHORT);
+        return getStringOptionValue(OPTION_PROXY_FILE_SHORT);
     }
 
     @Override
     public int getImageWidth() {
-        return this.getIntOptionValue(CommandLineOptions.OPTION_WIDTH_SHORT);
+        return getIntOptionValue(OPTION_WIDTH_SHORT);
     }
 
     @Override
     public boolean reloadImages() {
-        return this.getBoolOptionValue(CommandLineOptions.OPTION_IMG_RELOAD_SHORT);
+        return getBoolOptionValue(OPTION_IMG_RELOAD_SHORT);
     }
 
     @Override
     public boolean secureMode() {
-        return this.getBoolOptionValue(CommandLineOptions.OPTION_SECURE_MODE_SHORT);
+        return getBoolOptionValue(OPTION_SECURE_MODE_SHORT);
     }
 
     @Override
     public String pdfOptions() {
-        return this.getStringOptionValue(CommandLineOptions.OPTION_PDF_MODE_SHORT);
+        return getStringOptionValue(OPTION_PDF_MODE_SHORT);
     }
 
     @Override
     public CtxOptions ctxOptions() {
-        final String[] ctxOpts = this.getStringOptionValues(CommandLineOptions.OPTION_CTX_MODE_SHORT);
+        String[] ctxOpts = getStringOptionValues(OPTION_CTX_MODE_SHORT);
         return ctxOpts == null || ctxOpts.length != 2 ? CtxOptions.DEFAULT_CTX_OPTIONS : new CtxOptions(ctxOpts[0], ctxOpts[1]);
     }
 }

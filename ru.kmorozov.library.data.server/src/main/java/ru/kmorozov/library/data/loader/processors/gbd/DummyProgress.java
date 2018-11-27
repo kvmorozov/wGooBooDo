@@ -20,12 +20,12 @@ public class DummyProgress implements IProgress {
     }
 
     @Override
-    public IProgress getSubProgress(final int maxValue) {
+    public IProgress getSubProgress(int maxValue) {
         return new DummyProgress();
     }
 
     @Override
-    public void resetMaxValue(final int maxValue) {
+    public void resetMaxValue(int maxValue) {
 
     }
 }

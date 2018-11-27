@@ -27,10 +27,10 @@ public class QueryDataTest {
 
     @Test
     public void storageQueryTest() {
-        List<Storage> topStorages = this.storageRepository.findAllByParent(null);
+        final List<Storage> topStorages = storageRepository.findAllByParent(null);
         Assert.assertThat(topStorages.size(), is(1));
 
-        List<Storage> level1Storages = this.storageRepository.findAllByParent(topStorages.get(0));
+        final List<Storage> level1Storages = storageRepository.findAllByParent(topStorages.get(0));
         Assert.assertThat(level1Storages.size(), is(4));
     }
 }

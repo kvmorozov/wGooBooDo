@@ -22,21 +22,21 @@ public class SslProxiesListProvider extends AbstractProxyExtractor {
             "([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9]|" +
             "[1-5][0-9][0-9][0-9][0-9]|6[0-4][0-9][0-9][0-9]|" +
             "65[0-4][0-9][0-9]|655[0-2][0-9]|6553[0-5])$";
-    private static final Pattern pattern = Pattern.compile(SslProxiesListProvider.ipPortPattern);
+    private static final Pattern pattern = Pattern.compile(ipPortPattern);
     private static final boolean checkRegexp = true;
 
     @Override
     protected String getProxyListUrl() {
-        return SslProxiesListProvider.PROXY_LIST_URL;
+        return PROXY_LIST_URL;
     }
 
     @Override
-    protected List<String> extractProxyList(Document doc) {
-        final String textWithProxies = doc.html().replaceAll("<", "|").replaceAll(">", "|");
-        return Arrays.stream(textWithProxies.split("\\|")).filter(s -> this.validIpPort(s)).collect(Collectors.toList());
+    protected List<String> extractProxyList(final Document doc) {
+        String textWithProxies = doc.html().replaceAll("<", "|").replaceAll(">", "|");
+        return Arrays.stream(textWithProxies.split("\\|")).filter(s -> validIpPort(s)).collect(Collectors.toList());
     }
 
-    private boolean validIpPort(final String str) {
+    private boolean validIpPort(String str) {
         if (Strings.isNullOrEmpty(str))
             return false;
 
@@ -46,6 +46,6 @@ public class SslProxiesListProvider extends AbstractProxyExtractor {
         if (StringUtils.countMatches(str, ".") != 3 || !str.contains(":"))
             return false;
 
-        return !checkRegexp || SslProxiesListProvider.pattern.matcher(str).matches();
+        return !SslProxiesListProvider.checkRegexp || pattern.matcher(str).matches();
     }
 }

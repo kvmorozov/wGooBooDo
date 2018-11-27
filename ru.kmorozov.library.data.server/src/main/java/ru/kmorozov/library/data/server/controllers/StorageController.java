@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.kmorozov.gbd.logger.Logger;
 import ru.kmorozov.library.data.loader.LoaderConfiguration;
 import ru.kmorozov.library.data.loader.impl.LoaderExecutor;
-import ru.kmorozov.library.data.loader.impl.LoaderExecutor.State;
 import ru.kmorozov.library.data.loader.processors.DuplicatesProcessor;
 import ru.kmorozov.library.data.loader.processors.JstorProcessor;
 import ru.kmorozov.library.data.loader.processors.gbd.GbdRemoteProcessor;
@@ -24,7 +23,6 @@ import ru.kmorozov.library.data.model.book.Storage;
 import ru.kmorozov.library.data.model.dto.BookDTO;
 import ru.kmorozov.library.data.model.dto.DuplicatedBookDTO;
 import ru.kmorozov.library.data.model.dto.ItemDTO;
-import ru.kmorozov.library.data.model.dto.ItemDTO.ItemType;
 import ru.kmorozov.library.data.model.dto.StorageDTO;
 import ru.kmorozov.library.data.model.dto.UserDTO;
 import ru.kmorozov.library.data.repository.BooksRepository;
@@ -70,24 +68,24 @@ public class StorageController implements IDataRestServer {
 
     @Override
     @RequestMapping("/login")
-    public UserDTO login(@RequestParam(name = "login") String login) {
+    public UserDTO login(@RequestParam(name = "login") final String login) {
         return new UserDTO(login);
     }
 
     @RequestMapping("/jstorUpdate")
     public void jstorUpdate() {
-        this.jstorProcessor.process();
+        jstorProcessor.process();
     }
 
     @Override
     @RequestMapping("/storagesByParentId")
-    public List<StorageDTO> getStoragesByParentId(@RequestParam(name = "storageId") String storageId) {
-        Storage parentStorage = StringUtils.isEmpty(storageId) ? null : this.storageRepository.findById(storageId).get();
+    public List<StorageDTO> getStoragesByParentId(@RequestParam(name = "storageId") final String storageId) {
+        final Storage parentStorage = StringUtils.isEmpty(storageId) ? null : storageRepository.findById(storageId).get();
 
-        List<Storage> realStorages = this.storageRepository.findAllByParent(parentStorage);
-        List<Book> linksInStorages = this.booksRepository.findAllByStorageAndBookInfoFormat(parentStorage, "LNK");
-        linksInStorages.forEach(book -> this.loader.resolveLink(book));
-        List<Storage> linkedStorages = linksInStorages.stream()
+        final List<Storage> realStorages = storageRepository.findAllByParent(parentStorage);
+        final List<Book> linksInStorages = booksRepository.findAllByStorageAndBookInfoFormat(parentStorage, "LNK");
+        linksInStorages.forEach(book -> loader.resolveLink(book));
+        final List<Storage> linkedStorages = linksInStorages.stream()
                 .filter(lnk -> null != lnk.getLinkInfo() && null != lnk.getLinkInfo().getLinkedStorage())
                 .map(lnk -> lnk.getLinkInfo().getLinkedStorage())
                 .collect(Collectors.toList());
@@ -99,12 +97,12 @@ public class StorageController implements IDataRestServer {
 
     @Override
     @RequestMapping("/booksByStorageId")
-    public List<BookDTO> getBooksByStorageId(@RequestParam(name = "storageId") String storageId) {
-        Storage storage = StringUtils.isEmpty(storageId) ? null : this.storageRepository.findById(storageId).get();
+    public List<BookDTO> getBooksByStorageId(@RequestParam(name = "storageId") final String storageId) {
+        final Storage storage = StringUtils.isEmpty(storageId) ? null : storageRepository.findById(storageId).get();
         if (null == storage)
             return Collections.emptyList();
 
-        return this.booksRepository.findAllByStorage(storage).stream()
+        return booksRepository.findAllByStorage(storage).stream()
                 .filter(book -> !book.isBrokenLink())
                 .map(book -> book.isLink() ? book.getLinkInfo().getLinkedBook() : book)
                 .filter(Objects::nonNull)
@@ -114,24 +112,24 @@ public class StorageController implements IDataRestServer {
 
     @Override
     @RequestMapping("/itemsByStorageId")
-    public List<ItemDTO> getItemsByStorageId(String storageId) {
-        List<ItemDTO> result = this.getBooksByStorageId(storageId).stream().map(ItemDTO::new).collect(Collectors.toList());
-        result.addAll(this.getStoragesByParentId(storageId).stream().map(ItemDTO::new).collect(Collectors.toList()));
+    public List<ItemDTO> getItemsByStorageId(final String storageId) {
+        final List<ItemDTO> result = getBooksByStorageId(storageId).stream().map(ItemDTO::new).collect(Collectors.toList());
+        result.addAll(getStoragesByParentId(storageId).stream().map(ItemDTO::new).collect(Collectors.toList()));
 
         return result;
     }
 
     @Override
     @RequestMapping("/item")
-    public ItemDTO getItem(@RequestParam(name = "itemId") String itemId, @RequestParam(name = "itemType") ItemType itemType, @RequestParam(name = "refresh") boolean refresh) {
+    public ItemDTO getItem(@RequestParam(name = "itemId") final String itemId, @RequestParam(name = "itemType") final ItemDTO.ItemType itemType, @RequestParam(name = "refresh") final boolean refresh) {
         switch (itemType) {
             case book:
-                return new ItemDTO(new BookDTO(this.booksRepository.findById(itemId).get(), true));
+                return new ItemDTO(new BookDTO(booksRepository.findById(itemId).get(), true));
             case storage:
-                Storage storage = this.storageRepository.findById(itemId).get();
+                Storage storage = storageRepository.findById(itemId).get();
                 if (refresh)
-                    storage = this.loader.refresh(storage);
-                ItemDTO item = new ItemDTO(new StorageDTO(storage, true));
+                    storage = loader.refresh(storage);
+                final ItemDTO item = new ItemDTO(new StorageDTO(storage, true));
                 if (refresh)
                     item.setUpdated();
 
@@ -143,56 +141,56 @@ public class StorageController implements IDataRestServer {
 
     @Override
     @RequestMapping(value = "/updateLibrary", method = RequestMethod.POST)
-    public void updateLibrary(@RequestParam(name = "state") String stateString) {
-        State state = State.valueOf(stateString);
+    public void updateLibrary(@RequestParam(name = "state") final String stateString) {
+        final LoaderExecutor.State state = LoaderExecutor.State.valueOf(stateString);
 
         switch (state) {
             case STARTED:
-                this.loader.start();
+                loader.start();
                 break;
             case PAUSED:
-                this.loader.pause();
+                loader.pause();
                 break;
             case STOPPED:
-                this.loader.stop();
+                loader.stop();
         }
     }
 
     @Override
     @RequestMapping("/downloadBook")
-    public BookDTO downloadBook(@RequestParam(name = "bookId") String bookId) {
-        Book book = this.booksRepository.findById(bookId).get();
+    public BookDTO downloadBook(@RequestParam(name = "bookId") final String bookId) {
+        final Book book = booksRepository.findById(bookId).get();
         if (BookUtils.bookLoaded(book))
             return new BookDTO(book, true);
         else {
             book.getStorage().setLocalPath(null);
-            this.booksRepository.save(book);
+            booksRepository.save(book);
         }
 
-        this.loader.downloadBook(book);
+        loader.downloadBook(book);
         return new BookDTO(book, true);
     }
 
     @Override
     @RequestMapping("/findDuplicates")
     public List<DuplicatedBookDTO> findDuplicates() {
-        return this.duplicatesProcessor.findDuplicates();
+        return duplicatesProcessor.findDuplicates();
     }
 
     @Override
     @RequestMapping("/synchronizeDb")
     public void synchronizeDb() {
-        this.loader.start();
+        loader.start();
     }
 
     @RequestMapping("/processDuplicates")
     public void processDuplicates() {
-        this.duplicatesProcessor.process();
+        duplicatesProcessor.process();
     }
 
     @RequestMapping("/gbdLoadRemote")
-    public void gbdLoad(@RequestParam(name = "bookId", required = false) String bookId) {
-        this.gbdProcessor.load(bookId);
+    public void gbdLoad(@RequestParam(name = "bookId", required = false) final String bookId) {
+        gbdProcessor.load(bookId);
     }
 
 }

@@ -35,77 +35,77 @@ public class BookContext {
     private IImageExtractor extractor;
     private long pagesBefore, pagesProcessed;
 
-    BookContext(String bookId, IProgress progress, IPostProcessor postProcessor) {
-        bookInfo = LibraryFactory.getMetadata(bookId).getBookExtractor(bookId).getBookInfo();
+    BookContext(final String bookId, final IProgress progress, final IPostProcessor postProcessor) {
+        this.bookInfo = LibraryFactory.getMetadata(bookId).getBookExtractor(bookId).getBookInfo();
         this.progress = progress;
         this.postProcessor = postProcessor;
-        metadata = LibraryFactory.getMetadata(bookId);
+        this.metadata = LibraryFactory.getMetadata(bookId);
 
-        this.pagesBefore = this.getPagesStream().filter(pageInfo -> pageInfo.isFileExists()).count();
-        this.sigExecutor = new QueuedThreadPoolExecutor<>(1L, QueuedThreadPoolExecutor.THREAD_POOL_SIZE, x -> true, "Sig_" + bookId);
-        this.imgExecutor = new QueuedThreadPoolExecutor<>(0L, QueuedThreadPoolExecutor.THREAD_POOL_SIZE, BookContext.pagePredicate, "Img_" + bookId);
+        pagesBefore = getPagesStream().filter(pageInfo -> pageInfo.isFileExists()).count();
+        sigExecutor = new QueuedThreadPoolExecutor<>(1L, QueuedThreadPoolExecutor.THREAD_POOL_SIZE, x -> true, "Sig_" + bookId);
+        imgExecutor = new QueuedThreadPoolExecutor<>(0L, QueuedThreadPoolExecutor.THREAD_POOL_SIZE, pagePredicate, "Img_" + bookId);
     }
 
     public String getBookId() {
-        return this.bookInfo.getBookId();
+        return bookInfo.getBookId();
     }
 
     public BookInfo getBookInfo() {
-        return this.bookInfo;
+        return bookInfo;
     }
 
     public IStorage getStorage() {
-        return this.storage;
+        return storage;
     }
 
-    public void setStorage(IStorage storage) {
+    public void setStorage(final IStorage storage) {
         this.storage = storage;
     }
 
     public IProgress getProgress() {
-        return this.progress;
+        return progress;
     }
 
     public Runnable getPostProcessor() {
-        return this.postProcessor.getPostProcessor(this);
+        return postProcessor.getPostProcessor(this);
     }
 
     public boolean isPdfCompleted() {
-        return this.pdfCompleted.get();
+        return pdfCompleted.get();
     }
 
     public boolean isImgStarted() {
-        return this.started.get();
+        return started.get();
     }
 
     public long getPagesBefore() {
-        return this.pagesBefore;
+        return pagesBefore;
     }
 
-    public void setPagesBefore(long pagesBefore) {
+    public void setPagesBefore(final long pagesBefore) {
         this.pagesBefore = pagesBefore;
     }
 
     public Stream<IPage> getPagesStream() {
-        return Arrays.stream(this.bookInfo.getPages().getPages());
+        return Arrays.stream(bookInfo.getPages().getPages());
     }
 
     public long getPagesProcessed() {
-        return this.pagesProcessed;
+        return pagesProcessed;
     }
 
-    public void setPagesProcessed(long pagesProcessed) {
+    public void setPagesProcessed(final long pagesProcessed) {
         this.pagesProcessed = pagesProcessed;
     }
 
     @Override
     public String toString() {
-        return this.bookInfo.getBookId() + ' ' + this.bookInfo.getBookData().getTitle();
+        return bookInfo.getBookId() + ' ' + bookInfo.getBookData().getTitle();
     }
 
     public IImageExtractor getExtractor() {
-        if (null == this.extractor) this.extractor = this.metadata.getExtractor(this);
+        if (null == extractor) extractor = metadata.getExtractor(this);
 
-        return this.extractor;
+        return extractor;
     }
 }

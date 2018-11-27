@@ -9,6 +9,6 @@ public class ErrorSet {
     private ErrorFacet error;
 
     public ErrorFacet getError() {
-        return this.error;
+        return error;
     }
 }

@@ -25,7 +25,7 @@ public class ServerGBDOptions extends AbstractServerGBDOptions {
 
     @Override
     public IStorage getStorage() {
-        return new ServerStorage(this.api, this.root);
+        return new ServerStorage(api, root);
     }
 
     @Override

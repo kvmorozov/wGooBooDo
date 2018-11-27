@@ -12,12 +12,14 @@ import org.asynchttpclient.DefaultAsyncHttpClientConfig;
 import org.asynchttpclient.netty.channel.DefaultChannelPool;
 import org.asynchttpclient.netty.ssl.DefaultSslEngineFactory;
 import org.asynchttpclient.proxy.ProxyServer;
+import org.asynchttpclient.proxy.ProxyServer.Builder;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector;
 import ru.kmorozov.gbd.core.logic.connectors.Response;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -35,52 +37,52 @@ public class AsyncHttpConnector extends HttpConnector {
     private DefaultChannelPool pool;
     private HashedWheelTimer timer;
 
-    private AsyncHttpClient getClient(HttpHostExt proxy) {
-        String key = HttpConnector.getProxyKey(proxy);
-        AsyncHttpClient client = this.clientsMap.get(key);
+    private AsyncHttpClient getClient(final HttpHostExt proxy) {
+        final String key = HttpConnector.getProxyKey(proxy);
+        AsyncHttpClient client = clientsMap.get(key);
 
-        if (null == this.builder) synchronized (this.BUILDER_LOCK) {
-            if (null == this.builder) {
-                this.builder = new DefaultAsyncHttpClientConfig.Builder();
-                this.timer = new HashedWheelTimer();
-                this.timer.start();
-                this.builder.setNettyTimer(this.timer);
-                this.builder.setThreadFactory(new DefaultThreadFactory("asyncPool"));
-                this.builder.setEventLoopGroup(this.nioEventLoopGroup = new NioEventLoopGroup());
-                this.builder.setSslEngineFactory(new DefaultSslEngineFactory());
+        if (null == builder) synchronized (BUILDER_LOCK) {
+            if (null == builder) {
+                builder = new DefaultAsyncHttpClientConfig.Builder();
+                timer = new HashedWheelTimer();
+                timer.start();
+                builder.setNettyTimer(timer);
+                builder.setThreadFactory(new DefaultThreadFactory("asyncPool"));
+                builder.setEventLoopGroup(nioEventLoopGroup = new NioEventLoopGroup());
+                builder.setSslEngineFactory(new DefaultSslEngineFactory());
 
-                this.pool = new DefaultChannelPool(Integer.MAX_VALUE, Integer.MAX_VALUE, this.timer, Integer.MAX_VALUE);
-                this.builder.setChannelPool(this.pool);
+                pool = new DefaultChannelPool(Integer.MAX_VALUE, Integer.MAX_VALUE, timer, Integer.MAX_VALUE);
+                builder.setChannelPool(pool);
 
-                this.builder.setConnectTimeout(HttpConnector.CONNECT_TIMEOUT);
+                builder.setConnectTimeout(HttpConnector.CONNECT_TIMEOUT);
             }
         }
 
         if (null == client) synchronized (proxy) {
             if (!proxy.isLocal())
-                this.builder.setProxyServer(new ProxyServer.Builder(proxy.getHost().getHostName(), proxy.getHost().getPort()).build());
-            client = new DefaultAsyncHttpClient(this.builder.build());
+                builder.setProxyServer(new Builder(proxy.getHost().getHostName(), proxy.getHost().getPort()).build());
+            client = new DefaultAsyncHttpClient(builder.build());
 
-            this.clientsMap.put(key, client);
+            clientsMap.put(key, client);
         }
 
         return client;
     }
 
     @Override
-    public Response getContent(String url, HttpHostExt proxy, boolean withTimeout) {
-        AsyncHttpClient client = this.getClient(proxy);
-        BoundRequestBuilder builder = client.prepareGet(url);
-        for (Map.Entry<String, Object> headerItem : proxy.getHeaders(this.getUrlType(url)).entrySet())
+    public Response getContent(final String url, final HttpHostExt proxy, final boolean withTimeout) {
+        final AsyncHttpClient client = getClient(proxy);
+        final BoundRequestBuilder builder = client.prepareGet(url);
+        for (final Entry<String, Object> headerItem : proxy.getHeaders(getUrlType(url)).entrySet())
             if (!"cookie".equals(headerItem.getKey()))
                 builder.addHeader(headerItem.getKey(), headerItem.getValue().toString());
 
-        String[] cookies = proxy.getHeaders(this.getUrlType(url)).getCookie().split(";");
-        for (String cookieEntry : cookies) {
-            String[] cookieParts = cookieEntry.split("=", 2);
+        final String[] cookies = proxy.getHeaders(getUrlType(url)).getCookie().split(";");
+        for (final String cookieEntry : cookies) {
+            final String[] cookieParts = cookieEntry.split("=", 2);
             if (2 != cookieParts.length) continue;
 
-            Cookie cookie = new DefaultCookie(cookieParts[0], cookieParts[1]);
+            final Cookie cookie = new DefaultCookie(cookieParts[0], cookieParts[1]);
             cookie.setPath("/");
             cookie.setDomain(".google.ru");
             builder.addCookie(cookie);
@@ -88,7 +90,7 @@ public class AsyncHttpConnector extends HttpConnector {
 
         try {
             return new AsyncHttpResponse(builder.execute(new AsyncHandler(proxy)).get((long) HttpConnector.CONNECT_TIMEOUT, TimeUnit.MILLISECONDS));
-        } catch (final InterruptedException | ExecutionException | TimeoutException ex) {
+        } catch (InterruptedException | ExecutionException | TimeoutException ex) {
             return null;
         } finally {
         }
@@ -96,20 +98,20 @@ public class AsyncHttpConnector extends HttpConnector {
 
     @Override
     public void close() {
-        for (AsyncHttpClient client : this.clientsMap.values())
+        for (final AsyncHttpClient client : clientsMap.values())
             try {
                 if (!client.isClosed())
                     client.close();
-            } catch (IOException ignored) {
+            } catch (final IOException ignored) {
             }
 
-        if (null != this.nioEventLoopGroup)
-            this.nioEventLoopGroup.shutdownGracefully();
+        if (null != nioEventLoopGroup)
+            nioEventLoopGroup.shutdownGracefully();
 
-        if (null != this.pool)
-            this.pool.destroy();
+        if (null != pool)
+            pool.destroy();
 
-        if (null != this.timer)
-            this.timer.stop();
+        if (null != timer)
+            timer.stop();
     }
 }

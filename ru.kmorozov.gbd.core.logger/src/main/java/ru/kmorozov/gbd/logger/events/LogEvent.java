@@ -9,13 +9,13 @@ public class LogEvent extends BaseEvent {
 
     private final Level level;
 
-    public LogEvent(Level level, String eventInfo) {
+    public LogEvent(final Level level, final String eventInfo) {
         super(eventInfo);
 
         this.level = level;
     }
 
     public Level getLevel() {
-        return this.level;
+        return level;
     }
 }
