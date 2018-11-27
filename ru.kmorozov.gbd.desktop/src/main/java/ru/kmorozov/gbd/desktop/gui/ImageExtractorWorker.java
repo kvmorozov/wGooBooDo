@@ -15,23 +15,23 @@ public class ImageExtractorWorker extends SwingWorker<Void, Void> implements IEv
 
     private IProgress _processStatus;
 
-    public ImageExtractorWorker(final GoogleImageExtractor extractor) {
+    public ImageExtractorWorker(GoogleImageExtractor extractor) {
         this.extractor = extractor;
     }
 
     @Override
     protected Void doInBackground() {
-        extractor.process();
+        this.extractor.process();
 
         return null;
     }
 
     @Override
     public IProgress getProcessStatus() {
-        return _processStatus;
+        return this._processStatus;
     }
 
-    protected void setProcessStatus(final IProgress processStatus) {
-        this._processStatus = processStatus;
+    protected void setProcessStatus(IProgress processStatus) {
+        _processStatus = processStatus;
     }
 }

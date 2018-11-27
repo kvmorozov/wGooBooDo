@@ -4,10 +4,10 @@ import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage;
 
 public class RfbrPage extends AbstractPage {
 
-    private String bookId;
-    private int order;
+    private final String bookId;
+    private final int order;
 
-    public RfbrPage(String bookId, int order) {
+    public RfbrPage(final String bookId, final int order) {
         this.bookId = bookId;
         this.order = order;
     }
@@ -15,16 +15,16 @@ public class RfbrPage extends AbstractPage {
 
     @Override
     public String getPid() {
-        return String.valueOf(order);
+        return String.valueOf(this.order);
     }
 
     @Override
     public Integer getOrder() {
-        return order;
+        return this.order;
     }
 
     @Override
     public String getImgUrl() {
-        return String.format("http://www.rfbr.ru/rffi/djvu_page?objectId=%s&width=1000&page=%d", bookId, order);
+        return String.format("http://www.rfbr.ru/rffi/djvu_page?objectId=%s&width=1000&page=%d", this.bookId, this.order);
     }
 }

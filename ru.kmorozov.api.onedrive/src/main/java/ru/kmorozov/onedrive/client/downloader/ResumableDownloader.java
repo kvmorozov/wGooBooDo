@@ -81,7 +81,7 @@ public final class ResumableDownloader {
      * Maximum size of individual chunks that will get downloaded by single HTTP requests. The default
      * value is {@link #MAXIMUM_CHUNK_SIZE}.
      */
-    private int chunkSize = MAXIMUM_CHUNK_SIZE;
+    private int chunkSize = ResumableDownloader.MAXIMUM_CHUNK_SIZE;
     /**
      * The length of the HTTP media content or {@code 0} before it is initialized in
      * {@link #setMediaContentLength}.
@@ -90,7 +90,7 @@ public final class ResumableDownloader {
     /**
      * The current state of the downloader.
      */
-    private DownloadState downloadState = DownloadState.NOT_STARTED;
+    private ResumableDownloader.DownloadState downloadState = ResumableDownloader.DownloadState.NOT_STARTED;
     /**
      * The total number of bytes downloaded by this downloader.
      */
@@ -119,9 +119,9 @@ public final class ResumableDownloader {
      *                               {@code null} for none
      */
     public ResumableDownloader(
-            final HttpTransport transport, final HttpRequestInitializer httpRequestInitializer) {
+            HttpTransport transport, HttpRequestInitializer httpRequestInitializer) {
         this.transport = Preconditions.checkNotNull(transport);
-        this.requestFactory = null == httpRequestInitializer
+        requestFactory = null == httpRequestInitializer
                 ? transport.createRequestFactory() : transport.createRequestFactory(httpRequestInitializer);
     }
 
@@ -140,8 +140,8 @@ public final class ResumableDownloader {
      * @param requestUrl   The request URL where the download requests will be sent
      * @param outputStream destination output stream
      */
-    public void download(final GenericUrl requestUrl, final OutputStream outputStream) throws IOException {
-        download(requestUrl, null, outputStream);
+    public void download(GenericUrl requestUrl, OutputStream outputStream) throws IOException {
+        this.download(requestUrl, null, outputStream);
     }
 
     /**
@@ -161,55 +161,55 @@ public final class ResumableDownloader {
      * @param outputStream   destination output stream
      * @since 1.12
      */
-    public void download(final GenericUrl requestUrl, final Map requestHeaders, final OutputStream outputStream)
+    public void download(GenericUrl requestUrl, Map requestHeaders, OutputStream outputStream)
             throws IOException {
-        Preconditions.checkArgument(DownloadState.NOT_STARTED == downloadState);
+        Preconditions.checkArgument(ResumableDownloader.DownloadState.NOT_STARTED == this.downloadState);
         requestUrl.put("alt", "media");
 
-        if (directDownloadEnabled) {
-            updateStateAndNotifyListener(DownloadState.MEDIA_IN_PROGRESS);
-            final HttpResponse response =
-                    executeCurrentRequest(lastBytePos, requestUrl, requestHeaders, outputStream);
+        if (this.directDownloadEnabled) {
+            this.updateStateAndNotifyListener(ResumableDownloader.DownloadState.MEDIA_IN_PROGRESS);
+            HttpResponse response =
+                    this.executeCurrentRequest(this.lastBytePos, requestUrl, requestHeaders, outputStream);
             // All required bytes have been downloaded from the server.
-            mediaContentLength = response.getHeaders().getContentLength();
-            bytesDownloaded = mediaContentLength;
-            updateStateAndNotifyListener(DownloadState.MEDIA_COMPLETE);
+            this.mediaContentLength = response.getHeaders().getContentLength();
+            this.bytesDownloaded = this.mediaContentLength;
+            this.updateStateAndNotifyListener(ResumableDownloader.DownloadState.MEDIA_COMPLETE);
             return;
         }
 
         // Download the media content in chunks.
         while (true) {
-            long currentRequestLastBytePos = bytesDownloaded + (long) chunkSize - 1L;
-            if (-1L != lastBytePos) {
+            long currentRequestLastBytePos = this.bytesDownloaded + (long) this.chunkSize - 1L;
+            if (-1L != this.lastBytePos) {
                 // If last byte position has been specified use it iff it is smaller than the chunksize.
-                currentRequestLastBytePos = Math.min(lastBytePos, currentRequestLastBytePos);
+                currentRequestLastBytePos = Math.min(this.lastBytePos, currentRequestLastBytePos);
             }
             HttpResponse response;
 
             try {
-                response = executeCurrentRequest(
+                response = this.executeCurrentRequest(
                         currentRequestLastBytePos, requestUrl, requestHeaders, outputStream);
-            } catch (final Exception ex) {
-                log.error("Retry because of error: " + ex.getMessage());
-                response = executeCurrentRequest(
+            } catch (Exception ex) {
+                ResumableDownloader.log.error("Retry because of error: " + ex.getMessage());
+                response = this.executeCurrentRequest(
                         currentRequestLastBytePos, requestUrl, requestHeaders, outputStream);
             }
 
-            final String contentRange = response.getHeaders().getContentRange();
+            String contentRange = response.getHeaders().getContentRange();
 
-            final long nextByteIndex = getNextByteIndex(contentRange);
-            setMediaContentLength(contentRange);
-            setTotalSize(contentRange);
+            long nextByteIndex = ResumableDownloader.getNextByteIndex(contentRange);
+            this.setMediaContentLength(contentRange);
+            this.setTotalSize(contentRange);
 
-            if (mediaContentLength <= nextByteIndex) {
+            if (this.mediaContentLength <= nextByteIndex) {
                 // All required bytes have been downloaded from the server.
-                bytesDownloaded = mediaContentLength;
-                updateStateAndNotifyListener(DownloadState.MEDIA_COMPLETE);
+                this.bytesDownloaded = this.mediaContentLength;
+                this.updateStateAndNotifyListener(ResumableDownloader.DownloadState.MEDIA_COMPLETE);
                 return;
             }
 
-            bytesDownloaded = nextByteIndex;
-            updateStateAndNotifyListener(DownloadState.MEDIA_IN_PROGRESS);
+            this.bytesDownloaded = nextByteIndex;
+            this.updateStateAndNotifyListener(ResumableDownloader.DownloadState.MEDIA_IN_PROGRESS);
         }
     }
 
@@ -222,34 +222,34 @@ public final class ResumableDownloader {
      * @param outputStream              destination output stream
      * @return HTTP response
      */
-    private HttpResponse executeCurrentRequest(final long currentRequestLastBytePos, final GenericUrl requestUrl,
-                                               final Map requestHeaders, final OutputStream outputStream) throws IOException {
+    private HttpResponse executeCurrentRequest(long currentRequestLastBytePos, GenericUrl requestUrl,
+                                               Map requestHeaders, OutputStream outputStream) throws IOException {
         // prepare the GET request
-        final HttpRequest request = requestFactory.buildGetRequest(requestUrl);
+        HttpRequest request = this.requestFactory.buildGetRequest(requestUrl);
         // add request headers
         if (null != requestHeaders) {
             request.getHeaders().putAll(requestHeaders);
         }
         // set Range header (if necessary)
 
-        boolean chunked = false;
-        if (0L != bytesDownloaded || -1L != currentRequestLastBytePos) {
-            final StringBuilder rangeHeader = new StringBuilder();
+        final boolean chunked = false;
+        if (0L != this.bytesDownloaded || -1L != currentRequestLastBytePos) {
+            StringBuilder rangeHeader = new StringBuilder();
             rangeHeader.append("bytes=");
-            if (0L == totalSize || totalSize - currentRequestLastBytePos > (long) chunkSize)
-                rangeHeader.append(bytesDownloaded).append('-').append(currentRequestLastBytePos);
+            if (0L == this.totalSize || this.totalSize - currentRequestLastBytePos > (long) this.chunkSize)
+                rangeHeader.append(this.bytesDownloaded).append('-').append(currentRequestLastBytePos);
             else
-                rangeHeader.append('-').append(totalSize - bytesDownloaded);
+                rangeHeader.append('-').append(this.totalSize - this.bytesDownloaded);
 
             request.getHeaders().setRange(rangeHeader.toString());
 
         }
 
         request.setRetryOnExecuteIOException(true);
-        request.setIOExceptionHandler(ioExceptionHandler);
+        request.setIOExceptionHandler(ResumableDownloader.ioExceptionHandler);
 
         // execute the request and copy into the output stream
-        final HttpResponse response = request.execute();
+        HttpResponse response = request.execute();
         try {
             IOUtils.copy(response.getContent(), outputStream);
         } finally
@@ -268,7 +268,7 @@ public final class ResumableDownloader {
      * @param rangeHeader in the HTTP response
      * @return the byte index beginning where the server has yet to send out data
      */
-    private static long getNextByteIndex(final String rangeHeader) {
+    private static long getNextByteIndex(String rangeHeader) {
         if (null == rangeHeader) {
             return 0L;
         }
@@ -276,11 +276,11 @@ public final class ResumableDownloader {
                 rangeHeader.substring(rangeHeader.indexOf('-') + 1, rangeHeader.indexOf('/'))) + 1L;
     }
 
-    private void setTotalSize(final String rangeHeader) {
-        if (0L < totalSize)
+    private void setTotalSize(String rangeHeader) {
+        if (0L < this.totalSize)
             return;
 
-        totalSize = Long.parseLong(rangeHeader.substring(rangeHeader.indexOf('/') + 1));
+        this.totalSize = Long.parseLong(rangeHeader.substring(rangeHeader.indexOf('/') + 1));
     }
 
     /**
@@ -298,7 +298,7 @@ public final class ResumableDownloader {
      *
      * @param bytesDownloaded The total number of bytes downloaded
      */
-    public ResumableDownloader setBytesDownloaded(final long bytesDownloaded) {
+    public ResumableDownloader setBytesDownloaded(long bytesDownloaded) {
         Preconditions.checkArgument(0L <= bytesDownloaded);
         this.bytesDownloaded = bytesDownloaded;
         return this;
@@ -320,9 +320,9 @@ public final class ResumableDownloader {
      * @param lastBytePos  The last byte position in the content range string.
      * @since 1.13
      */
-    public ResumableDownloader setContentRange(final long firstBytePos, final int lastBytePos) {
+    public ResumableDownloader setContentRange(long firstBytePos, int lastBytePos) {
         Preconditions.checkArgument((long) lastBytePos >= firstBytePos);
-        setBytesDownloaded(firstBytePos);
+        this.setBytesDownloaded(firstBytePos);
         this.lastBytePos = (long) lastBytePos;
         return this;
     }
@@ -334,12 +334,12 @@ public final class ResumableDownloader {
      *
      * @param rangeHeader in the HTTP response
      */
-    private void setMediaContentLength(final String rangeHeader) {
+    private void setMediaContentLength(String rangeHeader) {
         if (null == rangeHeader) {
             return;
         }
-        if (0L == mediaContentLength) {
-            mediaContentLength = Long.parseLong(rangeHeader.substring(rangeHeader.indexOf('/') + 1));
+        if (0L == this.mediaContentLength) {
+            this.mediaContentLength = Long.parseLong(rangeHeader.substring(rangeHeader.indexOf('/') + 1));
         }
     }
 
@@ -350,7 +350,7 @@ public final class ResumableDownloader {
      * protocol to download in data chunks. Defaults to {@code false}.
      */
     public boolean isDirectDownloadEnabled() {
-        return directDownloadEnabled;
+        return this.directDownloadEnabled;
     }
 
     /**
@@ -359,7 +359,7 @@ public final class ResumableDownloader {
      * request. If value is set to {@code false} then the download uses the resumable media download
      * protocol to download in data chunks. Defaults to {@code false}.
      */
-    public ResumableDownloader setDirectDownloadEnabled(final boolean directDownloadEnabled) {
+    public ResumableDownloader setDirectDownloadEnabled(boolean directDownloadEnabled) {
         this.directDownloadEnabled = directDownloadEnabled;
         return this;
     }
@@ -368,14 +368,14 @@ public final class ResumableDownloader {
      * Returns the progress listener to send progress notifications to or {@code null} for none.
      */
     public ResumableDownloaderProgressListener getProgressListener() {
-        return progressListener;
+        return this.progressListener;
     }
 
     /**
      * Sets the progress listener to send progress notifications to or {@code null} for none.
      */
     public ResumableDownloader setProgressListener(
-            final ResumableDownloaderProgressListener progressListener) {
+            ResumableDownloaderProgressListener progressListener) {
         this.progressListener = progressListener;
         return this;
     }
@@ -384,7 +384,7 @@ public final class ResumableDownloader {
      * Returns the transport to use for requests.
      */
     public HttpTransport getTransport() {
-        return transport;
+        return this.transport;
     }
 
     /**
@@ -392,7 +392,7 @@ public final class ResumableDownloader {
      * The default value is {@link #MAXIMUM_CHUNK_SIZE}.
      */
     public int getChunkSize() {
-        return chunkSize;
+        return this.chunkSize;
     }
 
     /**
@@ -403,8 +403,8 @@ public final class ResumableDownloader {
      * The maximum allowable value is {@link #MAXIMUM_CHUNK_SIZE}.
      * </p>
      */
-    public ResumableDownloader setChunkSize(final int chunkSize) {
-        Preconditions.checkArgument(0 < chunkSize && MAXIMUM_CHUNK_SIZE >= chunkSize);
+    public ResumableDownloader setChunkSize(int chunkSize) {
+        Preconditions.checkArgument(0 < chunkSize && ResumableDownloader.MAXIMUM_CHUNK_SIZE >= chunkSize);
         this.chunkSize = chunkSize;
         return this;
     }
@@ -415,7 +415,7 @@ public final class ResumableDownloader {
      * @return the number of bytes downloaded
      */
     public long getNumBytesDownloaded() {
-        return bytesDownloaded;
+        return this.bytesDownloaded;
     }
 
     /**
@@ -426,7 +426,7 @@ public final class ResumableDownloader {
      * @since 1.13
      */
     public long getLastBytePosition() {
-        return lastBytePos;
+        return this.lastBytePos;
     }
 
     /**
@@ -434,10 +434,10 @@ public final class ResumableDownloader {
      *
      * @param downloadState value to set to
      */
-    private void updateStateAndNotifyListener(final DownloadState downloadState) throws IOException {
+    private void updateStateAndNotifyListener(ResumableDownloader.DownloadState downloadState) throws IOException {
         this.downloadState = downloadState;
-        if (null != progressListener) {
-            progressListener.progressChanged(this);
+        if (null != this.progressListener) {
+            this.progressListener.progressChanged(this);
         }
     }
 
@@ -446,8 +446,8 @@ public final class ResumableDownloader {
      *
      * @return the download state
      */
-    public DownloadState getDownloadState() {
-        return downloadState;
+    public ResumableDownloader.DownloadState getDownloadState() {
+        return this.downloadState;
     }
 
     /**
@@ -457,7 +457,7 @@ public final class ResumableDownloader {
      * @return the download progress
      */
     public double getProgress() {
-        return 0L == mediaContentLength ? (double) 0 : (double) bytesDownloaded / (double) mediaContentLength;
+        return 0L == this.mediaContentLength ? (double) 0 : (double) this.bytesDownloaded / (double) this.mediaContentLength;
     }
 
     /**

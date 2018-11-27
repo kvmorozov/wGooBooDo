@@ -11,10 +11,10 @@ public abstract class AbstractEventSource implements IEventSource {
 
     @Override
     public IProgress getProcessStatus() {
-        return _processStatus;
+        return this._processStatus;
     }
 
-    protected void setProcessStatus(final IProgress processStatus) {
-        this._processStatus = processStatus;
+    protected void setProcessStatus(IProgress processStatus) {
+        _processStatus = processStatus;
     }
 }

@@ -29,71 +29,71 @@ public class Category {
     Set<Storage> storages;
 
     public String getId() {
-        return id;
+        return this.id;
     }
 
-    public void setId(final String id) {
+    public void setId(String id) {
         this.id = id;
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
-    public void setName(final String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
     public Set<Category> getParents() {
-        return parents;
+        return this.parents;
     }
 
-    public void setParents(final Set<Category> parents) {
+    public void setParents(Set<Category> parents) {
         this.parents = parents;
     }
 
     public Iterable<Storage> getStorages() {
-        return storages;
+        return this.storages;
     }
 
-    public void setStorages(final Set<Storage> storages) {
+    public void setStorages(Set<Storage> storages) {
         this.storages = storages;
     }
 
-    public void addStorage(final Storage storage) {
-        if (null == storages)
-            storages = new HashSet<>();
+    public void addStorage(Storage storage) {
+        if (null == this.storages)
+            this.storages = new HashSet<>();
 
-        storages.add(storage);
+        this.storages.add(storage);
     }
 
-    public void addParents(final Collection<Category> items) {
-        if (null == parents)
-            parents = new HashSet<>();
+    public void addParents(Collection<Category> items) {
+        if (null == this.parents)
+            this.parents = new HashSet<>();
 
-        parents.addAll(items);
+        this.parents.addAll(items);
     }
 
-    public void addParent(final Category parent) {
-        if (null == parents)
-            parents = new HashSet<>();
+    public void addParent(Category parent) {
+        if (null == this.parents)
+            this.parents = new HashSet<>();
 
-        parents.add(parent);
+        this.parents.add(parent);
     }
 
     @Override
-    public boolean equals(final Object o) {
+    public boolean equals(Object o) {
         if (this == o) return true;
-        if (null == o || getClass() != o.getClass()) return false;
+        if (null == o || this.getClass() != o.getClass()) return false;
 
-        final Category category = (Category) o;
+        Category category = (Category) o;
 
-        return id.equals(category.id);
+        return this.id.equals(category.id);
 
     }
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+        return this.id.hashCode();
     }
 }

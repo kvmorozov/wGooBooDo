@@ -16,7 +16,7 @@ import ru.kmorozov.library.data.server.condition.LibraryEnabledCondition;
  */
 
 @RestController
-@ComponentScan(basePackageClasses = {GbdLocalProcessor.class})
+@ComponentScan(basePackageClasses = GbdLocalProcessor.class)
 @Conditional(LibraryEnabledCondition.class)
 public class LibraryRestController {
 
@@ -28,11 +28,11 @@ public class LibraryRestController {
 
     @RequestMapping("/gbdUpdate")
     public void gbdUpdate() {
-        gbdProcessor.process();
+        this.gbdProcessor.process();
     }
 
     @RequestMapping("/gbdLoadLocal")
-    public void gbdLoad(@RequestParam(name = "bookId", required = false) final String bookId) {
-        gbdProcessor.load(bookId);
+    public void gbdLoad(@RequestParam(name = "bookId", required = false) String bookId) {
+        this.gbdProcessor.load(bookId);
     }
 }

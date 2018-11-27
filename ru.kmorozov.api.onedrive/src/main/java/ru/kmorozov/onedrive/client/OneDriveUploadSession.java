@@ -13,49 +13,49 @@ public class OneDriveUploadSession {
     private final String uploadUrl;
     private final RandomAccessFile raf;
     private final OneDriveItem parent;
-    private Range[] ranges;
+    private OneDriveUploadSession.Range[] ranges;
     private long totalUploaded;
     private long lastUploaded;
     private OneDriveItem item;
 
-    public OneDriveUploadSession(final OneDriveItem parent, final File file, final String uploadUrl, final String[] ranges) throws IOException {
+    public OneDriveUploadSession(OneDriveItem parent, File file, String uploadUrl, String[] ranges) throws IOException {
         this.parent = parent;
         this.file = file;
         this.uploadUrl = uploadUrl;
-        this.raf = new RandomAccessFile(file, "r");
-        setRanges(ranges);
+        raf = new RandomAccessFile(file, "r");
+        this.setRanges(ranges);
     }
 
-    public void setRanges(final String[] stringRanges) {
+    public void setRanges(String[] stringRanges) {
 
-        this.ranges = new Range[stringRanges.length];
+        ranges = new OneDriveUploadSession.Range[stringRanges.length];
         for (int i = 0; i < stringRanges.length; i++) {
-            final long start = Long.parseLong(stringRanges[i].substring(0, stringRanges[i].indexOf('-')));
+            long start = Long.parseLong(stringRanges[i].substring(0, stringRanges[i].indexOf('-')));
 
-            final String s = stringRanges[i].substring(stringRanges[i].indexOf('-') + 1);
+            String s = stringRanges[i].substring(stringRanges[i].indexOf('-') + 1);
 
             long end = 0L;
             if (!s.isEmpty()) {
                 end = Long.parseLong(s);
             }
 
-            ranges[i] = new Range(start, end);
+            this.ranges[i] = new OneDriveUploadSession.Range(start, end);
         }
 
-        if (0 < ranges.length) {
-            lastUploaded = ranges[0].start - totalUploaded;
-            totalUploaded = ranges[0].start;
+        if (0 < this.ranges.length) {
+            this.lastUploaded = this.ranges[0].start - this.totalUploaded;
+            this.totalUploaded = this.ranges[0].start;
         }
     }
 
     public byte[] getChunk() throws IOException {
 
-        byte[] bytes = new byte[CHUNK_SIZE];
+        byte[] bytes = new byte[OneDriveUploadSession.CHUNK_SIZE];
 
-        raf.seek(totalUploaded);
-        final int read = raf.read(bytes);
+        this.raf.seek(this.totalUploaded);
+        int read = this.raf.read(bytes);
 
-        if (CHUNK_SIZE > read) {
+        if (OneDriveUploadSession.CHUNK_SIZE > read) {
             bytes = Arrays.copyOf(bytes, read);
         }
 
@@ -63,44 +63,44 @@ public class OneDriveUploadSession {
     }
 
     public long getTotalUploaded() {
-        return totalUploaded;
+        return this.totalUploaded;
     }
 
     public long getLastUploaded() {
-        return lastUploaded;
+        return this.lastUploaded;
     }
 
     public OneDriveItem getParent() {
-        return parent;
+        return this.parent;
     }
 
     public String getUploadUrl() {
-        return uploadUrl;
+        return this.uploadUrl;
     }
 
     public File getFile() {
-        return file;
+        return this.file;
     }
 
     public boolean isComplete() {
-        return null != item;
+        return null != this.item;
     }
 
-    public void setComplete(final OneDriveItem item) {
+    public void setComplete(OneDriveItem item) {
         this.item = item;
-        lastUploaded = file.length() - totalUploaded;
-        totalUploaded = file.length();
+        this.lastUploaded = this.file.length() - this.totalUploaded;
+        this.totalUploaded = this.file.length();
     }
 
     public OneDriveItem getItem() {
-        return item;
+        return this.item;
     }
 
     private static final class Range {
         public long start;
         public long end;
 
-        private Range(final long start, final long end) {
+        private Range(long start, long end) {
             this.start = start;
             this.end = end;
         }

@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public class Http2ResponseException extends ResponseException {
 
-    Http2ResponseException(IOException ioe) {
+    Http2ResponseException(final IOException ioe) {
         super(ioe);
     }
 

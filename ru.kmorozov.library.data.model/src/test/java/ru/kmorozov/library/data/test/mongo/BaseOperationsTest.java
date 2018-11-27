@@ -35,44 +35,44 @@ public class BaseOperationsTest {
 
     @Test
     public void connectTest() {
-        Assert.assertThat(booksRepository, notNullValue());
-        booksRepository.deleteAll();
-        Assert.assertThat(booksRepository.count(), is(0));
+        Assert.assertThat(this.booksRepository, notNullValue());
+        this.booksRepository.deleteAll();
+        Assert.assertThat(this.booksRepository.count(), is(0));
     }
 
     @Test
     public void crudTest() {
-        final long countBefore = booksRepository.count();
+        long countBefore = this.booksRepository.count();
 
-        final Book book = new Book("Test title", "Test author");
+        Book book = new Book("Test title", "Test author");
 
-        final Book savedBook = booksRepository.save(book);
+        Book savedBook = this.booksRepository.save(book);
         Assert.assertThat(savedBook, notNullValue());
         Assert.assertThat(savedBook, is(book));
-        Assert.assertThat(booksRepository.count(), is(countBefore + 1L));
-        booksRepository.delete(book);
-        Assert.assertThat(booksRepository.count(), is(countBefore));
+        Assert.assertThat(this.booksRepository.count(), is(countBefore + 1L));
+        this.booksRepository.delete(book);
+        Assert.assertThat(this.booksRepository.count(), is(countBefore));
     }
 
     @Test
     public void searchTest() {
-        final List<Book> books = Arrays.asList(new Book("Test tit1le", "Test aut1hor"), new Book("Test tit2le", "Test aut2hor"));
+        List<Book> books = Arrays.asList(new Book("Test tit1le", "Test aut1hor"), new Book("Test tit2le", "Test aut2hor"));
 
-        booksRepository.saveAll(books);
+        this.booksRepository.saveAll(books);
 
         try {
-            final LikeTextSearch likeTextSearch = new LikeTextSearch(Book.class.getSimpleName(), mongoTemplate);
+            LikeTextSearch likeTextSearch = new LikeTextSearch(Book.class.getSimpleName(), this.mongoTemplate);
             Assert.assertThat(likeTextSearch.findMatchingIds("%aut1%").size(), is(0));
-            final TextCriteria criteria2 = TextCriteria.forDefaultLanguage().matching("Test");
-            Assert.assertThat(booksRepository.findAllBy(criteria2).size(), is(2));
+            TextCriteria criteria2 = TextCriteria.forDefaultLanguage().matching("Test");
+            Assert.assertThat(this.booksRepository.findAllBy(criteria2).size(), is(2));
         } finally {
-            booksRepository.deleteAll(books);
+            this.booksRepository.deleteAll(books);
         }
     }
 
     @Test
     public void findLinks() {
-        final Stream<Book> lnkBooks = booksRepository.streamByBookInfoFormat("LNK");
+        Stream<Book> lnkBooks = this.booksRepository.streamByBookInfoFormat("LNK");
         Assert.assertTrue(10L > lnkBooks.count());
     }
 }

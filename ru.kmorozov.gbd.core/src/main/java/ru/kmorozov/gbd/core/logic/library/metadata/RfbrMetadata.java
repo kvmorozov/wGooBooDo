@@ -19,23 +19,23 @@ public final class RfbrMetadata implements ILibraryMetadata {
     public static final RfbrMetadata RFBR_METADATA = new RfbrMetadata();
 
     @Override
-    public boolean isValidId(String bookId) {
+    public boolean isValidId(final String bookId) {
         return StringUtils.isNumeric(bookId);
     }
 
     @Override
-    public IImageExtractor getExtractor(BookContext bookContext) {
+    public IImageExtractor getExtractor(final BookContext bookContext) {
         return new RfbrImageExtractor(bookContext);
     }
 
     @Override
-    public AbstractBookExtractor getBookExtractor(String bookId) {
+    public AbstractBookExtractor getBookExtractor(final String bookId) {
         return new RfbrBookExtractor(bookId);
     }
 
     @Override
-    public AbstractBookExtractor getBookExtractor(String bookId, IContextLoader storedLoader) {
-        return getBookExtractor(bookId);
+    public AbstractBookExtractor getBookExtractor(final String bookId, final IContextLoader storedLoader) {
+        return this.getBookExtractor(bookId);
     }
 
     @Override

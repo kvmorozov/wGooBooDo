@@ -9,8 +9,8 @@ import io.netty.handler.codec.string.StringEncoder;
 public class ClientAdapterInitializer extends ChannelInitializer<SocketChannel> {
 
     @Override
-    protected void initChannel(final SocketChannel channel) {
-        final ChannelPipeline pipeline = channel.pipeline();
+    protected void initChannel(SocketChannel channel) {
+        ChannelPipeline pipeline = channel.pipeline();
 
         pipeline.addLast("decoder", new StringDecoder());
         pipeline.addLast("encoder", new StringEncoder());

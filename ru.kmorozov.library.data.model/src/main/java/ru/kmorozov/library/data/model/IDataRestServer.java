@@ -1,7 +1,6 @@
 package ru.kmorozov.library.data.model;
 
 import ru.kmorozov.library.data.model.dto.*;
-import ru.kmorozov.library.data.model.dto.ItemDTO.ItemType;
 
 import java.util.List;
 
@@ -18,7 +17,7 @@ public interface IDataRestServer {
 
     List<ItemDTO> getItemsByStorageId(String storageId);
 
-    ItemDTO getItem(String itemId, ItemType itemType, boolean refresh);
+    ItemDTO getItem(String itemId, ItemDTO.ItemType itemType, boolean refresh);
 
     void updateLibrary(String state);
 

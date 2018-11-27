@@ -17,42 +17,42 @@ class GooglePageImgProcessor extends AbstractPageImgProcessor<GooglePageInfo> {
 
     private static final String IMG_ERROR_TEMPLATE = "No img at %s with proxy %s";
 
-    GooglePageImgProcessor(final BookContext bookContext, final GooglePageInfo page, final HttpHostExt usedProxy) {
+    GooglePageImgProcessor(BookContext bookContext, GooglePageInfo page, HttpHostExt usedProxy) {
         super(bookContext, page, usedProxy);
     }
 
-    private boolean processImageWithProxy(final HttpHostExt proxy) {
+    private boolean processImageWithProxy(HttpHostExt proxy) {
         return !(!proxy.isLocal() && !proxy.isAvailable()) &&
-                processImage(page.getImqRqUrl(bookContext.getBookInfo().getBookId(), HTTPS_IMG_TEMPLATE, getImgWidth()), proxy);
+                this.processImage(this.page.getImqRqUrl(this.bookContext.getBookInfo().getBookId(), HTTPS_IMG_TEMPLATE, AbstractPageImgProcessor.getImgWidth()), proxy);
     }
 
     @Override
-    protected String getErrorMsg(final String imgUrl, final HttpHostExt proxy) {
-        return String.format(IMG_ERROR_TEMPLATE, imgUrl, proxy.toString());
+    protected String getErrorMsg(String imgUrl, HttpHostExt proxy) {
+        return String.format(GooglePageImgProcessor.IMG_ERROR_TEMPLATE, imgUrl, proxy.toString());
     }
 
     @Override
     protected String getSuccessMsg() {
-        return String.format("Finished img processing for %s%s", page.getPid(), page.isGapPage() ? " with gap" : "");
+        return String.format("Finished img processing for %s%s", this.page.getPid(), this.page.isGapPage() ? " with gap" : "");
     }
 
     @Override
     public void run() {
-        if (page.isDataProcessed()) return;
+        if (this.page.isDataProcessed()) return;
 
-        if (!processImageWithProxy(usedProxy)) {
+        if (!this.processImageWithProxy(this.usedProxy)) {
             // Пробуем скачать страницу с без прокси, если не получилось с той прокси, с помощью которой узнали sig
-            if (!usedProxy.isLocal()) if (!processImageWithProxy(HttpHostExt.NO_PROXY))
+            if (!this.usedProxy.isLocal()) if (!this.processImageWithProxy(HttpHostExt.NO_PROXY))
                 // Пробуем скачать страницу с другими прокси, если не получилось с той, с помощью которой узнали sig
                 AbstractProxyListProvider.getInstance().getParallelProxyStream().forEach(proxy -> {
-                    if (proxy != usedProxy) if (processImageWithProxy(proxy)) {
+                    if (proxy != this.usedProxy) if (this.processImageWithProxy(proxy)) {
                     }
                 });
         }
     }
 
     @Override
-    protected boolean validateOutput(final IStoredItem storedItem, final int width) {
+    protected boolean validateOutput(IStoredItem storedItem, int width) {
         return !Images.isInvalidImage(storedItem.asFile(), width);
     }
 }

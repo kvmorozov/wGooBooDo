@@ -4,34 +4,34 @@ import java.util.Optional;
 
 public class ManagedProxyListProvider {
 
-    private IProxyListProvider parentProvider;
-    private int timeout;
+    private final IProxyListProvider parentProvider;
+    private final int timeout;
 
-    public ManagedProxyListProvider(IProxyListProvider parentProvider, int timeout) {
+    public ManagedProxyListProvider(final IProxyListProvider parentProvider, final int timeout) {
         this.parentProvider = parentProvider;
         this.timeout = timeout;
     }
 
-    public ManagedProxyListProvider(int timeout) {
+    public ManagedProxyListProvider(final int timeout) {
         this(AbstractProxyListProvider.getInstance(), timeout);
     }
 
     public HttpHostExt getProxy() {
-        if (checkReady(HttpHostExt.NO_PROXY))
+        if (this.checkReady(HttpHostExt.NO_PROXY))
             return HttpHostExt.NO_PROXY;
 
-        if (!parentProvider.proxyListCompleted())
-            parentProvider.processProxyList(UrlType.JSTOR);
+        if (!this.parentProvider.proxyListCompleted())
+            this.parentProvider.processProxyList(UrlType.JSTOR);
 
         Optional<HttpHostExt> opProxy;
         do {
             try {
                 Thread.sleep(100L);
-            } catch (InterruptedException e) {
+            } catch (final InterruptedException e) {
                 e.printStackTrace();
             }
 
-            opProxy = parentProvider
+            opProxy = this.parentProvider
                     .getParallelProxyStream()
                     .filter(this::checkReady)
                     .filter(HttpHostExt::isAvailable)
@@ -42,7 +42,7 @@ public class ManagedProxyListProvider {
         return opProxy.get();
     }
 
-    private boolean checkReady(HttpHostExt proxy) {
-        return System.currentTimeMillis() - proxy.getLastUsedTimestamp() > (long) timeout;
+    private boolean checkReady(final HttpHostExt proxy) {
+        return System.currentTimeMillis() - proxy.getLastUsedTimestamp() > (long) this.timeout;
     }
 }

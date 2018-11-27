@@ -11,7 +11,7 @@ public class ServerPdfMaker implements IPostProcessor {
     }
 
     @Override
-    public IPostProcessor getPostProcessor(BookContext bookContext) {
+    public IPostProcessor getPostProcessor(final BookContext bookContext) {
         return null;
     }
 

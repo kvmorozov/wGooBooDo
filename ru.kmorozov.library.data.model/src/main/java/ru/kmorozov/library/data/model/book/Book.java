@@ -39,110 +39,110 @@ public class Book {
     }
 
     public Map<IdType, String> getBookIds() {
-        return this.bookIds;
+        return bookIds;
     }
 
-    public void setBookIds(Map<IdType, String> bookIds) {
+    public void setBookIds(final Map<IdType, String> bookIds) {
         this.bookIds = bookIds;
     }
 
-    public Book(final String title, final String author) {
+    public Book(String title, String author) {
         this.title = title;
         this.author = author;
     }
 
     public String getBookId() {
-        return bookId;
+        return this.bookId;
     }
 
-    public void setBookId(final String bookId) {
+    public void setBookId(String bookId) {
         this.bookId = bookId;
     }
 
     public String getTitle() {
-        return title;
+        return this.title;
     }
 
-    public void setTitle(final String title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 
     public String getAuthor() {
-        return author;
+        return this.author;
     }
 
-    public void setAuthor(final String author) {
+    public void setAuthor(String author) {
         this.author = author;
     }
 
     public BookInfo getBookInfo() {
-        return bookInfo;
+        return this.bookInfo;
     }
 
-    public void setBookInfo(final BookInfo bookInfo) {
+    public void setBookInfo(BookInfo bookInfo) {
         this.bookInfo = bookInfo;
     }
 
     public Storage getStorage() {
-        return storage;
+        return this.storage;
     }
 
-    public void setStorage(final Storage storage) {
+    public void setStorage(Storage storage) {
         this.storage = storage;
     }
 
     public String getBookKey() {
-        return bookInfo.getFileName();
+        return this.bookInfo.getFileName();
     }
 
     public LinkInfo getLinkInfo() {
-        return linkInfo;
+        return this.linkInfo;
     }
 
-    public void setLinkInfo(final LinkInfo linkInfo) {
+    public void setLinkInfo(LinkInfo linkInfo) {
         this.linkInfo = linkInfo;
     }
 
     public boolean isLink() {
-        return this.bookInfo.isLink();
+        return bookInfo.isLink();
     }
 
     public boolean isBrokenLink() {
-        return this.bookInfo.isLink() && ((null != this.linkInfo && this.linkInfo.isBroken() || null == this.linkInfo));
+        return bookInfo.isLink() && ((null == linkInfo || linkInfo.isBroken()));
     }
 
     public Set<Category> getCategories() {
-        return this.categories;
+        return categories;
     }
 
-    public void setCategories(Set<Category> categories) {
+    public void setCategories(final Set<Category> categories) {
         this.categories = categories;
     }
 
     @Override
-    public boolean equals(final Object o) {
+    public boolean equals(Object o) {
         if (this == o) return true;
-        if (null == o || getClass() != o.getClass()) return false;
-        if (null == title) return false;
+        if (null == o || this.getClass() != o.getClass()) return false;
+        if (null == this.title) return false;
 
-        final Book book = (Book) o;
+        Book book = (Book) o;
 
-        if (!title.equals(book.title)) return false;
-        return author.equals(book.author);
+        if (!this.title.equals(book.title)) return false;
+        return this.author.equals(book.author);
     }
 
     @Override
     public int hashCode() {
-        if (null == title)
+        if (null == this.title)
             return super.hashCode();
 
-        int result = title.hashCode();
-        result = 31 * result + author.hashCode();
+        int result = this.title.hashCode();
+        result = 31 * result + this.author.hashCode();
         return result;
     }
 
-    public void addBookId(IdType idType, String bookId) {
-        bookIds = bookIds == null ? new HashMap<>(1) : bookIds;
-        bookIds.put(idType, bookId);
+    public void addBookId(final IdType idType, final String bookId) {
+        this.bookIds = this.bookIds == null ? new HashMap<>(1) : this.bookIds;
+        this.bookIds.put(idType, bookId);
     }
 }

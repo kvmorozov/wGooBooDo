@@ -8,6 +8,7 @@ import ru.kmorozov.onedrive.client.serialization.JsonDateSerializer;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.util.Date;
 
@@ -34,7 +35,7 @@ public interface OneDriveItem {
 
     class FACTORY {
 
-        public static OneDriveItem create(final OneDriveItem parent, final String name, final boolean isDirectory) {
+        public static OneDriveItem create(OneDriveItem parent, String name, boolean isDirectory) {
 
             return new OneDriveItem() {
                 public String getId() {
@@ -85,10 +86,10 @@ public interface OneDriveItem {
             };
         }
 
-        public static OneDriveItem create(final Item item) {
+        public static OneDriveItem create(Item item) {
             return new OneDriveItem() {
 
-                private final OneDriveItem parent = create(item.getParentReference());
+                private final OneDriveItem parent = FACTORY.create(item.getParentReference());
 
                 @Override
                 public String getId() {
@@ -107,7 +108,7 @@ public interface OneDriveItem {
 
                 @Override
                 public String getFullName() {
-                    return parent.getFullName() + item.getName() + (isDirectory() ? "/" : "");
+                    return this.parent.getFullName() + item.getName() + (this.isDirectory() ? "/" : "");
                 }
 
                 @Override
@@ -124,7 +125,7 @@ public interface OneDriveItem {
                 public Date getCreatedDateTime() {
                     try {
                         return JsonDateSerializer.INSTANCE.deserialize(item.getFileSystemInfo().getCreatedDateTime());
-                    } catch (ParseException e) {
+                    } catch (final ParseException e) {
                         e.printStackTrace();
 
                         return new Date();
@@ -135,7 +136,7 @@ public interface OneDriveItem {
                 public Date getLastModifiedDateTime() {
                     try {
                         return JsonDateSerializer.INSTANCE.deserialize(item.getFileSystemInfo().getLastModifiedDateTime());
-                    } catch (ParseException e) {
+                    } catch (final ParseException e) {
                         e.printStackTrace();
 
                         return new Date();
@@ -144,7 +145,7 @@ public interface OneDriveItem {
 
                 @Override
                 public OneDriveItem getParent() {
-                    return parent;
+                    return this.parent;
                 }
 
                 @Override
@@ -154,7 +155,7 @@ public interface OneDriveItem {
             };
         }
 
-        public static OneDriveItem create(final ItemReference parent) {
+        public static OneDriveItem create(ItemReference parent) {
             return new OneDriveItem() {
                 @Override
                 public String getId() {
@@ -177,13 +178,9 @@ public interface OneDriveItem {
                         return null;
                     }
 
-                    final int index = parent.getPath().indexOf(':');
+                    int index = parent.getPath().indexOf(':');
 
-                    try {
-                        return URLDecoder.decode(0 < index ? parent.getPath().substring(index + 1) : parent.getPath(), "UTF-8") + '/';
-                    } catch (final UnsupportedEncodingException e) {
-                        throw Throwables.propagate(e);
-                    }
+                    return URLDecoder.decode(0 < index ? parent.getPath().substring(index + 1) : parent.getPath(), StandardCharsets.UTF_8) + '/';
                 }
 
                 @Override

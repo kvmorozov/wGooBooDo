@@ -31,12 +31,12 @@ public class LibraryRestTest {
 
     @Before
     public void setup() {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
     }
 
     @Test
     public void login() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/login?login=user"))
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/login?login=user"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.login", Matchers.is("user")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$._links").value(Matchers.hasKey("root")))

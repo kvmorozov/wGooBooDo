@@ -18,16 +18,16 @@ public class OptionsBasedProducer implements IBookListProducer {
     private Set<String> bookIdsList = new HashSet<>();
 
     public OptionsBasedProducer() {
-        final String bookId = GBDOptions.getBookId();
+        String bookId = GBDOptions.getBookId();
 
         if (!StringUtils.isEmpty(bookId) && LibraryFactory.isValidId(bookId))
-            bookIdsList = new HashSet<>(Collections.singletonList(bookId));
+            this.bookIdsList = new HashSet<>(Collections.singletonList(bookId));
         else if (GBDOptions.isValidConfig())
-            bookIdsList = ContextProvider.getContextProvider().getBookIdsList();
+            this.bookIdsList = ContextProvider.getContextProvider().getBookIdsList();
     }
 
     @Override
     public Set<String> getBookIds() {
-        return bookIdsList;
+        return this.bookIdsList;
     }
 }

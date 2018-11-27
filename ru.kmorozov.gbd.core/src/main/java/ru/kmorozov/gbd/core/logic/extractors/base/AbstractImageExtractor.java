@@ -24,66 +24,66 @@ public abstract class AbstractImageExtractor extends AbstractEventSource impleme
     protected final Logger logger;
     protected Collection<HttpHostExt> waitingProxy = new CopyOnWriteArrayList<>();
 
-    protected AbstractImageExtractor(final BookContext bookContext, Class<? extends AbstractImageExtractor> extractorClass) {
+    protected AbstractImageExtractor(BookContext bookContext, final Class<? extends AbstractImageExtractor> extractorClass) {
         this.bookContext = bookContext;
-        setProcessStatus(bookContext.getProgress());
-        logger = ExecutionContext.INSTANCE.getLogger(extractorClass, bookContext);
+        this.setProcessStatus(bookContext.getProgress());
+        this.logger = ExecutionContext.INSTANCE.getLogger(extractorClass, bookContext);
 
-        this.output = ExecutionContext.INSTANCE.getOutput();
+        output = ExecutionContext.INSTANCE.getOutput();
     }
 
     @Override
     public BookContext getUniqueObject() {
-        return bookContext;
+        return this.bookContext;
     }
 
     protected abstract void restoreState();
 
     @Override
     public String toString() {
-        return "Extractor:" + bookContext;
+        return "Extractor:" + this.bookContext;
     }
 
     public final void process() {
-        if (!bookContext.started.compareAndSet(false, true)) return;
+        if (!this.bookContext.started.compareAndSet(false, true)) return;
 
-        if (!preCheck()) return;
+        if (!this.preCheck()) return;
 
-        prepareStorage();
-        restoreState();
+        this.prepareStorage();
+        this.restoreState();
 
-        initComplete.set(true);
+        this.initComplete.set(true);
     }
 
     protected abstract boolean preCheck();
 
     @Override
     public void run() {
-        process();
+        this.process();
 
-        while (!initComplete.get()) {
+        while (!this.initComplete.get()) {
             try {
                 Thread.sleep(1000L);
-            } catch (final InterruptedException e) {
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        waitingProxy.forEach(this::newProxyEvent);
+        this.waitingProxy.forEach(this::newProxyEvent);
     }
 
     protected void prepareStorage() {
         if (!GBDOptions.getStorage().isValidOrCreate()) return;
 
-        logger.info(ExecutionContext.INSTANCE.isSingleMode() ? String.format("Working with %s", bookContext.getBookInfo().getBookData().getTitle()) : "Starting...");
+        this.logger.info(ExecutionContext.INSTANCE.isSingleMode() ? String.format("Working with %s", this.bookContext.getBookInfo().getBookData().getTitle()) : "Starting...");
 
         try {
-            bookContext.setStorage(GBDOptions.getStorage().getChildStorage(bookContext.getBookInfo().getBookData()));
-            bookContext.getProgress().resetMaxValue(bookContext.getStorage().size());
-        } catch (IOException e) {
-            logger.error(e);
+            this.bookContext.setStorage(GBDOptions.getStorage().getChildStorage(this.bookContext.getBookInfo().getBookData()));
+            this.bookContext.getProgress().resetMaxValue(this.bookContext.getStorage().size());
+        } catch (final IOException e) {
+            this.logger.error(e);
         }
 
-        if (!bookContext.getStorage().isValidOrCreate())
-            logger.severe(String.format("Invalid book title: %s", bookContext.getBookInfo().getBookData().getTitle()));
+        if (!this.bookContext.getStorage().isValidOrCreate())
+            this.logger.severe(String.format("Invalid book title: %s", this.bookContext.getBookInfo().getBookData().getTitle()));
     }
 }

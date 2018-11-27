@@ -1,7 +1,7 @@
 package ru.kmorozov.library.utils;
 
 import ru.kmorozov.library.data.model.book.Book;
-import ru.kmorozov.library.data.model.book.BookInfo.BookFormat;
+import ru.kmorozov.library.data.model.book.BookInfo;
 import ru.kmorozov.library.data.model.book.Category;
 
 import java.util.HashSet;
@@ -16,35 +16,35 @@ public class BookUtils {
 
     private static final Logger logger = Logger.getLogger(BookUtils.class.getName());
 
-    public static BookFormat getFormat(final String fileName) {
-        for (final BookFormat format : BookFormat.values())
+    public static BookInfo.BookFormat getFormat(String fileName) {
+        for (BookInfo.BookFormat format : BookInfo.BookFormat.values())
             if (fileName.endsWith(format.getExt()))
                 return format;
 
-        logger.log(Level.INFO, "Unknown format for file " + fileName);
-        return BookFormat.UNKNOWN;
+        BookUtils.logger.log(Level.INFO, "Unknown format for file " + fileName);
+        return BookInfo.BookFormat.UNKNOWN;
     }
 
-    public static String humanReadableByteCount(final long bytes, final boolean si) {
-        final int unit = si ? 1000 : 1024;
+    public static String humanReadableByteCount(long bytes, boolean si) {
+        int unit = si ? 1000 : 1024;
         if (bytes < (long) unit) return bytes + " B";
-        final int exp = (int) (Math.log((double) bytes) / Math.log((double) unit));
-        final String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp - 1) + (si ? "" : "i");
+        int exp = (int) (Math.log((double) bytes) / Math.log((double) unit));
+        String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp - 1) + (si ? "" : "i");
         return String.format("%.1f %sB", (double) bytes / Math.pow((double) unit, (double) exp), pre);
     }
 
-    public static void mergeCategories(Book bookFrom, Book bookTo) {
+    public static void mergeCategories(final Book bookFrom, final Book bookTo) {
         if (bookFrom == bookTo)
             return;
 
-        Set<Category> inheritedFrom = bookFrom.getStorage().getCategories();
-        Set<Category> inheritedTo = bookTo.getStorage().getCategories();
+        final Set<Category> inheritedFrom = bookFrom.getStorage().getCategories();
+        final Set<Category> inheritedTo = bookTo.getStorage().getCategories();
 
-        Set<Category> ownFrom = bookFrom.getCategories() == null ? new HashSet<>() : bookFrom.getCategories();
-        Set<Category> ownTo = bookTo.getCategories() == null ? new HashSet<>() : bookTo.getCategories();
+        final Set<Category> ownFrom = bookFrom.getCategories() == null ? new HashSet<>() : bookFrom.getCategories();
+        final Set<Category> ownTo = bookTo.getCategories() == null ? new HashSet<>() : bookTo.getCategories();
 
-        Set<Category> merged = new HashSet<>();
-        Set<Category> inheritedMerged = new HashSet<>();
+        final Set<Category> merged = new HashSet<>();
+        final Set<Category> inheritedMerged = new HashSet<>();
 
         merged.addAll(ownTo);
         merged.addAll(ownFrom);

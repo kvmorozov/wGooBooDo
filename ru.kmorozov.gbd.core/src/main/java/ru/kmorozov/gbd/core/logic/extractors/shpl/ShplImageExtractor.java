@@ -16,20 +16,20 @@ import java.util.concurrent.TimeUnit;
  */
 public class ShplImageExtractor extends AbstractImageExtractor {
 
-    public ShplImageExtractor(final BookContext bookContext) {
+    public ShplImageExtractor(BookContext bookContext) {
         super(bookContext, ShplImageExtractor.class);
     }
 
     @Override
     protected void restoreState() {
-        bookContext.getPagesStream().forEach(page -> {
+        this.bookContext.getPagesStream().forEach(page -> {
             try {
-                if (bookContext.getStorage().isPageExists(page)) {
-                    logger.severe(String.format("Page %s found in directory!", page.getPid()));
+                if (this.bookContext.getStorage().isPageExists(page)) {
+                    this.logger.severe(String.format("Page %s found in directory!", page.getPid()));
                     ((AbstractPage) page).setDataProcessed(true);
                     ((AbstractPage) page).setFileExists(true);
                 }
-            } catch (final IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         });
@@ -41,7 +41,7 @@ public class ShplImageExtractor extends AbstractImageExtractor {
     }
 
     @Override
-    public void newProxyEvent(final HttpHostExt proxy) {
+    public void newProxyEvent(HttpHostExt proxy) {
         if (!proxy.isLocal()) return;
 
         (new Thread(new EventProcessor(proxy))).start();
@@ -51,32 +51,32 @@ public class ShplImageExtractor extends AbstractImageExtractor {
 
         private final HttpHostExt proxy;
 
-        EventProcessor(final HttpHostExt proxy) {
+        EventProcessor(HttpHostExt proxy) {
             this.proxy = proxy;
         }
 
         @Override
         public void run() {
-            while (!initComplete.get()) {
-                waitingProxy.add(proxy);
+            while (!ShplImageExtractor.this.initComplete.get()) {
+                ShplImageExtractor.this.waitingProxy.add(this.proxy);
                 return;
             }
 
-            for (final IPage page : bookContext.getBookInfo().getPages().getPages())
-                bookContext.imgExecutor.execute(new ShplPageImgProcessor(bookContext, (ShplPage) page, HttpHostExt.NO_PROXY));
+            for (IPage page : ShplImageExtractor.this.bookContext.getBookInfo().getPages().getPages())
+                ShplImageExtractor.this.bookContext.imgExecutor.execute(new ShplPageImgProcessor(ShplImageExtractor.this.bookContext, (ShplPage) page, HttpHostExt.NO_PROXY));
 
-            bookContext.imgExecutor.terminate(20L, TimeUnit.MINUTES);
+            ShplImageExtractor.this.bookContext.imgExecutor.terminate(20L, TimeUnit.MINUTES);
 
             ExecutionContext.INSTANCE.updateProxyList();
 
-            logger.info(bookContext.getBookInfo().getPages().getMissingPagesList());
+            ShplImageExtractor.this.logger.info(ShplImageExtractor.this.bookContext.getBookInfo().getPages().getMissingPagesList());
 
-            final long pagesAfter = bookContext.getPagesStream().filter(pageInfo -> pageInfo.isDataProcessed()).count();
+            long pagesAfter = ShplImageExtractor.this.bookContext.getPagesStream().filter(pageInfo -> pageInfo.isDataProcessed()).count();
 
-            logger.info(String.format("Processed %s pages", pagesAfter - bookContext.getPagesBefore()));
+            ShplImageExtractor.this.logger.info(String.format("Processed %s pages", pagesAfter - ShplImageExtractor.this.bookContext.getPagesBefore()));
 
-            synchronized (bookContext) {
-                ExecutionContext.INSTANCE.postProcessBook(bookContext);
+            synchronized (ShplImageExtractor.this.bookContext) {
+                ExecutionContext.INSTANCE.postProcessBook(ShplImageExtractor.this.bookContext);
             }
         }
     }

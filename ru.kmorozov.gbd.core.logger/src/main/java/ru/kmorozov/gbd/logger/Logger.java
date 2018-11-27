@@ -14,45 +14,45 @@ public final class Logger {
     private final IEventConsumer eventConsumer;
     private final String name, prefix;
 
-    public Logger(final IEventConsumer eventConsumer, final String name, final String prefix) {
+    public Logger(IEventConsumer eventConsumer, String name, String prefix) {
         this.eventConsumer = eventConsumer;
         this.name = name;
         this.prefix = prefix;
     }
 
-    public static Logger getLogger(final IEventConsumer eventConsumer, final String name, final String prefix) {
+    public static Logger getLogger(IEventConsumer eventConsumer, String name, String prefix) {
         return new Logger(eventConsumer, name, prefix);
     }
 
-    public static Logger getLogger(final Class<?> claszz) {
+    public static Logger getLogger(Class<?> claszz) {
         return new Logger(new DummyReceiver(), claszz.getName(), ": ");
     }
 
-    public void info(final String msg) {
-        eventConsumer.consumeEvent(new LogEvent(Level.INFO, prefix + msg));
+    public void info(String msg) {
+        this.eventConsumer.consumeEvent(new LogEvent(Level.INFO, this.prefix + msg));
     }
 
-    public void severe(final String msg) {
-        eventConsumer.consumeEvent(new LogEvent(Level.SEVERE, prefix + msg));
+    public void severe(String msg) {
+        this.eventConsumer.consumeEvent(new LogEvent(Level.SEVERE, this.prefix + msg));
     }
 
-    public void warn(final String msg) {
-        eventConsumer.consumeEvent(new LogEvent(Level.WARNING, prefix + msg));
+    public void warn(String msg) {
+        this.eventConsumer.consumeEvent(new LogEvent(Level.WARNING, this.prefix + msg));
     }
 
-    public void error(final String msg) {
-        eventConsumer.consumeEvent(new LogEvent(Level.SEVERE, prefix + msg));
+    public void error(String msg) {
+        this.eventConsumer.consumeEvent(new LogEvent(Level.SEVERE, this.prefix + msg));
     }
 
-    public void error(final Throwable ex) {
-        eventConsumer.consumeEvent(new LogEvent(Level.SEVERE, prefix + ex.getMessage()));
+    public void error(Throwable ex) {
+        this.eventConsumer.consumeEvent(new LogEvent(Level.SEVERE, this.prefix + ex.getMessage()));
     }
 
-    public void error(final String msg, final Throwable ex) {
-        eventConsumer.consumeEvent(new LogEvent(Level.SEVERE, prefix + msg + ":" + ex.getMessage()));
+    public void error(String msg, Throwable ex) {
+        this.eventConsumer.consumeEvent(new LogEvent(Level.SEVERE, this.prefix + msg + ":" + ex.getMessage()));
     }
 
-    public void finest(final String msg) {
-        eventConsumer.consumeEvent(new LogEvent(Level.FINEST, prefix + msg));
+    public void finest(String msg) {
+        this.eventConsumer.consumeEvent(new LogEvent(Level.FINEST, this.prefix + msg));
     }
 }

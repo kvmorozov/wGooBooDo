@@ -19,7 +19,7 @@ public class DownloadTask extends Task {
     private final boolean replace;
     private final int chunkSize;
 
-    public DownloadTask(final TaskOptions options, final File parent, final OneDriveItem remoteFile, final boolean replace, final int chunkSize) {
+    public DownloadTask(Task.TaskOptions options, File parent, OneDriveItem remoteFile, boolean replace, int chunkSize) {
         super(options);
 
         this.parent = Preconditions.checkNotNull(parent);
@@ -32,7 +32,7 @@ public class DownloadTask extends Task {
         }
     }
 
-    public DownloadTask(final TaskOptions options, final File parent, final OneDriveItem remoteFile, final boolean replace) {
+    public DownloadTask(Task.TaskOptions options, File parent, OneDriveItem remoteFile, boolean replace) {
         this(options, parent, remoteFile, replace, ResumableDownloader.MAXIMUM_CHUNK_SIZE);
     }
 
@@ -42,92 +42,92 @@ public class DownloadTask extends Task {
 
     @Override
     public String toString() {
-        return "Download " + remoteFile.getFullName();
+        return "Download " + this.remoteFile.getFullName();
     }
 
     @Override
     protected void taskBody() throws IOException {
 
-        if (isIgnored(remoteFile)) {
-            reporter.skipped();
+        if (Task.isIgnored(this.remoteFile)) {
+            this.reporter.skipped();
             return;
         }
 
-        if (remoteFile.isDirectory()) {
+        if (this.remoteFile.isDirectory()) {
 
-            final File newParent = fileSystem.createFolder(parent, remoteFile.getName());
-            queue.add(new UpdatePropertiesTask(getTaskOptions(), remoteFile, newParent));
+            File newParent = this.fileSystem.createFolder(this.parent, this.remoteFile.getName());
+            this.queue.add(new UpdatePropertiesTask(this.getTaskOptions(), this.remoteFile, newParent));
 
-            for (final OneDriveItem item : api.getChildren(remoteFile)) {
-                queue.add(new DownloadTask(getTaskOptions(), newParent, item, false));
+            for (OneDriveItem item : this.api.getChildren(this.remoteFile)) {
+                this.queue.add(new DownloadTask(this.getTaskOptions(), newParent, item, false));
             }
 
         } else {
 
-            if (isSizeInvalid(remoteFile)) {
-                reporter.skipped();
+            if (Task.isSizeInvalid(this.remoteFile)) {
+                this.reporter.skipped();
                 return;
             }
 
-            final long startTime = System.currentTimeMillis();
+            long startTime = System.currentTimeMillis();
 
             File downloadFile = null;
 
             try {
-                downloadFile = fileSystem.createFile(parent, remoteFile.getName() + ".tmp");
+                downloadFile = this.fileSystem.createFile(this.parent, this.remoteFile.getName() + ".tmp");
 
                 // The progress reporter
-                final ResumableDownloaderProgressListener progressListener = new ResumableDownloaderProgressListener() {
+                ResumableDownloaderProgressListener progressListener = new ResumableDownloaderProgressListener() {
 
                     private long startTimeInner = System.currentTimeMillis();
 
                     @Override
-                    public void progressChanged(final ResumableDownloader downloader) {
+                    public void progressChanged(ResumableDownloader downloader) {
 
                         switch (downloader.getDownloadState()) {
                             case MEDIA_IN_PROGRESS:
-                                final long elapsedTimeInner = System.currentTimeMillis() - startTimeInner;
+                                long elapsedTimeInner = System.currentTimeMillis() - this.startTimeInner;
 
-                                reporter.info(String.format("Downloaded chunk (progress %.1f%%) of %s (%s/s) for file %s",
+                                DownloadTask.this.reporter.info(String.format("Downloaded chunk (progress %.1f%%) of %s (%s/s) for file %s",
                                                             downloader.getProgress() * 100.0,
                                                             LogUtils.readableFileSize((long) downloader.getChunkSize()),
                                         0L < elapsedTimeInner ? LogUtils.readableFileSize((double) downloader.getChunkSize() / ((double) elapsedTimeInner / 1000.0d)) : 0,
-                                                            remoteFile.getFullName()));
+                                        DownloadTask.this.remoteFile.getFullName()));
 
-                                startTimeInner = System.currentTimeMillis();
+                                this.startTimeInner = System.currentTimeMillis();
                                 break;
                             case MEDIA_COMPLETE:
-                                final long elapsedTime = System.currentTimeMillis() - startTime;
-                                reporter.info(String.format("Downloaded %s in %s (%s/s) of %s file %s",
-                                                            LogUtils.readableFileSize(remoteFile.getSize()),
+                                long elapsedTime = System.currentTimeMillis() - startTime;
+                                DownloadTask.this.reporter.info(String.format("Downloaded %s in %s (%s/s) of %s file %s",
+                                                            LogUtils.readableFileSize(DownloadTask.this.remoteFile.getSize()),
                                                             LogUtils.readableTime(elapsedTime),
-                                        0L < elapsedTime ? LogUtils.readableFileSize((double) remoteFile.getSize() / ((double) elapsedTime / 1000.0d)) : 0,
-                                                            replace ? "replaced" : "new",
-                                                            remoteFile.getFullName()));
+                                        0L < elapsedTime ? LogUtils.readableFileSize((double) DownloadTask.this.remoteFile.getSize() / ((double) elapsedTime / 1000.0d)) : 0,
+                                        DownloadTask.this.replace ? "replaced" : "new",
+                                        DownloadTask.this.remoteFile.getFullName()));
                         }
                     }
                 };
 
-                api.download(remoteFile, downloadFile, progressListener, chunkSize);
+                this.api.download(this.remoteFile, downloadFile, progressListener, this.chunkSize);
 
                 // Do a CRC check on the downloaded file
-                if (!fileSystem.verifyCrc(downloadFile, remoteFile.getCrc32())) {
-                    throw new IOException(String.format("Download of file '%s' failed", remoteFile.getFullName()));
+                if (!this.fileSystem.verifyCrc(downloadFile, this.remoteFile.getCrc32())) {
+                    throw new IOException(String.format("Download of file '%s' failed", this.remoteFile.getFullName()));
                 }
 
-                fileSystem.setAttributes(
+                this.fileSystem.setAttributes(
                         downloadFile,
-                        remoteFile.getCreatedDateTime(),
-                        remoteFile.getLastModifiedDateTime());
+                        this.remoteFile.getCreatedDateTime(),
+                        this.remoteFile.getLastModifiedDateTime());
 
-                final File localFile = new File(parent, remoteFile.getName());
+                File localFile = new File(this.parent, this.remoteFile.getName());
 
-                fileSystem.replaceFile(localFile, downloadFile);
-                reporter.fileDownloaded(replace, remoteFile.getSize());
-            } catch (final Throwable e) {
+                this.fileSystem.replaceFile(localFile, downloadFile);
+                this.reporter.fileDownloaded(this.replace, this.remoteFile.getSize());
+            } catch (Throwable e) {
                 if (null != downloadFile) {
                     if (!downloadFile.delete()) {
-                        reporter.warn("Unable to remove temporary file " + downloadFile.getPath());
+                        this.reporter.warn("Unable to remove temporary file " + downloadFile.getPath());
                     }
                 }
 

@@ -31,20 +31,20 @@ public class OneDriveContextLoader implements IContextLoader {
     private Map<String, BookInfo> booksMap;
     private Map<String, OneDriveItem> itemsMap;
 
-    void initContext(OneDriveItem root) {
-        booksMap = new HashMap<>();
-        itemsMap = new HashMap<>();
+    void initContext(final OneDriveItem root) {
+        this.booksMap = new HashMap<>();
+        this.itemsMap = new HashMap<>();
 
         try {
-            for (OneDriveItem item : api.getChildren(root))
+            for (final OneDriveItem item : this.api.getChildren(root))
                 if (item.isDirectory()) {
-                    String[] nameTokens = item.getName().split(" ");
-                    String bookId = nameTokens[nameTokens.length - 1];
-                    booksMap.put(bookId, null);
-                    itemsMap.put(bookId, item);
+                    final String[] nameTokens = item.getName().split(" ");
+                    final String bookId = nameTokens[nameTokens.length - 1];
+                    this.booksMap.put(bookId, null);
+                    this.itemsMap.put(bookId, item);
                 }
-        } catch (IOException e) {
-            logger.error("Cannot init OneDriveContextLoader", e);
+        } catch (final IOException e) {
+            OneDriveContextLoader.logger.error("Cannot init OneDriveContextLoader", e);
         }
     }
 
@@ -59,31 +59,31 @@ public class OneDriveContextLoader implements IContextLoader {
     }
 
     @Override
-    public void updateBookInfo(BookInfo bookInfo) {
-        dbContextLoader.updateBookInfo(bookInfo);
+    public void updateBookInfo(final BookInfo bookInfo) {
+        this.dbContextLoader.updateBookInfo(bookInfo);
     }
 
     @Override
-    public BookInfo getBookInfo(String bookId) {
-        BookInfo bookInfo = booksMap.get(bookId);
+    public BookInfo getBookInfo(final String bookId) {
+        BookInfo bookInfo = this.booksMap.get(bookId);
         if (bookInfo == null)
-            booksMap.put(bookId, bookInfo = (new GoogleBookInfoExtractor(bookId, dbContextLoader)).getBookInfo());
+            this.booksMap.put(bookId, bookInfo = (new GoogleBookInfoExtractor(bookId, this.dbContextLoader)).getBookInfo());
 
         return bookInfo;
     }
 
-    public OneDriveItem getBookDir(String bookId) {
-        return itemsMap.get(bookId);
+    public OneDriveItem getBookDir(final String bookId) {
+        return this.itemsMap.get(bookId);
     }
 
     @Override
     public Set<String> getBookIdsList() {
-        return booksMap.keySet();
+        return this.booksMap.keySet();
     }
 
     @Override
     public int getContextSize() {
-        return booksMap.size();
+        return this.booksMap.size();
     }
 
     @Override
@@ -93,13 +93,13 @@ public class OneDriveContextLoader implements IContextLoader {
 
     @Override
     public boolean isValid() {
-        if (api == null)
+        if (this.api == null)
             return false;
 
         try {
-            return api.getRoot() != null;
-        } catch (IOException e) {
-            logger.error("Invalid OneDrive connection", e);
+            return this.api.getRoot() != null;
+        } catch (final IOException e) {
+            OneDriveContextLoader.logger.error("Invalid OneDrive connection", e);
             return false;
         }
     }

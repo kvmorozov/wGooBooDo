@@ -1,9 +1,8 @@
 package ru.kmorozov.library.data.loader.impl;
 
+import ru.kmorozov.library.data.model.book.Storage;
 import ru.kmorozov.onedrive.client.OneDriveItem;
 import ru.kmorozov.library.data.model.book.BookInfo;
-import ru.kmorozov.library.data.model.book.BookInfo.BookFormat;
-import ru.kmorozov.library.data.model.book.Storage.StorageType;
 import ru.kmorozov.library.utils.BookUtils;
 
 import java.io.File;
@@ -20,99 +19,99 @@ public class ServerItem {
     private final String name;
     private ServerItem parent;
     private Date lastModifiedDateTime;
-    private final StorageType storageType;
+    private final Storage.StorageType storageType;
     private long filesCount;
     private final long size;
     private final Object originalItem;
 
-    private ServerItem(final OneDriveItem oneDriveItem, final boolean lookupParent) {
-        this.isDirectory = oneDriveItem.isDirectory();
-        this.url = oneDriveItem.getId();
-        this.name = oneDriveItem.getName();
-        this.lastModifiedDateTime = oneDriveItem.getLastModifiedDateTime();
-        this.storageType = StorageType.OneDrive;
-        this.originalItem = oneDriveItem;
-        this.size = oneDriveItem.getSize();
+    private ServerItem(OneDriveItem oneDriveItem, boolean lookupParent) {
+        isDirectory = oneDriveItem.isDirectory();
+        url = oneDriveItem.getId();
+        name = oneDriveItem.getName();
+        lastModifiedDateTime = oneDriveItem.getLastModifiedDateTime();
+        storageType = Storage.StorageType.OneDrive;
+        originalItem = oneDriveItem;
+        size = oneDriveItem.getSize();
 
         if (lookupParent && null != oneDriveItem.getParent() && null != oneDriveItem.getParent().getId())
-            parent = new ServerItem(oneDriveItem.getParent(), false);
+            this.parent = new ServerItem(oneDriveItem.getParent(), false);
 
         if (null != oneDriveItem.getFolder())
-            filesCount = oneDriveItem.getFolder().getChildCount();
+            this.filesCount = oneDriveItem.getFolder().getChildCount();
     }
 
-    ServerItem(final OneDriveItem oneDriveItem) {
+    ServerItem(OneDriveItem oneDriveItem) {
         this(oneDriveItem, true);
     }
 
-    private ServerItem(final Path path, final boolean lookupParent) {
-        final File file = path.toFile();
+    private ServerItem(Path path, boolean lookupParent) {
+        File file = path.toFile();
 
-        this.isDirectory = file.isDirectory();
-        this.url = path.toString();
-        this.name = file.getName();
-        this.storageType = StorageType.LocalFileSystem;
-        this.originalItem = path;
-        this.size = file.length();
+        isDirectory = file.isDirectory();
+        url = path.toString();
+        name = file.getName();
+        storageType = Storage.StorageType.LocalFileSystem;
+        originalItem = path;
+        size = file.length();
 
         if (lookupParent)
-            parent = new ServerItem(path.getParent(), false);
+            this.parent = new ServerItem(path.getParent(), false);
     }
 
-    ServerItem(final Path path) {
+    ServerItem(Path path) {
         this(path, true);
     }
 
     public boolean isDirectory() {
-        return isDirectory;
+        return this.isDirectory;
     }
 
     public String getUrl() {
-        return url;
+        return this.url;
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public ServerItem getParent() {
-        return parent;
+        return this.parent;
     }
 
     public Date getLastModifiedDateTime() {
-        return lastModifiedDateTime;
+        return this.lastModifiedDateTime;
     }
 
     public boolean isLoadableItem() {
-        if (isDirectory)
+        if (this.isDirectory)
             return true;
         else {
-            final BookFormat format = BookUtils.getFormat(name);
+            BookInfo.BookFormat format = BookUtils.getFormat(this.name);
             return BookInfo.BookFormat.UNKNOWN != format && BookInfo.BookFormat.LNK != format;
         }
     }
 
     public boolean isLink() {
-        return BookInfo.BookFormat.LNK == BookUtils.getFormat(name);
+        return BookInfo.BookFormat.LNK == BookUtils.getFormat(this.name);
     }
 
     public boolean isLoadableOrLink() {
-        return isLoadableItem() || isLink();
+        return this.isLoadableItem() || this.isLink();
     }
 
-    public StorageType getStorageType() {
-        return storageType;
+    public Storage.StorageType getStorageType() {
+        return this.storageType;
     }
 
     public long getFilesCount() {
-        return filesCount;
+        return this.filesCount;
     }
 
     public Object getOriginalItem() {
-        return originalItem;
+        return this.originalItem;
     }
 
     public long getSize() {
-        return size;
+        return this.size;
     }
 }

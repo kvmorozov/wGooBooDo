@@ -13,17 +13,17 @@ import java.util.List;
 
 public class LocalFSIndex implements IIndex {
 
-    private File indexFile;
-    private LocalFSStorage storage;
+    private final File indexFile;
+    private final LocalFSStorage storage;
 
-    public LocalFSIndex(LocalFSStorage storage, String indexName, boolean createIfNotExists) {
+    public LocalFSIndex(final LocalFSStorage storage, final String indexName, final boolean createIfNotExists) {
         this.storage = storage;
 
-        indexFile = new File(storage.getStorageDir().getPath() + File.separator + indexName);
-        if (!indexFile.exists() && createIfNotExists) {
+        this.indexFile = new File(storage.getStorageDir().getPath() + File.separator + indexName);
+        if (!this.indexFile.exists() && createIfNotExists) {
             try {
-                indexFile.createNewFile();
-            } catch (final IOException e) {
+                this.indexFile.createNewFile();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -32,9 +32,9 @@ public class LocalFSIndex implements IIndex {
     @Override
     public IBookInfo[] getBooks() {
         BookInfo[] ctxObjArr = null;
-        try (FileReader reader = new FileReader(indexFile)) {
+        try (final FileReader reader = new FileReader(this.indexFile)) {
             ctxObjArr = Mapper.getGson().fromJson(reader, BookInfo[].class);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
 
@@ -42,12 +42,12 @@ public class LocalFSIndex implements IIndex {
     }
 
     @Override
-    public void updateIndex(List<IBookInfo> books) {
+    public void updateIndex(final List<IBookInfo> books) {
         try {
-            try (FileWriter writer = new FileWriter(indexFile)) {
+            try (final FileWriter writer = new FileWriter(this.indexFile)) {
                 Mapper.getGson().toJson(books, writer);
             }
-        } catch (final IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

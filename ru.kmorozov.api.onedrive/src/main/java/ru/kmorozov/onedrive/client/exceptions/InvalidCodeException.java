@@ -5,7 +5,7 @@ package ru.kmorozov.onedrive.client.exceptions;
  */
 public class InvalidCodeException extends OneDriveException {
 
-    public InvalidCodeException(final OneDriveErrorInfo errorInfo) {
+    public InvalidCodeException(OneDriveErrorInfo errorInfo) {
         super(errorInfo);
     }
 }

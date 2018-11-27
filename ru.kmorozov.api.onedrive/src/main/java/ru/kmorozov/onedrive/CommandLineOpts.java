@@ -16,12 +16,12 @@ public class CommandLineOpts {
 
     private static final Logger log = LogManager.getLogger(Main.class.getName());
 
-    private static final Options optionsToParse = buildOptions();
+    private static final Options optionsToParse = CommandLineOpts.buildOptions();
     private static final CommandLineOpts opts = new CommandLineOpts();
     private boolean isInitialised;
 
     // Mandatory arguments
-    private Direction direction;
+    private CommandLineOpts.Direction direction;
     private String localPath;
     private String remotePath;
 
@@ -41,190 +41,190 @@ public class CommandLineOpts {
     private boolean authorise;
 
     public static CommandLineOpts getCommandLineOpts() {
-        return opts;
+        return CommandLineOpts.opts;
     }
 
-    public static void initialise(final String[] args) throws ParseException {
+    public static void initialise(String[] args) throws ParseException {
 
-        final CommandLineParser parser = new DefaultParser();
-        final CommandLine line = parser.parse(optionsToParse, args);
+        CommandLineParser parser = new DefaultParser();
+        CommandLine line = parser.parse(CommandLineOpts.optionsToParse, args);
 
-        for (final Option opt : line.getOptions()) {
-            log.debug(String.format("Parsing command line option -%s, value = %s ",
+        for (Option opt : line.getOptions()) {
+            CommandLineOpts.log.debug(String.format("Parsing command line option -%s, value = %s ",
                     null != opt.getLongOpt() ? '-' + opt.getLongOpt() : opt.getOpt(),
                     opt.getValue()));
         }
 
-        opts.help = line.hasOption("help");
-        opts.useHash = line.hasOption("hash-compare");
-        opts.version = line.hasOption("version");
-        opts.recursive = line.hasOption("recursive");
-        opts.dryRun = line.hasOption("dry-run");
-        opts.authorise = line.hasOption("authorise");
+        CommandLineOpts.opts.help = line.hasOption("help");
+        CommandLineOpts.opts.useHash = line.hasOption("hash-compare");
+        CommandLineOpts.opts.version = line.hasOption("version");
+        CommandLineOpts.opts.recursive = line.hasOption("recursive");
+        CommandLineOpts.opts.dryRun = line.hasOption("dry-run");
+        CommandLineOpts.opts.authorise = line.hasOption("authorise");
 
         if (line.hasOption("local")) {
-            opts.localPath = line.getOptionValue("local");
+            CommandLineOpts.opts.localPath = line.getOptionValue("local");
         }
 
         if (line.hasOption("remote")) {
-            opts.remotePath = line.getOptionValue("remote");
+            CommandLineOpts.opts.remotePath = line.getOptionValue("remote");
         }
 
         if (line.hasOption("direction")) {
-            final String chosen = line.getOptionValue("direction").toLowerCase();
+            String chosen = line.getOptionValue("direction").toLowerCase();
             if (!"up".equals(chosen) && !"down".equals(chosen)) {
                 throw new ParseException("Direction must be one of up or down");
             }
-            opts.direction = Direction.valueOf(chosen.toUpperCase());
+            CommandLineOpts.opts.direction = CommandLineOpts.Direction.valueOf(chosen.toUpperCase());
         }
 
         if (line.hasOption("threads")) {
-            opts.threads = Integer.parseInt(line.getOptionValue("threads"));
+            CommandLineOpts.opts.threads = Integer.parseInt(line.getOptionValue("threads"));
         }
 
         if (line.hasOption("tries")) {
-            opts.tries = Integer.parseInt(line.getOptionValue("tries"));
+            CommandLineOpts.opts.tries = Integer.parseInt(line.getOptionValue("tries"));
         }
 
         if (line.hasOption("max-size")) {
-            opts.maxSizeKb = Integer.parseInt(line.getOptionValue("max-size"));
+            CommandLineOpts.opts.maxSizeKb = Integer.parseInt(line.getOptionValue("max-size"));
         }
 
         if (line.hasOption("keyfile")) {
-            opts.keyFile = Paths.get(line.getOptionValue("keyfile"));
+            CommandLineOpts.opts.keyFile = Paths.get(line.getOptionValue("keyfile"));
         }
 
         if (line.hasOption("logfile")) {
-            opts.logFile = line.getOptionValue("logfile");
+            CommandLineOpts.opts.logFile = line.getOptionValue("logfile");
         }
 
         if (line.hasOption("split-after")) {
-            opts.splitAfter = Integer.parseInt(line.getOptionValue("split-after"));
+            CommandLineOpts.opts.splitAfter = Integer.parseInt(line.getOptionValue("split-after"));
 
-            if (60 < opts.splitAfter) {
+            if (60 < CommandLineOpts.opts.splitAfter) {
                 throw new ParseException("maximum permissible value for split-after is 60");
             }
         }
 
         if (line.hasOption("ignore")) {
-            final Path ignoreFile = Paths.get(line.getOptionValue("ignore"));
+            Path ignoreFile = Paths.get(line.getOptionValue("ignore"));
             if (!Files.exists(ignoreFile)) {
                 throw new ParseException("specified ignore file does not exist");
             }
 
             try {
-                opts.ignored = Sets.newHashSet();
-                opts.ignored.addAll(Files.readAllLines(ignoreFile, Charset.defaultCharset()));
-            } catch (final IOException e) {
+                CommandLineOpts.opts.ignored = Sets.newHashSet();
+                CommandLineOpts.opts.ignored.addAll(Files.readAllLines(ignoreFile, Charset.defaultCharset()));
+            } catch (IOException e) {
                 throw new ParseException(e.getMessage());
             }
         }
 
-        opts.isInitialised = true;
+        CommandLineOpts.opts.isInitialised = true;
     }
 
     private static Options buildOptions() {
-        final Option authorise = Option.builder("a")
+        Option authorise = Option.builder("a")
                 .longOpt("authorise")
                 .desc("generate authorisation url")
                 .build();
 
-        final Option hash = Option.builder("c")
+        Option hash = Option.builder("c")
                 .longOpt("hash-compare")
                 .desc("always compare files by hash")
                 .build();
 
-        final Option direction = Option.builder()
+        Option direction = Option.builder()
                 .longOpt("direction")
                 .hasArg()
                 .argName("up|down")
                 .desc("direction of synchronisation.")
                 .build();
 
-        final Option help = Option.builder("h")
+        Option help = Option.builder("h")
                 .longOpt("help")
                 .desc("print this message")
                 .build();
 
-        final Option ignore = Option.builder("i")
+        Option ignore = Option.builder("i")
                 .longOpt("ignore")
                 .hasArg()
                 .argName("ignore_file")
                 .desc("ignore entry file")
                 .build();
 
-        final Option keyFile = Option.builder("k")
+        Option keyFile = Option.builder("k")
                 .longOpt("keyfile")
                 .hasArg()
                 .argName("file")
                 .desc("key file to use")
                 .build();
 
-        final Option logLevel = Option.builder("L")
+        Option logLevel = Option.builder("L")
                 .longOpt("log-level")
                 .hasArg()
                 .argName("level (1-7)")
                 .desc("controls the verbosity of logging")
                 .build();
 
-        final Option localPath = Option.builder()
+        Option localPath = Option.builder()
                 .longOpt("local")
                 .hasArg()
                 .argName("path")
                 .desc("the local path")
                 .build();
 
-        final Option logFile = Option.builder()
+        Option logFile = Option.builder()
                 .longOpt("logfile")
                 .hasArg()
                 .argName("file")
                 .desc("log to file")
                 .build();
 
-        final Option maxSize = Option.builder("M")
+        Option maxSize = Option.builder("M")
                 .longOpt("max-size")
                 .hasArg()
                 .argName("size_in_KB")
                 .desc("only process files smaller than <size> KB")
                 .build();
 
-        final Option dryRun = Option.builder("n")
+        Option dryRun = Option.builder("n")
                 .longOpt("dry-run")
                 .desc("only do a dry run without making changes")
                 .build();
 
-        final Option recursive = Option.builder("r")
+        Option recursive = Option.builder("r")
                 .longOpt("recursive")
                 .desc("recurse into directories")
                 .build();
 
-        final Option remotePath = Option.builder()
+        Option remotePath = Option.builder()
                 .longOpt("remote")
                 .hasArg()
                 .argName("path")
                 .desc("the remote path on OneDrive")
                 .build();
 
-        final Option splitAfter = Option.builder("s")
+        Option splitAfter = Option.builder("s")
                 .longOpt("split-after")
                 .hasArg()
                 .argName("size_in_MB")
                 .desc("use multi-part upload for big files")
                 .build();
 
-        final Option threads = Option.builder("t")
+        Option threads = Option.builder("t")
                 .longOpt("threads")
                 .hasArg()
                 .argName("count")
                 .desc("number of threads to use")
                 .build();
 
-        final Option version = Option.builder("v")
+        Option version = Option.builder("v")
                 .longOpt("version")
                 .desc("print the version information and exit")
                 .build();
 
-        final Option retries = Option.builder("y")
+        Option retries = Option.builder("y")
                 .longOpt("tries")
                 .hasArg()
                 .argName("count")
@@ -252,72 +252,72 @@ public class CommandLineOpts {
     }
 
     public static void printHelp() {
-        final HelpFormatter formatter = new HelpFormatter();
-        formatter.printHelp("onedrive-java-syncer", optionsToParse);
+        HelpFormatter formatter = new HelpFormatter();
+        formatter.printHelp("onedrive-java-syncer", CommandLineOpts.optionsToParse);
     }
 
-    public Direction getDirection() {
-        return direction;
+    public CommandLineOpts.Direction getDirection() {
+        return this.direction;
     }
 
     public String getLocalPath() {
-        return localPath;
+        return this.localPath;
     }
 
     public String getRemotePath() {
-        return remotePath;
+        return this.remotePath;
     }
 
     public boolean help() {
-        return help;
+        return this.help;
     }
 
     public int getThreads() {
-        return threads;
+        return this.threads;
     }
 
     public boolean useHash() {
-        return useHash;
+        return this.useHash;
     }
 
     public int getTries() {
-        return tries;
+        return this.tries;
     }
 
     public boolean version() {
-        return version;
+        return this.version;
     }
 
     public boolean isRecursive() {
-        return recursive;
+        return this.recursive;
     }
 
     public int getMaxSizeKb() {
-        return maxSizeKb;
+        return this.maxSizeKb;
     }
 
     public Path getKeyFile() {
-        return keyFile;
+        return this.keyFile;
     }
 
     public boolean isDryRun() {
-        return dryRun;
+        return this.dryRun;
     }
 
     public String getLogFile() {
-        return logFile;
+        return this.logFile;
     }
 
     public int getSplitAfter() {
-        return splitAfter;
+        return this.splitAfter;
     }
 
     public Set<String> getIgnored() {
-        return ignored;
+        return this.ignored;
     }
 
     public boolean isAuthorise() {
-        return authorise;
+        return this.authorise;
     }
 
     public enum Direction {

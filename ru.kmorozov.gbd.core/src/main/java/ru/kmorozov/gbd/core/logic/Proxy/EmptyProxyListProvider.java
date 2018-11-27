@@ -5,9 +5,9 @@ public class EmptyProxyListProvider extends AbstractProxyListProvider {
     public static final EmptyProxyListProvider INSTANCE = new EmptyProxyListProvider();
 
     private EmptyProxyListProvider() {
-        proxyList.add(HttpHostExt.NO_PROXY);
+        this.proxyList.add(HttpHostExt.NO_PROXY);
 
-        proxyListCompleted.set(true);
+        this.proxyListCompleted.set(true);
     }
 
     @Override

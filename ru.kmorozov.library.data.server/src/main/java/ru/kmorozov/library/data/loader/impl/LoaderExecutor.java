@@ -29,35 +29,35 @@ public class LoaderExecutor {
     private static final Executor loaderExecutor = Executors.newSingleThreadExecutor();
 
     public boolean isStarted() {
-        return State.STARTED == oneLoader.getState();
+        return LoaderExecutor.State.STARTED == this.oneLoader.getState();
     }
 
     public synchronized void start() {
-        if (State.STARTED == oneLoader.getState())
+        if (LoaderExecutor.State.STARTED == this.oneLoader.getState())
             throw new IllegalStateException("Loader is already started!");
 
-        oneLoader.setState(State.STARTED);
+        this.oneLoader.setState(LoaderExecutor.State.STARTED);
 
-        loaderExecutor.execute(oneLoader);
+        LoaderExecutor.loaderExecutor.execute(this.oneLoader);
     }
 
     public synchronized void stop() {
-        oneLoader.setState(State.STOPPED);
+        this.oneLoader.setState(LoaderExecutor.State.STOPPED);
     }
 
     public synchronized void pause() {
-        oneLoader.setState(State.PAUSED);
+        this.oneLoader.setState(LoaderExecutor.State.PAUSED);
     }
 
-    public Storage refresh(final Storage storage) {
-        return oneLoader.refresh(storage);
+    public Storage refresh(Storage storage) {
+        return this.oneLoader.refresh(storage);
     }
 
-    public void resolveLink(final Book lnkBook) {
-        oneLoader.resolveLink(lnkBook);
+    public void resolveLink(Book lnkBook) {
+        this.oneLoader.resolveLink(lnkBook);
     }
 
-    public void downloadBook(final Book book) {
-        oneLoader.downloadBook(book);
+    public void downloadBook(Book book) {
+        this.oneLoader.downloadBook(book);
     }
 }

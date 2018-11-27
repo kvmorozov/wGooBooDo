@@ -4,19 +4,19 @@ import ru.kmorozov.gbd.core.logic.model.book.base.IBookData;
 
 public class RfbrBookData implements IBookData {
 
-    private String bookId;
+    private final String bookId;
 
-    public RfbrBookData(String bookId) {
+    public RfbrBookData(final String bookId) {
         this.bookId = bookId;
     }
 
     @Override
     public String getTitle() {
-        return bookId;
+        return this.bookId;
     }
 
     @Override
     public String getVolumeId() {
-        return bookId;
+        return this.bookId;
     }
 }

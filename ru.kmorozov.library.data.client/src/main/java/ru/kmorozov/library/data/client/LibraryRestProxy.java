@@ -8,7 +8,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import ru.kmorozov.library.data.model.IDataRestServer;
 import ru.kmorozov.library.data.model.dto.*;
-import ru.kmorozov.library.data.model.dto.ItemDTO.ItemType;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,22 +22,22 @@ public class LibraryRestProxy implements IDataRestServer {
 
     private final RestTemplate template;
 
-    public LibraryRestProxy(final RestTemplate template) {
+    public LibraryRestProxy(RestTemplate template) {
         this.template = template;
     }
 
     @Override
     @RequestMapping("/login")
-    public UserDTO login(@RequestParam(name = "login") final String login) {
-        final UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
-        final String uri = builder.scheme("http")
+    public UserDTO login(@RequestParam(name = "login") String login) {
+        UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
+        String uri = builder.scheme("http")
                 .host("localhost")
                 .port(9000)
                 .path("login")
                 .queryParam("login", login)
                 .build().toString();
 
-        final UserDTO user = template.getForEntity(uri, UserDTO.class).getBody();
+        UserDTO user = this.template.getForEntity(uri, UserDTO.class).getBody();
         user.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(LibraryRestProxy.class).getItemsByStorageId("root")).withRel("root"));
 
         return user;
@@ -46,20 +45,20 @@ public class LibraryRestProxy implements IDataRestServer {
 
     @Override
     @RequestMapping("/storages/{storageId}")
-    public List<StorageDTO> getStoragesByParentId(@PathVariable final String storageId) {
-        return getList("/storagesByParentId", "storageId", storageId, StorageDTO[].class);
+    public List<StorageDTO> getStoragesByParentId(@PathVariable String storageId) {
+        return this.getList("/storagesByParentId", "storageId", storageId, StorageDTO[].class);
     }
 
     @Override
     @RequestMapping("/books/{storageId}")
-    public List<BookDTO> getBooksByStorageId(@PathVariable final String storageId) {
-        return getList("/booksByStorageId", "storageId", storageId, BookDTO[].class);
+    public List<BookDTO> getBooksByStorageId(@PathVariable String storageId) {
+        return this.getList("/booksByStorageId", "storageId", storageId, BookDTO[].class);
     }
 
     @Override
     @RequestMapping("/items/{storageId}")
-    public List<ItemDTO> getItemsByStorageId(@PathVariable final String storageId) {
-        final List<ItemDTO> result = getList("/itemsByStorageId", "storageId", storageId, ItemDTO[].class);
+    public List<ItemDTO> getItemsByStorageId(@PathVariable String storageId) {
+        List<ItemDTO> result = this.getList("/itemsByStorageId", "storageId", storageId, ItemDTO[].class);
 
         return result
                 .stream()
@@ -67,7 +66,7 @@ public class LibraryRestProxy implements IDataRestServer {
                 .collect(Collectors.toList());
     }
 
-    private static ItemDTO addLinks(final ItemDTO item) {
+    private static ItemDTO addLinks(ItemDTO item) {
         item.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(LibraryRestProxy.class, item.getItemType(), item.getItemId())
                                                                    .getItem(item.getItemId(), item.getItemType(), false)).withSelfRel());
         item.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(LibraryRestProxy.class)
@@ -90,11 +89,11 @@ public class LibraryRestProxy implements IDataRestServer {
 
     @Override
     @RequestMapping("/item/{itemType}/{itemId}/{refresh}")
-    public ItemDTO getItem(@PathVariable(name = "itemId") final String itemId,
-                           @PathVariable(name = "itemType") final ItemType itemType,
-                           @PathVariable(name = "refresh") final boolean refresh) {
-        final UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
-        final String uri = builder.scheme("http")
+    public ItemDTO getItem(@PathVariable(name = "itemId") String itemId,
+                           @PathVariable(name = "itemType") ItemDTO.ItemType itemType,
+                           @PathVariable(name = "refresh") boolean refresh) {
+        UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
+        String uri = builder.scheme("http")
                 .host("localhost")
                 .port(9000)
                 .path("item")
@@ -103,53 +102,53 @@ public class LibraryRestProxy implements IDataRestServer {
                 .queryParam("refresh", refresh)
                 .build().toString();
 
-        return addLinks(template.getForEntity(uri, ItemDTO.class).getBody());
+        return LibraryRestProxy.addLinks(this.template.getForEntity(uri, ItemDTO.class).getBody());
     }
 
     @Override
     @RequestMapping(value = "/updateLibrary/{state}", method = RequestMethod.POST)
-    public void updateLibrary(@PathVariable final String state) {
-        final UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
-        final String uri = builder.scheme("http")
+    public void updateLibrary(@PathVariable String state) {
+        UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
+        String uri = builder.scheme("http")
                 .host("localhost")
                 .port(9000)
                 .path("updateLibrary")
                 .queryParam("state", state)
                 .build().toString();
 
-        template.execute(uri, HttpMethod.POST, null, null);
+        this.template.execute(uri, HttpMethod.POST, null, null);
     }
 
     @Override
     @RequestMapping("/downloadBook/{bookId}")
-    public BookDTO downloadBook(@PathVariable final String bookId) {
-        final UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
-        final String uri = builder.scheme("http")
+    public BookDTO downloadBook(@PathVariable String bookId) {
+        UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
+        String uri = builder.scheme("http")
                 .host("localhost")
                 .port(9000)
                 .path("downloadBook")
                 .queryParam("bookId", bookId)
                 .build().toString();
 
-        return template.getForEntity(uri, BookDTO.class).getBody();
+        return this.template.getForEntity(uri, BookDTO.class).getBody();
     }
 
-    private List getList(final String operation, final String paramName, final String paramValue, final Class arrClass) {
-        final UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
+    private List getList(String operation, String paramName, String paramValue, Class arrClass) {
+        UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
         builder.scheme("http").host("localhost").port(9000).path(operation);
 
         if (!StringUtils.isEmpty(paramName) && !StringUtils.isEmpty(paramValue))
             builder.queryParam(paramName, paramValue);
 
-        final String uri = builder.build().toString();
+        String uri = builder.build().toString();
 
-        return Arrays.stream((Object[]) template.getForEntity(uri, arrClass).getBody()).collect(Collectors.toList());
+        return Arrays.stream((Object[]) this.template.getForEntity(uri, arrClass).getBody()).collect(Collectors.toList());
     }
 
     @Override
     @RequestMapping("/findDuplicates")
     public List<DuplicatedBookDTO> findDuplicates() {
-        return getList("/findDuplicates", null, null, DuplicatedBookDTO[].class);
+        return this.getList("/findDuplicates", null, null, DuplicatedBookDTO[].class);
     }
 
     @Override

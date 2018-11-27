@@ -2,7 +2,6 @@ package ru.kmorozov.library.data.loader.impl;
 
 import ru.kmorozov.gbd.logger.Logger;
 import ru.kmorozov.library.data.loader.ILoader;
-import ru.kmorozov.library.data.loader.impl.LoaderExecutor.State;
 import ru.kmorozov.library.data.model.book.Storage;
 
 import java.io.IOException;
@@ -17,29 +16,29 @@ public abstract class BaseLoader implements ILoader, Runnable {
 
     private static final Logger logger = Logger.getLogger(BaseLoader.class);
     protected Collection<Object> links = new ArrayList<>();
-    protected volatile State state = State.STOPPED;
+    protected volatile LoaderExecutor.State state = LoaderExecutor.State.STOPPED;
 
     @Override
     public void run() {
         try {
-            load();
-        } catch (IOException | UncheckedIOException e) {
-            this.state = State.STOPPED;
+            this.load();
+        } catch (final IOException | UncheckedIOException e) {
+            state = LoaderExecutor.State.STOPPED;
 
             e.printStackTrace();
         }
     }
 
-    void setState(final State state) {
+    void setState(LoaderExecutor.State state) {
         this.state = state;
     }
 
-    State getState() {
-        return state;
+    LoaderExecutor.State getState() {
+        return this.state;
     }
 
     public boolean isStopped() {
-        return LoaderExecutor.State.STOPPED == state;
+        return LoaderExecutor.State.STOPPED == this.state;
     }
 
     public abstract Storage refresh(Storage storage);

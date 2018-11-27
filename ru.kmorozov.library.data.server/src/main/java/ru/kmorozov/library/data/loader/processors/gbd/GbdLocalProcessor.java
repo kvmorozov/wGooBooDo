@@ -15,15 +15,15 @@ import ru.kmorozov.library.data.server.options.LocalServerGBDOptions;
 @Component
 public class GbdLocalProcessor implements IGbdProcessor {
 
-    @Autowired()
+    @Autowired
     private LocalServerGBDOptions options;
 
     @Override
-    public void load(String bookId) {
-        options.setBookId(bookId);
-        GBDOptions.init(options);
+    public void load(final String bookId) {
+        this.options.setBookId(bookId);
+        GBDOptions.init(this.options);
 
-        IBookListProducer producer = new SingleBookProducer(bookId);
+        final IBookListProducer producer = new SingleBookProducer(bookId);
         ContextProvider.setDefaultContextProvider(new ListBasedContextLoader(producer));
 
         ExecutionContext.initContext(new DummyReceiver(), 1 == producer.getBookIds().size());

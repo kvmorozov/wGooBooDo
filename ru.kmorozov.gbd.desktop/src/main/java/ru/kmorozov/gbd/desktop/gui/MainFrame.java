@@ -13,26 +13,26 @@ public class MainFrame extends JFrame {
     public MainFrame() {
         super("wGooBooDo");
 
-        if (null != INSTANCE) return;
+        if (null != MainFrame.INSTANCE) return;
 
-        INSTANCE = this;
+        MainFrame.INSTANCE = this;
 
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        setContentPane(new MainBookForm().getMainPanel());
-        pack();
+        this.setContentPane(new MainBookForm().getMainPanel());
+        this.pack();
 
-        final Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
-        final int x = (int) ((dimension.getWidth() - (double) getWidth()) / 2.0);
-        final int y = (int) ((dimension.getHeight() - (double) getHeight()) / 2.0);
-        setLocation(x, y);
+        Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (int) ((dimension.getWidth() - (double) this.getWidth()) / 2.0);
+        int y = (int) ((dimension.getHeight() - (double) this.getHeight()) / 2.0);
+        this.setLocation(x, y);
     }
 
     public static MainFrame getINSTANCE() {
-        return INSTANCE;
+        return MainFrame.INSTANCE;
     }
 
     public void setVisible() {
-        setVisible(true);
+        this.setVisible(true);
     }
 }

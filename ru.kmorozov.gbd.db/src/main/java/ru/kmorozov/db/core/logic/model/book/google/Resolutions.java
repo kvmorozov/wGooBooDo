@@ -9,12 +9,12 @@ public enum Resolutions {
 
     private final int resolution;
 
-    Resolutions(final int resolution) {
+    Resolutions(int resolution) {
         this.resolution = resolution;
     }
 
-    public static Resolutions getEnum(final int value) {
-        for (final Resolutions v : values())
+    public static Resolutions getEnum(int value) {
+        for (Resolutions v : Resolutions.values())
             if (v.resolution == value) return v;
 
         throw new IllegalArgumentException();
@@ -22,10 +22,10 @@ public enum Resolutions {
 
     @Override
     public String toString() {
-        return String.format("%d px", resolution);
+        return String.format("%d px", this.resolution);
     }
 
     public int getResolution() {
-        return resolution;
+        return this.resolution;
     }
 }

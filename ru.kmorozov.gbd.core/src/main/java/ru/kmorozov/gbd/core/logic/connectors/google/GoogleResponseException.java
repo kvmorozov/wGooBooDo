@@ -10,13 +10,13 @@ class GoogleResponseException extends ResponseException {
 
     private final HttpResponseException hre;
 
-    public GoogleResponseException(final HttpResponseException hre) {
+    public GoogleResponseException(HttpResponseException hre) {
         super(hre);
         this.hre = hre;
     }
 
     @Override
     public int getStatusCode() {
-        return hre.getStatusCode();
+        return this.hre.getStatusCode();
     }
 }

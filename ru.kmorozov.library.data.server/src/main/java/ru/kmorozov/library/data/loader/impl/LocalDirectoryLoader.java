@@ -17,7 +17,7 @@ public class LocalDirectoryLoader extends BaseLoader {
     private static final Logger logger = Logger.getLogger(LocalDirectoryLoader.class);
 
     @Override
-    public Storage refresh(final Storage storage) {
+    public Storage refresh(Storage storage) {
         return storage;
     }
 
@@ -27,12 +27,12 @@ public class LocalDirectoryLoader extends BaseLoader {
     }
 
     @Override
-    public void resolveLink(final Book lnkBook) {
+    public void resolveLink(Book lnkBook) {
 
     }
 
     @Override
-    public void downloadBook(final Book book) {
+    public void downloadBook(Book book) {
 
     }
 

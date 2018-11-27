@@ -12,14 +12,14 @@ public class ItemReference {
     private String path;
 
     public String getDriveId() {
-        return driveId;
+        return this.driveId;
     }
 
     public String getId() {
-        return id;
+        return this.id;
     }
 
     public String getPath() {
-        return path;
+        return this.path;
     }
 }

@@ -31,23 +31,23 @@ public class ScheduledOneDriveTasks {
     @Value("${onedrive.scheduler.enabled}")
     private boolean schedulerEnabled;
 
-    @Scheduled(fixedRate = SCHEDULE_INTERVAL)
+    @Scheduled(fixedRate = ScheduledOneDriveTasks.SCHEDULE_INTERVAL)
     public void refreshOneDrive() throws IOException {
-        if (!schedulerEnabled)
+        if (!this.schedulerEnabled)
             return;
 
-        logger.info("Scheduled refresh started");
-        oneLoader.load(oneDriveItem -> Long.MAX_VALUE < System.currentTimeMillis() - oneDriveItem.getLastModifiedDateTime().getTime());
-        logger.info("Scheduled refresh finished");
+        ScheduledOneDriveTasks.logger.info("Scheduled refresh started");
+        this.oneLoader.load(oneDriveItem -> Long.MAX_VALUE < System.currentTimeMillis() - oneDriveItem.getLastModifiedDateTime().getTime());
+        ScheduledOneDriveTasks.logger.info("Scheduled refresh finished");
     }
 
-    @Scheduled(fixedRate = SCHEDULE_INTERVAL)
+    @Scheduled(fixedRate = ScheduledOneDriveTasks.SCHEDULE_INTERVAL)
     public void processLinks() throws IOException {
-        if (!schedulerEnabled)
+        if (!this.schedulerEnabled)
             return;
 
-        logger.info("Scheduled links processing started");
-        oneLoader.processLinks();
-        logger.info("Scheduled links processing finished");
+        ScheduledOneDriveTasks.logger.info("Scheduled links processing started");
+        this.oneLoader.processLinks();
+        ScheduledOneDriveTasks.logger.info("Scheduled links processing finished");
     }
 }

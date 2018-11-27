@@ -19,7 +19,7 @@ public class UpdatePropertiesTask extends Task {
     private final OneDriveItem remoteFile;
     private final File localFile;
 
-    public UpdatePropertiesTask(final TaskOptions options, final OneDriveItem remoteFile, final File localFile) {
+    public UpdatePropertiesTask(Task.TaskOptions options, OneDriveItem remoteFile, File localFile) {
 
         super(options);
 
@@ -33,7 +33,7 @@ public class UpdatePropertiesTask extends Task {
 
     @Override
     public String toString() {
-        return "Update properties for " + remoteFile.getFullName();
+        return "Update properties for " + this.remoteFile.getFullName();
     }
 
     @Override
@@ -41,25 +41,25 @@ public class UpdatePropertiesTask extends Task {
 
         switch (CommandLineOpts.getCommandLineOpts().getDirection()) {
             case UP:
-                final BasicFileAttributes attr = Files.readAttributes(localFile.toPath(), BasicFileAttributes.class);
+                BasicFileAttributes attr = Files.readAttributes(this.localFile.toPath(), BasicFileAttributes.class);
                 // Timestamp rounded to the nearest second
-                final Date localCreatedDate = new Date(attr.creationTime().to(TimeUnit.SECONDS) * 1000L);
-                final Date localModifiedDate = new Date(attr.lastModifiedTime().to(TimeUnit.SECONDS) * 1000L);
+                Date localCreatedDate = new Date(attr.creationTime().to(TimeUnit.SECONDS) * 1000L);
+                Date localModifiedDate = new Date(attr.lastModifiedTime().to(TimeUnit.SECONDS) * 1000L);
 
-                api.updateFile(remoteFile, localCreatedDate, localModifiedDate);
+                this.api.updateFile(this.remoteFile, localCreatedDate, localModifiedDate);
 
-                log.info("Updated remote timestamps for item " + remoteFile.getFullName());
+                UpdatePropertiesTask.log.info("Updated remote timestamps for item " + this.remoteFile.getFullName());
 
                 break;
             case DOWN:
-                fileSystem.setAttributes(localFile, remoteFile.getCreatedDateTime(), remoteFile.getLastModifiedDateTime());
-                log.info("Updated local timestamps for item " + remoteFile.getFullName());
+                this.fileSystem.setAttributes(this.localFile, this.remoteFile.getCreatedDateTime(), this.remoteFile.getLastModifiedDateTime());
+                UpdatePropertiesTask.log.info("Updated local timestamps for item " + this.remoteFile.getFullName());
                 break;
             default:
                 throw new IllegalStateException("Unsupported direction " + CommandLineOpts.getCommandLineOpts().getDirection());
         }
 
-        reporter.propertiesUpdated();
+        this.reporter.propertiesUpdated();
     }
 }
 

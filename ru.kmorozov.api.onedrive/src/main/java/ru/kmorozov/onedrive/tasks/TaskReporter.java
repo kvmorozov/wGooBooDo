@@ -30,159 +30,159 @@ public class TaskReporter {
     private final long startTime;
 
     public TaskReporter() {
-        startTime = System.currentTimeMillis();
+        this.startTime = System.currentTimeMillis();
     }
 
     public synchronized void same() {
-        same++;
+        this.same++;
     }
 
     public synchronized void remoteDeleted() {
-        remoteDeleted++;
+        this.remoteDeleted++;
     }
 
     public synchronized void localDeleted() {
-        localDeleted++;
+        this.localDeleted++;
     }
 
     public synchronized void skipped() {
-        skipped++;
+        this.skipped++;
     }
 
     public synchronized void error() {
-        errors++;
+        this.errors++;
     }
 
-    public synchronized void fileUploaded(final boolean replace, final long size) {
+    public synchronized void fileUploaded(boolean replace, long size) {
         if (replace) {
-            replaceUploaded++;
-            replaceUploadedSize += size;
+            this.replaceUploaded++;
+            this.replaceUploadedSize += size;
         } else {
-            newUploaded++;
-            newUploadedSize += size;
+            this.newUploaded++;
+            this.newUploadedSize += size;
         }
     }
 
-    public synchronized void fileDownloaded(final boolean replace, final long size) {
+    public synchronized void fileDownloaded(boolean replace, long size) {
         if (replace) {
-            replaceDownloaded++;
-            replaceDownloadedSize += size;
+            this.replaceDownloaded++;
+            this.replaceDownloadedSize += size;
         } else {
-            newDownloaded++;
-            newDownloadedSize += size;
+            this.newDownloaded++;
+            this.newDownloadedSize += size;
         }
     }
 
     public synchronized void propertiesUpdated() {
-        propsUpdated++;
+        this.propsUpdated++;
     }
 
     public synchronized void report() {
 
-        if (0 < errors) {
-            log.error(String.format("%d tasks failed - see log for details", errors));
+        if (0 < this.errors) {
+            TaskReporter.log.error(String.format("%d tasks failed - see log for details", this.errors));
         }
 
-        if (0 < same) {
-            log.info(String.format("Skipped %d unchanged file%s", same, plural((long) same)));
+        if (0 < this.same) {
+            TaskReporter.log.info(String.format("Skipped %d unchanged file%s", this.same, TaskReporter.plural((long) this.same)));
         }
 
-        if (0 < skipped) {
-            log.info(String.format("Skipped %d ignored file%s", skipped, plural((long) skipped)));
+        if (0 < this.skipped) {
+            TaskReporter.log.info(String.format("Skipped %d ignored file%s", this.skipped, TaskReporter.plural((long) this.skipped)));
         }
 
-        if (0 < localDeleted) {
-            log.info(String.format("Deleted %d local file%s", localDeleted, plural((long) skipped)));
+        if (0 < this.localDeleted) {
+            TaskReporter.log.info(String.format("Deleted %d local file%s", this.localDeleted, TaskReporter.plural((long) this.skipped)));
         }
 
-        if (0 < remoteDeleted) {
-            log.info(String.format("Deleted %d remote file%s", remoteDeleted, plural((long) skipped)));
+        if (0 < this.remoteDeleted) {
+            TaskReporter.log.info(String.format("Deleted %d remote file%s", this.remoteDeleted, TaskReporter.plural((long) this.skipped)));
         }
 
-        if (0 < propsUpdated) {
-            log.info(String.format("Updated timestamps on %d file%s", propsUpdated, plural((long) skipped)));
+        if (0 < this.propsUpdated) {
+            TaskReporter.log.info(String.format("Updated timestamps on %d file%s", this.propsUpdated, TaskReporter.plural((long) this.skipped)));
         }
 
-        if (0 < newUploaded || 0 < replaceUploaded) {
+        if (0 < this.newUploaded || 0 < this.replaceUploaded) {
 
-            final StringBuilder uploadedResult = new StringBuilder();
+            StringBuilder uploadedResult = new StringBuilder();
 
             uploadedResult.append(
                     String.format("Uploaded %d file%s (%s) - ",
-                                  newUploaded + replaceUploaded,
-                                  plural((long) (newUploaded + replaceUploaded)),
-                                  LogUtils.readableFileSize(newUploadedSize + replaceUploadedSize)));
+                            this.newUploaded + this.replaceUploaded,
+                            TaskReporter.plural((long) (this.newUploaded + this.replaceUploaded)),
+                                  LogUtils.readableFileSize(this.newUploadedSize + this.replaceUploadedSize)));
 
-            if (0 < newUploaded) {
+            if (0 < this.newUploaded) {
                 uploadedResult.append(
                         String.format("%d new file%s (%s) ",
-                                      newUploaded,
-                                      plural((long) newUploaded),
-                                      LogUtils.readableFileSize(newUploadedSize)));
+                                this.newUploaded,
+                                TaskReporter.plural((long) this.newUploaded),
+                                      LogUtils.readableFileSize(this.newUploadedSize)));
             }
 
-            if (0 < replaceUploaded) {
+            if (0 < this.replaceUploaded) {
                 uploadedResult.append(
                         String.format("%d new file%s (%s) ",
-                                      replaceUploaded,
-                                      plural((long) replaceUploaded),
-                                      LogUtils.readableFileSize(replaceUploadedSize)));
+                                this.replaceUploaded,
+                                TaskReporter.plural((long) this.replaceUploaded),
+                                      LogUtils.readableFileSize(this.replaceUploadedSize)));
             }
 
-            log.info(uploadedResult.toString());
+            TaskReporter.log.info(uploadedResult.toString());
         }
 
-        if (0 < newDownloaded || 0 < replaceDownloaded) {
-            final StringBuilder downloadedResult = new StringBuilder();
+        if (0 < this.newDownloaded || 0 < this.replaceDownloaded) {
+            StringBuilder downloadedResult = new StringBuilder();
 
             downloadedResult.append(
                     String.format("Downloaded %d file%s (%s) - ",
-                                  newDownloaded + replaceDownloaded,
-                                  plural((long) (newDownloaded + replaceDownloaded)),
-                                  LogUtils.readableFileSize(newDownloadedSize + replaceDownloadedSize)));
+                            this.newDownloaded + this.replaceDownloaded,
+                            TaskReporter.plural((long) (this.newDownloaded + this.replaceDownloaded)),
+                                  LogUtils.readableFileSize(this.newDownloadedSize + this.replaceDownloadedSize)));
 
-            if (0 < newDownloaded) {
+            if (0 < this.newDownloaded) {
                 downloadedResult.append(
                         String.format("%d new file%s (%s) ",
-                                      newDownloaded,
-                                      plural((long) newDownloaded),
-                                      LogUtils.readableFileSize(newDownloadedSize)));
+                                this.newDownloaded,
+                                TaskReporter.plural((long) this.newDownloaded),
+                                      LogUtils.readableFileSize(this.newDownloadedSize)));
             }
 
-            if (0 < replaceDownloaded) {
+            if (0 < this.replaceDownloaded) {
                 downloadedResult.append(
                         String.format("%d new file%s (%s) ",
-                                      replaceDownloaded,
-                                      plural((long) replaceDownloaded),
-                                      LogUtils.readableFileSize(replaceDownloadedSize)));
+                                this.replaceDownloaded,
+                                TaskReporter.plural((long) this.replaceDownloaded),
+                                      LogUtils.readableFileSize(this.replaceDownloadedSize)));
             }
 
-            log.info(downloadedResult.toString());
+            TaskReporter.log.info(downloadedResult.toString());
         }
 
-        final long elapsed = System.currentTimeMillis() - startTime;
-        log.info(String.format("Elapsed time: %s", LogUtils.readableTime(elapsed)));
+        long elapsed = System.currentTimeMillis() - this.startTime;
+        TaskReporter.log.info(String.format("Elapsed time: %s", LogUtils.readableTime(elapsed)));
     }
 
-    private static String plural(final long same) {
+    private static String plural(long same) {
         return 1L == same ? "" : "s";
     }
 
-    public void setTaskLogger(final Logger taskLogger) {
+    public void setTaskLogger(Logger taskLogger) {
         this.taskLogger = taskLogger;
     }
 
-    public void info(final String message) {
-        if (null != taskLogger)
-            taskLogger.info(message);
+    public void info(String message) {
+        if (null != this.taskLogger)
+            this.taskLogger.info(message);
         else
-            log.info(message);
+            TaskReporter.log.info(message);
     }
 
-    public void warn(final String message) {
-        if (null != taskLogger)
-            taskLogger.warn(message);
+    public void warn(String message) {
+        if (null != this.taskLogger)
+            this.taskLogger.warn(message);
         else
-            log.warn(message);
+            TaskReporter.log.warn(message);
     }
 }

@@ -10,20 +10,20 @@ public class HashesFacet {
     private String crc32Hash;
 
     public String getSha1Hash() {
-        return sha1Hash;
+        return this.sha1Hash;
     }
 
     public String getCrc32Hash() {
-        return crc32Hash;
+        return this.crc32Hash;
     }
 
     public long getCrc32() {
         // OneDrive does not always return a hash
-        if (null == crc32Hash) {
+        if (null == this.crc32Hash) {
             return 0L;
         }
 
-        final String reversed = crc32Hash.substring(6, 8) + crc32Hash.substring(4, 6) + crc32Hash.substring(2, 4) + crc32Hash.substring(0, 2);
+        String reversed = this.crc32Hash.substring(6, 8) + this.crc32Hash.substring(4, 6) + this.crc32Hash.substring(2, 4) + this.crc32Hash.substring(0, 2);
         return Long.decode("0x" + reversed);
     }
 }

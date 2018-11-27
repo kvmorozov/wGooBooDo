@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import ru.kmorozov.gbd.logger.Logger;
 import ru.kmorozov.library.data.loader.SocketReporter;
-import ru.kmorozov.library.data.loader.impl.LoaderExecutor.State;
 import ru.kmorozov.library.data.loader.utils.ConsistencyUtils;
 import ru.kmorozov.library.data.loader.utils.WindowsShortcut;
 import ru.kmorozov.library.data.model.book.Book;
@@ -19,9 +18,9 @@ import ru.kmorozov.onedrive.TaskQueue;
 import ru.kmorozov.onedrive.client.OneDriveItem;
 import ru.kmorozov.onedrive.client.OneDriveProvider;
 import ru.kmorozov.onedrive.client.walker.OneDriveWalkers;
-import ru.kmorozov.onedrive.filesystem.FileSystemProvider.FACTORY;
+import ru.kmorozov.onedrive.filesystem.FileSystemProvider;
 import ru.kmorozov.onedrive.tasks.DownloadTask;
-import ru.kmorozov.onedrive.tasks.Task.TaskOptions;
+import ru.kmorozov.onedrive.tasks.Task;
 
 import java.io.File;
 import java.io.IOException;
@@ -53,106 +52,106 @@ public class OneDriveLoader extends StoredLoader {
 
     @Override
     public void load() throws IOException {
-        load(x -> false);
+        this.load(x -> false);
     }
 
-    public void load(final Predicate<OneDriveItem> skipCondition) throws IOException {
-        setState(State.STARTED);
+    public void load(Predicate<OneDriveItem> skipCondition) throws IOException {
+        this.setState(LoaderExecutor.State.STARTED);
 
-        logger.info("Sync db started.");
+        OneDriveLoader.logger.info("Sync db started.");
 
-        OneDriveWalkers.walk(api, skipCondition).forEach(oneDriveItem -> {
-            if (isStopped())
+        OneDriveWalkers.walk(this.api, skipCondition).forEach(oneDriveItem -> {
+            if (this.isStopped())
                 OneDriveWalkers.stopAll();
 
-            if (oneDriveItem.isDirectory() && !isStopped()) {
-                final Category category = getCategoryByServerItem(new ServerItem(oneDriveItem));
-                for (final Storage storage : category.getStorages())
+            if (oneDriveItem.isDirectory() && !this.isStopped()) {
+                Category category = this.getCategoryByServerItem(new ServerItem(oneDriveItem));
+                for (Storage storage : category.getStorages())
                     try {
-                        updateStorage(storage);
-                    } catch (final IOException e) {
-                        logger.error("Error when updating storage: " + e.getMessage());
+                        this.updateStorage(storage);
+                    } catch (IOException e) {
+                        OneDriveLoader.logger.error("Error when updating storage: " + e.getMessage());
                     }
             }
         });
 
-        logger.info("Sync db completed.");
+        OneDriveLoader.logger.info("Sync db completed.");
 
-        setState(State.STOPPED);
+        this.setState(LoaderExecutor.State.STOPPED);
     }
 
     @Override
-    protected Stream<ServerItem> getItemsStreamByStorage(final Storage storage) throws IOException {
-        final OneDriveItem[] children = api.getChildren(storage.getUrl());
+    protected Stream<ServerItem> getItemsStreamByStorage(Storage storage) throws IOException {
+        OneDriveItem[] children = this.api.getChildren(storage.getUrl());
         return Arrays.stream(children).map(ServerItem::new);
     }
 
     @Override
     public void processLinks() {
-        final Stream<Book> lnkBooks = booksRepository.streamByBookInfoFormat("LNK");
+        Stream<Book> lnkBooks = this.booksRepository.streamByBookInfoFormat("LNK");
 
         lnkBooks.forEach(this::resolveLink);
     }
 
     @Override
-    public void resolveLink(final Book lnkBook) {
+    public void resolveLink(Book lnkBook) {
         if (null != lnkBook.getLinkInfo() || !lnkBook.isLink())
             return;
 
-        logger.info("Resolving link: " + lnkBook.getBookInfo().getFileName());
+        OneDriveLoader.logger.info("Resolving link: " + lnkBook.getBookInfo().getFileName());
 
         try {
-            final OneDriveItem linkItem = api.getItem(lnkBook.getBookInfo().getPath());
-            final LinkInfo linkInfo = new LinkInfo();
+            OneDriveItem linkItem = this.api.getItem(lnkBook.getBookInfo().getPath());
+            LinkInfo linkInfo = new LinkInfo();
 
-            final File tmpFile = File.createTempFile("one", ".lnk");
-            api.download(linkItem, tmpFile, progressListener -> {
+            File tmpFile = File.createTempFile("one", ".lnk");
+            this.api.download(linkItem, tmpFile, progressListener -> {
             });
             if (WindowsShortcut.isPotentialValidLink(tmpFile))
                 try {
-                    final WindowsShortcut lnkFile = new WindowsShortcut(tmpFile, Charset.forName("Windows-1251"));
+                    WindowsShortcut lnkFile = new WindowsShortcut(tmpFile, Charset.forName("Windows-1251"));
                     if (lnkFile.isDirectory()) {
-                        final Storage linkedStorage = getStorageByLink(lnkFile.getRealFilename());
+                        Storage linkedStorage = this.getStorageByLink(lnkFile.getRealFilename());
                         if (null == linkedStorage) {
                             linkInfo.setBroken(true);
-                            logger.warn("Storage lnk not found for " + lnkFile.getRealFilename());
+                            OneDriveLoader.logger.warn("Storage lnk not found for " + lnkFile.getRealFilename());
                         } else {
-                            final Storage thisStorage = lnkBook.getStorage();
+                            Storage thisStorage = lnkBook.getStorage();
                             linkInfo.setLinkedStorage(linkedStorage);
 
                             if (null != thisStorage) {
-                                final Category linkCategory = linkedStorage.getMainCategory();
+                                Category linkCategory = linkedStorage.getMainCategory();
                                 linkCategory.addParent(thisStorage.getMainCategory());
-                                categoryRepository.save(linkCategory);
+                                this.categoryRepository.save(linkCategory);
                             }
                         }
                     } else {
-                        final String realPath = lnkFile.getRealFilename();
-                        final Book linkedBook = getBookByLink(realPath);
+                        String realPath = lnkFile.getRealFilename();
+                        Book linkedBook = this.getBookByLink(realPath);
                         if (null == linkedBook) {
                             linkInfo.setBroken(true);
-                            logger.warn("File lnk not found for " + realPath);
+                            OneDriveLoader.logger.warn("File lnk not found for " + realPath);
                         } else
                             linkInfo.setLinkedBook(linkedBook);
                     }
-                } catch (final ParseException e) {
-                    logger.error(e);
+                } catch (ParseException e) {
+                    OneDriveLoader.logger.error(e);
                 }
 
             tmpFile.delete();
 
             if (null != linkInfo.getLinkedBook() || null != linkInfo.getLinkedStorage() || linkInfo.isBroken()) {
                 lnkBook.setLinkInfo(linkInfo);
-                booksRepository.save(lnkBook);
+                this.booksRepository.save(lnkBook);
             }
-        } catch (final IOException ioe) {
-            logger.error(ioe);
+        } catch (IOException ioe) {
+            OneDriveLoader.logger.error(ioe);
         }
     }
 
-    private Book getBookByLink(final String lnkFileName) {
-        final String[] names = lnkFileName.split(delimiter);
-        final List<Book> books = booksRepository.findAllByBookInfoFileName(names[names.length - 1]);
+    private Book getBookByLink(String lnkFileName) {
+        String[] names = lnkFileName.split(OneDriveLoader.delimiter);
+        List<Book> books = this.booksRepository.findAllByBookInfoFileName(names[names.length - 1]);
 
         return 1 == books.size() ? books.get(0) : null;
     }
@@ -162,9 +161,9 @@ public class OneDriveLoader extends StoredLoader {
         return true;
     }
 
-    private Storage getStorageByLink(final String lnkFileName) {
-        final String[] names = lnkFileName.split(delimiter);
-        List<Storage> storages = storageRepository.findAllByName(names[names.length - 1]);
+    private Storage getStorageByLink(String lnkFileName) {
+        String[] names = lnkFileName.split(OneDriveLoader.delimiter);
+        List<Storage> storages = this.storageRepository.findAllByName(names[names.length - 1]);
         String parentName;
 
         for (int index = names.length - 1; 0 < index; index--) {
@@ -173,8 +172,8 @@ public class OneDriveLoader extends StoredLoader {
             else {
                 parentName = names[index - 1];
                 if (null != parentName) {
-                    final List<Storage> filteredStorages = new ArrayList<>();
-                    for (final Storage storage : storages)
+                    List<Storage> filteredStorages = new ArrayList<>();
+                    for (Storage storage : storages)
                         if (storage.getParent().getName().equals(parentName))
                             filteredStorages.add(storage);
 
@@ -187,46 +186,46 @@ public class OneDriveLoader extends StoredLoader {
     }
 
     @Override
-    public Storage refresh(final Storage storage) {
+    public Storage refresh(Storage storage) {
         if ((long) ItemDTO.REFRESH_INTERVAL > System.currentTimeMillis() - storage.getStorageInfo().getLastChecked())
             return storage;
 
         try {
-            final OneDriveItem item = api.getItem(storage.getUrl());
-            final ServerItem serverItem = new ServerItem(item);
+            OneDriveItem item = this.api.getItem(storage.getUrl());
+            ServerItem serverItem = new ServerItem(item);
 
-            fillStorage(storage, serverItem);
+            StoredLoader.fillStorage(storage, serverItem);
 
-            final Map<String, Book> books = ConsistencyUtils.deduplicate(booksRepository.findAllByStorage(storage), booksRepository)
+            Map<String, Book> books = ConsistencyUtils.deduplicate(this.booksRepository.findAllByStorage(storage), this.booksRepository)
                     .stream().collect(Collectors.toMap(book -> book.getBookInfo().getPath(), book -> book));
-            final Map<String, OneDriveItem> children = Arrays.asList(api.getChildren(item)).stream()
+            Map<String, OneDriveItem> children = Arrays.asList(this.api.getChildren(item)).stream()
                     .collect(Collectors.toMap(OneDriveItem::getId, child -> child));
 
-            storageRepository.save(storage);
-        } catch (final IOException e) {
-            logger.error(e);
+            this.storageRepository.save(storage);
+        } catch (IOException e) {
+            OneDriveLoader.logger.error(e);
         }
         return storage;
     }
 
     @Override
-    public void downloadBook(final Book book) {
+    public void downloadBook(Book book) {
         try {
-            final OneDriveItem bookItem = api.getItem(book.getBookInfo().getPath());
-            final File parent = new File(DEFAULT_PARENT);
+            OneDriveItem bookItem = this.api.getItem(book.getBookInfo().getPath());
+            File parent = new File(OneDriveLoader.DEFAULT_PARENT);
 
-            book.getStorage().setLocalPath(DEFAULT_PARENT);
-            storageRepository.save(book.getStorage());
+            book.getStorage().setLocalPath(OneDriveLoader.DEFAULT_PARENT);
+            this.storageRepository.save(book.getStorage());
 
-            final int itemPartSize = 0L < bookItem.getSize() ? (int) bookItem.getSize() / 5 : Integer.MAX_VALUE;
+            int itemPartSize = 0L < bookItem.getSize() ? (int) bookItem.getSize() / 5 : Integer.MAX_VALUE;
 
-            final Runnable task = new DownloadTask(
-                    new TaskOptions(new TaskQueue(), api, FACTORY.readWriteProvider(), new SocketReporter()),
+            Runnable task = new DownloadTask(
+                    new Task.TaskOptions(new TaskQueue(), this.api, FileSystemProvider.FACTORY.readWriteProvider(), new SocketReporter()),
                     parent, bookItem, true, itemPartSize);
 
             task.run();
-        } catch (final IOException e) {
-            logger.error(e);
+        } catch (IOException e) {
+            OneDriveLoader.logger.error(e);
         }
     }
 }

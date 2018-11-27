@@ -12,26 +12,26 @@ public class Http2Response implements Response {
     private final HttpResponse response;
     private InputStream is;
 
-    Http2Response(HttpResponse response) {
+    Http2Response(final HttpResponse response) {
         this.response = response;
 
         if (response.body() instanceof byte[])
-            is = new ByteArrayInputStream((byte[]) response.body());
+            this.is = new ByteArrayInputStream((byte[]) response.body());
     }
 
     @Override
     public InputStream getContent() throws IOException {
-        return is;
+        return this.is;
     }
 
     @Override
     public String getImageFormat() {
-        return response.headers().firstValue("content-type").get().split("/")[1];
+        return this.response.headers().firstValue("content-type").get().split("/")[1];
     }
 
     @Override
     public void close() throws IOException {
-        if (is != null)
-            is.close();
+        if (this.is != null)
+            this.is.close();
     }
 }

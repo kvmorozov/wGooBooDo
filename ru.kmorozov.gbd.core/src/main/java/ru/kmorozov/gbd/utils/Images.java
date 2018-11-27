@@ -19,10 +19,10 @@ public class Images {
 
     private static final Logger logger = ExecutionContext.INSTANCE.getLogger(Images.class);
 
-    public static boolean isImageFile(final Path filePath) {
+    public static boolean isImageFile(Path filePath) {
         if (!Files.isRegularFile(filePath)) return false;
 
-        final String ext = FilenameUtils.getExtension(filePath.toString()).toLowerCase();
+        String ext = FilenameUtils.getExtension(filePath.toString()).toLowerCase();
 
         switch (ext) {
             case "png":
@@ -32,25 +32,25 @@ public class Images {
             case "pdf":
                 return false;
             default:
-                logger.severe(String.format("Unknown img format = %s", ext));
+                Images.logger.severe(String.format("Unknown img format = %s", ext));
                 return false;
         }
     }
 
-    public static boolean isInvalidImage(final Path filePath, final int imgWidth) {
-        return isInvalidImage(filePath.toFile(), imgWidth);
+    public static boolean isInvalidImage(Path filePath, int imgWidth) {
+        return Images.isInvalidImage(filePath.toFile(), imgWidth);
     }
 
-    public static boolean isInvalidImage(final File imgfile, final int imgWidth) {
-        final Long fileSize = imgfile.length();
+    public static boolean isInvalidImage(File imgfile, int imgWidth) {
+        Long fileSize = imgfile.length();
 
         switch (imgWidth) {
             case 1280:
                 if (96183L <= fileSize && 97200L > fileSize) {
                     try {
-                        final BufferedImage bimg = ImageIO.read(imgfile);
+                        BufferedImage bimg = ImageIO.read(imgfile);
                         return 1670 == bimg.getHeight();
-                    } catch (final IOException e) {
+                    } catch (IOException e) {
                         return true;
                     }
                 }
@@ -61,15 +61,15 @@ public class Images {
         }
     }
 
-    public static boolean isPdfFile(final Path filePath) {
+    public static boolean isPdfFile(Path filePath) {
         if (!Files.isRegularFile(filePath)) return false;
 
-        final String ext = FilenameUtils.getExtension(filePath.toString()).toLowerCase();
+        String ext = FilenameUtils.getExtension(filePath.toString()).toLowerCase();
 
         return "pdf".equals(ext);
     }
 
-    public static String getImageFormat(final Response response) {
+    public static String getImageFormat(Response response) {
         return response.getImageFormat();
     }
 }

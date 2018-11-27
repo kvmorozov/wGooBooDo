@@ -38,42 +38,42 @@ public final class ApacheConnections {
     private CloseableHttpClient noProxyClient;
 
     private ApacheConnections() {
-        final PoolingHttpClientConnectionManager connPool = new PoolingHttpClientConnectionManager();
+        PoolingHttpClientConnectionManager connPool = new PoolingHttpClientConnectionManager();
         connPool.setMaxTotal(200);
         connPool.setDefaultMaxPerRoute(200);
 
-        builder = HttpClientBuilder.create().setUserAgent(HttpConnections.USER_AGENT).setConnectionManager(connPool).setConnectionManagerShared(true);
+        this.builder = HttpClientBuilder.create().setUserAgent(HttpConnections.USER_AGENT).setConnectionManager(connPool).setConnectionManagerShared(true);
 
-        builderWithTimeout = HttpClientBuilder.create().setUserAgent(HttpConnections.USER_AGENT).setConnectionManager(connPool);
+        this.builderWithTimeout = HttpClientBuilder.create().setUserAgent(HttpConnections.USER_AGENT).setConnectionManager(connPool);
 
         try {
-            final SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, (arg0, arg1) -> true).build();
+            SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, (arg0, arg1) -> true).build();
 //            builder.setSSLContext(sslContext);
 //            builderWithTimeout.setSSLContext(sslContext);
-        } catch (final Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
 
-        final RequestConfig requestConfig = RequestConfig.copy(RequestConfig.DEFAULT)
+        RequestConfig requestConfig = RequestConfig.copy(RequestConfig.DEFAULT)
                                                          .setConnectTimeout((long) HttpConnector.CONNECT_TIMEOUT, TimeUnit.MILLISECONDS)
                                                          .setConnectionRequestTimeout((long) HttpConnector.CONNECT_TIMEOUT, TimeUnit.MILLISECONDS).build();
 
-        builderWithTimeout.setDefaultRequestConfig(requestConfig);
+        this.builderWithTimeout.setDefaultRequestConfig(requestConfig);
     }
 
-    public HttpClient getClient(final HttpHostExt proxy, final boolean withTimeout) {
-        final HttpClientBuilder _builder = withTimeout ? builderWithTimeout : builder;
-        _builder.setDefaultCookieStore(getCookieStore(proxy));
+    public HttpClient getClient(HttpHostExt proxy, boolean withTimeout) {
+        HttpClientBuilder _builder = withTimeout ? this.builderWithTimeout : this.builder;
+        _builder.setDefaultCookieStore(this.getCookieStore(proxy));
 
         if (proxy.isLocal()) {
-            if (null == noProxyClient) noProxyClient = _builder.build();
+            if (null == this.noProxyClient) this.noProxyClient = _builder.build();
 
-            return noProxyClient;
+            return this.noProxyClient;
         }
         else {
-            final Map<HttpHost, HttpClient> _map = withTimeout ? withTimeoutClientsMap : clientsMap;
+            Map<HttpHost, HttpClient> _map = withTimeout ? this.withTimeoutClientsMap : this.clientsMap;
 
-            final HttpHost host = new HttpHost(proxy.getHost().getAddress());
+            HttpHost host = new HttpHost(proxy.getHost().getAddress());
 
             return _map.computeIfAbsent(host, k -> _builder.setProxy(host).build());
         }
@@ -81,35 +81,35 @@ public final class ApacheConnections {
 
     public void closeAllConnections() {
         try {
-            if (null != noProxyClient) noProxyClient.close();
+            if (null != this.noProxyClient) this.noProxyClient.close();
 
-            if (null != clientsMap) for (final HttpClient client : clientsMap.values())
+            if (null != this.clientsMap) for (HttpClient client : this.clientsMap.values())
                 ((Closeable) client).close();
-        } catch (final IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private CookieStore getCookieStore(final HttpHostExt proxy) {
-        CookieStore cookieStore = cookieStoreMap.get(proxy);
+    private CookieStore getCookieStore(HttpHostExt proxy) {
+        CookieStore cookieStore = this.cookieStoreMap.get(proxy);
 
         if (null == cookieStore) {
             synchronized (proxy) {
                 cookieStore = new BasicCookieStore();
-                final String[] cookies = proxy.getHeaders(UrlType.GOOGLE_BOOKS).getCookie().split(";");
+                String[] cookies = proxy.getHeaders(UrlType.GOOGLE_BOOKS).getCookie().split(";");
 
-                for (final String cookieEntry : cookies) {
-                    final String[] cookieParts = cookieEntry.split("=", 2);
+                for (String cookieEntry : cookies) {
+                    String[] cookieParts = cookieEntry.split("=", 2);
 
                     if (null != cookieParts && 1 < cookieParts.length && LibraryFactory.needSetCookies()) {
-                        final SetCookie cookie = new BasicClientCookie(cookieParts[0], cookieParts[1]);
+                        SetCookie cookie = new BasicClientCookie(cookieParts[0], cookieParts[1]);
                         cookie.setDomain(".google.ru");
                         cookie.setPath("/");
                         cookieStore.addCookie(cookie);
                     }
                 }
 
-                cookieStoreMap.put(proxy, cookieStore);
+                this.cookieStoreMap.put(proxy, cookieStore);
             }
         }
 

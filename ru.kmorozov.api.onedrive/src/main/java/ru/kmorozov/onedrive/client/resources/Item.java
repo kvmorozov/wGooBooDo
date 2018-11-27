@@ -42,66 +42,66 @@ public class Item {
     private DeletedFacet deleted;
 
     public String getId() {
-        return id;
+        return this.id;
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public String geteTag() {
-        return eTag;
+        return this.eTag;
     }
 
     public String getcTag() {
-        return cTag;
+        return this.cTag;
     }
 
     public IdentitySet getCreatedBy() {
-        return createdBy;
+        return this.createdBy;
     }
 
     public IdentitySet getLastModifiedBy() {
-        return lastModifiedBy;
+        return this.lastModifiedBy;
     }
 
     public String getCreatedDateTime() {
-        return createdDateTime;
+        return this.createdDateTime;
     }
 
     public String getLastModifiedDateTime() {
-        return lastModifiedDateTime;
+        return this.lastModifiedDateTime;
     }
 
     public long getSize() {
-        return size;
+        return this.size;
     }
 
     public ItemReference getParentReference() {
-        return parentReference;
+        return this.parentReference;
     }
 
     public String getWebUrl() {
-        return webUrl;
+        return this.webUrl;
     }
 
     public FolderFacet getFolder() {
-        return folder;
+        return this.folder;
     }
 
     public FileFacet getFile() {
-        return file;
+        return this.file;
     }
 
     public FileSystemInfoFacet getFileSystemInfo() {
-        return fileSystemInfo;
+        return this.fileSystemInfo;
     }
 
     public DeletedFacet getDeleted() {
-        return deleted;
+        return this.deleted;
     }
 
     public Item[] getChildren() {
-        return children;
+        return this.children;
     }
 }

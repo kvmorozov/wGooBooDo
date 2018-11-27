@@ -34,76 +34,76 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
     private final AtomicBoolean proxyListInitStarted = new AtomicBoolean(false);
 
     public static IProxyListProvider getInstance() {
-        if (null == INSTANCE)
-            INSTANCE = null == GBDOptions.getProxyListFile() ? new WebProxyListProvider() : new FileProxyListProvider();
+        if (null == AbstractProxyListProvider.INSTANCE)
+            AbstractProxyListProvider.INSTANCE = null == GBDOptions.getProxyListFile() ? new WebProxyListProvider() : new FileProxyListProvider();
 
-        return INSTANCE;
+        return AbstractProxyListProvider.INSTANCE;
     }
 
     public static void updateBlacklist() {
-        ProxyBlacklistHolder.BLACKLIST.updateBlacklist(INSTANCE.proxyList);
+        ProxyBlacklistHolder.BLACKLIST.updateBlacklist(AbstractProxyListProvider.INSTANCE.proxyList);
     }
 
-    private static String[] splitItems(final String proxyItem, final String delimiter) {
+    private static String[] splitItems(String proxyItem, String delimiter) {
         return proxyItem.split(delimiter);
     }
 
-    private String[] splitItems(final String proxyItem) {
-        String[] tmpItems = splitItems(proxyItem, DEFAULT_PROXY_DELIMITER);
+    private String[] splitItems(String proxyItem) {
+        String[] tmpItems = AbstractProxyListProvider.splitItems(proxyItem, AbstractProxyListProvider.DEFAULT_PROXY_DELIMITER);
         if (2 <= tmpItems.length) return tmpItems;
         else {
-            tmpItems = splitItems(proxyItem, "\\s+");
+            tmpItems = AbstractProxyListProvider.splitItems(proxyItem, "\\s+");
             return 2 <= tmpItems.length ? tmpItems : null;
         }
     }
 
     @Override
-    public void processProxyList(UrlType urlType) {
-        if (proxyListCompleted.get() || proxyListInitStarted.get())
+    public void processProxyList(final UrlType urlType) {
+        if (this.proxyListCompleted.get() || this.proxyListInitStarted.get())
             return;
 
-        proxyListInitStarted.set(true);
+        this.proxyListInitStarted.set(true);
 
-        for (final String proxyString : proxyItems)
+        for (String proxyString : this.proxyItems)
             if (!Strings.isNullOrEmpty(proxyString))
                 (new Thread(new ProxyChecker(proxyString, urlType))).start();
     }
 
     @Override
     public boolean proxyListCompleted() {
-        return proxyListCompleted.get();
+        return this.proxyListCompleted.get();
     }
 
     @Override
     public void invalidatedProxyListener() {
-        final long liveProxyCount = proxyList.stream().filter(HttpHostExt::isAvailable).count();
+        long liveProxyCount = this.proxyList.stream().filter(HttpHostExt::isAvailable).count();
         if (0L == liveProxyCount && GBDOptions.secureMode()) throw new RuntimeException("No more proxies!");
     }
 
     @Override
     public Stream<HttpHostExt> getParallelProxyStream() {
-        if (!proxyListCompleted.get()) {
+        if (!this.proxyListCompleted.get()) {
             try {
                 Thread.sleep(500L);
-            } catch (final InterruptedException e) {
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        return proxyList.parallelStream();
+        return this.proxyList.parallelStream();
     }
 
     @Override
     public Iterable<HttpHostExt> getProxyList() {
-        return proxyList;
+        return this.proxyList;
     }
 
-    protected static boolean notBlacklisted(final String proxyStr) {
+    protected static boolean notBlacklisted(String proxyStr) {
         return !ProxyBlacklistHolder.BLACKLIST.isProxyInBlacklist(proxyStr);
     }
 
     @Override
     public int getProxyCount() {
-        return proxyItems.size();
+        return this.proxyItems.size();
     }
 
     private class ProxyChecker implements Runnable {
@@ -111,49 +111,49 @@ public abstract class AbstractProxyListProvider implements IProxyListProvider {
         private final String proxyStr;
         private final UrlType urlType;
 
-        ProxyChecker(final String proxyStr, UrlType urlType) {
+        ProxyChecker(String proxyStr, final UrlType urlType) {
             this.proxyStr = proxyStr;
             this.urlType = urlType;
         }
 
         @Override
         public void run() {
-            final HttpHostExt host = processProxyItem(proxyStr);
+            HttpHostExt host = this.processProxyItem(this.proxyStr);
             ExecutionContext.sendProxyEvent(host);
         }
 
-        private String getCookie(final InetSocketAddress proxy) {
-            return HttpConnections.getCookieString(proxy, urlType);
+        private String getCookie(InetSocketAddress proxy) {
+            return HttpConnections.getCookieString(proxy, this.urlType);
         }
 
-        private HttpHostExt processProxyItem(final String proxyItem) {
+        private HttpHostExt processProxyItem(String proxyItem) {
             HttpHostExt proxy = null;
 
             try {
-                final String[] proxyItemArr = splitItems(proxyItem);
+                String[] proxyItemArr = AbstractProxyListProvider.this.splitItems(proxyItem);
 
                 if (null == proxyItemArr || 2 > proxyItemArr.length) return null;
 
-                final InetSocketAddress host = new InetSocketAddress(proxyItemArr[0], Integer.parseInt(proxyItemArr[1]));
-                final String cookie = getCookie(host);
+                InetSocketAddress host = new InetSocketAddress(proxyItemArr[0], Integer.parseInt(proxyItemArr[1]));
+                String cookie = this.getCookie(host);
                 proxy = new HttpHostExt(host, cookie);
                 if (!StringUtils.isEmpty(cookie)) {
                     if (!GBDOptions.secureMode() || proxy.isSecure()) {
-                        logger.info(String.format("%sroxy %s added.", GBDOptions.secureMode() ? proxy.isSecure() ? "Secure p" : "NOT secure p" : "P", host.toString()));
+                        AbstractProxyListProvider.logger.info(String.format("%sroxy %s added.", GBDOptions.secureMode() ? proxy.isSecure() ? "Secure p" : "NOT secure p" : "P", host.toString()));
                     } else {
-                        logger.info(String.format("NOT secure proxy %s NOT added.", host.toString()));
+                        AbstractProxyListProvider.logger.info(String.format("NOT secure proxy %s NOT added.", host.toString()));
                         proxy.forceInvalidate(false);
                     }
                 } else {
-                    logger.info(String.format("Proxy %s NOT added.", host.toString()));
+                    AbstractProxyListProvider.logger.info(String.format("Proxy %s NOT added.", host.toString()));
                     proxy.forceInvalidate(false);
                 }
-            } catch (final Exception ex) {
-                logger.info(String.format("Not valid proxy string %s.", proxyItem));
+            } catch (Exception ex) {
+                AbstractProxyListProvider.logger.info(String.format("Not valid proxy string %s.", proxyItem));
             }
 
-            proxyList.add(proxy);
-            proxyListCompleted.set(proxyList.size() == proxyItems.size());
+            AbstractProxyListProvider.this.proxyList.add(proxy);
+            AbstractProxyListProvider.this.proxyListCompleted.set(AbstractProxyListProvider.this.proxyList.size() == AbstractProxyListProvider.this.proxyItems.size());
 
             return proxy;
         }

@@ -16,26 +16,26 @@ public class LinkInfo {
     Book linkedBook;
 
     public Storage getLinkedStorage() {
-        return linkedStorage;
+        return this.linkedStorage;
     }
 
-    public void setLinkedStorage(final Storage linkedStorage) {
+    public void setLinkedStorage(Storage linkedStorage) {
         this.linkedStorage = linkedStorage;
     }
 
     public Book getLinkedBook() {
-        return linkedBook;
+        return this.linkedBook;
     }
 
-    public void setLinkedBook(final Book linkedBook) {
+    public void setLinkedBook(Book linkedBook) {
         this.linkedBook = linkedBook;
     }
 
     public boolean isBroken() {
-        return broken;
+        return this.broken;
     }
 
-    public void setBroken(final boolean broken) {
+    public void setBroken(boolean broken) {
         this.broken = broken;
     }
 }

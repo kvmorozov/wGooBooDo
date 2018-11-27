@@ -12,7 +12,7 @@ import javax.swing.*;
 public class SwingLogEventListener extends AbstractLogEventListener {
 
     @Override
-    public void receiveEvent(final BaseEvent event) {
+    public void receiveEvent(BaseEvent event) {
         if (!SwingUtilities.isEventDispatchThread()) {
             SwingUtilities.invokeLater(() -> {
                 LogTableModel.INSTANCE.addEvent((LogEvent) event);

@@ -9,7 +9,7 @@ import ru.kmorozov.gbd.logger.events.LogEvent;
 public abstract class AbstractLogEventListener implements IEventListener {
 
     @Override
-    public boolean eventMatched(final BaseEvent event) {
+    public boolean eventMatched(BaseEvent event) {
         return event instanceof LogEvent;
     }
 }

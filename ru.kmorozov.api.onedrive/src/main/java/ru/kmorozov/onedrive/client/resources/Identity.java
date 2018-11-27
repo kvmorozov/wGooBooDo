@@ -10,10 +10,10 @@ public class Identity {
     private String displayName;
 
     public String getId() {
-        return id;
+        return this.id;
     }
 
     public String getDisplayName() {
-        return displayName;
+        return this.displayName;
     }
 }

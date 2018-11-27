@@ -11,22 +11,22 @@ public class OkResponse implements Response {
 
     private final okhttp3.Response resp;
 
-    OkResponse(final okhttp3.Response resp) {
+    OkResponse(okhttp3.Response resp) {
         this.resp = resp;
     }
 
     @Override
     public InputStream getContent() {
-        return resp.body().byteStream();
+        return this.resp.body().byteStream();
     }
 
     @Override
     public String getImageFormat() {
-        return resp.body().contentType().subtype();
+        return this.resp.body().contentType().subtype();
     }
 
     @Override
     public void close() {
-        resp.body().close();
+        this.resp.body().close();
     }
 }

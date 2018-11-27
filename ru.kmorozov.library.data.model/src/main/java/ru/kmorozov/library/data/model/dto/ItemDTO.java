@@ -24,65 +24,65 @@ public class ItemDTO extends ResourceSupport {
     }
 
     private String itemId;
-    private ItemType itemType;
+    private ItemDTO.ItemType itemType;
     private Object itemSubType;
     private String displayName;
     private long filesCount;
     private List<CategoryDTO> categories;
-    private RefreshStatus refreshStatus;
+    private ItemDTO.RefreshStatus refreshStatus;
 
     public ItemDTO() {
     }
 
-    public ItemDTO(final StorageDTO storageDTO) {
-        this.itemId = storageDTO.getId();
-        this.itemType = ItemType.storage;
-        this.itemSubType = storageDTO.getStorageType();
-        this.displayName = storageDTO.getDisplayName();
-        this.filesCount = storageDTO.getFilesCount();
+    public ItemDTO(StorageDTO storageDTO) {
+        itemId = storageDTO.getId();
+        itemType = ItemDTO.ItemType.storage;
+        itemSubType = storageDTO.getStorageType();
+        displayName = storageDTO.getDisplayName();
+        filesCount = storageDTO.getFilesCount();
 
-        refreshStatus = (long) ItemDTO.REFRESH_INTERVAL > System.currentTimeMillis() - storageDTO.getLastChecked() ? RefreshStatus.updated : RefreshStatus.dirty;
+        this.refreshStatus = (long) REFRESH_INTERVAL > System.currentTimeMillis() - storageDTO.getLastChecked() ? ItemDTO.RefreshStatus.updated : ItemDTO.RefreshStatus.dirty;
 
         if (null != storageDTO.getCategories())
-            this.categories = storageDTO.getCategories().stream().map(CategoryDTO::new).collect(Collectors.toList());
+            categories = storageDTO.getCategories().stream().map(CategoryDTO::new).collect(Collectors.toList());
     }
 
-    public ItemDTO(final BookDTO bookDTO) {
-        this.itemId = bookDTO.getId();
-        this.itemType = ItemType.book;
-        this.itemSubType = bookDTO.getFormat();
-        this.displayName = bookDTO.getTitle();
+    public ItemDTO(BookDTO bookDTO) {
+        itemId = bookDTO.getId();
+        itemType = ItemDTO.ItemType.book;
+        itemSubType = bookDTO.getFormat();
+        displayName = bookDTO.getTitle();
     }
 
     public String getItemId() {
-        return itemId;
+        return this.itemId;
     }
 
-    public ItemType getItemType() {
-        return itemType;
+    public ItemDTO.ItemType getItemType() {
+        return this.itemType;
     }
 
     public Object getItemSubType() {
-        return itemSubType;
+        return this.itemSubType;
     }
 
     public String getDisplayName() {
-        return displayName;
+        return this.displayName;
     }
 
     public long getFilesCount() {
-        return filesCount;
+        return this.filesCount;
     }
 
     public List<CategoryDTO> getCategories() {
-        return categories;
+        return this.categories;
     }
 
-    public RefreshStatus getRefreshStatus() {
-        return refreshStatus;
+    public ItemDTO.RefreshStatus getRefreshStatus() {
+        return this.refreshStatus;
     }
 
     public void setUpdated() {
-        this.refreshStatus = RefreshStatus.updated;
+        refreshStatus = ItemDTO.RefreshStatus.updated;
     }
 }

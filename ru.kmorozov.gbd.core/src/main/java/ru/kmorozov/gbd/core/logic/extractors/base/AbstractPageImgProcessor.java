@@ -30,50 +30,50 @@ public abstract class AbstractPageImgProcessor<T extends AbstractPage> extends A
     protected final HttpHostExt usedProxy;
     protected final Logger logger;
 
-    protected AbstractPageImgProcessor(final BookContext bookContext, final T page, final HttpHostExt usedProxy) {
+    protected AbstractPageImgProcessor(BookContext bookContext, T page, HttpHostExt usedProxy) {
         this.bookContext = bookContext;
         this.page = page;
         this.usedProxy = usedProxy;
-        logger = ExecutionContext.INSTANCE.getLogger(getClass(), bookContext);
+        this.logger = ExecutionContext.INSTANCE.getLogger(this.getClass(), bookContext);
     }
 
-    protected boolean processImage(final String imgUrl) {
-        return processImage(imgUrl, HttpHostExt.NO_PROXY);
+    protected boolean processImage(String imgUrl) {
+        return this.processImage(imgUrl, HttpHostExt.NO_PROXY);
     }
 
-    protected boolean processImage(final String imgUrl, final HttpHostExt proxy) {
+    protected boolean processImage(String imgUrl, HttpHostExt proxy) {
         if (GBDOptions.secureMode() && proxy.isLocal()) return false;
 
         InputStream inputStream = null;
         IStoredItem storedItem = null;
 
-        if (page.isLoadingStarted()) return false;
+        if (this.page.isLoadingStarted()) return false;
 
-        try (Response resp = getContent(imgUrl, proxy, false)) {
+        try (final Response resp = AbstractHttpProcessor.getContent(imgUrl, proxy, false)) {
             inputStream = null == resp ? null : resp.getContent();
 
             if (null == inputStream) {
-                logger.info(getErrorMsg(imgUrl, proxy));
+                this.logger.info(this.getErrorMsg(imgUrl, proxy));
                 return false;
             }
 
             int read;
-            final byte[] bytes = new byte[dataChunk];
+            byte[] bytes = new byte[AbstractPageImgProcessor.dataChunk];
             boolean firstChunk = true, reloadFlag;
 
             while (-1 != (read = inputStream.read(bytes))) {
                 if (firstChunk) {
-                    final String imgFormat = Images.getImageFormat(resp);
+                    String imgFormat = Images.getImageFormat(resp);
                     if (null != imgFormat) {
 
-                        if (page.isLoadingStarted()) return false;
+                        if (this.page.isLoadingStarted()) return false;
 
-                        page.setLoadingStarted(true);
-                        storedItem = bookContext.getStorage().getStoredItem(page, imgFormat);
+                        this.page.setLoadingStarted(true);
+                        storedItem = this.bookContext.getStorage().getStoredItem(this.page, imgFormat);
 
                         if (reloadFlag = storedItem.exists()) if (GBDOptions.reloadImages()) storedItem.delete();
                         else {
-                            page.setDataProcessed(true);
+                            this.page.setDataProcessed(true);
                             return false;
                         }
                     } else break;
@@ -81,9 +81,9 @@ public abstract class AbstractPageImgProcessor<T extends AbstractPage> extends A
                     if (storedItem.exists()) break;
 
                     if (!proxy.isLocal())
-                        logger.info(String.format("Started img %s for %s with %s Proxy", reloadFlag ? "RELOADING" : "processing", page.getPid(), proxy.toString()));
+                        this.logger.info(String.format("Started img %s for %s with %s Proxy", reloadFlag ? "RELOADING" : "processing", this.page.getPid(), proxy.toString()));
                     else
-                        logger.info(String.format("Started img %s for %s without Proxy", reloadFlag ? "RELOADING" : "processing", page.getPid()));
+                        this.logger.info(String.format("Started img %s for %s without Proxy", reloadFlag ? "RELOADING" : "processing", this.page.getPid()));
                 }
 
                 firstChunk = false;
@@ -91,45 +91,45 @@ public abstract class AbstractPageImgProcessor<T extends AbstractPage> extends A
                 storedItem.write(bytes, read);
             }
 
-            if (validateOutput(storedItem, getImgWidth())) {
-                page.setDataProcessed(true);
+            if (this.validateOutput(storedItem, AbstractPageImgProcessor.getImgWidth())) {
+                this.page.setDataProcessed(true);
 
                 proxy.promoteProxy();
 
-                logger.info(getSuccessMsg());
-                page.setDataProcessed(true);
-                page.setFileExists(true);
+                this.logger.info(this.getSuccessMsg());
+                this.page.setDataProcessed(true);
+                this.page.setFileExists(true);
 
                 return true;
             } else {
                 storedItem.delete();
                 return false;
             }
-        } catch (SocketTimeoutException | SocketException | SSLException ste) {
+        } catch (final SocketTimeoutException | SocketException | SSLException ste) {
             proxy.registerFailure();
-        } catch (final Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
             if (null != inputStream) {
                 try {
                     inputStream.close();
-                } catch (final IOException e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
             if (null != storedItem) {
                 try {
                     storedItem.close();
-                } catch (final IOException e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
 
-            if (!page.isDataProcessed() && null != storedItem) {
-                logger.info(String.format("Loading page %s failed!", page.getPid()));
+            if (!this.page.isDataProcessed() && null != storedItem) {
+                this.logger.info(String.format("Loading page %s failed!", this.page.getPid()));
                 try {
                     storedItem.delete();
-                } catch (IOException e) {
+                } catch (final IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -144,12 +144,12 @@ public abstract class AbstractPageImgProcessor<T extends AbstractPage> extends A
 
     @Override
     public T getUniqueObject() {
-        return page;
+        return this.page;
     }
 
     @Override
     public String toString() {
-        return "Page processor:" + bookContext;
+        return "Page processor:" + this.bookContext;
     }
 
     protected static int getImgWidth() {

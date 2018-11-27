@@ -19,56 +19,56 @@ public final class EventSender implements Closeable {
     private Channel channel;
     private boolean isInitCompleted;
 
-    private boolean initIsNotPossible = false;
+    private boolean initIsNotPossible;
 
     public static final EventSender INSTANCE = new EventSender("localhost", 5252);
 
-    private EventSender(final String server, final int port) {
+    private EventSender(String server, int port) {
         this.server = server;
         this.port = port;
     }
 
     private void init() {
-        group = new NioEventLoopGroup();
-        final Bootstrap bootstrap = new Bootstrap().group(group)
+        this.group = new NioEventLoopGroup();
+        Bootstrap bootstrap = new Bootstrap().group(this.group)
                 .channel(NioSocketChannel.class)
                 .handler(new ClientAdapterInitializer());
         try {
-            channel = bootstrap.connect(server, port).sync().channel();
+            this.channel = bootstrap.connect(this.server, this.port).sync().channel();
 
-            isInitCompleted = true;
-        } catch (final InterruptedException e) {
-            group.shutdownGracefully();
+            this.isInitCompleted = true;
+        } catch (InterruptedException e) {
+            this.group.shutdownGracefully();
 
-            logger.error(e);
-        } catch (Exception ex) {
-            logger.error(ex.getMessage());
-            initIsNotPossible = true;
+            EventSender.logger.error(e);
+        } catch (final Exception ex) {
+            EventSender.logger.error(ex.getMessage());
+            this.initIsNotPossible = true;
         }
     }
 
-    private void write(final String msg) {
-        if (!isInitCompleted)
-            if (initIsNotPossible)
+    private void write(String msg) {
+        if (!this.isInitCompleted)
+            if (this.initIsNotPossible)
                 return;
             else
-                init();
+                this.init();
 
-        if (isInitCompleted) {
-            channel.write(msg);
-            channel.flush();
+        if (this.isInitCompleted) {
+            this.channel.write(msg);
+            this.channel.flush();
         }
     }
 
     @Override
     public void close() {
-        group.shutdownGracefully();
+        this.group.shutdownGracefully();
     }
 
-    public void sendInfo(final Logger logger, final String msg) {
+    public void sendInfo(Logger logger, String msg) {
         try {
-            write(msg);
-        } catch (final Exception ex) {
+            this.write(msg);
+        } catch (Exception ex) {
             logger.error(ex.getMessage());
         }
 

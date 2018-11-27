@@ -2,6 +2,7 @@ package ru.kmorozov.gbd.core.logic.Proxy;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
 /**
@@ -12,13 +13,13 @@ public class StaticProxyListProvider extends AbstractProxyListProvider {
     private static final String PROXY_LIST_RES = "proxy/list1";
 
     StaticProxyListProvider() {
-        buildList();
+        this.buildList();
     }
 
     private void buildList() {
-        try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(PROXY_LIST_RES)) {
-            this.proxyItems = new String(is.readAllBytes(), "UTF-8").lines().collect(Collectors.toSet());
-        } catch (final IOException e) {
+        try (final InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(StaticProxyListProvider.PROXY_LIST_RES)) {
+            proxyItems = new String(is.readAllBytes(), StandardCharsets.UTF_8).lines().collect(Collectors.toSet());
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

@@ -16,7 +16,7 @@ import java.util.Set;
 @Component
 public class DbContextLoader implements IContextLoader {
 
-    private Map<String, BookInfo> booksMap = new HashMap<>();
+    private final Map<String, BookInfo> booksMap = new HashMap<>();
 
     @Autowired
     @Lazy
@@ -33,36 +33,36 @@ public class DbContextLoader implements IContextLoader {
     }
 
     @Override
-    public void updateBookInfo(BookInfo bookInfo) {
-        BookInfo existBookInfo = googleBooksRepository.findByBookId(bookInfo.getBookId());
+    public void updateBookInfo(final BookInfo bookInfo) {
+        final BookInfo existBookInfo = this.googleBooksRepository.findByBookId(bookInfo.getBookId());
         if (existBookInfo != null)
-            googleBooksRepository.delete(existBookInfo);
+            this.googleBooksRepository.delete(existBookInfo);
 
-        googleBooksRepository.save(bookInfo);
+        this.googleBooksRepository.save(bookInfo);
     }
 
     @Override
-    public BookInfo getBookInfo(String bookId) {
-        BookInfo info = booksMap.get(bookId);
+    public BookInfo getBookInfo(final String bookId) {
+        BookInfo info = this.booksMap.get(bookId);
         if (info == null) {
-            info = googleBooksRepository.findByBookId(bookId);
+            info = this.googleBooksRepository.findByBookId(bookId);
 
-            for (IPage page : info.getPages().getPages())
+            for (final IPage page : info.getPages().getPages())
                 ((AbstractPage) page).setFileExists(true);
 
-            booksMap.put(bookId, info);
+            this.booksMap.put(bookId, info);
         }
         return info;
     }
 
     @Override
     public Set<String> getBookIdsList() {
-        return booksMap.keySet();
+        return this.booksMap.keySet();
     }
 
     @Override
     public int getContextSize() {
-        return booksMap.size();
+        return this.booksMap.size();
     }
 
     @Override

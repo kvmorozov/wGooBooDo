@@ -23,12 +23,12 @@ public class MongoConfiguration extends AbstractMongoConfiguration {
 
     @Override
     protected String getDatabaseName() {
-        return BOOKS_MONGO_DB_NAME;
+        return MongoConfiguration.BOOKS_MONGO_DB_NAME;
     }
 
     @Override
     public MongoClient mongoClient() {
-        return new MongoClient(new MongoClientURI(mongoUri));
+        return new MongoClient(new MongoClientURI(this.mongoUri));
     }
 
     @Override

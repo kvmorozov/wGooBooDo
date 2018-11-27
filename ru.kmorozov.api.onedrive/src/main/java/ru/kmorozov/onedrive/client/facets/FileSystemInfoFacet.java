@@ -10,18 +10,18 @@ public class FileSystemInfoFacet {
     private String lastModifiedDateTime;
 
     public String getCreatedDateTime() {
-        return createdDateTime;
+        return this.createdDateTime;
     }
 
-    public void setCreatedDateTime(final String createdDateTime) {
+    public void setCreatedDateTime(String createdDateTime) {
         this.createdDateTime = createdDateTime;
     }
 
     public String getLastModifiedDateTime() {
-        return lastModifiedDateTime;
+        return this.lastModifiedDateTime;
     }
 
-    public void setLastModifiedDateTime(final String lastModifiedDateTime) {
+    public void setLastModifiedDateTime(String lastModifiedDateTime) {
         this.lastModifiedDateTime = lastModifiedDateTime;
     }
 }

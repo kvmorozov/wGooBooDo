@@ -5,6 +5,7 @@ import ru.kmorozov.gbd.logger.Logger;
 import ru.kmorozov.library.data.loader.netty.EventSender;
 import ru.kmorozov.library.data.model.book.Book;
 import ru.kmorozov.library.data.model.book.BookInfo;
+import ru.kmorozov.library.data.model.book.BookInfo.BookFormat;
 import ru.kmorozov.library.data.model.book.Category;
 import ru.kmorozov.library.data.model.book.Storage;
 import ru.kmorozov.library.data.model.book.StorageInfo;
@@ -31,44 +32,44 @@ public abstract class StoredLoader extends BaseLoader{
     protected BooksRepository booksRepository;
 
     public void clear() {
-        final long categoryCount = categoryRepository.count();
-        final long storageCount = storageRepository.count();
-        final long booksCount = booksRepository.count();
+        long categoryCount = this.categoryRepository.count();
+        long storageCount = this.storageRepository.count();
+        long booksCount = this.booksRepository.count();
 
         if (0L < categoryCount) {
-            logger.info("Categories loaded: " + categoryCount);
-            categoryRepository.deleteAll();
+            StoredLoader.logger.info("Categories loaded: " + categoryCount);
+            this.categoryRepository.deleteAll();
         }
 
         if (0L < storageCount) {
-            logger.info("Storages loaded: " + storageCount);
-            storageRepository.deleteAll();
+            StoredLoader.logger.info("Storages loaded: " + storageCount);
+            this.storageRepository.deleteAll();
         }
 
         if (0L < booksCount) {
-            logger.info("Books loaded: " + storageCount);
-            booksRepository.deleteAll();
+            StoredLoader.logger.info("Books loaded: " + storageCount);
+            this.booksRepository.deleteAll();
         }
     }
 
-    private Category getOrCreateCategory(final String name) {
-        Category category = categoryRepository.findOneByName(name);
+    private Category getOrCreateCategory(String name) {
+        Category category = this.categoryRepository.findOneByName(name);
         if (null == category) {
             category = new Category();
             category.setName(name);
 
-            categoryRepository.save(category);
+            this.categoryRepository.save(category);
         }
 
         return category;
     }
 
-    private Storage getOrCreateStorage(final ServerItem serverItem) {
-        final Storage storage = storageRepository.findByUrl(serverItem.getUrl());
-        return fillStorage(null == storage ? new Storage() : storage, serverItem);
+    private Storage getOrCreateStorage(ServerItem serverItem) {
+        Storage storage = this.storageRepository.findByUrl(serverItem.getUrl());
+        return StoredLoader.fillStorage(null == storage ? new Storage() : storage, serverItem);
     }
 
-    protected static Storage fillStorage(final Storage storage, final ServerItem serverItem) {
+    protected static Storage fillStorage(Storage storage, ServerItem serverItem) {
         storage.setStorageType(serverItem.getStorageType());
         storage.setUrl(serverItem.getUrl());
         storage.setName(serverItem.getName());
@@ -79,26 +80,26 @@ public abstract class StoredLoader extends BaseLoader{
         return storage;
     }
 
-    protected Category getCategoryByServerItem(final ServerItem serverItem) {
-        final Category category = getOrCreateCategory(serverItem.getName());
-        final Storage storage = getOrCreateStorage(serverItem);
+    protected Category getCategoryByServerItem(ServerItem serverItem) {
+        Category category = this.getOrCreateCategory(serverItem.getName());
+        Storage storage = this.getOrCreateStorage(serverItem);
 
         storage.addCategory(category);
 
-        storageRepository.save(storage);
+        this.storageRepository.save(storage);
 
-        final Storage parentStorage = null == serverItem.getParent() ? null : storageRepository.findByUrl(serverItem.getParent().getUrl());
+        Storage parentStorage = null == serverItem.getParent() ? null : this.storageRepository.findByUrl(serverItem.getParent().getUrl());
 
         if (null != parentStorage) {
             storage.setParent(parentStorage);
-            storageRepository.save(storage);
+            this.storageRepository.save(storage);
 
             category.addParents(parentStorage.getCategories());
-            categoryRepository.save(category);
+            this.categoryRepository.save(category);
         }
 
         category.addStorage(storage);
-        categoryRepository.save(category);
+        this.categoryRepository.save(category);
 
         return storage.getMainCategory();
     }
@@ -109,20 +110,20 @@ public abstract class StoredLoader extends BaseLoader{
 
     public abstract boolean postponedLinksLoad();
 
-    protected void updateStorage(final Storage storage) throws IOException {
-        final StorageInfo storageInfo = null == storage.getStorageInfo() ? new StorageInfo() : storage.getStorageInfo();
+    protected void updateStorage(Storage storage) throws IOException {
+        StorageInfo storageInfo = null == storage.getStorageInfo() ? new StorageInfo() : storage.getStorageInfo();
 
-        getItemsStreamByStorage(storage)
+        this.getItemsStreamByStorage(storage)
                 .filter(ServerItem::isLoadableOrLink)
                 .forEach(serverItem -> {
                     if (!serverItem.isDirectory()) {
-                        final BookInfo.BookFormat bookFormat = BookUtils.getFormat(serverItem.getName());
-                        if (BookInfo.BookFormat.UNKNOWN != bookFormat) {
-                            final Book existBook = booksRepository.findOneByBookInfoPath(serverItem.getUrl());
+                        BookFormat bookFormat = BookUtils.getFormat(serverItem.getName());
+                        if (BookFormat.UNKNOWN != bookFormat) {
+                            Book existBook = this.booksRepository.findOneByBookInfoPath(serverItem.getUrl());
                             if (null == existBook) {
-                                final Book book = new Book();
+                                Book book = new Book();
 
-                                final BookInfo bookInfo = new BookInfo();
+                                BookInfo bookInfo = new BookInfo();
                                 bookInfo.setFileName(serverItem.getName());
                                 bookInfo.setPath(serverItem.getUrl());
                                 bookInfo.setFormat(bookFormat);
@@ -132,34 +133,34 @@ public abstract class StoredLoader extends BaseLoader{
                                 book.setBookInfo(bookInfo);
                                 book.setStorage(storage);
 
-                                if (book.isLink() && !postponedLinksLoad()) {
-                                    links.add(serverItem.getOriginalItem());
-                                    EventSender.INSTANCE.sendInfo(logger, "Added link " + serverItem.getName());
+                                if (book.isLink() && !this.postponedLinksLoad()) {
+                                    this.links.add(serverItem.getOriginalItem());
+                                    EventSender.INSTANCE.sendInfo(StoredLoader.logger, "Added link " + serverItem.getName());
                                 } else {
-                                    booksRepository.save(book);
+                                    this.booksRepository.save(book);
                                     storage.getStorageInfo().incFilesCount();
-                                    EventSender.INSTANCE.sendInfo(logger, "Added file " + serverItem.getName());
+                                    EventSender.INSTANCE.sendInfo(StoredLoader.logger, "Added file " + serverItem.getName());
                                 }
                             } else {
-                                final Date oldDate = existBook.getBookInfo().getLastModifiedDateTime();
-                                final Date newDate = serverItem.getLastModifiedDateTime();
-                                final boolean dateCondition = null == oldDate || oldDate.before(newDate);
+                                Date oldDate = existBook.getBookInfo().getLastModifiedDateTime();
+                                Date newDate = serverItem.getLastModifiedDateTime();
+                                boolean dateCondition = null == oldDate || oldDate.before(newDate);
 
-                                final long oldSize = existBook.getBookInfo().getSize();
-                                final long newSize = serverItem.getSize();
-                                final boolean sizeCondition = 0L == oldSize || oldSize != newSize;
+                                long oldSize = existBook.getBookInfo().getSize();
+                                long newSize = serverItem.getSize();
+                                boolean sizeCondition = 0L == oldSize || oldSize != newSize;
 
-                                boolean storageCondition = !existBook.getStorage().equals(storage);
-                                boolean nameCondition = serverItem.getName().equals(existBook.getBookInfo().getFileName());
+                                final boolean storageCondition = !existBook.getStorage().equals(storage);
+                                final boolean nameCondition = serverItem.getName().equals(existBook.getBookInfo().getFileName());
 
                                 if (dateCondition || sizeCondition || storageCondition || nameCondition) {
                                     existBook.getBookInfo().setFileName(serverItem.getName());
                                     existBook.getBookInfo().setLastModifiedDateTime(newDate);
                                     existBook.getBookInfo().setSize(newSize);
                                     existBook.setStorage(storage);
-                                    booksRepository.save(existBook);
+                                    this.booksRepository.save(existBook);
 
-                                    EventSender.INSTANCE.sendInfo(logger, "Updated file " + serverItem.getName());
+                                    EventSender.INSTANCE.sendInfo(StoredLoader.logger, "Updated file " + serverItem.getName());
                                 }
                             }
                         }
@@ -169,6 +170,6 @@ public abstract class StoredLoader extends BaseLoader{
         storageInfo.setLastChecked(System.currentTimeMillis());
 
         storage.setStorageInfo(storageInfo);
-        storageRepository.save(storage);
+        this.storageRepository.save(storage);
     }
 }

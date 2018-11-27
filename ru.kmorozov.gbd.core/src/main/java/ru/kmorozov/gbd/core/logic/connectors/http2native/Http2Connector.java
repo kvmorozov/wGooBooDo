@@ -11,7 +11,9 @@ import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
+import java.net.http.HttpRequest.Builder;
 import java.net.http.HttpResponse;
+import java.net.http.HttpResponse.BodyHandlers;
 import java.time.Duration;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,68 +24,68 @@ public class Http2Connector extends HttpConnector {
 
     private static final HttpClient DEFAULT_CLIENT = HttpClient.newHttpClient();
 
-    private HttpClient getClient(final HttpHostExt proxy) {
-        final String key = getProxyKey(proxy);
+    private HttpClient getClient(HttpHostExt proxy) {
+        String key = HttpConnector.getProxyKey(proxy);
 
-        HttpClient requestClient = httpClientsMap.get(key);
+        HttpClient requestClient = Http2Connector.httpClientsMap.get(key);
 
         if (null == requestClient) synchronized (proxy) {
             requestClient = HttpClient.newBuilder().proxy(ProxySelector.of(proxy.getHost())).build();
 
-            httpClientsMap.put(key, requestClient);
+            Http2Connector.httpClientsMap.put(key, requestClient);
         }
 
         return requestClient;
     }
 
     @Override
-    public Http2Response getContent(String rqUrl, HttpHostExt proxy, boolean withTimeout) throws IOException {
+    public Http2Response getContent(final String rqUrl, final HttpHostExt proxy, final boolean withTimeout) throws IOException {
         try {
-            final URI uri = URI.create(rqUrl);
+            URI uri = URI.create(rqUrl);
 
             if ((GBDOptions.secureMode() && proxy.isLocal()) || !proxy.isAvailable()) return null;
 
-            final HttpResponse resp;
-            if (validateProxy(rqUrl, proxy)) {
-                final HttpRequest.Builder reqBuilder = HttpRequest.newBuilder()
-                        .uri(uri).GET().timeout(Duration.ofMillis((long) (withTimeout ? CONNECT_TIMEOUT : CONNECT_TIMEOUT * 10)));
+            HttpResponse resp;
+            if (this.validateProxy(rqUrl, proxy)) {
+                Builder reqBuilder = HttpRequest.newBuilder()
+                        .uri(uri).GET().timeout(Duration.ofMillis((long) (withTimeout ? HttpConnector.CONNECT_TIMEOUT : HttpConnector.CONNECT_TIMEOUT * 10)));
 
-                if (needHeaders(rqUrl)) {
-                    HttpHeaders headers = proxy.getHeaders(getUrlType(rqUrl));
+                if (this.needHeaders(rqUrl)) {
+                    final HttpHeaders headers = proxy.getHeaders(this.getUrlType(rqUrl));
                     reqBuilder.setHeader("User-Agent", headers.getUserAgent());
                     reqBuilder.setHeader("Cookie", headers.getCookie());
                 }
 
-                resp = getContent(reqBuilder.build(), proxy, 0);
+                resp = this.getContent(reqBuilder.build(), proxy, 0);
             } else throw new RuntimeException("Invalid proxy config!");
 
             if (null == resp)
-                logger.finest(String.format("No response at url %s with proxy %s", rqUrl, proxy.toString()));
+                HttpConnector.logger.finest(String.format("No response at url %s with proxy %s", rqUrl, proxy.toString()));
 
             return new Http2Response(resp);
-        } catch (final IOException ioe) {
-            logger.severe("Connection error: " + ioe.getMessage());
+        } catch (IOException ioe) {
+            HttpConnector.logger.severe("Connection error: " + ioe.getMessage());
             throw new Http2ResponseException(ioe);
         }
     }
 
-    private HttpResponse getContent(final HttpRequest req, final HttpHostExt proxy, int attempt) throws IOException {
-        if (MAX_RETRY_COUNT <= attempt) {
+    private HttpResponse getContent(HttpRequest req, HttpHostExt proxy, int attempt) throws IOException {
+        if (HttpConnector.MAX_RETRY_COUNT <= attempt) {
             proxy.registerFailure();
             return null;
         }
 
         if (1 < attempt) try {
-            logger.finest(String.format("Attempt %d with %s url", attempt, req.uri().toString()));
-            Thread.sleep((long) (SLEEP_TIME * attempt));
-        } catch (final InterruptedException ignored) {
+            HttpConnector.logger.finest(String.format("Attempt %d with %s url", attempt, req.uri().toString()));
+            Thread.sleep((long) (HttpConnector.SLEEP_TIME * attempt));
+        } catch (InterruptedException ignored) {
         }
 
         try {
-            return DEFAULT_CLIENT.send(req, HttpResponse.BodyHandlers.ofByteArray());
-        } catch (final SocketTimeoutException | InterruptedException ste1) {
+            return Http2Connector.DEFAULT_CLIENT.send(req, BodyHandlers.ofByteArray());
+        } catch (SocketTimeoutException | InterruptedException ste1) {
             proxy.registerFailure();
-            return getContent(req, proxy, ++attempt);
+            return this.getContent(req, proxy, ++attempt);
         }
     }
 

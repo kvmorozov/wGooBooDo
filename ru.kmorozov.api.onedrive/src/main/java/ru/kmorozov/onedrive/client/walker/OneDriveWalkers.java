@@ -17,27 +17,27 @@ public class OneDriveWalkers {
     private static final int MAX_MAX_DEPTH = 100;
     private static OneDriveIterator<OneDriveItem> itr;
 
-    public static Stream<OneDriveItem> walk(final OneDriveProvider api, final int maxDepth, final Predicate<OneDriveItem> skipCondition) throws IOException {
-        itr = new OneDriveIterator(api, api.getRoot(), maxDepth, skipCondition);
+    public static Stream<OneDriveItem> walk(OneDriveProvider api, int maxDepth, Predicate<OneDriveItem> skipCondition) throws IOException {
+        OneDriveWalkers.itr = new OneDriveIterator(api, api.getRoot(), maxDepth, skipCondition);
 
         try {
-            final Stream<OneDriveItem> stream = StreamSupport.stream(Spliterators.spliteratorUnknownSize(itr, 1), false);
-            return stream.onClose(itr::close);
-        } catch (RuntimeException | Error ex) {
-            itr.close();
+            Stream<OneDriveItem> stream = StreamSupport.stream(Spliterators.spliteratorUnknownSize(OneDriveWalkers.itr, 1), false);
+            return stream.onClose(OneDriveWalkers.itr::close);
+        } catch (final RuntimeException | Error ex) {
+            OneDriveWalkers.itr.close();
             throw ex;
         }
     }
 
-    public static Stream<OneDriveItem> walk(final OneDriveProvider api, final int maxDepth) throws IOException {
-        return walk(api, maxDepth, x -> false);
+    public static Stream<OneDriveItem> walk(OneDriveProvider api, int maxDepth) throws IOException {
+        return OneDriveWalkers.walk(api, maxDepth, x -> false);
     }
 
-    public static Stream<OneDriveItem> walk(final OneDriveProvider api, final Predicate<OneDriveItem> skipCondition) throws IOException {
-        return walk(api, MAX_MAX_DEPTH, skipCondition);
+    public static Stream<OneDriveItem> walk(OneDriveProvider api, Predicate<OneDriveItem> skipCondition) throws IOException {
+        return OneDriveWalkers.walk(api, OneDriveWalkers.MAX_MAX_DEPTH, skipCondition);
     }
 
     public static void stopAll() {
-        itr.close();
+        OneDriveWalkers.itr.close();
     }
 }

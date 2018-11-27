@@ -14,42 +14,42 @@ public class RfbrBookExtractor extends AbstractBookExtractor {
 
     private static final String RFBR_BASE_URL = "http://www.rfbr.ru/rffi/ru/books/o_";
 
-    public RfbrBookExtractor(String bookId) {
+    public RfbrBookExtractor(final String bookId) {
         super(bookId);
     }
 
     @Override
     protected String getBookUrl() {
-        return RFBR_BASE_URL + bookId;
+        return RfbrBookExtractor.RFBR_BASE_URL + this.bookId;
     }
 
     @Override
     protected String getReserveBookUrl() {
-        return getBookUrl();
+        return this.getBookUrl();
     }
 
     @Override
     protected BookInfo findBookInfo() {
         Document defaultDocument = null;
         try {
-            defaultDocument = getDocumentWithoutProxy();
-        } catch (Exception e) {
+            defaultDocument = this.getDocumentWithoutProxy();
+        } catch (final Exception e) {
             e.printStackTrace();
         }
-        return extractBookInfo(defaultDocument);
+        return this.extractBookInfo(defaultDocument);
     }
 
-    private BookInfo extractBookInfo(Document doc) {
+    private BookInfo extractBookInfo(final Document doc) {
         if (null == doc) return null;
 
-        final IBookData bookData = new RfbrBookData(bookId);
-        int numPages = Integer.valueOf(Arrays.stream(doc.html().split("\\r?\\n")).filter(s -> s.contains("readerInitialization")).findAny().get().split("\\(")[1].split(",")[0]);
+        IBookData bookData = new RfbrBookData(this.bookId);
+        final int numPages = Integer.valueOf(Arrays.stream(doc.html().split("\\r?\\n")).filter(s -> s.contains("readerInitialization")).findAny().get().split("\\(")[1].split(",")[0]);
 
-        RfbrPage[] pages = new RfbrPage[numPages];
+        final RfbrPage[] pages = new RfbrPage[numPages];
 
         for (int index = 0; index < numPages; index++)
-            pages[index] = new RfbrPage(bookId, index);
+            pages[index] = new RfbrPage(this.bookId, index);
 
-        return new BookInfo(bookData, new RfbrPagesInfo(pages), bookId);
+        return new BookInfo(bookData, new RfbrPagesInfo(pages), this.bookId);
     }
 }

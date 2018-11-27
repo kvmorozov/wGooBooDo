@@ -13,11 +13,11 @@ import ru.kmorozov.gbd.pdf.PdfMaker;
 
 class Main {
 
-    public static void main(final String[] args) {
+    public static void main(String[] args) {
         if (0 < args.length) {
             GBDOptions.init(new CommandLineOptions(args));
 
-            final IBookListProducer producer = new OptionsBasedProducer();
+            IBookListProducer producer = new OptionsBasedProducer();
             ExecutionContext.initContext(new DummyReceiver(), 1 == producer.getBookIds().size());
             ExecutionContext.INSTANCE.addBookContext(producer, new ProcessStatus(), new PdfMaker());
 

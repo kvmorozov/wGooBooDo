@@ -23,46 +23,46 @@ public class LocalFSStorage implements IStorage {
 
     protected final File storageDir;
 
-    public LocalFSStorage(String storageDirName) {
-        storageDir = new File(storageDirName);
+    public LocalFSStorage(final String storageDirName) {
+        this.storageDir = new File(storageDirName);
     }
 
     @Override
     public boolean isValidOrCreate() {
-        return storageDir.exists() ? storageDir.isDirectory() : storageDir.mkdir();
+        return this.storageDir.exists() ? this.storageDir.isDirectory() : this.storageDir.mkdir();
     }
 
     @Override
-    public IStorage getChildStorage(IBookData bookData) {
+    public IStorage getChildStorage(final IBookData bookData) {
         try {
-            final Optional<Path> optPath = Files.find(storageDir.toPath(), 1,
+            Optional<Path> optPath = Files.find(this.storageDir.toPath(), 1,
                     (path, basicFileAttributes) -> path.toString().contains(bookData.getVolumeId())).findAny();
             if (optPath.isPresent()) return new LocalFSStorage(optPath.get().toString());
-        } catch (final IOException ignored) {
+        } catch (IOException ignored) {
         }
 
-        final String directoryName = storageDir.getPath() + '\\' + bookData.getTitle()
+        String directoryName = this.storageDir.getPath() + '\\' + bookData.getTitle()
                 .replace(":", "")
                 .replace("<", "")
                 .replace(">", "")
                 .replace("?", "")
                 .replace("/", ".");
-        final String volumeId = bookData.getVolumeId();
+        String volumeId = bookData.getVolumeId();
         return new LocalFSStorage(StringUtils.isEmpty(volumeId) ? directoryName : directoryName + ' ' + bookData.getVolumeId());
     }
 
     @Override
     public int size() {
-        return storageDir.listFiles() == null ? 0 : storageDir.listFiles().length;
+        return this.storageDir.listFiles() == null ? 0 : this.storageDir.listFiles().length;
     }
 
     @Override
     public Set<String> getBookIdsList() throws IOException {
-        final Set<String> bookIdsList = new HashSet<>();
+        Set<String> bookIdsList = new HashSet<>();
 
-        Files.walk(Paths.get(storageDir.toURI())).forEach(filePath -> {
+        Files.walk(Paths.get(this.storageDir.toURI())).forEach(filePath -> {
             if (filePath.toFile().isDirectory()) {
-                final String[] nameParts = filePath.toFile().getName().split(" ");
+                String[] nameParts = filePath.toFile().getName().split(" ");
                 if (LibraryFactory.isValidId(nameParts[nameParts.length - 1]))
                     bookIdsList.add(nameParts[nameParts.length - 1]);
             }
@@ -72,19 +72,19 @@ public class LocalFSStorage implements IStorage {
     }
 
     @Override
-    public boolean isPageExists(IPage page) throws IOException {
-        return 0L == Files.find(storageDir.toPath(), 1,
+    public boolean isPageExists(final IPage page) throws IOException {
+        return 0L == Files.find(this.storageDir.toPath(), 1,
                 (path, basicFileAttributes) -> path.toString().contains(page.getOrder() + '_' + page.getPid() + '.'),
                 FileVisitOption.FOLLOW_LINKS).count();
     }
 
     @Override
     public Stream<Path> getFiles() throws IOException {
-        return Files.walk(storageDir.toPath());
+        return Files.walk(this.storageDir.toPath());
     }
 
     @Override
-    public IStoredItem getStoredItem(IPage page, String imgFormat) throws IOException {
+    public IStoredItem getStoredItem(final IPage page, final String imgFormat) throws IOException {
         return new LocalFSStoredItem(this, page, imgFormat);
     }
 
@@ -94,11 +94,11 @@ public class LocalFSStorage implements IStorage {
     }
 
     public File getStorageDir() {
-        return this.storageDir;
+        return storageDir;
     }
 
     @Override
-    public IIndex getIndex(String indexName, boolean createIfNotExists) {
+    public IIndex getIndex(final String indexName, final boolean createIfNotExists) {
         return new LocalFSIndex(this, indexName, createIfNotExists);
     }
 }

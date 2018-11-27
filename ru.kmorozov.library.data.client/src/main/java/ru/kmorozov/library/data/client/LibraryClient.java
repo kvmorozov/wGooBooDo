@@ -13,7 +13,7 @@ import org.springframework.web.client.RestTemplate;
 @ComponentScan(basePackages = {"ru.kmorozov.library.data.client.netty", "ru.kmorozov.library.data.client"})
 public class LibraryClient {
 
-    public static void main(final String[] args) {
+    public static void main(String[] args) {
         SpringApplication.run(LibraryClient.class, args);
     }
 

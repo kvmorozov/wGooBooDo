@@ -5,11 +5,11 @@ package ru.kmorozov.gbd.utils;
  */
 public class ClassUtils {
 
-    public static boolean isClassExists(final String className) {
+    public static boolean isClassExists(String className) {
         try {
-            final Class<?> clazz = Class.forName(className);
+            Class<?> clazz = Class.forName(className);
             return null != clazz;
-        } catch (final ClassNotFoundException e) {
+        } catch (ClassNotFoundException e) {
             return false;
         }
     }

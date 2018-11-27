@@ -12,13 +12,13 @@ public class ShplPagesInfo implements IPagesInfo {
     @SerializedName("page")
     private final ShplPage[] pages;
 
-    public ShplPagesInfo(final ShplPage[] pages) {
+    public ShplPagesInfo(ShplPage[] pages) {
         this.pages = pages;
     }
 
     @Override
     public ShplPage[] getPages() {
-        return pages;
+        return this.pages;
     }
 
     @Override
@@ -32,7 +32,7 @@ public class ShplPagesInfo implements IPagesInfo {
     }
 
     @Override
-    public IPage getPageByPid(final String pid) {
+    public IPage getPageByPid(String pid) {
         return null;
     }
 }

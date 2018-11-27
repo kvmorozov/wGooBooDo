@@ -2,7 +2,6 @@ package ru.kmorozov.api.onedrive.test;
 
 import ru.kmorozov.onedrive.client.OneDriveItem;
 import ru.kmorozov.onedrive.client.OneDriveProvider;
-import ru.kmorozov.onedrive.client.OneDriveProvider.FACTORY;
 import ru.kmorozov.onedrive.client.authoriser.AuthorisationProvider;
 import ru.kmorozov.onedrive.client.walker.OneDriveWalkers;
 import org.hamcrest.CoreMatchers;
@@ -22,24 +21,24 @@ public class ReaderTest {
 
     @Before
     public void initApi() throws IOException {
-        final File file = new File(getClass().getClassLoader().getResource("onedrive.key").getFile());
+        File file = new File(this.getClass().getClassLoader().getResource("onedrive.key").getFile());
 
-        final AuthorisationProvider authoriser = AuthorisationProvider.FACTORY.create(file.toPath(), null, null);
-        api = FACTORY.readOnlyApi(authoriser);
+        AuthorisationProvider authoriser = AuthorisationProvider.FACTORY.create(file.toPath(), null, null);
+        this.api = OneDriveProvider.FACTORY.readOnlyApi(authoriser);
     }
 
     @Test
     public void rootTest() throws IOException {
-        final OneDriveItem root = api.getRoot();
+        OneDriveItem root = this.api.getRoot();
 
         MatcherAssert.assertThat(root, CoreMatchers.is(CoreMatchers.notNullValue()));
 
-        final OneDriveItem[] children = api.getChildren(root);
+        OneDriveItem[] children = this.api.getChildren(root);
         MatcherAssert.assertThat(children, CoreMatchers.is(CoreMatchers.notNullValue()));
     }
 
     @Test
     public void walkTest() throws IOException {
-        OneDriveWalkers.walk(api, 3).forEach(oneDriveItem -> System.out.println(oneDriveItem.getName()));
+        OneDriveWalkers.walk(this.api, 3).forEach(oneDriveItem -> System.out.println(oneDriveItem.getName()));
     }
 }

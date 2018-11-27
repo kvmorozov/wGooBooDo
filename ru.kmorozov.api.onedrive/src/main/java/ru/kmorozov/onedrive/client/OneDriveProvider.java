@@ -48,11 +48,11 @@ public interface OneDriveProvider {
 
     class FACTORY {
 
-        public static OneDriveProvider readOnlyApi(final AuthorisationProvider authoriser) {
+        public static OneDriveProvider readOnlyApi(AuthorisationProvider authoriser) {
             return new ROOneDriveProvider(authoriser);
         }
 
-        public static OneDriveProvider readWriteApi(final AuthorisationProvider authoriser) {
+        public static OneDriveProvider readWriteApi(AuthorisationProvider authoriser) {
             return new RWOneDriveProvider(authoriser);
         }
     }

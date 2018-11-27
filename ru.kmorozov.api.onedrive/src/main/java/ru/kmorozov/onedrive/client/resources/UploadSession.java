@@ -10,10 +10,10 @@ public class UploadSession {
     private String[] nextExpectedRanges;
 
     public String getUploadUrl() {
-        return uploadUrl;
+        return this.uploadUrl;
     }
 
     public String[] getNextExpectedRanges() {
-        return nextExpectedRanges;
+        return this.nextExpectedRanges;
     }
 }

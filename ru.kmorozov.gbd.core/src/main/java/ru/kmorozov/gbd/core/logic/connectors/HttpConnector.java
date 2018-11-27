@@ -26,27 +26,27 @@ public abstract class HttpConnector implements AutoCloseable {
 
     private static final Parser parser = Parser.htmlParser();
 
-    protected static String getProxyKey(final HttpHostExt proxy) {
+    protected static String getProxyKey(HttpHostExt proxy) {
         return proxy.toString();
     }
 
     public abstract Response getContent(String url, HttpHostExt proxy, boolean withTimeout) throws IOException;
 
-    public Document getHtmlDocument(String url, HttpHostExt proxy, boolean withTimeout) throws IOException {
+    public Document getHtmlDocument(final String url, final HttpHostExt proxy, final boolean withTimeout) throws IOException {
         try {
-            Response response = getContent(url, proxy, withTimeout);
+            final Response response = this.getContent(url, proxy, withTimeout);
             if (response == null)
                 throw new IOException("Cannot get document!");
 
-            return parser.parseInput(new StringReader(new String(response.getContent().readAllBytes(), Charset.forName("UTF-8"))), url);
+            return HttpConnector.parser.parseInput(new StringReader(new String(response.getContent().readAllBytes(), Charset.forName("UTF-8"))), url);
         } finally {
             proxy.updateTimestamp();
         }
     }
 
-    public Map<String, String> getJsonMapDocument(String url, HttpHostExt proxy, boolean withTimeout) throws IOException {
+    public Map<String, String> getJsonMapDocument(final String url, final HttpHostExt proxy, final boolean withTimeout) throws IOException {
         try {
-            Response response = getContent(url, proxy, withTimeout);
+            final Response response = this.getContent(url, proxy, withTimeout);
             if (response == null)
                 throw new IOException("Cannot get document!");
 
@@ -56,9 +56,9 @@ public abstract class HttpConnector implements AutoCloseable {
         }
     }
 
-    public String getString(String url, HttpHostExt proxy, boolean withTimeout) throws IOException {
+    public String getString(final String url, final HttpHostExt proxy, final boolean withTimeout) throws IOException {
         try {
-            Response response = getContent(url, proxy, withTimeout);
+            final Response response = this.getContent(url, proxy, withTimeout);
             if (response == null)
                 throw new IOException("Cannot get document!");
 
@@ -68,7 +68,7 @@ public abstract class HttpConnector implements AutoCloseable {
         }
     }
 
-    public UrlType getUrlType(String url) {
+    public UrlType getUrlType(final String url) {
         if (url.contains("books.google"))
             return UrlType.GOOGLE_BOOKS;
         else if (url.contains("jstor"))
@@ -77,17 +77,17 @@ public abstract class HttpConnector implements AutoCloseable {
             return UrlType.OTHER;
     }
 
-    protected boolean needHeaders(String url) {
-        return getUrlType(url) != UrlType.OTHER;
+    protected boolean needHeaders(final String url) {
+        return this.getUrlType(url) != UrlType.OTHER;
     }
 
-    protected boolean validateProxy(String url, HttpHostExt proxy) {
-        if (!needHeaders(url))
+    protected boolean validateProxy(final String url, final HttpHostExt proxy) {
+        if (!this.needHeaders(url))
             return true;
 
-        UrlType urlType = getUrlType(url);
+        final UrlType urlType = this.getUrlType(url);
 
-        HttpHeaders headers = proxy.getHeaders(urlType);
+        final HttpHeaders headers = proxy.getHeaders(urlType);
 
         if (StringUtils.isEmpty(headers.getCookie()))
             return false;

@@ -29,71 +29,71 @@ public class GoogleBookInfoExtractor extends AbstractBookExtractor {
     private static final String BOOK_INFO_END_TAG = "enableUserFeedbackUI";
     private static final String OPEN_PAGE_ADD_URL = "&printsec=frontcover&hl=ru#v=onepage&q&f=false";
 
-    public GoogleBookInfoExtractor(final String bookId) {
+    public GoogleBookInfoExtractor(String bookId) {
         super(bookId);
     }
 
-    public GoogleBookInfoExtractor(final String bookId, IContextLoader storedLoader) {
+    public GoogleBookInfoExtractor(String bookId, final IContextLoader storedLoader) {
         super(bookId, storedLoader);
     }
 
     @Override
     protected String getBookUrl() {
-        return HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, bookId) + OPEN_PAGE_ADD_URL;
+        return HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, this.bookId) + GoogleBookInfoExtractor.OPEN_PAGE_ADD_URL;
     }
 
     @Override
     protected String getReserveBookUrl() {
-        return HTTP_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, bookId) + OPEN_PAGE_ADD_URL;
+        return HTTP_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, this.bookId) + GoogleBookInfoExtractor.OPEN_PAGE_ADD_URL;
     }
 
     @Override
     protected BookInfo findBookInfo() throws Exception {
-        final Document defaultDocument = getDocumentWithoutProxy();
+        Document defaultDocument = this.getDocumentWithoutProxy();
         try {
-            final BookInfo defaultBookInfo = extractBookInfo(defaultDocument);
+            BookInfo defaultBookInfo = this.extractBookInfo(defaultDocument);
             if (null == defaultBookInfo) {
                 HttpHostExt.NO_PROXY.forceInvalidate(false);
 
-                for (final HttpHostExt proxy : AbstractProxyListProvider.getInstance().getProxyList()) {
+                for (HttpHostExt proxy : AbstractProxyListProvider.getInstance().getProxyList()) {
                     if (null == proxy) continue;
 
-                    final BookInfo proxyBookInfo = extractBookInfo(getDocumentWithProxy(proxy));
+                    BookInfo proxyBookInfo = this.extractBookInfo(this.getDocumentWithProxy(proxy));
                     if (null == proxyBookInfo) proxy.forceInvalidate(true);
                     else return proxyBookInfo;
                 }
             } else return defaultBookInfo;
-        } catch (final Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return null;
     }
 
-    private BookInfo extractBookInfo(final Document doc) {
+    private BookInfo extractBookInfo(Document doc) {
         if (null == doc) return null;
 
-        final Elements scripts = doc.select("script");
-        for (final Element script : scripts) {
-            final List<Node> childs = script.childNodes();
+        Elements scripts = doc.select("script");
+        for (Element script : scripts) {
+            List<Node> childs = script.childNodes();
             if (null != childs && !childs.isEmpty() && childs.get(0) instanceof DataNode) {
-                final String data = ((DataNode) childs.get(0)).getWholeData();
+                String data = ((DataNode) childs.get(0)).getWholeData();
 
                 if (null == data || data.isEmpty()) continue;
 
-                if (data.startsWith(ADD_FLAGS_ATTRIBUTE) && 0 < data.indexOf(OC_RUN_ATTRIBUTE)) {
-                    final int jsonStart = data.indexOf(OC_RUN_ATTRIBUTE) + OC_RUN_ATTRIBUTE.length() + 1;
-                    final int jsonEnd = data.lastIndexOf(BOOK_INFO_START_TAG) - 3;
+                if (data.startsWith(GoogleBookInfoExtractor.ADD_FLAGS_ATTRIBUTE) && 0 < data.indexOf(GoogleBookInfoExtractor.OC_RUN_ATTRIBUTE)) {
+                    int jsonStart = data.indexOf(GoogleBookInfoExtractor.OC_RUN_ATTRIBUTE) + GoogleBookInfoExtractor.OC_RUN_ATTRIBUTE.length() + 1;
+                    int jsonEnd = data.lastIndexOf(GoogleBookInfoExtractor.BOOK_INFO_START_TAG) - 3;
 
                     if (0 >= jsonStart || 0 >= jsonEnd) return null;
 
-                    final String pagesJsonData = data.substring(jsonStart, jsonEnd);
-                    final GooglePagesInfo pages = Mapper.getGson().fromJson(pagesJsonData, GooglePagesInfo.class);
+                    String pagesJsonData = data.substring(jsonStart, jsonEnd);
+                    GooglePagesInfo pages = Mapper.getGson().fromJson(pagesJsonData, GooglePagesInfo.class);
 
-                    final String bookJsonData = data.substring(data.indexOf(BOOK_INFO_START_TAG) - 2, data.lastIndexOf(BOOK_INFO_END_TAG) - 3);
-                    final GoogleBookData bookData = Mapper.getGson().fromJson(bookJsonData, GoogleBookData.class);
+                    String bookJsonData = data.substring(data.indexOf(GoogleBookInfoExtractor.BOOK_INFO_START_TAG) - 2, data.lastIndexOf(GoogleBookInfoExtractor.BOOK_INFO_END_TAG) - 3);
+                    GoogleBookData bookData = Mapper.getGson().fromJson(bookJsonData, GoogleBookData.class);
 
-                    return new BookInfo(bookData, pages, bookId);
+                    return new BookInfo(bookData, pages, this.bookId);
                 }
             }
         }

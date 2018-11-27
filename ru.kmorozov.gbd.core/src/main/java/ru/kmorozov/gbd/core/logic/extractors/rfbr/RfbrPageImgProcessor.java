@@ -10,7 +10,7 @@ import ru.kmorozov.db.core.logic.model.book.rfbr.RfbrPage;
  */
 public class RfbrPageImgProcessor extends SimplePageImgProcessor<RfbrPage> {
 
-    public RfbrPageImgProcessor(BookContext bookContext, RfbrPage page, HttpHostExt usedProxy) {
+    public RfbrPageImgProcessor(final BookContext bookContext, final RfbrPage page, final HttpHostExt usedProxy) {
         super(bookContext, page, usedProxy);
     }
 }

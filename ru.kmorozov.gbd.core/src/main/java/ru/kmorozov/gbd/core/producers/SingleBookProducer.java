@@ -13,12 +13,12 @@ public class SingleBookProducer implements IBookListProducer {
 
     private final Set<String> singletonSet;
 
-    public SingleBookProducer(final String bookId) {
-        singletonSet = new HashSet<>(Collections.singletonList(bookId));
+    public SingleBookProducer(String bookId) {
+        this.singletonSet = new HashSet<>(Collections.singletonList(bookId));
     }
 
     @Override
     public Set<String> getBookIds() {
-        return singletonSet;
+        return this.singletonSet;
     }
 }

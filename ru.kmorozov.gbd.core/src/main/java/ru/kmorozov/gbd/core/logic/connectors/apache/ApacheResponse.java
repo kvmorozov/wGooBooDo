@@ -14,24 +14,24 @@ public class ApacheResponse implements Response {
 
     private final CloseableHttpResponse response;
 
-    ApacheResponse(final CloseableHttpResponse response) {
+    ApacheResponse(CloseableHttpResponse response) {
         this.response = response;
     }
 
     @Override
     public InputStream getContent() throws IOException {
-        return null == response ? null : response.getEntity().getContent();
+        return null == this.response ? null : this.response.getEntity().getContent();
     }
 
     @Override
     public String getImageFormat() {
-        final String contentType = response.getEntity().getContentType();
+        String contentType = this.response.getEntity().getContentType();
 
         return contentType.startsWith("image/") ? contentType.split("/")[1] : null;
     }
 
     @Override
     public void close() {
-        if (null != response) EntityUtils.consumeQuietly(response.getEntity());
+        if (null != this.response) EntityUtils.consumeQuietly(this.response.getEntity());
     }
 }

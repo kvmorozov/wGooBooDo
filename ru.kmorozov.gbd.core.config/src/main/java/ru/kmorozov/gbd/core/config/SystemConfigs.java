@@ -16,78 +16,78 @@ public class SystemConfigs {
     private static final String KEY_SECURE_MODE = "secure.mode";
     private static final String KEY_PDF_MODE = "pdf.mode";
 
-    private static final Preferences preferences = Preferences.userRoot().node(PREFERENCES_NODE);
+    private static final Preferences preferences = Preferences.userRoot().node(SystemConfigs.PREFERENCES_NODE);
 
-    private static String getStringProperty(final String propKey) {
-        return preferences.get(propKey, null);
+    private static String getStringProperty(String propKey) {
+        return SystemConfigs.preferences.get(propKey, null);
     }
 
-    private static void setStringProperty(final String propKey, final String value) {
-        preferences.put(propKey, value);
+    private static void setStringProperty(String propKey, String value) {
+        SystemConfigs.preferences.put(propKey, value);
     }
 
-    private static int getIntProperty(final String propKey) {
-        return preferences.getInt(propKey, 0);
+    private static int getIntProperty(String propKey) {
+        return SystemConfigs.preferences.getInt(propKey, 0);
     }
 
-    private static void setIntProperty(final String propKey, final int value) {
-        preferences.putInt(propKey, value);
+    private static void setIntProperty(String propKey, int value) {
+        SystemConfigs.preferences.putInt(propKey, value);
     }
 
-    private static boolean getBoolProperty(final String propKey) {
-        return preferences.getBoolean(propKey, false);
+    private static boolean getBoolProperty(String propKey) {
+        return SystemConfigs.preferences.getBoolean(propKey, false);
     }
 
-    private static void setBoolProperty(final String propKey, final boolean value) {
-        preferences.putBoolean(propKey, value);
+    private static void setBoolProperty(String propKey, boolean value) {
+        SystemConfigs.preferences.putBoolean(propKey, value);
     }
 
     public static String getRootDir() {
-        return getStringProperty(KEY_ROOT_DIR);
+        return SystemConfigs.getStringProperty(SystemConfigs.KEY_ROOT_DIR);
     }
 
-    public static void setRootDir(final String value) {
-        setStringProperty(KEY_ROOT_DIR, value);
+    public static void setRootDir(String value) {
+        SystemConfigs.setStringProperty(SystemConfigs.KEY_ROOT_DIR, value);
     }
 
     public static String getProxyListFile() {
-        return getStringProperty(KEY_PROXY_LIST_FILE);
+        return SystemConfigs.getStringProperty(SystemConfigs.KEY_PROXY_LIST_FILE);
     }
 
-    public static void setProxyListFile(final String value) {
-        setStringProperty(KEY_PROXY_LIST_FILE, value);
+    public static void setProxyListFile(String value) {
+        SystemConfigs.setStringProperty(SystemConfigs.KEY_PROXY_LIST_FILE, value);
     }
 
     public static String getLastBookId() {
-        return getStringProperty(KEY_LAST_BOOK_ID);
+        return SystemConfigs.getStringProperty(SystemConfigs.KEY_LAST_BOOK_ID);
     }
 
-    public static void setLastBookId(final String value) {
-        setStringProperty(KEY_LAST_BOOK_ID, value);
+    public static void setLastBookId(String value) {
+        SystemConfigs.setStringProperty(SystemConfigs.KEY_LAST_BOOK_ID, value);
     }
 
     public static int getResolution() {
-        return getIntProperty(KEY_RESOLUTION);
+        return SystemConfigs.getIntProperty(SystemConfigs.KEY_RESOLUTION);
     }
 
-    public static void setResolution(final int value) {
-        setIntProperty(KEY_RESOLUTION, value);
+    public static void setResolution(int value) {
+        SystemConfigs.setIntProperty(SystemConfigs.KEY_RESOLUTION, value);
     }
 
     public static boolean getReload() {
-        return getBoolProperty(KEY_RELOAD);
+        return SystemConfigs.getBoolProperty(SystemConfigs.KEY_RELOAD);
     }
 
-    public static void setReload(final boolean value) {
-        setBoolProperty(KEY_RELOAD, value);
+    public static void setReload(boolean value) {
+        SystemConfigs.setBoolProperty(SystemConfigs.KEY_RELOAD, value);
     }
 
     public static boolean getSecureMode() {
-        return getBoolProperty(KEY_SECURE_MODE);
+        return SystemConfigs.getBoolProperty(SystemConfigs.KEY_SECURE_MODE);
     }
 
-    public static void setSecureMode(final boolean value) {
-        setBoolProperty(KEY_SECURE_MODE, value);
+    public static void setSecureMode(boolean value) {
+        SystemConfigs.setBoolProperty(SystemConfigs.KEY_SECURE_MODE, value);
     }
 
     public static boolean isConsoleMode() {
@@ -95,10 +95,10 @@ public class SystemConfigs {
     }
 
     public static String getPdfMode() {
-        return getStringProperty(KEY_PDF_MODE);
+        return SystemConfigs.getStringProperty(SystemConfigs.KEY_PDF_MODE);
     }
 
-    public static void setPdfMode(final String value) {
-        setStringProperty(KEY_PDF_MODE, value);
+    public static void setPdfMode(String value) {
+        SystemConfigs.setStringProperty(SystemConfigs.KEY_PDF_MODE, value);
     }
 }

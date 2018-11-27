@@ -9,7 +9,6 @@ import ru.kmorozov.gbd.core.logic.connectors.google.GoogleHttpConnector;
 import ru.kmorozov.gbd.core.logic.connectors.webdriver.WebDriverHttpConnector;
 import ru.kmorozov.gbd.logger.Logger;
 import ru.kmorozov.onedrive.client.OneDriveProvider;
-import ru.kmorozov.onedrive.client.OneDriveProvider.FACTORY;
 import ru.kmorozov.onedrive.client.authoriser.AuthorisationProvider;
 import ru.kmorozov.onedrive.client.authoriser.TokenFactory;
 import ru.kmorozov.onedrive.client.exceptions.InvalidCodeException;
@@ -50,49 +49,49 @@ public class LoaderConfiguration {
 
     @Bean @Lazy
     public OneDriveProvider api() {
-        URL keyResource = getClass().getClassLoader().getResource(oneDriveKeyFileName);
+        final URL keyResource = this.getClass().getClassLoader().getResource(this.oneDriveKeyFileName);
 
         if (keyResource == null) {
-            logger.warn("Key file not found, creating new...");
+            LoaderConfiguration.logger.warn("Key file not found, creating new...");
         }
 
-        final File keyFile = new File(keyResource == null ? oneDriveKeyFileName : keyResource.getFile());
+        File keyFile = new File(keyResource == null ? this.oneDriveKeyFileName : keyResource.getFile());
 
         if (!keyFile.exists()) {
             try {
                 keyFile.createNewFile();
-            } catch (IOException e) {
-                logger.error("Create keyFile error", e);
+            } catch (final IOException e) {
+                LoaderConfiguration.logger.error("Create keyFile error", e);
             }
         }
 
         AuthorisationProvider authoriser = null;
 
         try {
-            authoriser = AuthorisationProvider.FACTORY.create(keyFile.toPath(), onedriveClientId, onedriveClientSecret);
-        } catch (final InvalidCodeException cee) {
-            System.setProperty("webdriver.chrome.driver", webdriverChromeDriverPath);
-            if (TokenFactory.generateToken(keyFile, oneDriveUser, oneDrivePassword, onedriveClientId))
+            authoriser = AuthorisationProvider.FACTORY.create(keyFile.toPath(), this.onedriveClientId, this.onedriveClientSecret);
+        } catch (InvalidCodeException cee) {
+            System.setProperty("webdriver.chrome.driver", this.webdriverChromeDriverPath);
+            if (TokenFactory.generateToken(keyFile, this.oneDriveUser, this.oneDrivePassword, this.onedriveClientId))
                 try {
-                    authoriser = AuthorisationProvider.FACTORY.create(keyFile.toPath(), onedriveClientId, onedriveClientSecret);
-                } catch (final IOException e) {
-                    logger.error("OneDrive API init error", e);
+                    authoriser = AuthorisationProvider.FACTORY.create(keyFile.toPath(), this.onedriveClientId, this.onedriveClientSecret);
+                } catch (IOException e) {
+                    LoaderConfiguration.logger.error("OneDrive API init error", e);
                 }
             else
                 throw new RuntimeException(cee);
-        } catch (final IOException e) {
-            logger.error("OneDrive API init error", e);
+        } catch (IOException e) {
+            LoaderConfiguration.logger.error("OneDrive API init error", e);
         }
 
-        return FACTORY.readWriteApi(authoriser);
+        return OneDriveProvider.FACTORY.readWriteApi(authoriser);
     }
 
     @Bean
     @Lazy
     public HttpConnector getConnector() {
-        switch (httpConnectorType) {
+        switch (this.httpConnectorType) {
             case "chrome":
-                System.setProperty("webdriver.chrome.driver", webdriverChromeDriverPath);
+                System.setProperty("webdriver.chrome.driver", this.webdriverChromeDriverPath);
                 return new WebDriverHttpConnector();
             case "google":
                 return new GoogleHttpConnector();

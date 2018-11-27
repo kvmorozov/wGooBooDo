@@ -16,22 +16,22 @@ public class QuotaFacet {
     private String state;
 
     public long getTotal() {
-        return total;
+        return this.total;
     }
 
     public long getUsed() {
-        return used;
+        return this.used;
     }
 
     public long getRemaining() {
-        return remaining;
+        return this.remaining;
     }
 
     public long getDeleted() {
-        return deleted;
+        return this.deleted;
     }
 
     public String getState() {
-        return state;
+        return this.state;
     }
 }

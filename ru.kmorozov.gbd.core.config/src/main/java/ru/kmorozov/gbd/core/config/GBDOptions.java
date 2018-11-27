@@ -11,47 +11,47 @@ public class GBDOptions {
 
     private static IGBDOptions INSTANCE;
 
-    public static void init(final IGBDOptions optionHolder) {
-        INSTANCE = optionHolder;
+    public static void init(IGBDOptions optionHolder) {
+        GBDOptions.INSTANCE = optionHolder;
     }
 
     public static String getBookId() {
-        return INSTANCE.getBookId();
+        return GBDOptions.INSTANCE.getBookId();
     }
 
     public static IStorage getStorage() {
-        return INSTANCE.getStorage();
+        return GBDOptions.INSTANCE.getStorage();
     }
 
     public static String getProxyListFile() {
-        return INSTANCE.getProxyListFile();
+        return GBDOptions.INSTANCE.getProxyListFile();
     }
 
     public static int getImageWidth() {
-        return INSTANCE.getImageWidth();
+        return GBDOptions.INSTANCE.getImageWidth();
     }
 
     public static boolean reloadImages() {
-        return INSTANCE.reloadImages();
+        return GBDOptions.INSTANCE.reloadImages();
     }
 
     public static boolean secureMode() {
-        return INSTANCE.secureMode();
+        return GBDOptions.INSTANCE.secureMode();
     }
 
     public static PdfOptions pdfOptions() {
-        return StringUtils.isEmpty(INSTANCE.pdfOptions()) ? PdfOptions.DEFAULT_MODE : PdfOptions.getOption(INSTANCE.pdfOptions());
+        return StringUtils.isEmpty(GBDOptions.INSTANCE.pdfOptions()) ? PdfOptions.DEFAULT_MODE : PdfOptions.getOption(GBDOptions.INSTANCE.pdfOptions());
     }
 
-    public static int getImageWidth(final int defaultValue) {
-        return 0 == INSTANCE.getImageWidth() ? defaultValue : INSTANCE.getImageWidth();
+    public static int getImageWidth(int defaultValue) {
+        return 0 == GBDOptions.INSTANCE.getImageWidth() ? defaultValue : GBDOptions.INSTANCE.getImageWidth();
     }
 
     public static boolean isValidConfig() {
-        return INSTANCE.getStorage().isValidOrCreate();
+        return GBDOptions.INSTANCE.getStorage().isValidOrCreate();
     }
 
     public static CtxOptions getCtxOptions() {
-        return INSTANCE.ctxOptions();
+        return GBDOptions.INSTANCE.ctxOptions();
     }
 }

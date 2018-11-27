@@ -5,17 +5,17 @@ public enum PdfOptions {
     SKIP("PDF_SKIP");
 
     private final String pdfMode;
-    public static final PdfOptions DEFAULT_MODE = CREATE;
+    public static final PdfOptions DEFAULT_MODE = PdfOptions.CREATE;
 
-    PdfOptions(final String pdfMode) {
+    PdfOptions(String pdfMode) {
         this.pdfMode = pdfMode;
     }
 
-    public static PdfOptions getOption(final String pdfMode) {
-        for(final PdfOptions option : PdfOptions.values())
+    public static PdfOptions getOption(String pdfMode) {
+        for(PdfOptions option : PdfOptions.values())
             if (option.pdfMode.equalsIgnoreCase(pdfMode))
                 return option;
 
-        return DEFAULT_MODE;
+        return PdfOptions.DEFAULT_MODE;
     }
 }

@@ -4,7 +4,7 @@ import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpHeaders;
 import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpResponse;
-import com.google.api.client.http.javanet.NetHttpTransport.Builder;
+import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.common.base.Strings;
 import ru.kmorozov.gbd.core.config.GBDOptions;
 import ru.kmorozov.gbd.logger.Logger;
@@ -15,7 +15,6 @@ import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
-import java.net.Proxy.Type;
 import java.nio.charset.Charset;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -42,48 +41,48 @@ public class HttpHostExt {
 
     private volatile long lastUsedTimestamp;
 
-    public HttpHostExt(final InetSocketAddress host, final String cookie) {
+    public HttpHostExt(InetSocketAddress host, String cookie) {
         this.host = host;
         this.cookie = cookie;
 
-        if (GBDOptions.secureMode()) isSecure = checkSecurity();
+        if (GBDOptions.secureMode()) this.isSecure = this.checkSecurity();
 
-        failureCount = new AtomicInteger(0);
-        available = new AtomicBoolean(true);
+        this.failureCount = new AtomicInteger(0);
+        this.available = new AtomicBoolean(true);
     }
 
-    HttpHostExt(final InetSocketAddress host, final int failureCount) {
+    HttpHostExt(InetSocketAddress host, int failureCount) {
         this.host = host;
         this.failureCount = new AtomicInteger(failureCount);
 
-        available = new AtomicBoolean(REMOTE_FAILURES_THRESHOLD >= failureCount);
+        this.available = new AtomicBoolean(HttpHostExt.REMOTE_FAILURES_THRESHOLD >= failureCount);
     }
 
     private HttpHostExt() {
-        proxy = Proxy.NO_PROXY;
-        failureCount = new AtomicInteger(0);
-        available = new AtomicBoolean(true);
+        this.proxy = Proxy.NO_PROXY;
+        this.failureCount = new AtomicInteger(0);
+        this.available = new AtomicBoolean(true);
     }
 
-    public static HttpHostExt getProxyFromString(final String proxyStr) {
-        final String[] proxyVars = proxyStr.split(";");
+    public static HttpHostExt getProxyFromString(String proxyStr) {
+        String[] proxyVars = proxyStr.split(";");
         return new HttpHostExt(new InetSocketAddress(proxyVars[0], Integer.parseInt(proxyVars[1])), Integer.parseInt(proxyVars[2]));
     }
 
     private boolean checkSecurity() {
-        final HttpRequestFactory requestFactory = new Builder().setProxy(this.getProxy()).build().createRequestFactory();
+        HttpRequestFactory requestFactory = new NetHttpTransport.Builder().setProxy(getProxy()).build().createRequestFactory();
 
         try {
-            final HttpResponse resp = requestFactory.buildGetRequest(checkProxyUrl).execute();
+            HttpResponse resp = requestFactory.buildGetRequest(HttpHostExt.checkProxyUrl).execute();
             if (null != resp) {
-                try (InputStream is = resp.getContent()) {
+                try (final InputStream is = resp.getContent()) {
                     if (null != is) {
-                        final String respStr = new String(is.readAllBytes(), Charset.defaultCharset());
+                        String respStr = new String(is.readAllBytes(), Charset.defaultCharset());
                         return !respStr.contains(InetAddress.getLocalHost().getHostName());
                     }
                 }
             }
-        } catch (final IOException e) {
+        } catch (IOException e) {
             return false;
         }
 
@@ -91,122 +90,122 @@ public class HttpHostExt {
     }
 
     public boolean isAvailable() {
-        return available.get();
+        return this.available.get();
     }
 
     public boolean isNotAvailable() {
-        return !available.get();
+        return !this.available.get();
     }
 
     public InetSocketAddress getHost() {
-        return host;
+        return this.host;
     }
 
     @Override
     public int hashCode() {
-        return null == host ? -1 : host.hashCode();
+        return null == this.host ? -1 : this.host.hashCode();
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        return !(null == obj || !(obj instanceof HttpHostExt)) && host.equals(((HttpHostExt) obj).host);
+    public boolean equals(Object obj) {
+        return !(null == obj || !(obj instanceof HttpHostExt)) && this.host.equals(((HttpHostExt) obj).host);
     }
 
     @Override
     public String toString() {
-        return String.format("%s (%d)", null == host ? NO_PROXY_STR : host.toString(), -1 * failureCount.get());
+        return String.format("%s (%d)", null == this.host ? HttpHostExt.NO_PROXY_STR : this.host.toString(), -1 * this.failureCount.get());
     }
 
     public void registerFailure() {
-        if (!isAvailable()) return;
+        if (!this.isAvailable()) return;
 
-        failureCount.incrementAndGet();
-        if (failureCount.get() > (isLocal() ? LOCAL_FAILURES_THRESHOLD : REMOTE_FAILURES_THRESHOLD)) {
+        this.failureCount.incrementAndGet();
+        if (this.failureCount.get() > (this.isLocal() ? HttpHostExt.LOCAL_FAILURES_THRESHOLD : HttpHostExt.REMOTE_FAILURES_THRESHOLD)) {
             synchronized (this) {
-                if (isAvailable()) {
-                    logger.info(String.format("Proxy %s invalidated!", null == host ? NO_PROXY_STR : host.toString()));
-                    available.set(false);
+                if (this.isAvailable()) {
+                    HttpHostExt.logger.info(String.format("Proxy %s invalidated!", null == this.host ? HttpHostExt.NO_PROXY_STR : this.host.toString()));
+                    this.available.set(false);
                     AbstractProxyListProvider.getInstance().invalidatedProxyListener();
                 }
             }
         }
     }
 
-    public void forceInvalidate(final boolean reportFailure) {
+    public void forceInvalidate(boolean reportFailure) {
         synchronized (this) {
-            if (isAvailable()) {
-                failureCount.addAndGet(5);
-                available.set(false);
+            if (this.isAvailable()) {
+                this.failureCount.addAndGet(5);
+                this.available.set(false);
                 if (reportFailure)
-                    logger.info(String.format("Proxy %s force-invalidated!", null == host ? NO_PROXY_STR : host.toString()));
+                    HttpHostExt.logger.info(String.format("Proxy %s force-invalidated!", null == this.host ? HttpHostExt.NO_PROXY_STR : this.host.toString()));
             }
         }
     }
 
     public void promoteProxy() {
-        if (!isLocal()) failureCount.decrementAndGet();
+        if (!this.isLocal()) this.failureCount.decrementAndGet();
     }
 
     public Proxy getProxy() {
-        if (null == proxy) proxy = new Proxy(Type.HTTP, new InetSocketAddress(host.getHostName(), host.getPort()));
+        if (null == this.proxy) this.proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(this.host.getHostName(), this.host.getPort()));
 
-        return proxy;
+        return this.proxy;
     }
 
     public String getCookie() {
-        return cookie;
+        return this.cookie;
     }
 
-    public void setCookie(final String cookie) {
+    public void setCookie(String cookie) {
         this.cookie = cookie;
     }
 
     public boolean isSecure() {
-        return isSecure;
+        return this.isSecure;
     }
 
     public boolean isLocal() {
-        return this == NO_PROXY;
+        return this == HttpHostExt.NO_PROXY;
     }
 
-    public boolean isSameAsStr(final String proxyStr) {
-        return !Strings.isNullOrEmpty(proxyStr) && proxyStr.equals(getProxyStringShort());
+    public boolean isSameAsStr(String proxyStr) {
+        return !Strings.isNullOrEmpty(proxyStr) && proxyStr.equals(this.getProxyStringShort());
     }
 
-    public void update(final HttpHostExt anotherHost) {
-        failureCount.set(failureCount.get() + anotherHost.failureCount.get());
+    public void update(HttpHostExt anotherHost) {
+        this.failureCount.set(this.failureCount.get() + anotherHost.failureCount.get());
     }
 
     public String getProxyString() {
-        return host.getAddress().getHostAddress() + ';' + host.getPort() + ';' + failureCount.get();
+        return this.host.getAddress().getHostAddress() + ';' + this.host.getPort() + ';' + this.failureCount.get();
     }
 
     public String getProxyStringShort() {
-        return host.getAddress().getHostAddress() + ':' + host.getPort();
+        return this.host.getAddress().getHostAddress() + ':' + this.host.getPort();
     }
 
-    public HttpHeaders getHeaders(UrlType urlType) {
-        if (null == headers || null == headers.getCookie()) {
+    public HttpHeaders getHeaders(final UrlType urlType) {
+        if (null == this.headers || null == this.headers.getCookie()) {
             synchronized (this) {
-                if (null == headers || null == headers.getCookie()) {
-                    headers = HttpConnections.getHeaders(this);
-                    if (null == headers.getCookie()) headers.setCookie(HttpConnections.getCookieString(host, urlType));
-                    if (null == headers.getCookie()) {
-                        logger.severe(String.format("Cannot get cookies for proxy %s", this.toString()));
-                        forceInvalidate(false);
+                if (null == this.headers || null == this.headers.getCookie()) {
+                    this.headers = HttpConnections.getHeaders(this);
+                    if (null == this.headers.getCookie()) this.headers.setCookie(HttpConnections.getCookieString(this.host, urlType));
+                    if (null == this.headers.getCookie()) {
+                        HttpHostExt.logger.severe(String.format("Cannot get cookies for proxy %s", toString()));
+                        this.forceInvalidate(false);
                     }
                 }
             }
         }
 
-        return headers;
+        return this.headers;
     }
 
     public void updateTimestamp() {
-        lastUsedTimestamp = System.currentTimeMillis();
+        this.lastUsedTimestamp = System.currentTimeMillis();
     }
 
     public long getLastUsedTimestamp() {
-        return this.lastUsedTimestamp;
+        return lastUsedTimestamp;
     }
 }

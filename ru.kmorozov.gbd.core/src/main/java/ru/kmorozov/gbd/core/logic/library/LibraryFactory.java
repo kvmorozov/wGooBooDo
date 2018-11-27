@@ -19,25 +19,25 @@ public final class LibraryFactory {
     private LibraryFactory() {
     }
 
-    public static ILibraryMetadata getMetadata(final String bookId) {
-        for (final ILibraryMetadata _metadata : METADATA)
+    public static ILibraryMetadata getMetadata(String bookId) {
+        for (ILibraryMetadata _metadata : LibraryFactory.METADATA)
             if (_metadata.isValidId(bookId)) {
-                selectedMetadata = _metadata;
+                LibraryFactory.selectedMetadata = _metadata;
                 return _metadata;
             }
 
         return null;
     }
 
-    public static boolean isValidId(final String bookId) {
-        return null != getMetadata(bookId);
+    public static boolean isValidId(String bookId) {
+        return null != LibraryFactory.getMetadata(bookId);
     }
 
     public static boolean needSetCookies() {
-        return selectedMetadata.needSetCookies();
+        return LibraryFactory.selectedMetadata.needSetCookies();
     }
 
     public static List<HttpConnector> preferredConnectors() {
-        return selectedMetadata.preferredConnectors();
+        return LibraryFactory.selectedMetadata.preferredConnectors();
     }
 }

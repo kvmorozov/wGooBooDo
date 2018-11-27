@@ -11,7 +11,7 @@ public class ListBasedContextLoader implements IContextLoader {
 
     private final IBookListProducer producer;
 
-    public ListBasedContextLoader(IBookListProducer producer) {
+    public ListBasedContextLoader(final IBookListProducer producer) {
         this.producer = producer;
     }
 
@@ -26,18 +26,18 @@ public class ListBasedContextLoader implements IContextLoader {
     }
 
     @Override
-    public void updateBookInfo(BookInfo bookInfo) {
+    public void updateBookInfo(final BookInfo bookInfo) {
 
     }
 
     @Override
-    public BookInfo getBookInfo(String bookId) {
+    public BookInfo getBookInfo(final String bookId) {
         return LibraryFactory.getMetadata(bookId).getBookExtractor(bookId, null).getBookInfo();
     }
 
     @Override
     public Set<String> getBookIdsList() {
-        return producer.getBookIds();
+        return this.producer.getBookIds();
     }
 
     @Override

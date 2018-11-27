@@ -26,7 +26,7 @@ public abstract class AbstractRestClient extends AbstractHttpProcessor {
     private static final String DEFAULT_REST_SERVICE_URL = "http://localhost:8080/";
 
     protected static String getRestServiceBaseUrl() {
-        return DEFAULT_REST_SERVICE_URL;
+        return AbstractRestClient.DEFAULT_REST_SERVICE_URL;
     }
 
     protected static final class RestParam {
@@ -34,62 +34,62 @@ public abstract class AbstractRestClient extends AbstractHttpProcessor {
         String paramName;
         Object value;
 
-        RestParam(final String paramName, final Object value) {
+        RestParam(String paramName, Object value) {
             this.paramName = paramName;
             this.value = value;
         }
     }
 
     public boolean serviceAvailable() {
-        try (Socket socket = new Socket()) {
-            final URL serviceURL = new URL(DEFAULT_REST_SERVICE_URL);
+        try (final Socket socket = new Socket()) {
+            URL serviceURL = new URL(AbstractRestClient.DEFAULT_REST_SERVICE_URL);
             socket.connect(new InetSocketAddress(serviceURL.getHost(), serviceURL.getPort()));
             return true;
-        } catch (final IOException e) {
+        } catch (IOException e) {
             return false;
         }
     }
 
-    private String getRawResult(final String rqUrl) throws RestServiceUnavailableException {
+    private String getRawResult(String rqUrl) throws RestServiceUnavailableException {
         try {
-            final Response resp = getContent(rqUrl, HttpHostExt.NO_PROXY, true);
+            Response resp = AbstractHttpProcessor.getContent(rqUrl, HttpHostExt.NO_PROXY, true);
             if (null == resp || null == resp.getContent()) {
-                logger.info("Rest service is unavailable!");
+                AbstractRestClient.logger.info("Rest service is unavailable!");
                 throw new RestServiceUnavailableException();
             }
 
-            try (InputStream is = resp.getContent()) {
+            try (final InputStream is = resp.getContent()) {
                 return new String(is.readAllBytes(), Charset.defaultCharset());
-            } catch (SocketException | SSLException se) {
-                logger.info("Rest service is unavailable! " + se.getMessage());
+            } catch (final SocketException | SSLException se) {
+                AbstractRestClient.logger.info("Rest service is unavailable! " + se.getMessage());
                 throw new RestServiceUnavailableException();
             }
-        } catch (final IOException ioe) {
-            logger.info("Rest service is unavailable! " + ioe.getMessage());
+        } catch (IOException ioe) {
+            AbstractRestClient.logger.info("Rest service is unavailable! " + ioe.getMessage());
             throw new RestServiceUnavailableException();
         }
     }
 
-    protected <T> T getCallResult(final String operation, final Class<T> resultClass, final RestParam... parameters) {
-        final StringBuilder rqUrl = new StringBuilder(DEFAULT_REST_SERVICE_URL + operation);
+    protected <T> T getCallResult(String operation, Class<T> resultClass, AbstractRestClient.RestParam... parameters) {
+        StringBuilder rqUrl = new StringBuilder(AbstractRestClient.DEFAULT_REST_SERVICE_URL + operation);
 
         if (null != parameters && 0 < parameters.length) {
             rqUrl.append('?');
-            for (final RestParam param : parameters)
+            for (AbstractRestClient.RestParam param : parameters)
                 rqUrl.append(param.paramName).append('=').append(param.value).append('&');
         }
 
-        final String rawResult;
+        String rawResult;
 
         try {
-            rawResult = getRawResult(rqUrl.toString());
-        } catch (final RestServiceUnavailableException e) {
-            logger.finest(String.format("Service %s call failed!", operation));
+            rawResult = this.getRawResult(rqUrl.toString());
+        } catch (RestServiceUnavailableException e) {
+            AbstractRestClient.logger.finest(String.format("Service %s call failed!", operation));
             return resultClass.equals(Boolean.class) ? (T) Boolean.FALSE : null;
         }
 
         if (StringUtils.isEmpty(rawResult)) {
-            logger.finest(String.format("Service %s call failed!", operation));
+            AbstractRestClient.logger.finest(String.format("Service %s call failed!", operation));
             return null;
         }
 

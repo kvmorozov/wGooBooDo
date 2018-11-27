@@ -15,12 +15,12 @@ public abstract class AbstractOutputReceiver implements IOutputReceiver, IEventC
     private final Collection<IEventListener> listeners = new ArrayList<>();
 
     @Override
-    public void addListener(final IEventListener listener) {
-        listeners.add(listener);
+    public void addListener(IEventListener listener) {
+        this.listeners.add(listener);
     }
 
     @Override
-    public void consumeEvent(final BaseEvent event) {
-        listeners.stream().filter(listener -> listener.eventMatched(event)).forEachOrdered(listener -> listener.receiveEvent(event));
+    public void consumeEvent(BaseEvent event) {
+        this.listeners.stream().filter(listener -> listener.eventMatched(event)).forEachOrdered(listener -> listener.receiveEvent(event));
     }
 }

@@ -7,54 +7,54 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public abstract class AbstractPage implements IPage {
 
-    private AtomicBoolean sigChecked = new AtomicBoolean(false);
-    private AtomicBoolean dataProcessed = new AtomicBoolean(false);
-    private AtomicBoolean fileExists = new AtomicBoolean(false);
-    private AtomicBoolean loadingStarted = new AtomicBoolean(false);
+    private final AtomicBoolean sigChecked = new AtomicBoolean(false);
+    private final AtomicBoolean dataProcessed = new AtomicBoolean(false);
+    private final AtomicBoolean fileExists = new AtomicBoolean(false);
+    private final AtomicBoolean loadingStarted = new AtomicBoolean(false);
 
     @Override
     public boolean isDataProcessed() {
-        return dataProcessed.get();
+        return this.dataProcessed.get();
     }
 
     @Override
     public boolean isFileExists() {
-        return fileExists.get();
+        return this.fileExists.get();
     }
 
     @Override
     public boolean isSigChecked() {
-        return sigChecked.get();
+        return this.sigChecked.get();
     }
 
     @Override
     public boolean isLoadingStarted() {
-        return loadingStarted.get();
+        return this.loadingStarted.get();
     }
 
     public boolean isProcessed() {
-        return isDataProcessed() || sigChecked.get() || isFileExists();
+        return this.isDataProcessed() || this.sigChecked.get() || this.isFileExists();
     }
 
     public boolean isNotProcessed() {
-        return !isProcessed();
+        return !this.isProcessed();
     }
 
     public abstract String getImgUrl();
 
-    public void setSigChecked(boolean value) {
-        sigChecked.set(value);
+    public void setSigChecked(final boolean value) {
+        this.sigChecked.set(value);
     }
 
-    public void setDataProcessed(boolean value) {
-        dataProcessed.set(value);
+    public void setDataProcessed(final boolean value) {
+        this.dataProcessed.set(value);
     }
 
-    public void setFileExists(boolean value) {
-        fileExists.set(value);
+    public void setFileExists(final boolean value) {
+        this.fileExists.set(value);
     }
 
-    public void setLoadingStarted(boolean value) {
-        loadingStarted.set(value);
+    public void setLoadingStarted(final boolean value) {
+        this.loadingStarted.set(value);
     }
 }

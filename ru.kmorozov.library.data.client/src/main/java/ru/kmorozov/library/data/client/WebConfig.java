@@ -12,13 +12,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Override
-    public void configureAsyncSupport(final AsyncSupportConfigurer configurer) {
+    public void configureAsyncSupport(AsyncSupportConfigurer configurer) {
         configurer.setDefaultTimeout(Long.MAX_VALUE);
         super.configureAsyncSupport(configurer);
     }
 
     @Override
-    public void addResourceHandlers(final ResourceHandlerRegistry registry) {
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
         if (!registry.hasMappingForPattern("/icons/**")) {
             registry.addResourceHandler("/icons/**").addResourceLocations(
                     "classpath:/static/icons/");

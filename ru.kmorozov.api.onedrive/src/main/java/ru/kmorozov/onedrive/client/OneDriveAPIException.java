@@ -6,17 +6,17 @@ public class OneDriveAPIException extends IOException {
 
     private final int code;
 
-    public OneDriveAPIException(final int code, final String message) {
+    public OneDriveAPIException(int code, String message) {
         super(message);
         this.code = code;
     }
 
-    public OneDriveAPIException(final int code, final String message, final Throwable cause) {
+    public OneDriveAPIException(int code, String message, Throwable cause) {
         super(message, cause);
         this.code = code;
     }
 
     public int getCode() {
-        return code;
+        return this.code;
     }
 }

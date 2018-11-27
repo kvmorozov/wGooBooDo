@@ -12,14 +12,14 @@ public class ErrorFacet {
     private ErrorFacet innerError;
 
     public String getCode() {
-        return code;
+        return this.code;
     }
 
     public String getMessage() {
-        return message;
+        return this.message;
     }
 
     public ErrorFacet getInnerError() {
-        return innerError;
+        return this.innerError;
     }
 }

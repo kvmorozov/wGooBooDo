@@ -17,46 +17,46 @@ public class LocalFSStoredItem implements IStoredItem {
 
     private OutputStream outputStream;
 
-    public LocalFSStoredItem(LocalFSStorage storage, IPage page, String imgFormat) {
+    public LocalFSStoredItem(final LocalFSStorage storage, final IPage page, final String imgFormat) {
         this.storage = storage;
         this.page = page;
         this.imgFormat = imgFormat;
 
-        init();
+        this.init();
     }
 
     @Override
     public OutputStream getOutputStream() throws IOException {
-        return outputStream = outputStream == null ? new FileOutputStream(outputFile) : outputStream;
+        return this.outputStream = this.outputStream == null ? new FileOutputStream(this.outputFile) : this.outputStream;
     }
 
     @Override
     public boolean exists() {
-        return outputFile.exists();
+        return this.outputFile.exists();
     }
 
     @Override
     public void delete() {
-        outputFile.delete();
+        this.outputFile.delete();
     }
 
     @Override
     public void close() throws IOException {
-        if (outputStream != null)
-            outputStream.close();
+        if (this.outputStream != null)
+            this.outputStream.close();
     }
 
     @Override
-    public void write(byte[] bytes, int read) throws IOException {
-        getOutputStream().write(bytes, 0, read);
+    public void write(final byte[] bytes, final int read) throws IOException {
+        this.getOutputStream().write(bytes, 0, read);
     }
 
     @Override
     public File asFile() {
-        return outputFile;
+        return this.outputFile;
     }
 
     protected void init() {
-        outputFile = new File(storage.getStorageDir().getPath() + '\\' + page.getOrder() + '_' + page.getPid() + '.' + imgFormat);
+        this.outputFile = new File(this.storage.getStorageDir().getPath() + '\\' + this.page.getOrder() + '_' + this.page.getPid() + '.' + this.imgFormat);
     }
 }

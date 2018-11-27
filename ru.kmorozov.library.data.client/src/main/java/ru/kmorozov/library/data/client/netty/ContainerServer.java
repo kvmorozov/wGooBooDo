@@ -17,20 +17,20 @@ public class ContainerServer implements CommandLineRunner {
     private ServerAdapterInitializer initializer;
 
     @Override
-    public void run(final String... args) {
-        port = 5252;
-        final EventLoopGroup producer = new NioEventLoopGroup();
-        final EventLoopGroup consumer = new NioEventLoopGroup();
+    public void run(String... args) {
+        this.port = 5252;
+        EventLoopGroup producer = new NioEventLoopGroup();
+        EventLoopGroup consumer = new NioEventLoopGroup();
 
         try {
-            final ServerBootstrap bootstrap = new ServerBootstrap()
+            ServerBootstrap bootstrap = new ServerBootstrap()
                     .group(producer, consumer)
                     .channel(NioServerSocketChannel.class)
-                    .childHandler(initializer);
+                    .childHandler(this.initializer);
             System.out.println("Event server started");
-            bootstrap.bind(port).sync().channel().closeFuture().sync();
+            bootstrap.bind(this.port).sync().channel().closeFuture().sync();
 
-        } catch (final Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             producer.shutdownGracefully();

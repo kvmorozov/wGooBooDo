@@ -13,22 +13,22 @@ public class ItemSet {
     private String nextPage;
 
     public Item[] getValue() {
-        return value;
+        return this.value;
     }
 
     public String getNextToken() {
 
-        if (null == nextPage) {
+        if (null == this.nextPage) {
             return null;
         }
 
-        final String pattern = ".*skiptoken=(.*)";
+        String pattern = ".*skiptoken=(.*)";
 
         // Create a Pattern object
-        final Pattern r = Pattern.compile(pattern);
+        Pattern r = Pattern.compile(pattern);
 
         // Now create matcher object.
-        final Matcher m = r.matcher(nextPage);
+        Matcher m = r.matcher(this.nextPage);
         if (m.find()) {
             return m.group(1);
         } else {

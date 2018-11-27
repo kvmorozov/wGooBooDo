@@ -14,20 +14,20 @@ public class DeleteTask extends Task {
     private final OneDriveItem remoteFile;
     private final File localFile;
 
-    public DeleteTask(final TaskOptions options, final OneDriveItem remoteFile) {
+    public DeleteTask(Task.TaskOptions options, OneDriveItem remoteFile) {
 
         super(options);
 
         this.remoteFile = Preconditions.checkNotNull(remoteFile);
-        this.localFile = null;
+        localFile = null;
     }
 
-    public DeleteTask(final TaskOptions options, final File localFile) {
+    public DeleteTask(Task.TaskOptions options, File localFile) {
 
         super(options);
 
         this.localFile = Preconditions.checkNotNull(localFile);
-        this.remoteFile = null;
+        remoteFile = null;
     }
 
     public int priority() {
@@ -36,23 +36,23 @@ public class DeleteTask extends Task {
 
     @Override
     public String toString() {
-        if (null != localFile) {
-            return "Delete local file " + localFile.getPath();
+        if (null != this.localFile) {
+            return "Delete local file " + this.localFile.getPath();
         } else {
-            return "Delete remote file " + remoteFile.getFullName();
+            return "Delete remote file " + this.remoteFile.getFullName();
         }
     }
 
     @Override
     protected void taskBody() throws IOException {
-        if (null != localFile) {
-            fileSystem.delete(localFile);
-            reporter.localDeleted();
-            log.info("Deleted local file " + localFile.getPath());
+        if (null != this.localFile) {
+            this.fileSystem.delete(this.localFile);
+            this.reporter.localDeleted();
+            DeleteTask.log.info("Deleted local file " + this.localFile.getPath());
         } else {
-            api.delete(remoteFile);
-            reporter.remoteDeleted();
-            log.info("Deleted remote file " + remoteFile.getFullName());
+            this.api.delete(this.remoteFile);
+            this.reporter.remoteDeleted();
+            DeleteTask.log.info("Deleted remote file " + this.remoteFile.getFullName());
         }
     }
 }

@@ -9,11 +9,11 @@ public interface IPage {
 
     Integer getOrder();
 
-    public boolean isSigChecked();
+    boolean isSigChecked();
 
-    public boolean isDataProcessed();
+    boolean isDataProcessed();
 
-    public boolean isFileExists();
+    boolean isFileExists();
 
-    public boolean isLoadingStarted();
+    boolean isLoadingStarted();
 }
