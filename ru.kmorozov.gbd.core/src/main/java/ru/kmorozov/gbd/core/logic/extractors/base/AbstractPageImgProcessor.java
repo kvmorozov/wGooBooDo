@@ -57,7 +57,7 @@ public abstract class AbstractPageImgProcessor<T extends AbstractPage> extends A
                 return false;
             }
 
-            int read, totalRead = 0;
+            int read;
             final byte[] bytes = new byte[dataChunk];
             boolean firstChunk = true, reloadFlag;
 
@@ -88,7 +88,6 @@ public abstract class AbstractPageImgProcessor<T extends AbstractPage> extends A
 
                 firstChunk = false;
 
-                totalRead += read;
                 storedItem.write(bytes, read);
             }
 

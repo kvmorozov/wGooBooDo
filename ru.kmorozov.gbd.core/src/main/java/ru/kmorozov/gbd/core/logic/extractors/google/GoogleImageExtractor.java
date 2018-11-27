@@ -38,7 +38,7 @@ public class GoogleImageExtractor extends AbstractImageExtractor {
     }
 
     @Override
-    protected void scanDir() {
+    protected void restoreState() {
         final int imgWidth = 0 == GBDOptions.getImageWidth() ? DEFAULT_PAGE_WIDTH : GBDOptions.getImageWidth();
 
         try {

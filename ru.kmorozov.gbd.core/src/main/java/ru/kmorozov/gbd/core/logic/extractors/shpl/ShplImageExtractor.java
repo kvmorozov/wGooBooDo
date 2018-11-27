@@ -21,7 +21,7 @@ public class ShplImageExtractor extends AbstractImageExtractor {
     }
 
     @Override
-    protected void scanDir() {
+    protected void restoreState() {
         bookContext.getPagesStream().forEach(page -> {
             try {
                 if (bookContext.getStorage().isPageExists(page)) {

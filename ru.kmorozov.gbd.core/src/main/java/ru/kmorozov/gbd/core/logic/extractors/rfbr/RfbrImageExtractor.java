@@ -16,7 +16,7 @@ public class RfbrImageExtractor extends AbstractImageExtractor {
     }
 
     @Override
-    protected void scanDir() {
+    protected void restoreState() {
 
     }
 
