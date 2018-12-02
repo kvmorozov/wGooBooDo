@@ -37,8 +37,6 @@ public abstract class AbstractImageExtractor extends AbstractEventSource impleme
         return bookContext;
     }
 
-    protected abstract void restoreState();
-
     @Override
     public String toString() {
         return "Extractor:" + bookContext;
@@ -50,7 +48,7 @@ public abstract class AbstractImageExtractor extends AbstractEventSource impleme
         if (!preCheck()) return;
 
         prepareStorage();
-        restoreState();
+        bookContext.restoreState();
 
         initComplete.set(true);
     }

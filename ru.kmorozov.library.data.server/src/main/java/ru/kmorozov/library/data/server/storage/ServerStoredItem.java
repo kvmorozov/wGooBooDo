@@ -19,7 +19,7 @@ public class ServerStoredItem implements IStoredItem {
     private final LocalFSStoredItem localItem;
     private OneDriveItem remoteItem;
 
-    ServerStoredItem(ServerStorage storage, IPage page, String imgFormat) {
+    ServerStoredItem(ServerStorage storage, IPage page, String imgFormat) throws IOException {
         this.storage = storage;
         this.page = page;
 

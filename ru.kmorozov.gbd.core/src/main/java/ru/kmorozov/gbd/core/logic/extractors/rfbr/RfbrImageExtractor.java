@@ -1,11 +1,11 @@
 package ru.kmorozov.gbd.core.logic.extractors.rfbr;
 
+import ru.kmorozov.db.core.logic.model.book.rfbr.RfbrPage;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractImageExtractor;
 import ru.kmorozov.gbd.core.logic.model.book.base.IPage;
-import ru.kmorozov.db.core.logic.model.book.rfbr.RfbrPage;
 
 import java.util.concurrent.TimeUnit;
 
@@ -13,11 +13,6 @@ public class RfbrImageExtractor extends AbstractImageExtractor {
 
     public RfbrImageExtractor(BookContext bookContext) {
         super(bookContext, RfbrImageExtractor.class);
-    }
-
-    @Override
-    protected void restoreState() {
-
     }
 
     @Override

@@ -2,8 +2,6 @@ package ru.kmorozov.gbd.core.logic.connectors.asynchttp;
 
 import io.netty.handler.timeout.TimeoutException;
 import org.asynchttpclient.AsyncCompletionHandlerBase;
-import org.asynchttpclient.AsyncHandler;
-import org.asynchttpclient.AsyncHandler.State;
 import org.asynchttpclient.HttpResponseStatus;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 

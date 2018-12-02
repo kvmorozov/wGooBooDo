@@ -67,10 +67,6 @@ public class GooglePageInfo extends AbstractPage implements Serializable, Compar
         this.src = src;
     }
 
-    public void setWidth(final int width) {
-        this.width = width;
-    }
-
     public CharSequence getSig() {
         return null == src ? null : null == sig ? sig = src.substring(src.indexOf("sig=") + 4) : sig;
     }

@@ -57,4 +57,8 @@ public abstract class AbstractPage implements IPage {
     public void setLoadingStarted(boolean value) {
         loadingStarted.set(value);
     }
+
+    public boolean isGapPage() {
+        return false;
+    }
 }

@@ -1,14 +1,12 @@
 package ru.kmorozov.gbd.core.logic.extractors.shpl;
 
+import ru.kmorozov.db.core.logic.model.book.shpl.ShplPage;
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt;
 import ru.kmorozov.gbd.core.logic.context.BookContext;
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext;
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractImageExtractor;
-import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage;
 import ru.kmorozov.gbd.core.logic.model.book.base.IPage;
-import ru.kmorozov.db.core.logic.model.book.shpl.ShplPage;
 
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -18,21 +16,6 @@ public class ShplImageExtractor extends AbstractImageExtractor {
 
     public ShplImageExtractor(final BookContext bookContext) {
         super(bookContext, ShplImageExtractor.class);
-    }
-
-    @Override
-    protected void restoreState() {
-        bookContext.getPagesStream().forEach(page -> {
-            try {
-                if (bookContext.getStorage().isPageExists(page)) {
-                    logger.severe(String.format("Page %s found in directory!", page.getPid()));
-                    ((AbstractPage) page).setDataProcessed(true);
-                    ((AbstractPage) page).setFileExists(true);
-                }
-            } catch (final IOException e) {
-                e.printStackTrace();
-            }
-        });
     }
 
     @Override

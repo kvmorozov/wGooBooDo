@@ -7,16 +7,7 @@ import java.io.IOException;
 
 public class TempLocalItem extends LocalFSStoredItem {
 
-    public TempLocalItem(LocalFSStorage storage, IPage page, String imgFormat) {
-        super(storage, page, imgFormat);
-    }
-
-    @Override
-    protected void init() {
-        try {
-            outputFile = File.createTempFile(page.getOrder() + '_' + page.getPid(), imgFormat);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public TempLocalItem(LocalFSStorage storage, IPage page, String imgFormat) throws IOException {
+        super(File.createTempFile(page.getOrder() + '_' + page.getPid(), imgFormat), storage, page, imgFormat);
     }
 }

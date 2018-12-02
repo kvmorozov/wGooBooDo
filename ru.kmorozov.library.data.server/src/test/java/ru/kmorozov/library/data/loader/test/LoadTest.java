@@ -1,6 +1,6 @@
 package ru.kmorozov.library.data.loader.test;
 
-import org.junit.Assert;
+import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
 
 /**
  * Created by km on 26.12.2016.
@@ -80,6 +80,6 @@ public class LoadTest {
             }
         }
 
-        Assert.assertThat(1, is(storages.size()));
+        MatcherAssert.assertThat(1, is(storages.size()));
     }
 }

@@ -1,10 +1,10 @@
 package ru.kmorozov.gbd.core.config;
 
 import ru.kmorozov.gbd.core.logic.model.book.base.IBookData;
+import ru.kmorozov.gbd.core.logic.model.book.base.IBookInfo;
 import ru.kmorozov.gbd.core.logic.model.book.base.IPage;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -20,11 +20,13 @@ public interface IStorage {
 
     boolean isPageExists(IPage page) throws IOException;
 
-    Stream<Path> getFiles() throws IOException;
+    Stream<IStoredItem> getItems() throws IOException;
 
     IStoredItem getStoredItem(IPage page, String imgFormat) throws IOException;
 
     void refresh();
 
     IIndex getIndex(String indexName, boolean createIfNotExists);
+
+    void restoreState(IBookInfo bookInfo) throws IOException;
 }

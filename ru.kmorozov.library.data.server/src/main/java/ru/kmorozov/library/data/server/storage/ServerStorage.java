@@ -6,6 +6,7 @@ import ru.kmorozov.gbd.core.config.IStorage;
 import ru.kmorozov.gbd.core.config.IStoredItem;
 import ru.kmorozov.gbd.core.logic.library.LibraryFactory;
 import ru.kmorozov.gbd.core.logic.model.book.base.IBookData;
+import ru.kmorozov.gbd.core.logic.model.book.base.IBookInfo;
 import ru.kmorozov.gbd.core.logic.model.book.base.IPage;
 import ru.kmorozov.onedrive.client.OneDriveItem;
 import ru.kmorozov.onedrive.client.OneDriveProvider;
@@ -82,8 +83,8 @@ public class ServerStorage implements IStorage {
     }
 
     @Override
-    public Stream<Path> getFiles() throws IOException {
-        return null;
+    public Stream<IStoredItem> getItems() throws IOException {
+        throw new IllegalStateException();
     }
 
     @Override
@@ -99,6 +100,11 @@ public class ServerStorage implements IStorage {
     @Override
     public IIndex getIndex(String indexName, boolean createIfNotExists) {
         return null;
+    }
+
+    @Override
+    public void restoreState(IBookInfo bookInfo) {
+        throw new IllegalStateException();
     }
 
     private OneDriveItem[] getChildren() throws IOException {
