@@ -14,58 +14,58 @@ public class TaskQueue {
     private final AtomicInteger tasksInProgress = new AtomicInteger(0);
     private volatile boolean suspended;
 
-    public void add(final Task t) {
-        tasksInProgress.incrementAndGet();
-        queue.add(t);
+    public void add(Task t) {
+        this.tasksInProgress.incrementAndGet();
+        this.queue.add(t);
     }
 
     public Task take() throws InterruptedException {
 
         // Wait for the queue to be active
-        synchronized (suspendedMonitor) {
-            while (suspended) {
-                suspendedMonitor.wait();
+        synchronized (this.suspendedMonitor) {
+            while (this.suspended) {
+                this.suspendedMonitor.wait();
             }
         }
 
-        return queue.take();
+        return this.queue.take();
     }
 
-    public void done(final Task t) {
-        if (0 == tasksInProgress.decrementAndGet()) {
-            synchronized (doneMonitor) {
-                doneMonitor.notifyAll();
+    public void done(Task t) {
+        if (0 == this.tasksInProgress.decrementAndGet()) {
+            synchronized (this.doneMonitor) {
+                this.doneMonitor.notifyAll();
             }
         }
     }
 
     public void waitForCompletion() throws InterruptedException {
-        while (0 < tasksInProgress.get()) {
-            synchronized (doneMonitor) {
-                doneMonitor.wait();
+        while (0 < this.tasksInProgress.get()) {
+            synchronized (this.doneMonitor) {
+                this.doneMonitor.wait();
             }
         }
     }
 
-    public void suspend(final int seconds) {
+    public void suspend(int seconds) {
 
-        synchronized (suspendedMonitor) {
+        synchronized (this.suspendedMonitor) {
 
-            if (suspended) {
+            if (this.suspended) {
                 return;
             }
 
-            suspended = true;
+            this.suspended = true;
         }
 
         try {
             Thread.sleep((long) (seconds * 1000));
-        } catch (final InterruptedException e) {
+        } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } finally {
-            synchronized (suspendedMonitor) {
-                suspended = false;
-                suspendedMonitor.notifyAll();
+            synchronized (this.suspendedMonitor) {
+                this.suspended = false;
+                this.suspendedMonitor.notifyAll();
             }
         }
     }

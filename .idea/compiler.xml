@@ -19,7 +19,7 @@
         <module name="ru.kmorozov.library.data.server" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="9">
+    <bytecodeTargetLevel target="11">
       <module name="ru.kmorozov.api.onedrive" target="11" />
       <module name="ru.kmorozov.gbd.core" target="11" />
       <module name="ru.kmorozov.gbd.core.config" target="11" />

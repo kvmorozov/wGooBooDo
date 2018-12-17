@@ -1,21 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="Encoding" native2AsciiForPropertiesFiles="true" defaultCharsetForPropertiesFiles="ISO-8859-1">
+  <component name="Encoding" native2AsciiForPropertiesFiles="true" defaultCharsetForPropertiesFiles="ISO-8859-1" addBOMForNewFiles="with NO BOM">
     <file url="file://$PROJECT_DIR$" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ru.kmorozov.api.onedrive" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ru.kmorozov.api.onedrive" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ru.kmorozov.gbd.core" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ru.kmorozov.gbd.core" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ru.kmorozov.gbd.core.config" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ru.kmorozov.gbd.core.config" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ru.kmorozov.gbd.core.logger" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ru.kmorozov.gbd.core.logger" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ru.kmorozov.gbd.db" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ru.kmorozov.gbd.db" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ru.kmorozov.gbd.db.mongo" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ru.kmorozov.gbd.db.mongo" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ru.kmorozov.gbd.desktop" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ru.kmorozov.gbd.desktop" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ru.kmorozov.gbd.desktop.app" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ru.kmorozov.gbd.desktop.app" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/resources/gui.properties" charset="ISO-8859-1" />
     <file url="file://$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/resources/gui_ru.properties" charset="ISO-8859-1" />
     <file url="file://$PROJECT_DIR$/ru.kmorozov.gbd.parent" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ru.kmorozov.gbd.parent" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ru.kmorozov.library.data.client" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ru.kmorozov.library.data.client" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ru.kmorozov.library.data.model" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ru.kmorozov.library.data.model" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ru.kmorozov.library.data.server" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ru.kmorozov.library.data.server" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ru.kmorozov.library.parent" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ru.kmorozov.library.parent" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
