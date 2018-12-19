@@ -123,7 +123,8 @@ abstract class AbstractProxyListProvider : IProxyListProvider {
 
         private val logger = Logger.getLogger(AbstractProxyListProvider::class.java)
 
-        public val INSTANCE: AbstractProxyListProvider = if (null == GBDOptions.proxyListFile) WebProxyListProvider() else FileProxyListProvider()
+        public val INSTANCE: AbstractProxyListProvider
+            get() = if (StringUtils.isEmpty(GBDOptions.proxyListFile)) WebProxyListProvider() else FileProxyListProvider()
 
         fun updateBlacklist() {
             if (INSTANCE.proxyList.size > 1)
