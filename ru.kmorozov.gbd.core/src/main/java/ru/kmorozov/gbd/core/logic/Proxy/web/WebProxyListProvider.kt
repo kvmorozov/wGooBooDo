@@ -13,8 +13,8 @@ class WebProxyListProvider : AbstractProxyListProvider() {
         val candidateProxies = SslProxiesListProvider().proxyList
         candidateProxies.addAll(SslProxiesListProvider().proxyList)
 
-        this.proxyItems = candidateProxies.stream().filter { notBlacklisted(it) }.limit(20L).collect(Collectors.toSet())
-        (this.proxyItems as MutableSet<String>?)?.addAll(ProxyBlacklistHolder.BLACKLIST.whiteList)
+        this.proxyItems = candidateProxies.stream().filter { notBlacklisted(it) }.limit(20).collect(Collectors.toSet())
+        this.proxyItems.addAll(ProxyBlacklistHolder.BLACKLIST.whiteList)
     }
 
     override fun updateProxyList() {

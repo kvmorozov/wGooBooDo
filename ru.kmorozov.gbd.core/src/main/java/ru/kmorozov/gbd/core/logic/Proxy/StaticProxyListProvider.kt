@@ -17,7 +17,7 @@ class StaticProxyListProvider internal constructor() : AbstractProxyListProvider
     private fun buildList() {
         try {
             Thread.currentThread().contextClassLoader.getResourceAsStream(PROXY_LIST_RES)!!
-                    .use { stream -> this.proxyItems = String(stream.readAllBytes(), StandardCharsets.UTF_8).lines().toSet() }
+                    .use { stream -> this.proxyItems = String(stream.readAllBytes(), StandardCharsets.UTF_8).lines().toMutableSet() }
         } catch (e: IOException) {
             e.printStackTrace()
         }

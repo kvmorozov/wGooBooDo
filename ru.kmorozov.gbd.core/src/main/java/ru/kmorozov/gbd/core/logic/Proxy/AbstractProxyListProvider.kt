@@ -18,7 +18,7 @@ import java.util.stream.Stream
 abstract class AbstractProxyListProvider : IProxyListProvider {
 
     override val proxyList: MutableCollection<HttpHostExt> = HashSet()
-    protected var proxyItems: Set<String> = HashSet()
+    protected var proxyItems: MutableSet<String> = HashSet()
 
     protected val proxyListCompleted = AtomicBoolean(false)
     private val proxyListInitStarted = AtomicBoolean(false)
@@ -65,7 +65,7 @@ abstract class AbstractProxyListProvider : IProxyListProvider {
     }
 
     override fun invalidatedProxyListener() {
-        val liveProxyCount = proxyList.stream().filter({ x -> (x as HttpHostExt).isAvailable }).count()
+        val liveProxyCount = proxyList.stream().filter { it.isAvailable }.count()
         if (0L == liveProxyCount && GBDOptions.secureMode()) throw RuntimeException("No more proxies!")
     }
 
