@@ -37,17 +37,17 @@ class LibraryRestProxy(private val template: RestTemplate) : IDataRestServer {
 
     @RequestMapping("/storages/{storageId}")
     override fun getStoragesByParentId(@PathVariable storageId: String): List<StorageDTO> {
-        return getList("/storagesByParentId", "storageId", storageId, Array<StorageDTO>::class.java) as List<StorageDTO>
+        return getList("/storagesByParentId", "storageId", storageId, Array<StorageDTO>::class.java)
     }
 
     @RequestMapping("/books/{storageId}")
     override fun getBooksByStorageId(@PathVariable storageId: String): List<BookDTO> {
-        return getList("/booksByStorageId", "storageId", storageId, Array<BookDTO>::class.java) as List<BookDTO>
+        return getList("/booksByStorageId", "storageId", storageId, Array<BookDTO>::class.java)
     }
 
     @RequestMapping("/items/{storageId}")
     override fun getItemsByStorageId(@PathVariable storageId: String): List<ItemDTO> {
-        val result = getList("/itemsByStorageId", "storageId", storageId, Array<ItemDTO>::class.java) as List<ItemDTO>
+        val result = getList("/itemsByStorageId", "storageId", storageId, Array<ItemDTO>::class.java)
 
         return result
                 .stream()
@@ -121,7 +121,7 @@ class LibraryRestProxy(private val template: RestTemplate) : IDataRestServer {
         return template.getForEntity(uri, BookDTO::class.java).body!!
     }
 
-    private fun getList(operation: String, paramName: String?, paramValue: String?, arrClass: Class<*>): List<*> {
+    private fun <T> getList(operation: String, paramName: String?, paramValue: String?, arrClass: Class<Array<T>>): List<T> {
         val builder = UriComponentsBuilder.newInstance()
         builder.scheme("http").host("localhost").port(9000).path(operation)
 
@@ -130,12 +130,12 @@ class LibraryRestProxy(private val template: RestTemplate) : IDataRestServer {
 
         val uri = builder.build().toString()
 
-        return Arrays.stream(template.getForEntity(uri, arrClass).getBody() as Array<Any>).collect(Collectors.toList())
+        return Arrays.stream(template.getForEntity(uri, arrClass).getBody()).collect(Collectors.toList())
     }
 
     @RequestMapping("/findDuplicates")
     override fun findDuplicates(): List<DuplicatedBookDTO> {
-        return getList("/findDuplicates", null, null, Array<DuplicatedBookDTO>::class.java) as List<DuplicatedBookDTO>
+        return getList("/findDuplicates", null, null, Array<DuplicatedBookDTO>::class.java)
     }
 
     override fun synchronizeDb() {

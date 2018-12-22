@@ -26,14 +26,14 @@ class JstorProcessor : IProcessor {
     private val reactiveMode: Boolean = false
 
     @Autowired
-    private val proxyProvider: ManagedProxyListProvider? = null
+    private lateinit var proxyProvider: ManagedProxyListProvider
 
     @Autowired
     @Lazy
-    private val jstorConnector: HttpConnector? = null
+    private lateinit var jstorConnector: HttpConnector
 
     @Autowired
-    protected var booksRepository: BooksRepository? = null
+    protected lateinit var booksRepository: BooksRepository
 
     @Bean
     fun proxyProvider(): ManagedProxyListProvider {
@@ -43,7 +43,7 @@ class JstorProcessor : IProcessor {
     override fun process() {
         logger.info("Process JSTOR started.")
 
-        booksRepository!!
+        booksRepository
                 .findBooksByRegexBookInfoFileName("^\\d+.pdf")
                 .stream()
                 .filter { book -> book.bookInfo.getCustomFields() == null }
@@ -56,11 +56,11 @@ class JstorProcessor : IProcessor {
         val fileName = jstorBook.bookInfo.fileName
         val jstorId = fileName!!.substring(0, fileName.length - 4)
 
-        val proxy = proxyProvider!!.proxy
+        val proxy = proxyProvider.proxy
 
         val doi: String
         try {
-            val doc = jstorConnector!!.getString(JSTOR_ARTICLE_PREFIX + jstorId, proxy, true)
+            val doc = jstorConnector.getString(JSTOR_ARTICLE_PREFIX + jstorId, proxy, true)
             val opDoi = Arrays.stream(doc.split("\\r?\\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray())
                     .filter { s -> s.contains("ST.discriminator") }
                     .findFirst()
@@ -79,14 +79,14 @@ class JstorProcessor : IProcessor {
         }
 
         jstorBook.addBookId(IdType.JSTOR, jstorId)
-        booksRepository!!.save(jstorBook)
+        booksRepository.save(jstorBook)
 
         try {
             val doiMap = parseArticleData(doiConnector.getString(JSTOR_CITATION_PREFIX + doi, proxy, true))
             if (!doiMap.isEmpty()) {
                 jstorBook.bookInfo.bookType = BookInfo.BookType.ARTICLE
                 jstorBook.bookInfo.setCustomFields(doiMap)
-                booksRepository!!.save(jstorBook)
+                booksRepository.save(jstorBook)
 
                 logger.info(String.format("Saved DOI data for %s", doi))
             } else
@@ -97,7 +97,7 @@ class JstorProcessor : IProcessor {
         }
 
         jstorBook.addBookId(IdType.DOI, doi)
-        booksRepository!!.save(jstorBook)
+        booksRepository.save(jstorBook)
     }
 
     private fun parseArticleData(data: String): MutableMap<String, String> {

@@ -2,14 +2,11 @@ package ru.kmorozov.onedrive.client.authoriser
 
 import org.apache.commons.lang3.StringUtils
 import org.apache.logging.log4j.LogManager
-import org.apache.logging.log4j.Logger
 import org.openqa.selenium.By
 import org.openqa.selenium.NoSuchElementException
-import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.support.ui.FluentWait
-import org.openqa.selenium.support.ui.Wait
 
 import java.io.File
 import java.io.PrintWriter
@@ -48,9 +45,9 @@ object TokenFactory {
             }
 
             if (!StringUtils.isEmpty(password)) {
-                val pwdEdit = wait.until { driver1 -> driver1.findElement(By.name("passwd")) }
+                val pwdEdit = wait.until { it.findElement(By.name("passwd")) }
                 pwdEdit.sendKeys(password)
-                val nextBtn = wait.until { driver1 -> driver.findElement(By.className("btn-primary")) }
+                val nextBtn = wait.until { driver.findElement(By.className("btn-primary")) }
                 if (nextBtn != null)
                     try {
                         nextBtn.click()
@@ -68,7 +65,7 @@ object TokenFactory {
                     log.error("Failed generate token, continuing manually...", ex)
                 }
 
-                val noButton = wait.until<WebElement> { driver12 ->
+                wait.until<WebElement> { driver12 ->
                     try {
                         val button = driver12.findElement(By.id("idBtn_Accept"))
                         return@until null

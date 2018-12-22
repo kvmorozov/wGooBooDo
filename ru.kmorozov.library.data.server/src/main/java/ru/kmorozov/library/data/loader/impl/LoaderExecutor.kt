@@ -21,10 +21,10 @@ class LoaderExecutor {
 
     @Autowired
     @Lazy
-    private val oneLoader: OneDriveLoader? = null
+    private lateinit var oneLoader: OneDriveLoader
 
     val isStarted: Boolean
-        get() = State.STARTED == oneLoader!!.state
+        get() = State.STARTED == oneLoader.state
 
     enum class State {
         STARTED, STOPPED, PAUSED
@@ -32,7 +32,7 @@ class LoaderExecutor {
 
     @Synchronized
     fun start() {
-        if (State.STARTED == oneLoader!!.state)
+        if (State.STARTED == oneLoader.state)
             throw IllegalStateException("Loader is already started!")
 
         oneLoader.state = State.STARTED
@@ -42,24 +42,24 @@ class LoaderExecutor {
 
     @Synchronized
     fun stop() {
-        oneLoader!!.state = State.STOPPED
+        oneLoader.state = State.STOPPED
     }
 
     @Synchronized
     fun pause() {
-        oneLoader!!.state = State.PAUSED
+        oneLoader.state = State.PAUSED
     }
 
     fun refresh(storage: Storage): Storage {
-        return oneLoader!!.refresh(storage)
+        return oneLoader.refresh(storage)
     }
 
     fun resolveLink(lnkBook: Book) {
-        oneLoader!!.resolveLink(lnkBook)
+        oneLoader.resolveLink(lnkBook)
     }
 
     fun downloadBook(book: Book) {
-        oneLoader!!.downloadBook(book)
+        oneLoader.downloadBook(book)
     }
 
     companion object {

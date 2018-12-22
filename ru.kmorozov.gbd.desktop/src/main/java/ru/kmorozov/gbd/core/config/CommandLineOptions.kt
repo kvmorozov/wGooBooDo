@@ -1,6 +1,9 @@
 package ru.kmorozov.gbd.core.config
 
-import org.apache.commons.cli.*
+import org.apache.commons.cli.CommandLine
+import org.apache.commons.cli.DefaultParser
+import org.apache.commons.cli.Option
+import org.apache.commons.cli.Options
 import ru.kmorozov.gbd.core.config.options.CtxOptions
 import ru.kmorozov.gbd.core.loader.LocalFSStorage
 
@@ -9,7 +12,7 @@ import ru.kmorozov.gbd.core.loader.LocalFSStorage
  */
 class CommandLineOptions(commandLineArguments: Array<String>) : IGBDOptions {
 
-    private var commandLine: CommandLine? = null
+    private val commandLine: CommandLine
 
     override val bookId: String
         get() = getStringOptionValue(OPTION_BOOKID_SHORT)
@@ -75,34 +78,29 @@ class CommandLineOptions(commandLineArguments: Array<String>) : IGBDOptions {
         option.argName = "CTX mode "
         options.addOption(option)
 
-        try {
-            commandLine = cmdLineParser.parse(options, commandLineArguments)
-        } catch (e: ParseException) {
-            e.printStackTrace()
-        }
-
+        commandLine = cmdLineParser.parse(options, commandLineArguments)
     }
 
     private fun getStringOptionValue(optionName: String): String {
-        return if (commandLine!!.hasOption(optionName) && null != commandLine!!.getOptionValues(optionName) && 1 == commandLine!!.getOptionValues(optionName).size)
-            commandLine!!.getOptionValues(optionName)[0]
+        return if (commandLine.hasOption(optionName) && null != commandLine.getOptionValues(optionName) && 1 == commandLine.getOptionValues(optionName).size)
+            commandLine.getOptionValues(optionName)[0]
         else
             ""
     }
 
     private fun getStringOptionValues(optionName: String): Array<String>? {
-        return if (commandLine!!.hasOption(optionName) && null != commandLine!!.getOptionValues(optionName))
-            commandLine!!.getOptionValues(optionName)
+        return if (commandLine.hasOption(optionName) && null != commandLine.getOptionValues(optionName))
+            commandLine.getOptionValues(optionName)
         else
             null
     }
 
     private fun getIntOptionValue(optionName: String): Int {
-        return if (commandLine!!.hasOption(optionName) && 1 == commandLine!!.getOptionValues(optionName).size) Integer.parseInt(commandLine!!.getOptionValues(optionName)[0]) else 0
+        return if (commandLine.hasOption(optionName) && 1 == commandLine.getOptionValues(optionName).size) Integer.parseInt(commandLine.getOptionValues(optionName)[0]) else 0
     }
 
     private fun getBoolOptionValue(optionName: String): Boolean {
-        return commandLine!!.hasOption(optionName)
+        return commandLine.hasOption(optionName)
     }
 
     override fun reloadImages(): Boolean {

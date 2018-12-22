@@ -41,7 +41,7 @@ class BookContext {
     val sigExecutor: QueuedThreadPoolExecutor<out AbstractHttpProcessor>
     val imgExecutor: QueuedThreadPoolExecutor<AbstractPage>
     val bookInfo: BookInfo
-    private val metadata: ILibraryMetadata?
+    private val metadata: ILibraryMetadata
     var started: AtomicBoolean
     var pdfCompleted: AtomicBoolean
     var storage: IStorage? = null

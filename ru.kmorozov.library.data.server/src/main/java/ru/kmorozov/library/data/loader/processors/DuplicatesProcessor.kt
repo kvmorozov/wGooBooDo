@@ -24,10 +24,10 @@ import java.util.stream.Collectors
 class DuplicatesProcessor : IProcessor {
 
     @Autowired
-    private val mongoTemplate: MongoTemplate? = null
+    private lateinit var mongoTemplate: MongoTemplate
 
     @Autowired
-    protected var booksRepository: BooksRepository? = null
+    protected lateinit var booksRepository: BooksRepository
 
     @Autowired
     @Lazy
@@ -44,7 +44,7 @@ class DuplicatesProcessor : IProcessor {
                     Aggregation.skip(0L)
             ).withOptions(AggregationOptions(true, false, Document("batchSize", 1000.0)))
 
-            val results = mongoTemplate!!.aggregate(booksAggregation, BooksBySize::class.java)
+            val results = mongoTemplate.aggregate(booksAggregation, BooksBySize::class.java)
 
             return results.mappedResults
         }
@@ -61,7 +61,7 @@ class DuplicatesProcessor : IProcessor {
                 BookInfo.BookFormat.DJVU, BookInfo.BookFormat.PDF -> {
                     val books = duplicate.getBookIds()!!
                             .stream()
-                            .map { id -> booksRepository!!.findById(id) }
+                            .map { id -> booksRepository.findById(id) }
                             .filter { it.isPresent() }
                             .map<Book> { it.get() }
                             .collect(Collectors.toList())
@@ -74,13 +74,13 @@ class DuplicatesProcessor : IProcessor {
                     for (book in books)
                         BookUtils.mergeCategories(book, mainBook)
 
-                    booksRepository!!.save(mainBook)
+                    booksRepository.save(mainBook)
 
                     for (book in books)
                         if (book === mainBook)
                             continue
                         else {
-                            booksRepository!!.delete(book)
+                            booksRepository.delete(book)
                             try {
                                 val bookItem = api!!.getItem(book.bookInfo.path!!)
                                 api.delete(bookItem)
@@ -92,6 +92,11 @@ class DuplicatesProcessor : IProcessor {
 
                     logger.info(String.format("Duplicates for %s processed.", mainBook.bookInfo.fileName))
                 }
+                BookInfo.BookFormat.DOC -> TODO()
+                BookInfo.BookFormat.DOCX -> TODO()
+                BookInfo.BookFormat.LNK -> TODO()
+                BookInfo.BookFormat.UNKNOWN -> TODO()
+                null -> TODO()
             }
 
         logger.info("Process duplicates finished.")
@@ -99,7 +104,7 @@ class DuplicatesProcessor : IProcessor {
 
     private fun createDuplicateDTO(book: BooksBySize): DuplicatedBookDTO {
         val dto = DuplicatedBookDTO(book)
-        dto.books = book.getBookIds()!!.stream().map { id -> BookDTO(booksRepository!!.findById(id).get(), false) }.collect(Collectors.toList())
+        dto.books = book.getBookIds()!!.stream().map { id -> BookDTO(booksRepository.findById(id).get(), false) }.collect(Collectors.toList())
 
         return dto
     }
