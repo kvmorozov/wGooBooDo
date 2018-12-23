@@ -1,11 +1,11 @@
 package ru.kmorozov.gbd.core.logic.connectors.http2native
 
-import com.google.api.client.http.HttpHeaders
 import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
+import ru.kmorozov.gbd.core.logic.connectors.Response
+import ru.kmorozov.gbd.core.logic.connectors.Response.Companion.EMPTY_RESPONCE
 import ru.kmorozov.gbd.logger.Logger
-
 import java.io.IOException
 import java.net.ProxySelector
 import java.net.SocketTimeoutException
@@ -34,11 +34,11 @@ class Http2Connector : HttpConnector() {
     }
 
     @Throws(IOException::class)
-    override fun getContent(rqUrl: String, proxy: HttpHostExt, withTimeout: Boolean): Http2Response? {
+    override fun getContent(rqUrl: String, proxy: HttpHostExt, withTimeout: Boolean): Response {
         try {
             val uri = URI.create(rqUrl)
 
-            if (GBDOptions.secureMode() && proxy.isLocal || !proxy.isAvailable) return null
+            if (GBDOptions.secureMode() && proxy.isLocal || !proxy.isAvailable) return EMPTY_RESPONCE
 
             val resp: HttpResponse<*>?
             if (validateProxy(rqUrl, proxy)) {

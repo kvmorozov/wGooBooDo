@@ -44,16 +44,16 @@ class HttpHostExt {
         get() = this === NO_PROXY
 
     val proxyString: String
-        get() = host.address.hostAddress + ';'.toString() + host.port + ';'.toString() + failureCount.get()
+        get() = host.toString() + ";" + failureCount.get()
 
     val proxyStringShort: String
-        get() = host.address.hostAddress + ':'.toString() + host.port
+        get() = host.toString()
 
     constructor(host: InetSocketAddress, cookie: String) {
         this.host = host
         this.cookie = cookie
 
-        proxy = Proxy(Type.HTTP, InetSocketAddress(host.hostName, host.port))
+        proxy = Proxy(Type.HTTP, host)
 
         if (GBDOptions.secureMode()) isSecure = checkSecurity()
 
@@ -65,7 +65,7 @@ class HttpHostExt {
         this.host = host
         this.failureCount = AtomicInteger(failureCount)
 
-        proxy = Proxy(Type.HTTP, InetSocketAddress(host.hostName, host.port))
+        proxy = Proxy(Type.HTTP, host)
 
         available = AtomicBoolean(REMOTE_FAILURES_THRESHOLD >= failureCount)
     }
@@ -83,7 +83,7 @@ class HttpHostExt {
         try {
             val resp = requestFactory.buildGetRequest(checkProxyUrl).execute()
             resp?.content?.use { stream ->
-                val respStr = String(stream.readAllBytes(), Charset.defaultCharset())
+                val respStr = String(stream.readAllBytes())
                 return !respStr.contains(InetAddress.getLocalHost().hostName)
             }
         } catch (e: IOException) {
@@ -97,8 +97,8 @@ class HttpHostExt {
         return host.hashCode()
     }
 
-    override fun equals(obj: Any?): Boolean {
-        return !(null == obj || obj !is HttpHostExt) && host == obj.host
+    override fun equals(other: Any?): Boolean {
+        return !(null == other || other !is HttpHostExt) && host == other.host
     }
 
     override fun toString(): String {
@@ -176,7 +176,7 @@ class HttpHostExt {
 
         fun getProxyFromString(proxyStr: String): HttpHostExt {
             val proxyVars = proxyStr.split(";".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-            return HttpHostExt(InetSocketAddress(proxyVars[0], Integer.parseInt(proxyVars[1])), Integer.parseInt(proxyVars[2]))
+            return HttpHostExt(InetSocketAddress.createUnresolved(proxyVars[0], Integer.parseInt(proxyVars[1])), Integer.parseInt(proxyVars[2]))
         }
     }
 }

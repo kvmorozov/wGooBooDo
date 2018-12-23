@@ -13,6 +13,7 @@ import org.asynchttpclient.proxy.ProxyServer.Builder
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
 import ru.kmorozov.gbd.core.logic.connectors.Response
+import ru.kmorozov.gbd.core.logic.connectors.Response.Companion.EMPTY_RESPONCE
 import java.io.IOException
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ExecutionException
@@ -68,7 +69,7 @@ class AsyncHttpConnector : HttpConnector() {
         return client!!
     }
 
-    override fun getContent(url: String, proxy: HttpHostExt, withTimeout: Boolean): Response? {
+    override fun getContent(url: String, proxy: HttpHostExt, withTimeout: Boolean): Response {
         val client = getClient(proxy)
         val builder = client.prepareGet(url)
         for ((key, value) in proxy.getHeaders(getUrlType(url)))
@@ -89,11 +90,11 @@ class AsyncHttpConnector : HttpConnector() {
         try {
             return AsyncHttpResponse(builder.execute(AsyncHandler(proxy)).get(HttpConnector.CONNECT_TIMEOUT.toLong(), TimeUnit.MILLISECONDS))
         } catch (ex: InterruptedException) {
-            return null
+            return EMPTY_RESPONCE
         } catch (ex: ExecutionException) {
-            return null
+            return EMPTY_RESPONCE
         } catch (ex: TimeoutException) {
-            return null
+            return EMPTY_RESPONCE
         } finally {
         }
     }

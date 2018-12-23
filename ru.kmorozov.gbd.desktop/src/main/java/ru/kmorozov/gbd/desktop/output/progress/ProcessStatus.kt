@@ -54,8 +54,8 @@ class ProcessStatus : IProgress {
         progressBar!!.isIndeterminate = false
 
         SwingUtilities.invokeLater {
-            MainBookForm.instance!!.progressPanel!!.add(progressBar)
-            SwingUtilities.updateComponentTreeUI(MainBookForm.instance!!.progressPanel!!)
+            MainBookForm.instance.progressPanel!!.add(progressBar)
+            SwingUtilities.updateComponentTreeUI(MainBookForm.instance.progressPanel!!)
         }
     }
 
@@ -63,8 +63,8 @@ class ProcessStatus : IProgress {
         if (SystemConfigs.isConsoleMode) return
 
         SwingUtilities.invokeLater {
-            MainBookForm.instance!!.progressPanel!!.remove(progressBar!!)
-            SwingUtilities.updateComponentTreeUI(MainBookForm.instance!!.progressPanel!!)
+            MainBookForm.instance.progressPanel!!.remove(progressBar!!)
+            SwingUtilities.updateComponentTreeUI(MainBookForm.instance.progressPanel!!)
         }
     }
 

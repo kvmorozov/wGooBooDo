@@ -7,6 +7,8 @@ import org.apache.hc.core5.http.HttpResponse
 import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
+import ru.kmorozov.gbd.core.logic.connectors.Response
+import ru.kmorozov.gbd.core.logic.connectors.Response.Companion.EMPTY_RESPONCE
 import ru.kmorozov.gbd.logger.Logger
 
 import java.io.IOException
@@ -18,8 +20,8 @@ import java.net.SocketTimeoutException
 class ApacheHttpConnector : HttpConnector() {
 
     @Throws(IOException::class)
-    override fun getContent(rqUrl: String, proxy: HttpHostExt, withTimeout: Boolean): ApacheResponse? {
-        if (GBDOptions.secureMode() && proxy.isLocal || !proxy.isAvailable) return null
+    override fun getContent(rqUrl: String, proxy: HttpHostExt, withTimeout: Boolean): Response {
+        if (GBDOptions.secureMode() && proxy.isLocal || !proxy.isAvailable) return EMPTY_RESPONCE
 
         val response = getContent(ApacheConnections.INSTANCE.getClient(proxy, withTimeout), HttpGet(rqUrl), proxy, 0)
 

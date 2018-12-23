@@ -19,7 +19,7 @@ import java.nio.charset.Charset
 abstract class HttpConnector : AutoCloseable {
 
     @Throws(IOException::class)
-    abstract fun getContent(url: String, proxy: HttpHostExt, withTimeout: Boolean): Response?
+    abstract fun getContent(url: String, proxy: HttpHostExt, withTimeout: Boolean): Response
 
     @Throws(IOException::class)
     fun getHtmlDocument(url: String, proxy: HttpHostExt, withTimeout: Boolean): Document {

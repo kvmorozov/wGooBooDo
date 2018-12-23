@@ -1,14 +1,16 @@
 package ru.kmorozov.gbd.core.logic.connectors.google
 
-import com.google.api.client.http.*
-import com.google.api.client.http.javanet.NetHttpTransport
+import com.google.api.client.http.GenericUrl
+import com.google.api.client.http.HttpRequest
+import com.google.api.client.http.HttpRequestFactory
+import com.google.api.client.http.HttpResponseException
 import com.google.api.client.http.javanet.NetHttpTransport.Builder
 import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
 import ru.kmorozov.gbd.core.logic.connectors.Response
+import ru.kmorozov.gbd.core.logic.connectors.Response.Companion.EMPTY_RESPONCE
 import ru.kmorozov.gbd.logger.Logger
-
 import java.io.IOException
 import java.net.SocketTimeoutException
 import java.net.URI
@@ -22,19 +24,17 @@ class GoogleHttpConnector : HttpConnector() {
     private fun getFactory(proxy: HttpHostExt): HttpRequestFactory {
         val key = getProxyKey(proxy)
 
-        var requestFactory: HttpRequestFactory = httpFactoryMap.getOrDefault(key, Builder().setProxy(proxy.proxy).build().createRequestFactory())
-
-        return requestFactory
+        return httpFactoryMap.getOrDefault(key, Builder().setProxy(proxy.proxy).build().createRequestFactory())
     }
 
     @Throws(IOException::class)
-    override fun getContent(rqUrl: String, proxy: HttpHostExt, withTimeout: Boolean): Response? {
+    override fun getContent(rqUrl: String, proxy: HttpHostExt, withTimeout: Boolean): Response {
         try {
             val url = GenericUrl(URI.create(rqUrl))
 
-            if (GBDOptions.secureMode() && proxy.isLocal || !proxy.isAvailable) return null
+            if (GBDOptions.secureMode() && proxy.isLocal || !proxy.isAvailable) return EMPTY_RESPONCE
 
-            val resp: HttpResponse?
+            val resp: Response
             if (validateProxy(rqUrl, proxy)) {
                 val req = getFactory(proxy).buildGetRequest(url)
                         .setConnectTimeout(if (withTimeout) HttpConnector.CONNECT_TIMEOUT else HttpConnector.CONNECT_TIMEOUT * 10)
@@ -43,13 +43,15 @@ class GoogleHttpConnector : HttpConnector() {
                     req.headers = proxy.getHeaders(getUrlType(rqUrl))
 
                 resp = getContent(req, proxy, 0)
-            } else
-                throw RuntimeException("Invalid proxy config!")
+            } else {
+                logger.error("Invalid proxy config! " + proxy.toString())
+                return EMPTY_RESPONCE
+            }
 
-            if (null == resp)
+            if (resp == EMPTY_RESPONCE)
                 logger.finest(String.format("No response at url %s with proxy %s", rqUrl, proxy.toString()))
 
-            return GoogleResponse(resp)
+            return resp
         } catch (hre: HttpResponseException) {
             logger.severe("Connection error: " + hre.statusMessage)
             throw GoogleResponseException(hre)
@@ -58,11 +60,11 @@ class GoogleHttpConnector : HttpConnector() {
     }
 
     @Throws(IOException::class)
-    private fun getContent(req: HttpRequest, proxy: HttpHostExt, attempt: Int): HttpResponse? {
+    private fun getContent(req: HttpRequest, proxy: HttpHostExt, attempt: Int): Response {
         var attempt = attempt
         if (HttpConnector.MAX_RETRY_COUNT <= attempt) {
             proxy.registerFailure()
-            return null
+            return EMPTY_RESPONCE
         }
 
         if (1 < attempt)
@@ -73,7 +75,7 @@ class GoogleHttpConnector : HttpConnector() {
             }
 
         try {
-            return req.execute()
+            return GoogleResponse(req.execute())
         } catch (ste1: SocketTimeoutException) {
             proxy.registerFailure()
             return getContent(req, proxy, ++attempt)

@@ -14,26 +14,25 @@ import java.time.temporal.ChronoUnit.SECONDS
 
 class WebDriverHttpConnector : HttpConnector() {
 
-    protected var driver: WebDriver? = null
+    protected val driver: WebDriver
 
     init {
         driver = ChromeDriver()
     }
 
     @Throws(IOException::class)
-    override fun getContent(url: String, proxy: HttpHostExt, withTimeout: Boolean): Response? {
-        driver!!.get(url)
+    override fun getContent(url: String, proxy: HttpHostExt, withTimeout: Boolean): Response {
+        driver.get(url)
 
-        FluentWait(driver!!)
+        FluentWait(driver)
                 .withTimeout(Duration.of(HttpConnector.CONNECT_TIMEOUT.toLong(), MILLIS))
                 .pollingEvery(Duration.of(1, SECONDS))
                 .ignoring(NoSuchElementException::class.java)
 
-        return WebDriverResponse(driver!!.pageSource)
+        return WebDriverResponse(driver.pageSource)
     }
 
     override fun close() {
-        if (driver != null)
-            driver!!.close()
+        driver.close()
     }
 }
