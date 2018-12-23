@@ -17,7 +17,7 @@ import java.util.function.ToLongFunction
  * Created by km on 22.11.2015.
  */
 class ExecutionContext private constructor(val output: AbstractOutputReceiver, val isSingleMode: Boolean) {
-    private val bookContextMap = HashMap<String, BookContext>()
+    private val bookContextMap: MutableMap<String, BookContext> = HashMap<String, BookContext>()
     lateinit var bookExecutor: QueuedThreadPoolExecutor<BookContext>
     lateinit var pdfExecutor: QueuedThreadPoolExecutor<BookContext>
 
@@ -36,7 +36,7 @@ class ExecutionContext private constructor(val output: AbstractOutputReceiver, v
     fun addBookContext(idsProducer: IBookListProducer, progress: IProgress, postProcessor: IPostProcessor) {
         for (bookId in idsProducer.bookIds) {
             try {
-                (bookContextMap as MutableMap<String, BookContext>).computeIfAbsent(bookId) { BookContext(bookId, progress, postProcessor) }
+                bookContextMap.computeIfAbsent(bookId) { BookContext(bookId, progress, postProcessor) }
             } catch (ex: Exception) {
                 logger.severe("Cannot add book " + bookId + " because of " + ex.message)
             }

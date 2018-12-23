@@ -33,18 +33,18 @@ class BookInfo : Serializable, ILoggableObject, IBookInfo {
     private constructor() {
         this.bookData = object : IBookData {
             override val title: String?
-                get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+                get() = "empty"
             override val volumeId: String?
-                get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+                get() = "empty"
         }
         this.pages = object: IPagesInfo {
             override val pages: Array<IPage>
-                get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+                get() = arrayOf<IPage>()
             override val missingPagesList: String
                 get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
 
             override fun build() {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
             }
 
             override fun getPageByPid(pid: String): IPage? {

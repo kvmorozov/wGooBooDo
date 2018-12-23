@@ -42,7 +42,7 @@ class GooglePageInfo : AbstractPage, Serializable, Comparable<IPage> {
     private val links: Any? = null
 
     var prefix: String = ""
-        get() = if (StringUtils.isEmpty(prefix)) parsePageNum() else field
+        get() = if (StringUtils.isEmpty(field)) parsePageNum() else field
 
     var pageNum = -1
         private set
@@ -68,7 +68,7 @@ class GooglePageInfo : AbstractPage, Serializable, Comparable<IPage> {
 
     private fun parsePageNum(): String {
         var numFound = false
-        prefix = ""
+        var _prefix = ""
         val strNum = StringBuilder()
         var i = pid.length - 1
         while (0 <= i) {
@@ -77,15 +77,15 @@ class GooglePageInfo : AbstractPage, Serializable, Comparable<IPage> {
                 strNum.insert(0, ch)
             else if (!numFound && !Character.isDigit(ch)) {
                 numFound = true
-                prefix = ch + prefix
+                _prefix = ch + _prefix
             } else
-                prefix = ch + prefix
+                _prefix = ch + _prefix
             i--
         }
 
         pageNum = Integer.parseInt(strNum.toString())
 
-        return prefix
+        return _prefix
     }
 
     override fun compareTo(other: IPage): Int {

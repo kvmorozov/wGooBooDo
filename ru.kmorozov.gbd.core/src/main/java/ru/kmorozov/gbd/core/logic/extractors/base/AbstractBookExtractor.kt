@@ -62,12 +62,8 @@ abstract class AbstractBookExtractor : AbstractHttpProcessor {
     protected constructor(bookId: String, storedLoader: IContextLoader? = ContextProvider.getContextProvider()) {
         this.bookId = bookId
 
-        val storedBookInfo = storedLoader?.getBookInfo(bookId)
-        try {
-            bookInfo = storedBookInfo ?: findBookInfo()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        val storedBookInfo = storedLoader!!.getBookInfo(bookId)
+        bookInfo = if (storedBookInfo == BookInfo.EMPTY_BOOK) findBookInfo() else storedBookInfo
     }
 
     @Throws(Exception::class)
