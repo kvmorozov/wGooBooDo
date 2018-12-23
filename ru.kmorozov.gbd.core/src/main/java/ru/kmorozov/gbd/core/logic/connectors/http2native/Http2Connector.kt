@@ -19,18 +19,7 @@ import java.util.concurrent.ConcurrentHashMap
 class Http2Connector : HttpConnector() {
 
     private fun getClient(proxy: HttpHostExt): HttpClient {
-        val key = getProxyKey(proxy)
-
-        var requestClient: HttpClient? = httpClientsMap[key]
-
-        if (null == requestClient)
-            synchronized(proxy) {
-                requestClient = HttpClient.newBuilder().proxy(ProxySelector.of(proxy.host)).build()
-
-                httpClientsMap.put(key, requestClient!!)
-            }
-
-        return requestClient!!
+        return httpClientsMap.computeIfAbsent(getProxyKey(proxy)) { HttpClient.newBuilder().proxy(ProxySelector.of(proxy.host)).build() }
     }
 
     @Throws(IOException::class)
