@@ -48,7 +48,7 @@ class GoogleHttpConnector : HttpConnector() {
                 return EMPTY_RESPONCE
             }
 
-            if (resp == EMPTY_RESPONCE)
+            if (resp.empty)
                 logger.finest(String.format("No response at url %s with proxy %s", rqUrl, proxy.toString()))
 
             return resp

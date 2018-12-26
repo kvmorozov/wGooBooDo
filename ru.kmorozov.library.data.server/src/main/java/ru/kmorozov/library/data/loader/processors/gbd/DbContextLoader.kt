@@ -53,7 +53,7 @@ class DbContextLoader : IContextLoader {
             for (page in info!!.pages.pages)
                 (page as AbstractPage).isFileExists = true
 
-            booksMap[bookId] = info!!
+            booksMap[bookId] = info
         }
         return info
     }

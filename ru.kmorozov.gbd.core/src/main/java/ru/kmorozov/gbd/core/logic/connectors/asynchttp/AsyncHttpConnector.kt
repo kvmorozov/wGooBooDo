@@ -25,48 +25,19 @@ import java.util.concurrent.TimeoutException
  */
 class AsyncHttpConnector : HttpConnector() {
 
-    private val BUILDER_LOCK = Any()
     private val clientsMap = ConcurrentHashMap<String, AsyncHttpClient>()
-    @Volatile
-    private var builder: DefaultAsyncHttpClientConfig.Builder? = null
-    private var nioEventLoopGroup: NioEventLoopGroup? = null
-    private var pool: DefaultChannelPool? = null
-    private var timer: HashedWheelTimer? = null
+    private val builder: DefaultAsyncHttpClientConfig.Builder
+
+    private val nioEventLoopGroup: NioEventLoopGroup
+    private val pool: DefaultChannelPool
+    private val timer: HashedWheelTimer
 
     private fun getClient(proxy: HttpHostExt): AsyncHttpClient {
-        val key = getProxyKey(proxy)
-        var client: AsyncHttpClient? = clientsMap[key]
-
-        if (null == builder)
-            synchronized(BUILDER_LOCK) {
-                if (null == builder) {
-                    nioEventLoopGroup = NioEventLoopGroup()
-
-                    builder = DefaultAsyncHttpClientConfig.Builder()
-                    timer = HashedWheelTimer()
-                    timer!!.start()
-                    builder!!.setNettyTimer(timer)
-                    builder!!.setThreadFactory(DefaultThreadFactory("asyncPool"))
-                    builder!!.setEventLoopGroup(nioEventLoopGroup)
-                    builder!!.setSslEngineFactory(DefaultSslEngineFactory())
-
-                    pool = DefaultChannelPool(Integer.MAX_VALUE, Integer.MAX_VALUE, timer, Integer.MAX_VALUE)
-                    builder!!.setChannelPool(pool)
-
-                    builder!!.setConnectTimeout(HttpConnector.CONNECT_TIMEOUT)
-                }
-            }
-
-        if (null == client)
-            synchronized(proxy) {
-                if (!proxy.isLocal)
-                    builder!!.setProxyServer(Builder(proxy.host.hostName, proxy.host.port).build())
-                client = DefaultAsyncHttpClient(builder!!.build())
-
-                clientsMap.put(key, client as DefaultAsyncHttpClient)
-            }
-
-        return client!!
+        return clientsMap.computeIfAbsent(getProxyKey(proxy), {
+            if (!proxy.isLocal)
+                builder.setProxyServer(Builder(proxy.host.hostName, proxy.host.port).build())
+            DefaultAsyncHttpClient(builder.build())
+        })
     }
 
     override fun getContent(url: String, proxy: HttpHostExt, withTimeout: Boolean): Response {
@@ -107,13 +78,27 @@ class AsyncHttpConnector : HttpConnector() {
             } catch (ignored: IOException) {
             }
 
-        if (null != nioEventLoopGroup)
-            nioEventLoopGroup!!.shutdownGracefully()
+        nioEventLoopGroup.shutdownGracefully()
 
-        if (null != pool)
-            pool!!.destroy()
+        pool.destroy()
 
-        if (null != timer)
-            timer!!.stop()
+        timer.stop()
+    }
+
+    init {
+        nioEventLoopGroup = NioEventLoopGroup()
+
+        builder = DefaultAsyncHttpClientConfig.Builder()
+        timer = HashedWheelTimer()
+        timer.start()
+        builder.setNettyTimer(timer)
+        builder.setThreadFactory(DefaultThreadFactory("asyncPool"))
+        builder.setEventLoopGroup(nioEventLoopGroup)
+        builder.setSslEngineFactory(DefaultSslEngineFactory())
+
+        pool = DefaultChannelPool(Integer.MAX_VALUE, Integer.MAX_VALUE, timer, Integer.MAX_VALUE)
+        builder.setChannelPool(pool)
+
+        builder.setConnectTimeout(HttpConnector.CONNECT_TIMEOUT)
     }
 }

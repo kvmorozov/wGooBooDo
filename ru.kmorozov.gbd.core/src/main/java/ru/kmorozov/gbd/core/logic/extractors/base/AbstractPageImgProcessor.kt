@@ -23,9 +23,9 @@ abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcesso
     override var uniqueObject: T
     protected val usedProxy: HttpHostExt
 
-    protected constructor(bookContext: BookContext, uniqueObject: AbstractPage, usedProxy: HttpHostExt) : super() {
+    protected constructor(bookContext: BookContext, uniqueObject: T, usedProxy: HttpHostExt) : super() {
         this.bookContext = bookContext
-        this.uniqueObject = uniqueObject as T
+        this.uniqueObject = uniqueObject
         this.usedProxy = usedProxy
         logger = ExecutionContext.INSTANCE.getLogger(javaClass, bookContext)
     }
@@ -44,7 +44,7 @@ abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcesso
         if (uniqueObject.isLoadingStarted) return false
 
         try {
-            getContent(imgUrl, proxy, false)!!.use { resp ->
+            getContent(imgUrl, proxy, false).use { resp ->
                 inputStream = resp.content
 
                 if (null == inputStream) {

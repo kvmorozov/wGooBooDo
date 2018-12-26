@@ -25,14 +25,14 @@ class ApacheHttpConnector : HttpConnector() {
 
         val response = getContent(ApacheConnections.INSTANCE.getClient(proxy, withTimeout), HttpGet(rqUrl), proxy, 0)
 
-        if (null == response) logger.finest(String.format("No response at url %s with proxy %s", rqUrl, proxy.toString()))
+        if (response.empty) logger.finest(String.format("No response at url %s with proxy %s", rqUrl, proxy.toString()))
 
-        return ApacheResponse(response as CloseableHttpResponse?)
+        return response
     }
 
-    private fun getContent(client: HttpClient?, req: HttpGet, proxy: HttpHostExt, attempt: Int): HttpResponse? {
-        var attempt = attempt
-        if (HttpConnector.MAX_RETRY_COUNT <= attempt) return null
+    private fun getContent(client: HttpClient, req: HttpGet, proxy: HttpHostExt, attempt: Int): Response {
+        var _attempt = attempt
+        if (HttpConnector.MAX_RETRY_COUNT <= attempt) return EMPTY_RESPONCE
 
         if (0 < attempt)
             try {
@@ -42,13 +42,13 @@ class ApacheHttpConnector : HttpConnector() {
             }
 
         try {
-            return client!!.execute(req)
+            return ApacheResponse(client.execute(req) as CloseableHttpResponse)
         } catch (ste1: SocketTimeoutException) {
             proxy.registerFailure()
-            return getContent(client, req, proxy, attempt++)
+            return getContent(client, req, proxy, ++_attempt)
         } catch (ex: Exception) {
             proxy.registerFailure()
-            return null
+            return EMPTY_RESPONCE
         }
 
     }

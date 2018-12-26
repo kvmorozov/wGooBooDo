@@ -23,20 +23,15 @@ import java.util.concurrent.TimeUnit
 class OkHttpConnector : HttpConnector() {
 
     private fun getFactory(proxy: HttpHostExt, withTimeout: Boolean): Call.Factory {
-        val key = getProxyKey(proxy)
-
-        val factoryMap = if (withTimeout) httpFactoryMapWithTimeout else httpFactoryMap
-
-        var requestFactory: OkHttpClient? = factoryMap[key]
-
-        if (null == requestFactory)
-            synchronized(proxy) {
-                requestFactory = OkHttpClient.Builder().proxy(proxy.proxy).connectTimeout((if (withTimeout) HttpConnector.CONNECT_TIMEOUT else HttpConnector.CONNECT_TIMEOUT * 10).toLong(), TimeUnit.MILLISECONDS).build()
-
-                factoryMap.put(key, requestFactory!!)
-            }
-
-        return requestFactory!!
+        return httpFactoryMap.computeIfAbsent(getProxyKey(proxy),
+                {
+                    OkHttpClient.Builder().proxy(proxy.proxy)
+                            .connectTimeout(
+                                    (if (withTimeout)
+                                        HttpConnector.CONNECT_TIMEOUT else
+                                        HttpConnector.CONNECT_TIMEOUT * 10).toLong(), TimeUnit.MILLISECONDS)
+                            .build()
+                })
     }
 
     @Throws(IOException::class)
@@ -53,20 +48,17 @@ class OkHttpConnector : HttpConnector() {
         val okHeaders = Headers.of(*headerItems.toTypedArray())
 
         val request = Builder().url(url).headers(okHeaders).build()
-        val response = getContent(request, proxy, withTimeout, 0)
-
-        return OkResponse(response!!)
+        return getContent(request, proxy, withTimeout, 0)
     }
 
     override fun close() {
 
     }
 
-
     @Throws(IOException::class)
-    private fun getContent(request: Request, proxy: HttpHostExt, withTimeout: Boolean, attempt: Int): okhttp3.Response? {
-        var attempt = attempt
-        if (HttpConnector.MAX_RETRY_COUNT <= attempt) return null
+    private fun getContent(request: Request, proxy: HttpHostExt, withTimeout: Boolean, attempt: Int): Response {
+        var _attempt = attempt
+        if (HttpConnector.MAX_RETRY_COUNT <= attempt) return EMPTY_RESPONCE
 
         if (0 < attempt)
             try {
@@ -76,17 +68,15 @@ class OkHttpConnector : HttpConnector() {
             }
 
         try {
-            return getFactory(proxy, withTimeout).newCall(request).execute()
+            return OkResponse(getFactory(proxy, withTimeout).newCall(request).execute())
         } catch (ste1: SocketTimeoutException) {
             proxy.registerFailure()
-            return getContent(request, proxy, withTimeout, ++attempt)
+            return getContent(request, proxy, withTimeout, ++_attempt)
         }
-
     }
 
     companion object {
         private val logger = Logger.getLogger(HttpConnector::class.java)
         private val httpFactoryMap = ConcurrentHashMap<String, OkHttpClient>()
-        private val httpFactoryMapWithTimeout = ConcurrentHashMap<String, OkHttpClient>()
     }
 }

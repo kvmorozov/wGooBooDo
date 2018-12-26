@@ -18,7 +18,7 @@ class LocalFSIndex(private val storage: LocalFSStorage, indexName: String, creat
         get() {
             lateinit var ctxObjArr: Array<BookInfo>
             try {
-                FileReader(indexFile).use { reader -> ctxObjArr = Mapper.getGson()!!.fromJson(reader, Array<BookInfo>::class.java) }
+                FileReader(indexFile).use { reader -> ctxObjArr = Mapper.gson.fromJson(reader, Array<BookInfo>::class.java) }
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -41,7 +41,7 @@ class LocalFSIndex(private val storage: LocalFSStorage, indexName: String, creat
 
     override fun updateIndex(books: List<IBookInfo>) {
         try {
-            FileWriter(indexFile).use { writer -> Mapper.getGson()!!.toJson(books, writer) }
+            FileWriter(indexFile).use { writer -> Mapper.gson.toJson(books, writer) }
         } catch (e: IOException) {
             e.printStackTrace()
         }

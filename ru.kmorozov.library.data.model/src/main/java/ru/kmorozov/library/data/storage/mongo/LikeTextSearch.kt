@@ -32,7 +32,7 @@ class LikeTextSearch(private val collectionName: String, private val mongoTempla
 
         private fun extractSearchResultIds(commandResult: Document): Collection<ObjectId> {
             val objectIds = HashSet<ObjectId>()
-            val resultList = commandResult["results"] as Iterable<*> ?: return emptyList()
+            val resultList = commandResult["results"] as Iterable<*>
 
             for (aResultList in resultList) {
                 val resultContainer = aResultList as BasicDBObject

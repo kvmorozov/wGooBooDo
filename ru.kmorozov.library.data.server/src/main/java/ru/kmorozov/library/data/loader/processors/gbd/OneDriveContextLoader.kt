@@ -18,26 +18,23 @@ class OneDriveContextLoader : IContextLoader {
 
     @Autowired
     @Lazy
-    private val api: OneDriveProvider? = null
+    private lateinit var api: OneDriveProvider
 
     @Autowired
     @Lazy
-    private val dbContextLoader: DbContextLoader? = null
+    private lateinit var dbContextLoader: DbContextLoader
 
-    private var booksMap: MutableMap<String, BookInfo>? = null
-    private var itemsMap: MutableMap<String, OneDriveItem>? = null
+    private var booksMap: MutableMap<String, BookInfo> = HashMap()
+    private var itemsMap: MutableMap<String, OneDriveItem> = HashMap()
 
     override val bookIdsList: Set<String>
-        get() = booksMap!!.keys
+        get() = booksMap.keys
 
     override val contextSize: Int
-        get() = booksMap!!.size
+        get() = booksMap.size
 
     override val isValid: Boolean
         get() {
-            if (api == null)
-                return false
-
             try {
                 return api.root != null
             } catch (e: IOException) {
@@ -48,16 +45,13 @@ class OneDriveContextLoader : IContextLoader {
         }
 
     internal fun initContext(root: OneDriveItem) {
-        booksMap = HashMap()
-        itemsMap = HashMap()
-
         try {
-            for (item in api!!.getChildren(root))
+            for (item in api.getChildren(root))
                 if (item.isDirectory) {
                     val nameTokens = item.name.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
                     val bookId = nameTokens[nameTokens.size - 1]
-                    booksMap!![bookId] = BookInfo.EMPTY_BOOK
-                    itemsMap!![bookId] = item
+                    booksMap[bookId] = BookInfo.EMPTY_BOOK
+                    itemsMap[bookId] = item
                 }
         } catch (e: IOException) {
             logger.error("Cannot init OneDriveContextLoader", e)
@@ -74,19 +68,15 @@ class OneDriveContextLoader : IContextLoader {
     }
 
     override fun updateBookInfo(bookInfo: BookInfo) {
-        dbContextLoader!!.updateBookInfo(bookInfo)
+        dbContextLoader.updateBookInfo(bookInfo)
     }
 
     override fun getBookInfo(bookId: String): BookInfo {
-        var bookInfo: BookInfo? = booksMap!![bookId]
-        if (bookInfo == null)
-            booksMap!![bookId] = GoogleBookInfoExtractor(bookId, dbContextLoader!!).bookInfo
-
-        return bookInfo!!
+        return booksMap.computeIfAbsent(bookId, { GoogleBookInfoExtractor(bookId, dbContextLoader).bookInfo })
     }
 
     fun getBookDir(bookId: String): OneDriveItem {
-        return itemsMap!![bookId]!!
+        return itemsMap[bookId]!!
     }
 
     override fun refreshContext() {

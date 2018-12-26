@@ -72,7 +72,7 @@ abstract class AbstractBookExtractor : AbstractHttpProcessor {
     protected fun getDocumentWithProxy(proxy: HttpHostExt): Document? {
         val resp = getContent(bookUrl, proxy, true)
 
-        if (null == resp)
+        if (resp.empty)
             return null
         else {
             try {

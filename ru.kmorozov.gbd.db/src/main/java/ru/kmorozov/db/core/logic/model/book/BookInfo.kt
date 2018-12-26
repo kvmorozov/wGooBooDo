@@ -37,7 +37,7 @@ class BookInfo : Serializable, ILoggableObject, IBookInfo {
             override val volumeId: String?
                 get() = "empty"
         }
-        this.pages = object: IPagesInfo {
+        this.pages = object : IPagesInfo {
             override val pages: Array<IPage>
                 get() = arrayOf<IPage>()
             override val missingPagesList: String
@@ -53,6 +53,9 @@ class BookInfo : Serializable, ILoggableObject, IBookInfo {
         }
         this.bookId = ""
     }
+
+    val empty: Boolean
+        get() = this == EMPTY_BOOK
 
     companion object {
         val EMPTY_BOOK: BookInfo = BookInfo()

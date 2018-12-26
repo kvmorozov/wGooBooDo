@@ -9,43 +9,43 @@ import ru.kmorozov.gbd.core.config.options.PdfOptions
  */
 object GBDOptions {
 
-    private var INSTANCE: IGBDOptions? = null
+    private lateinit var INSTANCE: IGBDOptions
 
     val bookId: String
-        get() = INSTANCE!!.bookId
+        get() = INSTANCE.bookId
 
     val storage: IStorage
-        get() = INSTANCE!!.storage
+        get() = INSTANCE.storage
 
     val proxyListFile: String?
-        get() = INSTANCE!!.proxyListFile
+        get() = INSTANCE.proxyListFile
 
     val imageWidth: Int
-        get() = INSTANCE!!.imageWidth
+        get() = INSTANCE.imageWidth
 
     val isValidConfig: Boolean
-        get() = INSTANCE!!.storage.isValidOrCreate
+        get() = INSTANCE.storage.isValidOrCreate
 
     val ctxOptions: CtxOptions
-        get() = INSTANCE!!.ctxOptions()
+        get() = INSTANCE.ctxOptions()
 
     fun init(optionHolder: IGBDOptions) {
         INSTANCE = optionHolder
     }
 
     fun reloadImages(): Boolean {
-        return INSTANCE!!.reloadImages()
+        return INSTANCE.reloadImages()
     }
 
     fun secureMode(): Boolean {
-        return INSTANCE!!.secureMode()
+        return INSTANCE.secureMode()
     }
 
     fun pdfOptions(): PdfOptions {
-        return if (StringUtils.isEmpty(INSTANCE!!.pdfOptions())) PdfOptions.DEFAULT_MODE else PdfOptions.getOption(INSTANCE!!.pdfOptions())
+        return if (StringUtils.isEmpty(INSTANCE.pdfOptions())) PdfOptions.DEFAULT_MODE else PdfOptions.getOption(INSTANCE.pdfOptions())
     }
 
     fun getImageWidth(defaultValue: Int): Int {
-        return if (0 == INSTANCE!!.imageWidth) defaultValue else INSTANCE!!.imageWidth
+        return if (0 == INSTANCE.imageWidth) defaultValue else INSTANCE.imageWidth
     }
 }

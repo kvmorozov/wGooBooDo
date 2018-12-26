@@ -61,7 +61,7 @@ open class LocalFSStorage(storageDirName: String) : IStorage {
     override fun getChildStorage(bookData: IBookData): IStorage {
         try {
             val optPath = Files.find(storageDir.toPath(), 1,
-                    BiPredicate<Path, BasicFileAttributes> { path, basicFileAttributes -> path.toString().contains(bookData.volumeId!!) }).findAny()
+                    BiPredicate<Path, BasicFileAttributes> { path, _ -> path.toString().contains(bookData.volumeId!!) }).findAny()
             if (optPath.isPresent) return LocalFSStorage(optPath.get().toString())
         } catch (ignored: IOException) {
         }
@@ -101,7 +101,7 @@ open class LocalFSStorage(storageDirName: String) : IStorage {
 
     @Throws(IOException::class)
     override fun restoreState(bookInfo: IBookInfo) {
-        val items = items ?: return
+        val items = items
 
         val imgWidth = if (0 == GBDOptions.imageWidth) DEFAULT_PAGE_WIDTH else GBDOptions.imageWidth
 

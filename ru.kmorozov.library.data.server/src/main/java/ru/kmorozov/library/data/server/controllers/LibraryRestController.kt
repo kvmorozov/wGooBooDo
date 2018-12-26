@@ -22,16 +22,16 @@ class LibraryRestController {
 
     @Autowired
     @Lazy
-    private val gbdProcessor: GbdLocalProcessor? = null
+    private lateinit var gbdProcessor: GbdLocalProcessor
 
     @RequestMapping("/gbdUpdate")
     fun gbdUpdate() {
-        gbdProcessor!!.process()
+        gbdProcessor.process()
     }
 
     @RequestMapping("/gbdLoadLocal")
     fun gbdLoad(@RequestParam(name = "bookId", required = false) bookId: String) {
-        gbdProcessor!!.load(bookId)
+        gbdProcessor.load(bookId)
     }
 
     companion object {

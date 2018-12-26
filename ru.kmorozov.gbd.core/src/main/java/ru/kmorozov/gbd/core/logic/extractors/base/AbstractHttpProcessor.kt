@@ -4,26 +4,26 @@ import com.google.api.client.http.HttpStatusCodes
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
 import ru.kmorozov.gbd.core.logic.connectors.Response
+import ru.kmorozov.gbd.core.logic.connectors.Response.Companion.EMPTY_RESPONCE
 import ru.kmorozov.gbd.core.logic.connectors.ResponseException
 import ru.kmorozov.gbd.core.logic.library.LibraryFactory
-
-import javax.net.ssl.SSLException
 import java.io.IOException
 import java.net.SocketException
-import java.util.ArrayList
+import javax.net.ssl.SSLException
 
 /**
  * Created by km on 05.12.2015.
  */
 open class AbstractHttpProcessor {
 
-    protected fun getContent(rqUrl: String, proxy: HttpHostExt, withTimeout: Boolean): Response? {
+    protected fun getContent(rqUrl: String, proxy: HttpHostExt, withTimeout: Boolean): Response {
         try {
-            var resp: Response? = null
-            for (connector in getConnectors()!!) {
+            var resp: Response = EMPTY_RESPONCE
+            for (connector in connectors) {
                 resp = connector.getContent(rqUrl, proxy, withTimeout)
-                resp = if (proxy.isLocal) resp else resp ?: getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout)
-                if (null != resp)
+                resp = if (proxy.isLocal) resp else
+                    if (resp.empty) getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout) else resp
+                if (!resp.empty)
                     return resp
             }
 
@@ -35,51 +35,36 @@ open class AbstractHttpProcessor {
                 else -> re.printStackTrace()
             }
 
-            return if (proxy.isLocal) null else getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout)
+            return if (proxy.isLocal) EMPTY_RESPONCE else getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout)
         } catch (se: SocketException) {
             proxy.registerFailure()
-            return if (proxy.isLocal) null else getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout)
+            return if (proxy.isLocal) EMPTY_RESPONCE else getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout)
         } catch (se: SSLException) {
             proxy.registerFailure()
-            return if (proxy.isLocal) null else getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout)
+            return if (proxy.isLocal) EMPTY_RESPONCE else getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout)
         } catch (ioe: IOException) {
             proxy.registerFailure()
 
             // Если что-то более специфическое
             if (ioe.javaClass != IOException::class.java) ioe.printStackTrace()
 
-            return if (proxy.isLocal) null else getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout)
+            return if (proxy.isLocal) EMPTY_RESPONCE else getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout)
         } catch (ex: Exception) {
             ex.printStackTrace()
-            return null
+            return EMPTY_RESPONCE
         }
 
     }
 
     companion object {
 
-        private var connectors: List<HttpConnector>? = null
+        public val connectors: List<HttpConnector>
+            get() = LibraryFactory.preferredConnectors()
+
         private val LOCK = Any()
 
-        private fun getConnectors(): List<HttpConnector>? {
-            if (null == connectors || connectors!!.isEmpty())
-                synchronized(LOCK) {
-                    if (null == connectors || connectors!!.isEmpty())
-                        connectors = LibraryFactory.preferredConnectors()
-                }
-
-            return connectors
-        }
-
         fun close() {
-            for (connector in getConnectors()!!) {
-                try {
-                    connector.close()
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-
-            }
+            connectors.forEach(HttpConnector::close)
         }
     }
 }

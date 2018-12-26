@@ -57,12 +57,12 @@ class Book {
         this.author = author
     }
 
-    override fun equals(o: Any?): Boolean {
-        if (this === o) return true
-        if (null == o || javaClass != o.javaClass) return false
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (null == other || javaClass != other.javaClass) return false
         if (null == title) return false
 
-        val book = o as Book?
+        val book = other as Book?
 
         return if (title != book!!.title) false else author == book.author
     }

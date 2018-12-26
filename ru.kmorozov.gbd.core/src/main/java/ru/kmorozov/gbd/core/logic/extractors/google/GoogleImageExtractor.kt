@@ -67,7 +67,7 @@ class GoogleImageExtractor(bookContext: BookContext) : AbstractImageExtractor(bo
 
                 uniqueObject.imgExecutor.terminate(10L, TimeUnit.MINUTES)
 
-                logger.info(uniqueObject.bookInfo!!.pages.missingPagesList)
+                logger.info(uniqueObject.bookInfo.pages.missingPagesList)
 
                 val pagesAfter = uniqueObject.pagesStream.filter { pageInfo -> pageInfo.isDataProcessed }.count()
 

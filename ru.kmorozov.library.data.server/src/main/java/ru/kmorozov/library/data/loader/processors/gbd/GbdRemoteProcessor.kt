@@ -7,28 +7,22 @@ import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Conditional
 import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Component
-import ru.kmorozov.db.core.logic.model.book.BookInfo
 import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.logic.context.ContextProvider
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
 import ru.kmorozov.gbd.logger.Logger
 import ru.kmorozov.gbd.logger.output.DummyReceiver
 import ru.kmorozov.library.data.loader.processors.IGbdProcessor
-import ru.kmorozov.library.data.model.book.Book
-import ru.kmorozov.library.data.model.book.IdType
-import ru.kmorozov.library.data.model.book.Storage
-import ru.kmorozov.library.data.repository.BooksRepository
-import ru.kmorozov.library.data.repository.StorageRepository
-import ru.kmorozov.library.data.server.options.ServerGBDOptions
-import ru.kmorozov.library.data.server.condition.StorageEnabledCondition
-import ru.kmorozov.onedrive.client.OneDriveItem
-import ru.kmorozov.onedrive.client.OneDriveProvider
-
-import java.io.IOException
-import java.util.Optional
-
 import ru.kmorozov.library.data.model.book.BookInfo.BookFormat.PDF
 import ru.kmorozov.library.data.model.book.BookInfo.BookType.GOOGLE_BOOK
+import ru.kmorozov.library.data.model.book.IdType
+import ru.kmorozov.library.data.repository.BooksRepository
+import ru.kmorozov.library.data.repository.StorageRepository
+import ru.kmorozov.library.data.server.condition.StorageEnabledCondition
+import ru.kmorozov.library.data.server.options.ServerGBDOptions
+import ru.kmorozov.onedrive.client.OneDriveItem
+import ru.kmorozov.onedrive.client.OneDriveProvider
+import java.io.IOException
 
 @Component
 @ComponentScan(basePackageClasses = arrayOf(OneDriveContextLoader::class, ServerProducer::class, DbContextLoader::class, ServerGBDOptions::class))
@@ -95,7 +89,7 @@ class GbdRemoteProcessor : IGbdProcessor {
         if (!ctx.bookIdsList.isEmpty())
             for (bookId in ctx.bookIdsList) {
                 val bookInfo = ctx.getBookInfo(bookId)
-                if (bookInfo != null) {
+                if (bookInfo.empty) {
                     val dirItem = ctx.getBookDir(bookId)
                     val storage = storageRepository!!.findByUrl(dirItem.id!!)
                     val opBook = booksRepository!!.findAllByStorage(storage!!)

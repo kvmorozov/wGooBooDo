@@ -1,6 +1,7 @@
 package ru.kmorozov.gbd.core.logic.extractors.google
 
 import com.google.gson.JsonParseException
+import org.apache.commons.lang3.StringUtils
 import org.apache.commons.lang3.builder.EqualsBuilder
 import org.apache.commons.lang3.builder.HashCodeBuilder
 import org.apache.hc.core5.http.NoHttpResponseException
@@ -20,7 +21,6 @@ import ru.kmorozov.gbd.core.logic.extractors.base.AbstractHttpProcessor
 import ru.kmorozov.gbd.core.logic.extractors.base.IUniqueRunnable
 import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage
 import ru.kmorozov.gbd.utils.QueuedThreadPoolExecutor
-import java.io.IOException
 import java.net.SocketException
 import java.net.SocketTimeoutException
 import java.nio.charset.Charset
@@ -89,33 +89,33 @@ internal class GooglePageSigProcessor : AbstractHttpProcessor, IUniqueRunnable<G
             if (uniqueObject.isDataProcessed || null != uniqueObject.sig || uniqueObject.isSigChecked || uniqueObject.isLoadingStarted)
                 return
 
-            var resp: Response? = null
+            var resp: Response = Response.EMPTY_RESPONCE
             val baseUrl = HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, bookContext.bookInfo.bookId)
             val rqUrl = baseUrl + PAGES_REQUEST_TEMPLATE.replace(RQ_PG_PLACEHOLDER, uniqueObject.pid)
 
             try {
                 resp = getContent(rqUrl, proxy, true)
-                if (null == resp) {
+                if (resp.empty) {
                     logger.finest(String.format(SIG_ERROR_TEMPLATE, rqUrl, proxy.toString()))
                     return
                 }
 
                 var respStr: String? = null
                 try {
-                    resp.content.use { `is` -> respStr = String(`is`.readAllBytes(), Charset.defaultCharset()) }
+                    resp.content.use { respStr = String(it.readAllBytes(), Charset.defaultCharset()) }
                 } catch (se: SocketException) {
 
                 } catch (se: SSLException) {
                 }
 
-                if (respStr!!.isBlank()) {
+                if (StringUtils.isEmpty(respStr)) {
                     logger.finest(String.format(SIG_ERROR_TEMPLATE, rqUrl, proxy.toString()))
                     return
                 }
 
                 var framePages: GooglePagesInfo? = null
                 try {
-                    framePages = Mapper.getGson()!!.fromJson(respStr, GooglePagesInfo::class.java)
+                    framePages = Mapper.gson.fromJson(respStr, GooglePagesInfo::class.java)
                 } catch (jpe: JsonParseException) {
                     logger.severe("Invalid JSON string: " + respStr!!)
                 }
@@ -168,12 +168,7 @@ internal class GooglePageSigProcessor : AbstractHttpProcessor, IUniqueRunnable<G
             } catch (ex: Exception) {
                 ex.printStackTrace()
             } finally {
-                try {
-                    resp?.close()
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-
+                resp.close()
             }
         }
     }

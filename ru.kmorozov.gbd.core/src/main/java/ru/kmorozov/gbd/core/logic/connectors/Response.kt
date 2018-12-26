@@ -13,6 +13,9 @@ interface Response : Closeable {
 
     val imageFormat: String
 
+    val empty: Boolean
+        get() = this == EMPTY_RESPONCE
+
     companion object {
         val EMPTY_RESPONCE: Response = object : Response {
             override val content: InputStream

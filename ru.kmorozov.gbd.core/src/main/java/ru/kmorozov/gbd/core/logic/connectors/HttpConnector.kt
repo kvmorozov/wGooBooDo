@@ -24,7 +24,7 @@ abstract class HttpConnector : AutoCloseable {
     @Throws(IOException::class)
     fun getHtmlDocument(url: String, proxy: HttpHostExt, withTimeout: Boolean): Document {
         try {
-            val response = getContent(url, proxy, withTimeout) ?: throw IOException("Cannot get document!")
+            val response = getContent(url, proxy, withTimeout)
 
             return parser.parseInput(StringReader(String(response.content.readAllBytes(), Charset.forName("UTF-8"))), url)
         } finally {
@@ -35,9 +35,9 @@ abstract class HttpConnector : AutoCloseable {
     @Throws(IOException::class)
     fun getJsonMapDocument(url: String, proxy: HttpHostExt, withTimeout: Boolean): Map<String, String> {
         try {
-            val response = getContent(url, proxy, withTimeout) ?: throw IOException("Cannot get document!")
+            val response = getContent(url, proxy, withTimeout)
 
-            return Mapper.getGson()!!.fromJson(String(response.content.readAllBytes(), Charset.forName("UTF-8")), Mapper.mapType)
+            return Mapper.gson.fromJson(String(response.content.readAllBytes(), Charset.forName("UTF-8")), Mapper.mapType)
         } finally {
             proxy.updateTimestamp()
         }
@@ -46,7 +46,7 @@ abstract class HttpConnector : AutoCloseable {
     @Throws(IOException::class)
     fun getString(url: String, proxy: HttpHostExt, withTimeout: Boolean): String {
         try {
-            val response = getContent(url, proxy, withTimeout) ?: throw IOException("Cannot get document!")
+            val response = getContent(url, proxy, withTimeout)
 
             return String(response.content.readAllBytes(), Charset.forName("UTF-8"))
         } finally {

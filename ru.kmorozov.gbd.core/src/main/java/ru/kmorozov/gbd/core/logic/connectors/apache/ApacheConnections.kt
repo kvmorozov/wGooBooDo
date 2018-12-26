@@ -4,7 +4,6 @@ import org.apache.hc.client5.http.classic.HttpClient
 import org.apache.hc.client5.http.config.RequestConfig
 import org.apache.hc.client5.http.cookie.BasicCookieStore
 import org.apache.hc.client5.http.cookie.CookieStore
-import org.apache.hc.client5.http.cookie.SetCookie
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient
 import org.apache.hc.client5.http.impl.classic.HttpClientBuilder
 import org.apache.hc.client5.http.impl.cookie.BasicClientCookie
@@ -12,12 +11,11 @@ import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager
 import org.apache.hc.core5.http.HttpHost
 import org.apache.hc.core5.ssl.SSLContextBuilder
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt
+import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt.Companion.NO_PROXY
 import ru.kmorozov.gbd.core.logic.Proxy.UrlType
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
 import ru.kmorozov.gbd.core.logic.library.LibraryFactory
 import ru.kmorozov.gbd.utils.HttpConnections
-
-import javax.net.ssl.SSLContext
 import java.io.Closeable
 import java.io.IOException
 import java.util.concurrent.ConcurrentHashMap
@@ -29,10 +27,12 @@ import java.util.concurrent.TimeUnit
 class ApacheConnections private constructor() {
     private val builder: HttpClientBuilder
     private val builderWithTimeout: HttpClientBuilder
-    private val clientsMap = ConcurrentHashMap<HttpHost, HttpClient>()
-    private val withTimeoutClientsMap = ConcurrentHashMap<HttpHost, HttpClient>()
-    private val cookieStoreMap = ConcurrentHashMap<HttpHostExt, CookieStore>()
-    private var noProxyClient: CloseableHttpClient? = null
+    private val clientsMap = ConcurrentHashMap<HttpHost, CloseableHttpClient>()
+    private val withTimeoutClientsMap: MutableMap<HttpHost, CloseableHttpClient> = ConcurrentHashMap<HttpHost, CloseableHttpClient>()
+    private val cookieStoreMap: MutableMap<HttpHostExt, CookieStore> = ConcurrentHashMap<HttpHostExt, CookieStore>()
+    private val noProxyClient: CloseableHttpClient
+    private val noProxyClientWithTimeout: CloseableHttpClient
+    private val defaultCookieStore: CookieStore
 
     init {
         val connPool = PoolingHttpClientConnectionManager()
@@ -51,6 +51,11 @@ class ApacheConnections private constructor() {
             ex.printStackTrace()
         }
 
+        defaultCookieStore = getCookieStore(NO_PROXY)
+
+        noProxyClient = builder.setDefaultCookieStore(defaultCookieStore).build()
+        noProxyClientWithTimeout = builderWithTimeout.setDefaultCookieStore(defaultCookieStore).build()
+
         val requestConfig = RequestConfig.copy(RequestConfig.DEFAULT)
                 .setConnectTimeout(HttpConnector.CONNECT_TIMEOUT.toLong(), TimeUnit.MILLISECONDS)
                 .setConnectionRequestTimeout(HttpConnector.CONNECT_TIMEOUT.toLong(), TimeUnit.MILLISECONDS).build()
@@ -58,30 +63,28 @@ class ApacheConnections private constructor() {
         builderWithTimeout.setDefaultRequestConfig(requestConfig)
     }
 
-    fun getClient(proxy: HttpHostExt, withTimeout: Boolean): HttpClient? {
-        val _builder = if (withTimeout) builderWithTimeout else builder
-        _builder.setDefaultCookieStore(getCookieStore(proxy))
-
+    fun getClient(proxy: HttpHostExt, withTimeout: Boolean): HttpClient {
         if (proxy.isLocal) {
-            if (null == noProxyClient) noProxyClient = _builder.build()
-
-            return noProxyClient
+            return if (withTimeout) noProxyClientWithTimeout else noProxyClient
         } else {
             val _map = if (withTimeout) withTimeoutClientsMap else clientsMap
 
+            val _builder = if (withTimeout) builderWithTimeout else builder
+            _builder.setDefaultCookieStore(getCookieStore(proxy))
+
             val host = HttpHost(proxy.host.address)
 
-            return (_map as java.util.Map<HttpHost, HttpClient>).computeIfAbsent(host) { _builder.setProxy(host).build() }
+            return _map.computeIfAbsent(host) { _builder.setProxy(host).build() }
         }
     }
 
     fun closeAllConnections() {
         try {
-            if (null != noProxyClient) noProxyClient!!.close()
+            noProxyClient.close()
+            noProxyClientWithTimeout.close()
 
-            if (null != clientsMap)
-                for (client in clientsMap.values)
-                    (client as Closeable).close()
+            for (client in clientsMap.values)
+                (client as Closeable).close()
         } catch (e: IOException) {
             e.printStackTrace()
         }
@@ -89,29 +92,22 @@ class ApacheConnections private constructor() {
     }
 
     private fun getCookieStore(proxy: HttpHostExt): CookieStore {
-        var cookieStore: CookieStore = cookieStoreMap[proxy] ?: throw RuntimeException()
+        return cookieStoreMap.computeIfAbsent(proxy) {
+            val cookieStore = BasicCookieStore()
+            val cookies = proxy.getHeaders(UrlType.GOOGLE_BOOKS).cookie.split(";".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 
-        if (null == cookieStore) {
-            synchronized(proxy) {
-                cookieStore = BasicCookieStore()
-                val cookies = proxy.getHeaders(UrlType.GOOGLE_BOOKS).cookie.split(";".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+            for (cookieEntry in cookies) {
+                val cookieParts = cookieEntry.split("=".toRegex(), 2).toTypedArray()
 
-                for (cookieEntry in cookies) {
-                    val cookieParts = cookieEntry.split("=".toRegex(), 2).toTypedArray()
-
-                    if (1 < cookieParts.size && LibraryFactory.needSetCookies()) {
-                        val cookie = BasicClientCookie(cookieParts[0], cookieParts[1])
-                        cookie.domain = ".google.ru"
-                        cookie.path = "/"
-                        cookieStore.addCookie(cookie)
-                    }
+                if (1 < cookieParts.size && LibraryFactory.needSetCookies()) {
+                    val cookie = BasicClientCookie(cookieParts[0], cookieParts[1])
+                    cookie.domain = ".google.ru"
+                    cookie.path = "/"
+                    cookieStore.addCookie(cookie)
                 }
-
-                cookieStoreMap.put(proxy, cookieStore as BasicCookieStore)
             }
+            cookieStore
         }
-
-        return cookieStore
     }
 
     companion object {

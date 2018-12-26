@@ -1,7 +1,5 @@
 package ru.kmorozov.gbd.client
 
-import org.apache.commons.lang3.StringUtils
-import ru.kmorozov.db.utils.Mapper
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractHttpProcessor
 import ru.kmorozov.gbd.logger.Logger
@@ -37,7 +35,7 @@ abstract class AbstractRestClient : AbstractHttpProcessor() {
     private fun getRawResult(rqUrl: String): String {
         try {
             val resp = getContent(rqUrl, HttpHostExt.NO_PROXY, true)
-            if (null == resp || null == resp.content) {
+            if (resp.empty) {
                 logger.info("Rest service is unavailable!")
                 throw RestServiceUnavailableException()
             }
@@ -57,32 +55,6 @@ abstract class AbstractRestClient : AbstractHttpProcessor() {
             throw RestServiceUnavailableException()
         }
 
-    }
-
-    protected fun <T> getCallResult(operation: String, resultClass: Class<T>, vararg parameters: RestParam): T? {
-        val rqUrl = StringBuilder(restServiceBaseUrl + operation)
-
-        if (null != parameters && 0 < parameters.size) {
-            rqUrl.append('?')
-            for (param in parameters)
-                rqUrl.append(param.paramName).append('=').append(param.value).append('&')
-        }
-
-        val rawResult: String
-
-        try {
-            rawResult = getRawResult(rqUrl.toString())
-        } catch (e: RestServiceUnavailableException) {
-            logger.finest(String.format("Service %s call failed!", operation))
-            return if (resultClass == Boolean::class.java) java.lang.Boolean.FALSE as T else null
-        }
-
-        if (StringUtils.isEmpty(rawResult)) {
-            logger.finest(String.format("Service %s call failed!", operation))
-            return null
-        }
-
-        return Mapper.getGson()!!.fromJson(rawResult, resultClass)
     }
 
     companion object {

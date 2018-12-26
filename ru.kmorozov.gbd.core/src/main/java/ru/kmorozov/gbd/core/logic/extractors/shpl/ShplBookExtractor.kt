@@ -49,7 +49,7 @@ class ShplBookExtractor(bookId: String) : AbstractBookExtractor(bookId) {
                 if (data.contains(JSON_TAG_PAGES)) {
                     val pagesData = '['.toString() + data.split("[|]".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[2].split("[\\[\\]]".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[3] + ']'.toString()
 
-                    val pages = Mapper.getGson()!!.fromJson(pagesData, Array<ShplPage>::class.java) as Array<IPage>
+                    val pages = Mapper.gson.fromJson(pagesData, Array<ShplPage>::class.java) as Array<IPage>
                     for (i in 1..pages.size)
                         (pages[i - 1] as ShplPage).order = i
                     pagesInfo = ShplPagesInfo(pages)
