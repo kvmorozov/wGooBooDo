@@ -16,14 +16,18 @@ class LocalFSIndex(private val storage: LocalFSStorage, indexName: String, creat
 
     override val books: Array<IBookInfo>
         get() {
-            lateinit var ctxObjArr: Array<BookInfo>
-            try {
-                FileReader(indexFile).use { reader -> ctxObjArr = Mapper.gson.fromJson(reader, Array<BookInfo>::class.java) }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+            if (indexFile.exists()) {
+                lateinit var ctxObjArr: Array<BookInfo>
+                try {
+                    FileReader(indexFile).use { reader -> ctxObjArr = Mapper.gson.fromJson(reader, Array<BookInfo>::class.java) }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
 
-            return ctxObjArr as Array<IBookInfo>
+                return ctxObjArr as Array<IBookInfo>
+            }
+            else
+                return arrayOf(BookInfo.EMPTY_BOOK)
         }
 
     init {
