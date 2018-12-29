@@ -23,7 +23,7 @@ class ServerStorage(private val api: OneDriveProvider, private val root: OneDriv
     override val isValidOrCreate: Boolean
         get() = root != null && root.isDirectory
 
-    override val bookIdsList: Set<String>?
+    override val bookIdsList: Set<String>
         @Throws(IOException::class)
         get() {
             val bookIdsList = HashSet<String>()
@@ -84,8 +84,8 @@ class ServerStorage(private val api: OneDriveProvider, private val root: OneDriv
         children = null
     }
 
-    override fun getIndex(indexName: String, createIfNotExists: Boolean): IIndex? {
-        return null
+    override fun getIndex(indexName: String, createIfNotExists: Boolean): IIndex {
+        return null!!
     }
 
     override fun restoreState(bookInfo: IBookInfo) {

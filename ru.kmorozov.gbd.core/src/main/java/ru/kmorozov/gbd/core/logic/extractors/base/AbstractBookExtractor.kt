@@ -6,6 +6,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import ru.kmorozov.db.core.config.IContextLoader
 import ru.kmorozov.db.core.logic.model.book.BookInfo
+import ru.kmorozov.db.core.logic.model.book.BookInfo.Companion.EMPTY_BOOK
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.context.ContextProvider
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
@@ -59,11 +60,11 @@ abstract class AbstractBookExtractor : AbstractHttpProcessor {
     constructor() {}
 
     @JvmOverloads
-    protected constructor(bookId: String, storedLoader: IContextLoader? = ContextProvider.getContextProvider()) {
+    protected constructor(bookId: String, storedLoader: IContextLoader? = ContextProvider.contextProvider) {
         this.bookId = bookId
 
-        val storedBookInfo = storedLoader!!.getBookInfo(bookId)
-        bookInfo = if (storedBookInfo == BookInfo.EMPTY_BOOK) findBookInfo() else storedBookInfo
+        val storedBookInfo = if (storedLoader == null) EMPTY_BOOK else storedLoader.getBookInfo(bookId)
+        bookInfo = if ((storedBookInfo as BookInfo).empty) findBookInfo() else storedBookInfo
     }
 
     @Throws(Exception::class)
@@ -87,6 +88,6 @@ abstract class AbstractBookExtractor : AbstractHttpProcessor {
     }
 
     companion object {
-        protected val logger = ExecutionContext.INSTANCE.getLogger(AbstractBookExtractor::class.java)
+        protected val logger = ExecutionContext.getLogger(AbstractBookExtractor::class.java)
     }
 }

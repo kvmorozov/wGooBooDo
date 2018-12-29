@@ -11,7 +11,7 @@ interface IStorage {
 
     val isValidOrCreate: Boolean
 
-    val bookIdsList: Set<String>?
+    val bookIdsList: Set<String>
 
     val items: Stream<IStoredItem>?
 
@@ -29,7 +29,7 @@ interface IStorage {
 
     fun refresh()
 
-    fun getIndex(indexName: String, createIfNotExists: Boolean): IIndex?
+    fun getIndex(indexName: String, createIfNotExists: Boolean): IIndex
 
     @Throws(IOException::class)
     fun restoreState(bookInfo: IBookInfo)

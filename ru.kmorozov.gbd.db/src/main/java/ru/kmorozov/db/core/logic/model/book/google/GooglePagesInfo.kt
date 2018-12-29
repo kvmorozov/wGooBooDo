@@ -39,11 +39,11 @@ class GooglePagesInfo : IPagesInfo, Serializable {
     @Transient
     private var pagesMap: MutableMap<String, IPage> = HashMap()
     @Transient
-    private var pagesList: LinkedList<IPage>? = null
+    private var pagesList: LinkedList<IPage> = LinkedList()
 
     private fun addPage(page: IPage) {
         pagesMap[page.pid] = page
-        pagesList!!.add(page)
+        pagesList.add(page)
     }
 
     override fun build() {
@@ -66,7 +66,7 @@ class GooglePagesInfo : IPagesInfo, Serializable {
     }
 
     private fun fillGap(beginGap: GooglePageInfo, endGap: GooglePageInfo) {
-        val logger = Logger(DummyReceiver(), "gapFinder", ": ")
+        val logger = Logger(DummyReceiver.INSTANCE, "gapFinder", ": ")
 
         if (beginGap.isGapPage || endGap.isGapPage) return
 
@@ -118,7 +118,7 @@ class GooglePagesInfo : IPagesInfo, Serializable {
             }
         }
 
-        pagesList!!.sortWith(Comparator { obj, anotherPage -> obj.compareTo(anotherPage) })
+        pagesList.sortWith(Comparator { obj, anotherPage -> obj.compareTo(anotherPage) })
     }
 
     override fun getPageByPid(pid: String): GooglePageInfo? {
@@ -136,10 +136,10 @@ class GooglePagesInfo : IPagesInfo, Serializable {
         var blockStart: IPage? = null
         var prevPage: IPage? = null
 
-        val filteredCount = pagesList!!.stream().filter(condition).count()
-        val lastPage = pagesList!!.last
+        val filteredCount = pagesList.stream().filter(condition).count()
+        val lastPage = pagesList.last
 
-        for (currentPage in pagesList!!) {
+        for (currentPage in pagesList) {
             if (condition.test(currentPage))
                 if (null == blockStart) {
                     blockStart = currentPage
@@ -166,7 +166,7 @@ class GooglePagesInfo : IPagesInfo, Serializable {
 
         if (0 < bList.length) {
             bList.deleteCharAt(bList.length - 1).deleteCharAt(bList.length - 1)
-            bList.append(String.format(". Total = %d/%d", filteredCount, pagesList!!.size))
+            bList.append(String.format(". Total = %d/%d", filteredCount, pagesList.size))
         }
 
         return bList.toString()

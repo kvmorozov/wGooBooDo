@@ -18,7 +18,7 @@ internal object Main {
             GBDOptions.init(CommandLineOptions(args))
 
             val producer = OptionsBasedProducer()
-            ExecutionContext.initContext(DummyReceiver(), 1 == producer.bookIds.size)
+            ExecutionContext.initContext(DummyReceiver.INSTANCE, 1 == producer.bookIds.size)
             ExecutionContext.INSTANCE.addBookContext(producer, ProcessStatus(), PdfMaker())
 
             ExecutionContext.INSTANCE.execute()

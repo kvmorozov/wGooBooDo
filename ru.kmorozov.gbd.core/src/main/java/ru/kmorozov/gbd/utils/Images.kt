@@ -17,7 +17,7 @@ import java.nio.file.Path
  */
 object Images {
 
-    private val logger = ExecutionContext.INSTANCE.getLogger(Images::class.java)
+    private val logger = ExecutionContext.getLogger(Images::class.java)
 
     fun isImageFile(filePath: Path): Boolean {
         if (!Files.isRegularFile(filePath)) return false

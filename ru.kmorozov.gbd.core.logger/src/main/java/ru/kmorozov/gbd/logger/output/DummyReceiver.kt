@@ -15,4 +15,8 @@ class DummyReceiver : AbstractOutputReceiver() {
     override fun receive(bookInfo: ILoggableObject) {
 
     }
+
+    companion object {
+        val INSTANCE = DummyReceiver()
+    }
 }

@@ -17,7 +17,7 @@ open class GbdTestBase {
         val options = Mockito.mock(IGBDOptions::class.java)
         Mockito.`when`(options.secureMode()).thenReturn(false)
 
-        ExecutionContext.initContext(DummyReceiver(), true)
+        ExecutionContext.initContext(DummyReceiver.INSTANCE, true)
 
         GBDOptions.init(options)
     }

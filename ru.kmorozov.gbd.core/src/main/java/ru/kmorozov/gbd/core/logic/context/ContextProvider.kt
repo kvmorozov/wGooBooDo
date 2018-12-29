@@ -3,6 +3,7 @@ package ru.kmorozov.gbd.core.logic.context
 import ru.kmorozov.db.core.config.IContextLoader
 import ru.kmorozov.gbd.core.loader.DirContextLoader
 import ru.kmorozov.db.core.logic.model.book.BookInfo
+import ru.kmorozov.gbd.core.logic.model.book.base.IBookInfo
 
 /**
  * Created by sbt-morozov-kv on 02.12.2016.
@@ -30,7 +31,7 @@ class ContextProvider(protected var loader: IContextLoader) : IContextLoader {
         loader.updateBookInfo(bookInfo)
     }
 
-    override fun getBookInfo(bookId: String): BookInfo {
+    override fun getBookInfo(bookId: String): IBookInfo {
         return loader.getBookInfo(bookId)
     }
 
@@ -43,34 +44,28 @@ class ContextProvider(protected var loader: IContextLoader) : IContextLoader {
         private const val DB_CTX_PROVIDER_CLASS_NAME = "ru.kmorozov.library.data.loader.processors.gbd.DbContextLoader"
 
         private val LOCK_OBJ = Any()
-        @Volatile
-        private var contextProvider: IContextLoader? = null
+        public var contextProvider: IContextLoader = getContextProviderInternal()
 
-        fun getContextProvider(): IContextLoader? {
-            if (null == contextProvider) {
+        private fun getContextProviderInternal(): IContextLoader {
+            var _contextProvider: IContextLoader? = null
                 synchronized(LOCK_OBJ) {
-                    if (null == contextProvider)
+                    if (null == _contextProvider)
                         if (classExists(DB_CTX_PROVIDER_CLASS_NAME)) {
                             try {
-                                contextProvider = Class.forName(DB_CTX_PROVIDER_CLASS_NAME).getDeclaredConstructor().newInstance() as IContextLoader
+                                _contextProvider = Class.forName(DB_CTX_PROVIDER_CLASS_NAME).getDeclaredConstructor().newInstance() as IContextLoader
                             } catch (e: Exception) {
                                 e.printStackTrace()
                             }
 
                         }
 
-                    if (null == contextProvider || !contextProvider!!.isValid)
-                        contextProvider = ContextProvider(DirContextLoader.BOOK_CTX_LOADER)
+                    if (null == _contextProvider || !_contextProvider!!.isValid)
+                        _contextProvider = ContextProvider(DirContextLoader.BOOK_CTX_LOADER)
                 }
 
-                contextProvider!!.updateContext()
-            }
+            _contextProvider!!.updateContext()
 
-            return contextProvider
-        }
-
-        fun setDefaultContextProvider(_contextProvider: IContextLoader) {
-            contextProvider = _contextProvider
+            return _contextProvider!!
         }
 
         private fun classExists(className: String): Boolean {

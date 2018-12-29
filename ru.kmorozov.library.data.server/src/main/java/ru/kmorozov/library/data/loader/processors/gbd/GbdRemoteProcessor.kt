@@ -83,7 +83,7 @@ class GbdRemoteProcessor : IGbdProcessor {
             return
         }
 
-        ExecutionContext.initContext(DummyReceiver(), true)
+        ExecutionContext.initContext(DummyReceiver.INSTANCE, true)
 
         ctx!!.initContext(gbdRoot)
         if (!ctx.bookIdsList.isEmpty())
@@ -115,7 +115,7 @@ class GbdRemoteProcessor : IGbdProcessor {
         options!!.bookId = bookId
         GBDOptions.init(options)
 
-        ContextProvider.setDefaultContextProvider(dbCtx)
+        ContextProvider.contextProvider = dbCtx
 
         ExecutionContext.initContext(DummyReceiver(), 1 == producer!!.bookIds.size)
         ExecutionContext.INSTANCE.addBookContext(producer, DummyProgress(), ServerPdfMaker())

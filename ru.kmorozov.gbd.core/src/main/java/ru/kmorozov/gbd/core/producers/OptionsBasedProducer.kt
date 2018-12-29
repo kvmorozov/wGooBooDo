@@ -23,6 +23,6 @@ class OptionsBasedProducer : IBookListProducer {
         if (!StringUtils.isEmpty(bookId) && LibraryFactory.isValidId(bookId))
             bookIds = HashSet(listOf(bookId))
         else if (GBDOptions.isValidConfig)
-            bookIds = ContextProvider.getContextProvider()!!.bookIdsList
+            bookIds = ContextProvider.contextProvider.bookIdsList
     }
 }

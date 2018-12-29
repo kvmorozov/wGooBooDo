@@ -15,8 +15,8 @@ class DbStorage : IStorage {
     override val isValidOrCreate: Boolean
         get() = false
 
-    override val bookIdsList: Set<String>?
-        get() = null
+    override val bookIdsList: Set<String>
+        get() = null!!
 
     override val items: Stream<IStoredItem>?
         get() = null
@@ -45,8 +45,8 @@ class DbStorage : IStorage {
 
     }
 
-    override fun getIndex(indexName: String, createIfNotExists: Boolean): IIndex? {
-        return null
+    override fun getIndex(indexName: String, createIfNotExists: Boolean): IIndex {
+        return null!!
     }
 
     override fun restoreState(bookInfo: IBookInfo) {

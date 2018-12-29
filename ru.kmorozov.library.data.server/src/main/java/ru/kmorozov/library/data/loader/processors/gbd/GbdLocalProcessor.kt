@@ -23,9 +23,9 @@ class GbdLocalProcessor : IGbdProcessor {
         GBDOptions.init(options)
 
         val producer = SingleBookProducer(bookId)
-        ContextProvider.setDefaultContextProvider(ListBasedContextLoader(producer))
+        ContextProvider.contextProvider = ListBasedContextLoader(producer)
 
-        ExecutionContext.initContext(DummyReceiver(), 1 == producer.bookIds.size)
+        ExecutionContext.initContext(DummyReceiver.INSTANCE, 1 == producer.bookIds.size)
         ExecutionContext.INSTANCE.addBookContext(producer, DummyProgress(), ServerPdfMaker())
 
         ExecutionContext.INSTANCE.execute()

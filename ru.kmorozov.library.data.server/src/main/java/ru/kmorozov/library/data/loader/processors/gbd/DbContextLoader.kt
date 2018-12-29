@@ -6,10 +6,9 @@ import org.springframework.stereotype.Component
 import ru.kmorozov.db.core.config.IContextLoader
 import ru.kmorozov.db.core.logic.model.book.BookInfo
 import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage
-import ru.kmorozov.gbd.core.logic.model.book.base.IPage
+import ru.kmorozov.gbd.core.logic.model.book.base.IBookInfo
 import ru.kmorozov.library.data.repository.GoogleBooksRepository
-
-import java.util.HashMap
+import java.util.*
 
 @Component
 class DbContextLoader : IContextLoader {
@@ -18,7 +17,7 @@ class DbContextLoader : IContextLoader {
 
     @Autowired
     @Lazy
-    private val googleBooksRepository: GoogleBooksRepository? = null
+    private lateinit var googleBooksRepository: GoogleBooksRepository
 
     override val bookIdsList: Set<String>
         get() = booksMap.keys
@@ -38,24 +37,22 @@ class DbContextLoader : IContextLoader {
     }
 
     override fun updateBookInfo(bookInfo: BookInfo) {
-        val existBookInfo = googleBooksRepository!!.findByBookId(bookInfo.bookId)
+        val existBookInfo = googleBooksRepository.findByBookId(bookInfo.bookId)
         if (existBookInfo != null)
             googleBooksRepository.delete(existBookInfo)
 
         googleBooksRepository.save(bookInfo)
     }
 
-    override fun getBookInfo(bookId: String): BookInfo {
-        var info: BookInfo? = booksMap[bookId]
-        if (info == null) {
-            info = googleBooksRepository!!.findByBookId(bookId)
+    override fun getBookInfo(bookId: String): IBookInfo {
+        return booksMap.computeIfAbsent(bookId, {
+            val info = googleBooksRepository.findByBookId(bookId)!!
 
-            for (page in info!!.pages.pages)
+            for (page in info.pages.pages)
                 (page as AbstractPage).isFileExists = true
 
-            booksMap[bookId] = info
-        }
-        return info
+            info
+        })
     }
 
     override fun refreshContext() {

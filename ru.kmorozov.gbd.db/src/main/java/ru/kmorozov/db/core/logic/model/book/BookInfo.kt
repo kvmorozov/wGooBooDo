@@ -32,9 +32,9 @@ class BookInfo : Serializable, ILoggableObject, IBookInfo {
 
     private constructor() {
         this.bookData = object : IBookData {
-            override val title: String?
+            override val title: String
                 get() = "empty"
-            override val volumeId: String?
+            override val volumeId: String
                 get() = "empty"
         }
         this.pages = object : IPagesInfo {

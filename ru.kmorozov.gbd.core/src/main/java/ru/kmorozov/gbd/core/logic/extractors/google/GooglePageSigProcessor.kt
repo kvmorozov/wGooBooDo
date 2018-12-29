@@ -175,7 +175,7 @@ internal class GooglePageSigProcessor : AbstractHttpProcessor, IUniqueRunnable<G
 
     companion object {
 
-        protected val logger = ExecutionContext.INSTANCE.getLogger(GooglePageSigProcessor::class.java)
+        protected val logger = ExecutionContext.getLogger(GooglePageSigProcessor::class.java)
 
         private const val SIG_ERROR_TEMPLATE = "No sig at %s with proxy %s"
         private const val SIG_WRONG_FORMAT = "Wrong sig format: %s"

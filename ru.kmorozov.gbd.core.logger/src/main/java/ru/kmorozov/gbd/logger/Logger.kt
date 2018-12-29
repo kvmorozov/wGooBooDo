@@ -46,7 +46,7 @@ class Logger(private val eventConsumer: IEventConsumer, private val name: String
         }
 
         fun getLogger(claszz: Class<*>): Logger {
-            return Logger(DummyReceiver(), claszz.name, ": ")
+            return Logger(DummyReceiver.INSTANCE, claszz.name, ": ")
         }
     }
 }

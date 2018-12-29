@@ -27,7 +27,7 @@ class GoogleImageExtractor(bookContext: BookContext) : AbstractImageExtractor(bo
     private val processingStarted = AtomicBoolean(false)
 
     override fun preCheck(): Boolean {
-        if (uniqueObject.bookInfo == EMPTY_BOOK)
+        if (uniqueObject.bookInfo.empty)
             return true
 
         if (!Strings.isNullOrEmpty((uniqueObject.bookInfo.bookData as GoogleBookData).flags!!.downloadPdfUrl)) {

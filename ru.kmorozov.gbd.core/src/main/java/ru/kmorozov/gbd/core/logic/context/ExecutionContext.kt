@@ -7,6 +7,7 @@ import ru.kmorozov.gbd.core.logic.extractors.base.AbstractHttpProcessor
 import ru.kmorozov.gbd.core.logic.extractors.base.IPostProcessor
 import ru.kmorozov.gbd.logger.Logger
 import ru.kmorozov.gbd.logger.consumers.AbstractOutputReceiver
+import ru.kmorozov.gbd.logger.output.DummyReceiver
 import ru.kmorozov.gbd.logger.progress.IProgress
 import ru.kmorozov.gbd.utils.QueuedThreadPoolExecutor
 import java.util.*
@@ -24,7 +25,6 @@ class ExecutionContext private constructor(val output: AbstractOutputReceiver, v
     val bookIds: Iterable<String>
         get() = bookContextMap.keys
 
-    @JvmOverloads
     fun getLogger(clazz: Class<*>, bookContext: BookContext? = null): Logger {
         return Logger.getLogger(output, clazz.name, if (isSingleMode || null == bookContext) EMPTY else bookContext.bookInfo.bookData.title + ": ")
     }
@@ -78,9 +78,9 @@ class ExecutionContext private constructor(val output: AbstractOutputReceiver, v
         val totalProcessed = getContexts(false).stream().mapToLong(ToLongFunction<BookContext> { x -> (x as BookContext).pagesProcessed }).sum()
         getLogger("Total").info("Total pages processed: $totalProcessed")
 
-        val contextProvider = ContextProvider.getContextProvider()
+        val contextProvider = ContextProvider.contextProvider
 
-        contextProvider!!.updateIndex()
+        contextProvider.updateIndex()
         contextProvider.updateContext()
         updateBlacklist()
         AbstractHttpProcessor.close()
@@ -102,9 +102,16 @@ class ExecutionContext private constructor(val output: AbstractOutputReceiver, v
         private const val EMPTY = ""
         lateinit var INSTANCE: ExecutionContext
 
+        public var initialized = false
+
         @Synchronized
         fun initContext(output: AbstractOutputReceiver, singleMode: Boolean) {
             INSTANCE = ExecutionContext(output, singleMode)
+            initialized = true
+        }
+
+        fun getLogger(clazz: Class<*>): Logger {
+            return Logger.getLogger(DummyReceiver.INSTANCE, clazz.name, "")
         }
 
         val proxyCount: Int
