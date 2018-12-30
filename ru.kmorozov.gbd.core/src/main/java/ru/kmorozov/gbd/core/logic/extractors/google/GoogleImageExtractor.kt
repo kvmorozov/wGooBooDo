@@ -1,7 +1,6 @@
 package ru.kmorozov.gbd.core.logic.extractors.google
 
 import com.google.common.base.Strings
-import ru.kmorozov.db.core.logic.model.book.BookInfo.Companion.EMPTY_BOOK
 import ru.kmorozov.db.core.logic.model.book.google.GoogleBookData
 import ru.kmorozov.db.core.logic.model.book.google.GooglePageInfo
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt
@@ -9,7 +8,6 @@ import ru.kmorozov.gbd.core.logic.context.BookContext
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractImageExtractor
 import ru.kmorozov.gbd.logger.progress.IProgress
-
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
@@ -27,8 +25,8 @@ class GoogleImageExtractor(bookContext: BookContext) : AbstractImageExtractor(bo
     private val processingStarted = AtomicBoolean(false)
 
     override fun preCheck(): Boolean {
-        if (uniqueObject.bookInfo.empty)
-            return true
+        if (uniqueObject.bookInfo.empty || uniqueObject.bookInfo.bookData.title.equals("empty"))
+            uniqueObject.bookInfo = GoogleBookInfoExtractor(uniqueObject.bookInfo.bookId).findBookInfo()
 
         if (!Strings.isNullOrEmpty((uniqueObject.bookInfo.bookData as GoogleBookData).flags!!.downloadPdfUrl)) {
             logger.severe("There is direct url to download book. DIY!")

@@ -2,6 +2,7 @@ package ru.kmorozov.gbd.core.logic.extractors.google
 
 import org.jsoup.nodes.DataNode
 import org.jsoup.nodes.Document
+import ru.kmorozov.db.core.config.EmptyContextLoader.Companion.EMPTY_CONTEXT_LOADER
 import ru.kmorozov.db.core.config.IContextLoader
 import ru.kmorozov.db.core.logic.model.book.BookInfo
 import ru.kmorozov.db.core.logic.model.book.google.GoogleBookData
@@ -25,12 +26,13 @@ open class GoogleBookInfoExtractor : AbstractBookExtractor {
     protected override val reserveBookUrl: String
         get() = HTTP_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, bookId) + OPEN_PAGE_ADD_URL
 
-    constructor(bookId: String) : super(bookId) {}
+    constructor(bookId: String) : super(bookId, EMPTY_CONTEXT_LOADER) {}
 
     constructor(bookId: String, storedLoader: IContextLoader) : super(bookId, storedLoader) {}
 
     @Throws(Exception::class)
-    override fun findBookInfo(): BookInfo {
+    public override fun findBookInfo(): BookInfo {
+        logger.info("Loading bookinfo for $bookId...")
         val defaultDocument = documentWithoutProxy
         try {
             val defaultBookInfo = extractBookInfo(defaultDocument)

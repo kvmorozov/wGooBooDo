@@ -122,7 +122,7 @@ class GooglePagesInfo : IPagesInfo, Serializable {
     }
 
     override fun getPageByPid(pid: String): GooglePageInfo? {
-        return pagesMap[pid] as GooglePageInfo
+        return pagesMap[pid] as GooglePageInfo?
     }
 
     private fun createPair(p1: IPage, p2: IPage): Pair<IPage, IPage> {

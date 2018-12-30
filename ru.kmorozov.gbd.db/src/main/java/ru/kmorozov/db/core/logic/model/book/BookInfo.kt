@@ -54,7 +54,7 @@ class BookInfo : Serializable, ILoggableObject, IBookInfo {
         this.bookId = ""
     }
 
-    val empty: Boolean
+    override val empty: Boolean
         get() = this == EMPTY_BOOK
 
     companion object {

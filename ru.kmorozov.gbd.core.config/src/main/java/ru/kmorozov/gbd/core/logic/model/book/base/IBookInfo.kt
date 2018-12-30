@@ -7,4 +7,6 @@ interface IBookInfo {
     val pages: IPagesInfo
 
     val bookId: String
+
+    val empty: Boolean
 }

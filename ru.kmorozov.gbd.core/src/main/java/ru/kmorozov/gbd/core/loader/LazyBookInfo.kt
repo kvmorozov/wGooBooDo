@@ -7,6 +7,8 @@ import ru.kmorozov.gbd.core.logic.model.book.base.IBookInfo
 import ru.kmorozov.gbd.core.logic.model.book.base.IPagesInfo
 
 class LazyBookInfo(override val bookId: String) : IBookInfo {
+    override val empty: Boolean
+        get() = true
 
     var realBookInfo: BookInfo? = null
         get() = LibraryFactory.getMetadata(bookId).getBookExtractor(bookId).bookInfo

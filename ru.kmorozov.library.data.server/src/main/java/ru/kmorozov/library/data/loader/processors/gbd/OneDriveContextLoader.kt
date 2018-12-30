@@ -15,6 +15,8 @@ import java.util.HashMap
 
 @Component
 class OneDriveContextLoader : IContextLoader {
+    override val empty: Boolean
+        get() = false
 
     @Autowired
     @Lazy

@@ -20,9 +20,13 @@ import java.nio.charset.Charset
  */
 abstract class AbstractBookExtractor : AbstractHttpProcessor {
 
+    protected val logger = ExecutionContext.getLogger(AbstractBookExtractor::class.java)
+
     protected lateinit var bookId: String
     lateinit var bookInfo: BookInfo
         protected set
+
+    private val storedLoader: IContextLoader
 
     protected abstract val bookUrl: String
 
@@ -57,14 +61,17 @@ abstract class AbstractBookExtractor : AbstractHttpProcessor {
             return doc
         }
 
-    constructor() {}
+    constructor(storedLoader: IContextLoader) {
+        this.storedLoader = storedLoader
+    }
 
     @JvmOverloads
-    protected constructor(bookId: String, storedLoader: IContextLoader? = ContextProvider.contextProvider) {
+    protected constructor(bookId: String, storedLoader: IContextLoader = ContextProvider.contextProvider) {
         this.bookId = bookId
+        this.storedLoader = storedLoader
 
-        val storedBookInfo = if (storedLoader == null) EMPTY_BOOK else storedLoader.getBookInfo(bookId)
-        bookInfo = if ((storedBookInfo as BookInfo).empty) findBookInfo() else storedBookInfo
+        val storedBookInfo = if (storedLoader.empty) EMPTY_BOOK else storedLoader.getBookInfo(bookId)
+        bookInfo = if (storedBookInfo.empty) findBookInfo() else storedBookInfo as BookInfo
     }
 
     @Throws(Exception::class)
@@ -85,9 +92,5 @@ abstract class AbstractBookExtractor : AbstractHttpProcessor {
                 return null
             }
         }
-    }
-
-    companion object {
-        protected val logger = ExecutionContext.getLogger(AbstractBookExtractor::class.java)
     }
 }

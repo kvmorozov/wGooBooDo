@@ -12,6 +12,8 @@ import java.util.*
 
 @Component
 class DbContextLoader : IContextLoader {
+    override val empty: Boolean
+        get() = false
 
     private val booksMap = HashMap<String, BookInfo>()
 

@@ -14,6 +14,8 @@ interface IContextLoader {
 
     val isValid: Boolean
 
+    val empty: Boolean
+
     fun updateIndex()
 
     fun updateContext()

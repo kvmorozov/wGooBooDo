@@ -111,7 +111,7 @@ open class LocalFSStorage(storageDirName: String) : IStorage {
             if (Images.isImageFile(filePath)) {
                 val fileName = filePath.fileName.toString()
                 val nameParts = fileName.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0].split("_".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                val _page = bookInfo.pages.getPageByPid(nameParts[1]) as AbstractPage
+                val _page = bookInfo.pages.getPageByPid(nameParts[1]) as AbstractPage?
                 val order = Integer.valueOf(nameParts[0])
                 if (null == _page) {
                     logger.severe(String.format("Page %s not found!", fileName))

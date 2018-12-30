@@ -3,6 +3,8 @@ package ru.kmorozov.db.core.config
 import ru.kmorozov.db.core.logic.model.book.BookInfo
 
 class EmptyContextLoader() : IContextLoader {
+    override val empty: Boolean
+        get() = true
 
     override val bookIdsList: Set<String>
         get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.

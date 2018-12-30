@@ -15,6 +15,9 @@ import java.util.stream.Collectors
  * Created by sbt-morozov-kv on 14.11.2016.
  */
 class DirContextLoader : IContextLoader {
+    override val empty: Boolean
+        get() = false
+
     private val booksInfo = HashMap<String, IBookInfo>()
 
     protected val loadedFileName: String

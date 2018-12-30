@@ -9,6 +9,8 @@ import ru.kmorozov.gbd.core.logic.model.book.base.IBookInfo
  * Created by sbt-morozov-kv on 02.12.2016.
  */
 class ContextProvider(protected var loader: IContextLoader) : IContextLoader {
+    override val empty: Boolean
+        get() = false
 
     override val bookIdsList: Set<String>
         get() = loader.bookIdsList

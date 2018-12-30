@@ -7,6 +7,8 @@ import ru.kmorozov.gbd.core.logic.context.IBookListProducer
 import ru.kmorozov.gbd.core.logic.library.LibraryFactory
 
 class ListBasedContextLoader(private val producer: IBookListProducer) : IContextLoader {
+    override val empty: Boolean
+        get() = false
 
     override val bookIdsList: Set<String>
         get() = producer.bookIds
