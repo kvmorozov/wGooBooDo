@@ -11,6 +11,7 @@ import ru.kmorozov.gbd.logger.output.DummyReceiver
 import ru.kmorozov.gbd.logger.progress.IProgress
 import ru.kmorozov.gbd.utils.QueuedThreadPoolExecutor
 import java.util.*
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.TimeUnit
 import java.util.function.ToLongFunction
 
@@ -18,7 +19,7 @@ import java.util.function.ToLongFunction
  * Created by km on 22.11.2015.
  */
 class ExecutionContext private constructor(val output: AbstractOutputReceiver, val isSingleMode: Boolean) {
-    private val bookContextMap: MutableMap<String, BookContext> = HashMap<String, BookContext>()
+    private val bookContextMap: MutableMap<String, BookContext> = ConcurrentHashMap<String, BookContext>()
     lateinit var bookExecutor: QueuedThreadPoolExecutor<BookContext>
     lateinit var pdfExecutor: QueuedThreadPoolExecutor<BookContext>
 
@@ -34,13 +35,12 @@ class ExecutionContext private constructor(val output: AbstractOutputReceiver, v
     }
 
     fun addBookContext(idsProducer: IBookListProducer, progress: IProgress, postProcessor: IPostProcessor) {
-        for (bookId in idsProducer.bookIds) {
+        idsProducer.bookIds.stream().parallel().forEach {
             try {
-                bookContextMap.computeIfAbsent(bookId) { BookContext(bookId, progress, postProcessor) }
+                bookContextMap.computeIfAbsent(it) { BookContext(it, progress, postProcessor) }
             } catch (ex: Exception) {
-                logger.severe("Cannot add book " + bookId + " because of " + ex.message)
+                logger.severe("Cannot add book $it because of $ex.message")
             }
-
         }
     }
 

@@ -81,7 +81,7 @@ class DirContextLoader : IContextLoader {
         val ctxObjArr = index.books
 
         for (ctxObj in ctxObjArr)
-            if (ctxObj is BookInfo) {
+            if (ctxObj is BookInfo && !ctxObj.empty) {
                 val bookInfo = ctxObj
                 booksInfo[bookInfo.bookId] = bookInfo
             }

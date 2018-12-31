@@ -112,7 +112,6 @@ open class LocalFSStorage(storageDirName: String) : IStorage {
                 val fileName = filePath.fileName.toString()
                 val nameParts = fileName.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0].split("_".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
                 val _page = bookInfo.pages.getPageByPid(nameParts[1]) as AbstractPage?
-                val order = Integer.valueOf(nameParts[0])
                 if (null == _page) {
                     logger.severe(String.format("Page %s not found!", fileName))
                     try {
@@ -121,9 +120,10 @@ open class LocalFSStorage(storageDirName: String) : IStorage {
                     } catch (e: IOException) {
                         e.printStackTrace()
                     }
-
                 } else {
                     try {
+                        val order = Integer.valueOf(nameParts[0])
+
                         if (GBDOptions.reloadImages()) {
                             val bimg = ImageIO.read(item.asFile())
                             _page.isDataProcessed = bimg.width >= imgWidth
@@ -144,10 +144,11 @@ open class LocalFSStorage(storageDirName: String) : IStorage {
                         } else if (_page.order != order && !_page.isGapPage) {
                             val oldFile = item.asFile()
                             val newFile = File(filePath.toString().replace(order.toString() + "_", _page.order.toString() + "_"))
-                            if (!newFile.exists())
+                            if (!newFile.exists()) {
                                 oldFile.renameTo(newFile)
+                                logger.severe(String.format("Page %s renamed!", _page.pid))
+                            }
                             _page.isDataProcessed = true
-                            logger.severe(String.format("Page %s renamed!", _page.pid))
                         }
                     } catch (e: IOException) {
                         // Значит файл с ошибкой
