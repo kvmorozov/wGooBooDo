@@ -13,6 +13,7 @@ import ru.kmorozov.gbd.core.config.constants.GoogleConstants.HTTPS_TEMPLATE
 import ru.kmorozov.gbd.core.config.constants.GoogleConstants.HTTP_TEMPLATE
 import ru.kmorozov.gbd.core.logic.Proxy.AbstractProxyListProvider
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt
+import ru.kmorozov.gbd.core.logic.context.ContextProvider
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookExtractor
 
 /**
@@ -26,7 +27,7 @@ open class GoogleBookInfoExtractor : AbstractBookExtractor {
     protected override val reserveBookUrl: String
         get() = HTTP_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, bookId) + OPEN_PAGE_ADD_URL
 
-    constructor(bookId: String) : super(bookId, EMPTY_CONTEXT_LOADER) {}
+    constructor(bookId: String) : super(bookId, ContextProvider.contextProvider) {}
 
     constructor(bookId: String, storedLoader: IContextLoader) : super(bookId, storedLoader) {}
 

@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="832600b3-aa6b-4b28-bef7-61710f4358a7" name="funcs" comment="optimize imports">
+    <list default="true" id="832600b3-aa6b-4b28-bef7-61710f4358a7" name="funcs" comment="upd">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.parent/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.parent/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.parent/ru.kmorozov.gbd.parent.iml" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.parent/ru.kmorozov.gbd.parent.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.client/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.parent/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.library.parent/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.parent/ru.kmorozov.library.parent.iml" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.library.parent/ru.kmorozov.library.parent.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/context/ContextProvider.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/context/ContextProvider.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/google/GoogleBookInfoExtractor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/google/GoogleBookInfoExtractor.kt" afterDir="false" />
     </list>
     <list id="0c8b21df-78f5-408a-867d-4ccd8443679a" name="Default" comment="idea files" />
     <ignored path="wGooBooDo-gbd-web.iws" />
@@ -59,898 +56,74 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/pom.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2125">
-              <caret line="125" column="18" selection-start-line="125" selection-start-column="18" selection-end-line="125" selection-end-column="18" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.parent/pom.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="17" column="30" selection-start-line="17" selection-start-column="30" selection-end-line="17" selection-end-column="30" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ru.kmorozov.library.parent/pom.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1074">
-              <caret line="109" column="56" lean-forward="true" selection-start-line="109" selection-start-column="56" selection-end-line="109" selection-end-column="56" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="uml://MAVEN/ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1">
-          <provider selected="true" editor-type-id="UmlEditorProvider">
-            <state>
-              <ID>MAVEN</ID>
-              <OriginalElement>ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1</OriginalElement>
-              <nodes>
-                <node x="3594.895833333333" y="590.0">ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1</node>
-                <node x="4740.833333333333" y="420.0">org.jsoup:jsoup:jar:1.11.3</node>
-                <node x="5399.426081780535" y="420.0">com.google.http-client:google-http-client:jar:1.27.0</node>
-                <node x="5311.458333333333" y="300.0">com.google.http-client:google-http-client:jar:1.27.0/com.google.code.findbugs:jsr305:jar:3.0.2</node>
-                <node x="5545.458333333333" y="300.0">com.google.http-client:google-http-client:jar:1.27.0/org.apache.httpcomponents:httpclient:jar:4.5.5</node>
-                <node x="5668.458333333333" y="160.0">com.google.http-client:google-http-client:jar:1.27.0/org.apache.httpcomponents:httpclient:jar:4.5.5/org.apache.httpcomponents:httpcore:jar:4.4.9</node>
-                <node x="5318.265020703933" y="160.0">com.google.http-client:google-http-client:jar:1.27.0/org.apache.httpcomponents:httpclient:jar:4.5.5/commons-logging:commons-logging:jar:1.2</node>
-                <node x="5525.458333333333" y="160.0">com.google.http-client:google-http-client:jar:1.27.0/org.apache.httpcomponents:httpclient:jar:4.5.5/commons-codec:commons-codec:jar:1.10</node>
-                <node x="5393.458333333333" y="300.0">com.google.http-client:google-http-client:jar:1.27.0/com.google.j2objc:j2objc-annotations:jar:1.1</node>
-                <node x="5083.458333333333" y="420.0">com.google.guava:guava:jar:27.0.1-jre</node>
-                <node x="5192.458333333333" y="300.0">com.google.guava:guava:jar:27.0.1-jre/com.google.guava:failureaccess:jar:1.0.1</node>
-                <node x="5058.458333333333" y="300.0">com.google.guava:guava:jar:27.0.1-jre/com.google.guava:listenablefuture:jar:9999.0-empty-to-avoid-conflict-with-guava</node>
-                <node x="4937.458333333333" y="300.0">com.google.guava:guava:jar:27.0.1-jre/org.checkerframework:checker-qual:jar:2.5.2</node>
-                <node x="4562.458333333333" y="300.0">com.google.guava:guava:jar:27.0.1-jre/com.google.errorprone:error_prone_annotations:jar:2.2.0</node>
-                <node x="4743.458333333333" y="300.0">com.google.guava:guava:jar:27.0.1-jre/org.codehaus.mojo:animal-sniffer-annotations:jar:1.17</node>
-                <node x="3619.5131314699775" y="420.0">org.apache.httpcomponents.client5:httpclient5:jar:5.0-beta3</node>
-                <node x="3699.6381314699775" y="160.0">org.apache.httpcomponents.client5:httpclient5:jar:5.0-beta3/org.apache.httpcomponents.core5:httpcore5:jar:5.0-beta6</node>
-                <node x="3660.1381314699775" y="300.0">org.apache.httpcomponents.client5:httpclient5:jar:5.0-beta3/org.apache.httpcomponents.core5:httpcore5-h2:jar:5.0-beta6</node>
-                <node x="3517.1381314699775" y="300.0">org.apache.httpcomponents.client5:httpclient5:jar:5.0-beta3/commons-codec:commons-codec:jar:1.11</node>
-                <node x="1843.3333333333333" y="420.0">org.asynchttpclient:async-http-client:jar:2.6.0</node>
-                <node x="1802.850036231882" y="300.0">org.asynchttpclient:async-http-client:jar:2.6.0/org.asynchttpclient:async-http-client-netty-utils:jar:2.6.0</node>
-                <node x="1767.2667028985486" y="160.0">org.asynchttpclient:async-http-client:jar:2.6.0/org.asynchttpclient:async-http-client-netty-utils:jar:2.6.0/io.netty:netty-buffer:jar:4.1.30.Final</node>
-                <node x="1474.2667028985486" y="160.0">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-codec-http:jar:4.1.30.Final</node>
-                <node x="1600.7421532091062" y="80.0">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-codec-http:jar:4.1.30.Final/io.netty:netty-codec:jar:4.1.30.Final</node>
-                <node x="1592.7421532091062" y="0.0">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-codec-http:jar:4.1.30.Final/io.netty:netty-codec:jar:4.1.30.Final/io.netty:netty-transport:jar:4.1.30.Final</node>
-                <node x="2423.908819875773" y="300.0">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-handler:jar:4.1.30.Final</node>
-                <node x="2416.600036231882" y="160.0">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-handler:jar:4.1.30.Final/io.netty:netty-buffer:jar:4.1.29.Final</node>
-                <node x="2284.600036231882" y="160.0">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-handler:jar:4.1.30.Final/io.netty:netty-transport:jar:4.1.29.Final</node>
-                <node x="1617.2667028985486" y="160.0">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-codec-socks:jar:4.1.30.Final</node>
-                <node x="1405.308369565215" y="300.0">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-handler-proxy:jar:4.1.30.Final</node>
-                <node x="1342.2667028985486" y="160.0">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-handler-proxy:jar:4.1.30.Final/io.netty:netty-transport:jar:4.1.29.Final</node>
-                <node x="1110.0167028985486" y="300.0">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-resolver-dns:jar:4.1.30.Final</node>
-                <node x="1077.2667028985486" y="160.0">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-resolver-dns:jar:4.1.30.Final/io.netty:netty-resolver:jar:4.1.30.Final</node>
-                <node x="1073.2667028985486" y="80.0">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-resolver-dns:jar:4.1.30.Final/io.netty:netty-resolver:jar:4.1.30.Final/io.netty:netty-common:jar:4.1.30.Final</node>
-                <node x="1202.2667028985486" y="160.0">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-resolver-dns:jar:4.1.30.Final/io.netty:netty-codec-dns:jar:4.1.30.Final</node>
-                <node x="945.2667028985486" y="160.0">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-resolver-dns:jar:4.1.30.Final/io.netty:netty-transport:jar:4.1.29.Final</node>
-                <node x="2547.908819875773" y="300.0">org.asynchttpclient:async-http-client:jar:2.6.0/org.reactivestreams:reactive-streams:jar:1.0.2</node>
-                <node x="2063.850036231882" y="300.0">org.asynchttpclient:async-http-client:jar:2.6.0/com.typesafe.netty:netty-reactive-streams:jar:2.0.0</node>
-                <node x="2021.600036231882" y="160.0">org.asynchttpclient:async-http-client:jar:2.6.0/com.typesafe.netty:netty-reactive-streams:jar:2.0.0/io.netty:netty-handler:jar:4.1.13.Final</node>
-                <node x="2145.600036231882" y="160.0">org.asynchttpclient:async-http-client:jar:2.6.0/com.typesafe.netty:netty-reactive-streams:jar:2.0.0/org.reactivestreams:reactive-streams:jar:1.0.0</node>
-                <node x="1887.600036231882" y="160.0">org.asynchttpclient:async-http-client:jar:2.6.0/com.sun.activation:javax.activation:jar:1.2.0</node>
-                <node x="708.4921532091062" y="420.0">io.netty:netty-transport-native-epoll:jar:4.1.29.Final</node>
-                <node x="758.7250362318819" y="80.0">io.netty:netty-transport-native-epoll:jar:4.1.29.Final/io.netty:netty-common:jar:4.1.29.Final</node>
-                <node x="828.2667028985486" y="160.0">io.netty:netty-transport-native-epoll:jar:4.1.29.Final/io.netty:netty-buffer:jar:4.1.29.Final</node>
-                <node x="658.7667028985488" y="300.0">io.netty:netty-transport-native-epoll:jar:4.1.29.Final/io.netty:netty-transport-native-unix-common:jar:4.1.29.Final</node>
-                <node x="526.7667028985488" y="300.0">io.netty:netty-transport-native-epoll:jar:4.1.29.Final/io.netty:netty-transport:jar:4.1.29.Final</node>
-                <node x="502.26670289854883" y="160.0">io.netty:netty-transport-native-epoll:jar:4.1.29.Final/io.netty:netty-transport:jar:4.1.29.Final/io.netty:netty-resolver:jar:4.1.29.Final</node>
-                <node x="4165.2214648033105" y="420.0">com.squareup.okhttp3:okhttp:jar:3.12.1</node>
-                <node x="4171.2214648033105" y="300.0">com.squareup.okhttp3:okhttp:jar:3.12.1/com.squareup.okio:okio:jar:1.15.0</node>
-                <node x="2859.104513457554" y="420.0">ru.kmorozov.gbd:ru.kmorozov.gbd.db:jar:2.2-b1</node>
-                <node x="2856.519534161487" y="300.0">ru.kmorozov.gbd:ru.kmorozov.gbd.db:jar:2.2-b1/org.mongodb:mongo-java-driver:jar:3.6.3</node>
-                <node x="2701.519534161487" y="300.0">ru.kmorozov.gbd:ru.kmorozov.gbd.db:jar:2.2-b1/org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.20</node>
-                <node x="3272.6195341614875" y="300.0">ru.kmorozov.gbd:ru.kmorozov.gbd.core.logger:jar:2.2-b1</node>
-                <node x="3402.2445341614875" y="160.0">ru.kmorozov.gbd:ru.kmorozov.gbd.core.logger:jar:2.2-b1/org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11</node>
-                <node x="3008.519534161487" y="300.0">ru.kmorozov.gbd:ru.kmorozov.gbd.core.config:jar:2.2-b1</node>
-                <node x="2976.769534161487" y="160.0">ru.kmorozov.gbd:ru.kmorozov.gbd.core.config:jar:2.2-b1/org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11</node>
-                <node x="317.36715320910616" y="420.0">org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59</node>
-                <node x="339.08333333333303" y="160.0">org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/org.seleniumhq.selenium:selenium-api:jar:3.141.59</node>
-                <node x="141.74215320910662" y="300.0">org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/org.seleniumhq.selenium:selenium-remote-driver:jar:3.141.59</node>
-                <node x="135.0" y="160.0">org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/org.seleniumhq.selenium:selenium-remote-driver:jar:3.141.59/com.squareup.okio:okio:jar:1.14.0</node>
-                <node x="210.0" y="160.0">org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/net.bytebuddy:byte-buddy:jar:1.8.15</node>
-                <node x="0.0" y="160.0">org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/org.apache.commons:commons-exec:jar:1.3</node>
-                <node x="439.76670289854883" y="300.0">org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/com.squareup.okio:okio:jar:1.15.0</node>
-                <node x="157.11715320910662" y="420.0">org.seleniumhq.selenium:selenium-support:jar:3.141.59</node>
-                <node x="1.3917028985488287" y="300.0">org.seleniumhq.selenium:selenium-support:jar:3.141.59/com.squareup.okio:okio:jar:1.15.0</node>
-                <node x="3808.6381314699775" y="420.0">junit:junit:jar:4.13-beta-1</node>
-                <node x="3782.1381314699775" y="300.0">junit:junit:jar:4.13-beta-1/org.hamcrest:hamcrest-core:jar:1.3</node>
-                <node x="2798.019534161487" y="160.0">org.slf4j:slf4j-api:jar:1.7.25</node>
-                <node x="4821.833333333333" y="420.0">org.mockito:mockito-all:jar:2.0.2-beta</node>
-                <node x="3119.769534161487" y="160.0">org.apache.commons:commons-lang3:jar:3.8.1</node>
-                <node x="3310.604513457554" y="160.0">com.google.code.gson:gson:jar:2.8.5</node>
-                <node x="4054.2214648033105" y="420.0">org.eclipse.jetty:jetty-server:jar:9.4.14.v20181114</node>
-                <node x="3911.1381314699775" y="300.0">org.eclipse.jetty:jetty-server:jar:9.4.14.v20181114/javax.servlet:javax.servlet-api:jar:3.1.0</node>
-                <node x="4048.1381314699775" y="300.0">org.eclipse.jetty:jetty-server:jar:9.4.14.v20181114/org.eclipse.jetty:jetty-http:jar:9.4.14.v20181114</node>
-                <node x="4057.3881314699775" y="80.0">org.eclipse.jetty:jetty-server:jar:9.4.14.v20181114/org.eclipse.jetty:jetty-http:jar:9.4.14.v20181114/org.eclipse.jetty:jetty-util:jar:9.4.14.v20181114</node>
-                <node x="4088.1381314699775" y="160.0">org.eclipse.jetty:jetty-server:jar:9.4.14.v20181114/org.eclipse.jetty:jetty-io:jar:9.4.14.v20181114</node>
-                <node x="4398.2214648033105" y="420.0">org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11</node>
-                <node x="4375.7214648033105" y="160.0">org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11/org.jetbrains.kotlin:kotlin-stdlib:jar:1.3.11</node>
-                <node x="4230.2214648033105" y="80.0">org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11/org.jetbrains.kotlin:kotlin-stdlib:jar:1.3.11/org.jetbrains.kotlin:kotlin-stdlib-common:jar:1.3.11</node>
-                <node x="4400.2214648033105" y="80.0">org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11/org.jetbrains.kotlin:kotlin-stdlib:jar:1.3.11/org.jetbrains:annotations:jar:13.0</node>
-                <node x="4362.2214648033105" y="300.0">org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11/org.jetbrains.kotlin:kotlin-stdlib-jdk7:jar:1.3.11</node>
-                <node x="4246.2214648033105" y="300.0">org.jetbrains.kotlin:kotlin-test:jar:1.3.11</node>
-                <node x="4197.7214648033105" y="160.0">org.jetbrains.kotlin:kotlin-test:jar:1.3.11/org.jetbrains.kotlin:kotlin-test-common:jar:1.3.11</node>
-              </nodes>
-              <notes />
-              <edges>
-                <edge source="com.google.http-client:google-http-client:jar:1.27.0/org.apache.httpcomponents:httpclient:jar:4.5.5" target="com.google.http-client:google-http-client:jar:1.27.0/org.apache.httpcomponents:httpclient:jar:4.5.5/org.apache.httpcomponents:httpcore:jar:4.4.9">
-                  <point x="27.66666666666697" y="-15.0" />
-                  <point x="5614.625" y="280.0" />
-                  <point x="5706.958333333333" y="280.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1" target="com.google.code.gson:gson:jar:2.8.5">
-                  <point x="-3.724999999999909" y="-15.0" />
-                  <point x="3665.670833333333" y="480.0" />
-                  <point x="3469.1195341614875" y="480.0" />
-                  <point x="3469.1195341614875" y="220.0" />
-                  <point x="3361.354513457554" y="220.0" />
-                  <point x="21.75" y="15.0" />
-                </edge>
-                <edge source="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59" target="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/org.seleniumhq.selenium:selenium-api:jar:3.141.59">
-                  <point x="64.39999999999964" y="-15.0" />
-                  <point x="462.2671532091058" y="400.0" />
-                  <point x="516.2667028985488" y="400.0" />
-                  <point x="516.2667028985488" y="230.0" />
-                  <point x="423.25" y="230.0" />
-                  <point x="33.66666666666697" y="15.0" />
-                </edge>
-                <edge source="org.asynchttpclient:async-http-client:jar:2.6.0" target="org.asynchttpclient:async-http-client:jar:2.6.0/org.asynchttpclient:async-http-client-netty-utils:jar:2.6.0">
-                  <point x="-6.150000000000091" y="-15.0" />
-                  <point x="1898.6833333333332" y="400.0" />
-                  <point x="1893.850036231882" y="400.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="io.netty:netty-transport-native-epoll:jar:4.1.29.Final/io.netty:netty-transport-native-unix-common:jar:4.1.29.Final" target="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-resolver-dns:jar:4.1.30.Final/io.netty:netty-transport:jar:4.1.29.Final">
-                  <point x="57.75" y="-15.0" />
-                  <point x="832.0167028985488" y="280.0" />
-                  <point x="973.2667028985486" y="280.0" />
-                  <point x="-28.0" y="15.0" />
-                </edge>
-                <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1" target="org.mockito:mockito-all:jar:2.0.2-beta">
-                  <point x="55.875" y="-15.0" />
-                  <point x="3725.270833333333" y="550.0" />
-                  <point x="4868.333333333333" y="550.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.db:jar:2.2-b1" target="org.slf4j:slf4j-api:jar:1.7.25">
-                  <point x="-40.0" y="-15.0" />
-                  <point x="2889.104513457554" y="390.0" />
-                  <point x="2835.019534161487" y="390.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="org.jetbrains.kotlin:kotlin-test:jar:1.3.11/org.jetbrains.kotlin:kotlin-test-common:jar:1.3.11" target="org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11/org.jetbrains.kotlin:kotlin-stdlib:jar:1.3.11/org.jetbrains.kotlin:kotlin-stdlib-common:jar:1.3.11">
-                  <point x="0.0" y="-15.0" />
-                  <point x="-37.5" y="15.0" />
-                </edge>
-                <edge source="org.seleniumhq.selenium:selenium-support:jar:3.141.59" target="org.seleniumhq.selenium:selenium-support:jar:3.141.59/com.squareup.okio:okio:jar:1.15.0">
-                  <point x="-50.40000000000009" y="-15.0" />
-                  <point x="169.71715320910653" y="400.0" />
-                  <point x="28.89170289854883" y="400.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1" target="ru.kmorozov.gbd:ru.kmorozov.gbd.core.config:jar:2.2-b1">
-                  <point x="-26.074999999999818" y="-15.0" />
-                  <point x="3643.320833333333" y="510.0" />
-                  <point x="3204.354513457554" y="510.0" />
-                  <point x="3204.354513457554" y="380.0" />
-                  <point x="3148.019534161487" y="380.0" />
-                  <point x="46.5" y="15.0" />
-                </edge>
-                <edge source="com.google.guava:guava:jar:27.0.1-jre" target="com.google.guava:guava:jar:27.0.1-jre/com.google.guava:listenablefuture:jar:9999.0-empty-to-avoid-conflict-with-guava">
-                  <point x="0.0" y="-15.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="com.google.http-client:google-http-client:jar:1.27.0/org.apache.httpcomponents:httpclient:jar:4.5.5" target="com.google.http-client:google-http-client:jar:1.27.0/org.apache.httpcomponents:httpclient:jar:4.5.5/commons-logging:commons-logging:jar:1.2">
-                  <point x="-27.66666666666697" y="-15.0" />
-                  <point x="5559.291666666666" y="280.0" />
-                  <point x="5384.265020703933" y="280.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="org.asynchttpclient:async-http-client:jar:2.6.0" target="org.asynchttpclient:async-http-client:jar:2.6.0/org.reactivestreams:reactive-streams:jar:1.0.2">
-                  <point x="43.049999999999955" y="-15.0" />
-                  <point x="1947.8833333333332" y="390.0" />
-                  <point x="2607.408819875773" y="390.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="org.asynchttpclient:async-http-client:jar:2.6.0" target="org.slf4j:slf4j-api:jar:1.7.25">
-                  <point x="55.34999999999991" y="-15.0" />
-                  <point x="1960.1833333333332" y="400.0" />
-                  <point x="2677.408819875773" y="400.0" />
-                  <point x="2677.408819875773" y="270.0" />
-                  <point x="2813.8766770186303" y="270.0" />
-                  <point x="-21.14285714285711" y="15.0" />
-                </edge>
-                <edge source="org.seleniumhq.selenium:selenium-support:jar:3.141.59" target="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/net.bytebuddy:byte-buddy:jar:1.8.15">
-                  <point x="0.0" y="-15.0" />
-                  <point x="220.11715320910662" y="380.0" />
-                  <point x="131.24215320910662" y="380.0" />
-                  <point x="131.24215320910662" y="280.0" />
-                  <point x="225.66666666666652" y="280.0" />
-                  <point x="-31.333333333333485" y="15.0" />
-                </edge>
-                <edge source="org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11/org.jetbrains.kotlin:kotlin-stdlib-jdk7:jar:1.3.11" target="org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11/org.jetbrains.kotlin:kotlin-stdlib:jar:1.3.11">
-                  <point x="0.0" y="-15.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="com.google.http-client:google-http-client:jar:1.27.0/org.apache.httpcomponents:httpclient:jar:4.5.5" target="com.google.http-client:google-http-client:jar:1.27.0/org.apache.httpcomponents:httpclient:jar:4.5.5/commons-codec:commons-codec:jar:1.10">
-                  <point x="0.0" y="-15.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-resolver-dns:jar:4.1.30.Final" target="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-resolver-dns:jar:4.1.30.Final/io.netty:netty-transport:jar:4.1.29.Final">
-                  <point x="-43.0" y="-15.0" />
-                  <point x="1131.5167028985486" y="280.0" />
-                  <point x="1029.2667028985486" y="280.0" />
-                  <point x="28.0" y="15.0" />
-                </edge>
-                <edge source="com.google.http-client:google-http-client:jar:1.27.0" target="com.google.http-client:google-http-client:jar:1.27.0/com.google.code.findbugs:jsr305:jar:3.0.2">
-                  <point x="-43.33333333333303" y="-15.0" />
-                  <point x="5421.092748447202" y="390.0" />
-                  <point x="5357.958333333333" y="390.0" />
-                  <point x="15.5" y="15.0" />
-                </edge>
-                <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core.config:jar:2.2-b1" target="ru.kmorozov.gbd:ru.kmorozov.gbd.core.config:jar:2.2-b1/org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11">
-                  <point x="-23.25" y="-15.0" />
-                  <point x="3078.269534161487" y="260.0" />
-                  <point x="3038.269534161487" y="260.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="org.apache.httpcomponents.client5:httpclient5:jar:5.0-beta3" target="org.slf4j:slf4j-api:jar:1.7.25">
-                  <point x="-33.375" y="-15.0" />
-                  <point x="3630.6381314699775" y="400.0" />
-                  <point x="3485.4320341614875" y="400.0" />
-                  <point x="3485.4320341614875" y="210.0" />
-                  <point x="2866.7338198757734" y="210.0" />
-                  <point x="31.71428571428578" y="15.0" />
-                </edge>
-                <edge source="com.google.guava:guava:jar:27.0.1-jre" target="com.google.http-client:google-http-client:jar:1.27.0/com.google.code.findbugs:jsr305:jar:3.0.2">
-                  <point x="18.285714285714675" y="-15.0" />
-                  <point x="5133.744047619048" y="390.0" />
-                  <point x="5326.958333333333" y="390.0" />
-                  <point x="-15.5" y="15.0" />
-                </edge>
-                <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1" target="com.squareup.okhttp3:okhttp:jar:3.12.1">
-                  <point x="26.074999999999818" y="-15.0" />
-                  <point x="3695.470833333333" y="510.0" />
-                  <point x="4198.7214648033105" y="510.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="org.asynchttpclient:async-http-client:jar:2.6.0/com.typesafe.netty:netty-reactive-streams:jar:2.0.0" target="org.asynchttpclient:async-http-client:jar:2.6.0/com.typesafe.netty:netty-reactive-streams:jar:2.0.0/org.reactivestreams:reactive-streams:jar:1.0.0">
-                  <point x="37.75" y="-15.0" />
-                  <point x="2177.100036231882" y="250.0" />
-                  <point x="2205.100036231882" y="250.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="org.seleniumhq.selenium:selenium-support:jar:3.141.59" target="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/org.seleniumhq.selenium:selenium-remote-driver:jar:3.141.59">
-                  <point x="25.199999999999818" y="-15.0" />
-                  <point x="245.31715320910644" y="370.0" />
-                  <point x="181.24215320910662" y="370.0" />
-                  <point x="-39.5" y="15.0" />
-                </edge>
-                <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core.logger:jar:2.2-b1" target="org.apache.commons:commons-lang3:jar:3.8.1">
-                  <point x="-23.25" y="-15.0" />
-                  <point x="3342.3695341614875" y="240.0" />
-                  <point x="3224.769534161487" y="240.0" />
-                  <point x="45.0" y="15.0" />
-                </edge>
-                <edge source="io.netty:netty-transport-native-epoll:jar:4.1.29.Final" target="io.netty:netty-transport-native-epoll:jar:4.1.29.Final/io.netty:netty-transport-native-unix-common:jar:4.1.29.Final">
-                  <point x="-22.5" y="-15.0" />
-                  <point x="775.9921532091062" y="400.0" />
-                  <point x="774.2667028985488" y="400.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="org.apache.httpcomponents.client5:httpclient5:jar:5.0-beta3" target="org.apache.httpcomponents.client5:httpclient5:jar:5.0-beta3/commons-codec:commons-codec:jar:1.11">
-                  <point x="-11.125" y="-15.0" />
-                  <point x="3652.8881314699775" y="390.0" />
-                  <point x="3578.6381314699775" y="390.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="org.eclipse.jetty:jetty-server:jar:9.4.14.v20181114/org.eclipse.jetty:jetty-io:jar:9.4.14.v20181114" target="org.eclipse.jetty:jetty-server:jar:9.4.14.v20181114/org.eclipse.jetty:jetty-http:jar:9.4.14.v20181114/org.eclipse.jetty:jetty-util:jar:9.4.14.v20181114">
-                  <point x="0.0" y="-15.0" />
-                  <point x="4123.138131469977" y="140.0" />
-                  <point x="4115.138131469977" y="140.0" />
-                  <point x="19.25" y="15.0" />
-                </edge>
-                <edge source="org.asynchttpclient:async-http-client:jar:2.6.0/com.typesafe.netty:netty-reactive-streams:jar:2.0.0" target="org.asynchttpclient:async-http-client:jar:2.6.0/com.typesafe.netty:netty-reactive-streams:jar:2.0.0/io.netty:netty-handler:jar:4.1.13.Final">
-                  <point x="-37.75" y="-15.0" />
-                  <point x="2101.600036231882" y="250.0" />
-                  <point x="2073.600036231882" y="250.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="io.netty:netty-transport-native-epoll:jar:4.1.29.Final/io.netty:netty-transport:jar:4.1.29.Final" target="io.netty:netty-transport-native-epoll:jar:4.1.29.Final/io.netty:netty-transport:jar:4.1.29.Final/io.netty:netty-resolver:jar:4.1.29.Final">
-                  <point x="-28.0" y="-15.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core.config:jar:2.2-b1" target="org.apache.commons:commons-lang3:jar:3.8.1">
-                  <point x="23.25" y="-15.0" />
-                  <point x="3124.769534161487" y="280.0" />
-                  <point x="3164.769534161487" y="280.0" />
-                  <point x="-15.0" y="15.0" />
-                </edge>
-                <edge source="io.netty:netty-transport-native-epoll:jar:4.1.29.Final" target="io.netty:netty-transport-native-epoll:jar:4.1.29.Final/io.netty:netty-transport:jar:4.1.29.Final">
-                  <point x="-67.5" y="-15.0" />
-                  <point x="730.9921532091062" y="400.0" />
-                  <point x="582.7667028985488" y="400.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="org.asynchttpclient:async-http-client:jar:2.6.0/org.asynchttpclient:async-http-client-netty-utils:jar:2.6.0" target="org.slf4j:slf4j-api:jar:1.7.25">
-                  <point x="60.66666666666674" y="-15.0" />
-                  <point x="1954.5167028985488" y="260.0" />
-                  <point x="2803.305248447202" y="260.0" />
-                  <point x="-31.71428571428578" y="15.0" />
-                </edge>
-                <edge source="org.eclipse.jetty:jetty-server:jar:9.4.14.v20181114" target="org.eclipse.jetty:jetty-server:jar:9.4.14.v20181114/org.eclipse.jetty:jetty-http:jar:9.4.14.v20181114">
-                  <point x="0.0" y="-15.0" />
-                  <point x="4099.7214648033105" y="400.0" />
-                  <point x="4089.1381314699775" y="400.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="com.google.http-client:google-http-client:jar:1.27.0" target="com.google.http-client:google-http-client:jar:1.27.0/com.google.j2objc:j2objc-annotations:jar:1.1">
-                  <point x="0.0" y="-15.0" />
-                  <point x="5464.426081780535" y="400.0" />
-                  <point x="5492.458333333333" y="400.0" />
-                  <point x="33.0" y="15.0" />
-                </edge>
-                <edge source="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-codec-http:jar:4.1.30.Final/io.netty:netty-codec:jar:4.1.30.Final" target="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-codec-http:jar:4.1.30.Final/io.netty:netty-codec:jar:4.1.30.Final/io.netty:netty-transport:jar:4.1.30.Final">
-                  <point x="0.0" y="-15.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="com.google.guava:guava:jar:27.0.1-jre" target="com.google.guava:guava:jar:27.0.1-jre/com.google.guava:failureaccess:jar:1.0.1">
-                  <point x="9.142857142856883" y="-15.0" />
-                  <point x="5124.60119047619" y="380.0" />
-                  <point x="5241.958333333333" y="380.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59" target="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/org.apache.commons:commons-exec:jar:1.3">
-                  <point x="-32.19999999999982" y="-15.0" />
-                  <point x="365.66715320910635" y="370.0" />
-                  <point x="429.26670289854883" y="370.0" />
-                  <point x="429.26670289854883" y="250.0" />
-                  <point x="95.83333333333303" y="250.0" />
-                  <point x="38.33333333333303" y="15.0" />
-                </edge>
-                <edge source="org.asynchttpclient:async-http-client:jar:2.6.0" target="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-resolver-dns:jar:4.1.30.Final">
-                  <point x="-55.34999999999991" y="-15.0" />
-                  <point x="1849.4833333333333" y="400.0" />
-                  <point x="1174.5167028985486" y="400.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.db:jar:2.2-b1" target="com.google.code.gson:gson:jar:2.8.5">
-                  <point x="40.0" y="-15.0" />
-                  <point x="2969.104513457554" y="390.0" />
-                  <point x="3223.269534161487" y="390.0" />
-                  <point x="3223.269534161487" y="280.0" />
-                  <point x="3332.354513457554" y="280.0" />
-                  <point x="-7.25" y="15.0" />
-                </edge>
-                <edge source="org.eclipse.jetty:jetty-server:jar:9.4.14.v20181114/org.eclipse.jetty:jetty-http:jar:9.4.14.v20181114" target="org.eclipse.jetty:jetty-server:jar:9.4.14.v20181114/org.eclipse.jetty:jetty-http:jar:9.4.14.v20181114/org.eclipse.jetty:jetty-util:jar:9.4.14.v20181114">
-                  <point x="-20.5" y="-15.0" />
-                  <point x="4068.6381314699775" y="140.0" />
-                  <point x="4076.6381314699775" y="140.0" />
-                  <point x="-19.25" y="15.0" />
-                </edge>
-                <edge source="org.apache.httpcomponents.client5:httpclient5:jar:5.0-beta3" target="org.apache.httpcomponents.client5:httpclient5:jar:5.0-beta3/org.apache.httpcomponents.core5:httpcore5-h2:jar:5.0-beta6">
-                  <point x="11.125" y="-15.0" />
-                  <point x="3675.1381314699775" y="390.0" />
-                  <point x="3710.6381314699775" y="390.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1" target="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59">
-                  <point x="-63.32499999999982" y="-15.0" />
-                  <point x="3606.070833333333" y="560.0" />
-                  <point x="397.86715320910616" y="560.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11" target="org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11/org.jetbrains.kotlin:kotlin-stdlib-jdk7:jar:1.3.11">
-                  <point x="-30.75" y="-15.0" />
-                  <point x="4428.9714648033105" y="400.0" />
-                  <point x="4423.7214648033105" y="400.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59" target="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/net.bytebuddy:byte-buddy:jar:1.8.15">
-                  <point x="32.19999999999982" y="-15.0" />
-                  <point x="430.067153209106" y="390.0" />
-                  <point x="505.26670289854883" y="390.0" />
-                  <point x="505.26670289854883" y="240.0" />
-                  <point x="288.3333333333335" y="240.0" />
-                  <point x="31.333333333333485" y="15.0" />
-                </edge>
-                <edge source="org.apache.httpcomponents.client5:httpclient5:jar:5.0-beta3/org.apache.httpcomponents.core5:httpcore5-h2:jar:5.0-beta6" target="org.apache.httpcomponents.client5:httpclient5:jar:5.0-beta3/org.apache.httpcomponents.core5:httpcore5:jar:5.0-beta6">
-                  <point x="0.0" y="-15.0" />
-                  <point x="3710.6381314699775" y="280.0" />
-                  <point x="3720.3881314699775" y="280.0" />
-                  <point x="-20.75" y="15.0" />
-                </edge>
-                <edge source="org.asynchttpclient:async-http-client:jar:2.6.0" target="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-handler:jar:4.1.30.Final">
-                  <point x="30.75" y="-15.0" />
-                  <point x="1935.5833333333333" y="380.0" />
-                  <point x="2475.908819875773" y="380.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1" target="com.google.http-client:google-http-client:jar:1.27.0">
-                  <point x="70.77500000000009" y="-15.0" />
-                  <point x="3740.170833333333" y="570.0" />
-                  <point x="5464.426081780535" y="570.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/org.seleniumhq.selenium:selenium-remote-driver:jar:3.141.59" target="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/org.seleniumhq.selenium:selenium-api:jar:3.141.59">
-                  <point x="59.25" y="-15.0" />
-                  <point x="279.9921532091066" y="280.0" />
-                  <point x="355.91666666666606" y="280.0" />
-                  <point x="-33.66666666666697" y="15.0" />
-                </edge>
-                <edge source="org.eclipse.jetty:jetty-server:jar:9.4.14.v20181114" target="org.eclipse.jetty:jetty-server:jar:9.4.14.v20181114/javax.servlet:javax.servlet-api:jar:3.1.0">
-                  <point x="-30.333333333333485" y="-15.0" />
-                  <point x="4069.388131469977" y="400.0" />
-                  <point x="3969.6381314699775" y="400.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-resolver-dns:jar:4.1.30.Final/io.netty:netty-codec-dns:jar:4.1.30.Final" target="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-codec-http:jar:4.1.30.Final/io.netty:netty-codec:jar:4.1.30.Final">
-                  <point x="0.0" y="-15.0" />
-                  <point x="1262.2667028985486" y="130.0" />
-                  <point x="1612.7421532091062" y="130.0" />
-                  <point x="-36.0" y="15.0" />
-                </edge>
-                <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1" target="org.jetbrains.kotlin:kotlin-test:jar:1.3.11">
-                  <point x="33.52500000000009" y="-15.0" />
-                  <point x="3702.920833333333" y="520.0" />
-                  <point x="4289.2214648033105" y="520.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="io.netty:netty-transport-native-epoll:jar:4.1.29.Final/io.netty:netty-buffer:jar:4.1.29.Final" target="io.netty:netty-transport-native-epoll:jar:4.1.29.Final/io.netty:netty-common:jar:4.1.29.Final">
-                  <point x="0.0" y="-15.0" />
-                  <point x="876.2667028985486" y="140.0" />
-                  <point x="815.2250362318819" y="140.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="org.asynchttpclient:async-http-client:jar:2.6.0/org.asynchttpclient:async-http-client-netty-utils:jar:2.6.0" target="org.asynchttpclient:async-http-client:jar:2.6.0/com.sun.activation:javax.activation:jar:1.2.0">
-                  <point x="0.0" y="-15.0" />
-                  <point x="1893.850036231882" y="280.0" />
-                  <point x="1916.100036231882" y="280.0" />
-                  <point x="-28.5" y="15.0" />
-                </edge>
-                <edge source="com.google.guava:guava:jar:27.0.1-jre" target="com.google.guava:guava:jar:27.0.1-jre/com.google.errorprone:error_prone_annotations:jar:2.2.0">
-                  <point x="-27.42857142857156" y="-15.0" />
-                  <point x="5088.0297619047615" y="400.0" />
-                  <point x="4642.958333333333" y="400.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-handler:jar:4.1.30.Final" target="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-handler:jar:4.1.30.Final/io.netty:netty-transport:jar:4.1.29.Final">
-                  <point x="-34.666666666666515" y="-15.0" />
-                  <point x="2441.2421532091066" y="250.0" />
-                  <point x="2340.600036231882" y="250.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1" target="org.seleniumhq.selenium:selenium-support:jar:3.141.59">
-                  <point x="-70.77500000000009" y="-15.0" />
-                  <point x="3598.620833333333" y="570.0" />
-                  <point x="220.11715320910662" y="570.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core.logger:jar:2.2-b1" target="ru.kmorozov.gbd:ru.kmorozov.gbd.core.logger:jar:2.2-b1/org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11">
-                  <point x="69.75" y="-15.0" />
-                  <point x="3435.3695341614875" y="280.0" />
-                  <point x="3463.7445341614875" y="280.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="junit:junit:jar:4.13-beta-1" target="junit:junit:jar:4.13-beta-1/org.hamcrest:hamcrest-core:jar:1.3">
-                  <point x="0.0" y="-15.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1" target="junit:junit:jar:4.13-beta-1">
-                  <point x="11.175000000000182" y="-15.0" />
-                  <point x="3680.570833333333" y="490.0" />
-                  <point x="3836.6381314699775" y="490.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="org.asynchttpclient:async-http-client:jar:2.6.0" target="org.asynchttpclient:async-http-client:jar:2.6.0/com.sun.activation:javax.activation:jar:1.2.0">
-                  <point x="6.150000000000091" y="-15.0" />
-                  <point x="1910.9833333333333" y="360.0" />
-                  <point x="1995.350036231882" y="360.0" />
-                  <point x="1995.350036231882" y="250.0" />
-                  <point x="1973.100036231882" y="250.0" />
-                  <point x="28.5" y="15.0" />
-                </edge>
-                <edge source="org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11" target="org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11/org.jetbrains.kotlin:kotlin-stdlib:jar:1.3.11">
-                  <point x="30.75" y="-15.0" />
-                  <point x="4490.4714648033105" y="400.0" />
-                  <point x="4495.7214648033105" y="400.0" />
-                  <point x="4495.7214648033105" y="280.0" />
-                  <point x="4455.7214648033105" y="280.0" />
-                  <point x="32.0" y="15.0" />
-                </edge>
-                <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core.logger:jar:2.2-b1" target="com.google.code.gson:gson:jar:2.8.5">
-                  <point x="23.25" y="-15.0" />
-                  <point x="3388.8695341614875" y="230.0" />
-                  <point x="3346.854513457554" y="230.0" />
-                  <point x="7.25" y="15.0" />
-                </edge>
-                <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core.logger:jar:2.2-b1" target="org.slf4j:slf4j-api:jar:1.7.25">
-                  <point x="-69.75" y="-15.0" />
-                  <point x="3295.8695341614875" y="250.0" />
-                  <point x="2856.1623913043445" y="250.0" />
-                  <point x="21.14285714285711" y="15.0" />
-                </edge>
-                <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1" target="ru.kmorozov.gbd:ru.kmorozov.gbd.db:jar:2.2-b1">
-                  <point x="-33.52500000000009" y="-15.0" />
-                  <point x="3635.870833333333" y="520.0" />
-                  <point x="2929.104513457554" y="520.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11/org.jetbrains.kotlin:kotlin-stdlib:jar:1.3.11" target="org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11/org.jetbrains.kotlin:kotlin-stdlib:jar:1.3.11/org.jetbrains.kotlin:kotlin-stdlib-common:jar:1.3.11">
-                  <point x="-24.0" y="-15.0" />
-                  <point x="4399.7214648033105" y="140.0" />
-                  <point x="4342.7214648033105" y="140.0" />
-                  <point x="37.5" y="15.0" />
-                </edge>
-                <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.db:jar:2.2-b1" target="ru.kmorozov.gbd:ru.kmorozov.gbd.db:jar:2.2-b1/org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.20">
-                  <point x="-60.0" y="-15.0" />
-                  <point x="2869.104513457554" y="400.0" />
-                  <point x="2763.019534161487" y="400.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.db:jar:2.2-b1" target="ru.kmorozov.gbd:ru.kmorozov.gbd.core.logger:jar:2.2-b1">
-                  <point x="60.0" y="-15.0" />
-                  <point x="2989.104513457554" y="400.0" />
-                  <point x="3319.1195341614875" y="400.0" />
-                  <point x="-46.5" y="15.0" />
-                </edge>
-                <edge source="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59" target="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/com.squareup.okio:okio:jar:1.15.0">
-                  <point x="0.0" y="-15.0" />
-                  <point x="397.86715320910616" y="380.0" />
-                  <point x="467.26670289854883" y="380.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11/org.jetbrains.kotlin:kotlin-stdlib:jar:1.3.11" target="org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11/org.jetbrains.kotlin:kotlin-stdlib:jar:1.3.11/org.jetbrains:annotations:jar:13.0">
-                  <point x="24.0" y="-15.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="org.apache.httpcomponents.client5:httpclient5:jar:5.0-beta3" target="org.apache.httpcomponents.client5:httpclient5:jar:5.0-beta3/org.apache.httpcomponents.core5:httpcore5:jar:5.0-beta6">
-                  <point x="33.375" y="-15.0" />
-                  <point x="3697.3881314699775" y="400.0" />
-                  <point x="3771.6381314699775" y="400.0" />
-                  <point x="3771.6381314699775" y="280.0" />
-                  <point x="3761.8881314699775" y="280.0" />
-                  <point x="20.75" y="15.0" />
-                </edge>
-                <edge source="io.netty:netty-transport-native-epoll:jar:4.1.29.Final/io.netty:netty-transport-native-unix-common:jar:4.1.29.Final" target="io.netty:netty-transport-native-epoll:jar:4.1.29.Final/io.netty:netty-common:jar:4.1.29.Final">
-                  <point x="-57.75" y="-15.0" />
-                  <point x="716.5167028985486" y="140.0" />
-                  <point x="777.5583695652153" y="140.0" />
-                  <point x="-37.666666666666515" y="15.0" />
-                </edge>
-                <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.db:jar:2.2-b1" target="ru.kmorozov.gbd:ru.kmorozov.gbd.db:jar:2.2-b1/org.mongodb:mongo-java-driver:jar:3.6.3">
-                  <point x="0.0" y="-15.0" />
-                  <point x="2929.104513457554" y="400.0" />
-                  <point x="2922.519534161487" y="400.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="org.asynchttpclient:async-http-client:jar:2.6.0" target="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-handler-proxy:jar:4.1.30.Final">
-                  <point x="-43.049999999999955" y="-15.0" />
-                  <point x="1861.7833333333333" y="390.0" />
-                  <point x="1474.808369565215" y="390.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="org.jetbrains.kotlin:kotlin-test:jar:1.3.11" target="org.jetbrains.kotlin:kotlin-test:jar:1.3.11/org.jetbrains.kotlin:kotlin-test-common:jar:1.3.11">
-                  <point x="-21.5" y="-15.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-codec-http:jar:4.1.30.Final" target="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-codec-http:jar:4.1.30.Final/io.netty:netty-codec:jar:4.1.30.Final">
-                  <point x="0.0" y="-15.0" />
-                  <point x="1535.7667028985486" y="140.0" />
-                  <point x="1636.7421532091062" y="140.0" />
-                  <point x="-12.0" y="15.0" />
-                </edge>
-                <edge source="org.seleniumhq.selenium:selenium-support:jar:3.141.59" target="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/org.apache.commons:commons-exec:jar:1.3">
-                  <point x="-25.199999999999818" y="-15.0" />
-                  <point x="194.9171532091068" y="390.0" />
-                  <point x="66.89170289854883" y="390.0" />
-                  <point x="66.89170289854883" y="280.0" />
-                  <point x="19.166666666666515" y="280.0" />
-                  <point x="-38.333333333333485" y="15.0" />
-                </edge>
-                <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.db:jar:2.2-b1" target="org.apache.commons:commons-lang3:jar:3.8.1">
-                  <point x="-20.0" y="-15.0" />
-                  <point x="2909.104513457554" y="380.0" />
-                  <point x="2846.019534161487" y="380.0" />
-                  <point x="2846.019534161487" y="270.0" />
-                  <point x="3134.769534161487" y="270.0" />
-                  <point x="-45.0" y="15.0" />
-                </edge>
-                <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1" target="org.jsoup:jsoup:jar:1.11.3">
-                  <point x="48.42500000000018" y="-15.0" />
-                  <point x="3717.820833333333" y="540.0" />
-                  <point x="4771.333333333333" y="540.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="com.google.guava:guava:jar:27.0.1-jre" target="com.google.guava:guava:jar:27.0.1-jre/org.checkerframework:checker-qual:jar:2.5.2">
-                  <point x="-9.142857142856883" y="-15.0" />
-                  <point x="5106.315476190476" y="380.0" />
-                  <point x="4987.958333333333" y="380.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-resolver-dns:jar:4.1.30.Final/io.netty:netty-resolver:jar:4.1.30.Final" target="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-resolver-dns:jar:4.1.30.Final/io.netty:netty-resolver:jar:4.1.30.Final/io.netty:netty-common:jar:4.1.30.Final">
-                  <point x="0.0" y="-15.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="org.asynchttpclient:async-http-client:jar:2.6.0" target="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-codec-http:jar:4.1.30.Final">
-                  <point x="-30.75" y="-15.0" />
-                  <point x="1874.0833333333333" y="380.0" />
-                  <point x="1575.7667028985484" y="380.0" />
-                  <point x="1575.7667028985484" y="270.0" />
-                  <point x="1566.5167028985486" y="270.0" />
-                  <point x="30.75" y="15.0" />
-                </edge>
-                <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1" target="com.google.guava:guava:jar:27.0.1-jre">
-                  <point x="63.32499999999982" y="-15.0" />
-                  <point x="3732.720833333333" y="560.0" />
-                  <point x="5115.458333333333" y="560.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="org.eclipse.jetty:jetty-server:jar:9.4.14.v20181114" target="org.eclipse.jetty:jetty-server:jar:9.4.14.v20181114/org.eclipse.jetty:jetty-io:jar:9.4.14.v20181114">
-                  <point x="30.333333333333485" y="-15.0" />
-                  <point x="4130.0547981366435" y="400.0" />
-                  <point x="4140.638131469977" y="400.0" />
-                  <point x="17.5" y="15.0" />
-                </edge>
-                <edge source="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-handler-proxy:jar:4.1.30.Final" target="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-handler-proxy:jar:4.1.30.Final/io.netty:netty-transport:jar:4.1.29.Final">
-                  <point x="-46.33333333333303" y="-15.0" />
-                  <point x="1428.4750362318819" y="280.0" />
-                  <point x="1398.2667028985486" y="280.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1" target="ru.kmorozov.gbd:ru.kmorozov.gbd.core.logger:jar:2.2-b1">
-                  <point x="-11.175000000000182" y="-15.0" />
-                  <point x="3658.220833333333" y="490.0" />
-                  <point x="3412.1195341614875" y="490.0" />
-                  <point x="46.5" y="15.0" />
-                </edge>
-                <edge source="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/org.seleniumhq.selenium:selenium-remote-driver:jar:3.141.59" target="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/org.apache.commons:commons-exec:jar:1.3">
-                  <point x="-59.25" y="-15.0" />
-                  <point x="161.49215320910662" y="270.0" />
-                  <point x="57.5" y="270.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="org.jetbrains.kotlin:kotlin-test:jar:1.3.11" target="org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11/org.jetbrains.kotlin:kotlin-stdlib:jar:1.3.11">
-                  <point x="21.5" y="-15.0" />
-                  <point x="4310.7214648033105" y="280.0" />
-                  <point x="4391.7214648033105" y="280.0" />
-                  <point x="-32.0" y="15.0" />
-                </edge>
-                <edge source="io.netty:netty-transport-native-epoll:jar:4.1.29.Final" target="io.netty:netty-transport-native-epoll:jar:4.1.29.Final/io.netty:netty-common:jar:4.1.29.Final">
-                  <point x="67.5" y="-15.0" />
-                  <point x="865.9921532091062" y="400.0" />
-                  <point x="934.7667028985486" y="400.0" />
-                  <point x="934.7667028985486" y="130.0" />
-                  <point x="852.8917028985484" y="130.0" />
-                  <point x="37.666666666666515" y="15.0" />
-                </edge>
-                <edge source="com.google.http-client:google-http-client:jar:1.27.0" target="com.google.http-client:google-http-client:jar:1.27.0/org.apache.httpcomponents:httpclient:jar:4.5.5">
-                  <point x="43.33333333333303" y="-15.0" />
-                  <point x="5507.759415113868" y="400.0" />
-                  <point x="5586.958333333333" y="400.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="org.seleniumhq.selenium:selenium-support:jar:3.141.59" target="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/org.seleniumhq.selenium:selenium-api:jar:3.141.59">
-                  <point x="50.40000000000009" y="-15.0" />
-                  <point x="270.5171532091067" y="360.0" />
-                  <point x="378.51670289854883" y="360.0" />
-                  <point x="378.51670289854883" y="280.0" />
-                  <point x="389.58333333333303" y="280.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-handler:jar:4.1.30.Final" target="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-handler:jar:4.1.30.Final/io.netty:netty-buffer:jar:4.1.29.Final">
-                  <point x="0.0" y="-15.0" />
-                  <point x="2475.908819875773" y="250.0" />
-                  <point x="2464.600036231882" y="250.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1" target="org.eclipse.jetty:jetty-server:jar:9.4.14.v20181114">
-                  <point x="18.625" y="-15.0" />
-                  <point x="3688.020833333333" y="500.0" />
-                  <point x="4099.7214648033105" y="500.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core.config:jar:2.2-b1" target="org.slf4j:slf4j-api:jar:1.7.25">
-                  <point x="-69.75" y="-15.0" />
-                  <point x="3031.769534161487" y="260.0" />
-                  <point x="2845.590962732916" y="260.0" />
-                  <point x="10.571428571428669" y="15.0" />
-                </edge>
-                <edge source="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-handler-proxy:jar:4.1.30.Final" target="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-codec-http:jar:4.1.30.Final">
-                  <point x="2.2737367544323206E-13" y="-15.0" />
-                  <point x="1474.8083695652151" y="280.0" />
-                  <point x="1505.0167028985486" y="280.0" />
-                  <point x="-30.75" y="15.0" />
-                </edge>
-                <edge source="com.google.guava:guava:jar:27.0.1-jre" target="com.google.http-client:google-http-client:jar:1.27.0/com.google.j2objc:j2objc-annotations:jar:1.1">
-                  <point x="27.42857142857156" y="-15.0" />
-                  <point x="5142.886904761905" y="400.0" />
-                  <point x="5426.458333333333" y="400.0" />
-                  <point x="-33.0" y="15.0" />
-                </edge>
-                <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1" target="io.netty:netty-transport-native-epoll:jar:4.1.29.Final">
-                  <point x="-55.875" y="-15.0" />
-                  <point x="3613.520833333333" y="550.0" />
-                  <point x="798.4921532091062" y="550.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-resolver-dns:jar:4.1.30.Final" target="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-resolver-dns:jar:4.1.30.Final/io.netty:netty-resolver:jar:4.1.30.Final">
-                  <point x="0.0" y="-15.0" />
-                  <point x="1174.5167028985486" y="270.0" />
-                  <point x="1129.7667028985486" y="270.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="com.google.guava:guava:jar:27.0.1-jre" target="com.google.guava:guava:jar:27.0.1-jre/org.codehaus.mojo:animal-sniffer-annotations:jar:1.17">
-                  <point x="-18.285714285714675" y="-15.0" />
-                  <point x="5097.172619047618" y="390.0" />
-                  <point x="4830.458333333333" y="390.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="org.asynchttpclient:async-http-client:jar:2.6.0" target="org.asynchttpclient:async-http-client:jar:2.6.0/com.typesafe.netty:netty-reactive-streams:jar:2.0.0">
-                  <point x="18.450000000000045" y="-15.0" />
-                  <point x="1923.2833333333333" y="370.0" />
-                  <point x="2139.350036231882" y="370.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-handler-proxy:jar:4.1.30.Final" target="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-codec-socks:jar:4.1.30.Final">
-                  <point x="46.33333333333371" y="-15.0" />
-                  <point x="1521.1417028985486" y="280.0" />
-                  <point x="1649.7667028985486" y="280.0" />
-                  <point x="-32.5" y="15.0" />
-                </edge>
-                <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.db:jar:2.2-b1" target="ru.kmorozov.gbd:ru.kmorozov.gbd.core.config:jar:2.2-b1">
-                  <point x="20.0" y="-15.0" />
-                  <point x="2949.104513457554" y="380.0" />
-                  <point x="3055.019534161487" y="380.0" />
-                  <point x="-46.5" y="15.0" />
-                </edge>
-                <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1" target="org.apache.commons:commons-lang3:jar:3.8.1">
-                  <point x="-18.625" y="-15.0" />
-                  <point x="3650.770833333333" y="500.0" />
-                  <point x="3262.1195341614875" y="500.0" />
-                  <point x="3262.1195341614875" y="260.0" />
-                  <point x="3194.769534161487" y="260.0" />
-                  <point x="15.0" y="15.0" />
-                </edge>
-                <edge source="io.netty:netty-transport-native-epoll:jar:4.1.29.Final/io.netty:netty-transport:jar:4.1.29.Final" target="io.netty:netty-transport-native-epoll:jar:4.1.29.Final/io.netty:netty-buffer:jar:4.1.29.Final">
-                  <point x="28.0" y="-15.0" />
-                  <point x="610.7667028985488" y="270.0" />
-                  <point x="852.2667028985486" y="270.0" />
-                  <point x="-24.0" y="15.0" />
-                </edge>
-                <edge source="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-handler:jar:4.1.30.Final" target="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-codec-http:jar:4.1.30.Final/io.netty:netty-codec:jar:4.1.30.Final">
-                  <point x="34.666666666666515" y="-15.0" />
-                  <point x="2510.5754865424396" y="250.0" />
-                  <point x="2603.164037267078" y="250.0" />
-                  <point x="2603.164037267078" y="130.0" />
-                  <point x="1684.7421532091062" y="130.0" />
-                  <point x="36.0" y="15.0" />
-                </edge>
-                <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1" target="org.asynchttpclient:async-http-client:jar:2.6.0">
-                  <point x="-48.42500000000018" y="-15.0" />
-                  <point x="3620.970833333333" y="540.0" />
-                  <point x="1904.8333333333333" y="540.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="com.squareup.okhttp3:okhttp:jar:3.12.1" target="com.squareup.okhttp3:okhttp:jar:3.12.1/com.squareup.okio:okio:jar:1.15.0">
-                  <point x="0.0" y="-15.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="org.eclipse.jetty:jetty-server:jar:9.4.14.v20181114/org.eclipse.jetty:jetty-http:jar:9.4.14.v20181114" target="org.eclipse.jetty:jetty-server:jar:9.4.14.v20181114/org.eclipse.jetty:jetty-io:jar:9.4.14.v20181114">
-                  <point x="20.5" y="-15.0" />
-                  <point x="4109.638131469977" y="280.0" />
-                  <point x="4105.638131469977" y="280.0" />
-                  <point x="-17.5" y="15.0" />
-                </edge>
-                <edge source="org.asynchttpclient:async-http-client:jar:2.6.0/org.asynchttpclient:async-http-client-netty-utils:jar:2.6.0" target="org.asynchttpclient:async-http-client:jar:2.6.0/org.asynchttpclient:async-http-client-netty-utils:jar:2.6.0/io.netty:netty-buffer:jar:4.1.30.Final">
-                  <point x="-60.66666666666674" y="-15.0" />
-                  <point x="1833.1833695652153" y="280.0" />
-                  <point x="1815.2667028985486" y="280.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1" target="org.slf4j:slf4j-api:jar:1.7.25">
-                  <point x="-40.97499999999991" y="-15.0" />
-                  <point x="3628.420833333333" y="530.0" />
-                  <point x="2691.019534161487" y="530.0" />
-                  <point x="2691.019534161487" y="280.0" />
-                  <point x="2824.4481055900587" y="280.0" />
-                  <point x="-10.571428571428669" y="15.0" />
-                </edge>
-                <edge source="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/org.seleniumhq.selenium:selenium-remote-driver:jar:3.141.59" target="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/net.bytebuddy:byte-buddy:jar:1.8.15">
-                  <point x="19.75" y="-15.0" />
-                  <point x="240.49215320910662" y="280.0" />
-                  <point x="257.0" y="280.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core.config:jar:2.2-b1" target="com.google.code.gson:gson:jar:2.8.5">
-                  <point x="69.75" y="-15.0" />
-                  <point x="3171.269534161487" y="270.0" />
-                  <point x="3317.854513457554" y="270.0" />
-                  <point x="-21.75" y="15.0" />
-                </edge>
-                <edge source="org.asynchttpclient:async-http-client:jar:2.6.0" target="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-codec-socks:jar:4.1.30.Final">
-                  <point x="-18.450000000000045" y="-15.0" />
-                  <point x="1886.3833333333332" y="370.0" />
-                  <point x="1714.7667028985486" y="370.0" />
-                  <point x="32.5" y="15.0" />
-                </edge>
-                <edge source="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59" target="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/org.seleniumhq.selenium:selenium-remote-driver:jar:3.141.59">
-                  <point x="-64.39999999999964" y="-15.0" />
-                  <point x="333.4671532091065" y="350.0" />
-                  <point x="260.2421532091066" y="350.0" />
-                  <point x="39.5" y="15.0" />
-                </edge>
-                <edge source="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-resolver-dns:jar:4.1.30.Final" target="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-resolver-dns:jar:4.1.30.Final/io.netty:netty-codec-dns:jar:4.1.30.Final">
-                  <point x="43.0" y="-15.0" />
-                  <point x="1217.5167028985486" y="280.0" />
-                  <point x="1262.2667028985486" y="280.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1" target="org.apache.httpcomponents.client5:httpclient5:jar:5.0-beta3">
-                  <point x="3.724999999999909" y="-15.0" />
-                  <point x="3673.120833333333" y="470.0" />
-                  <point x="3664.0131314699775" y="470.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/org.seleniumhq.selenium:selenium-remote-driver:jar:3.141.59" target="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/org.seleniumhq.selenium:selenium-remote-driver:jar:3.141.59/com.squareup.okio:okio:jar:1.14.0">
-                  <point x="-19.75" y="-15.0" />
-                  <point x="200.99215320910662" y="260.0" />
-                  <point x="162.5" y="260.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-codec-socks:jar:4.1.30.Final" target="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-codec-http:jar:4.1.30.Final/io.netty:netty-codec:jar:4.1.30.Final">
-                  <point x="0.0" y="-15.0" />
-                  <point x="1682.2667028985486" y="140.0" />
-                  <point x="1660.7421532091062" y="140.0" />
-                  <point x="12.0" y="15.0" />
-                </edge>
-                <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1" target="org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11">
-                  <point x="40.97499999999991" y="-15.0" />
-                  <point x="3710.370833333333" y="530.0" />
-                  <point x="4459.7214648033105" y="530.0" />
-                  <point x="0.0" y="15.0" />
-                </edge>
-                <edge source="io.netty:netty-transport-native-epoll:jar:4.1.29.Final" target="io.netty:netty-transport-native-epoll:jar:4.1.29.Final/io.netty:netty-buffer:jar:4.1.29.Final">
-                  <point x="22.5" y="-15.0" />
-                  <point x="820.9921532091062" y="390.0" />
-                  <point x="900.2667028985486" y="390.0" />
-                  <point x="24.0" y="15.0" />
-                </edge>
-              </edges>
-              <settings layout="Hierarchic Group" zoom="1.0" x="4033.5" y="256.5" />
-              <SelectedNodes>
-                <node>com.google.http-client:google-http-client:jar:1.27.0/org.apache.httpcomponents:httpclient:jar:4.5.5/org.apache.httpcomponents:httpcore:jar:4.4.9</node>
-              </SelectedNodes>
-              <Categories />
-              <VISIBILITY>All</VISIBILITY>
+        <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/google/GoogleBookInfoExtractor.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="169">
+              <caret line="29" selection-start-line="29" selection-end-line="29" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ru.kmorozov.library.data.client/pom.xml">
+        <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/library/metadata/GoogleBooksMetadata.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1020">
-              <caret line="60" column="48" selection-start-line="60" selection-start-column="48" selection-end-line="60" selection-end-column="48" />
+            <state relative-caret-position="169">
+              <caret line="28" selection-start-line="28" selection-end-line="28" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/connectors/webdriver/WebDriverHttpConnector.kt">
+        <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/context/BookContext.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="20" column="5" selection-start-line="20" selection-start-column="5" selection-end-line="20" selection-end-column="5" />
-              <folding>
-                <element signature="e#57#546#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="169">
+              <caret line="31" selection-start-line="31" selection-end-line="31" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/pdf/PdfMaker.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="374">
+              <caret line="44" selection-start-line="44" selection-end-line="44" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.db/src/main/java/ru/kmorozov/db/core/config/EmptyContextLoader.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="358">
+              <caret line="36" column="32" selection-start-line="36" selection-start-column="12" selection-end-line="36" selection-end-column="32" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.db/src/main/java/ru/kmorozov/db/core/config/IContextLoader.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="119">
+              <caret line="8" column="10" selection-start-line="8" selection-start-column="10" selection-end-line="8" selection-end-column="10" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/context/ContextProvider.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-696">
+              <caret line="11" column="21" selection-start-line="11" selection-start-column="6" selection-end-line="11" selection-end-column="21" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/AbstractBookExtractor.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="368">
+              <caret line="73" selection-start-line="73" selection-end-line="73" />
             </state>
           </provider>
         </entry>
@@ -970,7 +143,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>was leaked</find>
       <find>HashedWheelTimer</find>
       <find>logg</find>
       <find>FINE</find>
@@ -1000,6 +172,7 @@
       <find>kotlin.ver</find>
       <find>2.1.0</find>
       <find>5.1.2</find>
+      <find>Loading bookinfo for</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -1049,12 +222,10 @@
         <option value="$PROJECT_DIR$/ru.kmorozov.gbd.db/src/main/java/ru/kmorozov/db/core/logic/model/book/google/GooglePagesInfo.kt" />
         <option value="$PROJECT_DIR$/ru.kmorozov.gbd.db/src/main/java/ru/kmorozov/db/core/config/IContextLoader.kt" />
         <option value="$PROJECT_DIR$/ru.kmorozov.gbd.db/src/main/java/ru/kmorozov/db/core/config/EmptyContextLoader.kt" />
-        <option value="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/context/ContextProvider.kt" />
         <option value="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/loader/processors/gbd/DbContextLoader.kt" />
         <option value="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/loader/ListBasedContextLoader.kt" />
         <option value="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/loader/processors/gbd/OneDriveContextLoader.kt" />
         <option value="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/context/BookContext.kt" />
-        <option value="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/google/GoogleBookInfoExtractor.kt" />
         <option value="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/google/GoogleImageExtractor.kt" />
         <option value="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/AbstractBookExtractor.kt" />
         <option value="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/loader/DirContextLoader.kt" />
@@ -1072,6 +243,8 @@
         <option value="$PROJECT_DIR$/ru.kmorozov.gbd.parent/pom.xml" />
         <option value="$PROJECT_DIR$/ru.kmorozov.library.data.client/pom.xml" />
         <option value="$PROJECT_DIR$/ru.kmorozov.library.parent/pom.xml" />
+        <option value="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/context/ContextProvider.kt" />
+        <option value="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/google/GoogleBookInfoExtractor.kt" />
       </list>
     </option>
   </component>
@@ -1185,10 +358,6 @@
               <item name="ru.kmorozov.gbd.core" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="wGooBooDo" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -1206,7 +375,7 @@
     <property name="RequestMappingsPanelWidth2" value="490" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1546344226346" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1546345546784" />
     <property name="js.eslint.eslintPackage" value="" />
     <property name="last_opened_file_path" value="$MAVEN_REPOSITORY$/org/springframework/spring-core/5.1.2.RELEASE/spring-core-5.1.2.RELEASE-sources.jar!/" />
     <property name="nodejs_package_manager_path" value="npm" />
@@ -1713,14 +882,7 @@
       <workItem from="1546179112052" duration="7961000" />
       <workItem from="1546244287034" duration="8478000" />
       <workItem from="1546330707111" duration="5152000" />
-      <workItem from="1546340430887" duration="1397000" />
-    </task>
-    <task id="LOCAL-00044" summary="modularization">
-      <created>1517641376006</created>
-      <option name="number" value="00044" />
-      <option name="presentableId" value="LOCAL-00044" />
-      <option name="project" value="LOCAL" />
-      <updated>1517641376006</updated>
+      <workItem from="1546340430887" duration="2586000" />
     </task>
     <task id="LOCAL-00045" summary="modularization">
       <created>1517641695954</created>
@@ -2058,7 +1220,14 @@
       <option name="project" value="LOCAL" />
       <updated>1546339634463</updated>
     </task>
-    <option name="localTasksCounter" value="93" />
+    <task id="LOCAL-00093" summary="upd">
+      <created>1546344336719</created>
+      <option name="number" value="00093" />
+      <option name="presentableId" value="LOCAL-00093" />
+      <option name="project" value="LOCAL" />
+      <updated>1546344336719</updated>
+    </task>
+    <option name="localTasksCounter" value="94" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -2094,7 +1263,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="510707000" />
+    <option name="totallyTimeSpent" value="511896000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -2107,6 +1276,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="npm" order="0" sideWeight="0.5063898" side_tool="true" weight="0.25" />
       <window_info id="UI Designer" order="1" />
@@ -2131,13 +1301,13 @@
       <window_info anchor="bottom" id="Application Servers" order="10" weight="0.33694476" />
       <window_info anchor="bottom" id="Run" order="11" sideWeight="0.48507464" weight="0.3488624" />
       <window_info active="true" anchor="bottom" id="Inspection Results" order="12" visible="true" weight="0.32827735" />
-      <window_info anchor="bottom" id="Debug" order="13" sideWeight="0.4936034" weight="0.39761648" />
+      <window_info active="true" anchor="bottom" id="Debug" order="13" sideWeight="0.4936034" visible="true" weight="0.39761648" />
       <window_info anchor="bottom" id="Cvs" order="14" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="15" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="16" weight="0.32936078" />
       <window_info anchor="bottom" content_ui="combo" id="Run Dashboard" order="17" weight="0.43336946" />
       <window_info anchor="bottom" id="Java Enterprise" order="18" weight="0.32827735" />
-      <window_info active="true" anchor="bottom" id="Version Control" order="19" sideWeight="0.48614073" visible="true" weight="0.31852654" />
+      <window_info anchor="bottom" id="Version Control" order="19" sideWeight="0.48614073" weight="0.31852654" />
       <window_info anchor="bottom" id="Docker" order="20" show_stripe_button="false" />
       <window_info active="true" anchor="bottom" id="Dependency Viewer" order="21" visible="true" weight="0.32936078" />
       <window_info anchor="bottom" id="REST Client" order="22" weight="0.32936078" />
@@ -2214,7 +1384,6 @@
     <option name="CHECK_NEW_TODO" value="false" />
     <MESSAGE value="rfbr" />
     <MESSAGE value="fix (not working)" />
-    <MESSAGE value="upd" />
     <MESSAGE value="continue refactoring (still not working)" />
     <MESSAGE value="fix (working!)" />
     <MESSAGE value="migration to modules" />
@@ -2237,7 +1406,8 @@
     <MESSAGE value="fixes, style" />
     <MESSAGE value="commons.io eliminated" />
     <MESSAGE value="optimize imports" />
-    <option name="LAST_COMMIT_MESSAGE" value="optimize imports" />
+    <MESSAGE value="upd" />
+    <option name="LAST_COMMIT_MESSAGE" value="upd" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -2339,6 +1509,18 @@
           <properties />
           <option name="timeStamp" value="205" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/google/GoogleBookInfoExtractor.kt</url>
+          <line>35</line>
+          <properties />
+          <option name="timeStamp" value="206" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/AbstractBookExtractor.kt</url>
+          <line>72</line>
+          <properties />
+          <option name="timeStamp" value="207" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
@@ -2396,66 +1578,10 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/loader/DirContextLoader.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="161">
-          <caret line="26" selection-start-line="26" selection-end-line="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/context/ExecutionContext.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="34" column="5" lean-forward="true" selection-start-line="34" selection-start-column="5" selection-end-line="34" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/google/GoogleBookInfoExtractor.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="152">
-          <caret line="33" column="30" lean-forward="true" selection-start-line="33" selection-start-column="30" selection-end-line="33" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/google/GoogleImageExtractor.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="39" selection-start-line="39" selection-end-line="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/AbstractImageExtractor.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="143">
-          <caret line="43" selection-start-line="43" selection-end-line="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.db/src/main/java/ru/kmorozov/db/core/logic/model/book/google/GooglePagesInfo.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="169">
-          <caret line="68" selection-start-line="68" selection-end-line="68" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk-11.0.1/lib/src.zip!/java.base/java/io/WinNTFileSystem.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="542" column="31" selection-start-line="542" selection-start-column="31" selection-end-line="542" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/loader/LocalFSStorage.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="425">
           <caret line="150" selection-start-line="150" selection-end-line="150" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/AbstractBookExtractor.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="16">
-          <caret line="48" selection-start-line="48" selection-end-line="48" />
         </state>
       </provider>
     </entry>
@@ -2474,13 +1600,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
           <caret line="52" column="84" selection-start-line="52" selection-start-column="84" selection-end-line="52" selection-end-column="84" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/pdf/PdfMaker.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="37" column="8" lean-forward="true" selection-start-line="37" selection-start-column="8" selection-end-line="37" selection-end-column="8" />
         </state>
       </provider>
     </entry>
@@ -2766,6 +1885,105 @@
         </state>
       </provider>
     </entry>
+    <entry file="uml://MAVEN/ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1">
+      <provider selected="true" editor-type-id="UmlEditorProvider">
+        <state>
+          <ID>MAVEN</ID>
+          <OriginalElement>ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1</OriginalElement>
+          <nodes>
+            <node x="" y="">ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1</node>
+            <node x="" y="">org.jsoup:jsoup:jar:1.11.3</node>
+            <node x="" y="">com.google.http-client:google-http-client:jar:1.27.0</node>
+            <node x="" y="">com.google.http-client:google-http-client:jar:1.27.0/com.google.code.findbugs:jsr305:jar:3.0.2</node>
+            <node x="" y="">com.google.http-client:google-http-client:jar:1.27.0/org.apache.httpcomponents:httpclient:jar:4.5.5</node>
+            <node x="" y="">com.google.http-client:google-http-client:jar:1.27.0/org.apache.httpcomponents:httpclient:jar:4.5.5/org.apache.httpcomponents:httpcore:jar:4.4.9</node>
+            <node x="" y="">com.google.http-client:google-http-client:jar:1.27.0/org.apache.httpcomponents:httpclient:jar:4.5.5/commons-logging:commons-logging:jar:1.2</node>
+            <node x="" y="">com.google.http-client:google-http-client:jar:1.27.0/org.apache.httpcomponents:httpclient:jar:4.5.5/commons-codec:commons-codec:jar:1.10</node>
+            <node x="" y="">com.google.http-client:google-http-client:jar:1.27.0/com.google.j2objc:j2objc-annotations:jar:1.1</node>
+            <node x="" y="">com.google.guava:guava:jar:27.0.1-jre</node>
+            <node x="" y="">com.google.guava:guava:jar:27.0.1-jre/com.google.guava:failureaccess:jar:1.0.1</node>
+            <node x="" y="">com.google.guava:guava:jar:27.0.1-jre/com.google.guava:listenablefuture:jar:9999.0-empty-to-avoid-conflict-with-guava</node>
+            <node x="" y="">com.google.guava:guava:jar:27.0.1-jre/org.checkerframework:checker-qual:jar:2.5.2</node>
+            <node x="" y="">com.google.guava:guava:jar:27.0.1-jre/com.google.errorprone:error_prone_annotations:jar:2.2.0</node>
+            <node x="" y="">com.google.guava:guava:jar:27.0.1-jre/org.codehaus.mojo:animal-sniffer-annotations:jar:1.17</node>
+            <node x="" y="">org.apache.httpcomponents.client5:httpclient5:jar:5.0-beta3</node>
+            <node x="" y="">org.apache.httpcomponents.client5:httpclient5:jar:5.0-beta3/org.apache.httpcomponents.core5:httpcore5:jar:5.0-beta6</node>
+            <node x="" y="">org.apache.httpcomponents.client5:httpclient5:jar:5.0-beta3/org.apache.httpcomponents.core5:httpcore5-h2:jar:5.0-beta6</node>
+            <node x="" y="">org.apache.httpcomponents.client5:httpclient5:jar:5.0-beta3/commons-codec:commons-codec:jar:1.11</node>
+            <node x="" y="">org.asynchttpclient:async-http-client:jar:2.6.0</node>
+            <node x="" y="">org.asynchttpclient:async-http-client:jar:2.6.0/org.asynchttpclient:async-http-client-netty-utils:jar:2.6.0</node>
+            <node x="" y="">org.asynchttpclient:async-http-client:jar:2.6.0/org.asynchttpclient:async-http-client-netty-utils:jar:2.6.0/io.netty:netty-buffer:jar:4.1.30.Final</node>
+            <node x="" y="">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-codec-http:jar:4.1.30.Final</node>
+            <node x="" y="">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-codec-http:jar:4.1.30.Final/io.netty:netty-codec:jar:4.1.30.Final</node>
+            <node x="" y="">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-codec-http:jar:4.1.30.Final/io.netty:netty-codec:jar:4.1.30.Final/io.netty:netty-transport:jar:4.1.30.Final</node>
+            <node x="" y="">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-handler:jar:4.1.30.Final</node>
+            <node x="" y="">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-handler:jar:4.1.30.Final/io.netty:netty-buffer:jar:4.1.29.Final</node>
+            <node x="" y="">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-handler:jar:4.1.30.Final/io.netty:netty-transport:jar:4.1.29.Final</node>
+            <node x="" y="">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-codec-socks:jar:4.1.30.Final</node>
+            <node x="" y="">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-handler-proxy:jar:4.1.30.Final</node>
+            <node x="" y="">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-handler-proxy:jar:4.1.30.Final/io.netty:netty-transport:jar:4.1.29.Final</node>
+            <node x="" y="">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-resolver-dns:jar:4.1.30.Final</node>
+            <node x="" y="">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-resolver-dns:jar:4.1.30.Final/io.netty:netty-resolver:jar:4.1.30.Final</node>
+            <node x="" y="">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-resolver-dns:jar:4.1.30.Final/io.netty:netty-resolver:jar:4.1.30.Final/io.netty:netty-common:jar:4.1.30.Final</node>
+            <node x="" y="">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-resolver-dns:jar:4.1.30.Final/io.netty:netty-codec-dns:jar:4.1.30.Final</node>
+            <node x="" y="">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-resolver-dns:jar:4.1.30.Final/io.netty:netty-transport:jar:4.1.29.Final</node>
+            <node x="" y="">org.asynchttpclient:async-http-client:jar:2.6.0/org.reactivestreams:reactive-streams:jar:1.0.2</node>
+            <node x="" y="">org.asynchttpclient:async-http-client:jar:2.6.0/com.typesafe.netty:netty-reactive-streams:jar:2.0.0</node>
+            <node x="" y="">org.asynchttpclient:async-http-client:jar:2.6.0/com.typesafe.netty:netty-reactive-streams:jar:2.0.0/io.netty:netty-handler:jar:4.1.13.Final</node>
+            <node x="" y="">org.asynchttpclient:async-http-client:jar:2.6.0/com.typesafe.netty:netty-reactive-streams:jar:2.0.0/org.reactivestreams:reactive-streams:jar:1.0.0</node>
+            <node x="" y="">org.asynchttpclient:async-http-client:jar:2.6.0/com.sun.activation:javax.activation:jar:1.2.0</node>
+            <node x="" y="">io.netty:netty-transport-native-epoll:jar:4.1.29.Final</node>
+            <node x="" y="">io.netty:netty-transport-native-epoll:jar:4.1.29.Final/io.netty:netty-common:jar:4.1.29.Final</node>
+            <node x="" y="">io.netty:netty-transport-native-epoll:jar:4.1.29.Final/io.netty:netty-buffer:jar:4.1.29.Final</node>
+            <node x="" y="">io.netty:netty-transport-native-epoll:jar:4.1.29.Final/io.netty:netty-transport-native-unix-common:jar:4.1.29.Final</node>
+            <node x="" y="">io.netty:netty-transport-native-epoll:jar:4.1.29.Final/io.netty:netty-transport:jar:4.1.29.Final</node>
+            <node x="" y="">io.netty:netty-transport-native-epoll:jar:4.1.29.Final/io.netty:netty-transport:jar:4.1.29.Final/io.netty:netty-resolver:jar:4.1.29.Final</node>
+            <node x="" y="">com.squareup.okhttp3:okhttp:jar:3.12.1</node>
+            <node x="" y="">com.squareup.okhttp3:okhttp:jar:3.12.1/com.squareup.okio:okio:jar:1.15.0</node>
+            <node x="" y="">ru.kmorozov.gbd:ru.kmorozov.gbd.db:jar:2.2-b1</node>
+            <node x="" y="">ru.kmorozov.gbd:ru.kmorozov.gbd.db:jar:2.2-b1/org.mongodb:mongo-java-driver:jar:3.6.3</node>
+            <node x="" y="">ru.kmorozov.gbd:ru.kmorozov.gbd.db:jar:2.2-b1/org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.20</node>
+            <node x="" y="">ru.kmorozov.gbd:ru.kmorozov.gbd.core.logger:jar:2.2-b1</node>
+            <node x="" y="">ru.kmorozov.gbd:ru.kmorozov.gbd.core.logger:jar:2.2-b1/org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11</node>
+            <node x="" y="">ru.kmorozov.gbd:ru.kmorozov.gbd.core.config:jar:2.2-b1</node>
+            <node x="" y="">ru.kmorozov.gbd:ru.kmorozov.gbd.core.config:jar:2.2-b1/org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11</node>
+            <node x="" y="">org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59</node>
+            <node x="" y="">org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/org.seleniumhq.selenium:selenium-api:jar:3.141.59</node>
+            <node x="" y="">org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/org.seleniumhq.selenium:selenium-remote-driver:jar:3.141.59</node>
+            <node x="" y="">org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/org.seleniumhq.selenium:selenium-remote-driver:jar:3.141.59/com.squareup.okio:okio:jar:1.14.0</node>
+            <node x="" y="">org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/net.bytebuddy:byte-buddy:jar:1.8.15</node>
+            <node x="" y="">org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/org.apache.commons:commons-exec:jar:1.3</node>
+            <node x="" y="">org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/com.squareup.okio:okio:jar:1.15.0</node>
+            <node x="" y="">org.seleniumhq.selenium:selenium-support:jar:3.141.59</node>
+            <node x="" y="">org.seleniumhq.selenium:selenium-support:jar:3.141.59/com.squareup.okio:okio:jar:1.15.0</node>
+            <node x="" y="">junit:junit:jar:4.13-beta-1</node>
+            <node x="" y="">junit:junit:jar:4.13-beta-1/org.hamcrest:hamcrest-core:jar:1.3</node>
+            <node x="" y="">org.slf4j:slf4j-api:jar:1.7.25</node>
+            <node x="" y="">org.mockito:mockito-all:jar:2.0.2-beta</node>
+            <node x="" y="">org.apache.commons:commons-lang3:jar:3.8.1</node>
+            <node x="" y="">com.google.code.gson:gson:jar:2.8.5</node>
+            <node x="" y="">org.eclipse.jetty:jetty-server:jar:9.4.14.v20181114</node>
+            <node x="" y="">org.eclipse.jetty:jetty-server:jar:9.4.14.v20181114/javax.servlet:javax.servlet-api:jar:3.1.0</node>
+            <node x="" y="">org.eclipse.jetty:jetty-server:jar:9.4.14.v20181114/org.eclipse.jetty:jetty-http:jar:9.4.14.v20181114</node>
+            <node x="" y="">org.eclipse.jetty:jetty-server:jar:9.4.14.v20181114/org.eclipse.jetty:jetty-http:jar:9.4.14.v20181114/org.eclipse.jetty:jetty-util:jar:9.4.14.v20181114</node>
+            <node x="" y="">org.eclipse.jetty:jetty-server:jar:9.4.14.v20181114/org.eclipse.jetty:jetty-io:jar:9.4.14.v20181114</node>
+            <node x="" y="">org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11</node>
+            <node x="" y="">org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11/org.jetbrains.kotlin:kotlin-stdlib:jar:1.3.11</node>
+            <node x="" y="">org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11/org.jetbrains.kotlin:kotlin-stdlib:jar:1.3.11/org.jetbrains.kotlin:kotlin-stdlib-common:jar:1.3.11</node>
+            <node x="" y="">org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11/org.jetbrains.kotlin:kotlin-stdlib:jar:1.3.11/org.jetbrains:annotations:jar:13.0</node>
+            <node x="" y="">org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11/org.jetbrains.kotlin:kotlin-stdlib-jdk7:jar:1.3.11</node>
+            <node x="" y="">org.jetbrains.kotlin:kotlin-test:jar:1.3.11</node>
+            <node x="" y="">org.jetbrains.kotlin:kotlin-test:jar:1.3.11/org.jetbrains.kotlin:kotlin-test-common:jar:1.3.11</node>
+          </nodes>
+          <notes />
+          <edges />
+          <settings layout="Hierarchic Group" zoom="1.0" x="4033.5" y="256.5" />
+          <SelectedNodes />
+          <Categories />
+          <VISIBILITY>All</VISIBILITY>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/ru.kmorozov.library.parent/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1074">
@@ -2773,849 +1991,66 @@
         </state>
       </provider>
     </entry>
-    <entry file="uml://MAVEN/ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1">
-      <provider selected="true" editor-type-id="UmlEditorProvider">
-        <state>
-          <ID>MAVEN</ID>
-          <OriginalElement>ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1</OriginalElement>
-          <nodes>
-            <node x="3594.895833333333" y="590.0">ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1</node>
-            <node x="4740.833333333333" y="420.0">org.jsoup:jsoup:jar:1.11.3</node>
-            <node x="5399.426081780535" y="420.0">com.google.http-client:google-http-client:jar:1.27.0</node>
-            <node x="5311.458333333333" y="300.0">com.google.http-client:google-http-client:jar:1.27.0/com.google.code.findbugs:jsr305:jar:3.0.2</node>
-            <node x="5545.458333333333" y="300.0">com.google.http-client:google-http-client:jar:1.27.0/org.apache.httpcomponents:httpclient:jar:4.5.5</node>
-            <node x="5668.458333333333" y="160.0">com.google.http-client:google-http-client:jar:1.27.0/org.apache.httpcomponents:httpclient:jar:4.5.5/org.apache.httpcomponents:httpcore:jar:4.4.9</node>
-            <node x="5318.265020703933" y="160.0">com.google.http-client:google-http-client:jar:1.27.0/org.apache.httpcomponents:httpclient:jar:4.5.5/commons-logging:commons-logging:jar:1.2</node>
-            <node x="5525.458333333333" y="160.0">com.google.http-client:google-http-client:jar:1.27.0/org.apache.httpcomponents:httpclient:jar:4.5.5/commons-codec:commons-codec:jar:1.10</node>
-            <node x="5393.458333333333" y="300.0">com.google.http-client:google-http-client:jar:1.27.0/com.google.j2objc:j2objc-annotations:jar:1.1</node>
-            <node x="5083.458333333333" y="420.0">com.google.guava:guava:jar:27.0.1-jre</node>
-            <node x="5192.458333333333" y="300.0">com.google.guava:guava:jar:27.0.1-jre/com.google.guava:failureaccess:jar:1.0.1</node>
-            <node x="5058.458333333333" y="300.0">com.google.guava:guava:jar:27.0.1-jre/com.google.guava:listenablefuture:jar:9999.0-empty-to-avoid-conflict-with-guava</node>
-            <node x="4937.458333333333" y="300.0">com.google.guava:guava:jar:27.0.1-jre/org.checkerframework:checker-qual:jar:2.5.2</node>
-            <node x="4562.458333333333" y="300.0">com.google.guava:guava:jar:27.0.1-jre/com.google.errorprone:error_prone_annotations:jar:2.2.0</node>
-            <node x="4743.458333333333" y="300.0">com.google.guava:guava:jar:27.0.1-jre/org.codehaus.mojo:animal-sniffer-annotations:jar:1.17</node>
-            <node x="3619.5131314699775" y="420.0">org.apache.httpcomponents.client5:httpclient5:jar:5.0-beta3</node>
-            <node x="3699.6381314699775" y="160.0">org.apache.httpcomponents.client5:httpclient5:jar:5.0-beta3/org.apache.httpcomponents.core5:httpcore5:jar:5.0-beta6</node>
-            <node x="3660.1381314699775" y="300.0">org.apache.httpcomponents.client5:httpclient5:jar:5.0-beta3/org.apache.httpcomponents.core5:httpcore5-h2:jar:5.0-beta6</node>
-            <node x="3517.1381314699775" y="300.0">org.apache.httpcomponents.client5:httpclient5:jar:5.0-beta3/commons-codec:commons-codec:jar:1.11</node>
-            <node x="1843.3333333333333" y="420.0">org.asynchttpclient:async-http-client:jar:2.6.0</node>
-            <node x="1802.850036231882" y="300.0">org.asynchttpclient:async-http-client:jar:2.6.0/org.asynchttpclient:async-http-client-netty-utils:jar:2.6.0</node>
-            <node x="1767.2667028985486" y="160.0">org.asynchttpclient:async-http-client:jar:2.6.0/org.asynchttpclient:async-http-client-netty-utils:jar:2.6.0/io.netty:netty-buffer:jar:4.1.30.Final</node>
-            <node x="1474.2667028985486" y="160.0">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-codec-http:jar:4.1.30.Final</node>
-            <node x="1600.7421532091062" y="80.0">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-codec-http:jar:4.1.30.Final/io.netty:netty-codec:jar:4.1.30.Final</node>
-            <node x="1592.7421532091062" y="0.0">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-codec-http:jar:4.1.30.Final/io.netty:netty-codec:jar:4.1.30.Final/io.netty:netty-transport:jar:4.1.30.Final</node>
-            <node x="2423.908819875773" y="300.0">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-handler:jar:4.1.30.Final</node>
-            <node x="2416.600036231882" y="160.0">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-handler:jar:4.1.30.Final/io.netty:netty-buffer:jar:4.1.29.Final</node>
-            <node x="2284.600036231882" y="160.0">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-handler:jar:4.1.30.Final/io.netty:netty-transport:jar:4.1.29.Final</node>
-            <node x="1617.2667028985486" y="160.0">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-codec-socks:jar:4.1.30.Final</node>
-            <node x="1405.308369565215" y="300.0">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-handler-proxy:jar:4.1.30.Final</node>
-            <node x="1342.2667028985486" y="160.0">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-handler-proxy:jar:4.1.30.Final/io.netty:netty-transport:jar:4.1.29.Final</node>
-            <node x="1110.0167028985486" y="300.0">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-resolver-dns:jar:4.1.30.Final</node>
-            <node x="1077.2667028985486" y="160.0">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-resolver-dns:jar:4.1.30.Final/io.netty:netty-resolver:jar:4.1.30.Final</node>
-            <node x="1073.2667028985486" y="80.0">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-resolver-dns:jar:4.1.30.Final/io.netty:netty-resolver:jar:4.1.30.Final/io.netty:netty-common:jar:4.1.30.Final</node>
-            <node x="1202.2667028985486" y="160.0">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-resolver-dns:jar:4.1.30.Final/io.netty:netty-codec-dns:jar:4.1.30.Final</node>
-            <node x="945.2667028985486" y="160.0">org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-resolver-dns:jar:4.1.30.Final/io.netty:netty-transport:jar:4.1.29.Final</node>
-            <node x="2547.908819875773" y="300.0">org.asynchttpclient:async-http-client:jar:2.6.0/org.reactivestreams:reactive-streams:jar:1.0.2</node>
-            <node x="2063.850036231882" y="300.0">org.asynchttpclient:async-http-client:jar:2.6.0/com.typesafe.netty:netty-reactive-streams:jar:2.0.0</node>
-            <node x="2021.600036231882" y="160.0">org.asynchttpclient:async-http-client:jar:2.6.0/com.typesafe.netty:netty-reactive-streams:jar:2.0.0/io.netty:netty-handler:jar:4.1.13.Final</node>
-            <node x="2145.600036231882" y="160.0">org.asynchttpclient:async-http-client:jar:2.6.0/com.typesafe.netty:netty-reactive-streams:jar:2.0.0/org.reactivestreams:reactive-streams:jar:1.0.0</node>
-            <node x="1887.600036231882" y="160.0">org.asynchttpclient:async-http-client:jar:2.6.0/com.sun.activation:javax.activation:jar:1.2.0</node>
-            <node x="708.4921532091062" y="420.0">io.netty:netty-transport-native-epoll:jar:4.1.29.Final</node>
-            <node x="758.7250362318819" y="80.0">io.netty:netty-transport-native-epoll:jar:4.1.29.Final/io.netty:netty-common:jar:4.1.29.Final</node>
-            <node x="828.2667028985486" y="160.0">io.netty:netty-transport-native-epoll:jar:4.1.29.Final/io.netty:netty-buffer:jar:4.1.29.Final</node>
-            <node x="658.7667028985488" y="300.0">io.netty:netty-transport-native-epoll:jar:4.1.29.Final/io.netty:netty-transport-native-unix-common:jar:4.1.29.Final</node>
-            <node x="526.7667028985488" y="300.0">io.netty:netty-transport-native-epoll:jar:4.1.29.Final/io.netty:netty-transport:jar:4.1.29.Final</node>
-            <node x="502.26670289854883" y="160.0">io.netty:netty-transport-native-epoll:jar:4.1.29.Final/io.netty:netty-transport:jar:4.1.29.Final/io.netty:netty-resolver:jar:4.1.29.Final</node>
-            <node x="4165.2214648033105" y="420.0">com.squareup.okhttp3:okhttp:jar:3.12.1</node>
-            <node x="4171.2214648033105" y="300.0">com.squareup.okhttp3:okhttp:jar:3.12.1/com.squareup.okio:okio:jar:1.15.0</node>
-            <node x="2859.104513457554" y="420.0">ru.kmorozov.gbd:ru.kmorozov.gbd.db:jar:2.2-b1</node>
-            <node x="2856.519534161487" y="300.0">ru.kmorozov.gbd:ru.kmorozov.gbd.db:jar:2.2-b1/org.mongodb:mongo-java-driver:jar:3.6.3</node>
-            <node x="2701.519534161487" y="300.0">ru.kmorozov.gbd:ru.kmorozov.gbd.db:jar:2.2-b1/org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.20</node>
-            <node x="3272.6195341614875" y="300.0">ru.kmorozov.gbd:ru.kmorozov.gbd.core.logger:jar:2.2-b1</node>
-            <node x="3402.2445341614875" y="160.0">ru.kmorozov.gbd:ru.kmorozov.gbd.core.logger:jar:2.2-b1/org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11</node>
-            <node x="3008.519534161487" y="300.0">ru.kmorozov.gbd:ru.kmorozov.gbd.core.config:jar:2.2-b1</node>
-            <node x="2976.769534161487" y="160.0">ru.kmorozov.gbd:ru.kmorozov.gbd.core.config:jar:2.2-b1/org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11</node>
-            <node x="317.36715320910616" y="420.0">org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59</node>
-            <node x="339.08333333333303" y="160.0">org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/org.seleniumhq.selenium:selenium-api:jar:3.141.59</node>
-            <node x="141.74215320910662" y="300.0">org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/org.seleniumhq.selenium:selenium-remote-driver:jar:3.141.59</node>
-            <node x="135.0" y="160.0">org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/org.seleniumhq.selenium:selenium-remote-driver:jar:3.141.59/com.squareup.okio:okio:jar:1.14.0</node>
-            <node x="210.0" y="160.0">org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/net.bytebuddy:byte-buddy:jar:1.8.15</node>
-            <node x="0.0" y="160.0">org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/org.apache.commons:commons-exec:jar:1.3</node>
-            <node x="439.76670289854883" y="300.0">org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/com.squareup.okio:okio:jar:1.15.0</node>
-            <node x="157.11715320910662" y="420.0">org.seleniumhq.selenium:selenium-support:jar:3.141.59</node>
-            <node x="1.3917028985488287" y="300.0">org.seleniumhq.selenium:selenium-support:jar:3.141.59/com.squareup.okio:okio:jar:1.15.0</node>
-            <node x="3808.6381314699775" y="420.0">junit:junit:jar:4.13-beta-1</node>
-            <node x="3782.1381314699775" y="300.0">junit:junit:jar:4.13-beta-1/org.hamcrest:hamcrest-core:jar:1.3</node>
-            <node x="2798.019534161487" y="160.0">org.slf4j:slf4j-api:jar:1.7.25</node>
-            <node x="4821.833333333333" y="420.0">org.mockito:mockito-all:jar:2.0.2-beta</node>
-            <node x="3119.769534161487" y="160.0">org.apache.commons:commons-lang3:jar:3.8.1</node>
-            <node x="3310.604513457554" y="160.0">com.google.code.gson:gson:jar:2.8.5</node>
-            <node x="4054.2214648033105" y="420.0">org.eclipse.jetty:jetty-server:jar:9.4.14.v20181114</node>
-            <node x="3911.1381314699775" y="300.0">org.eclipse.jetty:jetty-server:jar:9.4.14.v20181114/javax.servlet:javax.servlet-api:jar:3.1.0</node>
-            <node x="4048.1381314699775" y="300.0">org.eclipse.jetty:jetty-server:jar:9.4.14.v20181114/org.eclipse.jetty:jetty-http:jar:9.4.14.v20181114</node>
-            <node x="4057.3881314699775" y="80.0">org.eclipse.jetty:jetty-server:jar:9.4.14.v20181114/org.eclipse.jetty:jetty-http:jar:9.4.14.v20181114/org.eclipse.jetty:jetty-util:jar:9.4.14.v20181114</node>
-            <node x="4088.1381314699775" y="160.0">org.eclipse.jetty:jetty-server:jar:9.4.14.v20181114/org.eclipse.jetty:jetty-io:jar:9.4.14.v20181114</node>
-            <node x="4398.2214648033105" y="420.0">org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11</node>
-            <node x="4375.7214648033105" y="160.0">org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11/org.jetbrains.kotlin:kotlin-stdlib:jar:1.3.11</node>
-            <node x="4230.2214648033105" y="80.0">org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11/org.jetbrains.kotlin:kotlin-stdlib:jar:1.3.11/org.jetbrains.kotlin:kotlin-stdlib-common:jar:1.3.11</node>
-            <node x="4400.2214648033105" y="80.0">org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11/org.jetbrains.kotlin:kotlin-stdlib:jar:1.3.11/org.jetbrains:annotations:jar:13.0</node>
-            <node x="4362.2214648033105" y="300.0">org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11/org.jetbrains.kotlin:kotlin-stdlib-jdk7:jar:1.3.11</node>
-            <node x="4246.2214648033105" y="300.0">org.jetbrains.kotlin:kotlin-test:jar:1.3.11</node>
-            <node x="4197.7214648033105" y="160.0">org.jetbrains.kotlin:kotlin-test:jar:1.3.11/org.jetbrains.kotlin:kotlin-test-common:jar:1.3.11</node>
-          </nodes>
-          <notes />
-          <edges>
-            <edge source="com.google.http-client:google-http-client:jar:1.27.0/org.apache.httpcomponents:httpclient:jar:4.5.5" target="com.google.http-client:google-http-client:jar:1.27.0/org.apache.httpcomponents:httpclient:jar:4.5.5/org.apache.httpcomponents:httpcore:jar:4.4.9">
-              <point x="27.66666666666697" y="-15.0" />
-              <point x="5614.625" y="280.0" />
-              <point x="5706.958333333333" y="280.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1" target="com.google.code.gson:gson:jar:2.8.5">
-              <point x="-3.724999999999909" y="-15.0" />
-              <point x="3665.670833333333" y="480.0" />
-              <point x="3469.1195341614875" y="480.0" />
-              <point x="3469.1195341614875" y="220.0" />
-              <point x="3361.354513457554" y="220.0" />
-              <point x="21.75" y="15.0" />
-            </edge>
-            <edge source="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59" target="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/org.seleniumhq.selenium:selenium-api:jar:3.141.59">
-              <point x="64.39999999999964" y="-15.0" />
-              <point x="462.2671532091058" y="400.0" />
-              <point x="516.2667028985488" y="400.0" />
-              <point x="516.2667028985488" y="230.0" />
-              <point x="423.25" y="230.0" />
-              <point x="33.66666666666697" y="15.0" />
-            </edge>
-            <edge source="org.asynchttpclient:async-http-client:jar:2.6.0" target="org.asynchttpclient:async-http-client:jar:2.6.0/org.asynchttpclient:async-http-client-netty-utils:jar:2.6.0">
-              <point x="-6.150000000000091" y="-15.0" />
-              <point x="1898.6833333333332" y="400.0" />
-              <point x="1893.850036231882" y="400.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="io.netty:netty-transport-native-epoll:jar:4.1.29.Final/io.netty:netty-transport-native-unix-common:jar:4.1.29.Final" target="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-resolver-dns:jar:4.1.30.Final/io.netty:netty-transport:jar:4.1.29.Final">
-              <point x="57.75" y="-15.0" />
-              <point x="832.0167028985488" y="280.0" />
-              <point x="973.2667028985486" y="280.0" />
-              <point x="-28.0" y="15.0" />
-            </edge>
-            <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1" target="org.mockito:mockito-all:jar:2.0.2-beta">
-              <point x="55.875" y="-15.0" />
-              <point x="3725.270833333333" y="550.0" />
-              <point x="4868.333333333333" y="550.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.db:jar:2.2-b1" target="org.slf4j:slf4j-api:jar:1.7.25">
-              <point x="-40.0" y="-15.0" />
-              <point x="2889.104513457554" y="390.0" />
-              <point x="2835.019534161487" y="390.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="org.jetbrains.kotlin:kotlin-test:jar:1.3.11/org.jetbrains.kotlin:kotlin-test-common:jar:1.3.11" target="org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11/org.jetbrains.kotlin:kotlin-stdlib:jar:1.3.11/org.jetbrains.kotlin:kotlin-stdlib-common:jar:1.3.11">
-              <point x="0.0" y="-15.0" />
-              <point x="-37.5" y="15.0" />
-            </edge>
-            <edge source="org.seleniumhq.selenium:selenium-support:jar:3.141.59" target="org.seleniumhq.selenium:selenium-support:jar:3.141.59/com.squareup.okio:okio:jar:1.15.0">
-              <point x="-50.40000000000009" y="-15.0" />
-              <point x="169.71715320910653" y="400.0" />
-              <point x="28.89170289854883" y="400.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1" target="ru.kmorozov.gbd:ru.kmorozov.gbd.core.config:jar:2.2-b1">
-              <point x="-26.074999999999818" y="-15.0" />
-              <point x="3643.320833333333" y="510.0" />
-              <point x="3204.354513457554" y="510.0" />
-              <point x="3204.354513457554" y="380.0" />
-              <point x="3148.019534161487" y="380.0" />
-              <point x="46.5" y="15.0" />
-            </edge>
-            <edge source="com.google.guava:guava:jar:27.0.1-jre" target="com.google.guava:guava:jar:27.0.1-jre/com.google.guava:listenablefuture:jar:9999.0-empty-to-avoid-conflict-with-guava">
-              <point x="0.0" y="-15.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="com.google.http-client:google-http-client:jar:1.27.0/org.apache.httpcomponents:httpclient:jar:4.5.5" target="com.google.http-client:google-http-client:jar:1.27.0/org.apache.httpcomponents:httpclient:jar:4.5.5/commons-logging:commons-logging:jar:1.2">
-              <point x="-27.66666666666697" y="-15.0" />
-              <point x="5559.291666666666" y="280.0" />
-              <point x="5384.265020703933" y="280.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="org.asynchttpclient:async-http-client:jar:2.6.0" target="org.asynchttpclient:async-http-client:jar:2.6.0/org.reactivestreams:reactive-streams:jar:1.0.2">
-              <point x="43.049999999999955" y="-15.0" />
-              <point x="1947.8833333333332" y="390.0" />
-              <point x="2607.408819875773" y="390.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="org.asynchttpclient:async-http-client:jar:2.6.0" target="org.slf4j:slf4j-api:jar:1.7.25">
-              <point x="55.34999999999991" y="-15.0" />
-              <point x="1960.1833333333332" y="400.0" />
-              <point x="2677.408819875773" y="400.0" />
-              <point x="2677.408819875773" y="270.0" />
-              <point x="2813.8766770186303" y="270.0" />
-              <point x="-21.14285714285711" y="15.0" />
-            </edge>
-            <edge source="org.seleniumhq.selenium:selenium-support:jar:3.141.59" target="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/net.bytebuddy:byte-buddy:jar:1.8.15">
-              <point x="0.0" y="-15.0" />
-              <point x="220.11715320910662" y="380.0" />
-              <point x="131.24215320910662" y="380.0" />
-              <point x="131.24215320910662" y="280.0" />
-              <point x="225.66666666666652" y="280.0" />
-              <point x="-31.333333333333485" y="15.0" />
-            </edge>
-            <edge source="org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11/org.jetbrains.kotlin:kotlin-stdlib-jdk7:jar:1.3.11" target="org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11/org.jetbrains.kotlin:kotlin-stdlib:jar:1.3.11">
-              <point x="0.0" y="-15.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="com.google.http-client:google-http-client:jar:1.27.0/org.apache.httpcomponents:httpclient:jar:4.5.5" target="com.google.http-client:google-http-client:jar:1.27.0/org.apache.httpcomponents:httpclient:jar:4.5.5/commons-codec:commons-codec:jar:1.10">
-              <point x="0.0" y="-15.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-resolver-dns:jar:4.1.30.Final" target="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-resolver-dns:jar:4.1.30.Final/io.netty:netty-transport:jar:4.1.29.Final">
-              <point x="-43.0" y="-15.0" />
-              <point x="1131.5167028985486" y="280.0" />
-              <point x="1029.2667028985486" y="280.0" />
-              <point x="28.0" y="15.0" />
-            </edge>
-            <edge source="com.google.http-client:google-http-client:jar:1.27.0" target="com.google.http-client:google-http-client:jar:1.27.0/com.google.code.findbugs:jsr305:jar:3.0.2">
-              <point x="-43.33333333333303" y="-15.0" />
-              <point x="5421.092748447202" y="390.0" />
-              <point x="5357.958333333333" y="390.0" />
-              <point x="15.5" y="15.0" />
-            </edge>
-            <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core.config:jar:2.2-b1" target="ru.kmorozov.gbd:ru.kmorozov.gbd.core.config:jar:2.2-b1/org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11">
-              <point x="-23.25" y="-15.0" />
-              <point x="3078.269534161487" y="260.0" />
-              <point x="3038.269534161487" y="260.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="org.apache.httpcomponents.client5:httpclient5:jar:5.0-beta3" target="org.slf4j:slf4j-api:jar:1.7.25">
-              <point x="-33.375" y="-15.0" />
-              <point x="3630.6381314699775" y="400.0" />
-              <point x="3485.4320341614875" y="400.0" />
-              <point x="3485.4320341614875" y="210.0" />
-              <point x="2866.7338198757734" y="210.0" />
-              <point x="31.71428571428578" y="15.0" />
-            </edge>
-            <edge source="com.google.guava:guava:jar:27.0.1-jre" target="com.google.http-client:google-http-client:jar:1.27.0/com.google.code.findbugs:jsr305:jar:3.0.2">
-              <point x="18.285714285714675" y="-15.0" />
-              <point x="5133.744047619048" y="390.0" />
-              <point x="5326.958333333333" y="390.0" />
-              <point x="-15.5" y="15.0" />
-            </edge>
-            <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1" target="com.squareup.okhttp3:okhttp:jar:3.12.1">
-              <point x="26.074999999999818" y="-15.0" />
-              <point x="3695.470833333333" y="510.0" />
-              <point x="4198.7214648033105" y="510.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="org.asynchttpclient:async-http-client:jar:2.6.0/com.typesafe.netty:netty-reactive-streams:jar:2.0.0" target="org.asynchttpclient:async-http-client:jar:2.6.0/com.typesafe.netty:netty-reactive-streams:jar:2.0.0/org.reactivestreams:reactive-streams:jar:1.0.0">
-              <point x="37.75" y="-15.0" />
-              <point x="2177.100036231882" y="250.0" />
-              <point x="2205.100036231882" y="250.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="org.seleniumhq.selenium:selenium-support:jar:3.141.59" target="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/org.seleniumhq.selenium:selenium-remote-driver:jar:3.141.59">
-              <point x="25.199999999999818" y="-15.0" />
-              <point x="245.31715320910644" y="370.0" />
-              <point x="181.24215320910662" y="370.0" />
-              <point x="-39.5" y="15.0" />
-            </edge>
-            <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core.logger:jar:2.2-b1" target="org.apache.commons:commons-lang3:jar:3.8.1">
-              <point x="-23.25" y="-15.0" />
-              <point x="3342.3695341614875" y="240.0" />
-              <point x="3224.769534161487" y="240.0" />
-              <point x="45.0" y="15.0" />
-            </edge>
-            <edge source="io.netty:netty-transport-native-epoll:jar:4.1.29.Final" target="io.netty:netty-transport-native-epoll:jar:4.1.29.Final/io.netty:netty-transport-native-unix-common:jar:4.1.29.Final">
-              <point x="-22.5" y="-15.0" />
-              <point x="775.9921532091062" y="400.0" />
-              <point x="774.2667028985488" y="400.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="org.apache.httpcomponents.client5:httpclient5:jar:5.0-beta3" target="org.apache.httpcomponents.client5:httpclient5:jar:5.0-beta3/commons-codec:commons-codec:jar:1.11">
-              <point x="-11.125" y="-15.0" />
-              <point x="3652.8881314699775" y="390.0" />
-              <point x="3578.6381314699775" y="390.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="org.eclipse.jetty:jetty-server:jar:9.4.14.v20181114/org.eclipse.jetty:jetty-io:jar:9.4.14.v20181114" target="org.eclipse.jetty:jetty-server:jar:9.4.14.v20181114/org.eclipse.jetty:jetty-http:jar:9.4.14.v20181114/org.eclipse.jetty:jetty-util:jar:9.4.14.v20181114">
-              <point x="0.0" y="-15.0" />
-              <point x="4123.138131469977" y="140.0" />
-              <point x="4115.138131469977" y="140.0" />
-              <point x="19.25" y="15.0" />
-            </edge>
-            <edge source="org.asynchttpclient:async-http-client:jar:2.6.0/com.typesafe.netty:netty-reactive-streams:jar:2.0.0" target="org.asynchttpclient:async-http-client:jar:2.6.0/com.typesafe.netty:netty-reactive-streams:jar:2.0.0/io.netty:netty-handler:jar:4.1.13.Final">
-              <point x="-37.75" y="-15.0" />
-              <point x="2101.600036231882" y="250.0" />
-              <point x="2073.600036231882" y="250.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="io.netty:netty-transport-native-epoll:jar:4.1.29.Final/io.netty:netty-transport:jar:4.1.29.Final" target="io.netty:netty-transport-native-epoll:jar:4.1.29.Final/io.netty:netty-transport:jar:4.1.29.Final/io.netty:netty-resolver:jar:4.1.29.Final">
-              <point x="-28.0" y="-15.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core.config:jar:2.2-b1" target="org.apache.commons:commons-lang3:jar:3.8.1">
-              <point x="23.25" y="-15.0" />
-              <point x="3124.769534161487" y="280.0" />
-              <point x="3164.769534161487" y="280.0" />
-              <point x="-15.0" y="15.0" />
-            </edge>
-            <edge source="io.netty:netty-transport-native-epoll:jar:4.1.29.Final" target="io.netty:netty-transport-native-epoll:jar:4.1.29.Final/io.netty:netty-transport:jar:4.1.29.Final">
-              <point x="-67.5" y="-15.0" />
-              <point x="730.9921532091062" y="400.0" />
-              <point x="582.7667028985488" y="400.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="org.asynchttpclient:async-http-client:jar:2.6.0/org.asynchttpclient:async-http-client-netty-utils:jar:2.6.0" target="org.slf4j:slf4j-api:jar:1.7.25">
-              <point x="60.66666666666674" y="-15.0" />
-              <point x="1954.5167028985488" y="260.0" />
-              <point x="2803.305248447202" y="260.0" />
-              <point x="-31.71428571428578" y="15.0" />
-            </edge>
-            <edge source="org.eclipse.jetty:jetty-server:jar:9.4.14.v20181114" target="org.eclipse.jetty:jetty-server:jar:9.4.14.v20181114/org.eclipse.jetty:jetty-http:jar:9.4.14.v20181114">
-              <point x="0.0" y="-15.0" />
-              <point x="4099.7214648033105" y="400.0" />
-              <point x="4089.1381314699775" y="400.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="com.google.http-client:google-http-client:jar:1.27.0" target="com.google.http-client:google-http-client:jar:1.27.0/com.google.j2objc:j2objc-annotations:jar:1.1">
-              <point x="0.0" y="-15.0" />
-              <point x="5464.426081780535" y="400.0" />
-              <point x="5492.458333333333" y="400.0" />
-              <point x="33.0" y="15.0" />
-            </edge>
-            <edge source="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-codec-http:jar:4.1.30.Final/io.netty:netty-codec:jar:4.1.30.Final" target="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-codec-http:jar:4.1.30.Final/io.netty:netty-codec:jar:4.1.30.Final/io.netty:netty-transport:jar:4.1.30.Final">
-              <point x="0.0" y="-15.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="com.google.guava:guava:jar:27.0.1-jre" target="com.google.guava:guava:jar:27.0.1-jre/com.google.guava:failureaccess:jar:1.0.1">
-              <point x="9.142857142856883" y="-15.0" />
-              <point x="5124.60119047619" y="380.0" />
-              <point x="5241.958333333333" y="380.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59" target="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/org.apache.commons:commons-exec:jar:1.3">
-              <point x="-32.19999999999982" y="-15.0" />
-              <point x="365.66715320910635" y="370.0" />
-              <point x="429.26670289854883" y="370.0" />
-              <point x="429.26670289854883" y="250.0" />
-              <point x="95.83333333333303" y="250.0" />
-              <point x="38.33333333333303" y="15.0" />
-            </edge>
-            <edge source="org.asynchttpclient:async-http-client:jar:2.6.0" target="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-resolver-dns:jar:4.1.30.Final">
-              <point x="-55.34999999999991" y="-15.0" />
-              <point x="1849.4833333333333" y="400.0" />
-              <point x="1174.5167028985486" y="400.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.db:jar:2.2-b1" target="com.google.code.gson:gson:jar:2.8.5">
-              <point x="40.0" y="-15.0" />
-              <point x="2969.104513457554" y="390.0" />
-              <point x="3223.269534161487" y="390.0" />
-              <point x="3223.269534161487" y="280.0" />
-              <point x="3332.354513457554" y="280.0" />
-              <point x="-7.25" y="15.0" />
-            </edge>
-            <edge source="org.eclipse.jetty:jetty-server:jar:9.4.14.v20181114/org.eclipse.jetty:jetty-http:jar:9.4.14.v20181114" target="org.eclipse.jetty:jetty-server:jar:9.4.14.v20181114/org.eclipse.jetty:jetty-http:jar:9.4.14.v20181114/org.eclipse.jetty:jetty-util:jar:9.4.14.v20181114">
-              <point x="-20.5" y="-15.0" />
-              <point x="4068.6381314699775" y="140.0" />
-              <point x="4076.6381314699775" y="140.0" />
-              <point x="-19.25" y="15.0" />
-            </edge>
-            <edge source="org.apache.httpcomponents.client5:httpclient5:jar:5.0-beta3" target="org.apache.httpcomponents.client5:httpclient5:jar:5.0-beta3/org.apache.httpcomponents.core5:httpcore5-h2:jar:5.0-beta6">
-              <point x="11.125" y="-15.0" />
-              <point x="3675.1381314699775" y="390.0" />
-              <point x="3710.6381314699775" y="390.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1" target="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59">
-              <point x="-63.32499999999982" y="-15.0" />
-              <point x="3606.070833333333" y="560.0" />
-              <point x="397.86715320910616" y="560.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11" target="org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11/org.jetbrains.kotlin:kotlin-stdlib-jdk7:jar:1.3.11">
-              <point x="-30.75" y="-15.0" />
-              <point x="4428.9714648033105" y="400.0" />
-              <point x="4423.7214648033105" y="400.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59" target="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/net.bytebuddy:byte-buddy:jar:1.8.15">
-              <point x="32.19999999999982" y="-15.0" />
-              <point x="430.067153209106" y="390.0" />
-              <point x="505.26670289854883" y="390.0" />
-              <point x="505.26670289854883" y="240.0" />
-              <point x="288.3333333333335" y="240.0" />
-              <point x="31.333333333333485" y="15.0" />
-            </edge>
-            <edge source="org.apache.httpcomponents.client5:httpclient5:jar:5.0-beta3/org.apache.httpcomponents.core5:httpcore5-h2:jar:5.0-beta6" target="org.apache.httpcomponents.client5:httpclient5:jar:5.0-beta3/org.apache.httpcomponents.core5:httpcore5:jar:5.0-beta6">
-              <point x="0.0" y="-15.0" />
-              <point x="3710.6381314699775" y="280.0" />
-              <point x="3720.3881314699775" y="280.0" />
-              <point x="-20.75" y="15.0" />
-            </edge>
-            <edge source="org.asynchttpclient:async-http-client:jar:2.6.0" target="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-handler:jar:4.1.30.Final">
-              <point x="30.75" y="-15.0" />
-              <point x="1935.5833333333333" y="380.0" />
-              <point x="2475.908819875773" y="380.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1" target="com.google.http-client:google-http-client:jar:1.27.0">
-              <point x="70.77500000000009" y="-15.0" />
-              <point x="3740.170833333333" y="570.0" />
-              <point x="5464.426081780535" y="570.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/org.seleniumhq.selenium:selenium-remote-driver:jar:3.141.59" target="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/org.seleniumhq.selenium:selenium-api:jar:3.141.59">
-              <point x="59.25" y="-15.0" />
-              <point x="279.9921532091066" y="280.0" />
-              <point x="355.91666666666606" y="280.0" />
-              <point x="-33.66666666666697" y="15.0" />
-            </edge>
-            <edge source="org.eclipse.jetty:jetty-server:jar:9.4.14.v20181114" target="org.eclipse.jetty:jetty-server:jar:9.4.14.v20181114/javax.servlet:javax.servlet-api:jar:3.1.0">
-              <point x="-30.333333333333485" y="-15.0" />
-              <point x="4069.388131469977" y="400.0" />
-              <point x="3969.6381314699775" y="400.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-resolver-dns:jar:4.1.30.Final/io.netty:netty-codec-dns:jar:4.1.30.Final" target="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-codec-http:jar:4.1.30.Final/io.netty:netty-codec:jar:4.1.30.Final">
-              <point x="0.0" y="-15.0" />
-              <point x="1262.2667028985486" y="130.0" />
-              <point x="1612.7421532091062" y="130.0" />
-              <point x="-36.0" y="15.0" />
-            </edge>
-            <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1" target="org.jetbrains.kotlin:kotlin-test:jar:1.3.11">
-              <point x="33.52500000000009" y="-15.0" />
-              <point x="3702.920833333333" y="520.0" />
-              <point x="4289.2214648033105" y="520.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="io.netty:netty-transport-native-epoll:jar:4.1.29.Final/io.netty:netty-buffer:jar:4.1.29.Final" target="io.netty:netty-transport-native-epoll:jar:4.1.29.Final/io.netty:netty-common:jar:4.1.29.Final">
-              <point x="0.0" y="-15.0" />
-              <point x="876.2667028985486" y="140.0" />
-              <point x="815.2250362318819" y="140.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="org.asynchttpclient:async-http-client:jar:2.6.0/org.asynchttpclient:async-http-client-netty-utils:jar:2.6.0" target="org.asynchttpclient:async-http-client:jar:2.6.0/com.sun.activation:javax.activation:jar:1.2.0">
-              <point x="0.0" y="-15.0" />
-              <point x="1893.850036231882" y="280.0" />
-              <point x="1916.100036231882" y="280.0" />
-              <point x="-28.5" y="15.0" />
-            </edge>
-            <edge source="com.google.guava:guava:jar:27.0.1-jre" target="com.google.guava:guava:jar:27.0.1-jre/com.google.errorprone:error_prone_annotations:jar:2.2.0">
-              <point x="-27.42857142857156" y="-15.0" />
-              <point x="5088.0297619047615" y="400.0" />
-              <point x="4642.958333333333" y="400.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-handler:jar:4.1.30.Final" target="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-handler:jar:4.1.30.Final/io.netty:netty-transport:jar:4.1.29.Final">
-              <point x="-34.666666666666515" y="-15.0" />
-              <point x="2441.2421532091066" y="250.0" />
-              <point x="2340.600036231882" y="250.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1" target="org.seleniumhq.selenium:selenium-support:jar:3.141.59">
-              <point x="-70.77500000000009" y="-15.0" />
-              <point x="3598.620833333333" y="570.0" />
-              <point x="220.11715320910662" y="570.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core.logger:jar:2.2-b1" target="ru.kmorozov.gbd:ru.kmorozov.gbd.core.logger:jar:2.2-b1/org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11">
-              <point x="69.75" y="-15.0" />
-              <point x="3435.3695341614875" y="280.0" />
-              <point x="3463.7445341614875" y="280.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="junit:junit:jar:4.13-beta-1" target="junit:junit:jar:4.13-beta-1/org.hamcrest:hamcrest-core:jar:1.3">
-              <point x="0.0" y="-15.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1" target="junit:junit:jar:4.13-beta-1">
-              <point x="11.175000000000182" y="-15.0" />
-              <point x="3680.570833333333" y="490.0" />
-              <point x="3836.6381314699775" y="490.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="org.asynchttpclient:async-http-client:jar:2.6.0" target="org.asynchttpclient:async-http-client:jar:2.6.0/com.sun.activation:javax.activation:jar:1.2.0">
-              <point x="6.150000000000091" y="-15.0" />
-              <point x="1910.9833333333333" y="360.0" />
-              <point x="1995.350036231882" y="360.0" />
-              <point x="1995.350036231882" y="250.0" />
-              <point x="1973.100036231882" y="250.0" />
-              <point x="28.5" y="15.0" />
-            </edge>
-            <edge source="org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11" target="org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11/org.jetbrains.kotlin:kotlin-stdlib:jar:1.3.11">
-              <point x="30.75" y="-15.0" />
-              <point x="4490.4714648033105" y="400.0" />
-              <point x="4495.7214648033105" y="400.0" />
-              <point x="4495.7214648033105" y="280.0" />
-              <point x="4455.7214648033105" y="280.0" />
-              <point x="32.0" y="15.0" />
-            </edge>
-            <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core.logger:jar:2.2-b1" target="com.google.code.gson:gson:jar:2.8.5">
-              <point x="23.25" y="-15.0" />
-              <point x="3388.8695341614875" y="230.0" />
-              <point x="3346.854513457554" y="230.0" />
-              <point x="7.25" y="15.0" />
-            </edge>
-            <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core.logger:jar:2.2-b1" target="org.slf4j:slf4j-api:jar:1.7.25">
-              <point x="-69.75" y="-15.0" />
-              <point x="3295.8695341614875" y="250.0" />
-              <point x="2856.1623913043445" y="250.0" />
-              <point x="21.14285714285711" y="15.0" />
-            </edge>
-            <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1" target="ru.kmorozov.gbd:ru.kmorozov.gbd.db:jar:2.2-b1">
-              <point x="-33.52500000000009" y="-15.0" />
-              <point x="3635.870833333333" y="520.0" />
-              <point x="2929.104513457554" y="520.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11/org.jetbrains.kotlin:kotlin-stdlib:jar:1.3.11" target="org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11/org.jetbrains.kotlin:kotlin-stdlib:jar:1.3.11/org.jetbrains.kotlin:kotlin-stdlib-common:jar:1.3.11">
-              <point x="-24.0" y="-15.0" />
-              <point x="4399.7214648033105" y="140.0" />
-              <point x="4342.7214648033105" y="140.0" />
-              <point x="37.5" y="15.0" />
-            </edge>
-            <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.db:jar:2.2-b1" target="ru.kmorozov.gbd:ru.kmorozov.gbd.db:jar:2.2-b1/org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.20">
-              <point x="-60.0" y="-15.0" />
-              <point x="2869.104513457554" y="400.0" />
-              <point x="2763.019534161487" y="400.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.db:jar:2.2-b1" target="ru.kmorozov.gbd:ru.kmorozov.gbd.core.logger:jar:2.2-b1">
-              <point x="60.0" y="-15.0" />
-              <point x="2989.104513457554" y="400.0" />
-              <point x="3319.1195341614875" y="400.0" />
-              <point x="-46.5" y="15.0" />
-            </edge>
-            <edge source="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59" target="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/com.squareup.okio:okio:jar:1.15.0">
-              <point x="0.0" y="-15.0" />
-              <point x="397.86715320910616" y="380.0" />
-              <point x="467.26670289854883" y="380.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11/org.jetbrains.kotlin:kotlin-stdlib:jar:1.3.11" target="org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11/org.jetbrains.kotlin:kotlin-stdlib:jar:1.3.11/org.jetbrains:annotations:jar:13.0">
-              <point x="24.0" y="-15.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="org.apache.httpcomponents.client5:httpclient5:jar:5.0-beta3" target="org.apache.httpcomponents.client5:httpclient5:jar:5.0-beta3/org.apache.httpcomponents.core5:httpcore5:jar:5.0-beta6">
-              <point x="33.375" y="-15.0" />
-              <point x="3697.3881314699775" y="400.0" />
-              <point x="3771.6381314699775" y="400.0" />
-              <point x="3771.6381314699775" y="280.0" />
-              <point x="3761.8881314699775" y="280.0" />
-              <point x="20.75" y="15.0" />
-            </edge>
-            <edge source="io.netty:netty-transport-native-epoll:jar:4.1.29.Final/io.netty:netty-transport-native-unix-common:jar:4.1.29.Final" target="io.netty:netty-transport-native-epoll:jar:4.1.29.Final/io.netty:netty-common:jar:4.1.29.Final">
-              <point x="-57.75" y="-15.0" />
-              <point x="716.5167028985486" y="140.0" />
-              <point x="777.5583695652153" y="140.0" />
-              <point x="-37.666666666666515" y="15.0" />
-            </edge>
-            <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.db:jar:2.2-b1" target="ru.kmorozov.gbd:ru.kmorozov.gbd.db:jar:2.2-b1/org.mongodb:mongo-java-driver:jar:3.6.3">
-              <point x="0.0" y="-15.0" />
-              <point x="2929.104513457554" y="400.0" />
-              <point x="2922.519534161487" y="400.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="org.asynchttpclient:async-http-client:jar:2.6.0" target="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-handler-proxy:jar:4.1.30.Final">
-              <point x="-43.049999999999955" y="-15.0" />
-              <point x="1861.7833333333333" y="390.0" />
-              <point x="1474.808369565215" y="390.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="org.jetbrains.kotlin:kotlin-test:jar:1.3.11" target="org.jetbrains.kotlin:kotlin-test:jar:1.3.11/org.jetbrains.kotlin:kotlin-test-common:jar:1.3.11">
-              <point x="-21.5" y="-15.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-codec-http:jar:4.1.30.Final" target="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-codec-http:jar:4.1.30.Final/io.netty:netty-codec:jar:4.1.30.Final">
-              <point x="0.0" y="-15.0" />
-              <point x="1535.7667028985486" y="140.0" />
-              <point x="1636.7421532091062" y="140.0" />
-              <point x="-12.0" y="15.0" />
-            </edge>
-            <edge source="org.seleniumhq.selenium:selenium-support:jar:3.141.59" target="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/org.apache.commons:commons-exec:jar:1.3">
-              <point x="-25.199999999999818" y="-15.0" />
-              <point x="194.9171532091068" y="390.0" />
-              <point x="66.89170289854883" y="390.0" />
-              <point x="66.89170289854883" y="280.0" />
-              <point x="19.166666666666515" y="280.0" />
-              <point x="-38.333333333333485" y="15.0" />
-            </edge>
-            <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.db:jar:2.2-b1" target="org.apache.commons:commons-lang3:jar:3.8.1">
-              <point x="-20.0" y="-15.0" />
-              <point x="2909.104513457554" y="380.0" />
-              <point x="2846.019534161487" y="380.0" />
-              <point x="2846.019534161487" y="270.0" />
-              <point x="3134.769534161487" y="270.0" />
-              <point x="-45.0" y="15.0" />
-            </edge>
-            <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1" target="org.jsoup:jsoup:jar:1.11.3">
-              <point x="48.42500000000018" y="-15.0" />
-              <point x="3717.820833333333" y="540.0" />
-              <point x="4771.333333333333" y="540.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="com.google.guava:guava:jar:27.0.1-jre" target="com.google.guava:guava:jar:27.0.1-jre/org.checkerframework:checker-qual:jar:2.5.2">
-              <point x="-9.142857142856883" y="-15.0" />
-              <point x="5106.315476190476" y="380.0" />
-              <point x="4987.958333333333" y="380.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-resolver-dns:jar:4.1.30.Final/io.netty:netty-resolver:jar:4.1.30.Final" target="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-resolver-dns:jar:4.1.30.Final/io.netty:netty-resolver:jar:4.1.30.Final/io.netty:netty-common:jar:4.1.30.Final">
-              <point x="0.0" y="-15.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="org.asynchttpclient:async-http-client:jar:2.6.0" target="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-codec-http:jar:4.1.30.Final">
-              <point x="-30.75" y="-15.0" />
-              <point x="1874.0833333333333" y="380.0" />
-              <point x="1575.7667028985484" y="380.0" />
-              <point x="1575.7667028985484" y="270.0" />
-              <point x="1566.5167028985486" y="270.0" />
-              <point x="30.75" y="15.0" />
-            </edge>
-            <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1" target="com.google.guava:guava:jar:27.0.1-jre">
-              <point x="63.32499999999982" y="-15.0" />
-              <point x="3732.720833333333" y="560.0" />
-              <point x="5115.458333333333" y="560.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="org.eclipse.jetty:jetty-server:jar:9.4.14.v20181114" target="org.eclipse.jetty:jetty-server:jar:9.4.14.v20181114/org.eclipse.jetty:jetty-io:jar:9.4.14.v20181114">
-              <point x="30.333333333333485" y="-15.0" />
-              <point x="4130.0547981366435" y="400.0" />
-              <point x="4140.638131469977" y="400.0" />
-              <point x="17.5" y="15.0" />
-            </edge>
-            <edge source="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-handler-proxy:jar:4.1.30.Final" target="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-handler-proxy:jar:4.1.30.Final/io.netty:netty-transport:jar:4.1.29.Final">
-              <point x="-46.33333333333303" y="-15.0" />
-              <point x="1428.4750362318819" y="280.0" />
-              <point x="1398.2667028985486" y="280.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1" target="ru.kmorozov.gbd:ru.kmorozov.gbd.core.logger:jar:2.2-b1">
-              <point x="-11.175000000000182" y="-15.0" />
-              <point x="3658.220833333333" y="490.0" />
-              <point x="3412.1195341614875" y="490.0" />
-              <point x="46.5" y="15.0" />
-            </edge>
-            <edge source="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/org.seleniumhq.selenium:selenium-remote-driver:jar:3.141.59" target="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/org.apache.commons:commons-exec:jar:1.3">
-              <point x="-59.25" y="-15.0" />
-              <point x="161.49215320910662" y="270.0" />
-              <point x="57.5" y="270.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="org.jetbrains.kotlin:kotlin-test:jar:1.3.11" target="org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11/org.jetbrains.kotlin:kotlin-stdlib:jar:1.3.11">
-              <point x="21.5" y="-15.0" />
-              <point x="4310.7214648033105" y="280.0" />
-              <point x="4391.7214648033105" y="280.0" />
-              <point x="-32.0" y="15.0" />
-            </edge>
-            <edge source="io.netty:netty-transport-native-epoll:jar:4.1.29.Final" target="io.netty:netty-transport-native-epoll:jar:4.1.29.Final/io.netty:netty-common:jar:4.1.29.Final">
-              <point x="67.5" y="-15.0" />
-              <point x="865.9921532091062" y="400.0" />
-              <point x="934.7667028985486" y="400.0" />
-              <point x="934.7667028985486" y="130.0" />
-              <point x="852.8917028985484" y="130.0" />
-              <point x="37.666666666666515" y="15.0" />
-            </edge>
-            <edge source="com.google.http-client:google-http-client:jar:1.27.0" target="com.google.http-client:google-http-client:jar:1.27.0/org.apache.httpcomponents:httpclient:jar:4.5.5">
-              <point x="43.33333333333303" y="-15.0" />
-              <point x="5507.759415113868" y="400.0" />
-              <point x="5586.958333333333" y="400.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="org.seleniumhq.selenium:selenium-support:jar:3.141.59" target="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/org.seleniumhq.selenium:selenium-api:jar:3.141.59">
-              <point x="50.40000000000009" y="-15.0" />
-              <point x="270.5171532091067" y="360.0" />
-              <point x="378.51670289854883" y="360.0" />
-              <point x="378.51670289854883" y="280.0" />
-              <point x="389.58333333333303" y="280.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-handler:jar:4.1.30.Final" target="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-handler:jar:4.1.30.Final/io.netty:netty-buffer:jar:4.1.29.Final">
-              <point x="0.0" y="-15.0" />
-              <point x="2475.908819875773" y="250.0" />
-              <point x="2464.600036231882" y="250.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1" target="org.eclipse.jetty:jetty-server:jar:9.4.14.v20181114">
-              <point x="18.625" y="-15.0" />
-              <point x="3688.020833333333" y="500.0" />
-              <point x="4099.7214648033105" y="500.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core.config:jar:2.2-b1" target="org.slf4j:slf4j-api:jar:1.7.25">
-              <point x="-69.75" y="-15.0" />
-              <point x="3031.769534161487" y="260.0" />
-              <point x="2845.590962732916" y="260.0" />
-              <point x="10.571428571428669" y="15.0" />
-            </edge>
-            <edge source="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-handler-proxy:jar:4.1.30.Final" target="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-codec-http:jar:4.1.30.Final">
-              <point x="2.2737367544323206E-13" y="-15.0" />
-              <point x="1474.8083695652151" y="280.0" />
-              <point x="1505.0167028985486" y="280.0" />
-              <point x="-30.75" y="15.0" />
-            </edge>
-            <edge source="com.google.guava:guava:jar:27.0.1-jre" target="com.google.http-client:google-http-client:jar:1.27.0/com.google.j2objc:j2objc-annotations:jar:1.1">
-              <point x="27.42857142857156" y="-15.0" />
-              <point x="5142.886904761905" y="400.0" />
-              <point x="5426.458333333333" y="400.0" />
-              <point x="-33.0" y="15.0" />
-            </edge>
-            <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1" target="io.netty:netty-transport-native-epoll:jar:4.1.29.Final">
-              <point x="-55.875" y="-15.0" />
-              <point x="3613.520833333333" y="550.0" />
-              <point x="798.4921532091062" y="550.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-resolver-dns:jar:4.1.30.Final" target="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-resolver-dns:jar:4.1.30.Final/io.netty:netty-resolver:jar:4.1.30.Final">
-              <point x="0.0" y="-15.0" />
-              <point x="1174.5167028985486" y="270.0" />
-              <point x="1129.7667028985486" y="270.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="com.google.guava:guava:jar:27.0.1-jre" target="com.google.guava:guava:jar:27.0.1-jre/org.codehaus.mojo:animal-sniffer-annotations:jar:1.17">
-              <point x="-18.285714285714675" y="-15.0" />
-              <point x="5097.172619047618" y="390.0" />
-              <point x="4830.458333333333" y="390.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="org.asynchttpclient:async-http-client:jar:2.6.0" target="org.asynchttpclient:async-http-client:jar:2.6.0/com.typesafe.netty:netty-reactive-streams:jar:2.0.0">
-              <point x="18.450000000000045" y="-15.0" />
-              <point x="1923.2833333333333" y="370.0" />
-              <point x="2139.350036231882" y="370.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-handler-proxy:jar:4.1.30.Final" target="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-codec-socks:jar:4.1.30.Final">
-              <point x="46.33333333333371" y="-15.0" />
-              <point x="1521.1417028985486" y="280.0" />
-              <point x="1649.7667028985486" y="280.0" />
-              <point x="-32.5" y="15.0" />
-            </edge>
-            <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.db:jar:2.2-b1" target="ru.kmorozov.gbd:ru.kmorozov.gbd.core.config:jar:2.2-b1">
-              <point x="20.0" y="-15.0" />
-              <point x="2949.104513457554" y="380.0" />
-              <point x="3055.019534161487" y="380.0" />
-              <point x="-46.5" y="15.0" />
-            </edge>
-            <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1" target="org.apache.commons:commons-lang3:jar:3.8.1">
-              <point x="-18.625" y="-15.0" />
-              <point x="3650.770833333333" y="500.0" />
-              <point x="3262.1195341614875" y="500.0" />
-              <point x="3262.1195341614875" y="260.0" />
-              <point x="3194.769534161487" y="260.0" />
-              <point x="15.0" y="15.0" />
-            </edge>
-            <edge source="io.netty:netty-transport-native-epoll:jar:4.1.29.Final/io.netty:netty-transport:jar:4.1.29.Final" target="io.netty:netty-transport-native-epoll:jar:4.1.29.Final/io.netty:netty-buffer:jar:4.1.29.Final">
-              <point x="28.0" y="-15.0" />
-              <point x="610.7667028985488" y="270.0" />
-              <point x="852.2667028985486" y="270.0" />
-              <point x="-24.0" y="15.0" />
-            </edge>
-            <edge source="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-handler:jar:4.1.30.Final" target="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-codec-http:jar:4.1.30.Final/io.netty:netty-codec:jar:4.1.30.Final">
-              <point x="34.666666666666515" y="-15.0" />
-              <point x="2510.5754865424396" y="250.0" />
-              <point x="2603.164037267078" y="250.0" />
-              <point x="2603.164037267078" y="130.0" />
-              <point x="1684.7421532091062" y="130.0" />
-              <point x="36.0" y="15.0" />
-            </edge>
-            <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1" target="org.asynchttpclient:async-http-client:jar:2.6.0">
-              <point x="-48.42500000000018" y="-15.0" />
-              <point x="3620.970833333333" y="540.0" />
-              <point x="1904.8333333333333" y="540.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="com.squareup.okhttp3:okhttp:jar:3.12.1" target="com.squareup.okhttp3:okhttp:jar:3.12.1/com.squareup.okio:okio:jar:1.15.0">
-              <point x="0.0" y="-15.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="org.eclipse.jetty:jetty-server:jar:9.4.14.v20181114/org.eclipse.jetty:jetty-http:jar:9.4.14.v20181114" target="org.eclipse.jetty:jetty-server:jar:9.4.14.v20181114/org.eclipse.jetty:jetty-io:jar:9.4.14.v20181114">
-              <point x="20.5" y="-15.0" />
-              <point x="4109.638131469977" y="280.0" />
-              <point x="4105.638131469977" y="280.0" />
-              <point x="-17.5" y="15.0" />
-            </edge>
-            <edge source="org.asynchttpclient:async-http-client:jar:2.6.0/org.asynchttpclient:async-http-client-netty-utils:jar:2.6.0" target="org.asynchttpclient:async-http-client:jar:2.6.0/org.asynchttpclient:async-http-client-netty-utils:jar:2.6.0/io.netty:netty-buffer:jar:4.1.30.Final">
-              <point x="-60.66666666666674" y="-15.0" />
-              <point x="1833.1833695652153" y="280.0" />
-              <point x="1815.2667028985486" y="280.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1" target="org.slf4j:slf4j-api:jar:1.7.25">
-              <point x="-40.97499999999991" y="-15.0" />
-              <point x="3628.420833333333" y="530.0" />
-              <point x="2691.019534161487" y="530.0" />
-              <point x="2691.019534161487" y="280.0" />
-              <point x="2824.4481055900587" y="280.0" />
-              <point x="-10.571428571428669" y="15.0" />
-            </edge>
-            <edge source="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/org.seleniumhq.selenium:selenium-remote-driver:jar:3.141.59" target="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/net.bytebuddy:byte-buddy:jar:1.8.15">
-              <point x="19.75" y="-15.0" />
-              <point x="240.49215320910662" y="280.0" />
-              <point x="257.0" y="280.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core.config:jar:2.2-b1" target="com.google.code.gson:gson:jar:2.8.5">
-              <point x="69.75" y="-15.0" />
-              <point x="3171.269534161487" y="270.0" />
-              <point x="3317.854513457554" y="270.0" />
-              <point x="-21.75" y="15.0" />
-            </edge>
-            <edge source="org.asynchttpclient:async-http-client:jar:2.6.0" target="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-codec-socks:jar:4.1.30.Final">
-              <point x="-18.450000000000045" y="-15.0" />
-              <point x="1886.3833333333332" y="370.0" />
-              <point x="1714.7667028985486" y="370.0" />
-              <point x="32.5" y="15.0" />
-            </edge>
-            <edge source="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59" target="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/org.seleniumhq.selenium:selenium-remote-driver:jar:3.141.59">
-              <point x="-64.39999999999964" y="-15.0" />
-              <point x="333.4671532091065" y="350.0" />
-              <point x="260.2421532091066" y="350.0" />
-              <point x="39.5" y="15.0" />
-            </edge>
-            <edge source="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-resolver-dns:jar:4.1.30.Final" target="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-resolver-dns:jar:4.1.30.Final/io.netty:netty-codec-dns:jar:4.1.30.Final">
-              <point x="43.0" y="-15.0" />
-              <point x="1217.5167028985486" y="280.0" />
-              <point x="1262.2667028985486" y="280.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1" target="org.apache.httpcomponents.client5:httpclient5:jar:5.0-beta3">
-              <point x="3.724999999999909" y="-15.0" />
-              <point x="3673.120833333333" y="470.0" />
-              <point x="3664.0131314699775" y="470.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/org.seleniumhq.selenium:selenium-remote-driver:jar:3.141.59" target="org.seleniumhq.selenium:selenium-chrome-driver:jar:3.141.59/org.seleniumhq.selenium:selenium-remote-driver:jar:3.141.59/com.squareup.okio:okio:jar:1.14.0">
-              <point x="-19.75" y="-15.0" />
-              <point x="200.99215320910662" y="260.0" />
-              <point x="162.5" y="260.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-codec-socks:jar:4.1.30.Final" target="org.asynchttpclient:async-http-client:jar:2.6.0/io.netty:netty-codec-http:jar:4.1.30.Final/io.netty:netty-codec:jar:4.1.30.Final">
-              <point x="0.0" y="-15.0" />
-              <point x="1682.2667028985486" y="140.0" />
-              <point x="1660.7421532091062" y="140.0" />
-              <point x="12.0" y="15.0" />
-            </edge>
-            <edge source="ru.kmorozov.gbd:ru.kmorozov.gbd.core:2.2-b1" target="org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.3.11">
-              <point x="40.97499999999991" y="-15.0" />
-              <point x="3710.370833333333" y="530.0" />
-              <point x="4459.7214648033105" y="530.0" />
-              <point x="0.0" y="15.0" />
-            </edge>
-            <edge source="io.netty:netty-transport-native-epoll:jar:4.1.29.Final" target="io.netty:netty-transport-native-epoll:jar:4.1.29.Final/io.netty:netty-buffer:jar:4.1.29.Final">
-              <point x="22.5" y="-15.0" />
-              <point x="820.9921532091062" y="390.0" />
-              <point x="900.2667028985486" y="390.0" />
-              <point x="24.0" y="15.0" />
-            </edge>
-          </edges>
-          <settings layout="Hierarchic Group" zoom="1.0" x="4033.5" y="256.5" />
-          <SelectedNodes>
-            <node>com.google.http-client:google-http-client:jar:1.27.0/org.apache.httpcomponents:httpclient:jar:4.5.5/org.apache.httpcomponents:httpcore:jar:4.4.9</node>
-          </SelectedNodes>
-          <Categories />
-          <VISIBILITY>All</VISIBILITY>
+    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/context/ExecutionContext.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="169">
+          <caret line="39" column="53" selection-start-line="39" selection-start-column="53" selection-end-line="39" selection-end-column="53" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.db/src/main/java/ru/kmorozov/db/core/config/IContextLoader.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="8" column="10" selection-start-line="8" selection-start-column="10" selection-end-line="8" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.db/src/main/java/ru/kmorozov/db/core/config/EmptyContextLoader.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="358">
+          <caret line="36" column="32" selection-start-line="36" selection-start-column="12" selection-end-line="36" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/context/ContextProvider.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-696">
+          <caret line="11" column="21" selection-start-line="11" selection-start-column="6" selection-end-line="11" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/AbstractBookExtractor.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="368">
+          <caret line="73" selection-start-line="73" selection-end-line="73" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/library/metadata/GoogleBooksMetadata.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="169">
+          <caret line="28" selection-start-line="28" selection-end-line="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/context/BookContext.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="169">
+          <caret line="31" selection-start-line="31" selection-end-line="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/pdf/PdfMaker.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="44" selection-start-line="44" selection-end-line="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/google/GoogleBookInfoExtractor.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="169">
+          <caret line="29" selection-start-line="29" selection-end-line="29" />
         </state>
       </provider>
     </entry>

@@ -1,5 +1,6 @@
 package ru.kmorozov.gbd.core.logic.context
 
+import ru.kmorozov.db.core.config.EmptyContextLoader.Companion.EMPTY_CONTEXT_LOADER
 import ru.kmorozov.db.core.config.IContextLoader
 import ru.kmorozov.gbd.core.loader.DirContextLoader
 import ru.kmorozov.db.core.logic.model.book.BookInfo
@@ -49,9 +50,9 @@ class ContextProvider(protected var loader: IContextLoader) : IContextLoader {
         public var contextProvider: IContextLoader = getContextProviderInternal()
 
         private fun getContextProviderInternal(): IContextLoader {
-            var _contextProvider: IContextLoader? = null
+            var _contextProvider: IContextLoader = EMPTY_CONTEXT_LOADER
                 synchronized(LOCK_OBJ) {
-                    if (null == _contextProvider)
+                    if (_contextProvider.empty)
                         if (classExists(DB_CTX_PROVIDER_CLASS_NAME)) {
                             try {
                                 _contextProvider = Class.forName(DB_CTX_PROVIDER_CLASS_NAME).getDeclaredConstructor().newInstance() as IContextLoader
@@ -61,13 +62,13 @@ class ContextProvider(protected var loader: IContextLoader) : IContextLoader {
 
                         }
 
-                    if (null == _contextProvider || !_contextProvider!!.isValid)
+                    if (_contextProvider.empty || !_contextProvider.isValid)
                         _contextProvider = ContextProvider(DirContextLoader.BOOK_CTX_LOADER)
                 }
 
-            _contextProvider!!.updateContext()
+            _contextProvider.updateContext()
 
-            return _contextProvider!!
+            return _contextProvider
         }
 
         private fun classExists(className: String): Boolean {
