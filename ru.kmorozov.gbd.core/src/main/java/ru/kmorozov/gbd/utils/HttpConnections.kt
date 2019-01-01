@@ -36,7 +36,7 @@ class HttpConnections private constructor() {
 
     companion object {
 
-        const val USER_AGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 YaBrowser/17.6.1.871 Yowser/2.5 Safari/537.36"
+        const val USER_AGENT = "Mozilla/5.0 (Linux; Android 7.0; SM-G892A Build/NRD90M; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/60.0.3112.107 Mobile Safari/537.36"
         private val headers = HttpHeaders().setUserAgent(USER_AGENT)
         private val INSTANCE = HttpConnections()
         private val baseUrls = HashMap<UrlType, GenericUrl>(1)
@@ -76,23 +76,20 @@ class HttpConnections private constructor() {
         }
 
         private fun getBaseUrl(urlType: UrlType): GenericUrl {
-            var url: GenericUrl? = baseUrls[urlType]
-            if (url == null) {
+            return baseUrls.computeIfAbsent(urlType) {
                 when (urlType) {
                     UrlType.GOOGLE_BOOKS -> {
                         val anyContext = ExecutionContext.INSTANCE.getContexts(false).stream().filter { bookContext -> bookContext.bookInfo.bookData is GoogleBookData }.findAny()
                         if (!anyContext.isPresent)
-                            return GenericUrl("https://books.google.ru")
+                            GenericUrl("https://books.google.ru")
                         else {
-                            url = GenericUrl((anyContext.get().bookInfo.bookData as GoogleBookData).baseUrl)
+                            GenericUrl((anyContext.get().bookInfo.bookData as GoogleBookData).baseUrl)
                         }
                     }
-                    UrlType.JSTOR -> url = GenericUrl("https://www.jstor.org")
-                    else -> url = GenericUrl("http://www.ya.ru")
+                    UrlType.JSTOR -> GenericUrl("https://www.jstor.org")
+                    else -> GenericUrl("http://www.ya.ru")
                 }
-                baseUrls[urlType] = url
             }
-            return url
         }
 
         private fun _getResponse(proxy: Proxy, urlType: UrlType): HttpResponse? {

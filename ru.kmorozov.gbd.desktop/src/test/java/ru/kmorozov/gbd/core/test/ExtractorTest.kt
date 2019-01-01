@@ -1,18 +1,20 @@
 package ru.kmorozov.gbd.core.test
 
-import org.apache.commons.io.IOUtils
-import org.eclipse.jetty.http.MimeTypes
 import org.eclipse.jetty.http.MimeTypes.Type
 import org.eclipse.jetty.server.Request
 import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.server.handler.DefaultHandler
+import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.CoreMatchers.notNullValue
+import org.hamcrest.MatcherAssert
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito
+import ru.kmorozov.db.core.logic.model.book.BookInfo
 import ru.kmorozov.gbd.core.config.GBDOptions
-import ru.kmorozov.db.core.config.IContextLoader
 import ru.kmorozov.gbd.core.config.IGBDOptions
+import ru.kmorozov.gbd.core.config.IStorage
 import ru.kmorozov.gbd.core.loader.LocalFSStorage
 import ru.kmorozov.gbd.core.logic.context.ContextProvider
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
@@ -22,20 +24,11 @@ import ru.kmorozov.gbd.core.logic.library.metadata.ShplMetadata
 import ru.kmorozov.gbd.core.producers.OptionsBasedProducer
 import ru.kmorozov.gbd.core.producers.SingleBookProducer
 import ru.kmorozov.gbd.logger.output.DummyReceiver
-
+import java.io.File
+import java.io.IOException
+import java.nio.file.Files
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
-import java.io.File
-import java.io.FileInputStream
-import java.io.IOException
-import java.io.OutputStream
-import java.nio.charset.Charset
-
-import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.CoreMatchers.notNullValue
-import org.hamcrest.MatcherAssert
-import ru.kmorozov.db.core.logic.model.book.BookInfo
-import ru.kmorozov.gbd.core.config.IStorage
 
 /**
  * Created by sbt-morozov-kv on 16.11.2016.
@@ -66,7 +59,7 @@ class ExtractorTest {
                 if (null == resFileName) return
 
                 val res = File(javaClass.classLoader.getResource(resFileName)!!.file)
-                val data = IOUtils.toString(FileInputStream(res), Charset.forName("UTF-8"))
+                val data = Files.readString(res.toPath())
                 response.outputStream.use { os -> os.write(data.toByteArray()) }
             }
         }

@@ -1,6 +1,5 @@
 package ru.kmorozov.gbd.core.logic.connectors
 
-import org.apache.commons.io.input.NullInputStream
 import java.io.Closeable
 import java.io.InputStream
 
@@ -19,7 +18,7 @@ interface Response : Closeable {
     companion object {
         val EMPTY_RESPONCE: Response = object : Response {
             override val content: InputStream
-                get() = NullInputStream(0);
+                get() = System.`in`;
             override val imageFormat: String
                 get() = "unknown"
 

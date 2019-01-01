@@ -1,16 +1,13 @@
 package ru.kmorozov.gbd.utils
 
-import org.apache.commons.io.FilenameUtils
+import com.google.common.io.MoreFiles
 import ru.kmorozov.gbd.core.logic.connectors.Response
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
-import ru.kmorozov.gbd.logger.Logger
-
-import javax.imageio.ImageIO
-import java.awt.image.BufferedImage
 import java.io.File
 import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
+import javax.imageio.ImageIO
 
 /**
  * Created by km on 27.12.2015.
@@ -22,7 +19,7 @@ object Images {
     fun isImageFile(filePath: Path): Boolean {
         if (!Files.isRegularFile(filePath)) return false
 
-        val ext = FilenameUtils.getExtension(filePath.toString()).toLowerCase()
+        val ext = MoreFiles.getFileExtension(filePath).toLowerCase()
 
         when (ext) {
             "png", "jpg", "jpeg" -> return true
@@ -59,7 +56,7 @@ object Images {
     fun isPdfFile(filePath: Path): Boolean {
         if (!Files.isRegularFile(filePath)) return false
 
-        val ext = FilenameUtils.getExtension(filePath.toString()).toLowerCase()
+        val ext = MoreFiles.getFileExtension(filePath).toLowerCase()
 
         return "pdf" == ext
     }
