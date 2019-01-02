@@ -71,7 +71,7 @@ abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcesso
                         uniqueObject.isLoadingStarted = true
                         storedItem = bookContext.storage.getStoredItem(uniqueObject, imgFormat)
 
-                        reloadFlag = storedItem.exists()
+                        reloadFlag = !storedItem.createdNew
                         if (reloadFlag)
                             if (GBDOptions.reloadImages)
                                 storedItem.delete()

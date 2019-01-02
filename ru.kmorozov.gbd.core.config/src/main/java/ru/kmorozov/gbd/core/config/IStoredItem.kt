@@ -21,4 +21,6 @@ interface IStoredItem {
     fun write(bytes: ByteArray, len: Int)
 
     fun asFile(): File
+
+    val createdNew : Boolean
 }

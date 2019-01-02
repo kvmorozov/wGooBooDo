@@ -8,10 +8,19 @@ import java.io.IOException
 import java.io.OutputStream
 import java.nio.file.Path
 
-open class RawFileItem(protected val outputFile: File) : IStoredItem {
+open class RawFileItem : IStoredItem {
+    protected val outputFile: File
+
+    public override val createdNew: Boolean
+
+    constructor(outputFile: File) {
+        this.outputFile = outputFile
+        this.createdNew = !outputFile.exists()
+    }
+
     constructor(path: Path) : this(path.toFile()) {}
 
-    override val outputStream: OutputStream = FileOutputStream(outputFile)
+    override lateinit var outputStream: OutputStream
 
     var totalLen = 0
 
@@ -22,7 +31,14 @@ open class RawFileItem(protected val outputFile: File) : IStoredItem {
 
     @Throws(IOException::class)
     override fun delete() {
-        outputFile.delete()
+        try {
+            if (totalLen > 0)
+                outputStream.close()
+
+            outputFile.delete()
+        } catch (ex: IOException) {
+            ex.printStackTrace()
+        }
     }
 
     @Throws(IOException::class)
@@ -32,8 +48,15 @@ open class RawFileItem(protected val outputFile: File) : IStoredItem {
 
     @Throws(IOException::class)
     override fun write(bytes: ByteArray, len: Int) {
-        totalLen += len
-        outputStream.write(bytes, 0, len)
+        try {
+            if (totalLen == 0)
+                outputStream = FileOutputStream(outputFile)
+
+            outputStream.write(bytes, 0, len)
+            totalLen += len
+        } catch (ex: IOException) {
+            ex.printStackTrace()
+        }
     }
 
     override fun asFile(): File {
