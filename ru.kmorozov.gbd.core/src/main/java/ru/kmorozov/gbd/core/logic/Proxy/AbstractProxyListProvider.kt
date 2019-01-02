@@ -66,7 +66,7 @@ abstract class AbstractProxyListProvider : IProxyListProvider {
 
     override fun invalidatedProxyListener() {
         val liveProxyCount = proxyList.stream().filter { it.isAvailable }.count()
-        if (0L == liveProxyCount && GBDOptions.secureMode()) throw RuntimeException("No more proxies!")
+        if (0L == liveProxyCount && GBDOptions.secureMode) throw RuntimeException("No more proxies!")
     }
 
     private inner class ProxyChecker internal constructor(private val proxyStr: String, private val urlType: UrlType) : Runnable {
@@ -92,8 +92,8 @@ abstract class AbstractProxyListProvider : IProxyListProvider {
                 val cookie = getCookie(host)
                 proxy = HttpHostExt(host, cookie)
                 if (!StringUtils.isEmpty(cookie)) {
-                    if (!GBDOptions.secureMode() || proxy.isSecure) {
-                        logger.info(String.format("%sroxy %s added.", if (GBDOptions.secureMode()) if (proxy.isSecure) "Secure p" else "NOT secure p" else "P", host.toString()))
+                    if (!GBDOptions.secureMode || proxy.isSecure) {
+                        logger.info(String.format("%sroxy %s added.", if (GBDOptions.secureMode) if (proxy.isSecure) "Secure p" else "NOT secure p" else "P", host.toString()))
                     } else {
                         logger.info(String.format("NOT secure proxy %s NOT added.", host.toString()))
                         proxy.forceInvalidate(false)

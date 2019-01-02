@@ -11,9 +11,9 @@ import java.nio.file.Path
 open class RawFileItem(protected val outputFile: File) : IStoredItem {
     constructor(path: Path) : this(path.toFile()) {}
 
-    override var outputStream: OutputStream? = null
-        @Throws(IOException::class)
-        get() = FileOutputStream(outputFile)
+    override val outputStream: OutputStream = FileOutputStream(outputFile)
+
+    var totalLen = 0
 
     @Throws(IOException::class)
     override fun exists(): Boolean {
@@ -27,13 +27,13 @@ open class RawFileItem(protected val outputFile: File) : IStoredItem {
 
     @Throws(IOException::class)
     override fun close() {
-        if (outputStream != null)
-            outputStream!!.close()
+        outputStream.close()
     }
 
     @Throws(IOException::class)
-    override fun write(bytes: ByteArray, read: Int) {
-        outputStream?.write(bytes, 0, read)
+    override fun write(bytes: ByteArray, len: Int) {
+        totalLen += len
+        outputStream.write(bytes, 0, len)
     }
 
     override fun asFile(): File {

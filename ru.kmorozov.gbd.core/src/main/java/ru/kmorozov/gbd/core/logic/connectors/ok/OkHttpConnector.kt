@@ -36,7 +36,7 @@ class OkHttpConnector : HttpConnector() {
 
     @Throws(IOException::class)
     override fun getContent(url: String, proxy: HttpHostExt, withTimeout: Boolean): Response {
-        if (GBDOptions.secureMode() && proxy.isLocal || !proxy.isAvailable) return EMPTY_RESPONSE
+        if (GBDOptions.secureMode && proxy.isLocal || !proxy.isAvailable) return EMPTY_RESPONSE
 
         val googleHeaders = proxy.getHeaders(getUrlType(url))
         val headerItems = ArrayList<String>()

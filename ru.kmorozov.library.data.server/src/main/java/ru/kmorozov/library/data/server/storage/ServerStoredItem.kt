@@ -46,8 +46,8 @@ internal constructor(private val storage: ServerStorage, val page: IPage, imgFor
     }
 
     @Throws(IOException::class)
-    override fun write(bytes: ByteArray, read: Int) {
-        localItem.write(bytes, read)
+    override fun write(bytes: ByteArray, len: Int) {
+        localItem.write(bytes, len)
     }
 
     override fun asFile(): File {

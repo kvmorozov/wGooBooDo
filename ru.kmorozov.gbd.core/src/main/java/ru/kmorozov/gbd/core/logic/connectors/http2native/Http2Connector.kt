@@ -27,7 +27,7 @@ class Http2Connector : HttpConnector() {
         try {
             val uri = URI.create(rqUrl)
 
-            if (GBDOptions.secureMode() && proxy.isLocal || !proxy.isAvailable) return EMPTY_RESPONSE
+            if (GBDOptions.secureMode && proxy.isLocal || !proxy.isAvailable) return EMPTY_RESPONSE
 
             val resp: HttpResponse<*>?
             if (validateProxy(rqUrl, proxy)) {

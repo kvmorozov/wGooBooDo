@@ -55,7 +55,7 @@ class HttpHostExt {
 
         proxy = Proxy(Type.HTTP, host)
 
-        if (GBDOptions.secureMode()) isSecure = checkSecurity()
+        if (GBDOptions.secureMode) isSecure = checkSecurity()
 
         failureCount = AtomicInteger(0)
         available = AtomicBoolean(true)

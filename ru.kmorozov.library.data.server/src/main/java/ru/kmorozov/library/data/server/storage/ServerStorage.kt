@@ -43,7 +43,7 @@ class ServerStorage(private val api: OneDriveProvider, private val root: OneDriv
         get() = throw IllegalStateException()
 
     @Throws(IOException::class)
-    override fun getChildStorage(bookData: IBookData): IStorage? {
+    override fun getChildStorage(bookData: IBookData): IStorage {
         for (child in getChildren())
             if (child.name.contains(bookData.volumeId!!))
                 return ServerStorage(api, child)
@@ -76,7 +76,7 @@ class ServerStorage(private val api: OneDriveProvider, private val root: OneDriv
     }
 
     @Throws(IOException::class)
-    override fun getStoredItem(page: IPage, imgFormat: String): IStoredItem? {
+    override fun getStoredItem(page: IPage, imgFormat: String): IStoredItem {
         return ServerStoredItem(this, page, imgFormat)
     }
 
@@ -85,7 +85,7 @@ class ServerStorage(private val api: OneDriveProvider, private val root: OneDriv
     }
 
     override fun getIndex(indexName: String, createIfNotExists: Boolean): IIndex {
-        return null!!
+        TODO("Not implemented yet")
     }
 
     override fun restoreState(bookInfo: IBookInfo) {

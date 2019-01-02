@@ -16,7 +16,7 @@ interface IStorage {
     val items: Stream<IStoredItem>?
 
     @Throws(IOException::class)
-    fun getChildStorage(bookData: IBookData): IStorage?
+    fun getChildStorage(bookData: IBookData): IStorage
 
     @Throws(IOException::class)
     fun size(): Int
@@ -25,7 +25,7 @@ interface IStorage {
     fun isPageExists(page: IPage): Boolean
 
     @Throws(IOException::class)
-    fun getStoredItem(page: IPage, imgFormat: String): IStoredItem?
+    fun getStoredItem(page: IPage, imgFormat: String): IStoredItem
 
     fun refresh()
 

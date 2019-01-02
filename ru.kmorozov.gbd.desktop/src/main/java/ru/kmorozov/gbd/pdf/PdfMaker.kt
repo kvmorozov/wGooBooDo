@@ -38,7 +38,7 @@ class PdfMaker : IPostProcessor {
     constructor()
 
     override fun make() {
-        if (PdfOptions.SKIP === GBDOptions.pdfOptions())
+        if (PdfOptions.SKIP === GBDOptions.pdfOptions)
             return
 
         val logger = ExecutionContext.INSTANCE.getLogger(PdfMaker::class.java, uniqueObject)
@@ -113,11 +113,11 @@ class PdfMaker : IPostProcessor {
                                 }
                             } else {
                                 Files.delete(filePath)
-                                logger.severe(String.format("Image %s was deleted!", filePath.fileName))
+                                logger.severe("Image ${filePath.fileName} was deleted!")
                             }
                         }
                     } catch (fse: FileSystemException) {
-
+                        fse.printStackTrace()
                     } catch (e: IOException) {
                         try {
                             Files.delete(filePath)

@@ -44,7 +44,7 @@ class BookContext {
     private val metadata: ILibraryMetadata
     var started: AtomicBoolean
     var pdfCompleted: AtomicBoolean
-    var storage: IStorage? = null
+    lateinit var storage: IStorage
     var extractor: IImageExtractor
     var pagesBefore: Long = 0
     var pagesProcessed: Long = 0
@@ -75,7 +75,7 @@ class BookContext {
         try {
             pagesStream.filter { it.isFileExists }.forEach { page ->
                 try {
-                    if (!storage!!.isPageExists(page)) {
+                    if (!storage.isPageExists(page)) {
                         logger.severe(String.format("Page %s not found in storage!", page.pid))
                         (page as AbstractPage).isDataProcessed = false
                         page.isFileExists = false
@@ -85,7 +85,7 @@ class BookContext {
                 }
             }
 
-            storage!!.restoreState(bookInfo)
+            storage.restoreState(bookInfo)
         } catch (e: Exception) {
             e.printStackTrace()
         } finally {

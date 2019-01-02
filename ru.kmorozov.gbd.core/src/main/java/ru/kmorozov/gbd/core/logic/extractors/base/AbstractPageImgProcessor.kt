@@ -36,10 +36,10 @@ abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcesso
 
     @JvmOverloads
     protected fun processImage(imgUrl: String, proxy: HttpHostExt = HttpHostExt.NO_PROXY): Boolean {
-        if (GBDOptions.secureMode() && proxy.isLocal) return false
+        if (GBDOptions.secureMode && proxy.isLocal) return false
 
         var inputStream: InputStream? = null
-        var storedItem: IStoredItem? = null
+        lateinit var storedItem: IStoredItem
 
         if (uniqueObject.isLoadingStarted) return false
 
@@ -69,28 +69,26 @@ abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcesso
                         if (uniqueObject.isLoadingStarted) return false
 
                         uniqueObject.isLoadingStarted = true
-                        storedItem = bookContext.storage!!.getStoredItem(uniqueObject, imgFormat)
+                        storedItem = bookContext.storage.getStoredItem(uniqueObject, imgFormat)
 
-                        reloadFlag = storedItem!!.exists()
+                        reloadFlag = storedItem.exists()
                         if (reloadFlag)
-                            if (GBDOptions.reloadImages())
-                                storedItem!!.delete()
+                            if (GBDOptions.reloadImages)
+                                storedItem.delete()
                             else {
                                 uniqueObject.isDataProcessed = true
                                 return false
                             }
 
-                        if (storedItem!!.exists()) break
-
-                        if (!proxy.isLocal)
-                            logger.info(String.format("Started img %s for %s with %s Proxy", if (reloadFlag) "RELOADING" else "processing", uniqueObject.pid, proxy.toString()))
-                        else
+                        if (proxy.isLocal)
                             logger.info(String.format("Started img %s for %s without Proxy", if (reloadFlag) "RELOADING" else "processing", uniqueObject.pid))
+                        else
+                            logger.info(String.format("Started img %s for %s with %s Proxy", if (reloadFlag) "RELOADING" else "processing", uniqueObject.pid, proxy.toString()))
                     }
 
                     firstChunk = false
 
-                    storedItem!!.write(bytes, read)
+                    storedItem.write(bytes, read)
                 } while (true)
 
                 if (validateOutput(storedItem, imgWidth)) {
@@ -104,7 +102,7 @@ abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcesso
 
                     return true
                 } else {
-                    storedItem!!.delete()
+                    storedItem.delete()
                     return false
                 }
             }
@@ -123,20 +121,17 @@ abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcesso
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
-
             }
-            if (null != storedItem) {
-                try {
-                    storedItem!!.close()
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
+            try {
+                storedItem.close()
+            } catch (e: IOException) {
+                e.printStackTrace()
             }
 
-            if (!uniqueObject.isDataProcessed && null != storedItem) {
+            if (!uniqueObject.isDataProcessed) {
                 logger.info(String.format("Loading page %s failed!", uniqueObject.pid))
                 try {
-                    storedItem!!.delete()
+                    storedItem.delete()
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }

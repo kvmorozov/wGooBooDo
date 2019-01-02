@@ -32,7 +32,7 @@ class GoogleHttpConnector : HttpConnector() {
         try {
             val url = GenericUrl(URI.create(rqUrl))
 
-            if (GBDOptions.secureMode() && proxy.isLocal || !proxy.isAvailable) return EMPTY_RESPONSE
+            if (GBDOptions.secureMode && proxy.isLocal || !proxy.isAvailable) return EMPTY_RESPONSE
 
             val resp: Response
             if (validateProxy(rqUrl, proxy)) {

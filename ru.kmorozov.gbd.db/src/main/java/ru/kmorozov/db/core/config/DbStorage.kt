@@ -16,14 +16,14 @@ class DbStorage : IStorage {
         get() = false
 
     override val bookIdsList: Set<String>
-        get() = null!!
+        get() = TODO("Not implemented yet")
 
     override val items: Stream<IStoredItem>?
         get() = null
 
     @Throws(IOException::class)
-    override fun getChildStorage(bookData: IBookData): IStorage? {
-        return null
+    override fun getChildStorage(bookData: IBookData): IStorage {
+        TODO("Not implemented yet")
     }
 
     @Throws(IOException::class)
@@ -37,8 +37,8 @@ class DbStorage : IStorage {
     }
 
     @Throws(IOException::class)
-    override fun getStoredItem(page: IPage, imgFormat: String): IStoredItem? {
-        return null
+    override fun getStoredItem(page: IPage, imgFormat: String): IStoredItem {
+        TODO("Not implemented yet")
     }
 
     override fun refresh() {
@@ -46,7 +46,7 @@ class DbStorage : IStorage {
     }
 
     override fun getIndex(indexName: String, createIfNotExists: Boolean): IIndex {
-        return null!!
+        TODO("Not implemented yet")
     }
 
     override fun restoreState(bookInfo: IBookInfo) {

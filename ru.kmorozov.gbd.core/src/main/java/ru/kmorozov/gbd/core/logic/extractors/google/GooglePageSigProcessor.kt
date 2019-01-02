@@ -48,7 +48,7 @@ internal class GooglePageSigProcessor : AbstractHttpProcessor, IUniqueRunnable<G
     override var uniqueObject: GooglePageSigProcessor
 
     override fun run() {
-        if (GBDOptions.secureMode() && proxy.isLocal || !proxy.isAvailable) return
+        if (GBDOptions.secureMode && proxy.isLocal || !proxy.isAvailable) return
 
         if (!proxy.isLocal && !(proxy.isAvailable && 0 < proxy.host.port)) return
 

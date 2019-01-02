@@ -20,7 +20,7 @@ class ApacheHttpConnector : HttpConnector() {
 
     @Throws(IOException::class)
     override fun getContent(rqUrl: String, proxy: HttpHostExt, withTimeout: Boolean): Response {
-        if (GBDOptions.secureMode() && proxy.isLocal || !proxy.isAvailable) return EMPTY_RESPONSE
+        if (GBDOptions.secureMode && proxy.isLocal || !proxy.isAvailable) return EMPTY_RESPONSE
 
         val response = getContent(ApacheConnections.INSTANCE.getClient(proxy, withTimeout), HttpGet(rqUrl), proxy, 0)
 

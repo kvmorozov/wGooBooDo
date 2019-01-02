@@ -50,7 +50,7 @@ open class LocalFSStorage(storageDirName: String) : IStorage {
 
     override val items: Stream<IStoredItem>
         @Throws(IOException::class)
-        get() = Files.walk(storageDir.toPath()).map { RawFileItem(it) }
+        get() = Files.walk(storageDir.toPath()).filter { !it.toFile().isDirectory }.map { RawFileItem(it) }
 
     init {
         storageDir = File(storageDirName)
@@ -77,7 +77,7 @@ open class LocalFSStorage(storageDirName: String) : IStorage {
     }
 
     override fun size(): Int {
-        return if (storageDir.listFiles() == null) 0 else storageDir.listFiles()!!.size
+        return if (storageDir.listFiles() == null) 0 else storageDir.listFiles().size
     }
 
     @Throws(IOException::class)
@@ -124,12 +124,12 @@ open class LocalFSStorage(storageDirName: String) : IStorage {
                     try {
                         val order = Integer.valueOf(nameParts[0])
 
-                        if (GBDOptions.reloadImages()) {
+                        if (GBDOptions.reloadImages) {
                             val bimg = ImageIO.read(item.asFile())
-                            _page.isDataProcessed = bimg.width >= imgWidth
+                            _page.isDataProcessed = bimg != null && bimg.width >= imgWidth
 
                             // 1.4 - эмпирически, высота переменная
-                            if (bimg.width * 1.4 > bimg.height) {
+                            if (bimg == null || bimg.width * 1.4 > bimg.height) {
                                 item.delete()
                                 _page.isDataProcessed = false
                                 logger.severe(String.format("Page %s deleted!", _page.pid))
@@ -137,19 +137,19 @@ open class LocalFSStorage(storageDirName: String) : IStorage {
                         } else
                             _page.isDataProcessed = true
 
-                        if (Images.isInvalidImage(filePath, imgWidth)) {
-                            _page.isDataProcessed = false
-                            item.delete()
-                            logger.severe(String.format("Page %s deleted!", _page.pid))
-                        } else if (_page.order != order && !_page.isGapPage) {
-                            val oldFile = item.asFile()
-                            val newFile = File(filePath.toString().replace(order.toString() + "_", _page.order.toString() + "_"))
-                            if (!newFile.exists()) {
-                                oldFile.renameTo(newFile)
-                                logger.severe(String.format("Page %s renamed!", _page.pid))
+                        if (_page.isDataProcessed)
+                            if (Images.isInvalidImage(filePath, imgWidth)) {
+                                _page.isDataProcessed = false
+                                item.delete()
+                                logger.severe(String.format("Page %s deleted!", _page.pid))
+                            } else if (_page.order != order && !_page.isGapPage) {
+                                val oldFile = item.asFile()
+                                val newFile = File(filePath.toString().replace(order.toString() + "_", _page.order.toString() + "_"))
+                                if (!newFile.exists()) {
+                                    oldFile.renameTo(newFile)
+                                    logger.severe(String.format("Page %s renamed!", _page.pid))
+                                }
                             }
-                            _page.isDataProcessed = true
-                        }
                     } catch (e: IOException) {
                         // Значит файл с ошибкой
                         try {
@@ -162,7 +162,7 @@ open class LocalFSStorage(storageDirName: String) : IStorage {
                         logger.severe(String.format("Page %s deleted!", _page.pid))
                     }
 
-                    _page.isFileExists = true
+                    _page.isFileExists = item.asFile().exists()
                 }
             }
         }

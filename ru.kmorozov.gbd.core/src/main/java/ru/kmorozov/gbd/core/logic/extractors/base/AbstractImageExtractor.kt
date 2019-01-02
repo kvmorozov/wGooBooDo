@@ -72,12 +72,12 @@ abstract class AbstractImageExtractor : AbstractEventSource, IUniqueRunnable<Boo
 
         try {
             uniqueObject.storage = GBDOptions.storage.getChildStorage(uniqueObject.bookInfo.bookData)
-            uniqueObject.progress.resetMaxValue(uniqueObject.storage!!.size())
+            uniqueObject.progress.resetMaxValue(uniqueObject.storage.size())
         } catch (e: IOException) {
             logger.error(e)
         }
 
-        if (!uniqueObject.storage!!.isValidOrCreate)
+        if (!uniqueObject.storage.isValidOrCreate)
             logger.severe(String.format("Invalid book title: %s", uniqueObject.bookInfo.bookData.title))
     }
 }

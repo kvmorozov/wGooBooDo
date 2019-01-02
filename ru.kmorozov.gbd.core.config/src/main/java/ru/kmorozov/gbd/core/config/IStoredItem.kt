@@ -18,7 +18,7 @@ interface IStoredItem {
     fun close()
 
     @Throws(IOException::class)
-    fun write(bytes: ByteArray, read: Int)
+    fun write(bytes: ByteArray, len: Int)
 
     fun asFile(): File
 }

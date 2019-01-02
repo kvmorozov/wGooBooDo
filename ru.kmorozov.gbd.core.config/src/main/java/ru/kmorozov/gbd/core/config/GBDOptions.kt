@@ -33,17 +33,14 @@ object GBDOptions {
         INSTANCE = optionHolder
     }
 
-    fun reloadImages(): Boolean {
-        return INSTANCE.reloadImages()
-    }
+    val reloadImages: Boolean
+        get() = INSTANCE.reloadImages()
 
-    fun secureMode(): Boolean {
-        return INSTANCE.secureMode()
-    }
+    val secureMode: Boolean
+        get() = INSTANCE.secureMode()
 
-    fun pdfOptions(): PdfOptions {
-        return if (StringUtils.isEmpty(INSTANCE.pdfOptions())) PdfOptions.DEFAULT_MODE else PdfOptions.getOption(INSTANCE.pdfOptions())
-    }
+    val pdfOptions: PdfOptions
+        get() = if (StringUtils.isEmpty(INSTANCE.pdfOptions())) PdfOptions.DEFAULT_MODE else PdfOptions.getOption(INSTANCE.pdfOptions())
 
     fun getImageWidth(defaultValue: Int): Int {
         return if (0 == INSTANCE.imageWidth) defaultValue else INSTANCE.imageWidth
