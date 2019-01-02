@@ -2,9 +2,9 @@ package ru.kmorozov.gbd.core.logic.extractors.google
 
 import org.jsoup.nodes.DataNode
 import org.jsoup.nodes.Document
-import ru.kmorozov.db.core.config.EmptyContextLoader.Companion.EMPTY_CONTEXT_LOADER
 import ru.kmorozov.db.core.config.IContextLoader
 import ru.kmorozov.db.core.logic.model.book.BookInfo
+import ru.kmorozov.db.core.logic.model.book.BookInfo.Companion.EMPTY_BOOK
 import ru.kmorozov.db.core.logic.model.book.google.GoogleBookData
 import ru.kmorozov.db.core.logic.model.book.google.GooglePagesInfo
 import ru.kmorozov.db.utils.Mapper
@@ -37,12 +37,12 @@ open class GoogleBookInfoExtractor : AbstractBookExtractor {
         val defaultDocument = documentWithoutProxy
         try {
             val defaultBookInfo = extractBookInfo(defaultDocument)
-            if (null == defaultBookInfo) {
+            if (defaultBookInfo.empty) {
                 HttpHostExt.NO_PROXY.forceInvalidate(false)
 
                 for (proxy in AbstractProxyListProvider.INSTANCE.proxyList) {
                     val proxyBookInfo = extractBookInfo(getDocumentWithProxy(proxy))
-                    if (null == proxyBookInfo)
+                    if (proxyBookInfo.empty)
                         proxy.forceInvalidate(true)
                     else
                         return proxyBookInfo
@@ -56,8 +56,8 @@ open class GoogleBookInfoExtractor : AbstractBookExtractor {
         return BookInfo.EMPTY_BOOK
     }
 
-    private fun extractBookInfo(doc: Document?): BookInfo? {
-        if (null == doc) return null
+    private fun extractBookInfo(doc: Document?): BookInfo {
+        if (null == doc) return EMPTY_BOOK
 
         val scripts = doc.select("script")
         for (script in scripts) {
@@ -71,7 +71,7 @@ open class GoogleBookInfoExtractor : AbstractBookExtractor {
                     val jsonStart = data.indexOf(OC_RUN_ATTRIBUTE) + OC_RUN_ATTRIBUTE.length + 1
                     val jsonEnd = data.lastIndexOf(BOOK_INFO_START_TAG) - 3
 
-                    if (0 >= jsonStart || 0 >= jsonEnd) return null
+                    if (0 >= jsonStart || 0 >= jsonEnd) return EMPTY_BOOK
 
                     val pagesJsonData = data.substring(jsonStart, jsonEnd)
                     val pages = Mapper.gson.fromJson(pagesJsonData, GooglePagesInfo::class.java)
@@ -84,7 +84,7 @@ open class GoogleBookInfoExtractor : AbstractBookExtractor {
             }
         }
 
-        return null
+        return EMPTY_BOOK
     }
 
     companion object {

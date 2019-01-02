@@ -4,7 +4,7 @@ import com.google.api.client.http.HttpStatusCodes
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
 import ru.kmorozov.gbd.core.logic.connectors.Response
-import ru.kmorozov.gbd.core.logic.connectors.Response.Companion.EMPTY_RESPONCE
+import ru.kmorozov.gbd.core.logic.connectors.Response.Companion.EMPTY_RESPONSE
 import ru.kmorozov.gbd.core.logic.connectors.ResponseException
 import ru.kmorozov.gbd.core.logic.library.LibraryFactory
 import java.io.IOException
@@ -18,7 +18,7 @@ open class AbstractHttpProcessor {
 
     protected fun getContent(rqUrl: String, proxy: HttpHostExt, withTimeout: Boolean): Response {
         try {
-            var resp: Response = EMPTY_RESPONCE
+            var resp: Response = EMPTY_RESPONSE
             for (connector in connectors) {
                 resp = connector.getContent(rqUrl, proxy, withTimeout)
                 resp = if (proxy.isLocal) resp else
@@ -35,23 +35,23 @@ open class AbstractHttpProcessor {
                 else -> re.printStackTrace()
             }
 
-            return if (proxy.isLocal) EMPTY_RESPONCE else getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout)
+            return if (proxy.isLocal) EMPTY_RESPONSE else getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout)
         } catch (se: SocketException) {
             proxy.registerFailure()
-            return if (proxy.isLocal) EMPTY_RESPONCE else getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout)
+            return if (proxy.isLocal) EMPTY_RESPONSE else getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout)
         } catch (se: SSLException) {
             proxy.registerFailure()
-            return if (proxy.isLocal) EMPTY_RESPONCE else getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout)
+            return if (proxy.isLocal) EMPTY_RESPONSE else getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout)
         } catch (ioe: IOException) {
             proxy.registerFailure()
 
             // Если что-то более специфическое
             if (ioe.javaClass != IOException::class.java) ioe.printStackTrace()
 
-            return if (proxy.isLocal) EMPTY_RESPONCE else getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout)
+            return if (proxy.isLocal) EMPTY_RESPONSE else getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout)
         } catch (ex: Exception) {
             ex.printStackTrace()
-            return EMPTY_RESPONCE
+            return EMPTY_RESPONSE
         }
 
     }

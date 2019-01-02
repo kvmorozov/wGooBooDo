@@ -89,7 +89,7 @@ internal class GooglePageSigProcessor : AbstractHttpProcessor, IUniqueRunnable<G
             if (uniqueObject.isDataProcessed || null != uniqueObject.sig || uniqueObject.isSigChecked || uniqueObject.isLoadingStarted)
                 return
 
-            var resp: Response = Response.EMPTY_RESPONCE
+            var resp: Response = Response.EMPTY_RESPONSE
             val baseUrl = HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, bookContext.bookInfo.bookId)
             val rqUrl = baseUrl + PAGES_REQUEST_TEMPLATE.replace(RQ_PG_PLACEHOLDER, uniqueObject.pid)
 

@@ -4,7 +4,7 @@ import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
 import ru.kmorozov.gbd.core.logic.connectors.Response
-import ru.kmorozov.gbd.core.logic.connectors.Response.Companion.EMPTY_RESPONCE
+import ru.kmorozov.gbd.core.logic.connectors.Response.Companion.EMPTY_RESPONSE
 import ru.kmorozov.gbd.logger.Logger
 import java.io.IOException
 import java.net.ProxySelector
@@ -27,7 +27,7 @@ class Http2Connector : HttpConnector() {
         try {
             val uri = URI.create(rqUrl)
 
-            if (GBDOptions.secureMode() && proxy.isLocal || !proxy.isAvailable) return EMPTY_RESPONCE
+            if (GBDOptions.secureMode() && proxy.isLocal || !proxy.isAvailable) return EMPTY_RESPONSE
 
             val resp: HttpResponse<*>?
             if (validateProxy(rqUrl, proxy)) {

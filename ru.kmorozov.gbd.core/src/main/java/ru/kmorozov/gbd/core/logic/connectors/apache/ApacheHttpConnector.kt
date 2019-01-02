@@ -3,12 +3,11 @@ package ru.kmorozov.gbd.core.logic.connectors.apache
 import org.apache.hc.client5.http.classic.HttpClient
 import org.apache.hc.client5.http.classic.methods.HttpGet
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse
-import org.apache.hc.core5.http.HttpResponse
 import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
 import ru.kmorozov.gbd.core.logic.connectors.Response
-import ru.kmorozov.gbd.core.logic.connectors.Response.Companion.EMPTY_RESPONCE
+import ru.kmorozov.gbd.core.logic.connectors.Response.Companion.EMPTY_RESPONSE
 import ru.kmorozov.gbd.logger.Logger
 
 import java.io.IOException
@@ -21,7 +20,7 @@ class ApacheHttpConnector : HttpConnector() {
 
     @Throws(IOException::class)
     override fun getContent(rqUrl: String, proxy: HttpHostExt, withTimeout: Boolean): Response {
-        if (GBDOptions.secureMode() && proxy.isLocal || !proxy.isAvailable) return EMPTY_RESPONCE
+        if (GBDOptions.secureMode() && proxy.isLocal || !proxy.isAvailable) return EMPTY_RESPONSE
 
         val response = getContent(ApacheConnections.INSTANCE.getClient(proxy, withTimeout), HttpGet(rqUrl), proxy, 0)
 
@@ -32,7 +31,7 @@ class ApacheHttpConnector : HttpConnector() {
 
     private fun getContent(client: HttpClient, req: HttpGet, proxy: HttpHostExt, attempt: Int): Response {
         var _attempt = attempt
-        if (HttpConnector.MAX_RETRY_COUNT <= attempt) return EMPTY_RESPONCE
+        if (HttpConnector.MAX_RETRY_COUNT <= attempt) return EMPTY_RESPONSE
 
         if (0 < attempt)
             try {
@@ -48,7 +47,7 @@ class ApacheHttpConnector : HttpConnector() {
             return getContent(client, req, proxy, ++_attempt)
         } catch (ex: Exception) {
             proxy.registerFailure()
-            return EMPTY_RESPONCE
+            return EMPTY_RESPONSE
         }
 
     }

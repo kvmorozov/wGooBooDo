@@ -13,7 +13,7 @@ import org.asynchttpclient.proxy.ProxyServer.Builder
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
 import ru.kmorozov.gbd.core.logic.connectors.Response
-import ru.kmorozov.gbd.core.logic.connectors.Response.Companion.EMPTY_RESPONCE
+import ru.kmorozov.gbd.core.logic.connectors.Response.Companion.EMPTY_RESPONSE
 import java.io.IOException
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ExecutionException
@@ -61,11 +61,11 @@ class AsyncHttpConnector : HttpConnector() {
         try {
             return AsyncHttpResponse(builder.execute(AsyncHandler(proxy)).get(HttpConnector.CONNECT_TIMEOUT.toLong(), TimeUnit.MILLISECONDS))
         } catch (ex: InterruptedException) {
-            return EMPTY_RESPONCE
+            return EMPTY_RESPONSE
         } catch (ex: ExecutionException) {
-            return EMPTY_RESPONCE
+            return EMPTY_RESPONSE
         } catch (ex: TimeoutException) {
-            return EMPTY_RESPONCE
+            return EMPTY_RESPONSE
         } finally {
         }
     }
