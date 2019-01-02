@@ -5,6 +5,8 @@ import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.Proxy.UrlType
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractHttpProcessor
 import ru.kmorozov.gbd.core.logic.extractors.base.IPostProcessor
+import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata
+import ru.kmorozov.gbd.core.logic.library.LibraryFactory
 import ru.kmorozov.gbd.logger.Logger
 import ru.kmorozov.gbd.logger.consumers.AbstractOutputReceiver
 import ru.kmorozov.gbd.logger.output.DummyReceiver
@@ -22,6 +24,8 @@ class ExecutionContext private constructor(val output: AbstractOutputReceiver, v
     private val bookContextMap: MutableMap<String, BookContext> = ConcurrentHashMap<String, BookContext>()
     lateinit var bookExecutor: QueuedThreadPoolExecutor<BookContext>
     lateinit var pdfExecutor: QueuedThreadPoolExecutor<BookContext>
+
+    lateinit var defaultMetadata: ILibraryMetadata
 
     val bookIds: Iterable<String>
         get() = bookContextMap.keys
@@ -64,11 +68,15 @@ class ExecutionContext private constructor(val output: AbstractOutputReceiver, v
         bookExecutor = QueuedThreadPoolExecutor(bookContextMap.size.toLong(), 5, { x -> x.isImgStarted }, "bookExecutor")
         pdfExecutor = QueuedThreadPoolExecutor(bookContextMap.size.toLong(), 5, { x -> x.isPdfCompleted }, "pdfExecutor")
 
-        for (bookContext in getContexts(true)) {
+        val contexts = getContexts(true)
+
+        for (bookContext in contexts) {
             val extractor = bookContext.extractor
             extractor.newProxyEvent(HttpHostExt.NO_PROXY)
             bookExecutor.execute(extractor)
         }
+
+        defaultMetadata = LibraryFactory.getMetadata(contexts.get(0).bookId)
 
         AbstractProxyListProvider.INSTANCE.processProxyList(UrlType.GOOGLE_BOOKS)
 

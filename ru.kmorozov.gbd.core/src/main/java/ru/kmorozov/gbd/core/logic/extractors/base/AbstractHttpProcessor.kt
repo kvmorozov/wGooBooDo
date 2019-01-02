@@ -6,6 +6,7 @@ import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
 import ru.kmorozov.gbd.core.logic.connectors.Response
 import ru.kmorozov.gbd.core.logic.connectors.Response.Companion.EMPTY_RESPONSE
 import ru.kmorozov.gbd.core.logic.connectors.ResponseException
+import ru.kmorozov.gbd.core.logic.context.ExecutionContext
 import ru.kmorozov.gbd.core.logic.library.LibraryFactory
 import java.io.IOException
 import java.net.SocketException
@@ -59,7 +60,7 @@ open class AbstractHttpProcessor {
     companion object {
 
         public val connectors: List<HttpConnector>
-            get() = LibraryFactory.preferredConnectors()
+            get() = ExecutionContext.INSTANCE.defaultMetadata.preferredConnectors()
 
         private val LOCK = Any()
 

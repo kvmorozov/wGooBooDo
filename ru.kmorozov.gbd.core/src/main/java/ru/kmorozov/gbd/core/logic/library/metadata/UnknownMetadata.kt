@@ -12,7 +12,7 @@ class UnknownMetadata : ILibraryMetadata {
     private constructor()
 
     override fun isValidId(bookId: String): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return true
     }
 
     override fun getExtractor(bookContext: BookContext): IImageExtractor {

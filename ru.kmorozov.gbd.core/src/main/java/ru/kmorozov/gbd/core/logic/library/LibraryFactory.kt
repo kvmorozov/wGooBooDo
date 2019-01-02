@@ -1,9 +1,8 @@
 package ru.kmorozov.gbd.core.logic.library
 
-import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
-import ru.kmorozov.gbd.core.logic.library.metadata.GoogleBooksMetadata
-import ru.kmorozov.gbd.core.logic.library.metadata.RfbrMetadata
-import ru.kmorozov.gbd.core.logic.library.metadata.ShplMetadata
+import ru.kmorozov.gbd.core.logic.library.metadata.GoogleBooksMetadata.Companion.GOOGLE_METADATA
+import ru.kmorozov.gbd.core.logic.library.metadata.RfbrMetadata.Companion.RFBR_METADATA
+import ru.kmorozov.gbd.core.logic.library.metadata.ShplMetadata.Companion.SHPL_METADATA
 import ru.kmorozov.gbd.core.logic.library.metadata.UnknownMetadata.Companion.UNKNOWN_METADATA
 
 /**
@@ -11,29 +10,13 @@ import ru.kmorozov.gbd.core.logic.library.metadata.UnknownMetadata.Companion.UNK
  */
 object LibraryFactory {
 
-    private val METADATA = arrayOf(GoogleBooksMetadata.GOOGLE_METADATA, ShplMetadata.SHPL_METADATA, RfbrMetadata.RFBR_METADATA)
-
-    private var selectedMetadata: ILibraryMetadata? = null
+    private val METADATA = arrayOf(GOOGLE_METADATA, SHPL_METADATA, RFBR_METADATA, UNKNOWN_METADATA)
 
     fun getMetadata(bookId: String): ILibraryMetadata {
-        for (_metadata in METADATA)
-            if (_metadata.isValidId(bookId)) {
-                selectedMetadata = _metadata
-                return _metadata
-            }
-
-        return UNKNOWN_METADATA
+        return METADATA.first { it -> it.isValidId(bookId) }
     }
 
     fun isValidId(bookId: String): Boolean {
         return !getMetadata(bookId).equals(UNKNOWN_METADATA)
-    }
-
-    fun needSetCookies(): Boolean {
-        return selectedMetadata!!.needSetCookies()
-    }
-
-    fun preferredConnectors(): List<HttpConnector> {
-        return selectedMetadata!!.preferredConnectors()
     }
 }

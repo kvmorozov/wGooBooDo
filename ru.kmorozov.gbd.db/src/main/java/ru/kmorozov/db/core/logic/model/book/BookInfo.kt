@@ -30,14 +30,16 @@ class BookInfo : Serializable, ILoggableObject, IBookInfo {
         this.bookId = bookId
     }
 
-    private constructor() {
-        this.bookData = object : IBookData {
+    override val empty: Boolean
+        get() = this == EMPTY_BOOK
+
+    companion object {
+        val EMPTY_BOOK: BookInfo = BookInfo(object : IBookData {
             override val title: String
                 get() = "empty"
             override val volumeId: String
                 get() = "empty"
-        }
-        this.pages = object : IPagesInfo {
+        }, object : IPagesInfo {
             override val pages: Array<IPage>
                 get() = arrayOf<IPage>()
             override val missingPagesList: String
@@ -50,14 +52,6 @@ class BookInfo : Serializable, ILoggableObject, IBookInfo {
             override fun getPageByPid(pid: String): IPage? {
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
-        }
-        this.bookId = ""
-    }
-
-    override val empty: Boolean
-        get() = this == EMPTY_BOOK
-
-    companion object {
-        val EMPTY_BOOK: BookInfo = BookInfo()
+        }, "")
     }
 }

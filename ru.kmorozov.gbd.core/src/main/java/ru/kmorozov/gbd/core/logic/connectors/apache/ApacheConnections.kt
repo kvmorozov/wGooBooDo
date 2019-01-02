@@ -14,6 +14,7 @@ import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt.Companion.NO_PROXY
 import ru.kmorozov.gbd.core.logic.Proxy.UrlType
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
+import ru.kmorozov.gbd.core.logic.context.ExecutionContext
 import ru.kmorozov.gbd.core.logic.library.LibraryFactory
 import ru.kmorozov.gbd.utils.HttpConnections
 import java.io.Closeable
@@ -99,7 +100,7 @@ class ApacheConnections private constructor() {
             for (cookieEntry in cookies) {
                 val cookieParts = cookieEntry.split("=".toRegex(), 2).toTypedArray()
 
-                if (1 < cookieParts.size && LibraryFactory.needSetCookies()) {
+                if (1 < cookieParts.size && ExecutionContext.INSTANCE.defaultMetadata.needSetCookies()) {
                     val cookie = BasicClientCookie(cookieParts[0], cookieParts[1])
                     cookie.domain = ".google.ru"
                     cookie.path = "/"
