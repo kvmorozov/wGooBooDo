@@ -10,7 +10,7 @@ import ru.kmorozov.db.core.logic.model.book.rfbr.RfbrPagesInfo
 import java.util.Arrays
 import java.util.stream.IntStream
 
-class RfbrBookExtractor(bookId: String) : AbstractBookInfoExtractor(bookId) {
+class RfbrBookInfoExtractor(bookId: String) : AbstractBookInfoExtractor(bookId) {
 
     protected override val bookUrl: String
         get() = RFBR_BASE_URL + bookId

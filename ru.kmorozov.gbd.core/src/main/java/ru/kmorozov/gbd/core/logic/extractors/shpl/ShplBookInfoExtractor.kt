@@ -12,7 +12,7 @@ import ru.kmorozov.gbd.core.logic.model.book.base.IPage
 /**
  * Created by sbt-morozov-kv on 16.11.2016.
  */
-class ShplBookExtractor(bookId: String) : AbstractBookInfoExtractor(bookId) {
+class ShplBookInfoExtractor(bookId: String) : AbstractBookInfoExtractor(bookId) {
 
     protected override val bookUrl: String
         get() = bookId

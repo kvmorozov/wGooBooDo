@@ -20,10 +20,10 @@ interface ILibraryMetadata {
 
     fun getExtractor(bookContext: BookContext): IImageExtractor
 
-    fun getBookExtractor(bookId: String): AbstractBookInfoExtractor
+    fun getBookInfoExtractor(bookId: String): AbstractBookInfoExtractor
 
-    fun getBookExtractor(bookId: String, storedLoader: IContextLoader): AbstractBookInfoExtractor {
-        return getBookExtractor(bookId)
+    fun getBookInfoExtractor(bookId: String, storedLoader: IContextLoader): AbstractBookInfoExtractor {
+        return getBookInfoExtractor(bookId)
     }
 
     fun needSetCookies(): Boolean

@@ -5,7 +5,7 @@ import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
 import ru.kmorozov.gbd.core.logic.context.BookContext
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookInfoExtractor
 import ru.kmorozov.gbd.core.logic.extractors.base.IImageExtractor
-import ru.kmorozov.gbd.core.logic.extractors.rfbr.RfbrBookExtractor
+import ru.kmorozov.gbd.core.logic.extractors.rfbr.RfbrBookInfoExtractor
 import ru.kmorozov.gbd.core.logic.extractors.rfbr.RfbrImageExtractor
 import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata
 
@@ -19,8 +19,8 @@ class RfbrMetadata : ILibraryMetadata {
         return RfbrImageExtractor(bookContext)
     }
 
-    override fun getBookExtractor(bookId: String): AbstractBookInfoExtractor {
-        return RfbrBookExtractor(bookId)
+    override fun getBookInfoExtractor(bookId: String): AbstractBookInfoExtractor {
+        return RfbrBookInfoExtractor(bookId)
     }
 
     override fun needSetCookies(): Boolean {

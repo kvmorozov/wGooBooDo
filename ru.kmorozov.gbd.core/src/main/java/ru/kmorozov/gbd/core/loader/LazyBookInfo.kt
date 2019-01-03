@@ -11,7 +11,7 @@ class LazyBookInfo(override val bookId: String) : IBookInfo {
         get() = true
 
     var realBookInfo: BookInfo? = null
-        get() = LibraryFactory.getMetadata(bookId).getBookExtractor(bookId).bookInfo
+        get() = LibraryFactory.getMetadata(bookId).getBookInfoExtractor(bookId).bookInfo
 
     override val bookData: IBookData
         get() = realBookInfo!!.bookData

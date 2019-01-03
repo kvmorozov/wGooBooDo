@@ -27,11 +27,11 @@ class GoogleBooksMetadata private constructor() : ILibraryMetadata {
         return GoogleImageExtractor(bookContext)
     }
 
-    override fun getBookExtractor(bookId: String): AbstractBookInfoExtractor {
+    override fun getBookInfoExtractor(bookId: String): AbstractBookInfoExtractor {
         return GoogleBookInfoExtractor(bookId)
     }
 
-    override fun getBookExtractor(bookId: String, storedLoader: IContextLoader): AbstractBookInfoExtractor {
+    override fun getBookInfoExtractor(bookId: String, storedLoader: IContextLoader): AbstractBookInfoExtractor {
         return GoogleBookInfoExtractor(bookId, storedLoader)
     }
 

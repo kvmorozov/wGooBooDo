@@ -32,7 +32,7 @@ class ListBasedContextLoader(private val producer: IBookListProducer) : IContext
     }
 
     override fun getBookInfo(bookId: String): BookInfo {
-        return LibraryFactory.getMetadata(bookId).getBookExtractor(bookId, EMPTY_CONTEXT_LOADER).bookInfo
+        return LibraryFactory.getMetadata(bookId).getBookInfoExtractor(bookId, EMPTY_CONTEXT_LOADER).bookInfo
     }
 
     override fun refreshContext() {

@@ -19,11 +19,11 @@ class UnknownMetadata : ILibraryMetadata {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun getBookExtractor(bookId: String): AbstractBookInfoExtractor {
+    override fun getBookInfoExtractor(bookId: String): AbstractBookInfoExtractor {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun getBookExtractor(bookId: String, storedLoader: IContextLoader): AbstractBookInfoExtractor {
+    override fun getBookInfoExtractor(bookId: String, storedLoader: IContextLoader): AbstractBookInfoExtractor {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

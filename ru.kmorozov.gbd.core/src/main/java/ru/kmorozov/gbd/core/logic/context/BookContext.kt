@@ -30,7 +30,7 @@ class BookContext {
         this.started = AtomicBoolean(false)
         this.pdfCompleted = AtomicBoolean(false)
         this.metadata = LibraryFactory.getMetadata(bookId)
-        this.bookInfo = metadata.getBookExtractor(bookId).bookInfo
+        this.bookInfo = metadata.getBookInfoExtractor(bookId).bookInfo
         pagesBefore = pagesStream.filter { pageInfo -> pageInfo.isFileExists }.count()
         sigExecutor = QueuedThreadPoolExecutor(1L, QueuedThreadPoolExecutor.THREAD_POOL_SIZE, { true }, "Sig_$bookId")
         imgExecutor = QueuedThreadPoolExecutor(0L, QueuedThreadPoolExecutor.THREAD_POOL_SIZE, { x -> x.isDataProcessed }, "Img_$bookId")

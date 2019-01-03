@@ -4,7 +4,7 @@ import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
 import ru.kmorozov.gbd.core.logic.context.BookContext
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookInfoExtractor
 import ru.kmorozov.gbd.core.logic.extractors.base.IImageExtractor
-import ru.kmorozov.gbd.core.logic.extractors.shpl.ShplBookExtractor
+import ru.kmorozov.gbd.core.logic.extractors.shpl.ShplBookInfoExtractor
 import ru.kmorozov.gbd.core.logic.extractors.shpl.ShplImageExtractor
 import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata
 
@@ -21,8 +21,8 @@ class ShplMetadata private constructor() : ILibraryMetadata {
         return ShplImageExtractor(bookContext)
     }
 
-    override fun getBookExtractor(bookId: String): AbstractBookInfoExtractor {
-        return ShplBookExtractor(bookId)
+    override fun getBookInfoExtractor(bookId: String): AbstractBookInfoExtractor {
+        return ShplBookInfoExtractor(bookId)
     }
 
     override fun needSetCookies(): Boolean {

@@ -19,7 +19,7 @@ import ru.kmorozov.gbd.core.loader.LocalFSStorage
 import ru.kmorozov.gbd.core.logic.context.ContextProvider
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
 import ru.kmorozov.gbd.core.logic.extractors.google.GoogleBookInfoExtractor
-import ru.kmorozov.gbd.core.logic.extractors.shpl.ShplBookExtractor
+import ru.kmorozov.gbd.core.logic.extractors.shpl.ShplBookInfoExtractor
 import ru.kmorozov.gbd.core.logic.library.metadata.ShplMetadata
 import ru.kmorozov.gbd.core.producers.OptionsBasedProducer
 import ru.kmorozov.gbd.core.producers.SingleBookProducer
@@ -74,7 +74,7 @@ class ExtractorTest {
 
     @Test
     fun shplBookInfoTest() {
-        val extractor = ShplBookExtractor("http://localhost")
+        val extractor = ShplBookInfoExtractor("http://localhost")
 
         MatcherAssert.assertThat<BookInfo>(extractor.bookInfo, notNullValue())
     }
