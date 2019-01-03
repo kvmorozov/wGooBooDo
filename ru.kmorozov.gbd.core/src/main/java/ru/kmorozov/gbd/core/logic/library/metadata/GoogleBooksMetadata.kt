@@ -2,8 +2,10 @@ package ru.kmorozov.gbd.core.logic.library.metadata
 
 import ru.kmorozov.db.core.config.IContextLoader
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
+import ru.kmorozov.gbd.core.logic.connectors.apache.ApacheHttpConnector
 import ru.kmorozov.gbd.core.logic.connectors.asynchttp.AsyncHttpConnector
 import ru.kmorozov.gbd.core.logic.connectors.google.GoogleHttpConnector
+import ru.kmorozov.gbd.core.logic.connectors.http2native.Http2Connector
 import ru.kmorozov.gbd.core.logic.connectors.ok.OkHttpConnector
 import ru.kmorozov.gbd.core.logic.context.BookContext
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookExtractor
@@ -38,13 +40,15 @@ class GoogleBooksMetadata private constructor() : ILibraryMetadata {
     }
 
     override fun preferredConnectors(): List<HttpConnector> {
-        return listOf(GOOGLE_CONNECTOR, ASYNC_CONNECTOR, OK_CONNECTOR)
+        return listOf(GOOGLE_CONNECTOR, HTTP_2_CONNECTOR, OK_CONNECTOR, ASYNC_CONNECTOR, APACHE_CONNECTOR)
     }
 
     companion object {
         val GOOGLE_CONNECTOR = GoogleHttpConnector()
         val ASYNC_CONNECTOR = AsyncHttpConnector()
         val OK_CONNECTOR = OkHttpConnector()
+        val APACHE_CONNECTOR = ApacheHttpConnector()
+        val HTTP_2_CONNECTOR = Http2Connector()
 
         val GOOGLE_METADATA: ILibraryMetadata = GoogleBooksMetadata()
     }

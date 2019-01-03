@@ -25,7 +25,11 @@ class AsyncHandler(private val proxy: HttpHostExt) : AsyncCompletionHandlerBase(
     override fun onStatusReceived(status: HttpResponseStatus): org.asynchttpclient.AsyncHandler.State {
         val statusCode = status.statusCode
 
-        return if (200 == statusCode || 302 == statusCode) super.onStatusReceived(status) else org.asynchttpclient.AsyncHandler.State.ABORT
+        return if (ok.contains(statusCode)) super.onStatusReceived(status) else org.asynchttpclient.AsyncHandler.State.ABORT
+    }
+
+    companion object {
+        val ok = setOf<Int>(200, 302)
     }
 
 }

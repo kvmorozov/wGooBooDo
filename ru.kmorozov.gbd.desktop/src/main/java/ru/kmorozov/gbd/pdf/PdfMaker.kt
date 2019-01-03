@@ -94,7 +94,7 @@ class PdfMaker : IPostProcessor {
 
         try {
             PDDocument().use { document ->
-                Files.list(imgDir.toPath()).filter(Predicate<Path> { filePath -> Images.isImageFile(filePath) }).sorted(Comparator.comparing<Path, Int> { getPagenum(it) }).forEach { filePath ->
+                Files.list(imgDir.toPath()).filter({ Images.isImageFile(it) }).sorted(Comparator.comparing<Path, Int> { getPagenum(it) }).forEach { filePath ->
                     try {
                         FileInputStream(filePath.toFile()).use { `in` ->
                             if (!Images.isInvalidImage(filePath, imgWidth)) {
