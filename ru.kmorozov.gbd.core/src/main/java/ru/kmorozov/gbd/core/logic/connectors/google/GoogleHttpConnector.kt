@@ -27,7 +27,6 @@ class GoogleHttpConnector : HttpConnector() {
         return httpFactoryMap.getOrDefault(key, Builder().setProxy(proxy.proxy).build().createRequestFactory())
     }
 
-    @Throws(IOException::class)
     override fun getContent(rqUrl: String, proxy: HttpHostExt, withTimeout: Boolean): Response {
         try {
             val url = GenericUrl(URI.create(rqUrl))
@@ -54,12 +53,11 @@ class GoogleHttpConnector : HttpConnector() {
             return resp
         } catch (hre: HttpResponseException) {
             logger.severe("Connection error: " + hre.statusMessage)
-            throw GoogleResponseException(hre)
+            return EMPTY_RESPONSE
         }
 
     }
 
-    @Throws(IOException::class)
     private fun getContent(req: HttpRequest, proxy: HttpHostExt, attempt: Int): Response {
         var _attempt = attempt
         if (HttpConnector.MAX_RETRY_COUNT <= _attempt) {

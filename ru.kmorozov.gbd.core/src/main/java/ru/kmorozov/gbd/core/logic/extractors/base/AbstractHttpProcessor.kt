@@ -7,7 +7,6 @@ import ru.kmorozov.gbd.core.logic.connectors.Response
 import ru.kmorozov.gbd.core.logic.connectors.Response.Companion.EMPTY_RESPONSE
 import ru.kmorozov.gbd.core.logic.connectors.ResponseException
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
-import ru.kmorozov.gbd.core.logic.library.LibraryFactory
 import java.io.IOException
 import java.net.SocketException
 import javax.net.ssl.SSLException
@@ -22,13 +21,15 @@ open class AbstractHttpProcessor {
             var resp: Response = EMPTY_RESPONSE
             for (connector in connectors) {
                 resp = connector.getContent(rqUrl, proxy, withTimeout)
-                resp = if (proxy.isLocal) resp else
-                    if (resp.empty) getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout) else resp
+
                 if (!resp.empty)
                     return resp
             }
 
-            return resp
+            if (resp.empty && !proxy.isLocal)
+                return getContent(rqUrl, HttpHostExt.NO_PROXY, withTimeout)
+            else
+                return resp
         } catch (re: ResponseException) {
             when (re.statusCode) {
                 HttpStatusCodes.STATUS_CODE_SERVICE_UNAVAILABLE, 413 -> proxy.forceInvalidate(true)
