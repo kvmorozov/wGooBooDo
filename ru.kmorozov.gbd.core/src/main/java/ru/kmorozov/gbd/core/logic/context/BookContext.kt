@@ -34,7 +34,7 @@ class BookContext {
         pagesBefore = pagesStream.filter { pageInfo -> pageInfo.isFileExists }.count()
         sigExecutor = QueuedThreadPoolExecutor(1L, QueuedThreadPoolExecutor.THREAD_POOL_SIZE, { true }, "Sig_$bookId")
         imgExecutor = QueuedThreadPoolExecutor(0L, QueuedThreadPoolExecutor.THREAD_POOL_SIZE, { x -> x.isDataProcessed }, "Img_$bookId")
-        extractor = metadata.getExtractor(this)
+        extractor = metadata.getImageExtractor(this)
         logger = ExecutionContext.INSTANCE.getLogger(BookContext::class.java, this)
     }
 

@@ -15,7 +15,7 @@ class UnknownMetadata : ILibraryMetadata {
         return true
     }
 
-    override fun getExtractor(bookContext: BookContext): IImageExtractor {
+    override fun getImageExtractor(bookContext: BookContext): IImageExtractor {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

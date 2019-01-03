@@ -15,7 +15,7 @@ class RfbrMetadata : ILibraryMetadata {
         return StringUtils.isNumeric(bookId)
     }
 
-    override fun getExtractor(bookContext: BookContext): IImageExtractor {
+    override fun getImageExtractor(bookContext: BookContext): IImageExtractor {
         return RfbrImageExtractor(bookContext)
     }
 

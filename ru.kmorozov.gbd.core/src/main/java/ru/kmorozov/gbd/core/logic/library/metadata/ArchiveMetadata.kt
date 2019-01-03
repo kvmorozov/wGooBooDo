@@ -17,7 +17,7 @@ class ArchiveMetadata private constructor() : ILibraryMetadata {
         return ARCHIVE_PATTERN.matcher(bookId).matches()
     }
 
-    override fun getExtractor(bookContext: BookContext): IImageExtractor {
+    override fun getImageExtractor(bookContext: BookContext): IImageExtractor {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

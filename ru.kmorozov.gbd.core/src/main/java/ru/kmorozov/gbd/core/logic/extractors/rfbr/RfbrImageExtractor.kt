@@ -4,6 +4,7 @@ import ru.kmorozov.db.core.logic.model.book.rfbr.RfbrPage
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.context.BookContext
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
+import ru.kmorozov.gbd.core.logic.extractors.SimplePageImgProcessor
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractImageExtractor
 import ru.kmorozov.gbd.logger.progress.IProgress
 import java.util.concurrent.TimeUnit
@@ -33,7 +34,7 @@ class RfbrImageExtractor(bookContext: BookContext) : AbstractImageExtractor(book
             }
 
             for (page in uniqueObject.bookInfo.pages.pages)
-                uniqueObject.imgExecutor.execute(RfbrPageImgProcessor(uniqueObject, page as RfbrPage, HttpHostExt.NO_PROXY))
+                uniqueObject.imgExecutor.execute(SimplePageImgProcessor(uniqueObject, page as RfbrPage, HttpHostExt.NO_PROXY))
 
             uniqueObject.imgExecutor.terminate(20L, TimeUnit.MINUTES)
 

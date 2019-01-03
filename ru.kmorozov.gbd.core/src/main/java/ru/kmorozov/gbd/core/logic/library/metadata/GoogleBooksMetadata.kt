@@ -23,7 +23,7 @@ class GoogleBooksMetadata private constructor() : ILibraryMetadata {
         return 12 == bookId.length
     }
 
-    override fun getExtractor(bookContext: BookContext): IImageExtractor {
+    override fun getImageExtractor(bookContext: BookContext): IImageExtractor {
         return GoogleImageExtractor(bookContext)
     }
 

@@ -18,7 +18,7 @@ interface ILibraryMetadata {
 
     fun isValidId(bookId: String): Boolean
 
-    fun getExtractor(bookContext: BookContext): IImageExtractor
+    fun getImageExtractor(bookContext: BookContext): IImageExtractor
 
     fun getBookInfoExtractor(bookId: String): AbstractBookInfoExtractor
 

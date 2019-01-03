@@ -17,7 +17,7 @@ class ShplMetadata private constructor() : ILibraryMetadata {
         return bookId.contains(SHPL_BASE_URL)
     }
 
-    override fun getExtractor(bookContext: BookContext): IImageExtractor {
+    override fun getImageExtractor(bookContext: BookContext): IImageExtractor {
         return ShplImageExtractor(bookContext)
     }
 
