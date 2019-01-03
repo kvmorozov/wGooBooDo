@@ -18,7 +18,7 @@ class DirContextLoader : IContextLoader {
     override val empty: Boolean
         get() = false
 
-    private var booksInfo: MutableMap<String, IBookInfo> = HashMap<String, IBookInfo>()
+    private var booksInfo: Map<String, IBookInfo> = HashMap<String, IBookInfo>()
 
     protected val loadedFileName: String
         get() = GBDOptions.ctxOptions.connectionParams
@@ -51,12 +51,11 @@ class DirContextLoader : IContextLoader {
 
         if (ExecutionContext.initialized) {
             booksInfo = ExecutionContext.INSTANCE.getContexts(false).stream()
-                    .map(BookContext::bookInfo).collect(Collectors.toList()).associate({ it.bookId to it }).toMutableMap()
+                    .map(BookContext::bookInfo).collect(Collectors.toList()).associate({ it.bookId to it })
             index.updateIndex(ArrayList<IBookInfo>(booksInfo.values))
         } else {
-            booksInfo = getFromStorage().associate({ it.bookId to it }).toMutableMap()
-            booksInfo.putAll(index.books.associate({ it.bookId to it }))
-            booksInfo
+            booksInfo = getFromStorage().associate({ it.bookId to it })
+            booksInfo.toMutableMap().putAll(index.books.associate({ it.bookId to it }))
         }
     }
 
@@ -76,7 +75,7 @@ class DirContextLoader : IContextLoader {
     override fun refreshContext() {
         val index = getIndex(false)
 
-        index.books.filter { it is BookInfo && !it.empty }.associate { it.bookId to it }
+        booksInfo = index.books.filter { it is BookInfo && !it.empty }.associate { it.bookId to it }
     }
 
     protected fun getIndex(createIfNotExists: Boolean): IIndex {
