@@ -24,7 +24,7 @@ class LocalFSIndex(private val storage: LocalFSStorage, indexName: String, creat
                     e.printStackTrace()
                 }
 
-                return ctxObjArr as Array<IBookInfo>
+                return (ctxObjArr as Array<IBookInfo>).filter { it.bookId.isNotEmpty() }.toTypedArray()
             }
             else
                 return arrayOf(BookInfo.EMPTY_BOOK)

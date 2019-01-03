@@ -18,7 +18,7 @@ class DirContextLoader : IContextLoader {
     override val empty: Boolean
         get() = false
 
-    private val booksInfo = HashMap<String, IBookInfo>()
+    private var booksInfo: MutableMap<String, IBookInfo> = HashMap<String, IBookInfo>()
 
     protected val loadedFileName: String
         get() = GBDOptions.ctxOptions.connectionParams
@@ -36,7 +36,8 @@ class DirContextLoader : IContextLoader {
         get() = GBDOptions.isValidConfig
 
     init {
-        initContext()
+        if (GBDOptions.isValidConfig)
+            refreshContext()
     }
 
     override fun updateIndex() {
@@ -46,14 +47,17 @@ class DirContextLoader : IContextLoader {
     override fun updateContext() {
         if (!StringUtils.isEmpty(GBDOptions.bookId)) return
 
-        val runtimeBooksInfo = if (ExecutionContext.initialized)
-            ExecutionContext.INSTANCE.getContexts(false).stream().map(BookContext::bookInfo).collect(Collectors.toList())
-        else getFromStorage()
+        val index = getIndex(true)
 
-        for (bookInfo in runtimeBooksInfo)
-            booksInfo[bookInfo.bookId] = bookInfo
-
-        getIndex(true).updateIndex(ArrayList<IBookInfo>(booksInfo.values))
+        if (ExecutionContext.initialized) {
+            booksInfo = ExecutionContext.INSTANCE.getContexts(false).stream()
+                    .map(BookContext::bookInfo).collect(Collectors.toList()).associate({ it.bookId to it }).toMutableMap()
+            index.updateIndex(ArrayList<IBookInfo>(booksInfo.values))
+        } else {
+            booksInfo = getFromStorage().associate({ it.bookId to it }).toMutableMap()
+            booksInfo.putAll(index.books.associate({ it.bookId to it }))
+            booksInfo
+        }
     }
 
     private fun getFromStorage(): List<IBookInfo> {
@@ -65,12 +69,6 @@ class DirContextLoader : IContextLoader {
         throw UnsupportedOperationException()
     }
 
-    private fun initContext() {
-        if (!GBDOptions.isValidConfig) return
-
-        refreshContext()
-    }
-
     override fun getBookInfo(bookId: String): IBookInfo {
         return booksInfo.getOrDefault(bookId, BookInfo.EMPTY_BOOK)
     }
@@ -78,13 +76,7 @@ class DirContextLoader : IContextLoader {
     override fun refreshContext() {
         val index = getIndex(false)
 
-        val ctxObjArr = index.books
-
-        for (ctxObj in ctxObjArr)
-            if (ctxObj is BookInfo && !ctxObj.empty) {
-                val bookInfo = ctxObj
-                booksInfo[bookInfo.bookId] = bookInfo
-            }
+        index.books.filter { it is BookInfo && !it.empty }.associate { it.bookId to it }
     }
 
     protected fun getIndex(createIfNotExists: Boolean): IIndex {

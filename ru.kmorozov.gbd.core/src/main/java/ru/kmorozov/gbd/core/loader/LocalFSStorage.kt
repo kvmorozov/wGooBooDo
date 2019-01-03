@@ -129,7 +129,7 @@ open class LocalFSStorage(storageDirName: String) : IStorage {
                             _page.isDataProcessed = bimg != null && bimg.width >= imgWidth
 
                             // 1.4 - эмпирически, высота переменная
-                            if (bimg == null || bimg.width * 1.4 > bimg.height) {
+                            if (bimg == null || (bimg.width * 1.4 > bimg.height && bimg.height < 800)) {
                                 item.delete()
                                 _page.isDataProcessed = false
                                 logger.severe(String.format("Page %s deleted!", _page.pid))
