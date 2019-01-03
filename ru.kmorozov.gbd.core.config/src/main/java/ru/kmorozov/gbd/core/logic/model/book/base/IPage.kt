@@ -16,4 +16,8 @@ interface IPage : Comparable<IPage> {
     val isFileExists: Boolean
 
     val isLoadingStarted: Boolean
+
+    override fun compareTo(other: IPage): Int {
+        return order.compareTo(other.order)
+    }
 }

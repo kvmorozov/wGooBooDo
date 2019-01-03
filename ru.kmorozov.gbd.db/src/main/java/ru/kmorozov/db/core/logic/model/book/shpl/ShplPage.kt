@@ -11,10 +11,6 @@ import ru.kmorozov.gbd.core.logic.model.book.base.IPage
  */
 class ShplPage : AbstractPage {
 
-    override fun compareTo(other: IPage): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
     override val pid: String
         get() = id
 

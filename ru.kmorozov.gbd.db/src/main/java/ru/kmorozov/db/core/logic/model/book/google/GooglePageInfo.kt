@@ -87,8 +87,4 @@ class GooglePageInfo : AbstractPage, Serializable, Comparable<IPage> {
 
         return _prefix
     }
-
-    override fun compareTo(other: IPage): Int {
-        return this.order.compareTo(other.order)
-    }
 }
