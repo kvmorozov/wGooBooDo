@@ -30,7 +30,8 @@ abstract class AbstractBookInfoExtractor : AbstractHttpProcessor {
 
     protected abstract val bookUrl: String
 
-    protected abstract val reserveBookUrl: String
+    protected open val reserveBookUrl: String
+        get() = bookUrl
 
     protected val documentWithoutProxy: Document?
         @Throws(Exception::class)

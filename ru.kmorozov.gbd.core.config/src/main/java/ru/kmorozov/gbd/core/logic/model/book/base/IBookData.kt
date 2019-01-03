@@ -6,7 +6,7 @@ package ru.kmorozov.gbd.core.logic.model.book.base
 
 interface IBookData {
 
-    val title: String?
+    val title: String
 
-    val volumeId: String?
+    val volumeId: String
 }

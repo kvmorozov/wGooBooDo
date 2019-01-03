@@ -13,13 +13,6 @@ class ShplPagesInfo(pages: Array<IPage>) : IPagesInfo {
     @field:SerializedName("page")
     public override val pages = pages
 
-    override val missingPagesList: String
-        get() = ""
-
-    override fun build() {
-
-    }
-
     override fun getPageByPid(pid: String): IPage {
         return EMPTY_SHPL_PAGE
     }

@@ -17,9 +17,6 @@ class ShplBookExtractor(bookId: String) : AbstractBookInfoExtractor(bookId) {
     protected override val bookUrl: String
         get() = bookId
 
-    protected override val reserveBookUrl: String
-        get() = bookId
-
     protected override fun extractBookInfo(doc: Document?): BookInfo {
         if (null == doc) return BookInfo.EMPTY_BOOK
 

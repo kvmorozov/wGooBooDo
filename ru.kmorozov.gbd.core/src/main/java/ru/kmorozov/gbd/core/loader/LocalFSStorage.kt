@@ -61,17 +61,17 @@ open class LocalFSStorage(storageDirName: String) : IStorage {
     override fun getChildStorage(bookData: IBookData): IStorage {
         try {
             val optPath = Files.find(storageDir.toPath(), 1,
-                    BiPredicate<Path, BasicFileAttributes> { path, _ -> path.toString().contains(bookData.volumeId!!) }).findAny()
+                    BiPredicate<Path, BasicFileAttributes> { path, _ -> path.toString().contains(bookData.volumeId) }).findAny()
             if (optPath.isPresent) return LocalFSStorage(optPath.get().toString())
         } catch (ignored: IOException) {
         }
 
         val directoryName = storageDir.path + '\\'.toString() + bookData.title
-                ?.replace(":", "")
-                ?.replace("<", "")
-                ?.replace(">", "")
-                ?.replace("?", "")
-                ?.replace("/", ".")
+                .replace(":", "")
+                .replace("<", "")
+                .replace(">", "")
+                .replace("?", "")
+                .replace("/", ".")
         val volumeId = bookData.volumeId
         return LocalFSStorage(if (StringUtils.isEmpty(volumeId)) directoryName else directoryName + ' '.toString() + bookData.volumeId)
     }

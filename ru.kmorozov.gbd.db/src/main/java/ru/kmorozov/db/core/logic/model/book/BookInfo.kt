@@ -11,24 +11,12 @@ import java.io.Serializable
 /**
  * Created by km on 28.11.2015.
  */
-class BookInfo : Serializable, ILoggableObject, IBookInfo {
-
-    override val bookData: IBookData
-
-    override val pages: IPagesInfo
-
-    override val bookId: String
+class BookInfo(override val bookData: IBookData, override val pages: IPagesInfo, override val bookId: String) : Serializable, ILoggableObject, IBookInfo {
 
     override val description: String?
         get() = bookData.title
 
     var lastPdfChecked: Long = 0
-
-    constructor(bookData: IBookData, pages: IPagesInfo, bookId: String) {
-        this.bookData = bookData
-        this.pages = pages
-        this.bookId = bookId
-    }
 
     override val empty: Boolean
         get() = this == EMPTY_BOOK

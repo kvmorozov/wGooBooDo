@@ -45,11 +45,11 @@ class ServerStorage(private val api: OneDriveProvider, private val root: OneDriv
     @Throws(IOException::class)
     override fun getChildStorage(bookData: IBookData): IStorage {
         for (child in getChildren())
-            if (child.name.contains(bookData.volumeId!!))
+            if (child.name.contains(bookData.volumeId))
                 return ServerStorage(api, child)
 
         val volumeId = bookData.volumeId
-        val normalizedName = bookData.title!!
+        val normalizedName = bookData.title
                 .replace(":", "")
                 .replace("<", "")
                 .replace(">", "")

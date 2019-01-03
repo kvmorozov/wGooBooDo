@@ -31,7 +31,7 @@ class GoogleBookData : IBookData, Serializable {
     @SerializedName("show_print_pages_button")
     private val showPrintPagesButton: Boolean = false
     @SerializedName("title")
-    override val title: String? = null
+    override lateinit var title: String
     @SerializedName("subtitle")
     private val subtitle: String? = null
     @SerializedName("attribution")
@@ -49,7 +49,7 @@ class GoogleBookData : IBookData, Serializable {
     @SerializedName("quality_info")
     private val qualityInfo: String? = null
     @SerializedName("volume_id")
-    override val volumeId: String? = null
+    override lateinit var volumeId: String
     @SerializedName("permission_info")
     private val permissionInfo: String? = null
     @SerializedName("is_ebook")
@@ -80,6 +80,6 @@ class GoogleBookData : IBookData, Serializable {
     private val lastPage: GooglePageInfo? = null
 
     val baseUrl: URI
-        get() = URI.create(HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, volumeId!!))
+        get() = URI.create(HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, volumeId))
 
 }

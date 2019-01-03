@@ -8,8 +8,9 @@ interface IPagesInfo {
     val pages: Array<IPage>
 
     val missingPagesList: String
+        get() = ""
 
-    fun build()
+    fun build() {}
 
     fun getPageByPid(pid: String): IPage?
 }

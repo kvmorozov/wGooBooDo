@@ -7,9 +7,9 @@ import ru.kmorozov.gbd.core.logic.model.book.base.IBookData
  */
 class ShplBookData(title: String) : IBookData {
 
-    override var title: String? = ""
-        get() = field!!.trim { it <= ' ' }
+    override var title: String = ""
+        get() = field.trim { it <= ' ' }
 
-    override val volumeId: String?
+    override val volumeId: String
         get() = title.hashCode().toString()
 }

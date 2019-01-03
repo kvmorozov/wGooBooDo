@@ -6,13 +6,6 @@ import ru.kmorozov.gbd.core.logic.model.book.base.IPagesInfo
 
 class RfbrPagesInfo(override val pages: Array<IPage>) : IPagesInfo {
 
-    override val missingPagesList: String
-        get() = ""
-
-    override fun build() {
-
-    }
-
     override fun getPageByPid(pid: String): IPage {
         return EMPTY_RFBR_PAGE
     }
