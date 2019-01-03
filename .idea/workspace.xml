@@ -2,10 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="832600b3-aa6b-4b28-bef7-61710f4358a7" name="funcs" comment="fixes">
+      <change afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core.config/src/main/java/ru/kmorozov/gbd/core/config/constants/ArchiveConstants.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/archive/ArchiveBookInfoExtractor.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/library/metadata/ArchiveMetadata.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/connectors/asynchttp/AsyncHandler.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/connectors/asynchttp/AsyncHandler.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/AbstractBookExtractor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/AbstractBookInfoExtractor.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/google/GoogleBookInfoExtractor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/google/GoogleBookInfoExtractor.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/rfbr/RfbrBookExtractor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/rfbr/RfbrBookExtractor.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/shpl/ShplBookExtractor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/shpl/ShplBookExtractor.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/library/ILibraryMetadata.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/library/ILibraryMetadata.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/library/metadata/GoogleBooksMetadata.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/library/metadata/GoogleBooksMetadata.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/pdf/PdfMaker.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/pdf/PdfMaker.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/library/metadata/RfbrMetadata.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/library/metadata/RfbrMetadata.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/library/metadata/ShplMetadata.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/library/metadata/ShplMetadata.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/library/metadata/UnknownMetadata.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/library/metadata/UnknownMetadata.kt" afterDir="false" />
     </list>
     <list id="0c8b21df-78f5-408a-867d-4ccd8443679a" name="Default" comment="idea files" />
     <ignored path="wGooBooDo-gbd-web.iws" />
@@ -57,29 +66,77 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/archive/ArchiveBookInfoExtractor.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="306">
+              <caret line="18" column="54" selection-start-line="18" selection-start-column="54" selection-end-line="18" selection-end-column="54" />
+              <folding>
+                <element signature="e#55#479#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/AbstractBookInfoExtractor.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="192">
+              <caret line="87" column="27" selection-start-line="87" selection-start-column="27" selection-end-line="87" selection-end-column="27" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/google/GoogleBookInfoExtractor.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="184">
+              <caret line="52" column="24" selection-start-line="52" selection-start-column="24" selection-end-line="52" selection-end-column="24" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.db/src/main/java/ru/kmorozov/db/core/logic/model/book/BookInfo.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="153">
+              <caret line="15" column="30" lean-forward="true" selection-start-line="15" selection-start-column="30" selection-end-line="15" selection-end-column="30" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core.config/src/main/java/ru/kmorozov/gbd/core/logic/model/book/base/IBookData.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="102">
+              <caret line="6" column="10" selection-start-line="6" selection-start-column="10" selection-end-line="6" selection-end-column="10" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.db/src/main/java/ru/kmorozov/db/core/logic/model/book/google/GoogleBookData.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="221">
+              <caret line="20" column="20" lean-forward="true" selection-start-line="20" selection-start-column="20" selection-end-line="20" selection-end-column="20" />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/pdf/PdfMaker.kt">
+        <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.db/src/main/java/ru/kmorozov/db/core/logic/model/book/rfbr/RfbrBookData.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="25" lean-forward="true" selection-start-line="25" selection-end-line="25" />
+            <state relative-caret-position="68">
+              <caret line="4" column="6" selection-start-line="4" selection-start-column="6" selection-end-line="4" selection-end-column="6" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/IUniqueRunnable.kt">
+        <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.db/src/main/java/ru/kmorozov/db/core/logic/model/book/shpl/ShplBookData.kt">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="119">
-              <caret line="7" column="8" selection-start-line="7" selection-start-column="8" selection-end-line="7" selection-end-column="8" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/IPostProcessor.kt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="7" column="10" selection-start-line="7" selection-start-column="10" selection-end-line="7" selection-end-column="10" />
+              <caret line="7" column="6" selection-start-line="7" selection-start-column="6" selection-end-line="7" selection-end-column="6" />
             </state>
           </provider>
         </entry>
@@ -94,12 +151,13 @@
         <option value="Enum" />
         <option value="Class" />
         <option value="Kotlin File" />
+        <option value="Kotlin Class" />
+        <option value="Kotlin Object" />
       </list>
     </option>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>maven-compiler-plugin</find>
       <find>4.1.29</find>
       <find>5.0-beta2</find>
       <find>kotlin-maven-plugin</find>
@@ -129,6 +187,7 @@
       <find>lpg=PP1</find>
       <find>Connection error</find>
       <find>Invalid JSON string</find>
+      <find>No response at url</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -150,18 +209,7 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/AbstractBookExtractor.kt" />
-        <option value="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/utils/HttpConnections.kt" />
-        <option value="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/Proxy/FileProxyListProvider.kt" />
-        <option value="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/utils/Images.kt" />
-        <option value="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/connectors/webdriver/WebDriverHttpConnector.kt" />
-        <option value="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/connectors/webdriver/WebDriverResponse.kt" />
-        <option value="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/test/java/ru/kmorozov/gbd/core/test/ExtractorTest.kt" />
-        <option value="$PROJECT_DIR$/ru.kmorozov.gbd.core/pom.xml" />
-        <option value="$PROJECT_DIR$/ru.kmorozov.gbd.parent/pom.xml" />
-        <option value="$PROJECT_DIR$/ru.kmorozov.library.data.client/pom.xml" />
         <option value="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/context/ContextProvider.kt" />
-        <option value="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/google/GoogleBookInfoExtractor.kt" />
         <option value="$PROJECT_DIR$/ru.kmorozov.library.parent/pom.xml" />
         <option value="$PROJECT_DIR$/ru.kmorozov.library.data.model/pom.xml" />
         <option value="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/library/metadata/UnknownMetadata.kt" />
@@ -198,9 +246,20 @@
         <option value="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/connectors/asynchttp/AsyncHttpResponse.kt" />
         <option value="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/AbstractHttpProcessor.kt" />
         <option value="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/connectors/asynchttp/AsyncHttpConnector.kt" />
-        <option value="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/library/metadata/GoogleBooksMetadata.kt" />
         <option value="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/connectors/asynchttp/AsyncHandler.kt" />
         <option value="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/pdf/PdfMaker.kt" />
+        <option value="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/library/metadata/GoogleBooksMetadata.kt" />
+        <option value="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/library/metadata/ArchiveMetadata.kt" />
+        <option value="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/library/ILibraryMetadata.kt" />
+        <option value="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/library/metadata/RfbrMetadata.kt" />
+        <option value="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/library/metadata/ShplMetadata.kt" />
+        <option value="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/AbstractBookExtractor.kt" />
+        <option value="$PROJECT_DIR$/ru.kmorozov.gbd.core.config/src/main/java/ru/kmorozov/gbd/core/config/constants/ArchiveConstants.kt" />
+        <option value="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/rfbr/RfbrBookExtractor.kt" />
+        <option value="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/shpl/ShplBookExtractor.kt" />
+        <option value="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/AbstractBookInfoExtractor.kt" />
+        <option value="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/google/GoogleBookInfoExtractor.kt" />
+        <option value="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/archive/ArchiveBookInfoExtractor.kt" />
       </list>
     </option>
   </component>
@@ -320,102 +379,7 @@
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="gbd" type="462c0819:PsiDirectoryNode" />
               <item name="core" type="462c0819:PsiDirectoryNode" />
-              <item name="loader" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="wGooBooDo" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ru.kmorozov" type="9c53a853:ProjectViewModuleGroupNode" />
-              <item name="gbd" type="9c53a853:ProjectViewModuleGroupNode" />
-              <item name="ru.kmorozov.gbd.core" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="gbd" type="462c0819:PsiDirectoryNode" />
-              <item name="core" type="462c0819:PsiDirectoryNode" />
               <item name="logic" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="wGooBooDo" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ru.kmorozov" type="9c53a853:ProjectViewModuleGroupNode" />
-              <item name="gbd" type="9c53a853:ProjectViewModuleGroupNode" />
-              <item name="ru.kmorozov.gbd.core" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="gbd" type="462c0819:PsiDirectoryNode" />
-              <item name="core" type="462c0819:PsiDirectoryNode" />
-              <item name="logic" type="462c0819:PsiDirectoryNode" />
-              <item name="connectors" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="wGooBooDo" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ru.kmorozov" type="9c53a853:ProjectViewModuleGroupNode" />
-              <item name="gbd" type="9c53a853:ProjectViewModuleGroupNode" />
-              <item name="ru.kmorozov.gbd.core" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="gbd" type="462c0819:PsiDirectoryNode" />
-              <item name="core" type="462c0819:PsiDirectoryNode" />
-              <item name="logic" type="462c0819:PsiDirectoryNode" />
-              <item name="connectors" type="462c0819:PsiDirectoryNode" />
-              <item name="apache" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="wGooBooDo" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ru.kmorozov" type="9c53a853:ProjectViewModuleGroupNode" />
-              <item name="gbd" type="9c53a853:ProjectViewModuleGroupNode" />
-              <item name="ru.kmorozov.gbd.core" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="gbd" type="462c0819:PsiDirectoryNode" />
-              <item name="core" type="462c0819:PsiDirectoryNode" />
-              <item name="logic" type="462c0819:PsiDirectoryNode" />
-              <item name="connectors" type="462c0819:PsiDirectoryNode" />
-              <item name="asynchttp" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="wGooBooDo" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ru.kmorozov" type="9c53a853:ProjectViewModuleGroupNode" />
-              <item name="gbd" type="9c53a853:ProjectViewModuleGroupNode" />
-              <item name="ru.kmorozov.gbd.core" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="gbd" type="462c0819:PsiDirectoryNode" />
-              <item name="core" type="462c0819:PsiDirectoryNode" />
-              <item name="logic" type="462c0819:PsiDirectoryNode" />
-              <item name="connectors" type="462c0819:PsiDirectoryNode" />
-              <item name="google" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="wGooBooDo" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ru.kmorozov" type="9c53a853:ProjectViewModuleGroupNode" />
-              <item name="gbd" type="9c53a853:ProjectViewModuleGroupNode" />
-              <item name="ru.kmorozov.gbd.core" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="gbd" type="462c0819:PsiDirectoryNode" />
-              <item name="core" type="462c0819:PsiDirectoryNode" />
-              <item name="logic" type="462c0819:PsiDirectoryNode" />
-              <item name="connectors" type="462c0819:PsiDirectoryNode" />
-              <item name="http2native" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="wGooBooDo" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ru.kmorozov" type="9c53a853:ProjectViewModuleGroupNode" />
-              <item name="gbd" type="9c53a853:ProjectViewModuleGroupNode" />
-              <item name="ru.kmorozov.gbd.core" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="gbd" type="462c0819:PsiDirectoryNode" />
-              <item name="core" type="462c0819:PsiDirectoryNode" />
-              <item name="logic" type="462c0819:PsiDirectoryNode" />
-              <item name="connectors" type="462c0819:PsiDirectoryNode" />
-              <item name="ok" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="wGooBooDo" type="b2602c69:ProjectViewProjectNode" />
@@ -442,7 +406,49 @@
               <item name="core" type="462c0819:PsiDirectoryNode" />
               <item name="logic" type="462c0819:PsiDirectoryNode" />
               <item name="extractors" type="462c0819:PsiDirectoryNode" />
+              <item name="archive" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="wGooBooDo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ru.kmorozov" type="9c53a853:ProjectViewModuleGroupNode" />
+              <item name="gbd" type="9c53a853:ProjectViewModuleGroupNode" />
+              <item name="ru.kmorozov.gbd.core" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="gbd" type="462c0819:PsiDirectoryNode" />
+              <item name="core" type="462c0819:PsiDirectoryNode" />
+              <item name="logic" type="462c0819:PsiDirectoryNode" />
+              <item name="extractors" type="462c0819:PsiDirectoryNode" />
+              <item name="base" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="wGooBooDo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ru.kmorozov" type="9c53a853:ProjectViewModuleGroupNode" />
+              <item name="gbd" type="9c53a853:ProjectViewModuleGroupNode" />
+              <item name="ru.kmorozov.gbd.core" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="gbd" type="462c0819:PsiDirectoryNode" />
+              <item name="core" type="462c0819:PsiDirectoryNode" />
+              <item name="logic" type="462c0819:PsiDirectoryNode" />
+              <item name="extractors" type="462c0819:PsiDirectoryNode" />
               <item name="google" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="wGooBooDo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ru.kmorozov" type="9c53a853:ProjectViewModuleGroupNode" />
+              <item name="gbd" type="9c53a853:ProjectViewModuleGroupNode" />
+              <item name="ru.kmorozov.gbd.core" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="gbd" type="462c0819:PsiDirectoryNode" />
+              <item name="core" type="462c0819:PsiDirectoryNode" />
+              <item name="logic" type="462c0819:PsiDirectoryNode" />
+              <item name="extractors" type="462c0819:PsiDirectoryNode" />
+              <item name="rfbr" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="wGooBooDo" type="b2602c69:ProjectViewProjectNode" />
@@ -520,7 +526,119 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="core" type="462c0819:PsiDirectoryNode" />
+              <item name="config" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="wGooBooDo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ru.kmorozov" type="9c53a853:ProjectViewModuleGroupNode" />
+              <item name="gbd" type="9c53a853:ProjectViewModuleGroupNode" />
+              <item name="ru.kmorozov.gbd.core.config" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="core" type="462c0819:PsiDirectoryNode" />
+              <item name="config" type="462c0819:PsiDirectoryNode" />
+              <item name="constants" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="wGooBooDo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ru.kmorozov" type="9c53a853:ProjectViewModuleGroupNode" />
+              <item name="gbd" type="9c53a853:ProjectViewModuleGroupNode" />
+              <item name="ru.kmorozov.gbd.core.config" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="core" type="462c0819:PsiDirectoryNode" />
               <item name="base" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="wGooBooDo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ru.kmorozov" type="9c53a853:ProjectViewModuleGroupNode" />
+              <item name="gbd" type="9c53a853:ProjectViewModuleGroupNode" />
+              <item name="ru.kmorozov.gbd.db" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="wGooBooDo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ru.kmorozov" type="9c53a853:ProjectViewModuleGroupNode" />
+              <item name="gbd" type="9c53a853:ProjectViewModuleGroupNode" />
+              <item name="ru.kmorozov.gbd.db" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="wGooBooDo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ru.kmorozov" type="9c53a853:ProjectViewModuleGroupNode" />
+              <item name="gbd" type="9c53a853:ProjectViewModuleGroupNode" />
+              <item name="ru.kmorozov.gbd.db" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="wGooBooDo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ru.kmorozov" type="9c53a853:ProjectViewModuleGroupNode" />
+              <item name="gbd" type="9c53a853:ProjectViewModuleGroupNode" />
+              <item name="ru.kmorozov.gbd.db" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="wGooBooDo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ru.kmorozov" type="9c53a853:ProjectViewModuleGroupNode" />
+              <item name="gbd" type="9c53a853:ProjectViewModuleGroupNode" />
+              <item name="ru.kmorozov.gbd.db" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="db" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="wGooBooDo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ru.kmorozov" type="9c53a853:ProjectViewModuleGroupNode" />
+              <item name="gbd" type="9c53a853:ProjectViewModuleGroupNode" />
+              <item name="ru.kmorozov.gbd.db" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="db" type="462c0819:PsiDirectoryNode" />
+              <item name="core" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="wGooBooDo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ru.kmorozov" type="9c53a853:ProjectViewModuleGroupNode" />
+              <item name="gbd" type="9c53a853:ProjectViewModuleGroupNode" />
+              <item name="ru.kmorozov.gbd.db" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="db" type="462c0819:PsiDirectoryNode" />
+              <item name="core" type="462c0819:PsiDirectoryNode" />
+              <item name="book" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="wGooBooDo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ru.kmorozov" type="9c53a853:ProjectViewModuleGroupNode" />
+              <item name="gbd" type="9c53a853:ProjectViewModuleGroupNode" />
+              <item name="ru.kmorozov.gbd.db" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="db" type="462c0819:PsiDirectoryNode" />
+              <item name="core" type="462c0819:PsiDirectoryNode" />
+              <item name="book" type="462c0819:PsiDirectoryNode" />
+              <item name="rfbr" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="wGooBooDo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ru.kmorozov" type="9c53a853:ProjectViewModuleGroupNode" />
+              <item name="gbd" type="9c53a853:ProjectViewModuleGroupNode" />
+              <item name="ru.kmorozov.gbd.db" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="db" type="462c0819:PsiDirectoryNode" />
+              <item name="core" type="462c0819:PsiDirectoryNode" />
+              <item name="book" type="462c0819:PsiDirectoryNode" />
+              <item name="shpl" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -538,7 +656,7 @@
     <property name="RequestMappingsPanelWidth2" value="490" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1546521599323" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1546527150246" />
     <property name="js.eslint.eslintPackage" value="" />
     <property name="last_opened_file_path" value="$MAVEN_REPOSITORY$/org/springframework/spring-core/5.1.2.RELEASE/spring-core-5.1.2.RELEASE-sources.jar!/" />
     <property name="nodejs_package_manager_path" value="npm" />
@@ -1048,14 +1166,7 @@
       <workItem from="1546340430887" duration="5327000" />
       <workItem from="1546411499265" duration="693000" />
       <workItem from="1546419767067" duration="20216000" />
-      <workItem from="1546497576327" duration="16860000" />
-    </task>
-    <task id="LOCAL-00053" summary="fix (working!)">
-      <created>1525189548277</created>
-      <option name="number" value="00053" />
-      <option name="presentableId" value="LOCAL-00053" />
-      <option name="project" value="LOCAL" />
-      <updated>1525189548278</updated>
+      <workItem from="1546497576327" duration="19726000" />
     </task>
     <task id="LOCAL-00054" summary="migration to modules">
       <created>1541430578758</created>
@@ -1393,7 +1504,14 @@
       <option name="project" value="LOCAL" />
       <updated>1546518524569</updated>
     </task>
-    <option name="localTasksCounter" value="102" />
+    <task id="LOCAL-00102" summary="fixes">
+      <created>1546524281146</created>
+      <option name="number" value="00102" />
+      <option name="presentableId" value="LOCAL-00102" />
+      <option name="project" value="LOCAL" />
+      <updated>1546524281146</updated>
+    </task>
+    <option name="localTasksCounter" value="103" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1429,7 +1547,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="552406000" />
+    <option name="totallyTimeSpent" value="555272000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1442,6 +1560,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="npm" order="0" sideWeight="0.5063898" side_tool="true" weight="0.25" />
       <window_info id="UI Designer" order="1" />
@@ -1449,9 +1568,9 @@
       <window_info id="Image Layers" order="3" />
       <window_info id="Nl-Palette" order="4" />
       <window_info id="Favorites" order="5" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="6" sideWeight="0.6645469" visible="true" weight="0.3379531" />
+      <window_info active="true" content_ui="combo" id="Project" order="6" sideWeight="0.6638935" visible="true" weight="0.3379531" />
       <window_info id="Capture Tool" order="7" />
-      <window_info id="Structure" order="8" sideWeight="0.3354531" side_tool="true" visible="true" weight="0.3379531" />
+      <window_info id="Structure" order="8" sideWeight="0.33610648" side_tool="true" visible="true" weight="0.3379531" />
       <window_info id="Web" order="9" side_tool="true" />
       <window_info anchor="bottom" id="Statistic" order="0" weight="0.32900432" />
       <window_info anchor="bottom" id="Messages" order="1" sideWeight="0.49573562" weight="0.3261105" />
@@ -1464,7 +1583,7 @@
       <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Find" order="9" weight="0.32827735" />
       <window_info anchor="bottom" id="Application Servers" order="10" weight="0.33694476" />
-      <window_info anchor="bottom" id="Run" order="11" sideWeight="0.48507464" weight="0.3488624" />
+      <window_info anchor="bottom" id="Run" order="11" sideWeight="0.48507464" visible="true" weight="0.3488624" />
       <window_info active="true" anchor="bottom" id="Inspection Results" order="12" visible="true" weight="0.32827735" />
       <window_info anchor="bottom" id="Debug" order="13" sideWeight="0.4936034" weight="0.39761648" />
       <window_info anchor="bottom" id="Cvs" order="14" weight="0.25" />
@@ -1472,7 +1591,7 @@
       <window_info anchor="bottom" id="TODO" order="16" weight="0.32936078" />
       <window_info anchor="bottom" content_ui="combo" id="Run Dashboard" order="17" weight="0.43336946" />
       <window_info anchor="bottom" id="Java Enterprise" order="18" weight="0.32827735" />
-      <window_info active="true" anchor="bottom" id="Version Control" order="19" sideWeight="0.48614073" visible="true" weight="0.31852654" />
+      <window_info anchor="bottom" id="Version Control" order="19" sideWeight="0.48614073" weight="0.31852654" />
       <window_info anchor="bottom" id="Docker" order="20" show_stripe_button="false" />
       <window_info active="true" anchor="bottom" id="Dependency Viewer" order="21" visible="true" weight="0.32936078" />
       <window_info anchor="bottom" id="REST Client" order="22" weight="0.32936078" />
@@ -1621,12 +1740,6 @@
           <option name="timeStamp" value="169" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/AbstractBookExtractor.kt</url>
-          <line>48</line>
-          <properties />
-          <option name="timeStamp" value="203" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
           <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/loader/LocalFSStorage.kt</url>
           <line>161</line>
           <properties />
@@ -1655,12 +1768,6 @@
           <line>45</line>
           <properties />
           <option name="timeStamp" value="257" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/google/GoogleBookInfoExtractor.kt</url>
-          <line>35</line>
-          <properties />
-          <option name="timeStamp" value="260" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="kotlin-line">
           <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/connectors/http2native/Http2Connector.kt</url>
@@ -1725,104 +1832,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/loader/RawFileItem.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="34" selection-start-line="34" selection-end-line="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk-11.0.1/lib/src.zip!/java.base/java/util/stream/Collectors.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="1456" column="30" selection-start-line="1456" selection-start-column="30" selection-end-line="1456" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-stdlib/1.3.20-eap-52/kotlin-stdlib-1.3.20-eap-52.jar!/kotlin/collections/ArraysKt.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="24">
-          <caret line="495" column="48" selection-start-line="495" selection-start-column="48" selection-end-line="495" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-stdlib/1.3.20-eap-52/kotlin-stdlib-1.3.20-eap-52.jar!/kotlin/collections/collections.kotlin_builtins">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="169">
-          <caret line="166" column="24" selection-start-line="166" selection-start-column="24" selection-end-line="166" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk-11.0.1/lib/src.zip!/java.base/sun/nio/cs/UTF_8.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="242" selection-start-line="242" selection-end-line="242" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/producers/OptionsBasedProducer.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="25" column="57" selection-start-line="25" selection-start-column="57" selection-end-line="25" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.db/src/main/java/ru/kmorozov/db/core/config/IContextLoader.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="10" column="8" selection-start-line="10" selection-start-column="8" selection-end-line="10" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/library/ILibraryMetadata.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="17" selection-start-line="17" selection-end-line="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.db/src/main/java/ru/kmorozov/db/core/logic/model/book/BookInfo.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="15" column="17" selection-start-line="15" selection-start-column="17" selection-end-line="15" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core.config/src/main/java/ru/kmorozov/gbd/core/logic/model/book/base/IBookInfo.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="8" selection-start-line="4" selection-start-column="8" selection-end-line="4" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core.config/src/main/java/ru/kmorozov/gbd/core/config/IStorage.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="344">
-          <caret line="31" column="8" selection-start-line="31" selection-start-column="8" selection-end-line="31" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.db/src/main/java/ru/kmorozov/db/utils/Mapper.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="23" column="70" selection-start-line="23" selection-start-column="70" selection-end-line="23" selection-end-column="70" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.db/src/main/java/ru/kmorozov/db/utils/gson/IBookDataAdapter.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="12" column="6" selection-start-line="12" selection-start-column="6" selection-end-line="12" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/google/code/gson/gson/2.8.5/gson-2.8.5-sources.jar!/com/google/gson/stream/JsonReader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="169">
-          <caret line="1326" selection-start-line="1326" selection-end-line="1326" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core.config/src/main/java/ru/kmorozov/gbd/core/config/IIndex.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
@@ -1858,20 +1867,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/AbstractBookExtractor.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="161">
-          <caret line="73" selection-start-line="73" selection-end-line="73" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/google/GoogleBookInfoExtractor.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="161">
-          <caret line="29" selection-start-line="29" selection-end-line="29" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-stdlib/1.3.20-eap-52/kotlin-stdlib-1.3.20-eap-52.jar!/kotlin/collections/MapsKt.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="192">
@@ -1904,13 +1899,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="498">
           <caret line="51" column="27" selection-start-line="51" selection-start-column="27" selection-end-line="51" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core.config/src/main/java/ru/kmorozov/gbd/core/config/constants/GoogleConstants.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="36" selection-start-line="6" selection-start-column="36" selection-end-line="6" selection-end-column="36" />
         </state>
       </provider>
     </entry>
@@ -2009,13 +1997,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/library/metadata/GoogleBooksMetadata.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="287">
-          <caret line="42" column="40" selection-start-line="42" selection-start-column="40" selection-end-line="42" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/connectors/apache/ApacheHttpConnector.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="396">
@@ -2073,10 +2054,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/IPostProcessor.kt">
+    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/pdf/PdfMaker.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="10" selection-start-line="7" selection-start-column="10" selection-end-line="7" selection-end-column="10" />
+        <state relative-caret-position="51">
+          <caret line="25" lean-forward="true" selection-start-line="25" selection-end-line="25" />
         </state>
       </provider>
     </entry>
@@ -2087,10 +2068,142 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/pdf/PdfMaker.kt">
+    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/IPostProcessor.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="25" lean-forward="true" selection-start-line="25" selection-end-line="25" />
+        <state relative-caret-position="119">
+          <caret line="7" column="10" selection-start-line="7" selection-start-column="10" selection-end-line="7" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/ru/kmorozov/onedrive/client/authoriser/OneDriveAuthorisationProvider.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="192">
+          <caret line="65" column="26" selection-start-line="65" selection-start-column="26" selection-end-line="65" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/library/metadata/RfbrMetadata.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="235">
+          <caret line="24" selection-start-line="24" selection-end-line="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/library/metadata/ShplMetadata.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="213">
+          <caret line="26" selection-start-line="26" selection-end-line="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/library/metadata/GoogleBooksMetadata.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="184">
+          <caret line="29" column="17" selection-start-line="29" selection-start-column="17" selection-end-line="29" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/library/ILibraryMetadata.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3">
+          <caret line="11" column="65" lean-forward="true" selection-start-line="11" selection-start-column="65" selection-end-line="11" selection-end-column="65" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/library/metadata/ArchiveMetadata.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="400">
+          <caret line="26" column="86" selection-start-line="26" selection-start-column="86" selection-end-line="26" selection-end-column="86" />
+          <folding>
+            <element signature="e#53#442#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core.config/src/main/java/ru/kmorozov/gbd/core/config/constants/GoogleConstants.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="4" selection-start-line="9" selection-start-column="4" selection-end-line="9" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core.config/src/main/java/ru/kmorozov/gbd/core/config/constants/ArchiveConstants.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="23" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/rfbr/RfbrBookExtractor.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="142">
+          <caret line="19" column="35" lean-forward="true" selection-start-line="19" selection-start-column="35" selection-end-line="19" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/shpl/ShplBookExtractor.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-62">
+          <caret line="22" column="36" lean-forward="true" selection-start-line="22" selection-start-column="36" selection-end-line="22" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/AbstractBookInfoExtractor.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="192">
+          <caret line="87" column="27" selection-start-line="87" selection-start-column="27" selection-end-line="87" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/google/GoogleBookInfoExtractor.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="184">
+          <caret line="52" column="24" selection-start-line="52" selection-start-column="24" selection-end-line="52" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.db/src/main/java/ru/kmorozov/db/core/logic/model/book/BookInfo.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="15" column="30" lean-forward="true" selection-start-line="15" selection-start-column="30" selection-end-line="15" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/archive/ArchiveBookInfoExtractor.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="18" column="54" selection-start-line="18" selection-start-column="54" selection-end-line="18" selection-end-column="54" />
+          <folding>
+            <element signature="e#55#479#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.core.config/src/main/java/ru/kmorozov/gbd/core/logic/model/book/base/IBookData.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="10" selection-start-line="6" selection-start-column="10" selection-end-line="6" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.db/src/main/java/ru/kmorozov/db/core/logic/model/book/google/GoogleBookData.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="20" column="20" lean-forward="true" selection-start-line="20" selection-start-column="20" selection-end-line="20" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.db/src/main/java/ru/kmorozov/db/core/logic/model/book/shpl/ShplBookData.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="6" selection-start-line="7" selection-start-column="6" selection-end-line="7" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ru.kmorozov.gbd.db/src/main/java/ru/kmorozov/db/core/logic/model/book/rfbr/RfbrBookData.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="6" selection-start-line="4" selection-start-column="6" selection-end-line="4" selection-end-column="6" />
         </state>
       </provider>
     </entry>

@@ -1,17 +1,15 @@
 package ru.kmorozov.gbd.core.logic.extractors.rfbr
 
 import org.jsoup.nodes.Document
-import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookExtractor
+import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookInfoExtractor
 import ru.kmorozov.db.core.logic.model.book.BookInfo
-import ru.kmorozov.gbd.core.logic.model.book.base.IBookData
 import ru.kmorozov.db.core.logic.model.book.rfbr.RfbrBookData
 import ru.kmorozov.db.core.logic.model.book.rfbr.RfbrPage
 import ru.kmorozov.db.core.logic.model.book.rfbr.RfbrPagesInfo
-import ru.kmorozov.gbd.core.logic.model.book.base.IPage
 
 import java.util.Arrays
 
-class RfbrBookExtractor(bookId: String) : AbstractBookExtractor(bookId) {
+class RfbrBookExtractor(bookId: String) : AbstractBookInfoExtractor(bookId) {
 
     protected override val bookUrl: String
         get() = RFBR_BASE_URL + bookId
@@ -19,18 +17,7 @@ class RfbrBookExtractor(bookId: String) : AbstractBookExtractor(bookId) {
     protected override val reserveBookUrl: String
         get() = bookUrl
 
-    override fun findBookInfo(): BookInfo {
-        var defaultDocument: Document? = null
-        try {
-            defaultDocument = documentWithoutProxy
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-        return extractBookInfo(defaultDocument)
-    }
-
-    private fun extractBookInfo(doc: Document?): BookInfo {
+    protected override fun extractBookInfo(doc: Document?): BookInfo {
         if (null == doc) return BookInfo.EMPTY_BOOK
 
         val bookData = RfbrBookData(bookId)

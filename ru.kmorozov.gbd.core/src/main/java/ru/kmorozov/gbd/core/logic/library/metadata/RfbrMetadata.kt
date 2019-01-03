@@ -1,17 +1,13 @@
 package ru.kmorozov.gbd.core.logic.library.metadata
 
 import org.apache.commons.lang3.StringUtils
-import ru.kmorozov.db.core.config.IContextLoader
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
-import ru.kmorozov.gbd.core.logic.connectors.apache.ApacheHttpConnector
 import ru.kmorozov.gbd.core.logic.context.BookContext
-import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookExtractor
+import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookInfoExtractor
 import ru.kmorozov.gbd.core.logic.extractors.base.IImageExtractor
 import ru.kmorozov.gbd.core.logic.extractors.rfbr.RfbrBookExtractor
 import ru.kmorozov.gbd.core.logic.extractors.rfbr.RfbrImageExtractor
 import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata
-
-import java.util.Arrays
 
 class RfbrMetadata : ILibraryMetadata {
 
@@ -23,12 +19,8 @@ class RfbrMetadata : ILibraryMetadata {
         return RfbrImageExtractor(bookContext)
     }
 
-    override fun getBookExtractor(bookId: String): AbstractBookExtractor {
+    override fun getBookExtractor(bookId: String): AbstractBookInfoExtractor {
         return RfbrBookExtractor(bookId)
-    }
-
-    override fun getBookExtractor(bookId: String, storedLoader: IContextLoader): AbstractBookExtractor {
-        return getBookExtractor(bookId)
     }
 
     override fun needSetCookies(): Boolean {
@@ -36,7 +28,7 @@ class RfbrMetadata : ILibraryMetadata {
     }
 
     override fun preferredConnectors(): List<HttpConnector> {
-        return Arrays.asList<HttpConnector>(ApacheHttpConnector())
+        return listOf(ILibraryMetadata.APACHE_CONNECTOR)
     }
 
     companion object {

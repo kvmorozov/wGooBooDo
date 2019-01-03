@@ -11,15 +11,13 @@ import ru.kmorozov.db.utils.Mapper
 import ru.kmorozov.gbd.core.config.constants.GoogleConstants.BOOK_ID_PLACEHOLDER
 import ru.kmorozov.gbd.core.config.constants.GoogleConstants.HTTPS_TEMPLATE
 import ru.kmorozov.gbd.core.config.constants.GoogleConstants.HTTP_TEMPLATE
-import ru.kmorozov.gbd.core.logic.Proxy.AbstractProxyListProvider
-import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.context.ContextProvider
-import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookExtractor
+import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookInfoExtractor
 
 /**
  * Created by km on 08.10.2016.
  */
-open class GoogleBookInfoExtractor : AbstractBookExtractor {
+open class GoogleBookInfoExtractor : AbstractBookInfoExtractor {
 
     protected override val bookUrl: String
         get() = HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, bookId) + OPEN_PAGE_ADD_URL
@@ -31,32 +29,7 @@ open class GoogleBookInfoExtractor : AbstractBookExtractor {
 
     constructor(bookId: String, storedLoader: IContextLoader) : super(bookId, storedLoader) {}
 
-    @Throws(Exception::class)
-    public override fun findBookInfo(): BookInfo {
-        logger.info("Loading bookinfo for $bookId...")
-        val defaultDocument = documentWithoutProxy
-        try {
-            val defaultBookInfo = extractBookInfo(defaultDocument)
-            if (defaultBookInfo.empty) {
-                HttpHostExt.NO_PROXY.forceInvalidate(false)
-
-                for (proxy in AbstractProxyListProvider.INSTANCE.proxyList) {
-                    val proxyBookInfo = extractBookInfo(getDocumentWithProxy(proxy))
-                    if (proxyBookInfo.empty)
-                        proxy.forceInvalidate(true)
-                    else
-                        return proxyBookInfo
-                }
-            } else
-                return defaultBookInfo
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-        return BookInfo.EMPTY_BOOK
-    }
-
-    private fun extractBookInfo(doc: Document?): BookInfo {
+    protected override fun extractBookInfo(doc: Document?): BookInfo {
         if (null == doc) return EMPTY_BOOK
 
         val scripts = doc.select("script")

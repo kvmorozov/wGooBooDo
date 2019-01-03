@@ -6,13 +6,14 @@ import ru.kmorozov.gbd.core.logic.context.BookContext
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookInfoExtractor
 import ru.kmorozov.gbd.core.logic.extractors.base.IImageExtractor
 import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata
+import java.util.regex.Pattern
 
-class UnknownMetadata : ILibraryMetadata {
+class ArchiveMetadata private constructor() : ILibraryMetadata {
 
-    private constructor()
+    val ARCHIVE_PATTERN = Pattern.compile("[a-z]*[0-9][0-9][a-z]*")
 
     override fun isValidId(bookId: String): Boolean {
-        return true
+        return ARCHIVE_PATTERN.matcher(bookId).matches()
     }
 
     override fun getExtractor(bookContext: BookContext): IImageExtractor {
@@ -32,11 +33,10 @@ class UnknownMetadata : ILibraryMetadata {
     }
 
     override fun preferredConnectors(): List<HttpConnector> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return listOf(ILibraryMetadata.APACHE_CONNECTOR)
     }
 
     companion object {
-        val UNKNOWN_METADATA: UnknownMetadata = UnknownMetadata()
+        val ARCHIVE_METADATA = ArchiveMetadata()
     }
-
 }

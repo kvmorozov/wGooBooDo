@@ -18,9 +18,9 @@ import java.nio.charset.Charset
 /**
  * Created by sbt-morozov-kv on 16.11.2016.
  */
-abstract class AbstractBookExtractor : AbstractHttpProcessor {
+abstract class AbstractBookInfoExtractor : AbstractHttpProcessor {
 
-    protected val logger = ExecutionContext.getLogger(AbstractBookExtractor::class.java)
+    protected val logger = ExecutionContext.getLogger(AbstractBookInfoExtractor::class.java)
 
     protected lateinit var bookId: String
     lateinit var bookInfo: BookInfo
@@ -74,8 +74,18 @@ abstract class AbstractBookExtractor : AbstractHttpProcessor {
         bookInfo = if (storedBookInfo.empty) findBookInfo() else storedBookInfo as BookInfo
     }
 
-    @Throws(Exception::class)
-    protected abstract fun findBookInfo(): BookInfo
+    open fun findBookInfo(): BookInfo {
+        logger.info("Loading bookinfo for $bookId...")
+        try {
+            return extractBookInfo(documentWithoutProxy)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        return BookInfo.EMPTY_BOOK
+    }
+
+    protected abstract fun extractBookInfo(doc: Document?): BookInfo
 
     protected fun getDocumentWithProxy(proxy: HttpHostExt): Document? {
         val resp = getContent(bookUrl, proxy, true)

@@ -2,17 +2,17 @@ package ru.kmorozov.gbd.core.logic.library.metadata
 
 import ru.kmorozov.db.core.config.IContextLoader
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
-import ru.kmorozov.gbd.core.logic.connectors.apache.ApacheHttpConnector
-import ru.kmorozov.gbd.core.logic.connectors.asynchttp.AsyncHttpConnector
-import ru.kmorozov.gbd.core.logic.connectors.google.GoogleHttpConnector
-import ru.kmorozov.gbd.core.logic.connectors.http2native.Http2Connector
-import ru.kmorozov.gbd.core.logic.connectors.ok.OkHttpConnector
 import ru.kmorozov.gbd.core.logic.context.BookContext
-import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookExtractor
+import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookInfoExtractor
 import ru.kmorozov.gbd.core.logic.extractors.base.IImageExtractor
 import ru.kmorozov.gbd.core.logic.extractors.google.GoogleBookInfoExtractor
 import ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor
 import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata
+import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata.Companion.APACHE_CONNECTOR
+import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata.Companion.ASYNC_CONNECTOR
+import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata.Companion.GOOGLE_CONNECTOR
+import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata.Companion.HTTP_2_CONNECTOR
+import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata.Companion.OK_CONNECTOR
 
 /**
  * Created by sbt-morozov-kv on 15.11.2016.
@@ -27,11 +27,11 @@ class GoogleBooksMetadata private constructor() : ILibraryMetadata {
         return GoogleImageExtractor(bookContext)
     }
 
-    override fun getBookExtractor(bookId: String): AbstractBookExtractor {
+    override fun getBookExtractor(bookId: String): AbstractBookInfoExtractor {
         return GoogleBookInfoExtractor(bookId)
     }
 
-    override fun getBookExtractor(bookId: String, storedLoader: IContextLoader): AbstractBookExtractor {
+    override fun getBookExtractor(bookId: String, storedLoader: IContextLoader): AbstractBookInfoExtractor {
         return GoogleBookInfoExtractor(bookId, storedLoader)
     }
 
@@ -44,12 +44,6 @@ class GoogleBooksMetadata private constructor() : ILibraryMetadata {
     }
 
     companion object {
-        val GOOGLE_CONNECTOR = GoogleHttpConnector()
-        val ASYNC_CONNECTOR = AsyncHttpConnector()
-        val OK_CONNECTOR = OkHttpConnector()
-        val APACHE_CONNECTOR = ApacheHttpConnector()
-        val HTTP_2_CONNECTOR = Http2Connector()
-
         val GOOGLE_METADATA: ILibraryMetadata = GoogleBooksMetadata()
     }
 }

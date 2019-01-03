@@ -6,13 +6,13 @@ import ru.kmorozov.db.core.logic.model.book.shpl.ShplBookData
 import ru.kmorozov.db.core.logic.model.book.shpl.ShplPage
 import ru.kmorozov.db.core.logic.model.book.shpl.ShplPagesInfo
 import ru.kmorozov.db.utils.Mapper
-import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookExtractor
+import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookInfoExtractor
 import ru.kmorozov.gbd.core.logic.model.book.base.IPage
 
 /**
  * Created by sbt-morozov-kv on 16.11.2016.
  */
-class ShplBookExtractor(bookId: String) : AbstractBookExtractor(bookId) {
+class ShplBookExtractor(bookId: String) : AbstractBookInfoExtractor(bookId) {
 
     protected override val bookUrl: String
         get() = bookId
@@ -20,18 +20,7 @@ class ShplBookExtractor(bookId: String) : AbstractBookExtractor(bookId) {
     protected override val reserveBookUrl: String
         get() = bookId
 
-    override fun findBookInfo(): BookInfo {
-        var defaultDocument: Document? = null
-        try {
-            defaultDocument = documentWithoutProxy
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-        return extractBookInfo(defaultDocument)
-    }
-
-    private fun extractBookInfo(doc: Document?): BookInfo {
+    protected override fun extractBookInfo(doc: Document?): BookInfo {
         if (null == doc) return BookInfo.EMPTY_BOOK
 
         val title = doc.select("title")[0]

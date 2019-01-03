@@ -1,15 +1,12 @@
 package ru.kmorozov.gbd.core.logic.library.metadata
 
-import ru.kmorozov.db.core.config.IContextLoader
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
-import ru.kmorozov.gbd.core.logic.connectors.apache.ApacheHttpConnector
 import ru.kmorozov.gbd.core.logic.context.BookContext
-import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookExtractor
+import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookInfoExtractor
 import ru.kmorozov.gbd.core.logic.extractors.base.IImageExtractor
 import ru.kmorozov.gbd.core.logic.extractors.shpl.ShplBookExtractor
 import ru.kmorozov.gbd.core.logic.extractors.shpl.ShplImageExtractor
 import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata
-import java.util.*
 
 /**
  * Created by sbt-morozov-kv on 15.11.2016.
@@ -24,12 +21,8 @@ class ShplMetadata private constructor() : ILibraryMetadata {
         return ShplImageExtractor(bookContext)
     }
 
-    override fun getBookExtractor(bookId: String): AbstractBookExtractor {
+    override fun getBookExtractor(bookId: String): AbstractBookInfoExtractor {
         return ShplBookExtractor(bookId)
-    }
-
-    override fun getBookExtractor(bookId: String, storedLoader: IContextLoader): AbstractBookExtractor {
-        return getBookExtractor(bookId)
     }
 
     override fun needSetCookies(): Boolean {
@@ -37,7 +30,7 @@ class ShplMetadata private constructor() : ILibraryMetadata {
     }
 
     override fun preferredConnectors(): List<HttpConnector> {
-        return Arrays.asList<HttpConnector>(ApacheHttpConnector())
+        return listOf(ILibraryMetadata.APACHE_CONNECTOR)
     }
 
     companion object {
