@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger
 /**
  * Created by km on 21.11.2015.
  */
-class GoogleImageExtractor(bookContext: BookContext) : AbstractImageExtractor(bookContext, GoogleImageExtractor::class.java) {
+class GoogleImageExtractor(bookContext: BookContext) : AbstractImageExtractor<GooglePageInfo>(bookContext, GoogleImageExtractor::class.java) {
 
     override var processStatus: IProgress
         get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.

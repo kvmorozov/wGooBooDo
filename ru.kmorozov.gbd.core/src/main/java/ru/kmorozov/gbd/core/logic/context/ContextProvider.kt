@@ -66,8 +66,6 @@ class ContextProvider(protected var loader: IContextLoader) : IContextLoader {
                         _contextProvider = ContextProvider(DirContextLoader.BOOK_CTX_LOADER)
                 }
 
-            _contextProvider.updateContext()
-
             return _contextProvider
         }
 

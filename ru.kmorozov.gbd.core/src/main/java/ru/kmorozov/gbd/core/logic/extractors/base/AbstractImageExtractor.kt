@@ -4,23 +4,25 @@ import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.context.BookContext
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
+import ru.kmorozov.gbd.core.logic.extractors.SimplePageImgProcessor
+import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage
 import ru.kmorozov.gbd.logger.Logger
 import ru.kmorozov.gbd.logger.consumers.AbstractOutputReceiver
 import ru.kmorozov.gbd.logger.events.AbstractEventSource
-
 import java.io.IOException
 import java.util.concurrent.CopyOnWriteArrayList
+import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.function.Consumer
 
 /**
  * Created by sbt-morozov-kv on 16.11.2016.
  */
-abstract class AbstractImageExtractor : AbstractEventSource, IUniqueRunnable<BookContext>, IImageExtractor {
+abstract class AbstractImageExtractor <T: AbstractPage> : AbstractEventSource, IUniqueRunnable<BookContext>, IImageExtractor {
 
     override var uniqueObject: BookContext
 
-    protected constructor(uniqueObject: BookContext, extractorClass: Class<out AbstractImageExtractor>) : super() {
+    protected constructor(uniqueObject: BookContext, extractorClass: Class<out AbstractImageExtractor<T>>) : super() {
         this.uniqueObject = uniqueObject
         this.initComplete = AtomicBoolean(false)
         this.waitingProxy = CopyOnWriteArrayList()
@@ -49,7 +51,9 @@ abstract class AbstractImageExtractor : AbstractEventSource, IUniqueRunnable<Boo
         initComplete.set(true)
     }
 
-    protected abstract fun preCheck(): Boolean
+    protected open fun preCheck(): Boolean {
+        return true
+    }
 
     override fun run() {
         process()
@@ -79,5 +83,38 @@ abstract class AbstractImageExtractor : AbstractEventSource, IUniqueRunnable<Boo
 
         if (!uniqueObject.storage.isValidOrCreate)
             logger.severe(String.format("Invalid book title: %s", uniqueObject.bookInfo.bookData.title))
+    }
+
+    override fun newProxyEvent(proxy: HttpHostExt) {
+        if (!proxy.isLocal) return
+
+        Thread(EventProcessor(proxy)).start()
+    }
+
+    protected inner class EventProcessor internal constructor(private val proxy: HttpHostExt) : Runnable {
+
+        override fun run() {
+            while (!initComplete.get()) {
+                waitingProxy.add(proxy)
+                return
+            }
+
+            for (page in uniqueObject.bookInfo.pages.pages)
+                uniqueObject.imgExecutor.execute(SimplePageImgProcessor(uniqueObject, page as T, HttpHostExt.NO_PROXY))
+
+            uniqueObject.imgExecutor.terminate(20L, TimeUnit.MINUTES)
+
+            ExecutionContext.INSTANCE.updateProxyList()
+
+            logger.info(uniqueObject.bookInfo.pages.missingPagesList)
+
+            val pagesAfter = uniqueObject.pagesStream.filter { pageInfo -> pageInfo.isDataProcessed }.count()
+
+            logger.info(String.format("Processed %s pages", pagesAfter - uniqueObject.pagesBefore))
+
+            synchronized(uniqueObject) {
+                ExecutionContext.INSTANCE.postProcessBook(uniqueObject)
+            }
+        }
     }
 }

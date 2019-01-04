@@ -7,5 +7,7 @@ import ru.kmorozov.gbd.logger.progress.IProgress
  */
 abstract class AbstractEventSource : IEventSource {
 
-    abstract override var processStatus: IProgress
+    override var processStatus: IProgress
+        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+        set(value) {}
 }
