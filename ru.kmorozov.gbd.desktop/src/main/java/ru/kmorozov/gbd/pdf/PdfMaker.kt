@@ -59,7 +59,7 @@ class PdfMaker : IPostProcessor {
         }
 
         if (null == pdfFile)
-            pdfFile = File(imgDir.path + File.separator + bookInfo.bookData.title!!.replace("[^А-Яа-яa-zA-Z0-9-]".toRegex(), " ") + ".pdf")
+            pdfFile = File(imgDir.path + File.separator + bookInfo.bookData.title.replace("[^А-Яа-яa-zA-Z0-9-]".toRegex(), " ") + ".pdf")
         try {
             if (Files.exists(pdfFile.toPath())) {
                 if (pdfFile.lastModified() < bookInfo.lastPdfChecked)
