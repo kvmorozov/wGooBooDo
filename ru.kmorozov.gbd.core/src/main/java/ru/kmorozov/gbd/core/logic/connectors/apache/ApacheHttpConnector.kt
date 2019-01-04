@@ -16,13 +16,7 @@ import java.net.SocketTimeoutException
 /**
  * Created by km on 17.05.2016.
  */
-class ApacheHttpConnector : HttpConnector {
-
-    private var factory: IApacheConnectionFactory
-
-    constructor(factory: IApacheConnectionFactory){
-        this.factory = factory
-    }
+class ApacheHttpConnector(private var factory: IApacheConnectionFactory) : HttpConnector() {
 
     @Throws(IOException::class)
     override fun getContent(rqUrl: String, proxy: HttpHostExt, withTimeout: Boolean): Response {

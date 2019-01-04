@@ -8,7 +8,7 @@ import ru.kmorozov.gbd.core.logic.extractors.base.IImageExtractor
 import ru.kmorozov.gbd.core.logic.extractors.google.GoogleBookInfoExtractor
 import ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor
 import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata
-import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata.Companion.APACHE_GOOGLE_CONNECTOR
+import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata.Companion.GOOGLE_APACHE_CONNECTOR
 import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata.Companion.ASYNC_CONNECTOR
 import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata.Companion.GOOGLE_CONNECTOR
 import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata.Companion.HTTP_2_CONNECTOR
@@ -36,7 +36,7 @@ class GoogleBooksMetadata private constructor() : ILibraryMetadata {
     }
 
     override fun preferredConnectors(): List<HttpConnector> {
-        return listOf(GOOGLE_CONNECTOR, HTTP_2_CONNECTOR, OK_CONNECTOR, ASYNC_CONNECTOR, APACHE_GOOGLE_CONNECTOR)
+        return listOf(GOOGLE_CONNECTOR, HTTP_2_CONNECTOR, OK_CONNECTOR, ASYNC_CONNECTOR, GOOGLE_APACHE_CONNECTOR)
     }
 
     companion object {

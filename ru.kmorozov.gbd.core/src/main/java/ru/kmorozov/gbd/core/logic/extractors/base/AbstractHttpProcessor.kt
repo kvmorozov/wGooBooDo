@@ -63,8 +63,6 @@ open class AbstractHttpProcessor {
         public val connectors: List<HttpConnector>
             get() = ExecutionContext.INSTANCE.defaultMetadata.preferredConnectors()
 
-        private val LOCK = Any()
-
         fun close() {
             connectors.forEach(HttpConnector::close)
         }

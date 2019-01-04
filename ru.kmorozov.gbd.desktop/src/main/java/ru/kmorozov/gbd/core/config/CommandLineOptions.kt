@@ -4,6 +4,7 @@ import org.apache.commons.cli.CommandLine
 import org.apache.commons.cli.DefaultParser
 import org.apache.commons.cli.Option
 import org.apache.commons.cli.Options
+import ru.kmorozov.gbd.core.config.options.AuthOptions
 import ru.kmorozov.gbd.core.config.options.CtxOptions
 import ru.kmorozov.gbd.core.loader.LocalFSStorage
 
@@ -78,6 +79,12 @@ class CommandLineOptions(commandLineArguments: Array<String>) : IGBDOptions {
         option.argName = "CTX mode "
         options.addOption(option)
 
+        option = Option(OPTION_AUTH_MODE_SHORT, OPTION_AUTH_MODE_LONG, true, "authentication params")
+        option.args = 2
+        option.setOptionalArg(true)
+        option.argName = "authentication params "
+        options.addOption(option)
+
         commandLine = cmdLineParser.parse(options, commandLineArguments)
     }
 
@@ -120,6 +127,11 @@ class CommandLineOptions(commandLineArguments: Array<String>) : IGBDOptions {
         return if (ctxOpts == null || ctxOpts.size != 2) CtxOptions.DEFAULT_CTX_OPTIONS else CtxOptions(ctxOpts[0], ctxOpts[1])
     }
 
+    override fun authOptions(): AuthOptions? {
+        val authOpts = getStringOptionValues(OPTION_AUTH_MODE_SHORT)
+        return if (authOpts == null || authOpts.size != 2) null else AuthOptions(authOpts[0], authOpts[1])
+    }
+
     companion object {
 
         private const val OPTION_BOOKID_SHORT = "i"
@@ -138,5 +150,7 @@ class CommandLineOptions(commandLineArguments: Array<String>) : IGBDOptions {
         private const val OPTION_PDF_MODE_LONG = "pdf"
         private const val OPTION_CTX_MODE_SHORT = "c"
         private const val OPTION_CTX_MODE_LONG = "ctx"
+        private const val OPTION_AUTH_MODE_SHORT = "a"
+        private const val OPTION_AUTH_MODE_LONG = "auth"
     }
 }

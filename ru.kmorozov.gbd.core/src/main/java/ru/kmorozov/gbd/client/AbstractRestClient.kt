@@ -41,7 +41,7 @@ abstract class AbstractRestClient : AbstractHttpProcessor() {
             }
 
             try {
-                resp.content.use { `is` -> return String(`is`.readAllBytes(), Charset.defaultCharset()) }
+                resp.content.use { return String(it.readAllBytes()) }
             } catch (se: SocketException) {
                 logger.info("Rest service is unavailable! " + se.message)
                 throw RestServiceUnavailableException()

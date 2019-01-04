@@ -34,8 +34,8 @@ interface ILibraryMetadata {
         val GOOGLE_CONNECTOR = GoogleHttpConnector()
         val ASYNC_CONNECTOR = AsyncHttpConnector()
         val OK_CONNECTOR = OkHttpConnector()
-        val APACHE_GOOGLE_CONNECTOR = ApacheHttpConnector(GoogleApacheConnections.INSTANCE)
-        val SIMPLE_GOOGLE_CONNECTOR = ApacheHttpConnector(SimpleApacheConnections.INSTANCE)
+        val GOOGLE_APACHE_CONNECTOR = ApacheHttpConnector(GoogleApacheConnections.INSTANCE)
+        val SIMPLE_APACHE_CONNECTOR = ApacheHttpConnector(SimpleApacheConnections.INSTANCE)
         val HTTP_2_CONNECTOR = Http2Connector()
     }
 }

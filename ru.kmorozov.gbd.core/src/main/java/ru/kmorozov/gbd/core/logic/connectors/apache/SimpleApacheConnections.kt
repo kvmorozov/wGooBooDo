@@ -6,6 +6,7 @@ import org.apache.hc.client5.http.cookie.CookieStore
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient
 import org.apache.hc.client5.http.impl.classic.HttpClientBuilder
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager
+import org.apache.hc.core5.http.Header
 import org.apache.hc.core5.http.HttpHost
 import org.apache.hc.core5.ssl.SSLContextBuilder
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt
@@ -21,36 +22,34 @@ import java.util.concurrent.TimeUnit
  * Created by km on 22.05.2016.
  */
 open class SimpleApacheConnections : IApacheConnectionFactory {
-    private val builder: HttpClientBuilder
+    protected val builder: HttpClientBuilder
     private val builderWithTimeout: HttpClientBuilder
     private val clientsMap = ConcurrentHashMap<HttpHost, CloseableHttpClient>()
     private val withTimeoutClientsMap: MutableMap<HttpHost, CloseableHttpClient> = ConcurrentHashMap<HttpHost, CloseableHttpClient>()
     protected val cookieStoreMap: MutableMap<HttpHostExt, CookieStore> = ConcurrentHashMap<HttpHostExt, CookieStore>()
     private val noProxyClient: CloseableHttpClient
     private val noProxyClientWithTimeout: CloseableHttpClient
-    private val defaultCookieStore: CookieStore?
 
     init {
         val connPool = PoolingHttpClientConnectionManager()
         connPool.maxTotal = 200
         connPool.defaultMaxPerRoute = 200
 
-        builder = HttpClientBuilder.create().setUserAgent(HttpConnections.USER_AGENT).setConnectionManager(connPool).setConnectionManagerShared(true)
+        builder = HttpClientBuilder.create()
+                .setUserAgent(HttpConnections.USER_AGENT)
+                .setConnectionManager(connPool)
+                .setConnectionManagerShared(true)
+                .disableRedirectHandling()
 
-        builderWithTimeout = HttpClientBuilder.create().setUserAgent(HttpConnections.USER_AGENT).setConnectionManager(connPool)
+        builderWithTimeout = HttpClientBuilder.create()
+                .setUserAgent(HttpConnections.USER_AGENT)
+                .setConnectionManager(connPool)
 
-        try {
-            val sslContext = SSLContextBuilder().loadTrustMaterial(null) { _, _ -> true }.build()
-            //            builder.setSSLContext(sslContext);
-            //            builderWithTimeout.setSSLContext(sslContext);
-        } catch (ex: Exception) {
-            ex.printStackTrace()
-        }
+        val defaultCookieStore = getCookieStore()
+        val defaultHeaders = getHeaders()
 
-        defaultCookieStore = getCookieStore()
-
-        noProxyClient = builder.setDefaultCookieStore(defaultCookieStore).build()
-        noProxyClientWithTimeout = builderWithTimeout.setDefaultCookieStore(defaultCookieStore).build()
+        noProxyClient = builder.setDefaultCookieStore(defaultCookieStore).setDefaultHeaders(defaultHeaders).build()
+        noProxyClientWithTimeout = builderWithTimeout.setDefaultCookieStore(defaultCookieStore).setDefaultHeaders(defaultHeaders).build()
 
         val requestConfig = RequestConfig.copy(RequestConfig.DEFAULT)
                 .setConnectTimeout(HttpConnector.CONNECT_TIMEOUT.toLong(), TimeUnit.MILLISECONDS)
@@ -75,6 +74,10 @@ open class SimpleApacheConnections : IApacheConnectionFactory {
     }
 
     protected open fun getCookieStore(proxy: HttpHostExt = NO_PROXY): CookieStore? {
+        return null
+    }
+
+    protected open fun getHeaders(proxy: HttpHostExt = NO_PROXY): List<Header>? {
         return null
     }
 

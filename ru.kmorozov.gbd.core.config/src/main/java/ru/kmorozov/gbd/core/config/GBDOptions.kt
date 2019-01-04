@@ -1,6 +1,7 @@
 package ru.kmorozov.gbd.core.config
 
 import org.apache.commons.lang3.StringUtils
+import ru.kmorozov.gbd.core.config.options.AuthOptions
 import ru.kmorozov.gbd.core.config.options.CtxOptions
 import ru.kmorozov.gbd.core.config.options.PdfOptions
 
@@ -45,4 +46,7 @@ object GBDOptions {
     fun getImageWidth(defaultValue: Int): Int {
         return if (0 == INSTANCE.imageWidth) defaultValue else INSTANCE.imageWidth
     }
+
+    val authOptions: AuthOptions?
+        get() = INSTANCE.authOptions()
 }

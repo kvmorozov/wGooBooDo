@@ -24,7 +24,7 @@ class RfbrMetadata : ILibraryMetadata {
     }
 
     override fun preferredConnectors(): List<HttpConnector> {
-        return listOf(ILibraryMetadata.SIMPLE_GOOGLE_CONNECTOR)
+        return listOf(ILibraryMetadata.SIMPLE_APACHE_CONNECTOR)
     }
 
     companion object {

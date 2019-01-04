@@ -1,5 +1,6 @@
 package ru.kmorozov.gbd.core.config
 
+import ru.kmorozov.gbd.core.config.options.AuthOptions
 import ru.kmorozov.gbd.core.config.options.CtxOptions
 
 /**
@@ -22,4 +23,8 @@ interface IGBDOptions {
     fun pdfOptions(): String
 
     fun ctxOptions(): CtxOptions
+
+    fun authOptions(): AuthOptions? {
+        TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+    }
 }
