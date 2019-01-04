@@ -6,7 +6,7 @@ import ru.kmorozov.gbd.core.config.options.AuthOptions
 import ru.kmorozov.gbd.core.config.options.CtxOptions
 
 abstract class AbstractServerGBDOptions : IGBDOptions {
-    override val bookId: String
+    override var bookId: String = ""
         get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
     override val storage: IStorage
         get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.

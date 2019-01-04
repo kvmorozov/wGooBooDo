@@ -25,7 +25,7 @@ class ArchiveBookInfoExtractor(bookId: String) : AbstractBookInfoExtractor(bookI
         val itemPath = params[1].split("=")[1]
         val server = params[2].split("=")[1]
 
-        val pages = IntRange(1, numPages).map { ArchivePage(bookId, it, itemPath, server) }
+        val pages = IntRange(1, numPages - 1).map { ArchivePage(bookId, it, itemPath, server) }
 
         val bookData = ArchiveBookData(title, bookId)
 
