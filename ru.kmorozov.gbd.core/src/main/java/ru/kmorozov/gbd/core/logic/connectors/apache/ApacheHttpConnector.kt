@@ -16,13 +16,19 @@ import java.net.SocketTimeoutException
 /**
  * Created by km on 17.05.2016.
  */
-class ApacheHttpConnector : HttpConnector() {
+class ApacheHttpConnector : HttpConnector {
+
+    private var factory: IApacheConnectionFactory
+
+    constructor(factory: IApacheConnectionFactory){
+        this.factory = factory
+    }
 
     @Throws(IOException::class)
     override fun getContent(rqUrl: String, proxy: HttpHostExt, withTimeout: Boolean): Response {
         if (GBDOptions.secureMode && proxy.isLocal || !proxy.isAvailable) return EMPTY_RESPONSE
 
-        val response = getContent(ApacheConnections.INSTANCE.getClient(proxy, withTimeout), HttpGet(rqUrl), proxy, 0)
+        val response = getContent(factory.getClient(proxy, withTimeout), HttpGet(rqUrl), proxy, 0)
 
         if (response.empty) logger.finest(String.format("No response at url %s with proxy %s", rqUrl, proxy.toString()))
 
@@ -53,7 +59,7 @@ class ApacheHttpConnector : HttpConnector() {
     }
 
     override fun close() {
-        ApacheConnections.INSTANCE.closeAllConnections()
+        factory.closeAllConnections()
     }
 
     companion object {

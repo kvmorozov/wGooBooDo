@@ -23,12 +23,8 @@ class RfbrMetadata : ILibraryMetadata {
         return RfbrBookInfoExtractor(bookId)
     }
 
-    override fun needSetCookies(): Boolean {
-        return false
-    }
-
     override fun preferredConnectors(): List<HttpConnector> {
-        return listOf(ILibraryMetadata.APACHE_CONNECTOR)
+        return listOf(ILibraryMetadata.SIMPLE_GOOGLE_CONNECTOR)
     }
 
     companion object {

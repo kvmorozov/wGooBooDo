@@ -27,10 +27,6 @@ class UnknownMetadata : ILibraryMetadata {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun needSetCookies(): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
     override fun preferredConnectors(): List<HttpConnector> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }

@@ -1,6 +1,5 @@
 package ru.kmorozov.gbd.core.logic.library.metadata
 
-import ru.kmorozov.db.core.config.IContextLoader
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
 import ru.kmorozov.gbd.core.logic.context.BookContext
 import ru.kmorozov.gbd.core.logic.extractors.archive.ArchiveBookInfoExtractor
@@ -26,12 +25,8 @@ class ArchiveMetadata private constructor() : ILibraryMetadata {
         return ArchiveBookInfoExtractor(bookId)
     }
 
-    override fun needSetCookies(): Boolean {
-        return false
-    }
-
     override fun preferredConnectors(): List<HttpConnector> {
-        return listOf(ILibraryMetadata.APACHE_CONNECTOR)
+        return listOf(ILibraryMetadata.SIMPLE_GOOGLE_CONNECTOR)
     }
 
     companion object {
