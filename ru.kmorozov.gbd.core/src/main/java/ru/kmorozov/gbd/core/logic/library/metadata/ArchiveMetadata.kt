@@ -4,6 +4,7 @@ import ru.kmorozov.db.core.config.IContextLoader
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
 import ru.kmorozov.gbd.core.logic.context.BookContext
 import ru.kmorozov.gbd.core.logic.extractors.archive.ArchiveBookInfoExtractor
+import ru.kmorozov.gbd.core.logic.extractors.archive.ArchiveImageExtractor
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookInfoExtractor
 import ru.kmorozov.gbd.core.logic.extractors.base.IImageExtractor
 import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata
@@ -18,7 +19,7 @@ class ArchiveMetadata private constructor() : ILibraryMetadata {
     }
 
     override fun getImageExtractor(bookContext: BookContext): IImageExtractor {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return ArchiveImageExtractor(bookContext)
     }
 
     override fun getBookInfoExtractor(bookId: String): AbstractBookInfoExtractor {
@@ -26,7 +27,7 @@ class ArchiveMetadata private constructor() : ILibraryMetadata {
     }
 
     override fun needSetCookies(): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return false
     }
 
     override fun preferredConnectors(): List<HttpConnector> {
