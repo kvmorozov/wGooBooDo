@@ -48,5 +48,9 @@ class Logger(private val eventConsumer: IEventConsumer, private val name: String
         fun getLogger(claszz: Class<*>): Logger {
             return Logger(DummyReceiver.INSTANCE, claszz.name, ": ")
         }
+
+        fun getLogger(claszz: Class<*>, prefix: String): Logger {
+            return Logger(DummyReceiver.INSTANCE, claszz.name, prefix + " : ")
+        }
     }
 }

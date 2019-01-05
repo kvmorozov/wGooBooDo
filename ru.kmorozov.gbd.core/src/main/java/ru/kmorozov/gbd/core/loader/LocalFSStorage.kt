@@ -55,7 +55,7 @@ open class LocalFSStorage(storageDirName: String) : IStorage {
     init {
         storageDir = File(storageDirName)
 
-        logger = Logger.getLogger(LocalFSStorage::class.java)
+        logger = Logger.getLogger(LocalFSStorage::class.java, storageDirName)
     }
 
     override fun getChildStorage(bookData: IBookData): IStorage {
