@@ -7,7 +7,8 @@ import java.io.InputStream
 import java.nio.charset.StandardCharsets
 
 internal class WebDriverResponse(private val response: String) : Response {
-
+    override val statusCode: Int
+        get() = 200
 
     override val content: InputStream
         @Throws(IOException::class)

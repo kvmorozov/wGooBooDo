@@ -89,20 +89,20 @@ internal class GooglePageSigProcessor : AbstractHttpProcessor, IUniqueRunnable<G
             if (uniqueObject.isDataProcessed || null != uniqueObject.sig || uniqueObject.isSigChecked || uniqueObject.isLoadingStarted)
                 return
 
-            var resp: Response = Response.EMPTY_RESPONSE
+            var response: Response = Response.EMPTY_RESPONSE
             val baseUrl = HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, bookContext.bookInfo.bookId)
             val rqUrl = baseUrl + PAGES_REQUEST_TEMPLATE.replace(RQ_PG_PLACEHOLDER, uniqueObject.pid)
 
             try {
-                resp = getContent(rqUrl, proxy, true)
-                if (resp.empty) {
+                response = getContent(rqUrl, proxy, true)
+                if (response.empty) {
                     logger.finest(String.format(SIG_ERROR_TEMPLATE, rqUrl, proxy.toString()))
                     return
                 }
 
                 var respStr: String? = null
                 try {
-                    resp.content.use { respStr = String(it.readAllBytes(), Charset.defaultCharset()) }
+                    response.content.use { respStr = String(it.readAllBytes(), Charset.defaultCharset()) }
                 } catch (se: SocketException) {
 
                 } catch (se: SSLException) {
@@ -168,7 +168,7 @@ internal class GooglePageSigProcessor : AbstractHttpProcessor, IUniqueRunnable<G
             } catch (ex: Exception) {
                 ex.printStackTrace()
             } finally {
-                resp.close()
+                response.close()
             }
         }
     }

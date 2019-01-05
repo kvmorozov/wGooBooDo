@@ -12,11 +12,15 @@ interface Response : Closeable {
 
     val imageFormat: String
 
+    val statusCode: Int
+
     val empty: Boolean
         get() = this == EMPTY_RESPONSE
 
     companion object {
         val EMPTY_RESPONSE: Response = object : Response {
+            override val statusCode: Int
+                get() = 200
             override val content: InputStream
                 get() = System.`in`;
             override val imageFormat: String

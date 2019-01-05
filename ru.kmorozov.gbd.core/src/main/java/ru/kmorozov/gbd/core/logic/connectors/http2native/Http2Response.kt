@@ -8,6 +8,9 @@ import java.io.InputStream
 import java.net.http.HttpResponse
 
 class Http2Response internal constructor(private val response: HttpResponse<*>) : Response {
+    override val statusCode: Int
+        get() = response.statusCode()
+
     override val content: InputStream
 
     override val imageFormat: String

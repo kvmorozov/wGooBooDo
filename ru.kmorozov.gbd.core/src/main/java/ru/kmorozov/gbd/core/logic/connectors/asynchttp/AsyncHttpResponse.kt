@@ -8,6 +8,8 @@ import java.io.InputStream
  * Created by km on 23.12.2016.
  */
 class AsyncHttpResponse internal constructor(private val response: Response) : ru.kmorozov.gbd.core.logic.connectors.Response {
+    override val statusCode: Int
+        get() = response.statusCode
 
     override val content: InputStream
         get() = response.responseBodyAsStream

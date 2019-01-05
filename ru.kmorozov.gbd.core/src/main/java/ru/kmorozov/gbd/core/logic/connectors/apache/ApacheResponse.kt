@@ -11,6 +11,8 @@ import java.io.InputStream
  * Created by km on 20.05.2016.
  */
 class ApacheResponse internal constructor(private val response: CloseableHttpResponse) : Response {
+    override val statusCode: Int
+        get() = response.code
 
     override val content: InputStream
         @Throws(IOException::class)

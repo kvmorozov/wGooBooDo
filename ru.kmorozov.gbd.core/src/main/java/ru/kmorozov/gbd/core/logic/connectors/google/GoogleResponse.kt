@@ -9,14 +9,16 @@ import java.io.InputStream
 /**
  * Created by km on 17.05.2016.
  */
-internal class GoogleResponse(private val resp: HttpResponse) : Response {
+internal class GoogleResponse(private val response: HttpResponse) : Response {
+    override val statusCode: Int
+        get() = response.statusCode
 
     override val content: InputStream
         @Throws(IOException::class)
-        get() = resp.content
+        get() = response.content
 
     override val imageFormat: String
-        get() = resp.mediaType.subType
+        get() = response.mediaType.subType
 
     override fun close() {
 

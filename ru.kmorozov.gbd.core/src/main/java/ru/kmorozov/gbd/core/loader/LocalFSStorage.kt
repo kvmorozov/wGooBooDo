@@ -77,7 +77,7 @@ open class LocalFSStorage(storageDirName: String) : IStorage {
     }
 
     override fun size(): Int {
-        return if (storageDir.listFiles() == null) 0 else storageDir.listFiles().size
+        return storageDir.listFiles().size
     }
 
     @Throws(IOException::class)
