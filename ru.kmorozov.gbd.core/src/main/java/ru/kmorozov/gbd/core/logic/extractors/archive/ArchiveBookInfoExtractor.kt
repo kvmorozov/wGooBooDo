@@ -17,10 +17,11 @@ class ArchiveBookInfoExtractor(bookId: String) : AbstractBookInfoExtractor(bookI
     override fun extractBookInfo(doc: Document?): BookInfo {
         if (null == doc) return BookInfo.EMPTY_BOOK
 
-        val title = doc.body().children()[1].children()[5].children()[1].children()[3].allElements.eachText()[0]
+        val title = doc.head().children()[0].text().split(":")[0].trim()
 
-        val numPages = Integer.valueOf(doc.body().children()[1].children()[5].children()[4].children()[0].children()[0].children()[0].children()[10].children()[9].allElements.eachText()[2])
-        val params = doc.body().children()[1].children()[5].children()[1].children()[5].children()[0].children()[0].children()[2].data().lines()[4].split("?")[1].split("&")
+        val pageElts = doc.body().getElementsByAttributeValue("itemprop", "numberOfPages")
+        val numPages = if (pageElts.size == 0) 100 else pageElts[0].text().toInt()
+        val params = doc.body().getElementById("theatre-controls").parent().children()[2].data().lines()[4].split("?")[1].split("&")
 
         val itemPath = params[1].split("=")[1]
         val server = params[2].split("=")[1]

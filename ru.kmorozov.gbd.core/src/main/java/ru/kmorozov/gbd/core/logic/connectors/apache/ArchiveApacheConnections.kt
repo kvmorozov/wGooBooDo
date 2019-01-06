@@ -11,8 +11,11 @@ import org.apache.hc.core5.http.message.BasicNameValuePair
 import ru.kmorozov.db.utils.Mapper
 import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt
+import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
+import ru.kmorozov.gbd.logger.Logger
 import java.lang.RuntimeException
 import java.nio.charset.Charset
+import kotlin.system.exitProcess
 
 class ArchiveApacheConnections : SimpleApacheConnections() {
 
@@ -58,10 +61,12 @@ class ArchiveApacheConnections : SimpleApacheConnections() {
         val loanRs = builder.setDefaultCookieStore(cookieStore).setDefaultHeaders(loginRq.headers.asList()).build().execute(loanRq)
         val loanJson : Map<String, String> = Mapper.gson.fromJson(String(loanRs.entity.content.readAllBytes()), Mapper.mapType)
 
-        val success = loanJson["success"]!!.toBoolean()
+        val success = loanJson.containsKey("success") && loanJson["success"]!!.toBoolean()
 
-        if (!success)
-            throw RuntimeException("You have to loan ${GBDOptions.bookId} first!")
+        if (!success) {
+            logger.error("You have to loan ${GBDOptions.bookId} first!")
+            exitProcess(-1)
+        }
 
         val token = loanJson["token"]!!
 
@@ -85,6 +90,7 @@ class ArchiveApacheConnections : SimpleApacheConnections() {
 
     companion object {
 
+        private val logger = Logger.getLogger(ArchiveApacheConnections::class.java)
         internal val INSTANCE = ArchiveApacheConnections()
     }
 }

@@ -76,7 +76,7 @@ class QueuedThreadPoolExecutor<T> : ThreadPoolExecutor {
         if (command is IUniqueRunnable<*>) {
             val uniqueObj = (command as IUniqueRunnable<T>).uniqueObject
             synchronized(uniqueObj as Any) {
-                if (null == uniqueMap.put(uniqueObj, command)) super.execute(command)
+                if (null == uniqueMap.putIfAbsent(uniqueObj, command)) super.execute(command)
             }
         } else
             super.execute(command)

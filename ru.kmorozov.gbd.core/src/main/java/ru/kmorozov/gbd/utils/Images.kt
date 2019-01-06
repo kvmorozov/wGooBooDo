@@ -25,7 +25,7 @@ object Images {
             "png", "jpg", "jpeg" -> return true
             "pdf" -> return false
             else -> {
-                logger.severe(String.format("Unknown img format = %s", ext))
+                logger.severe(String.format("Unknown img format for %s", filePath))
                 return false
             }
         }
