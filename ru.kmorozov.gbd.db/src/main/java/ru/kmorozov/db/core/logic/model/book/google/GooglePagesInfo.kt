@@ -6,8 +6,7 @@ import org.apache.commons.lang3.tuple.Pair
 import ru.kmorozov.gbd.core.logic.model.book.base.IPage
 import ru.kmorozov.gbd.core.logic.model.book.base.IPagesInfo
 import ru.kmorozov.gbd.logger.Logger
-import ru.kmorozov.gbd.logger.output.DummyReceiver
-
+import ru.kmorozov.gbd.logger.output.ReceiverProvider
 import java.io.Serializable
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
@@ -66,7 +65,7 @@ class GooglePagesInfo : IPagesInfo, Serializable {
     }
 
     private fun fillGap(beginGap: GooglePageInfo, endGap: GooglePageInfo) {
-        val logger = Logger(DummyReceiver.INSTANCE, "gapFinder", ": ")
+        val logger = Logger(ReceiverProvider.getReceiver(), "gapFinder", ": ")
 
         if (beginGap.isGapPage || endGap.isGapPage) return
 

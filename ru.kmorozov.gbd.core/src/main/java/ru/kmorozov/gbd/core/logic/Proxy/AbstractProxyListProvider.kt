@@ -93,17 +93,17 @@ abstract class AbstractProxyListProvider : IProxyListProvider {
                 proxy = HttpHostExt(host, cookie)
                 if (!StringUtils.isEmpty(cookie)) {
                     if (!GBDOptions.secureMode || proxy.isSecure) {
-                        logger.info(String.format("%sroxy %s added.", if (GBDOptions.secureMode) if (proxy.isSecure) "Secure p" else "NOT secure p" else "P", host.toString()))
+                        logger.finest(String.format("%sroxy %s added.", if (GBDOptions.secureMode) if (proxy.isSecure) "Secure p" else "NOT secure p" else "P", host.toString()))
                     } else {
-                        logger.info(String.format("NOT secure proxy %s NOT added.", host.toString()))
+                        logger.finest(String.format("NOT secure proxy %s NOT added.", host.toString()))
                         proxy.forceInvalidate(false)
                     }
                 } else {
-                    logger.info(String.format("Proxy %s NOT added.", host.toString()))
+                    logger.finest(String.format("Proxy %s NOT added.", host.toString()))
                     proxy.forceInvalidate(false)
                 }
             } catch (ex: Exception) {
-                logger.info(String.format("Not valid proxy string %s.", proxyItem))
+                logger.finest(String.format("Not valid proxy string %s.", proxyItem))
             }
 
             proxyList.add(proxy)

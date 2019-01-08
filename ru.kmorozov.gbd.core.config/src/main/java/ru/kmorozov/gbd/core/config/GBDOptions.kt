@@ -35,10 +35,13 @@ object GBDOptions {
     }
 
     val reloadImages: Boolean
-        get() = INSTANCE.reloadImages()
+        get() = INSTANCE.reloadImages
 
     val secureMode: Boolean
-        get() = INSTANCE.secureMode()
+        get() = INSTANCE.secureMode
+
+    val debugEnabled: Boolean
+        get() = INSTANCE.debugEnabled
 
     val pdfOptions: PdfOptions
         get() = if (StringUtils.isEmpty(INSTANCE.pdfOptions())) PdfOptions.DEFAULT_MODE else PdfOptions.getOption(INSTANCE.pdfOptions())

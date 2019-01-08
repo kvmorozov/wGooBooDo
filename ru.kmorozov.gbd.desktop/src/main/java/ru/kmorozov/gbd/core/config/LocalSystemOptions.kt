@@ -20,13 +20,12 @@ class LocalSystemOptions : IGBDOptions {
     override val imageWidth: Int
         get() = SystemConfigs.resolution
 
-    override fun reloadImages(): Boolean {
-        return SystemConfigs.reload
-    }
+    override val reloadImages: Boolean
+        get() = SystemConfigs.reloadImages
 
-    override fun secureMode(): Boolean {
-        return SystemConfigs.secureMode
-    }
+    override val secureMode: Boolean
+        get() = SystemConfigs.secureMode
+
 
     override fun pdfOptions(): String {
         return SystemConfigs.pdfMode

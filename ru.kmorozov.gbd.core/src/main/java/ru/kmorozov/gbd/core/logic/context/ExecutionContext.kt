@@ -9,7 +9,7 @@ import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata
 import ru.kmorozov.gbd.core.logic.library.LibraryFactory
 import ru.kmorozov.gbd.logger.Logger
 import ru.kmorozov.gbd.logger.consumers.AbstractOutputReceiver
-import ru.kmorozov.gbd.logger.output.DummyReceiver
+import ru.kmorozov.gbd.logger.output.ReceiverProvider
 import ru.kmorozov.gbd.logger.progress.IProgress
 import ru.kmorozov.gbd.utils.QueuedThreadPoolExecutor
 import java.util.*
@@ -119,7 +119,7 @@ class ExecutionContext private constructor(val output: AbstractOutputReceiver, v
         }
 
         fun getLogger(clazz: Class<*>): Logger {
-            return Logger.getLogger(DummyReceiver.INSTANCE, clazz.name, "")
+            return Logger.getLogger(ReceiverProvider.getReceiver(), clazz.name, "")
         }
 
         val proxyCount: Int

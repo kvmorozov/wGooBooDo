@@ -11,7 +11,7 @@ import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.logic.context.ContextProvider
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
 import ru.kmorozov.gbd.logger.Logger
-import ru.kmorozov.gbd.logger.output.DummyReceiver
+import ru.kmorozov.gbd.logger.output.ReceiverProvider
 import ru.kmorozov.library.data.loader.processors.IGbdProcessor
 import ru.kmorozov.library.data.model.book.BookInfo.BookFormat.PDF
 import ru.kmorozov.library.data.model.book.BookInfo.BookType.GOOGLE_BOOK
@@ -35,19 +35,19 @@ class GbdRemoteProcessor : IGbdProcessor {
 
     @Autowired
     @Lazy
-    private val storageRepository: StorageRepository? = null
+    private lateinit var storageRepository: StorageRepository
 
     @Autowired
     @Lazy
-    private val booksRepository: BooksRepository? = null
+    private lateinit var booksRepository: BooksRepository
 
     @Autowired
     @Lazy
-    private val ctx: OneDriveContextLoader? = null
+    private lateinit var ctx: OneDriveContextLoader
 
     @Autowired
     @Lazy
-    private val producer: ServerProducer? = null
+    private lateinit var producer: ServerProducer
 
     @Autowired
     @Lazy
@@ -55,7 +55,7 @@ class GbdRemoteProcessor : IGbdProcessor {
 
     @Autowired
     @Qualifier("remote")
-    private val options: ServerGBDOptions? = null
+    private lateinit var options: ServerGBDOptions
 
     val gbdRoot: OneDriveItem?
         @Bean
@@ -83,16 +83,16 @@ class GbdRemoteProcessor : IGbdProcessor {
             return
         }
 
-        ExecutionContext.initContext(DummyReceiver.INSTANCE, true)
+        ExecutionContext.initContext(ReceiverProvider.getReceiver(), true)
 
-        ctx!!.initContext(gbdRoot)
+        ctx.initContext(gbdRoot)
         if (!ctx.bookIdsList.isEmpty())
             for (bookId in ctx.bookIdsList) {
                 val bookInfo = ctx.getBookInfo(bookId)
                 if (bookInfo.empty) {
                     val dirItem = ctx.getBookDir(bookId)
-                    val storage = storageRepository!!.findByUrl(dirItem.id!!)
-                    val opBook = booksRepository!!.findAllByStorage(storage!!)
+                    val storage = storageRepository.findByUrl(dirItem.id!!)
+                    val opBook = booksRepository.findAllByStorage(storage!!)
                             .stream().filter { book -> book.bookInfo.format === PDF }.findFirst()
                     if (opBook.isPresent) {
                         val book = opBook.get()
@@ -112,12 +112,12 @@ class GbdRemoteProcessor : IGbdProcessor {
     }
 
     override fun load(bookId: String) {
-        options!!.bookId = bookId
+        options.bookId = bookId
         GBDOptions.init(options)
 
         ContextProvider.contextProvider = dbCtx
 
-        ExecutionContext.initContext(DummyReceiver(), 1 == producer!!.bookIds.size)
+        ExecutionContext.initContext(ReceiverProvider.getReceiver(), 1 == producer.bookIds.size)
         ExecutionContext.INSTANCE.addBookContext(producer, DummyProgress(), ServerPdfMaker())
 
         ExecutionContext.INSTANCE.execute()

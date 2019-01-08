@@ -5,7 +5,7 @@ import org.mockito.Mockito
 import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.config.IGBDOptions
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
-import ru.kmorozov.gbd.logger.output.DummyReceiver
+import ru.kmorozov.gbd.logger.output.ReceiverProvider
 
 /**
  * Created by km on 22.01.2017.
@@ -15,9 +15,9 @@ open class GbdTestBase {
     @Before
     fun init() {
         val options = Mockito.mock(IGBDOptions::class.java)
-        Mockito.`when`(options.secureMode()).thenReturn(false)
+        Mockito.`when`(options.secureMode).thenReturn(false)
 
-        ExecutionContext.initContext(DummyReceiver.INSTANCE, true)
+        ExecutionContext.initContext(ReceiverProvider.getReceiver(), true)
 
         GBDOptions.init(options)
     }

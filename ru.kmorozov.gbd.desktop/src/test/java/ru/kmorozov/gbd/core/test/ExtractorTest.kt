@@ -23,7 +23,7 @@ import ru.kmorozov.gbd.core.logic.extractors.shpl.ShplBookInfoExtractor
 import ru.kmorozov.gbd.core.logic.library.metadata.ShplMetadata
 import ru.kmorozov.gbd.core.producers.OptionsBasedProducer
 import ru.kmorozov.gbd.core.producers.SingleBookProducer
-import ru.kmorozov.gbd.logger.output.DummyReceiver
+import ru.kmorozov.gbd.logger.output.ReceiverProvider
 import java.io.File
 import java.io.IOException
 import java.nio.file.Files
@@ -37,7 +37,7 @@ class ExtractorTest {
 
     @Before
     fun initServer() {
-        ExecutionContext.initContext(DummyReceiver.INSTANCE, true)
+        ExecutionContext.initContext(ReceiverProvider.getReceiver(), true)
         val mockOptions = Mockito.mock(IGBDOptions::class.java)
         Mockito.`when`<IStorage>(mockOptions.storage).thenReturn(LocalFSStorage("E:\\Work\\gbd\\"))
         Mockito.`when`(mockOptions.proxyListFile).thenReturn("E:\\Work\\gbd\\proxy.txt")

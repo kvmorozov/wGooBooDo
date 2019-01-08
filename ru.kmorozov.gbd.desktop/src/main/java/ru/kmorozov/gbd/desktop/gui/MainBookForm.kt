@@ -50,7 +50,7 @@ class MainBookForm {
         tfBookId!!.text = SystemConfigs.lastBookId
 
         cbResolution = JComboBox(Resolutions.values())
-        cbReload!!.isSelected = SystemConfigs.reload
+        cbReload!!.isSelected = SystemConfigs.reloadImages
         cbSecureMode!!.isSelected = SystemConfigs.secureMode
 
         if (0 < SystemConfigs.resolution)
@@ -102,7 +102,7 @@ class MainBookForm {
         }
 
         cbResolution.addItemListener { event -> SystemConfigs.resolution = (event.item as Resolutions).resolution }
-        cbReload.addChangeListener { event -> SystemConfigs.reload = (event.source as AbstractButton).model.isSelected }
+        cbReload.addChangeListener { event -> SystemConfigs.reloadImages = (event.source as AbstractButton).model.isSelected }
 
         Runtime.getRuntime().addShutdownHook(Thread {
             if (null != workerExtractor && SwingWorker.StateValue.STARTED == workerExtractor!!.state)

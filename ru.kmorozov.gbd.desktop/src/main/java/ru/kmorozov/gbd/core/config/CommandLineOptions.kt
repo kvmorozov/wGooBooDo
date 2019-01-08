@@ -67,6 +67,12 @@ class CommandLineOptions(commandLineArguments: Array<String>) : IGBDOptions {
         option.argName = "Secure mode "
         options.addOption(option)
 
+        option = Option(OPTION_DEBUG_MODE_SHORT, OPTION_DEBUG_MODE_LONG, true, "Debug mode")
+        option.args = 0
+        option.setOptionalArg(true)
+        option.argName = "Debug mode "
+        options.addOption(option)
+
         option = Option(OPTION_PDF_MODE_SHORT, OPTION_PDF_MODE_LONG, true, "Pdf mode")
         option.args = 1
         option.setOptionalArg(true)
@@ -110,13 +116,14 @@ class CommandLineOptions(commandLineArguments: Array<String>) : IGBDOptions {
         return commandLine.hasOption(optionName)
     }
 
-    override fun reloadImages(): Boolean {
-        return getBoolOptionValue(OPTION_IMG_RELOAD_SHORT)
-    }
+    override val reloadImages: Boolean
+        get() = getBoolOptionValue(OPTION_IMG_RELOAD_SHORT)
 
-    override fun secureMode(): Boolean {
-        return getBoolOptionValue(OPTION_SECURE_MODE_SHORT)
-    }
+    override val secureMode: Boolean
+        get() = getBoolOptionValue(OPTION_SECURE_MODE_SHORT)
+
+    override val debugEnabled: Boolean
+        get() = getBoolOptionValue(OPTION_DEBUG_MODE_SHORT)
 
     override fun pdfOptions(): String {
         return getStringOptionValue(OPTION_PDF_MODE_SHORT)
@@ -143,7 +150,7 @@ class CommandLineOptions(commandLineArguments: Array<String>) : IGBDOptions {
         private const val OPTION_WIDTH_SHORT = "w"
         private const val OPTION_WIDTH_LONG = "width"
         private const val OPTION_IMG_RELOAD_SHORT = "r"
-        private const val OPTION_IMG_RELOAD_LONG = "reload"
+        private const val OPTION_IMG_RELOAD_LONG = "reloadImages"
         private const val OPTION_SECURE_MODE_SHORT = "s"
         private const val OPTION_SECURE_MODE_LONG = "secure"
         private const val OPTION_PDF_MODE_SHORT = "x"
@@ -152,5 +159,7 @@ class CommandLineOptions(commandLineArguments: Array<String>) : IGBDOptions {
         private const val OPTION_CTX_MODE_LONG = "ctx"
         private const val OPTION_AUTH_MODE_SHORT = "a"
         private const val OPTION_AUTH_MODE_LONG = "auth"
+        private const val OPTION_DEBUG_MODE_SHORT = "d"
+        private const val OPTION_DEBUG_MODE_LONG = "debug"
     }
 }

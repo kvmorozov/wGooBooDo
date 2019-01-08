@@ -16,9 +16,12 @@ interface IGBDOptions {
 
     val imageWidth: Int
 
-    fun reloadImages(): Boolean
+    val debugEnabled: Boolean
+        get() = false
 
-    fun secureMode(): Boolean
+    val reloadImages: Boolean
+
+    val secureMode: Boolean
 
     fun pdfOptions(): String
 

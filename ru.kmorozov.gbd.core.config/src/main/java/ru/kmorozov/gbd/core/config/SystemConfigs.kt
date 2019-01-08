@@ -12,7 +12,7 @@ object SystemConfigs {
     private const val KEY_PROXY_LIST_FILE = "proxy.list.file"
     private const val KEY_LAST_BOOK_ID = "last.book.id"
     private const val KEY_RESOLUTION = "resolution"
-    private const val KEY_RELOAD = "reload"
+    private const val KEY_RELOAD = "reloadImages"
     private const val KEY_SECURE_MODE = "secure.mode"
     private const val KEY_PDF_MODE = "pdf.mode"
 
@@ -34,7 +34,7 @@ object SystemConfigs {
         get() = getIntProperty(KEY_RESOLUTION)
         set(value) = setIntProperty(KEY_RESOLUTION, value)
 
-    var reload: Boolean
+    var reloadImages: Boolean
         get() = getBoolProperty(KEY_RELOAD)
         set(value) = setBoolProperty(KEY_RELOAD, value)
 

@@ -2,7 +2,7 @@ package ru.kmorozov.gbd.logger
 
 import ru.kmorozov.gbd.logger.consumers.IEventConsumer
 import ru.kmorozov.gbd.logger.events.LogEvent
-import ru.kmorozov.gbd.logger.output.DummyReceiver
+import ru.kmorozov.gbd.logger.output.DefaultReceiver
 
 import java.util.logging.Level
 
@@ -46,11 +46,11 @@ class Logger(private val eventConsumer: IEventConsumer, private val name: String
         }
 
         fun getLogger(claszz: Class<*>): Logger {
-            return Logger(DummyReceiver.INSTANCE, claszz.name, ": ")
+            return Logger(DefaultReceiver.INSTANCE, claszz.name, ": ")
         }
 
         fun getLogger(claszz: Class<*>, prefix: String): Logger {
-            return Logger(DummyReceiver.INSTANCE, claszz.name, prefix + " : ")
+            return Logger(DefaultReceiver.INSTANCE, claszz.name, prefix + " : ")
         }
     }
 }

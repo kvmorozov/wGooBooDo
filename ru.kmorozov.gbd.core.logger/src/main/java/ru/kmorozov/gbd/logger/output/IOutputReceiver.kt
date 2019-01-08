@@ -8,5 +8,7 @@ import ru.kmorozov.gbd.logger.model.ILoggableObject
 @FunctionalInterface
 interface IOutputReceiver {
 
-    fun receive(bookInfo: ILoggableObject)
+    fun receive(bookInfo: ILoggableObject) {
+
+    }
 }

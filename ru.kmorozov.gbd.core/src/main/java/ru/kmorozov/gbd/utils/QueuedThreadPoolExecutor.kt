@@ -6,12 +6,12 @@ import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
-import java.util.function.Predicate
+import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * Created by km on 12.11.2016.
  */
-class QueuedThreadPoolExecutor<T> : ThreadPoolExecutor {
+class QueuedThreadPoolExecutor<T : Any> : ThreadPoolExecutor {
     private var needProcessCount: Long
     private val completeChecker: (T) -> Boolean
     private val description: String
@@ -40,16 +40,16 @@ class QueuedThreadPoolExecutor<T> : ThreadPoolExecutor {
 
     fun terminate(timeout: Long, unit: TimeUnit) {
         val liveTime = Math.min(unit.toMillis(timeout), MAX_LIVE_TIME)
-        var counter = 0
+        var counter = AtomicInteger(0)
         var submitted = 0L
         while (true)
             try {
-                val completed = uniqueMap.keys.stream().filter(completeChecker).count()
+                val completed = uniqueMap.keys.filter(completeChecker).count()
                 if (completedTaskCount == taskCount && completedTaskCount >= needProcessCount || System.currentTimeMillis() - timeStart > liveTime)
                     break
-                if (0 == ++counter % 100) {
+                if (0 == counter.incrementAndGet() % 100) {
                     if (0L < needProcessCount)
-                        logger.finest(String.format("Waiting for %s %d sec (%d of %d completed, %d tasks finished of %d submitted, %d in queue)", description, counter, completed,
+                        logger.finest(String.format("Waiting for %s %d sec (%d of %d completed, %d tasks finished of %d submitted, %d in queue)", description, counter.get(), completed,
                                 needProcessCount, completedTaskCount, taskCount, queue.size))
 
                     if (submitted == taskCount && 0L < taskCount && submitted < needProcessCount) {
@@ -64,9 +64,8 @@ class QueuedThreadPoolExecutor<T> : ThreadPoolExecutor {
             }
 
         if (0L < needProcessCount)
-            logger.finest(String.format("Terminating working threads for %s after %s sec (%s of %s completed, %s tasks finished of %s submitted)", description, counter, uniqueMap.keys
-                    .stream()
-                    .filter(completeChecker).count(), needProcessCount, completedTaskCount, taskCount))
+            logger.finest(String.format("Terminating working threads for %s after %s sec (%s of %s completed, %s tasks finished of %s submitted)",
+                    description, counter.get(), uniqueMap.keys.filter(completeChecker).count(), needProcessCount, completedTaskCount, taskCount))
         shutdownNow()
 
         uniqueMap.clear()
@@ -75,7 +74,7 @@ class QueuedThreadPoolExecutor<T> : ThreadPoolExecutor {
     override fun execute(command: Runnable) {
         if (command is IUniqueRunnable<*>) {
             val uniqueObj = (command as IUniqueRunnable<T>).uniqueObject
-            synchronized(uniqueObj as Any) {
+            synchronized(uniqueObj) {
                 if (null == uniqueMap.putIfAbsent(uniqueObj, command)) super.execute(command)
             }
         } else

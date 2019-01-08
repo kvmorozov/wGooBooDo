@@ -1,6 +1,6 @@
 package ru.kmorozov.gbd.logger.consumers
 
-import ru.kmorozov.gbd.logger.events.BaseEvent
+import ru.kmorozov.gbd.logger.events.LogEvent
 import ru.kmorozov.gbd.logger.listeners.IEventListener
 
 /**
@@ -10,5 +10,5 @@ interface IEventConsumer {
 
     fun addListener(listener: IEventListener)
 
-    fun consumeEvent(event: BaseEvent)
+    fun consumeEvent(event: LogEvent)
 }
