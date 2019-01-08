@@ -22,7 +22,7 @@ class FileProxyListProvider internal constructor() : AbstractProxyListProvider()
 
     override fun updateProxyList() {
         val proxyListFileName = GBDOptions.proxyListFile
-        if (null == proxyListFileName || proxyListFileName.isEmpty()) return
+        if (StringUtils.isEmpty(proxyListFileName)) return
 
         val proxyListFile = File(proxyListFileName)
         val proxyListPath = proxyListFile.toPath()

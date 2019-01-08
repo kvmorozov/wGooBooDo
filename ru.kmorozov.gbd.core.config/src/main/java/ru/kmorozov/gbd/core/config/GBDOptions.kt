@@ -18,7 +18,7 @@ object GBDOptions {
     val storage: IStorage
         get() = INSTANCE.storage
 
-    val proxyListFile: String?
+    val proxyListFile: String
         get() = INSTANCE.proxyListFile
 
     val imageWidth: Int

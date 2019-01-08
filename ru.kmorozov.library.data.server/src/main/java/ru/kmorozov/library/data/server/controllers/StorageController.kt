@@ -42,19 +42,19 @@ class StorageController : IDataRestServer {
 
     @Autowired
     @Lazy
-    private val loader: LoaderExecutor? = null
+    private lateinit var loader: LoaderExecutor
 
     @Autowired
     @Lazy
-    private val duplicatesProcessor: DuplicatesProcessor? = null
+    private lateinit var duplicatesProcessor: DuplicatesProcessor
 
     @Autowired
     @Lazy
-    private val jstorProcessor: JstorProcessor? = null
+    private lateinit var jstorProcessor: JstorProcessor
 
     @Autowired
     @Lazy
-    private val gbdProcessor: GbdRemoteProcessor? = null
+    private lateinit var gbdProcessor: GbdRemoteProcessor
 
     @RequestMapping("/login")
     override fun login(@RequestParam(name = "login") login: String): UserDTO {
@@ -63,7 +63,7 @@ class StorageController : IDataRestServer {
 
     @RequestMapping("/jstorUpdate")
     fun jstorUpdate() {
-        jstorProcessor!!.process()
+        jstorProcessor.process()
     }
 
     @RequestMapping("/storagesByParentId")
@@ -72,7 +72,7 @@ class StorageController : IDataRestServer {
 
         val realStorages = storageRepository.findAllByParent(parentStorage!!)
         val linksInStorages = booksRepository.findAllByStorageAndBookInfoFormat(parentStorage, BookInfo.BookFormat.LNK)
-        linksInStorages.forEach { book -> loader!!.resolveLink(book) }
+        linksInStorages.forEach { book -> loader.resolveLink(book) }
         val linkedStorages = linksInStorages.stream()
                 .filter { lnk -> null != lnk.linkInfo && null != lnk.linkInfo!!.linkedStorage }
                 .map { lnk -> lnk.linkInfo!!.linkedStorage }
@@ -111,7 +111,7 @@ class StorageController : IDataRestServer {
             ItemDTO.ItemType.storage -> {
                 var storage = storageRepository.findById(itemId).get()
                 if (refresh)
-                    storage = loader!!.refresh(storage)
+                    storage = loader.refresh(storage)
                 val item = ItemDTO(StorageDTO(storage, true))
                 if (refresh)
                     item.setUpdated()
@@ -127,9 +127,9 @@ class StorageController : IDataRestServer {
         val state = LoaderExecutor.State.valueOf(stateString)
 
         when (state) {
-            LoaderExecutor.State.STARTED -> loader!!.start()
-            LoaderExecutor.State.PAUSED -> loader!!.pause()
-            LoaderExecutor.State.STOPPED -> loader!!.stop()
+            LoaderExecutor.State.STARTED -> loader.start()
+            LoaderExecutor.State.PAUSED -> loader.pause()
+            LoaderExecutor.State.STOPPED -> loader.stop()
         }
     }
 
@@ -143,28 +143,28 @@ class StorageController : IDataRestServer {
             booksRepository.save(book)
         }
 
-        loader!!.downloadBook(book)
+        loader.downloadBook(book)
         return BookDTO(book, true)
     }
 
     @RequestMapping("/findDuplicates")
     override fun findDuplicates(): List<DuplicatedBookDTO> {
-        return duplicatesProcessor!!.findDuplicates()
+        return duplicatesProcessor.findDuplicates()
     }
 
     @RequestMapping("/synchronizeDb")
     override fun synchronizeDb() {
-        loader!!.start()
+        loader.start()
     }
 
     @RequestMapping("/processDuplicates")
     fun processDuplicates() {
-        duplicatesProcessor!!.process()
+        duplicatesProcessor.process()
     }
 
     @RequestMapping("/gbdLoadRemote")
     fun gbdLoad(@RequestParam(name = "bookId", required = false) bookId: String) {
-        gbdProcessor!!.load(bookId)
+        gbdProcessor.load(bookId)
     }
 
     companion object {
