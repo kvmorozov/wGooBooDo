@@ -38,7 +38,7 @@ import java.util.stream.Stream
 
 @Component
 @Conditional(StorageEnabledCondition::class)
-class OneDriveLoader : StoredLoader() {
+open class OneDriveLoader : StoredLoader() {
 
     @Autowired
     @Lazy

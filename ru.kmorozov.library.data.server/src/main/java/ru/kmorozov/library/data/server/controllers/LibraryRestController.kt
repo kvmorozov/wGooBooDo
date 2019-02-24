@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import ru.kmorozov.gbd.logger.Logger
+import ru.kmorozov.library.data.loader.processors.IGbdProcessor
 import ru.kmorozov.library.data.loader.processors.gbd.GbdLocalProcessor
 import ru.kmorozov.library.data.server.condition.LibraryEnabledCondition
 
@@ -16,13 +17,13 @@ import ru.kmorozov.library.data.server.condition.LibraryEnabledCondition
  */
 
 @RestController
-@ComponentScan(basePackageClasses = arrayOf(GbdLocalProcessor::class))
+@ComponentScan(basePackageClasses = arrayOf(GbdConfiguration::class))
 @Conditional(LibraryEnabledCondition::class)
 class LibraryRestController {
 
     @Autowired
     @Lazy
-    private lateinit var gbdProcessor: GbdLocalProcessor
+    private lateinit var gbdProcessor: IGbdProcessor
 
     @RequestMapping("/gbdUpdate")
     fun gbdUpdate() {

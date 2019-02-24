@@ -17,7 +17,7 @@ import java.util.concurrent.Executors
 
 @Component
 @Conditional(StorageEnabledCondition::class)
-class LoaderExecutor {
+open class LoaderExecutor {
 
     @Autowired
     @Lazy

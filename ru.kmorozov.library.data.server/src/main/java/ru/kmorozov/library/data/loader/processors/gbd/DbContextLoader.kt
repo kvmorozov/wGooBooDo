@@ -11,7 +11,7 @@ import ru.kmorozov.library.data.repository.GoogleBooksRepository
 import java.util.*
 
 @Component
-class DbContextLoader : IContextLoader {
+open class DbContextLoader : IContextLoader {
     override val empty: Boolean
         get() = false
 

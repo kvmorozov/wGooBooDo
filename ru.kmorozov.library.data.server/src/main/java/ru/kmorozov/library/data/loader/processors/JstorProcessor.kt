@@ -20,7 +20,7 @@ import java.util.*
 import java.util.stream.Collectors
 
 @Component
-class JstorProcessor : IProcessor {
+open class JstorProcessor : IProcessor {
 
     @Value("\${mongo.reactive.mode}")
     private val reactiveMode: Boolean = false

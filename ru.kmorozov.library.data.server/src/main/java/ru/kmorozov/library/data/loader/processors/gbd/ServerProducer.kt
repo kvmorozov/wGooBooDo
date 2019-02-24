@@ -14,7 +14,7 @@ import java.util.Collections
 import java.util.HashSet
 
 @Component
-class ServerProducer : IBookListProducer {
+open class ServerProducer : IBookListProducer {
 
     private var ids: Set<String>? = null
 

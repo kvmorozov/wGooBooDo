@@ -27,11 +27,11 @@ import java.io.IOException
 @Component
 @ComponentScan(basePackageClasses = arrayOf(OneDriveContextLoader::class, ServerProducer::class, DbContextLoader::class, ServerGBDOptions::class))
 @Conditional(StorageEnabledCondition::class)
-class GbdRemoteProcessor : IGbdProcessor {
+open class GbdRemoteProcessor : IGbdProcessor {
 
     @Autowired
     @Lazy
-    private val api: OneDriveProvider? = null
+    private lateinit var api: OneDriveProvider
 
     @Autowired
     @Lazy
@@ -62,7 +62,7 @@ class GbdRemoteProcessor : IGbdProcessor {
         @Lazy
         get() {
             try {
-                val searchResults = api!!.search("books.ctx")
+                val searchResults = api.search("books.ctx")
                 if (searchResults.size == 1)
                     return searchResults[0].parent
                 else

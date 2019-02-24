@@ -5,7 +5,7 @@ import com.google.api.client.http.HttpRequestFactory
 import com.google.api.client.http.HttpResponse
 import com.google.api.client.http.HttpResponseException
 import com.google.api.client.http.HttpTransport
-import com.google.api.client.http.apache.ApacheHttpTransport
+import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.JsonObjectParser
 import com.google.api.client.util.Lists
 import ru.kmorozov.onedrive.client.authoriser.AuthorisationProvider
@@ -27,7 +27,7 @@ internal open class ROOneDriveProvider(authoriser: AuthorisationProvider) : OneD
 
     private var cachedDefaultDrive: Drive? = null
 
-    protected val HTTP_TRANSPORT: HttpTransport = ApacheHttpTransport()
+    protected val HTTP_TRANSPORT: HttpTransport = NetHttpTransport()
 
     override val defaultDrive: Drive
         @Throws(IOException::class)

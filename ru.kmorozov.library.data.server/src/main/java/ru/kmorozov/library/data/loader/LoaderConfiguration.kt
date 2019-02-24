@@ -2,6 +2,7 @@ package ru.kmorozov.library.data.loader
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Lazy
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
@@ -23,7 +24,8 @@ import java.net.URL
  */
 
 @Configuration
-class LoaderConfiguration {
+@ComponentScan(basePackageClasses = arrayOf(OneDriveProvider::class))
+open class LoaderConfiguration {
 
     @Value("\${onedrive.key}")
     var oneDriveKeyFileName: String? = null
@@ -46,7 +48,7 @@ class LoaderConfiguration {
     @Value("\${onedrive.clientSecret}")
     var onedriveClientSecret: String? = null
 
-    val connector: HttpConnector
+    open val connector: HttpConnector
         @Bean
         @Lazy
         get() {
@@ -62,7 +64,7 @@ class LoaderConfiguration {
 
     @Bean
     @Lazy
-    fun api(): OneDriveProvider {
+    open fun api(): OneDriveProvider {
         val keyResource = javaClass.classLoader.getResource(oneDriveKeyFileName!!)
 
         if (keyResource == null) {

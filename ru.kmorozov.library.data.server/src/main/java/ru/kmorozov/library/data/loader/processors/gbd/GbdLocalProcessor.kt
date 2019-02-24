@@ -1,6 +1,7 @@
 package ru.kmorozov.library.data.loader.processors.gbd
 
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.annotation.ComponentScan
 import org.springframework.stereotype.Component
 import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.loader.ListBasedContextLoader
@@ -12,13 +13,14 @@ import ru.kmorozov.library.data.loader.processors.IGbdProcessor
 import ru.kmorozov.library.data.server.options.LocalServerGBDOptions
 
 @Component
-class GbdLocalProcessor : IGbdProcessor {
+@ComponentScan(basePackageClasses = arrayOf(LocalServerGBDOptions::class))
+open class GbdLocalProcessor : IGbdProcessor {
 
     @Autowired
-    private val options: LocalServerGBDOptions? = null
+    private lateinit var options: LocalServerGBDOptions
 
     override fun load(bookId: String) {
-        options!!.bookId = bookId
+        options.bookId = bookId
         GBDOptions.init(options)
 
         val producer = SingleBookProducer(bookId)

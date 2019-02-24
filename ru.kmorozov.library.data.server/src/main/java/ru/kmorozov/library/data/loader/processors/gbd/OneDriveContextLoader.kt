@@ -14,7 +14,7 @@ import java.io.IOException
 import java.util.HashMap
 
 @Component
-class OneDriveContextLoader : IContextLoader {
+open class OneDriveContextLoader : IContextLoader {
     override val empty: Boolean
         get() = false
 

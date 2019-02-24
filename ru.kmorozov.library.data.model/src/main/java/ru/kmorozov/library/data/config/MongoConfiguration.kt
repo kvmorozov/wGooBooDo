@@ -12,7 +12,7 @@ import java.util.Collections
  */
 
 @Configuration
-class MongoConfiguration : AbstractMongoConfiguration() {
+open class MongoConfiguration : AbstractMongoConfiguration() {
 
     @Value("\${mongo.uri}")
     private val mongoUri: String? = null

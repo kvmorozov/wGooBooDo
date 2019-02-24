@@ -1,7 +1,7 @@
 package ru.kmorozov.onedrive.client.authoriser
 
 import com.google.api.client.http.*
-import com.google.api.client.http.apache.ApacheHttpTransport
+import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.JsonObjectParser
 import com.google.api.client.util.Preconditions
 import com.google.common.base.Strings
@@ -168,7 +168,7 @@ constructor(keyFile: Path, private val clientId: String, private val clientSecre
 
         private val EMPTY_STR_ARR = arrayOf<String>("")
 
-        val HTTP_TRANSPORT: HttpTransport = ApacheHttpTransport()
+        val HTTP_TRANSPORT: HttpTransport = NetHttpTransport()
         private val log = LogManager.getLogger(OneDriveAuthorisationProvider::class.java.name)
 
         private const val scope = "files.readwrite.all"

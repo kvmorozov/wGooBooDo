@@ -23,7 +23,7 @@ class ScheduledOneDriveTasks {
 
     @Autowired
     @Lazy
-    private val oneLoader: OneDriveLoader? = null
+    private lateinit var oneLoader: OneDriveLoader
 
     @Value("\${onedrive.scheduler.enabled}")
     private val schedulerEnabled: Boolean = false
@@ -35,7 +35,7 @@ class ScheduledOneDriveTasks {
             return
 
         logger.info("Scheduled refresh started")
-        oneLoader!!.load { oneDriveItem -> java.lang.Long.MAX_VALUE < System.currentTimeMillis() - oneDriveItem.lastModifiedDateTime.time }
+        oneLoader.load { oneDriveItem -> java.lang.Long.MAX_VALUE < System.currentTimeMillis() - oneDriveItem.lastModifiedDateTime.time }
         logger.info("Scheduled refresh finished")
     }
 
@@ -46,7 +46,7 @@ class ScheduledOneDriveTasks {
             return
 
         logger.info("Scheduled links processing started")
-        oneLoader!!.processLinks()
+        oneLoader.processLinks()
         logger.info("Scheduled links processing finished")
     }
 

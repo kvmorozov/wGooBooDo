@@ -21,7 +21,7 @@ import java.io.IOException
 import java.util.stream.Collectors
 
 @Component
-class DuplicatesProcessor : IProcessor {
+open class DuplicatesProcessor : IProcessor {
 
     @Autowired
     private lateinit var mongoTemplate: MongoTemplate
