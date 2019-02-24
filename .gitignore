@@ -4,4 +4,4 @@ node_modules/
 bootstrap*.css
 *.iml
 onedrive.key
-*.jar
+out/
