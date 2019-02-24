@@ -17,6 +17,8 @@
         <module name="ru.kmorozov.library.data.client" />
         <module name="ru.kmorozov.library.data.model" />
         <module name="ru.kmorozov.library.data.server" />
+        <module name="ru.kmorozov.library.data.server (1)" />
+        <module name="ru.kmorozov.library.data.server.her" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="11">
@@ -32,6 +34,8 @@
       <module name="ru.kmorozov.library.data.client" target="11" />
       <module name="ru.kmorozov.library.data.model" target="11" />
       <module name="ru.kmorozov.library.data.server" target="11" />
+      <module name="ru.kmorozov.library.data.server (1)" target="11" />
+      <module name="ru.kmorozov.library.data.server.her" target="11" />
       <module name="ru.kmorozov.library.parent" target="11" />
     </bytecodeTargetLevel>
   </component>
@@ -42,6 +46,8 @@
       <module name="ru.kmorozov.library.data.client" options="-parameters" />
       <module name="ru.kmorozov.library.data.model" options="-parameters" />
       <module name="ru.kmorozov.library.data.server" options="-parameters" />
+      <module name="ru.kmorozov.library.data.server (1)" options="-parameters" />
+      <module name="ru.kmorozov.library.data.server.her" options="-parameters" />
     </option>
   </component>
 </project>

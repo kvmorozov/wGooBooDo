@@ -4,13 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>ru.kmorozov.library.data.server</artifactId>
+    <artifactId>ru.kmorozov.library</artifactId>
 
     <parent>
         <groupId>ru.kmorozov.library</groupId>
         <artifactId>ru.kmorozov.library.parent</artifactId>
         <version>2.2-b2</version>
-        <relativePath>../ru.kmorozov.library.parent/pom.xml</relativePath>
+        <relativePath>ru.kmorozov.library.parent/pom.xml</relativePath>
     </parent>
 
     <properties>
