@@ -15,11 +15,6 @@
         <version>2.1.3.RELEASE</version>
     </parent>
 
-    <modules>
-        <module>ru.kmorozov.library.data.model</module>
-        <module>ru.kmorozov.api.onedrive</module>
-    </modules>
-
     <repositories>
         <repository>
             <id>spring-milestone</id>
