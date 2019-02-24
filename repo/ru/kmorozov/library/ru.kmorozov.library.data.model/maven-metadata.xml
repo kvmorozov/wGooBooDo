@@ -3,10 +3,11 @@
   <groupId>ru.kmorozov.library</groupId>
   <artifactId>ru.kmorozov.library.data.model</artifactId>
   <versioning>
-    <release>2.2-b2</release>
+    <release>true</release>
     <versions>
       <version>2.2-b2</version>
+      <version>true</version>
     </versions>
-    <lastUpdated>20190224160408</lastUpdated>
+    <lastUpdated>20190224194416</lastUpdated>
   </versioning>
 </metadata>

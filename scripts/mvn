@@ -1,4 +1,3 @@
 C:\Work\Utils\maven\apache-maven-3.6.0\bin\mvn deploy:deploy-file -Durl=file:///J:/Work/wGooBooDo/repo -Dfile=J:/ru.kmorozov.api.onedrive.jar -DgroupId=ru.kmorozov.gbd -DartifactId=ru.kmorozov.api.onedrive -Dpackaging=jar -Dversion=2.2-b2
 
-C:\Work\Utils\maven\apache-maven-3.6.0\bin\mvn deploy:deploy-file -Durl=file:///J:/Work/wGooBooDo/repo -Dfile=J:/ru.kmorozov.library.data.model.jar -DgroupId=ru.kmorozov.library -DartifactId=ru.kmorozov.library.data.model -Dpackaging=jar -Dversion
-=2.2-b2
+C:\Work\Utils\maven\apache-maven-3.6.0\bin\mvn deploy:deploy-file -Durl=file:///J:/Work/wGooBooDo/repo -Dfile=J:/ru.kmorozov.library.data.model.jar -DgroupId=ru.kmorozov.library -DartifactId=ru.kmorozov.library.data.model -Dpackaging=jar -Dversion=2.2-b2
