@@ -15,14 +15,14 @@ import java.util.Collections
 open class MongoConfiguration : AbstractMongoConfiguration() {
 
     @Value("\${mongo.uri}")
-    private val mongoUri: String? = null
+    private lateinit var mongoUri: String
 
     override fun getDatabaseName(): String {
         return BOOKS_MONGO_DB_NAME
     }
 
     override fun mongoClient(): MongoClient {
-        return MongoClient(MongoClientURI(mongoUri!!))
+        return MongoClient(MongoClientURI(mongoUri))
     }
 
     override fun getMappingBasePackages(): Collection<String> {
