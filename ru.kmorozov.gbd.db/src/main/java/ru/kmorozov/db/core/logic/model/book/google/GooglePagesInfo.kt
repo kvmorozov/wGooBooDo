@@ -5,6 +5,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair
 import org.apache.commons.lang3.tuple.Pair
 import ru.kmorozov.gbd.core.logic.model.book.base.IPage
 import ru.kmorozov.gbd.core.logic.model.book.base.IPagesInfo
+import ru.kmorozov.gbd.core.logic.model.book.base.PageNotFoundException
 import ru.kmorozov.gbd.logger.Logger
 import ru.kmorozov.gbd.logger.output.ReceiverProvider
 import java.io.Serializable
@@ -76,7 +77,7 @@ class GooglePagesInfo : IPagesInfo, Serializable {
         val endPageNum = endGap.pageNum
 
         if (beginPageNum >= endPageNum && 1 < endPageNum && beginPagePrefix == endPagePrefix)
-            logger.severe(String.format("Cannot fill gap between pages %s(order=%s) and %s(order=%s)", beginGap.pid, beginGap.order, endGap.pid, endGap.order))
+            logger.severe("Cannot fill gap between pages ${beginGap.pid}(order=${beginGap.order}) and ${endGap.pid}(order=${endGap.order})")
 
         if (beginPagePrefix == endPagePrefix) {
             for (index in beginGap.order + 1 until endGap.order) {
@@ -113,15 +114,18 @@ class GooglePagesInfo : IPagesInfo, Serializable {
                     }
                 }
             } else if (1 < beginPageNum && 0 > endPageNum) {
-                logger.severe(String.format("Cannot fill gap between pages %s(order=%s) and %s(order=%s)", beginGap.pid, beginGap.order, endGap.pid, endGap.order))
+                logger.severe("Cannot fill gap between pages ${beginGap.pid}(order=${beginGap.order}) and ${endGap.pid}(order=${endGap.order})")
             }
         }
 
         pagesList.sortWith(Comparator { obj, anotherPage -> obj.compareTo(anotherPage) })
     }
 
-    override fun getPageByPid(pid: String): GooglePageInfo? {
-        return pagesMap[pid] as GooglePageInfo?
+    override fun getPageByPid(pid: String): GooglePageInfo {
+        if (!pagesMap.containsKey(pid))
+            throw PageNotFoundException()
+
+        return pagesMap[pid] as GooglePageInfo
     }
 
     private fun createPair(p1: IPage, p2: IPage): Pair<IPage, IPage> {
@@ -159,9 +163,9 @@ class GooglePagesInfo : IPagesInfo, Serializable {
 
         for (pair in pairs)
             if (pair.left === pair.right)
-                bList.append(String.format("%s, ", pair.left.pid))
+                bList.append("${pair.left.pid}, ")
             else
-                bList.append(String.format("%s-%s, ", pair.left.pid, pair.right.pid))
+                bList.append("${pair.left.pid}-${pair.right.pid}, ")
 
         if (0 < bList.length) {
             bList.deleteCharAt(bList.length - 1).deleteCharAt(bList.length - 1)

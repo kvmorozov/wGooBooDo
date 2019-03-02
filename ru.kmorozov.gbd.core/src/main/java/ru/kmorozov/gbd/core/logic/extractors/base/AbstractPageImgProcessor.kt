@@ -81,9 +81,9 @@ abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcesso
                             }
 
                         if (proxy.isLocal)
-                            logger.info(String.format("Started img %s for %s without Proxy", if (reloadFlag) "RELOADING" else "processing", uniqueObject.pid))
+                            logger.info("Started img ${if (reloadFlag) "RELOADING" else "processing"} for ${uniqueObject.pid} without Proxy")
                         else
-                            logger.info(String.format("Started img %s for %s with %s Proxy", if (reloadFlag) "RELOADING" else "processing", uniqueObject.pid, proxy.toString()))
+                            logger.info("Started img ${if (reloadFlag) "RELOADING" else "processing"} for ${uniqueObject.pid} with $proxy Proxy")
                     }
 
                     firstChunk = false
@@ -129,7 +129,7 @@ abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcesso
             }
 
             if (!uniqueObject.isDataProcessed) {
-                logger.info(String.format("Loading page %s failed!", uniqueObject.pid))
+                logger.info("Loading page ${uniqueObject.pid} failed!")
                 try {
                     storedItem.delete()
                 } catch (e: IOException) {

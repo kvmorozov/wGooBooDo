@@ -112,7 +112,7 @@ class HttpHostExt {
         if (failureCount.get() > (if (isLocal) LOCAL_FAILURES_THRESHOLD else REMOTE_FAILURES_THRESHOLD)) {
             synchronized(this) {
                 if (isAvailable) {
-                    logger.info(String.format("Proxy %s invalidated!", if (host.port == 1) NO_PROXY_STR else host.toString()))
+                    logger.info("Proxy ${if (host.port == 1) NO_PROXY_STR else host.toString()} invalidated!")
                     available.set(false)
                     AbstractProxyListProvider.INSTANCE.invalidatedProxyListener()
                 }
@@ -126,7 +126,7 @@ class HttpHostExt {
                 failureCount.addAndGet(5)
                 available.set(false)
                 if (reportFailure)
-                    logger.info(String.format("Proxy %s force-invalidated!", if (host.port == 1) NO_PROXY_STR else host.toString()))
+                    logger.info("Proxy ${if (host.port == 1) NO_PROXY_STR else host.toString()} force-invalidated!")
             }
         }
     }
@@ -150,7 +150,7 @@ class HttpHostExt {
                     headers = HttpConnections.getHeaders(this)
                     if (Strings.isNullOrEmpty(headers!!.cookie)) headers!!.cookie = HttpConnections.getCookieString(host, urlType)
                     if (Strings.isNullOrEmpty(headers!!.cookie)) {
-                        logger.severe(String.format("Cannot get cookies for proxy %s", this.toString()))
+                        logger.severe("Cannot get cookies for proxy $this")
                         forceInvalidate(false)
                     }
                 }

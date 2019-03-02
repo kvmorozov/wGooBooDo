@@ -56,19 +56,19 @@ abstract class Task protected constructor(options: TaskOptions) : Runnable, Comp
         } catch (ex: HttpResponseException) {
 
             when (ex.statusCode) {
-                401 -> log.warn(String.format("Task %s encountered %s", getId(), ex.message))
+                401 -> log.warn("Task ${getId()} encountered ${ex.message}")
                 500, 502, 503, 504 -> {
-                    log.warn(String.format("Task %s encountered %s - sleeping 10 seconds", getId(), ex.message))
+                    log.warn("Task ${getId()} encountered ${ex.message} - sleeping 10 seconds")
                     queue.suspend(10)
                 }
                 429, 509 -> {
-                    log.warn(String.format("Task %s encountered %s - sleeping 60 seconds", getId(), ex.message))
+                    log.warn("Task ${getId()} encountered ${ex.message} - sleeping 60 seconds")
                     queue.suspend(60)
                 }
-                else -> log.warn(String.format("Task %s encountered %s", getId(), ex.message))
+                else -> log.warn("Task ${getId()} encountered ${ex.message}")
             }
         } catch (ex: Exception) {
-            log.error(String.format("Task %s encountered exception", getId()), ex)
+            log.error("Task ${getId()} encountered exception", ex)
             queue.suspend(1)
         }
 

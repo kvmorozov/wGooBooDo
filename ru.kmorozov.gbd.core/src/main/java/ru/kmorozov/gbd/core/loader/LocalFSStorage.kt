@@ -7,10 +7,7 @@ import ru.kmorozov.gbd.core.config.IStorage
 import ru.kmorozov.gbd.core.config.IStoredItem
 import ru.kmorozov.gbd.core.config.constants.GoogleConstants.DEFAULT_PAGE_WIDTH
 import ru.kmorozov.gbd.core.logic.library.LibraryFactory
-import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage
-import ru.kmorozov.gbd.core.logic.model.book.base.IBookData
-import ru.kmorozov.gbd.core.logic.model.book.base.IBookInfo
-import ru.kmorozov.gbd.core.logic.model.book.base.IPage
+import ru.kmorozov.gbd.core.logic.model.book.base.*
 import ru.kmorozov.gbd.logger.Logger
 import ru.kmorozov.gbd.utils.Images
 import java.io.File
@@ -111,16 +108,10 @@ open class LocalFSStorage(storageDirName: String) : IStorage {
             if (Images.isImageFile(filePath)) {
                 val fileName = filePath.fileName.toString()
                 val nameParts = fileName.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0].split("_".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                val _page = bookInfo.pages.getPageByPid(nameParts[1]) as AbstractPage?
-                if (null == _page) {
-                    logger.severe(String.format("Page %s not found!", fileName))
-                    try {
-                        item.delete()
-                        logger.severe(String.format("Page %s deleted!", fileName))
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                    }
-                } else {
+
+                try {
+                    val _page = bookInfo.pages.getPageByPid(nameParts[1]) as AbstractPage
+
                     try {
                         val order = Integer.valueOf(nameParts[0])
 
@@ -132,7 +123,7 @@ open class LocalFSStorage(storageDirName: String) : IStorage {
                             if (bimg == null || (bimg.width * 1.4 > bimg.height && bimg.height < 800)) {
                                 item.delete()
                                 _page.isDataProcessed = false
-                                logger.severe(String.format("Page %s deleted!", _page.pid))
+                                logger.severe("Page ${_page.pid} deleted!")
                             }
                         } else
                             _page.isDataProcessed = true
@@ -141,13 +132,13 @@ open class LocalFSStorage(storageDirName: String) : IStorage {
                             if (Images.isInvalidImage(filePath, imgWidth)) {
                                 _page.isDataProcessed = false
                                 item.delete()
-                                logger.severe(String.format("Page %s deleted!", _page.pid))
+                                logger.severe("Page ${_page.pid} deleted!")
                             } else if (_page.order != order && !_page.isGapPage) {
                                 val oldFile = item.asFile()
                                 val newFile = File(filePath.toString().replace(order.toString() + "_", _page.order.toString() + "_"))
                                 if (!newFile.exists()) {
                                     oldFile.renameTo(newFile)
-                                    logger.severe(String.format("Page %s renamed!", _page.pid))
+                                    logger.severe("Page ${_page.pid} renamed!")
                                 }
                             }
                     } catch (e: IOException) {
@@ -155,14 +146,22 @@ open class LocalFSStorage(storageDirName: String) : IStorage {
                         try {
                             item.delete()
                         } catch (e1: IOException) {
-                            logger.severe(String.format("Cannot delete page %s!", _page.pid))
+                            logger.severe("Cannot delete page ${_page.pid}!")
                         }
 
                         _page.isDataProcessed = false
-                        logger.severe(String.format("Page %s deleted!", _page.pid))
+                        logger.severe("Page ${_page.pid} deleted!")
                     }
 
                     _page.isFileExists = item.asFile().exists()
+                } catch (pnf: PageNotFoundException) {
+                    logger.severe("Page $fileName not found!")
+                    try {
+                        item.delete()
+                        logger.severe("Page $fileName deleted!")
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                    }
                 }
             }
         }

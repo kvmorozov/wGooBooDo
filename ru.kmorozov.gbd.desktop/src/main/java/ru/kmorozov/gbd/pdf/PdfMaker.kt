@@ -102,7 +102,7 @@ class PdfMaker : IPostProcessor {
 
                                 if (null == bimg) {
                                     Files.delete(filePath)
-                                    logger.severe(String.format("Image %s was deleted!", filePath.fileName))
+                                    logger.severe("Image ${filePath.fileName} was deleted!")
                                 } else {
                                     val width = bimg.width.toFloat()
                                     val height = bimg.height.toFloat()
@@ -121,7 +121,7 @@ class PdfMaker : IPostProcessor {
                     } catch (e: IOException) {
                         try {
                             Files.delete(filePath)
-                            logger.severe(String.format("Image %s was deleted!", filePath.fileName))
+                            logger.severe("Image ${filePath.fileName} was deleted!")
                         } catch (ioe: IOException) {
                             ioe.printStackTrace()
                         }

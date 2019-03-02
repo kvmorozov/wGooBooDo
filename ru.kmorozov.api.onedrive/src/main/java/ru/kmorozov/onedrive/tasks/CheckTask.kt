@@ -27,7 +27,7 @@ class CheckTask(options: TaskOptions, remoteFile: OneDriveItem, localFile: File)
     }
 
     override fun toString(): String {
-        return String.format("Checking %s %s", if (remoteFile.isDirectory) "folder" else "file", remoteFile.fullName)
+        return "Checking ${if (remoteFile.isDirectory) "folder" else "file"} ${remoteFile.fullName}"
     }
 
     @Throws(IOException::class)

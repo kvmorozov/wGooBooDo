@@ -70,7 +70,7 @@ object Main {
         // Initialise a log file (if set)
         if (null != CommandLineOpts.commandLineOpts.logFile) {
             val logFileName = LogUtils.addFileLogger(CommandLineOpts.commandLineOpts.logFile!!)
-            log.info(String.format("Writing log output to %s", logFileName))
+            log.info("Writing log output to $logFileName")
         }
 
         if (CommandLineOpts.commandLineOpts.isAuthorise) {
@@ -129,15 +129,15 @@ object Main {
             rootFolder = api.getPath(CommandLineOpts.commandLineOpts.remotePath!!)
         } catch (e: OneDriveAPIException) {
             if (404 == e.code) {
-                log.error(String.format("Specified remote folder '%s' does not exist", CommandLineOpts.commandLineOpts.remotePath))
+                log.error("Specified remote folder '${CommandLineOpts.commandLineOpts.remotePath}' does not exist")
             } else {
-                log.error(String.format("Unable to locate remote folder '%s' - %s", CommandLineOpts.commandLineOpts.remotePath, e.message))
+                log.error("Unable to locate remote folder '${CommandLineOpts.commandLineOpts.remotePath}' - ${e.message}")
             }
             return
         }
 
         if (null == rootFolder || !rootFolder.isDirectory) {
-            log.error(String.format("Specified root '%s' is not a folder", CommandLineOpts.commandLineOpts.remotePath))
+            log.error("Specified root '${CommandLineOpts.commandLineOpts.remotePath}' is not a folder")
             return
         }
 
@@ -145,11 +145,11 @@ object Main {
         val localFolder = File(CommandLineOpts.commandLineOpts.localPath!!)
 
         if (!localFolder.exists() || !localFolder.isDirectory()) {
-            log.error(String.format("Specified local path '%s' is not a valid folder", CommandLineOpts.commandLineOpts.localPath))
+            log.error("Specified local path '${CommandLineOpts.commandLineOpts.localPath}' is not a valid folder")
             return
         }
 
-        log.info(String.format("Starting at root folder '%s'", rootFolder.fullName))
+        log.info("Starting at root folder '${rootFolder.fullName}'")
 
         // Start synchronisation operation at the root
         val queue = TaskQueue()

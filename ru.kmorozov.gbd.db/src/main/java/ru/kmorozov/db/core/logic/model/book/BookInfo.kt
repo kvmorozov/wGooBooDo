@@ -40,7 +40,7 @@ class BookInfo(override val bookData: IBookData, override val pages: IPagesInfo,
 
             }
 
-            override fun getPageByPid(pid: String): IPage? {
+            override fun getPageByPid(pid: String): IPage {
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
         }, "")

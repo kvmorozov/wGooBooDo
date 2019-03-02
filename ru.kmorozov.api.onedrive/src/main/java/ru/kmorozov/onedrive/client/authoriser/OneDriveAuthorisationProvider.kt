@@ -49,13 +49,13 @@ constructor(keyFile: Path, private val clientId: String, private val clientSecre
         this.keyFile = Preconditions.checkNotNull(keyFile)
 
         if (!Files.exists(keyFile) || !Files.isRegularFile(keyFile)) {
-            throw OneDriveAPIException(401, String.format("Specified key file '%s' cannot be found.", keyFile))
+            throw OneDriveAPIException(401, "Specified key file '$keyFile' cannot be found.")
         }
 
         val keyFileContents = readToken()
 
         when (keyFileContents.size) {
-            0 -> throw OneDriveAPIException(401, String.format("Key file '%s' is empty.", keyFile))
+            0 -> throw OneDriveAPIException(401, "Key file '$keyFile' is empty.")
             1 -> {
                 var authCode = keyFileContents[0]
 
@@ -183,11 +183,7 @@ constructor(keyFile: Path, private val clientId: String, private val clientSecre
         }
 
         fun getAuthString(clientId: String): String {
-            return String.format("%s?client_id=%s&response_type=code&scope=%s&redirect_uri=%s",
-                    AUTH_URL,
-                    clientId,
-                    scope,
-                    REDIRECT_URL)
+            return "$AUTH_URL?client_id=$clientId&response_type=code&scope=$scope&redirect_uri=$REDIRECT_URL"
         }
 
         @Throws(IOException::class)

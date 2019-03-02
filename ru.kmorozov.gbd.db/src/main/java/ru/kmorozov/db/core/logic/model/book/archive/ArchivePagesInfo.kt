@@ -5,7 +5,7 @@ import ru.kmorozov.gbd.core.logic.model.book.base.IPagesInfo
 
 class ArchivePagesInfo(override val pages: Array<IPage>) : IPagesInfo {
 
-    override fun getPageByPid(pid: String): IPage? {
+    override fun getPageByPid(pid: String): IPage {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

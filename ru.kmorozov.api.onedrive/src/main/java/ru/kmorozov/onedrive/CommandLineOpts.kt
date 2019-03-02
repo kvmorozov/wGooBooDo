@@ -82,9 +82,7 @@ class CommandLineOpts {
             val line = parser.parse(optionsToParse, args)
 
             for (opt in line.options) {
-                log.debug(String.format("Parsing command line option -%s, value = %s ",
-                        if (null != opt.longOpt) '-' + opt.longOpt else opt.opt,
-                        opt.value))
+                log.debug("Parsing command line option -${if (null != opt.longOpt) '-' + opt.longOpt else opt.opt}, value = ${opt.value} ")
             }
 
             commandLineOpts.help = line.hasOption("help")

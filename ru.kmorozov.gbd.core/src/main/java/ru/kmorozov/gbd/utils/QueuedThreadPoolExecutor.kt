@@ -64,8 +64,7 @@ class QueuedThreadPoolExecutor<T : Any> : ThreadPoolExecutor {
             }
 
         if (0L < needProcessCount)
-            logger.finest(String.format("Terminating working threads for %s after %s sec (%s of %s completed, %s tasks finished of %s submitted)",
-                    description, counter.get(), uniqueMap.keys.filter(completeChecker).count(), needProcessCount, completedTaskCount, taskCount))
+            logger.finest("Terminating working threads for $description after ${counter.get()} sec (${uniqueMap.keys.filter(completeChecker).count()} of $needProcessCount completed, $completedTaskCount tasks finished of $taskCount submitted)")
         shutdownNow()
 
         uniqueMap.clear()

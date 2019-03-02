@@ -15,7 +15,7 @@ class ShplPage : AbstractPage {
         get() = id
 
     override val imgUrl: String
-        get() = String.format("http://elib.shpl.ru/pages/%s/zooms/%s", id, GBDOptions.getImageWidth(ShplConstants.DEFAULT_PAGE_WIDTH))
+        get() = "http://elib.shpl.ru/pages/$id/zooms/${GBDOptions.getImageWidth(ShplConstants.DEFAULT_PAGE_WIDTH)}"
 
     @SerializedName("id")
     private val id: String = ""

@@ -85,12 +85,12 @@ open class DuplicatesProcessor : IProcessor {
                                 val bookItem = api!!.getItem(book.bookInfo.path!!)
                                 api.delete(bookItem)
                             } catch (e: IOException) {
-                                logger.error(String.format("Failed delete OneDriveItem for %s : %s", mainBook.bookInfo.fileName, e.message))
+                                logger.error("Failed delete OneDriveItem for ${mainBook.bookInfo.fileName} : ${e.message}")
                             }
 
                         }
 
-                    logger.info(String.format("Duplicates for %s processed.", mainBook.bookInfo.fileName))
+                    logger.info("Duplicates for ${mainBook.bookInfo.fileName} processed.")
                 }
                 BookInfo.BookFormat.DOC -> TODO()
                 BookInfo.BookFormat.DOCX -> TODO()

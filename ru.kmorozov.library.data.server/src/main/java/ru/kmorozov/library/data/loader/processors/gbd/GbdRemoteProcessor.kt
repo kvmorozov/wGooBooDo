@@ -103,7 +103,7 @@ open class GbdRemoteProcessor : IGbdProcessor {
 
                         ctx.updateBookInfo(bookInfo)
 
-                        logger.info(String.format("BookId %s processed.", bookId))
+                        logger.info("BookId $bookId processed.")
                     }
                 }
             }

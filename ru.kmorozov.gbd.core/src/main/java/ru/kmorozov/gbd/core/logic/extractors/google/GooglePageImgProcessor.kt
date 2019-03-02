@@ -15,7 +15,7 @@ import ru.kmorozov.gbd.utils.Images
 internal class GooglePageImgProcessor(bookContext: BookContext, page: GooglePageInfo, usedProxy: HttpHostExt) : AbstractPageImgProcessor<GooglePageInfo>(bookContext, page, usedProxy) {
 
     protected override val successMsg: String
-        get() = String.format("Finished img processing for %s%s", uniqueObject.pid, if (uniqueObject.isGapPage) " with gap" else "")
+        get() = "Finished img processing for ${uniqueObject.pid}${if (uniqueObject.isGapPage) " with gap" else ""}"
 
     private fun processImageWithProxy(proxy: HttpHostExt): Boolean {
         return !(!proxy.isLocal && !proxy.isAvailable) && processImage(uniqueObject.getImqRqUrl(bookContext.bookInfo.bookId, HTTPS_IMG_TEMPLATE, imgWidth), proxy)

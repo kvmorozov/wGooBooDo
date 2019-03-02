@@ -168,7 +168,7 @@ open class TaskReporter {
         }
 
         val elapsed = System.currentTimeMillis() - startTime
-        log.info(String.format("Elapsed time: %s", LogUtils.readableTime(elapsed)))
+        log.info("Elapsed time: ${LogUtils.readableTime(elapsed)}")
     }
 
     fun setTaskLogger(taskLogger: Logger) {

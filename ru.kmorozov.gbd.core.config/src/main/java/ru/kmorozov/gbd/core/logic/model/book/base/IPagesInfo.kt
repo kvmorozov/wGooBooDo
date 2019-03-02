@@ -12,5 +12,6 @@ interface IPagesInfo {
 
     fun build() {}
 
-    fun getPageByPid(pid: String): IPage?
+    @Throws(PageNotFoundException::class)
+    fun getPageByPid(pid: String): IPage
 }

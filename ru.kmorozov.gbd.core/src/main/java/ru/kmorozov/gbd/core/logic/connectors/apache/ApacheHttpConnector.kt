@@ -24,7 +24,7 @@ class ApacheHttpConnector(private var factory: IApacheConnectionFactory) : HttpC
 
         val response = getContent(factory.getClient(proxy, withTimeout), HttpGet(rqUrl), proxy, 0)
 
-        if (response.empty) logger.finest(String.format("No response at url %s with proxy %s", rqUrl, proxy.toString()))
+        if (response.empty) logger.finest("No response at url $rqUrl with proxy $proxy")
 
         return response
     }

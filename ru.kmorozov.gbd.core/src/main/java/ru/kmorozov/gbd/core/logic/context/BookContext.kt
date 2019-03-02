@@ -76,7 +76,7 @@ class BookContext {
             pagesStream.filter { it.isFileExists }.forEach { page ->
                 try {
                     if (!storage.isPageExists(page)) {
-                        logger.severe(String.format("Page %s not found in storage!", page.pid))
+                        logger.severe("Page ${page.pid} not found in storage!")
                         (page as AbstractPage).isDataProcessed = false
                         page.isFileExists = false
                     }

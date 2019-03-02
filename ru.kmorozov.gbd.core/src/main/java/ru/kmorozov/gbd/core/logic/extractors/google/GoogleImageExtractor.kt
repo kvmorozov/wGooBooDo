@@ -70,7 +70,7 @@ class GoogleImageExtractor(bookContext: BookContext) : AbstractImageExtractor<Go
                 val pagesAfter = uniqueObject.pagesStream.filter { pageInfo -> pageInfo.isDataProcessed }.count()
 
                 uniqueObject.pagesProcessed = pagesAfter - uniqueObject.pagesBefore
-                logger.info(String.format("Processed %s pages", uniqueObject.pagesProcessed))
+                logger.info("Processed ${uniqueObject.pagesProcessed} pages")
 
                 ExecutionContext.INSTANCE.postProcessBook(uniqueObject)
             }

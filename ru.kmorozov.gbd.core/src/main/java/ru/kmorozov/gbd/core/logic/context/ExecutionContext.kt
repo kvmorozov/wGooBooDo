@@ -76,7 +76,7 @@ class ExecutionContext private constructor(val output: AbstractOutputReceiver, v
             bookExecutor.execute(extractor)
         }
 
-        defaultMetadata = LibraryFactory.getMetadata(contexts.get(0).bookId)
+        defaultMetadata = LibraryFactory.getMetadata(contexts)
 
         AbstractProxyListProvider.INSTANCE.processProxyList(UrlType.GOOGLE_BOOKS)
 

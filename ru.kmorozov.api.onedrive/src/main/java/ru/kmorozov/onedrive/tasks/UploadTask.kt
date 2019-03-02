@@ -87,10 +87,7 @@ class UploadTask(options: TaskOptions, parent: OneDriveItem, localFile: File, pr
                         tryCount = 0
 
                     } catch (ex: IOException) {
-                        log.warn(String.format("Encountered '%s' while uploading chunk of %s for file %s",
-                                ex.message,
-                                LogUtils.readableFileSize(session.lastUploaded),
-                                parent.fullName + localFile.name))
+                        log.warn("Encountered '${ex.message}' while uploading chunk of ${LogUtils.readableFileSize(session.lastUploaded)} for file ${parent.fullName + localFile.name}")
 
                         tryCount++
                     }
@@ -98,7 +95,7 @@ class UploadTask(options: TaskOptions, parent: OneDriveItem, localFile: File, pr
                 }
 
                 if (!session.isComplete) {
-                    throw IOException(String.format("Gave up on multi-part upload after %s retries", CommandLineOpts.commandLineOpts.tries))
+                    throw IOException("Gave up on multi-part upload after ${CommandLineOpts.commandLineOpts.tries} retries")
                 }
 
                 response = session.item
@@ -109,12 +106,7 @@ class UploadTask(options: TaskOptions, parent: OneDriveItem, localFile: File, pr
 
             val elapsedTime = System.currentTimeMillis() - startTime
 
-            log.info(String.format("Uploaded %s in %s (%s/s) to %s file %s",
-                    LogUtils.readableFileSize(localFile.length()),
-                    LogUtils.readableTime(elapsedTime),
-                    if (0L < elapsedTime) LogUtils.readableFileSize(localFile.length().toDouble() / (elapsedTime.toDouble() / 1000.0)) else 0,
-                    if (replace) "replace" else "new",
-                    response!!.fullName))
+            log.info("Uploaded ${LogUtils.readableFileSize(localFile.length())} in ${LogUtils.readableTime(elapsedTime)} (${if (0L < elapsedTime) LogUtils.readableFileSize(localFile.length().toDouble() / (elapsedTime.toDouble() / 1000.0)) else 0}/s) to ${if (replace) "replace" else "new"} file ${response!!.fullName}")
 
             reporter.fileUploaded(replace, localFile.length())
         }

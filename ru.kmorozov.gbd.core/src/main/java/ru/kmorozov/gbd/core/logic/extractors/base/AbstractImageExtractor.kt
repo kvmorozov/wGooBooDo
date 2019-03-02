@@ -72,7 +72,7 @@ abstract class AbstractImageExtractor <T: AbstractPage> : AbstractEventSource, I
     protected open fun prepareStorage() {
         if (!GBDOptions.storage.isValidOrCreate) return
 
-        logger.info(if (ExecutionContext.INSTANCE.isSingleMode) String.format("Working with %s", uniqueObject.bookInfo.bookData.title) else "Starting...")
+        logger.info(if (ExecutionContext.INSTANCE.isSingleMode) "Working with ${uniqueObject.bookInfo.bookData.title}" else "Starting...")
 
         try {
             uniqueObject.storage = GBDOptions.storage.getChildStorage(uniqueObject.bookInfo.bookData)
@@ -82,7 +82,7 @@ abstract class AbstractImageExtractor <T: AbstractPage> : AbstractEventSource, I
         }
 
         if (!uniqueObject.storage.isValidOrCreate)
-            logger.severe(String.format("Invalid book title: %s", uniqueObject.bookInfo.bookData.title))
+            logger.severe("Invalid book title: ${uniqueObject.bookInfo.bookData.title}")
     }
 
     override fun newProxyEvent(proxy: HttpHostExt) {
@@ -110,7 +110,7 @@ abstract class AbstractImageExtractor <T: AbstractPage> : AbstractEventSource, I
 
             val pagesAfter = uniqueObject.pagesStream.filter { pageInfo -> pageInfo.isDataProcessed }.count()
 
-            logger.info(String.format("Processed %s pages", pagesAfter - uniqueObject.pagesBefore))
+            logger.info("Processed ${pagesAfter - uniqueObject.pagesBefore} pages")
 
             synchronized(uniqueObject) {
                 ExecutionContext.INSTANCE.postProcessBook(uniqueObject)

@@ -70,11 +70,11 @@ open class JstorProcessor : IProcessor {
                         .map { s -> s.split("=".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1] }
                         .findFirst().get().replace("\"", "")
             else {
-                logger.error(String.format("%s not a valid JSTOR id", jstorId))
+                logger.error("$jstorId not a valid JSTOR id")
                 return
             }
         } catch (e: IOException) {
-            logger.error(String.format("%s not a valid JSTOR id", jstorId), e)
+            logger.error("$jstorId not a valid JSTOR id", e)
             return
         }
 
@@ -88,11 +88,11 @@ open class JstorProcessor : IProcessor {
                 jstorBook.bookInfo.setCustomFields(doiMap)
                 booksRepository.save(jstorBook)
 
-                logger.info(String.format("Saved DOI data for %s", doi))
+                logger.info("Saved DOI data for $doi")
             } else
-                logger.info(String.format("Not saved DOI data for %s", doi))
+                logger.info("Not saved DOI data for $doi")
         } catch (e: IOException) {
-            logger.warn(String.format("Invalid DOI %s for %s", doi, jstorId))
+            logger.warn("Invalid DOI $doi for $jstorId")
             return
         }
 

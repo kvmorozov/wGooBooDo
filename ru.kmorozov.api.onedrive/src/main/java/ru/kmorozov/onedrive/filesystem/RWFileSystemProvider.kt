@@ -54,7 +54,7 @@ internal class RWFileSystemProvider : ROFileSystemProvider() {
         val newFolder = File(file, name)
 
         if (!newFolder.mkdir()) {
-            throw IOException(String.format("Unable to create local directory '%s' in '%s'", name, file.name))
+            throw IOException("Unable to create local directory '$name' in '${file.name}'")
         }
 
         return newFolder

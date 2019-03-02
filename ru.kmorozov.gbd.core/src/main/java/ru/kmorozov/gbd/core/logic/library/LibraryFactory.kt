@@ -1,5 +1,6 @@
 package ru.kmorozov.gbd.core.logic.library
 
+import ru.kmorozov.gbd.core.logic.context.BookContext
 import ru.kmorozov.gbd.core.logic.library.metadata.ArchiveMetadata.Companion.ARCHIVE_METADATA
 import ru.kmorozov.gbd.core.logic.library.metadata.GoogleBooksMetadata.Companion.GOOGLE_METADATA
 import ru.kmorozov.gbd.core.logic.library.metadata.RfbrMetadata.Companion.RFBR_METADATA
@@ -12,6 +13,13 @@ import ru.kmorozov.gbd.core.logic.library.metadata.UnknownMetadata.Companion.UNK
 object LibraryFactory {
 
     private val METADATA = arrayOf(GOOGLE_METADATA, SHPL_METADATA, RFBR_METADATA, ARCHIVE_METADATA, UNKNOWN_METADATA)
+
+    fun getMetadata(contexts: List<BookContext>): ILibraryMetadata {
+        if (contexts.size > 0)
+            return getMetadata(contexts.get(0).bookId)
+        else
+            return GOOGLE_METADATA;
+    }
 
     fun getMetadata(bookId: String): ILibraryMetadata {
         return METADATA.first { it.isValidId(bookId) }

@@ -150,19 +150,19 @@ internal class GooglePageSigProcessor : AbstractHttpProcessor, IUniqueRunnable<G
             } catch (ce: SocketTimeoutException) {
                 if (!proxy.isLocal) {
                     proxy.registerFailure()
-                    logger.info(String.format("Proxy %s failed!", proxy.toString()))
+                    logger.info("Proxy $proxy failed!")
                 }
 
             } catch (ce: SocketException) {
                 if (!proxy.isLocal) {
                     proxy.registerFailure()
-                    logger.info(String.format("Proxy %s failed!", proxy.toString()))
+                    logger.info("Proxy $proxy failed!")
                 }
                 if (ce !is SocketTimeoutException) ce.printStackTrace()
             } catch (ce: NoHttpResponseException) {
                 if (!proxy.isLocal) {
                     proxy.registerFailure()
-                    logger.info(String.format("Proxy %s failed!", proxy.toString()))
+                    logger.info("Proxy $proxy failed!")
                 }
                 if (ce !is SocketTimeoutException) ce.printStackTrace()
             } catch (ex: Exception) {

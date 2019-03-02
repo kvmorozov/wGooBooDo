@@ -45,11 +45,11 @@ class Http2Connector : HttpConnector() {
                 throw RuntimeException("Invalid proxy config!")
 
             if (null == resp)
-                logger.finest(String.format("No response at url %s with proxy %s", rqUrl, proxy.toString()))
+                logger.finest("No response at url $rqUrl with proxy $proxy")
 
             return Http2Response(resp!!)
         } catch (ioe: IOException) {
-            logger.severe("Connection error: " + ioe.message)
+            logger.severe("Connection error: ${ioe.message}")
             throw Http2ResponseException(ioe)
         }
 

@@ -48,7 +48,7 @@ class GoogleHttpConnector : HttpConnector() {
             }
 
             if (resp.empty)
-                logger.finest(String.format("No response at url %s with proxy %s", rqUrl, proxy.toString()))
+                logger.finest("No response at url $rqUrl with proxy $proxy")
 
             return resp
         } catch (hre: HttpResponseException) {
