@@ -75,7 +75,7 @@ class DirContextLoader : IContextLoader {
     override fun refreshContext() {
         val index = getIndex(false)
 
-        booksInfo = index.books.filter { it is BookInfo && !it.empty }.associate { it.bookId to it }
+        booksInfo = index.books.filter { !it.empty }.associate { it.bookId to it }
     }
 
     protected fun getIndex(createIfNotExists: Boolean): IIndex {

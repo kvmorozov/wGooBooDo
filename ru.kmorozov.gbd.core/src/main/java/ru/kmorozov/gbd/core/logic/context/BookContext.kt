@@ -1,6 +1,5 @@
 package ru.kmorozov.gbd.core.logic.context
 
-import ru.kmorozov.db.core.logic.model.book.BookInfo
 import ru.kmorozov.gbd.core.config.IStorage
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractHttpProcessor
 import ru.kmorozov.gbd.core.logic.extractors.base.IImageExtractor
@@ -8,6 +7,7 @@ import ru.kmorozov.gbd.core.logic.extractors.base.IPostProcessor
 import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata
 import ru.kmorozov.gbd.core.logic.library.LibraryFactory
 import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage
+import ru.kmorozov.gbd.core.logic.model.book.base.IBookInfo
 import ru.kmorozov.gbd.core.logic.model.book.base.IPage
 import ru.kmorozov.gbd.logger.Logger
 import ru.kmorozov.gbd.logger.progress.IProgress
@@ -40,7 +40,7 @@ class BookContext {
 
     val sigExecutor: QueuedThreadPoolExecutor<out AbstractHttpProcessor>
     val imgExecutor: QueuedThreadPoolExecutor<AbstractPage>
-    var bookInfo: BookInfo
+    var bookInfo: IBookInfo
     private val metadata: ILibraryMetadata
     var started: AtomicBoolean
     var pdfCompleted: AtomicBoolean

@@ -4,6 +4,7 @@ import ru.kmorozov.gbd.core.config.IIndex
 import ru.kmorozov.db.core.logic.model.book.BookInfo
 import ru.kmorozov.gbd.core.logic.model.book.base.IBookInfo
 import ru.kmorozov.db.utils.Mapper
+import ru.kmorozov.gbd.core.config.GBDOptions
 
 import java.io.File
 import java.io.FileReader
@@ -14,7 +15,7 @@ class LocalFSIndex(private val storage: LocalFSStorage, indexName: String, creat
 
     private val indexFile: File
 
-    override val books: Array<IBookInfo>
+    override val books: List<IBookInfo>
         get() {
             if (indexFile.exists()) {
                 lateinit var ctxObjArr: Array<BookInfo>
@@ -24,14 +25,13 @@ class LocalFSIndex(private val storage: LocalFSStorage, indexName: String, creat
                     e.printStackTrace()
                 }
 
-                return (ctxObjArr as Array<IBookInfo>).filter { it.bookId.isNotEmpty() }.toTypedArray()
+                return (ctxObjArr as Array<IBookInfo>).filter { it.bookId.isNotEmpty() }
             }
             else
-                return arrayOf(BookInfo.EMPTY_BOOK)
+                return getFromStorage()
         }
 
     init {
-
         indexFile = File(storage.storageDir.path + File.separator + indexName)
         if (!indexFile.exists() && createIfNotExists) {
             try {
@@ -39,7 +39,6 @@ class LocalFSIndex(private val storage: LocalFSStorage, indexName: String, creat
             } catch (e: IOException) {
                 e.printStackTrace()
             }
-
         }
     }
 
@@ -49,6 +48,10 @@ class LocalFSIndex(private val storage: LocalFSStorage, indexName: String, creat
         } catch (e: IOException) {
             e.printStackTrace()
         }
+    }
 
+    private fun getFromStorage() : List<IBookInfo> {
+        var result = mutableListOf<LazyBookInfo>()
+        return storage.bookIdsList.mapTo(result, { bookId -> LazyBookInfo(bookId) })
     }
 }

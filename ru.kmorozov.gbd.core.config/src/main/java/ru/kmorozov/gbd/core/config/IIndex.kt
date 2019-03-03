@@ -4,7 +4,7 @@ import ru.kmorozov.gbd.core.logic.model.book.base.IBookInfo
 
 interface IIndex {
 
-    val books: Array<IBookInfo>
+    val books: List<IBookInfo>
 
     fun updateIndex(books: List<IBookInfo>)
 }
