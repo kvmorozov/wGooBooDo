@@ -2,8 +2,8 @@ package ru.kmorozov.gbd.core.logic.context
 
 import ru.kmorozov.db.core.config.EmptyContextLoader.Companion.EMPTY_CONTEXT_LOADER
 import ru.kmorozov.db.core.config.IContextLoader
-import ru.kmorozov.gbd.core.loader.DirContextLoader
 import ru.kmorozov.db.core.logic.model.book.BookInfo
+import ru.kmorozov.gbd.core.loader.DirContextLoader
 import ru.kmorozov.gbd.core.logic.model.book.base.IBookInfo
 
 /**
@@ -22,10 +22,6 @@ class ContextProvider(protected var loader: IContextLoader) : IContextLoader {
     override val isValid: Boolean
         get() = loader.isValid
 
-    override fun updateIndex() {
-        loader.updateIndex()
-    }
-
     override fun updateContext() {
         loader.updateContext()
     }
@@ -38,10 +34,6 @@ class ContextProvider(protected var loader: IContextLoader) : IContextLoader {
         return loader.getBookInfo(bookId)
     }
 
-    override fun refreshContext() {
-        loader.refreshContext()
-    }
-
     companion object {
 
         private const val DB_CTX_PROVIDER_CLASS_NAME = "ru.kmorozov.library.data.loader.processors.gbd.DbContextLoader"
@@ -51,20 +43,20 @@ class ContextProvider(protected var loader: IContextLoader) : IContextLoader {
 
         private fun getContextProviderInternal(): IContextLoader {
             var _contextProvider: IContextLoader = EMPTY_CONTEXT_LOADER
-                synchronized(LOCK_OBJ) {
-                    if (_contextProvider.empty)
-                        if (classExists(DB_CTX_PROVIDER_CLASS_NAME)) {
-                            try {
-                                _contextProvider = Class.forName(DB_CTX_PROVIDER_CLASS_NAME).getDeclaredConstructor().newInstance() as IContextLoader
-                            } catch (e: Exception) {
-                                e.printStackTrace()
-                            }
-
+            synchronized(LOCK_OBJ) {
+                if (_contextProvider.empty)
+                    if (classExists(DB_CTX_PROVIDER_CLASS_NAME)) {
+                        try {
+                            _contextProvider = Class.forName(DB_CTX_PROVIDER_CLASS_NAME).getDeclaredConstructor().newInstance() as IContextLoader
+                        } catch (e: Exception) {
+                            e.printStackTrace()
                         }
 
-                    if (_contextProvider.empty || !_contextProvider.isValid)
-                        _contextProvider = ContextProvider(DirContextLoader.BOOK_CTX_LOADER)
-                }
+                    }
+
+                if (_contextProvider.empty || !_contextProvider.isValid)
+                    _contextProvider = ContextProvider(DirContextLoader.BOOK_CTX_LOADER)
+            }
 
             return _contextProvider
         }

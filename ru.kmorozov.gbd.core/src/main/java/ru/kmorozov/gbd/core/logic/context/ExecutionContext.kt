@@ -88,7 +88,6 @@ class ExecutionContext private constructor(val output: AbstractOutputReceiver, v
 
         val contextProvider = ContextProvider.contextProvider
 
-        contextProvider.updateIndex()
         contextProvider.updateContext()
         updateBlacklist()
         AbstractHttpProcessor.close()

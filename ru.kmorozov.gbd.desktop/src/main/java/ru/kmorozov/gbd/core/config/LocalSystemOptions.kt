@@ -12,7 +12,7 @@ class LocalSystemOptions : IGBDOptions {
         get() = SystemConfigs.lastBookId
 
     override val storage: IStorage
-        get() = LocalFSStorage(SystemConfigs.rootDir)
+        get() = LocalFSStorage.getStorage(SystemConfigs.rootDir)
 
     override val proxyListFile: String
         get() = SystemConfigs.proxyListFile

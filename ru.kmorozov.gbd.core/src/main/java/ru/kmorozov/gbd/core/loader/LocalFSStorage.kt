@@ -21,10 +21,18 @@ import java.util.function.BiPredicate
 import java.util.stream.Stream
 import javax.imageio.ImageIO
 
-open class LocalFSStorage(storageDirName: String) : IStorage {
+open class LocalFSStorage : IStorage {
+
+    internal constructor(storageDirName: String) {
+        this.indexes = mapOf<String, LocalFSIndex>().toMutableMap()
+        storageDir = File(storageDirName)
+        logger = Logger.getLogger(LocalFSStorage::class.java, storageDirName)
+    }
 
     val storageDir: File
     protected val logger: Logger
+
+    private val indexes: MutableMap<String, LocalFSIndex>
 
     override val isValidOrCreate: Boolean
         get() = if (storageDir.exists()) storageDir.isDirectory else storageDir.mkdir()
@@ -48,12 +56,6 @@ open class LocalFSStorage(storageDirName: String) : IStorage {
     override val items: Stream<IStoredItem>
         @Throws(IOException::class)
         get() = Files.walk(storageDir.toPath()).filter { !it.toFile().isDirectory }.map { RawFileItem(it) }
-
-    init {
-        storageDir = File(storageDirName)
-
-        logger = Logger.getLogger(LocalFSStorage::class.java, storageDirName)
-    }
 
     override fun getChildStorage(bookData: IBookData): IStorage {
         try {
@@ -93,7 +95,11 @@ open class LocalFSStorage(storageDirName: String) : IStorage {
     }
 
     override fun getIndex(indexName: String, createIfNotExists: Boolean): IIndex {
-        return LocalFSIndex(this, indexName, createIfNotExists)
+        if (!indexes.containsKey(indexName)) {
+            val index = LocalFSIndex(this, indexName, createIfNotExists)
+            indexes.put(indexName, index)
+        }
+        return indexes.get(indexName)!!
     }
 
     @Throws(IOException::class)
@@ -164,6 +170,17 @@ open class LocalFSStorage(storageDirName: String) : IStorage {
                     }
                 }
             }
+        }
+    }
+
+    companion object {
+        val storages: MutableMap<String, LocalFSStorage> = emptyMap<String, LocalFSStorage>().toMutableMap()
+
+        fun getStorage(storageDirName: String) : LocalFSStorage {
+            if (!storages.containsKey(storageDirName))
+                storages.put(storageDirName, LocalFSStorage(storageDirName))
+
+            return storages.get(storageDirName)!!
         }
     }
 }

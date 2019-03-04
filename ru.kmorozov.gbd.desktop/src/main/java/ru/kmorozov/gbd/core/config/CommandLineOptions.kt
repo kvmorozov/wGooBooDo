@@ -19,7 +19,7 @@ class CommandLineOptions(commandLineArguments: Array<String>) : IGBDOptions {
         get() = getStringOptionValue(OPTION_BOOKID_SHORT)
 
     override val storage: IStorage
-        get() = LocalFSStorage(getStringOptionValue(OPTION_OUTDIR_SHORT))
+        get() = LocalFSStorage.getStorage(getStringOptionValue(OPTION_OUTDIR_SHORT))
 
     override val proxyListFile: String
         get() = getStringOptionValue(OPTION_PROXY_FILE_SHORT)

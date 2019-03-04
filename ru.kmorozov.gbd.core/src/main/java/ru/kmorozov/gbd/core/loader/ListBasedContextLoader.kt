@@ -19,10 +19,6 @@ class ListBasedContextLoader(private val producer: IBookListProducer) : IContext
     override val isValid: Boolean
         get() = true
 
-    override fun updateIndex() {
-
-    }
-
     override fun updateContext() {
 
     }
@@ -33,9 +29,5 @@ class ListBasedContextLoader(private val producer: IBookListProducer) : IContext
 
     override fun getBookInfo(bookId: String): BookInfo {
         return LibraryFactory.getMetadata(bookId).getBookInfoExtractor(bookId, EMPTY_CONTEXT_LOADER).bookInfo
-    }
-
-    override fun refreshContext() {
-
     }
 }

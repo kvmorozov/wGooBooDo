@@ -39,7 +39,7 @@ class ExtractorTest {
     fun initServer() {
         ExecutionContext.initContext(ReceiverProvider.getReceiver(), true)
         val mockOptions = Mockito.mock(IGBDOptions::class.java)
-        Mockito.`when`<IStorage>(mockOptions.storage).thenReturn(LocalFSStorage("E:\\Work\\gbd\\"))
+        Mockito.`when`<IStorage>(mockOptions.storage).thenReturn(LocalFSStorage.getStorage("E:\\Work\\gbd\\"))
         Mockito.`when`(mockOptions.proxyListFile).thenReturn("E:\\Work\\gbd\\proxy.txt")
         GBDOptions.init(mockOptions)
 
@@ -90,7 +90,6 @@ class ExtractorTest {
         ExecutionContext.INSTANCE.addBookContext(SingleBookProducer("http://localhost/elib.shpl.ru"), null!!, null!!)
 
         contextProvider.updateContext()
-        contextProvider.refreshContext()
 
         val ctxSizeAfter = contextProvider.contextSize
         MatcherAssert.assertThat(ctxSizeAfter, `is`(ctxSizeBefore + 1))

@@ -12,10 +12,10 @@ import ru.kmorozov.gbd.core.loader.LocalFSStorage
 class LocalServerGBDOptions : AbstractServerGBDOptions() {
 
     @Value("\${library.local.directory}")
-    private val localLibraryPath: String? = null
+    private lateinit var localLibraryPath: String
 
     override val storage: IStorage
-        get() = LocalFSStorage(localLibraryPath!!)
+        get() = LocalFSStorage.getStorage(localLibraryPath)
 
     override fun ctxOptions(): CtxOptions {
         return CtxOptions.DEFAULT_CTX_OPTIONS

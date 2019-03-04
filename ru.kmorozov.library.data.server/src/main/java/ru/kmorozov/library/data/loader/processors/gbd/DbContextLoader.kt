@@ -30,10 +30,6 @@ open class DbContextLoader : IContextLoader {
     override val isValid: Boolean
         get() = false
 
-    override fun updateIndex() {
-
-    }
-
     override fun updateContext() {
 
     }
@@ -55,10 +51,6 @@ open class DbContextLoader : IContextLoader {
 
             info
         })
-    }
-
-    override fun refreshContext() {
-
     }
 
 }

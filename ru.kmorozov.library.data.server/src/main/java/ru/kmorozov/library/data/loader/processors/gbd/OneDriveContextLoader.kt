@@ -61,10 +61,6 @@ open class OneDriveContextLoader : IContextLoader {
 
     }
 
-    override fun updateIndex() {
-
-    }
-
     override fun updateContext() {
 
     }
@@ -79,10 +75,6 @@ open class OneDriveContextLoader : IContextLoader {
 
     fun getBookDir(bookId: String): OneDriveItem {
         return itemsMap[bookId]!!
-    }
-
-    override fun refreshContext() {
-
     }
 
     companion object {

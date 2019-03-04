@@ -1,7 +1,7 @@
 package ru.kmorozov.library.data.model.dto
 
 import org.springframework.hateoas.ResourceSupport
-import java.util.stream.Collectors
+import kotlin.streams.toList
 
 /**
  * Created by sbt-morozov-kv on 31.01.2017.
@@ -45,7 +45,7 @@ class ItemDTO : ResourceSupport {
         refreshStatus = if (ItemDTO.REFRESH_INTERVAL.toLong() > System.currentTimeMillis() - storageDTO.lastChecked) RefreshStatus.updated else RefreshStatus.dirty
 
         if (null != storageDTO.categories)
-            this.categories = storageDTO.categories!!.stream().map<CategoryDTO> { CategoryDTO(it) }.collect(Collectors.toList())
+            this.categories = storageDTO.categories!!.stream().map<CategoryDTO> { CategoryDTO(it) }.toList()
     }
 
     constructor(bookDTO: BookDTO) {

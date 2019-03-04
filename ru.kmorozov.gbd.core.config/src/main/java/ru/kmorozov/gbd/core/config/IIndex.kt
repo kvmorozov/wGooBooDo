@@ -6,5 +6,13 @@ interface IIndex {
 
     val books: List<IBookInfo>
 
+    val bookIdsList: Set<String>
+
+    fun getBookInfo(bookId: String): IBookInfo
+
     fun updateIndex(books: List<IBookInfo>)
+
+    fun updateBook(book: IBookInfo)
+
+    fun updateContext()
 }

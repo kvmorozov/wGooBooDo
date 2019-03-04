@@ -16,13 +16,9 @@ interface IContextLoader {
 
     val empty: Boolean
 
-    fun updateIndex()
-
     fun updateContext()
 
     fun updateBookInfo(bookInfo: BookInfo)
 
     fun getBookInfo(bookId: String): IBookInfo
-
-    fun refreshContext()
 }
