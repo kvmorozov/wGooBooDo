@@ -21,6 +21,7 @@ object Mapper {
 
     val gson: Gson
         get() = GsonBuilder()
+                .excludeFieldsWithoutExposeAnnotation()
                 .registerTypeAdapter(IBookData::class.java, IBookDataAdapter())
                 .registerTypeAdapter(IPagesInfo::class.java, IPagesInfoAdapter())
                 .registerTypeAdapter(IPage::class.java, IPageAdapter())

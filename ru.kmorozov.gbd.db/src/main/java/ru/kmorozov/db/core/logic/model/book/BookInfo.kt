@@ -1,5 +1,6 @@
 package ru.kmorozov.db.core.logic.model.book
 
+import com.google.gson.annotations.Expose
 import ru.kmorozov.gbd.core.logic.model.book.base.IBookData
 import ru.kmorozov.gbd.core.logic.model.book.base.IBookInfo
 import ru.kmorozov.gbd.core.logic.model.book.base.IPage
@@ -11,7 +12,20 @@ import java.io.Serializable
 /**
  * Created by km on 28.11.2015.
  */
-open class BookInfo(override val bookData: IBookData, override val pages: IPagesInfo, override val bookId: String) : Serializable, ILoggableObject, IBookInfo {
+open class BookInfo : Serializable, ILoggableObject, IBookInfo {
+
+    @Expose
+    override val bookData: IBookData
+    @Expose
+    override val pages: IPagesInfo
+    @Expose
+    override var bookId: String
+
+    constructor(bookData: IBookData, pages: IPagesInfo, bookId: String) {
+        this.bookData = bookData
+        this.pages = pages
+        this.bookId = bookId
+    }
 
     override val description: String?
         get() = bookData.title

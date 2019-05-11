@@ -52,7 +52,7 @@ class GoogleHttpConnector : HttpConnector() {
 
             return resp
         } catch (hre: HttpResponseException) {
-            logger.severe("Connection error: " + hre.statusMessage)
+            logger.severe("Connection error: ${hre.statusMessage}")
             return EMPTY_RESPONSE
         }
 

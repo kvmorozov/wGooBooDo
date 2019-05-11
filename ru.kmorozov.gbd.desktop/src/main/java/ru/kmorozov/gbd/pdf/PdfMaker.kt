@@ -41,10 +41,10 @@ class PdfMaker : IPostProcessor {
         if (PdfOptions.SKIP === GBDOptions.pdfOptions)
             return
 
+        if (!uniqueObject.pdfCompleted.compareAndSet(false, true)) return
+
         val logger = ExecutionContext.INSTANCE.getLogger(PdfMaker::class.java, uniqueObject)
         logger.info("Starting making pdf file...")
-
-        if (!uniqueObject.pdfCompleted.compareAndSet(false, true)) return
 
         val imgDir = (uniqueObject.storage as LocalFSStorage).storageDir
         var existPages = 0L

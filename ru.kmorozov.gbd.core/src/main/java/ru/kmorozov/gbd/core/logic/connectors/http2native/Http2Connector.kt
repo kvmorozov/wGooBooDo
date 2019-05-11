@@ -50,7 +50,7 @@ class Http2Connector : HttpConnector() {
             return Http2Response(resp!!)
         } catch (ioe: IOException) {
             logger.severe("Connection error: ${ioe.message}")
-            throw Http2ResponseException(ioe)
+            return EMPTY_RESPONSE
         }
 
     }

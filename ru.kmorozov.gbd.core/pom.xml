@@ -7,7 +7,7 @@
     <artifactId>ru.kmorozov.gbd.core</artifactId>
 
     <properties>
-        <kotlin.version>1.3.30-eap-11</kotlin.version>
+        <kotlin.version>1.3.30-eap-45</kotlin.version>
         <kotlin.maven.plugin.version>1.3.21</kotlin.maven.plugin.version>
     </properties>
 
@@ -65,7 +65,7 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-transport-native-epoll</artifactId>
-            <version>4.1.31.Final</version>
+            <version>4.1.33.Final</version>
         </dependency>
 
         <dependency>
