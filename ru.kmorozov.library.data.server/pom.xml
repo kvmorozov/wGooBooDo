@@ -16,7 +16,7 @@
     <properties>
         <start-class>ru.kmorozov.library.data.server.LibraryRestServer</start-class>
         <kotlin.version>1.3.30-eap-45</kotlin.version>
-        <kotlin.maven.plugin.version>1.3.21</kotlin.maven.plugin.version>
+        <kotlin.maven.plugin.version>1.3.31</kotlin.maven.plugin.version>
     </properties>
 
     <build>
