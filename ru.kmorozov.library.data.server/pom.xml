@@ -79,6 +79,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.springframework.hateoas</groupId>
+            <artifactId>spring-hateoas</artifactId>
+            <version>0.25.1.RELEASE</version>
+        </dependency>
+
+        <dependency>
             <groupId>ru.kmorozov.library</groupId>
             <artifactId>ru.kmorozov.library.data.model</artifactId>
             <version>${project.version}</version>
