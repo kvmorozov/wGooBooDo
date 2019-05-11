@@ -71,6 +71,12 @@
             <version>${project.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>ru.kmorozov.gbd.core</groupId>
+            <artifactId>ru.kmorozov.gbd.core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
     </dependencies>
 
 </project>
