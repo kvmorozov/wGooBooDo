@@ -3,3 +3,5 @@ C:\Work\Utils\maven\apache-maven-3.6.0\bin\mvn deploy:deploy-file -Durl=file:///
 C:\Work\Utils\maven\apache-maven-3.6.0\bin\mvn deploy:deploy-file -Durl=file:///J:/Work/wGooBooDo/repo -Dfile=J:/ru.kmorozov.library.data.model.jar -DgroupId=ru.kmorozov.library -DartifactId=ru.kmorozov.library.data.model -Dpackaging=jar -Dversion=2.2-b2
 
 C:\Work\Utils\maven\apache-maven-3.6.0\bin\mvn deploy:deploy-file -Durl=file:///J:/Work/wGooBooDo/repo -Dfile=J:/ru.kmorozov.gbd.core.jar -DgroupId=ru.kmorozov.gbd.core -DartifactId=ru.kmorozov.gbd.core -Dpackaging=jar -Dversion=2.2-b2
+
+C:\Work\Utils\maven\apache-maven-3.6.0\bin\mvn deploy:deploy-file -Durl=file:///J:/Work/wGooBooDo/repo -Dfile=J:/ru.kmorozov.gbd.core.config.jar -DgroupId=ru.kmorozov.gbd.core -DartifactId=ru.kmorozov.gbd.core.config -Dpackaging=jar -Dversion=2.2-b2
