@@ -15,14 +15,6 @@
         <version>2.2.0.BUILD-SNAPSHOT</version>
     </parent>
 
-    <modules>
-        <module>../ru.kmorozov.api.onedrive</module>
-        <module>../ru.kmorozov.gbd.core.logger</module>
-        <module>../ru.kmorozov.gbd.db</module>
-        <module>../ru.kmorozov.library.data.model</module>
-        <module>../ru.kmorozov.library.data.server</module>
-    </modules>
-
     <repositories>
         <repository>
             <id>spring-milestone</id>
