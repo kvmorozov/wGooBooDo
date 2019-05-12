@@ -8,9 +8,11 @@ import ru.kmorozov.gbd.core.logic.context.BookContext
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractImageExtractor
 import ru.kmorozov.gbd.logger.progress.IProgress
+import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
+import java.util.function.Consumer
 
 /**
  * Created by km on 21.11.2015.
@@ -23,9 +25,11 @@ class GoogleImageExtractor(bookContext: BookContext) : AbstractImageExtractor<Go
 
     private val proxyReceived = AtomicInteger(0)
     private val processingStarted = AtomicBoolean(false)
+    private val initComplete = AtomicBoolean(false)
+    private var waitingProxy: MutableList<HttpHostExt> = CopyOnWriteArrayList()
 
     override fun preCheck(): Boolean {
-        if (uniqueObject.bookInfo.empty || uniqueObject.bookInfo.bookData.title.equals("empty"))
+        if (uniqueObject.bookInfo.empty || uniqueObject.bookInfo.pages.pages.size == 0)
             uniqueObject.bookInfo = GoogleBookInfoExtractor(uniqueObject.bookInfo.bookId).findBookInfo()
 
         if (!Strings.isNullOrEmpty((uniqueObject.bookInfo.bookData as GoogleBookData).flags!!.downloadPdfUrl)) {
@@ -42,6 +46,18 @@ class GoogleImageExtractor(bookContext: BookContext) : AbstractImageExtractor<Go
 
     override fun newProxyEvent(proxy: HttpHostExt) {
         Thread(EventProcessor(proxy)).start()
+    }
+
+    override fun process() {
+        super.process()
+
+        initComplete.set(true)
+    }
+
+    override fun run() {
+        super.run()
+
+        waitingProxy.forEach(Consumer<HttpHostExt> { this.newProxyEvent(it) })
     }
 
     private inner class EventProcessor internal constructor(private val proxy: HttpHostExt) : Runnable {

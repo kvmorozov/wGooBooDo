@@ -10,45 +10,36 @@ import ru.kmorozov.gbd.logger.Logger
 import ru.kmorozov.gbd.logger.consumers.AbstractOutputReceiver
 import ru.kmorozov.gbd.logger.events.AbstractEventSource
 import java.io.IOException
-import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.TimeUnit
-import java.util.concurrent.atomic.AtomicBoolean
-import java.util.function.Consumer
 
 /**
  * Created by sbt-morozov-kv on 16.11.2016.
  */
-abstract class AbstractImageExtractor <T: AbstractPage> : AbstractEventSource, IUniqueRunnable<BookContext>, IImageExtractor {
+abstract class AbstractImageExtractor<T : AbstractPage> : AbstractEventSource, IUniqueRunnable<BookContext>, IImageExtractor {
 
     override var uniqueObject: BookContext
 
     protected constructor(uniqueObject: BookContext, extractorClass: Class<out AbstractImageExtractor<T>>) : super() {
         this.uniqueObject = uniqueObject
-        this.initComplete = AtomicBoolean(false)
-        this.waitingProxy = CopyOnWriteArrayList()
         processStatus = uniqueObject.progress
         logger = ExecutionContext.INSTANCE.getLogger(extractorClass, uniqueObject)
         this.output = ExecutionContext.INSTANCE.output
     }
 
     protected val output: AbstractOutputReceiver
-    protected val initComplete: AtomicBoolean
     protected val logger: Logger
-    protected var waitingProxy: MutableList<HttpHostExt>
 
     override fun toString(): String {
         return "Extractor:$uniqueObject"
     }
 
-    fun process() {
+    open fun process() {
         if (!uniqueObject.started.compareAndSet(false, true)) return
 
         if (!preCheck()) return
 
         prepareStorage()
         uniqueObject.restoreState()
-
-        initComplete.set(true)
     }
 
     protected open fun preCheck(): Boolean {
@@ -57,16 +48,6 @@ abstract class AbstractImageExtractor <T: AbstractPage> : AbstractEventSource, I
 
     override fun run() {
         process()
-
-        while (!initComplete.get()) {
-            try {
-                Thread.sleep(1000L)
-            } catch (e: InterruptedException) {
-                e.printStackTrace()
-            }
-
-        }
-        waitingProxy.forEach(Consumer<HttpHostExt> { this.newProxyEvent(it) })
     }
 
     protected open fun prepareStorage() {
@@ -94,11 +75,6 @@ abstract class AbstractImageExtractor <T: AbstractPage> : AbstractEventSource, I
     protected inner class EventProcessor internal constructor(private val proxy: HttpHostExt) : Runnable {
 
         override fun run() {
-            while (!initComplete.get()) {
-                waitingProxy.add(proxy)
-                return
-            }
-
             for (page in uniqueObject.bookInfo.pages.pages)
                 uniqueObject.imgExecutor.execute(SimplePageImgProcessor(uniqueObject, page as T, HttpHostExt.NO_PROXY))
 

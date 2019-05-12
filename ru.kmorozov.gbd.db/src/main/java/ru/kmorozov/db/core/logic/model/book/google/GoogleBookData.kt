@@ -1,5 +1,6 @@
 package ru.kmorozov.db.core.logic.model.book.google
 
+import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import ru.kmorozov.gbd.core.logic.model.book.base.IBookData
 
@@ -14,69 +15,69 @@ import ru.kmorozov.gbd.core.config.constants.GoogleConstants.HTTPS_TEMPLATE
  */
 class GoogleBookData : IBookData, Serializable {
 
-    @SerializedName("fullview")
+    @Expose @SerializedName("fullview")
     private val fullview: Boolean = false
-    @SerializedName("page_width")
+    @Expose @SerializedName("page_width")
     private val pageWidth: Int = 0
-    @SerializedName("page_height")
+    @Expose @SerializedName("page_height")
     private val pageHeight: Int = 0
-    @SerializedName("font_height")
+    @Expose @SerializedName("font_height")
     private val fontHeight: Int = 0
-    @SerializedName("first_content_page")
+    @Expose @SerializedName("first_content_page")
     private val firstContentPage: Int = 0
-    @SerializedName("disable_twopage")
+    @Expose @SerializedName("disable_twopage")
     private val disableTwopage: Boolean = false
-    @SerializedName("initial_zoom_width_override")
+    @Expose @SerializedName("initial_zoom_width_override")
     private val initialZoomWidthOverride: Int = 0
-    @SerializedName("show_print_pages_button")
+    @Expose @SerializedName("show_print_pages_button")
     private val showPrintPagesButton: Boolean = false
-    @SerializedName("title")
+    @Expose @SerializedName("title")
     override lateinit var title: String
-    @SerializedName("subtitle")
+    @Expose @SerializedName("subtitle")
     private val subtitle: String? = null
-    @SerializedName("attribution")
+    @Expose @SerializedName("attribution")
     private val attribution: String? = null
-    @SerializedName("additional_info")
+    @Expose @SerializedName("additional_info")
     private val additionalInfo: AdditionalInfo? = null
-    @SerializedName("table_of_contents_page_id")
+    @Expose @SerializedName("table_of_contents_page_id")
     private val tableOfContentsPageId: String? = null
-    @SerializedName("max_resolution_image_width")
+    @Expose @SerializedName("max_resolution_image_width")
     private val maxResolutionImageWidth: Int = 0
-    @SerializedName("max_resolution_image_height")
+    @Expose @SerializedName("max_resolution_image_height")
     private val maxResolutionImageHeight: Int = 0
-    @SerializedName("num_toc_pages")
+    @Expose @SerializedName("num_toc_pages")
     private val numTocPages: Int = 0
-    @SerializedName("quality_info")
+    @Expose @SerializedName("quality_info")
     private val qualityInfo: String? = null
-    @SerializedName("volume_id")
+    @Expose @SerializedName("volume_id")
     override lateinit var volumeId: String
-    @SerializedName("permission_info")
+    @Expose @SerializedName("permission_info")
     private val permissionInfo: String? = null
-    @SerializedName("is_ebook")
+    @Expose @SerializedName("is_ebook")
     private val ebook: Boolean = false
-    @SerializedName("volumeresult")
+    @Expose @SerializedName("volumeresult")
     val flags: VolumeResultFlags? = null
-    @SerializedName("rating")
+    @Expose @SerializedName("rating")
     private val rating: Int = 0
-    @SerializedName("num_reviews")
+    @Expose @SerializedName("num_reviews")
     private val numReviews: Int = 0
-    @SerializedName("publisher")
+    @Expose @SerializedName("publisher")
     private val publisher: String? = null
-    @SerializedName("publication_date")
+    @Expose @SerializedName("publication_date")
     private val publicationDate: String? = null
-    @SerializedName("num_pages")
+    @Expose @SerializedName("num_pages")
     private val numPages: Int = 0
-    @SerializedName("sample_url")
+    @Expose @SerializedName("sample_url")
     private val sampleUrl: String? = null
-    @SerializedName("synposis")
+    @Expose @SerializedName("synposis")
     private val synposis: String? = null
-    @SerializedName("my_library_url")
+    @Expose @SerializedName("my_library_url")
     private val myLibraryUrl: String? = null
-    @SerializedName("is_magazine")
+    @Expose @SerializedName("is_magazine")
     private val magazine: Boolean = false
-    @SerializedName("is_public_domain")
+    @Expose @SerializedName("is_public_domain")
     private val publicDomain: Boolean = false
-    @SerializedName("last_page")
+    @Expose @SerializedName("last_page")
     private val lastPage: GooglePageInfo? = null
 
     val baseUrl: URI

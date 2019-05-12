@@ -1,5 +1,6 @@
 package ru.kmorozov.db.core.logic.model.book.google
 
+import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import org.apache.commons.lang3.tuple.ImmutablePair
 import org.apache.commons.lang3.tuple.Pair
@@ -22,6 +23,7 @@ class GooglePagesInfo : IPagesInfo, Serializable {
     override val missingPagesList: String
         get() = getListByCondition(not(IPage::isFileExists))
 
+    @Expose
     @SerializedName("page")
     override var pages: Array<IPage> = arrayOf<IPage>()
         set(pages: Array<IPage>) {

@@ -1,5 +1,6 @@
 package ru.kmorozov.db.core.logic.model.book.google
 
+import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import org.apache.commons.lang3.StringUtils
 import ru.kmorozov.gbd.core.config.constants.GoogleConstants.BOOK_ID_PLACEHOLDER
@@ -19,12 +20,18 @@ class GooglePageInfo : AbstractPage, Serializable, Comparable<IPage> {
     override val imgUrl: String
         get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
 
+    @Expose
     @SerializedName("pid")
     override var pid: String = ""
+
     @SerializedName("flags")
     private val flags: String? = null
+
+    @Expose
     @SerializedName("title")
     private val title: String? = null
+
+    @Expose
     var src: String? = null
     @SerializedName("uf")
     private val uf: String? = null
@@ -33,6 +40,7 @@ class GooglePageInfo : AbstractPage, Serializable, Comparable<IPage> {
         get() = if (null == field && null == src) null else src!!.substring(src!!.indexOf("sig=") + 4)
         private set
 
+    @Expose
     @SerializedName("order")
     override var order: Int = 0
     @SerializedName("h")
