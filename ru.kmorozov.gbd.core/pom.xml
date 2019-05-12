@@ -6,11 +6,6 @@
 
     <artifactId>ru.kmorozov.gbd.core</artifactId>
 
-    <properties>
-        <kotlin.version>1.3.30-eap-45</kotlin.version>
-        <kotlin.maven.plugin.version>1.3.31</kotlin.maven.plugin.version>
-    </properties>
-
     <parent>
         <groupId>ru.kmorozov.gbd</groupId>
         <artifactId>parent</artifactId>
@@ -23,22 +18,6 @@
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
             <version>LATEST</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.google.http-client</groupId>
-            <artifactId>google-http-client</artifactId>
-            <version>LATEST</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.google.guava</groupId>
-                    <artifactId>guava</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>commons-codec</groupId>
-                    <artifactId>commons-codec</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
