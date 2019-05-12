@@ -50,7 +50,7 @@
         <dependency>
             <groupId>ru.kmorozov.library</groupId>
             <artifactId>ru.kmorozov.library.data.server</artifactId>
-            <version>${project.version}-h</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>

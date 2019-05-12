@@ -7,17 +7,14 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Lazy
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
 import ru.kmorozov.gbd.core.logic.connectors.google.GoogleHttpConnector
-import ru.kmorozov.gbd.core.logic.connectors.webdriver.WebDriverHttpConnector
 import ru.kmorozov.gbd.logger.Logger
 import ru.kmorozov.onedrive.client.OneDriveProvider
 import ru.kmorozov.onedrive.client.OneDriveProvider.FACTORY
 import ru.kmorozov.onedrive.client.authoriser.AuthorisationProvider
 import ru.kmorozov.onedrive.client.authoriser.TokenFactory
 import ru.kmorozov.onedrive.client.exceptions.InvalidCodeException
-
 import java.io.File
 import java.io.IOException
-import java.net.URL
 
 /**
  * Created by km on 26.12.2016.
@@ -53,10 +50,6 @@ open class LoaderConfiguration {
         @Lazy
         get() {
             when (httpConnectorType) {
-                "chrome" -> {
-                    System.setProperty("webdriver.chrome.driver", webdriverChromeDriverPath!!)
-                    return WebDriverHttpConnector()
-                }
                 "google" -> return GoogleHttpConnector()
                 else -> return GoogleHttpConnector()
             }

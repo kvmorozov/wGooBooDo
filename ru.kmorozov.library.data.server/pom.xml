@@ -28,7 +28,11 @@
                     <excludes>
                         <exclude>
                             <groupId>ru.kmorozov.library</groupId>
-                            <artifactId>ru.kmorozov.library.data.model</artifactId>
+                            <artifactId>*</artifactId>
+                        </exclude>
+                        <exclude>
+                            <groupId>ru.kmorozov.gbd</groupId>
+                            <artifactId>*</artifactId>
                         </exclude>
                     </excludes>
                 </configuration>
