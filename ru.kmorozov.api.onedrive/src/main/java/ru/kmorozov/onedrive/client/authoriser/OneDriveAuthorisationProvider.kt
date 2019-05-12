@@ -4,7 +4,7 @@ import com.google.api.client.http.*
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.JsonObjectParser
 import com.google.api.client.util.Preconditions
-import com.google.common.base.Strings
+import com.google.api.client.util.Strings
 import org.apache.commons.lang3.StringUtils
 import org.apache.logging.log4j.LogManager
 import ru.kmorozov.onedrive.client.OneDriveAPIException
@@ -26,14 +26,14 @@ constructor(keyFile: Path, private val clientId: String, private val clientSecre
 
     private val keyFile: Path
     private var authorisation: Authorisation? = null
-    private var lastFetched: Date? = null
+    private var lastFetched: Date = Date(Long.MIN_VALUE)
 
     override// Refresh if we know it is needed
     val accessToken: String
         @Throws(IOException::class)
         get() {
             if (null != authorisation) {
-                if (lastFetched!!.after(Date(lastFetched!!.time + (authorisation!!.expiresIn * 1000).toLong()))) {
+                if (lastFetched.after(Date(lastFetched.time + (authorisation!!.expiresIn * 1000).toLong()))) {
                     log.info("Authorisation token has expired - refreshing")
                     getTokenFromRefreshToken(authorisation!!.refreshToken!!)
                     saveToken()

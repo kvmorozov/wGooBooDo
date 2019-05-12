@@ -1,20 +1,20 @@
 package ru.kmorozov.library.data.model.dto
 
-import org.springframework.hateoas.ResourceSupport
 import kotlin.streams.toList
+import org.springframework.hateoas.RepresentationModel
 
 /**
  * Created by sbt-morozov-kv on 31.01.2017.
  */
-class ItemDTO : ResourceSupport {
+class ItemDTO : RepresentationModel<ItemDTO> {
 
-    var itemId: String? = null
+    lateinit var itemId: String
         private set
-    var itemType: ItemType? = null
+    lateinit var itemType: ItemType
         private set
-    var itemSubType: Any? = null
+    lateinit var itemSubType: Any
         private set
-    var displayName: String? = null
+    lateinit var displayName: String
         private set
     var filesCount: Long = 0
     var categories: List<CategoryDTO>? = null

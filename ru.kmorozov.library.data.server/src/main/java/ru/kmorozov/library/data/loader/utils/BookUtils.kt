@@ -18,7 +18,7 @@ object BookUtils {
     fun createBookDIO(book: Book): BookDTO {
         val dto = BookDTO(book, bookLoaded(book))
         when (book.storage!!.storageType) {
-            Storage.StorageType.LocalFileSystem -> dto.path = book.bookInfo.path
+            Storage.StorageType.LocalFileSystem -> dto.path = book.bookInfo.path!!
             Storage.StorageType.OneDrive -> dto.path = OneDriveUrl.content(book.bookInfo.path!!).toString()
         }
 

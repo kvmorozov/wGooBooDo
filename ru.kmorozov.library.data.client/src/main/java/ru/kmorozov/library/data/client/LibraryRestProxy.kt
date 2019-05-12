@@ -1,6 +1,6 @@
 package ru.kmorozov.library.data.client
 
-import org.springframework.hateoas.mvc.ControllerLinkBuilder
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder
 import org.springframework.http.HttpMethod
 import org.springframework.util.StringUtils
 import org.springframework.web.bind.annotation.*
@@ -30,7 +30,7 @@ class LibraryRestProxy(private val template: RestTemplate) : IDataRestServer {
                 .build().toString()
 
         val user = template.getForEntity(uri, UserDTO::class.java).body
-        user!!.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(LibraryRestProxy::class.java).getItemsByStorageId("root")).withRel("root"))
+        user.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(LibraryRestProxy::class.java).getItemsByStorageId("root")).withRel("root"))
 
         return user
     }
@@ -56,23 +56,22 @@ class LibraryRestProxy(private val template: RestTemplate) : IDataRestServer {
     }
 
     private fun addLinks(item: ItemDTO): ItemDTO {
-        item.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(LibraryRestProxy::class.java, item.itemType, item.itemId)
-                .getItem(item.itemId!!, item.itemType!!, false)).withSelfRel())
-        item.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(LibraryRestProxy::class.java)
-                .getItem(item.itemId!!, item.itemType!!, true)).withRel("refresh"))
+        item.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(LibraryRestProxy::class.java, item.itemType, item.itemId)
+                .getItem(item.itemId, item.itemType, false)).withSelfRel())
+        item.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(LibraryRestProxy::class.java)
+                .getItem(item.itemId, item.itemType, true)).withRel("refresh"))
 
         when (item.itemType) {
             ItemType.storage -> {
-                item.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(LibraryRestProxy::class.java)
-                        .getBooksByStorageId(item.itemId!!)).withRel("books"))
-                item.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(LibraryRestProxy::class.java)
-                        .getStoragesByParentId(item.itemId!!)).withRel("storages"))
-                item.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(LibraryRestProxy::class.java)
-                        .getItemsByStorageId(item.itemId!!)).withRel("items"))
+                item.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(LibraryRestProxy::class.java)
+                        .getBooksByStorageId(item.itemId)).withRel("books"))
+                item.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(LibraryRestProxy::class.java)
+                        .getStoragesByParentId(item.itemId)).withRel("storages"))
+                item.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(LibraryRestProxy::class.java)
+                        .getItemsByStorageId(item.itemId)).withRel("items"))
             }
             ItemType.category -> TODO()
             ItemType.book -> TODO()
-            null -> TODO()
         }
 
         return item

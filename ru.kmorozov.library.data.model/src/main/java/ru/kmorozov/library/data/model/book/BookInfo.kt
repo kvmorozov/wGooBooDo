@@ -12,7 +12,7 @@ class BookInfo {
 
     var bookId: String? = null
 
-    var format: BookFormat? = null
+    lateinit var format: BookFormat
 
     var bookType: BookType? = null
 

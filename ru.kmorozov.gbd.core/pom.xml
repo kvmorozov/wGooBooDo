@@ -71,7 +71,7 @@
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
-            <version>LATEST</version>
+            <version>3.14.1</version>
             <scope>compile</scope>
         </dependency>
 
@@ -175,7 +175,7 @@
                 <dependency>
                     <groupId>com.squareup.okhttp3</groupId>
                     <artifactId>okhttp</artifactId>
-                    <version>LATEST</version>
+                    <version>3.14.1</version>
                 </dependency>
             </dependencies>
         </profile>
@@ -203,7 +203,7 @@
                 <dependency>
                     <groupId>io.netty</groupId>
                     <artifactId>netty-handler</artifactId>
-                    <version>4.1.29.Final</version>
+                    <version>4.1.33.Final</version>
                 </dependency>
             </dependencies>
         </profile>
