@@ -11,13 +11,11 @@
       <module fileurl="file://$PROJECT_DIR$/ru.kmorozov.gbd.desktop/ru.kmorozov.gbd.desktop.iml" filepath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/ru.kmorozov.gbd.desktop.iml" />
       <module fileurl="file://$PROJECT_DIR$/ru.kmorozov.gbd.desktop.app/ru.kmorozov.gbd.desktop.app.iml" filepath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop.app/ru.kmorozov.gbd.desktop.app.iml" />
       <module fileurl="file://$PROJECT_DIR$/ru.kmorozov.gbd.parent/ru.kmorozov.gbd.parent.iml" filepath="$PROJECT_DIR$/ru.kmorozov.gbd.parent/ru.kmorozov.gbd.parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ru.kmorozov.library.iml" filepath="$PROJECT_DIR$/ru.kmorozov.library.iml" />
       <module fileurl="file://$PROJECT_DIR$/ru.kmorozov.library.data.client/ru.kmorozov.library.data.client.iml" filepath="$PROJECT_DIR$/ru.kmorozov.library.data.client/ru.kmorozov.library.data.client.iml" />
       <module fileurl="file://$PROJECT_DIR$/ru.kmorozov.library.data.model/ru.kmorozov.library.data.model.iml" filepath="$PROJECT_DIR$/ru.kmorozov.library.data.model/ru.kmorozov.library.data.model.iml" />
       <module fileurl="file://$PROJECT_DIR$/ru.kmorozov.library.data.server/ru.kmorozov.library.data.server.iml" filepath="$PROJECT_DIR$/ru.kmorozov.library.data.server/ru.kmorozov.library.data.server.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ru.kmorozov.library.data.server (1).iml" filepath="$PROJECT_DIR$/ru.kmorozov.library.data.server (1).iml" />
-      <module fileurl="file://$PROJECT_DIR$/ru.kmorozov.library.data.server.her.iml" filepath="$PROJECT_DIR$/ru.kmorozov.library.data.server.her.iml" />
       <module fileurl="file://$PROJECT_DIR$/ru.kmorozov.library.parent/ru.kmorozov.library.parent.iml" filepath="$PROJECT_DIR$/ru.kmorozov.library.parent/ru.kmorozov.library.parent.iml" />
-      <module fileurl="file://$PROJECT_DIR$/simpleGBD.iml" filepath="$PROJECT_DIR$/simpleGBD.iml" />
     </modules>
   </component>
 </project>
