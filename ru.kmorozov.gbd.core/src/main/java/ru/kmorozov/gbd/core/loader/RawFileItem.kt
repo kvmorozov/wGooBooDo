@@ -24,6 +24,9 @@ open class RawFileItem : IStoredItem {
 
     var totalLen = 0
 
+    override val pageNum: Int
+        get() = Integer.parseInt(outputFile.toPath().fileName.toString().split("_".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0])
+
     @Throws(IOException::class)
     override fun exists(): Boolean {
         return outputFile.exists()
@@ -32,8 +35,10 @@ open class RawFileItem : IStoredItem {
     @Throws(IOException::class)
     override fun delete() {
         try {
-            if (totalLen > 0)
+            if (totalLen > 0) {
                 outputStream.close()
+                totalLen = 0;
+            }
 
             outputFile.delete()
         } catch (ex: IOException) {

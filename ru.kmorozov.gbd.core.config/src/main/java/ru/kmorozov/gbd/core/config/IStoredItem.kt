@@ -22,5 +22,8 @@ interface IStoredItem {
 
     fun asFile(): File
 
-    val createdNew : Boolean
+    val createdNew: Boolean
+
+    val pageNum: Int
+        get() = -1
 }

@@ -18,6 +18,8 @@ import java.nio.file.Paths
 import java.nio.file.attribute.BasicFileAttributes
 import java.util.*
 import java.util.function.BiPredicate
+import java.util.function.Predicate
+import java.util.stream.Collectors
 import java.util.stream.Stream
 import javax.imageio.ImageIO
 
@@ -55,7 +57,9 @@ open class LocalFSStorage : IStorage {
 
     override val items: Stream<IStoredItem>
         @Throws(IOException::class)
-        get() = Files.walk(storageDir.toPath()).filter { !it.toFile().isDirectory }.map { RawFileItem(it) }
+        get() = Files.walk(storageDir.toPath())
+                .filter { !it.toFile().isDirectory }.filter({ Images.isImageFile(it) })
+                .map { RawFileItem(it) }
 
     override fun getChildStorage(bookData: IBookData): IStorage {
         try {
@@ -173,10 +177,26 @@ open class LocalFSStorage : IStorage {
         }
     }
 
+    fun getOrCreatePdf(title: String): File {
+        val pdfFiles = Files.list(storageDir.toPath()).filter(Predicate<Path> { filePath -> Images.isPdfFile(filePath) }).collect(Collectors.toList())
+        if (1 == pdfFiles.size)
+            return pdfFiles[0].toFile();
+        else {
+            val pdfFile = File(storageDir.path + File.separator + title.replace("[^А-Яа-яa-zA-Z0-9-]".toRegex(), " ") + ".pdf");
+            pdfFile.createNewFile();
+
+            return pdfFile;
+        }
+    }
+
+    fun imgCount() : Long {
+        return Files.list(storageDir.toPath()).filter(Predicate<Path> { filePath -> Images.isImageFile(filePath) }).count()
+    }
+
     companion object {
         val storages: MutableMap<String, LocalFSStorage> = emptyMap<String, LocalFSStorage>().toMutableMap()
 
-        fun getStorage(storageDirName: String) : LocalFSStorage {
+        fun getStorage(storageDirName: String): LocalFSStorage {
             if (!storages.containsKey(storageDirName))
                 storages.put(storageDirName, LocalFSStorage(storageDirName))
 

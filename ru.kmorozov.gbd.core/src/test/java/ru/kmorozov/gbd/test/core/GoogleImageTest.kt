@@ -1,17 +1,16 @@
 package ru.kmorozov.gbd.test.core
 
+import com.asprise.ocr.Ocr
 import org.junit.Assert
 import org.junit.Test
+import ru.kmorozov.gbd.core.config.constants.GoogleConstants.DEFAULT_PAGE_WIDTH
 import ru.kmorozov.gbd.test.GbdTestBase
 import ru.kmorozov.gbd.utils.Images
-
-import javax.imageio.ImageIO
-import java.awt.image.BufferedImage
 import java.io.File
 import java.io.IOException
 import java.nio.file.Paths
+import javax.imageio.ImageIO
 
-import ru.kmorozov.gbd.core.config.constants.GoogleConstants.DEFAULT_PAGE_WIDTH
 
 /**
  * Created by km on 22.01.2017.
@@ -52,6 +51,20 @@ class GoogleImageTest : GbdTestBase() {
         Assert.assertFalse(Images.isInvalidImage(Paths.get(complexGoodCase), DEFAULT_PAGE_WIDTH))
     }
 
+    @Test
+    fun testOcr() {
+        Ocr.setUp() // one time setup
+
+        val ocr = Ocr() // create a new OCR engine
+
+        ocr.startEngine("eng", Ocr.SPEED_FASTEST) // English
+
+        val s: String = ocr.recognize(arrayOf(File(invalidImg)), Ocr.RECOGNIZE_TYPE_ALL, Ocr.OUTPUT_FORMAT_PLAINTEXT)
+        Assert.assertTrue(s.length == 46 && s.contains("available"))
+
+        ocr.stopEngine()
+    }
+
     companion object {
 
         private const val baseDirName = "J:\\gbdBooks\\The Early Christian Book (CUA Studies in Early Christianity) 3vLeyIIjwGQC\\"
@@ -61,5 +74,7 @@ class GoogleImageTest : GbdTestBase() {
         private val emptyImg = baseDirName + "110_PT110.png"
 
         private const val complexGoodCase = "J:\\gbdBooks\\Castles of Northwest Greece Xc5HAQAAQBAJ\\151_PA132.png"
+
+        private const val invalidImg = "J:\\OneDrive\\113_PA113.png"
     }
 }

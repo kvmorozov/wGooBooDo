@@ -13,7 +13,7 @@ import java.util.regex.Pattern
 
 class ArchiveMetadata private constructor() : ILibraryMetadata {
 
-    val ARCHIVE_PATTERN = Pattern.compile("[a-z]*[0-9][0-9][a-z]*")
+    val ARCHIVE_PATTERN = Pattern.compile("[a-z]*[0-9]*[a-z]*")
 
     override fun isValidId(bookId: String): Boolean {
         return ARCHIVE_PATTERN.matcher(bookId).matches()

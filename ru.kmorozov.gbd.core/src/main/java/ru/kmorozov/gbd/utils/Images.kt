@@ -1,5 +1,6 @@
 package ru.kmorozov.gbd.utils
 
+import com.asprise.ocr.Ocr
 import com.google.common.io.MoreFiles
 import ru.kmorozov.gbd.core.logic.connectors.Response
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
@@ -15,6 +16,16 @@ import javax.imageio.ImageIO
 object Images {
 
     private val logger = ExecutionContext.getLogger(Images::class.java)
+
+    val ocr: Ocr
+
+    init {
+        Ocr.setUp() // one time setup
+
+        ocr = Ocr() // create a new OCR engine
+
+        ocr.startEngine("eng", Ocr.SPEED_FASTEST)
+    }
 
     fun isImageFile(filePath: Path): Boolean {
         if (!Files.isRegularFile(filePath)) return false
@@ -39,16 +50,17 @@ object Images {
         val fileSize = imgfile.length()
 
         when (imgWidth) {
-            1280 -> return if (96183L <= fileSize && 97200L > fileSize) {
+            1280 -> return if (fileSize > 96183L || fileSize < 70000L) {
                 try {
                     val bimg = ImageIO.read(imgfile)
                     1670 == bimg.height
                 } catch (e: IOException) {
                     true
                 }
-
-            } else
-                false
+            } else {
+                val s: String = ocr.recognize(arrayOf(imgfile), Ocr.RECOGNIZE_TYPE_ALL, Ocr.OUTPUT_FORMAT_PLAINTEXT)
+                return s.length < 50 && s.contains("image") && s.contains("not") && s.contains("available")
+            }
             else -> return false
         }
     }
