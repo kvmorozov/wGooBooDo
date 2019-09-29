@@ -17,6 +17,10 @@ object Images {
 
     private val logger = ExecutionContext.getLogger(Images::class.java)
 
+    private final var OCR_SESSION_MAX_COUNT = 100
+
+    var ocrCount = 0;
+
     val ocr: Ocr
 
     init {
@@ -58,11 +62,24 @@ object Images {
                     true
                 }
             } else {
-                val s: String = ocr.recognize(arrayOf(imgfile), Ocr.RECOGNIZE_TYPE_ALL, Ocr.OUTPUT_FORMAT_PLAINTEXT)
+                val s = doOCR(imgfile)
                 return s.length < 50 && s.contains("image") && s.contains("not") && s.contains("available")
             }
             else -> return false
         }
+    }
+
+    @Synchronized
+    private fun doOCR(imgfile: File): String {
+        ocrCount++
+
+        if (ocrCount > OCR_SESSION_MAX_COUNT) {
+            ocr.stopEngine()
+            ocr.startEngine("eng", Ocr.SPEED_FASTEST)
+            ocrCount = 0
+        }
+
+        return ocr.recognize(arrayOf(imgfile), Ocr.RECOGNIZE_TYPE_ALL, Ocr.OUTPUT_FORMAT_PLAINTEXT);
     }
 
     fun isPdfFile(filePath: Path): Boolean {

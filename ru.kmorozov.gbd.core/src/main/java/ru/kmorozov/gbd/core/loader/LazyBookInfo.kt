@@ -29,10 +29,11 @@ class LazyBookInfo : BookInfo {
     override val pages: IPagesInfo
         get() = getOrLoadBookInfo().pages
 
-
     private fun getOrLoadBookInfo(): BookInfo {
         if (!loaded) {
             realBookInfo = LibraryFactory.getMetadata(bookId).getBookInfoExtractor(bookId, EMPTY_CONTEXT_LOADER).bookInfo
+
+            assert(!(realBookInfo is LazyBookInfo))
 
             index.updateBook(realBookInfo)
 
