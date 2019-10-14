@@ -1,7 +1,8 @@
 package ru.kmorozov.gbd.utils
 
-import com.asprise.ocr.Ocr
 import com.google.common.io.MoreFiles
+import net.sourceforge.tess4j.Tesseract
+import net.sourceforge.tess4j.TesseractException
 import ru.kmorozov.gbd.core.logic.connectors.Response
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
 import java.io.File
@@ -17,18 +18,11 @@ object Images {
 
     private val logger = ExecutionContext.getLogger(Images::class.java)
 
-    private final var OCR_SESSION_MAX_COUNT = 100
-
-    var ocrCount = 0;
-
-    val ocr: Ocr
+    val ocr: Tesseract
 
     init {
-        Ocr.setUp() // one time setup
-
-        ocr = Ocr() // create a new OCR engine
-
-        ocr.startEngine("eng", Ocr.SPEED_FASTEST)
+        ocr = Tesseract() // create a new OCR engine
+        ocr.setDatapath("J:\\OCR\\tesseract\\tessdata")
     }
 
     fun isImageFile(filePath: Path): Boolean {
@@ -63,23 +57,21 @@ object Images {
                 }
             } else {
                 val s = doOCR(imgfile)
-                return s.length < 50 && s.contains("image") && s.contains("not") && s.contains("available")
+                return (s.length < 50 && s.contains("not") && s.contains("available")) ||
+                        s.startsWith("<error: failed to read file:")
             }
             else -> return false
         }
     }
 
     @Synchronized
-    private fun doOCR(imgfile: File): String {
-        ocrCount++
-
-        if (ocrCount > OCR_SESSION_MAX_COUNT) {
-            ocr.stopEngine()
-            ocr.startEngine("eng", Ocr.SPEED_FASTEST)
-            ocrCount = 0
+    public fun doOCR(imgfile: File): String {
+        try {
+            return ocr.doOCR(imgfile);
+        } catch (ex: TesseractException) {
+            logger.error(ex.localizedMessage)
+            return ""
         }
-
-        return ocr.recognize(arrayOf(imgfile), Ocr.RECOGNIZE_TYPE_ALL, Ocr.OUTPUT_FORMAT_PLAINTEXT);
     }
 
     fun isPdfFile(filePath: Path): Boolean {

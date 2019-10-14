@@ -59,7 +59,7 @@ class AsyncHttpConnector : HttpConnector() {
         }
 
         try {
-            val resp = builder.execute(AsyncHandler(proxy)).get(HttpConnector.CONNECT_TIMEOUT.toLong(), TimeUnit.MILLISECONDS)
+            val resp = builder.execute(AsyncHandler(proxy)).get(CONNECT_TIMEOUT.toLong(), TimeUnit.MILLISECONDS)
             return AsyncHttpResponse(resp)
         } catch (ex: Exception) {
             return EMPTY_RESPONSE

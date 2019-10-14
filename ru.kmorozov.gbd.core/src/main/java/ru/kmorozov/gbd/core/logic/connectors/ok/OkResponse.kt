@@ -9,15 +9,15 @@ import java.io.InputStream
  */
 class OkResponse internal constructor(private val response: okhttp3.Response) : Response {
     override val statusCode: Int
-        get() = response.code()
+        get() = response.code
 
     override val content: InputStream
-        get() = response.body()!!.byteStream()
+        get() = response.body!!.byteStream()
 
     override val imageFormat: String
-        get() = response.body()!!.contentType()!!.subtype()
+        get() = response.body!!.contentType()!!.subtype
 
     override fun close() {
-        response.body()!!.close()
+        response.body!!.close()
     }
 }

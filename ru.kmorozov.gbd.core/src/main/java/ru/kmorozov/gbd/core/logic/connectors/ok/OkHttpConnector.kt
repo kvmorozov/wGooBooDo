@@ -45,7 +45,7 @@ class OkHttpConnector : HttpConnector() {
             headerItems.add(value.toString())
         }
 
-        val okHeaders = Headers.of(*headerItems.toTypedArray())
+        val okHeaders = Headers.headersOf(*headerItems.toTypedArray())
 
         val request = Builder().url(url).headers(okHeaders).build()
         return getContent(request, proxy, withTimeout, 0)
@@ -62,7 +62,7 @@ class OkHttpConnector : HttpConnector() {
 
         if (0 < attempt)
             try {
-                logger.finest(String.format("Attempt %d with %s url", attempt, request.url().toString()))
+                logger.finest(String.format("Attempt %d with %s url", attempt, request.url.toString()))
                 Thread.sleep((HttpConnector.SLEEP_TIME * attempt).toLong())
             } catch (ignored: InterruptedException) {
             }

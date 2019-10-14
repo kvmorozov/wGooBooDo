@@ -1,6 +1,5 @@
 package ru.kmorozov.gbd.test.core
 
-import com.asprise.ocr.Ocr
 import org.junit.Assert
 import org.junit.Test
 import ru.kmorozov.gbd.core.config.constants.GoogleConstants.DEFAULT_PAGE_WIDTH
@@ -53,16 +52,8 @@ class GoogleImageTest : GbdTestBase() {
 
     @Test
     fun testOcr() {
-        Ocr.setUp() // one time setup
-
-        val ocr = Ocr() // create a new OCR engine
-
-        ocr.startEngine("eng", Ocr.SPEED_FASTEST) // English
-
-        val s: String = ocr.recognize(arrayOf(File(invalidImg)), Ocr.RECOGNIZE_TYPE_ALL, Ocr.OUTPUT_FORMAT_PLAINTEXT)
-        Assert.assertTrue(s.length == 46 && s.contains("available"))
-
-        ocr.stopEngine()
+        val s: String = Images.doOCR(File(invalidImg))
+        Assert.assertTrue(s.contains("available"))
     }
 
     companion object {
@@ -75,6 +66,6 @@ class GoogleImageTest : GbdTestBase() {
 
         private const val complexGoodCase = "J:\\gbdBooks\\Castles of Northwest Greece Xc5HAQAAQBAJ\\151_PA132.png"
 
-        private const val invalidImg = "J:\\OneDrive\\113_PA113.png"
+        private const val invalidImg = "J:\\OneDrive\\6_PA6.png"
     }
 }

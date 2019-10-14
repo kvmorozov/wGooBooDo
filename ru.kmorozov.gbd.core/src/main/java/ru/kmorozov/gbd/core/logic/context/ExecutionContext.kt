@@ -49,7 +49,7 @@ class ExecutionContext private constructor(val output: AbstractOutputReceiver, v
     }
 
     fun getContexts(shuffle: Boolean): List<BookContext> {
-        val contexts = Arrays.asList(*bookContextMap.values.toTypedArray())
+        val contexts = mutableListOf(*bookContextMap.values.toTypedArray())
         if (shuffle) contexts.shuffle()
         return contexts
     }
