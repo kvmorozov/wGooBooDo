@@ -122,6 +122,8 @@ open class LocalFSStorage : IStorage {
                 try {
                     val _page = bookInfo.pages.getPageByPid(nameParts[1]) as AbstractPage
 
+                    _page.storedItem = item
+
                     try {
                         val order = Integer.valueOf(nameParts[0])
 

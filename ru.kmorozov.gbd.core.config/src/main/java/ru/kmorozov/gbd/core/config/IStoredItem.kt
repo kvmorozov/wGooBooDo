@@ -1,10 +1,13 @@
 package ru.kmorozov.gbd.core.config
 
+import ru.kmorozov.gbd.core.logic.model.book.base.IPage
 import java.io.File
 import java.io.IOException
 import java.io.OutputStream
 
 interface IStoredItem {
+
+    val page: IPage
 
     val outputStream: OutputStream?
 

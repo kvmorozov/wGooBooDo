@@ -1,5 +1,7 @@
 package ru.kmorozov.gbd.core.logic.model.book.base
 
+import ru.kmorozov.gbd.core.config.IStoredItem
+
 /**
  * Created by sbt-morozov-kv on 17.11.2016.
  */
@@ -16,6 +18,10 @@ interface IPage : Comparable<IPage> {
     val isFileExists: Boolean
 
     val isLoadingStarted: Boolean
+
+    val isScanned: Boolean
+
+    var storedItem: IStoredItem
 
     override fun compareTo(other: IPage): Int {
         return order.compareTo(other.order)

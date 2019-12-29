@@ -12,7 +12,7 @@ import java.io.IOException
 import java.io.OutputStream
 
 class ServerStoredItem @Throws(IOException::class)
-internal constructor(private val storage: ServerStorage, val page: IPage, imgFormat: String) : IStoredItem {
+internal constructor(private val storage: ServerStorage, override val page: IPage, imgFormat: String) : IStoredItem {
     override val createdNew: Boolean
         get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
 

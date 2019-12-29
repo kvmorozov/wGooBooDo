@@ -20,12 +20,12 @@ import javax.net.ssl.SSLException
  */
 abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcessor, IUniqueRunnable<T> {
     protected val bookContext: BookContext
-    override var uniqueObject: T
+    override var page: T
     protected val usedProxy: HttpHostExt
 
-    protected constructor(bookContext: BookContext, uniqueObject: T, usedProxy: HttpHostExt) : super() {
+    protected constructor(bookContext: BookContext, page: T, usedProxy: HttpHostExt) : super() {
         this.bookContext = bookContext
-        this.uniqueObject = uniqueObject
+        this.page = page
         this.usedProxy = usedProxy
         logger = ExecutionContext.INSTANCE.getLogger(javaClass, bookContext)
     }
@@ -41,7 +41,7 @@ abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcesso
         var inputStream: InputStream? = null
         lateinit var storedItem: IStoredItem
 
-        if (uniqueObject.isLoadingStarted) return false
+        if (page.isLoadingStarted) return false
 
         try {
             getContent(imgUrl, proxy, false).use { resp ->
@@ -66,24 +66,24 @@ abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcesso
                     if (firstChunk) {
                         val imgFormat = Images.getImageFormat(resp)
 
-                        if (uniqueObject.isLoadingStarted) return false
+                        if (page.isLoadingStarted) return false
 
-                        uniqueObject.isLoadingStarted = true
-                        storedItem = bookContext.storage.getStoredItem(uniqueObject, imgFormat)
+                        page.isLoadingStarted = true
+                        storedItem = bookContext.storage.getStoredItem(page, imgFormat)
 
                         reloadFlag = !storedItem.createdNew
                         if (reloadFlag)
                             if (GBDOptions.reloadImages)
                                 storedItem.delete()
                             else {
-                                uniqueObject.isDataProcessed = true
+                                page.isDataProcessed = true
                                 return false
                             }
 
                         if (proxy.isLocal)
-                            logger.info("Started img ${if (reloadFlag) "RELOADING" else "processing"} for ${uniqueObject.pid} without Proxy")
+                            logger.info("Started img ${if (reloadFlag) "RELOADING" else "processing"} for ${page.pid} without Proxy")
                         else
-                            logger.info("Started img ${if (reloadFlag) "RELOADING" else "processing"} for ${uniqueObject.pid} with $proxy Proxy")
+                            logger.info("Started img ${if (reloadFlag) "RELOADING" else "processing"} for ${page.pid} with $proxy Proxy")
                     }
 
                     firstChunk = false
@@ -92,13 +92,14 @@ abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcesso
                 } while (true)
 
                 if (validateOutput(storedItem, imgWidth)) {
-                    uniqueObject.isDataProcessed = true
+                    page.isDataProcessed = true
+                    page.isScanned = true
 
                     proxy.promoteProxy()
 
                     logger.info(successMsg)
-                    uniqueObject.isDataProcessed = true
-                    uniqueObject.isFileExists = true
+                    page.isDataProcessed = true
+                    page.isFileExists = true
 
                     return true
                 } else {
@@ -128,8 +129,8 @@ abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcesso
                 e.printStackTrace()
             }
 
-            if (!uniqueObject.isDataProcessed) {
-                logger.info("Loading page ${uniqueObject.pid} failed!")
+            if (!page.isDataProcessed) {
+                logger.info("Loading page ${page.pid} failed!")
                 try {
                     storedItem.delete()
                 } catch (e: IOException) {
@@ -147,7 +148,7 @@ abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcesso
         return "Page processor:$bookContext"
     }
 
-    protected abstract fun validateOutput(storedItem: IStoredItem?, width: Int): Boolean
+    protected abstract fun validateOutput(storedItem: IStoredItem, width: Int): Boolean
 
     private val dataChunk = 4096
 

@@ -14,19 +14,19 @@ open class SimplePageImgProcessor<T : AbstractPage> : AbstractPageImgProcessor<T
     constructor(bookContext: BookContext, page: T, usedProxy: HttpHostExt) : super(bookContext, page, usedProxy)
 
     protected override val successMsg: String
-        get() = "Finished img processing for ${uniqueObject.pid}"
+        get() = "Finished img processing for ${page.pid}"
 
     override fun getErrorMsg(imgUrl: String, proxy: HttpHostExt): String {
         return "Cannot load data from $imgUrl"
     }
 
     override fun run() {
-        if (uniqueObject.isDataProcessed) return
+        if (page.isDataProcessed) return
 
-        processImage(uniqueObject.imgUrl)
+        processImage(page.imgUrl)
     }
 
-    override fun validateOutput(storedItem: IStoredItem?, width: Int): Boolean {
+    override fun validateOutput(storedItem: IStoredItem, width: Int): Boolean {
         return true
     }
 }

@@ -15,10 +15,10 @@ import ru.kmorozov.gbd.utils.Images
 internal class GooglePageImgProcessor(bookContext: BookContext, page: GooglePageInfo, usedProxy: HttpHostExt) : AbstractPageImgProcessor<GooglePageInfo>(bookContext, page, usedProxy) {
 
     protected override val successMsg: String
-        get() = "Finished img processing for ${uniqueObject.pid}${if (uniqueObject.isGapPage) " with gap" else ""}"
+        get() = "Finished img processing for ${page.pid}${if (page.isGapPage) " with gap" else ""}"
 
     private fun processImageWithProxy(proxy: HttpHostExt): Boolean {
-        return !(!proxy.isLocal && !proxy.isAvailable) && processImage(uniqueObject.getImqRqUrl(bookContext.bookInfo.bookId, HTTPS_IMG_TEMPLATE, imgWidth), proxy)
+        return !(!proxy.isLocal && !proxy.isAvailable) && processImage(page.getImqRqUrl(bookContext.bookInfo.bookId, HTTPS_IMG_TEMPLATE, imgWidth), proxy)
     }
 
     override fun getErrorMsg(imgUrl: String, proxy: HttpHostExt): String {
@@ -26,7 +26,7 @@ internal class GooglePageImgProcessor(bookContext: BookContext, page: GooglePage
     }
 
     override fun run() {
-        if (uniqueObject.isDataProcessed) return
+        if (page.isDataProcessed) return
 
         if (!processImageWithProxy(usedProxy)) {
             // Пробуем скачать страницу с без прокси, если не получилось с той прокси, с помощью которой узнали sig
@@ -41,8 +41,8 @@ internal class GooglePageImgProcessor(bookContext: BookContext, page: GooglePage
         }
     }
 
-    override fun validateOutput(storedItem: IStoredItem?, width: Int): Boolean {
-        return !Images.isInvalidImage(storedItem!!.asFile(), width)
+    override fun validateOutput(storedItem: IStoredItem, width: Int): Boolean {
+        return !Images.isInvalidImage(storedItem.asFile(), width)
     }
 
     companion object {

@@ -32,7 +32,7 @@ class Http2Connector : HttpConnector() {
             val resp: HttpResponse<*>?
             if (validateProxy(rqUrl, proxy)) {
                 val reqBuilder = HttpRequest.newBuilder()
-                        .uri(uri).GET().timeout(Duration.ofMillis((if (withTimeout) HttpConnector.CONNECT_TIMEOUT else HttpConnector.CONNECT_TIMEOUT * 10).toLong()))
+                        .uri(uri).GET().timeout(Duration.ofMillis((if (withTimeout) CONNECT_TIMEOUT else CONNECT_TIMEOUT * 10).toLong()))
 
                 if (needHeaders(rqUrl)) {
                     val headers = proxy.getHeaders(getUrlType(rqUrl))
@@ -57,8 +57,7 @@ class Http2Connector : HttpConnector() {
 
     @Throws(IOException::class)
     private fun getContent(req: HttpRequest, proxy: HttpHostExt, attempt: Int): HttpResponse<*>? {
-        var attempt = attempt
-        if (HttpConnector.MAX_RETRY_COUNT <= attempt) {
+        if (MAX_RETRY_COUNT <= attempt) {
             proxy.registerFailure()
             return null
         }
@@ -66,7 +65,7 @@ class Http2Connector : HttpConnector() {
         if (1 < attempt)
             try {
                 logger.finest(String.format("Attempt %d with %s url", attempt, req.uri().toString()))
-                Thread.sleep((HttpConnector.SLEEP_TIME * attempt).toLong())
+                Thread.sleep((SLEEP_TIME * attempt).toLong())
             } catch (ignored: InterruptedException) {
             }
 
@@ -74,10 +73,10 @@ class Http2Connector : HttpConnector() {
             return DEFAULT_CLIENT.send(req, HttpResponse.BodyHandlers.ofByteArray())
         } catch (ste1: SocketTimeoutException) {
             proxy.registerFailure()
-            return getContent(req, proxy, ++attempt)
+            return getContent(req, proxy, attempt + 1)
         } catch (ste1: InterruptedException) {
             proxy.registerFailure()
-            return getContent(req, proxy, ++attempt)
+            return getContent(req, proxy, attempt + 1)
         }
 
     }

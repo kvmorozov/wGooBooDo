@@ -60,10 +60,10 @@ class BookContext {
         get() = started.get()
 
     val pagesStream: Stream<IPage>
-        get() = Arrays.stream(bookInfo.pages.pages)
+        get() = Arrays.stream(bookInfo.pages.pages).sorted()
 
     fun getPostProcessor(): Runnable {
-        postProcessor.uniqueObject = this
+        postProcessor.page = this
         return postProcessor
     }
 

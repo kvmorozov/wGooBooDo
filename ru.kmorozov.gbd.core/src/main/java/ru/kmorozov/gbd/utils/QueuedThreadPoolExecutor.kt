@@ -25,8 +25,8 @@ class QueuedThreadPoolExecutor<T : Any> : ThreadPoolExecutor {
         setRejectedExecutionHandler { r, _ ->
             try {
                 if (r is IUniqueRunnable<*>) {
-                    synchronized((r as IUniqueRunnable<T>).uniqueObject as Any) {
-                        if (!completeChecker.invoke(r.uniqueObject)) queue.put(r)
+                    synchronized((r as IUniqueRunnable<T>).page as Any) {
+                        if (!completeChecker.invoke(r.page)) queue.put(r)
                     }
                 }
             } catch (e: InterruptedException) {
@@ -72,7 +72,7 @@ class QueuedThreadPoolExecutor<T : Any> : ThreadPoolExecutor {
 
     override fun execute(command: Runnable) {
         if (command is IUniqueRunnable<*>) {
-            val uniqueObj = (command as IUniqueRunnable<T>).uniqueObject
+            val uniqueObj = (command as IUniqueRunnable<T>).page
             synchronized(uniqueObj) {
                 if (null == uniqueMap.putIfAbsent(uniqueObj, command)) super.execute(command)
             }

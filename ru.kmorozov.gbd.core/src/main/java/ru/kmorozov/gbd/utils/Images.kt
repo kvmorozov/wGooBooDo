@@ -2,7 +2,7 @@ package ru.kmorozov.gbd.utils
 
 import com.google.common.io.MoreFiles
 import net.sourceforge.tess4j.Tesseract
-import net.sourceforge.tess4j.TesseractException
+import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.logic.connectors.Response
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
 import java.io.File
@@ -57,8 +57,8 @@ object Images {
                 }
             } else {
                 val s = doOCR(imgfile)
-                return (s.length < 50 && s.contains("not") && s.contains("available")) ||
-                        s.startsWith("<error: failed to read file:")
+                return (s.length < 50 && (s.contains("image")
+                        || s.contains("not") || s.contains("available") || s.lines().size == 4))
             }
             else -> return false
         }
@@ -66,9 +66,12 @@ object Images {
 
     @Synchronized
     public fun doOCR(imgfile: File): String {
+        if (!GBDOptions.scanEnabled)
+            return ""
+
         try {
             return ocr.doOCR(imgfile);
-        } catch (ex: TesseractException) {
+        } catch (ex: Exception) {
             logger.error(ex.localizedMessage)
             return ""
         }

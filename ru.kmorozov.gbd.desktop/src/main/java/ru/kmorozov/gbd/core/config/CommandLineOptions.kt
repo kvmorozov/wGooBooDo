@@ -79,6 +79,12 @@ class CommandLineOptions(commandLineArguments: Array<String>) : IGBDOptions {
         option.argName = "Pdf mode "
         options.addOption(option)
 
+        option = Option(OPTION_SCAN_MODE_SHORT, OPTION_SCAN_MODE_LONG, true, "Scan mode")
+        option.args = 0
+        option.setOptionalArg(true)
+        option.argName = "Scan mode "
+        options.addOption(option)
+
         option = Option(OPTION_CTX_MODE_SHORT, OPTION_CTX_MODE_LONG, true, "CTX mode")
         option.args = 2
         option.setOptionalArg(true)
@@ -125,6 +131,9 @@ class CommandLineOptions(commandLineArguments: Array<String>) : IGBDOptions {
     override val debugEnabled: Boolean
         get() = getBoolOptionValue(OPTION_DEBUG_MODE_SHORT)
 
+    override val scanEnabled: Boolean
+        get() = getBoolOptionValue(OPTION_SCAN_MODE_SHORT)
+
     override fun pdfOptions(): String {
         return getStringOptionValue(OPTION_PDF_MODE_SHORT)
     }
@@ -161,5 +170,7 @@ class CommandLineOptions(commandLineArguments: Array<String>) : IGBDOptions {
         private const val OPTION_AUTH_MODE_LONG = "auth"
         private const val OPTION_DEBUG_MODE_SHORT = "d"
         private const val OPTION_DEBUG_MODE_LONG = "debug"
+        private const val OPTION_SCAN_MODE_SHORT = "S"
+        private const val OPTION_SCAN_MODE_LONG = "Scan"
     }
 }

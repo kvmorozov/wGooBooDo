@@ -27,10 +27,10 @@ import javax.imageio.ImageIO
  */
 class PdfMaker : IPostProcessor {
 
-    override lateinit var uniqueObject: BookContext
+    override lateinit var page: BookContext
 
     constructor(uniqueObject: BookContext) {
-        this.uniqueObject = uniqueObject
+        this.page = uniqueObject
     }
 
     constructor()
@@ -39,19 +39,19 @@ class PdfMaker : IPostProcessor {
         if (PdfOptions.SKIP === GBDOptions.pdfOptions)
             return
 
-        if (!uniqueObject.pdfCompleted.compareAndSet(false, true)) return
+        if (!page.pdfCompleted.compareAndSet(false, true)) return
 
-        val logger = ExecutionContext.INSTANCE.getLogger(PdfMaker::class.java, uniqueObject)
+        val logger = ExecutionContext.INSTANCE.getLogger(PdfMaker::class.java, page)
         logger.info("Starting making pdf file...")
 
         var existPages = 0L
-        val bookInfo = uniqueObject.bookInfo
+        val bookInfo = page.bookInfo
 
-        val pdfFile = (uniqueObject.storage as LocalFSStorage).getOrCreatePdf(bookInfo.bookData.title)
+        val pdfFile = (page.storage as LocalFSStorage).getOrCreatePdf(bookInfo.bookData.title)
 
         try {
             if (pdfFile.lastModified() < bookInfo.lastPdfChecked)
-                existPages = uniqueObject.pagesBefore
+                existPages = page.pagesBefore
             else
                 try {
                     PDDocument.load(pdfFile).use { existDocument -> existPages = existDocument.numberOfPages.toLong() }
@@ -64,7 +64,7 @@ class PdfMaker : IPostProcessor {
         }
 
         try {
-            val imgCount = (uniqueObject.storage as LocalFSStorage).imgCount()
+            val imgCount = (page.storage as LocalFSStorage).imgCount()
             if (imgCount <= existPages) {
                 logger.finest("No new pages, exiting...")
                 bookInfo.lastPdfChecked = System.currentTimeMillis()
@@ -84,10 +84,10 @@ class PdfMaker : IPostProcessor {
                 documentInfo.producer = GBDConstants.GBD_APP_NAME;
                 document.documentInformation = documentInfo;
 
-                (uniqueObject.storage as LocalFSStorage).items.sorted(Comparator.comparing<IStoredItem, Int> { it.pageNum }).forEach { item ->
+                (page.storage as LocalFSStorage).items.sorted(Comparator.comparing<IStoredItem, Int> { it.pageNum }).forEach { item ->
                     try {
                         FileInputStream(item.asFile()).use { fis ->
-                            if (!Images.isInvalidImage(item.asFile(), imgWidth)) {
+                            if (/*item.page.isScanned || */!Images.isInvalidImage(item.asFile(), imgWidth)) {
                                 val bimg = ImageIO.read(fis)
 
                                 if (null == bimg) {
@@ -135,6 +135,6 @@ class PdfMaker : IPostProcessor {
     }
 
     override fun toString(): String {
-        return "Pdf maker:$uniqueObject"
+        return "Pdf maker:$page"
     }
 }

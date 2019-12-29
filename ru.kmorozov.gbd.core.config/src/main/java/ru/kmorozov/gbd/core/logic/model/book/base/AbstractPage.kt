@@ -1,5 +1,6 @@
 package ru.kmorozov.gbd.core.logic.model.book.base
 
+import ru.kmorozov.gbd.core.config.IStoredItem
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -11,6 +12,7 @@ abstract class AbstractPage : IPage {
     private val dataProcessed = AtomicBoolean(false)
     private val fileExists = AtomicBoolean(false)
     private val loadingStarted = AtomicBoolean(false)
+    private val scanned = AtomicBoolean(false)
 
     override var isDataProcessed: Boolean
         get() = dataProcessed.get()
@@ -28,6 +30,10 @@ abstract class AbstractPage : IPage {
         get() = loadingStarted.get()
         set(value) = loadingStarted.set(value)
 
+    override var isScanned: Boolean
+        get() = scanned.get()
+        set(value) = scanned.set(value)
+
     val isProcessed: Boolean
         get() = isDataProcessed || sigChecked.get() || isFileExists
 
@@ -38,4 +44,6 @@ abstract class AbstractPage : IPage {
 
     val isGapPage: Boolean
         get() = false
+
+    override lateinit var storedItem: IStoredItem
 }

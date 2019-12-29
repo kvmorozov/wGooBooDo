@@ -11,7 +11,6 @@ import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
 import ru.kmorozov.gbd.core.logic.connectors.Response
 import ru.kmorozov.gbd.core.logic.connectors.Response.Companion.EMPTY_RESPONSE
 import ru.kmorozov.gbd.logger.Logger
-import java.io.IOException
 import java.net.SocketTimeoutException
 import java.net.URI
 import java.util.concurrent.ConcurrentHashMap
@@ -36,7 +35,7 @@ class GoogleHttpConnector : HttpConnector() {
             val resp: Response
             if (validateProxy(rqUrl, proxy)) {
                 val req = getFactory(proxy).buildGetRequest(url)
-                        .setConnectTimeout(if (withTimeout) HttpConnector.CONNECT_TIMEOUT else HttpConnector.CONNECT_TIMEOUT * 10)
+                        .setConnectTimeout(if (withTimeout) CONNECT_TIMEOUT else CONNECT_TIMEOUT * 10)
                         .setSuppressUserAgentSuffix(true)
                 if (needHeaders(rqUrl))
                     req.headers = proxy.getHeaders(getUrlType(rqUrl))
@@ -52,23 +51,23 @@ class GoogleHttpConnector : HttpConnector() {
 
             return resp
         } catch (hre: HttpResponseException) {
-            logger.severe("Connection error: ${hre.statusMessage}")
+            if (hre.statusCode != 404)
+                logger.severe("Connection error: ${hre.statusMessage}")
             return EMPTY_RESPONSE
         }
 
     }
 
     private fun getContent(req: HttpRequest, proxy: HttpHostExt, attempt: Int): Response {
-        var _attempt = attempt
-        if (HttpConnector.MAX_RETRY_COUNT <= _attempt) {
+        if (MAX_RETRY_COUNT <= attempt) {
             proxy.registerFailure()
             return EMPTY_RESPONSE
         }
 
-        if (1 < _attempt)
+        if (1 < attempt)
             try {
                 logger.finest(String.format("Attempt %d with %s url", attempt, req.url.toString()))
-                Thread.sleep((HttpConnector.SLEEP_TIME * attempt).toLong())
+                Thread.sleep((SLEEP_TIME * attempt).toLong())
             } catch (ignored: InterruptedException) {
             }
 
@@ -76,7 +75,7 @@ class GoogleHttpConnector : HttpConnector() {
             return GoogleResponse(req.execute())
         } catch (ste1: SocketTimeoutException) {
             proxy.registerFailure()
-            return getContent(req, proxy, ++_attempt)
+            return getContent(req, proxy, attempt + 1)
         }
 
     }

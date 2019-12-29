@@ -43,6 +43,9 @@ object GBDOptions {
     val debugEnabled: Boolean
         get() = INSTANCE.debugEnabled
 
+    val scanEnabled: Boolean
+        get() = INSTANCE.scanEnabled
+
     val pdfOptions: PdfOptions
         get() = if (StringUtils.isEmpty(INSTANCE.pdfOptions())) PdfOptions.DEFAULT_MODE else PdfOptions.getOption(INSTANCE.pdfOptions())
 

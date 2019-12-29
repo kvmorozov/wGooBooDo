@@ -17,10 +17,10 @@ import java.util.concurrent.TimeUnit
  */
 abstract class AbstractImageExtractor<T : AbstractPage> : AbstractEventSource, IUniqueRunnable<BookContext>, IImageExtractor {
 
-    override var uniqueObject: BookContext
+    override var page: BookContext
 
     protected constructor(uniqueObject: BookContext, extractorClass: Class<out AbstractImageExtractor<T>>) : super() {
-        this.uniqueObject = uniqueObject
+        this.page = uniqueObject
         processStatus = uniqueObject.progress
         logger = ExecutionContext.INSTANCE.getLogger(extractorClass, uniqueObject)
         this.output = ExecutionContext.INSTANCE.output
@@ -30,16 +30,16 @@ abstract class AbstractImageExtractor<T : AbstractPage> : AbstractEventSource, I
     protected val logger: Logger
 
     override fun toString(): String {
-        return "Extractor:$uniqueObject"
+        return "Extractor:$page"
     }
 
     open fun process() {
-        if (!uniqueObject.started.compareAndSet(false, true)) return
+        if (!page.started.compareAndSet(false, true)) return
 
         if (!preCheck()) return
 
         prepareStorage()
-        uniqueObject.restoreState()
+        page.restoreState()
     }
 
     protected open fun preCheck(): Boolean {
@@ -53,17 +53,17 @@ abstract class AbstractImageExtractor<T : AbstractPage> : AbstractEventSource, I
     protected open fun prepareStorage() {
         if (!GBDOptions.storage.isValidOrCreate) return
 
-        logger.info(if (ExecutionContext.INSTANCE.isSingleMode) "Working with ${uniqueObject.bookInfo.bookData.title}" else "Starting...")
+        logger.info(if (ExecutionContext.INSTANCE.isSingleMode) "Working with ${page.bookInfo.bookData.title}" else "Starting...")
 
         try {
-            uniqueObject.storage = GBDOptions.storage.getChildStorage(uniqueObject.bookInfo.bookData)
-            uniqueObject.progress.resetMaxValue(uniqueObject.storage.size())
+            page.storage = GBDOptions.storage.getChildStorage(page.bookInfo.bookData)
+            page.progress.resetMaxValue(page.storage.size())
         } catch (e: IOException) {
             logger.error(e)
         }
 
-        if (!uniqueObject.storage.isValidOrCreate)
-            logger.severe("Invalid book title: ${uniqueObject.bookInfo.bookData.title}")
+        if (!page.storage.isValidOrCreate)
+            logger.severe("Invalid book title: ${page.bookInfo.bookData.title}")
     }
 
     override fun newProxyEvent(proxy: HttpHostExt) {
@@ -75,21 +75,21 @@ abstract class AbstractImageExtractor<T : AbstractPage> : AbstractEventSource, I
     protected inner class EventProcessor internal constructor(private val proxy: HttpHostExt) : Runnable {
 
         override fun run() {
-            for (page in uniqueObject.bookInfo.pages.pages)
-                uniqueObject.imgExecutor.execute(SimplePageImgProcessor(uniqueObject, page as T, HttpHostExt.NO_PROXY))
+            for (page in page.bookInfo.pages.pages)
+                this@AbstractImageExtractor.page.imgExecutor.execute(SimplePageImgProcessor(this@AbstractImageExtractor.page, page as T, HttpHostExt.NO_PROXY))
 
-            uniqueObject.imgExecutor.terminate(20L, TimeUnit.MINUTES)
+            page.imgExecutor.terminate(20L, TimeUnit.MINUTES)
 
             ExecutionContext.INSTANCE.updateProxyList()
 
-            logger.info(uniqueObject.bookInfo.pages.missingPagesList)
+            logger.info(page.bookInfo.pages.missingPagesList)
 
-            val pagesAfter = uniqueObject.pagesStream.filter { pageInfo -> pageInfo.isDataProcessed }.count()
+            val pagesAfter = page.pagesStream.filter { pageInfo -> pageInfo.isDataProcessed }.count()
 
-            logger.info("Processed ${pagesAfter - uniqueObject.pagesBefore} pages")
+            logger.info("Processed ${pagesAfter - page.pagesBefore} pages")
 
-            synchronized(uniqueObject) {
-                ExecutionContext.INSTANCE.postProcessBook(uniqueObject)
+            synchronized(page) {
+                ExecutionContext.INSTANCE.postProcessBook(page)
             }
         }
     }

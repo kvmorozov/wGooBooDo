@@ -21,6 +21,9 @@ interface IGBDOptions {
 
     val reloadImages: Boolean
 
+    val scanEnabled: Boolean
+        get() = false
+
     val secureMode: Boolean
 
     fun pdfOptions(): String

@@ -3,6 +3,7 @@ package ru.kmorozov.db.core.logic.model.book.google
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import org.apache.commons.lang3.StringUtils
+import ru.kmorozov.gbd.core.config.IStoredItem
 import ru.kmorozov.gbd.core.config.constants.GoogleConstants.BOOK_ID_PLACEHOLDER
 import ru.kmorozov.gbd.core.config.constants.GoogleConstants.IMG_REQUEST_TEMPLATE
 import ru.kmorozov.gbd.core.config.constants.GoogleConstants.RQ_PG_PLACEHOLDER

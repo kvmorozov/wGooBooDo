@@ -29,10 +29,10 @@ class GoogleImageExtractor(bookContext: BookContext) : AbstractImageExtractor<Go
     private var waitingProxy: MutableList<HttpHostExt> = CopyOnWriteArrayList()
 
     override fun preCheck(): Boolean {
-        if (uniqueObject.bookInfo.empty || uniqueObject.bookInfo.pages.pages.size == 0)
-            uniqueObject.bookInfo = GoogleBookInfoExtractor(uniqueObject.bookInfo.bookId).findBookInfo()
+        if (page.bookInfo.empty || page.bookInfo.pages.pages.size == 0)
+            page.bookInfo = GoogleBookInfoExtractor(page.bookInfo.bookId).findBookInfo()
 
-        if (!Strings.isNullOrEmpty((uniqueObject.bookInfo.bookData as GoogleBookData).flags!!.downloadPdfUrl)) {
+        if (!Strings.isNullOrEmpty((page.bookInfo.bookData as GoogleBookData).flags!!.downloadPdfUrl)) {
             logger.severe("There is direct url to download book. DIY!")
             return false
         } else
@@ -41,7 +41,7 @@ class GoogleImageExtractor(bookContext: BookContext) : AbstractImageExtractor<Go
 
     override fun prepareStorage() {
         super.prepareStorage()
-        uniqueObject.bookInfo.pages.build()
+        page.bookInfo.pages.build()
     }
 
     override fun newProxyEvent(proxy: HttpHostExt) {
@@ -68,27 +68,30 @@ class GoogleImageExtractor(bookContext: BookContext) : AbstractImageExtractor<Go
                 return
             }
 
-            if (proxy.isAvailable) uniqueObject.sigExecutor.execute(GooglePageSigProcessor(uniqueObject, proxy))
+            if (proxy.isAvailable) page.sigExecutor.execute(GooglePageSigProcessor(page, proxy))
 
             val proxyNeeded = ExecutionContext.proxyCount - proxyReceived.incrementAndGet()
 
             if (0 >= proxyNeeded) {
                 if (!processingStarted.compareAndSet(false, true)) return
 
-                uniqueObject.sigExecutor.terminate(10L, TimeUnit.MINUTES)
+                page.sigExecutor.terminate(10L, TimeUnit.MINUTES)
 
-                uniqueObject.pagesStream.filter { page -> !page.isDataProcessed && null != (page as GooglePageInfo).sig }.forEach { page -> uniqueObject.imgExecutor.execute(GooglePageImgProcessor(uniqueObject, page as GooglePageInfo, HttpHostExt.NO_PROXY)) }
+                page.pagesStream
+                        .filter { page -> !page.isDataProcessed && null != (page as GooglePageInfo).sig }
+                        .sorted(Comparator {p1, p2 -> p2.order - p1.order})
+                        .forEach { page -> this@GoogleImageExtractor.page.imgExecutor.execute(GooglePageImgProcessor(this@GoogleImageExtractor.page, page as GooglePageInfo, HttpHostExt.NO_PROXY)) }
 
-                uniqueObject.imgExecutor.terminate(10L, TimeUnit.MINUTES)
+                page.imgExecutor.terminate(10L, TimeUnit.MINUTES)
 
-                logger.info(uniqueObject.bookInfo.pages.missingPagesList)
+                logger.info(page.bookInfo.pages.missingPagesList)
 
-                val pagesAfter = uniqueObject.pagesStream.filter { pageInfo -> pageInfo.isDataProcessed }.count()
+                val pagesAfter = page.pagesStream.filter { pageInfo -> pageInfo.isDataProcessed }.count()
 
-                uniqueObject.pagesProcessed = pagesAfter - uniqueObject.pagesBefore
-                logger.info("Processed ${uniqueObject.pagesProcessed} pages")
+                page.pagesProcessed = pagesAfter - page.pagesBefore
+                logger.info("Processed ${page.pagesProcessed} pages")
 
-                ExecutionContext.INSTANCE.postProcessBook(uniqueObject)
+                ExecutionContext.INSTANCE.postProcessBook(page)
             }
         }
     }
