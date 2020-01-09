@@ -83,7 +83,7 @@ abstract class AbstractBookInfoExtractor : AbstractHttpProcessor {
             e.printStackTrace()
         }
 
-        return BookInfo.EMPTY_BOOK
+        return EMPTY_BOOK
     }
 
     protected abstract fun extractBookInfo(doc: Document?): BookInfo

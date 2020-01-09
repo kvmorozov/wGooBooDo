@@ -51,6 +51,7 @@ class GoogleImageExtractor(bookContext: BookContext) : AbstractImageExtractor<Go
     override fun process() {
         super.process()
 
+        page.restoreState()
         initComplete.set(true)
     }
 

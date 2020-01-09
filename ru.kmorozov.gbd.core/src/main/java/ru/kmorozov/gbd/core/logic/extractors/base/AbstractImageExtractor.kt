@@ -39,7 +39,6 @@ abstract class AbstractImageExtractor<T : AbstractPage> : AbstractEventSource, I
         if (!preCheck()) return
 
         prepareStorage()
-        page.restoreState()
     }
 
     protected open fun preCheck(): Boolean {
