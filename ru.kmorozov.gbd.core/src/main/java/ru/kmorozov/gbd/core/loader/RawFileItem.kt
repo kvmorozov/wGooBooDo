@@ -52,7 +52,8 @@ open class RawFileItem : IStoredItem {
 
     @Throws(IOException::class)
     override fun close() {
-        outputStream.close()
+        if (totalLen > 0)
+            outputStream.close()
     }
 
     @Throws(IOException::class)
