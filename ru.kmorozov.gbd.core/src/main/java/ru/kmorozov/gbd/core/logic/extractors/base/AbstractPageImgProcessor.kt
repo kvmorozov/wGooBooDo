@@ -2,7 +2,6 @@ package ru.kmorozov.gbd.core.logic.extractors.base
 
 import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.config.IStoredItem
-import ru.kmorozov.gbd.core.config.constants.GoogleConstants.DEFAULT_PAGE_WIDTH
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.context.BookContext
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
@@ -91,7 +90,9 @@ abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcesso
                     storedItem.write(bytes, read)
                 } while (true)
 
-                if (validateOutput(storedItem, imgWidth)) {
+                storedItem.flush()
+
+                if (storedItem.validate()) {
                     page.isDataProcessed = true
                     page.isScanned = true
 
@@ -148,10 +149,5 @@ abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcesso
         return "Page processor:$bookContext"
     }
 
-    protected abstract fun validateOutput(storedItem: IStoredItem, width: Int): Boolean
-
     private val dataChunk = 4096
-
-    protected val imgWidth: Int
-        get() = if (0 == GBDOptions.imageWidth) DEFAULT_PAGE_WIDTH else GBDOptions.imageWidth
 }

@@ -23,7 +23,13 @@ interface IStoredItem {
     @Throws(IOException::class)
     fun write(bytes: ByteArray, len: Int)
 
+    fun flush()
+
     fun asFile(): File
+
+    fun isImage(): Boolean
+
+    fun validate(): Boolean
 
     val createdNew: Boolean
 

@@ -52,7 +52,19 @@ internal constructor(private val storage: ServerStorage, override val page: IPag
         localItem.write(bytes, len)
     }
 
+    override fun flush() {
+
+    }
+
     override fun asFile(): File {
         return localItem.asFile()
+    }
+
+    override fun isImage(): Boolean {
+        return true
+    }
+
+    override fun validate(): Boolean {
+        return true
     }
 }

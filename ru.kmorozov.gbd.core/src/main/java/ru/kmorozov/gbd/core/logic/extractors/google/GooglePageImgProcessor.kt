@@ -1,13 +1,13 @@
 package ru.kmorozov.gbd.core.logic.extractors.google
 
 import ru.kmorozov.db.core.logic.model.book.google.GooglePageInfo
-import ru.kmorozov.gbd.core.config.IStoredItem
+import ru.kmorozov.gbd.core.config.GBDOptions
+import ru.kmorozov.gbd.core.config.constants.GoogleConstants
 import ru.kmorozov.gbd.core.config.constants.GoogleConstants.HTTPS_IMG_TEMPLATE
 import ru.kmorozov.gbd.core.logic.Proxy.AbstractProxyListProvider
 import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.context.BookContext
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractPageImgProcessor
-import ru.kmorozov.gbd.utils.Images
 
 /**
  * Created by km on 21.11.2015.
@@ -18,7 +18,9 @@ internal class GooglePageImgProcessor(bookContext: BookContext, page: GooglePage
         get() = "Finished img processing for ${page.pid}${if (page.isGapPage) " with gap" else ""}"
 
     private fun processImageWithProxy(proxy: HttpHostExt): Boolean {
-        return !(!proxy.isLocal && !proxy.isAvailable) && processImage(page.getImqRqUrl(bookContext.bookInfo.bookId, HTTPS_IMG_TEMPLATE, imgWidth), proxy)
+        return !(!proxy.isLocal && !proxy.isAvailable) &&
+                processImage(page.getImqRqUrl(bookContext.bookInfo.bookId, HTTPS_IMG_TEMPLATE,
+                        if (0 == GBDOptions.imageWidth) GoogleConstants.DEFAULT_PAGE_WIDTH else GBDOptions.imageWidth), proxy)
     }
 
     override fun getErrorMsg(imgUrl: String, proxy: HttpHostExt): String {
@@ -39,10 +41,6 @@ internal class GooglePageImgProcessor(bookContext: BookContext, page: GooglePage
                             }
                     }
         }
-    }
-
-    override fun validateOutput(storedItem: IStoredItem, width: Int): Boolean {
-        return !Images.isInvalidImage(storedItem.asFile(), width)
     }
 
     companion object {

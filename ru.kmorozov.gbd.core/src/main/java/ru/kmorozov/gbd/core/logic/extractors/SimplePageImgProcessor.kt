@@ -25,8 +25,4 @@ open class SimplePageImgProcessor<T : AbstractPage> : AbstractPageImgProcessor<T
 
         processImage(page.imgUrl)
     }
-
-    override fun validateOutput(storedItem: IStoredItem, width: Int): Boolean {
-        return true
-    }
 }

@@ -4,7 +4,7 @@ import ru.kmorozov.gbd.core.logic.model.book.base.IPage
 
 import java.io.File
 
-open class LocalFSStoredItem : RawFileItem {
+open class LocalFSStoredItem : ImageItem {
 
     protected val storage: LocalFSStorage
     override val page: IPage

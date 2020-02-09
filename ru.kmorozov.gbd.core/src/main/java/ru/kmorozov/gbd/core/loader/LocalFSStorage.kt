@@ -59,7 +59,7 @@ open class LocalFSStorage : IStorage {
         @Throws(IOException::class)
         get() = Files.walk(storageDir.toPath())
                 .filter { !it.toFile().isDirectory }.filter({ Images.isImageFile(it) })
-                .map { RawFileItem(it) }
+                .map { ImageItem(it.toFile()) }
 
     override fun getChildStorage(bookData: IBookData): IStorage {
         try {
@@ -115,7 +115,7 @@ open class LocalFSStorage : IStorage {
         items.forEach { item ->
             val filePath = item.asFile().toPath()
 
-            if (Images.isImageFile(filePath)) {
+            if (item.isImage()) {
                 val fileName = filePath.fileName.toString()
                 val nameParts = fileName.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0].split("_".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 

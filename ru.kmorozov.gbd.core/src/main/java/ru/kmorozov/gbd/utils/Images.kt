@@ -28,7 +28,7 @@ object Images {
     fun isImageFile(filePath: Path): Boolean {
         if (!Files.isRegularFile(filePath)) return false
 
-        val ext = MoreFiles.getFileExtension(filePath).toLowerCase()
+        val ext = getImageFormat(filePath)
 
         when (ext) {
             "png", "jpg", "jpeg" -> return true
@@ -38,6 +38,10 @@ object Images {
                 return false
             }
         }
+    }
+
+    fun getImageFormat(filePath: Path) : String {
+        return MoreFiles.getFileExtension(filePath).toLowerCase()
     }
 
     fun isInvalidImage(filePath: Path, imgWidth: Int): Boolean {

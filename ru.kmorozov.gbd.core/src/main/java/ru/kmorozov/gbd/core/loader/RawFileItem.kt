@@ -2,6 +2,7 @@ package ru.kmorozov.gbd.core.loader
 
 import ru.kmorozov.gbd.core.config.IStoredItem
 import ru.kmorozov.gbd.core.logic.model.book.base.IPage
+import ru.kmorozov.gbd.utils.Images
 
 import java.io.File
 import java.io.FileOutputStream
@@ -60,16 +61,36 @@ open class RawFileItem : IStoredItem {
     override fun write(bytes: ByteArray, len: Int) {
         try {
             if (totalLen == 0)
-                outputStream = FileOutputStream(outputFile)
+                init()
 
-            outputStream.write(bytes, 0, len)
+            writeInternal(bytes, len)
             totalLen += len
         } catch (ex: IOException) {
             ex.printStackTrace()
         }
     }
 
+    open fun init() {
+        outputStream = FileOutputStream(outputFile)
+    }
+
+    fun writeInternal(bytes: ByteArray, len: Int) {
+        outputStream.write(bytes, 0, len)
+    }
+
+    override fun flush() {
+
+    }
+
     override fun asFile(): File {
         return outputFile
+    }
+
+    override fun isImage(): Boolean {
+        return Images.isImageFile(outputFile.toPath())
+    }
+
+    override fun validate(): Boolean {
+        return outputFile.exists()
     }
 }
