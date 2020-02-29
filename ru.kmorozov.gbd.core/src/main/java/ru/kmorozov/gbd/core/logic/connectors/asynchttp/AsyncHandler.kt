@@ -3,7 +3,7 @@ package ru.kmorozov.gbd.core.logic.connectors.asynchttp
 import io.netty.handler.timeout.TimeoutException
 import org.asynchttpclient.AsyncCompletionHandlerBase
 import org.asynchttpclient.HttpResponseStatus
-import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt
+import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 
 import java.net.ConnectException
 

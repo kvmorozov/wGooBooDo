@@ -1,6 +1,6 @@
 package ru.kmorozov.gbd.client
 
-import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt
+import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractHttpProcessor
 import ru.kmorozov.gbd.logger.Logger
 import java.io.IOException
@@ -8,7 +8,6 @@ import java.net.InetSocketAddress
 import java.net.Socket
 import java.net.SocketException
 import java.net.URL
-import java.nio.charset.Charset
 import javax.net.ssl.SSLException
 
 /**

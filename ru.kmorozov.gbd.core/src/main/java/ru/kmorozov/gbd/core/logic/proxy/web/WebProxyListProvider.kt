@@ -1,7 +1,7 @@
-package ru.kmorozov.gbd.core.logic.Proxy.web
+package ru.kmorozov.gbd.core.logic.proxy.web
 
-import ru.kmorozov.gbd.core.logic.Proxy.AbstractProxyListProvider
-import ru.kmorozov.gbd.core.logic.Proxy.ProxyBlacklistHolder
+import ru.kmorozov.gbd.core.logic.proxy.AbstractProxyListProvider
+import ru.kmorozov.gbd.core.logic.proxy.ProxyBlacklistHolder
 import java.util.stream.Collectors
 
 /**

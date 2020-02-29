@@ -1,4 +1,4 @@
-package ru.kmorozov.gbd.core.logic.Proxy.web
+package ru.kmorozov.gbd.core.logic.proxy.web
 
 import com.google.api.client.util.Strings
 import org.apache.commons.lang3.StringUtils

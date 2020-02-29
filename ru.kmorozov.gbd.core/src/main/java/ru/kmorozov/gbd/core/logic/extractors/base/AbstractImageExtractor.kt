@@ -1,7 +1,7 @@
 package ru.kmorozov.gbd.core.logic.extractors.base
 
 import ru.kmorozov.gbd.core.config.GBDOptions
-import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt
+import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.context.BookContext
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
 import ru.kmorozov.gbd.core.logic.extractors.SimplePageImgProcessor

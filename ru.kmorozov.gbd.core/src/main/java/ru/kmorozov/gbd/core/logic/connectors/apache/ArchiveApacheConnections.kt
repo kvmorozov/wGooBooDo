@@ -10,7 +10,7 @@ import org.apache.hc.core5.http.message.BasicHeader
 import org.apache.hc.core5.http.message.BasicNameValuePair
 import ru.kmorozov.db.utils.Mapper
 import ru.kmorozov.gbd.core.config.GBDOptions
-import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt
+import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.logger.Logger
 import kotlin.system.exitProcess
 

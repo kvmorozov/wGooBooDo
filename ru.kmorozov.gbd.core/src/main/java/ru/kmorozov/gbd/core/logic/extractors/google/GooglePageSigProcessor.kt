@@ -13,7 +13,7 @@ import ru.kmorozov.gbd.core.config.constants.GoogleConstants.BOOK_ID_PLACEHOLDER
 import ru.kmorozov.gbd.core.config.constants.GoogleConstants.HTTPS_TEMPLATE
 import ru.kmorozov.gbd.core.config.constants.GoogleConstants.PAGES_REQUEST_TEMPLATE
 import ru.kmorozov.gbd.core.config.constants.GoogleConstants.RQ_PG_PLACEHOLDER
-import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt
+import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.connectors.Response
 import ru.kmorozov.gbd.core.logic.context.BookContext
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext

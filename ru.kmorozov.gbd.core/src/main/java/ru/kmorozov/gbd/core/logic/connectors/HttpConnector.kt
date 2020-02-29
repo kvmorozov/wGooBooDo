@@ -1,12 +1,11 @@
 package ru.kmorozov.gbd.core.logic.connectors
 
-import com.google.api.client.http.HttpHeaders
 import org.apache.commons.lang3.StringUtils
 import org.jsoup.nodes.Document
 import org.jsoup.parser.Parser
 import ru.kmorozov.db.utils.Mapper
-import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt
-import ru.kmorozov.gbd.core.logic.Proxy.UrlType
+import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
+import ru.kmorozov.gbd.core.logic.proxy.UrlType
 import ru.kmorozov.gbd.logger.Logger
 
 import java.io.IOException

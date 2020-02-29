@@ -6,7 +6,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Request.Builder
 import ru.kmorozov.gbd.core.config.GBDOptions
-import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt
+import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
 import ru.kmorozov.gbd.core.logic.connectors.Response
 import ru.kmorozov.gbd.core.logic.connectors.Response.Companion.EMPTY_RESPONSE

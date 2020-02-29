@@ -8,9 +8,8 @@ import org.apache.hc.client5.http.impl.classic.HttpClientBuilder
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager
 import org.apache.hc.core5.http.Header
 import org.apache.hc.core5.http.HttpHost
-import org.apache.hc.core5.ssl.SSLContextBuilder
-import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt
-import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt.Companion.NO_PROXY
+import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
+import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt.Companion.NO_PROXY
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
 import ru.kmorozov.gbd.utils.HttpConnections
 import java.io.Closeable

@@ -1,9 +1,7 @@
-package ru.kmorozov.gbd.core.logic.Proxy
+package ru.kmorozov.gbd.core.logic.proxy
 
 import java.io.IOException
-import java.io.InputStream
 import java.nio.charset.StandardCharsets
-import java.util.stream.Collectors
 
 /**
  * Created by km on 27.11.2015.

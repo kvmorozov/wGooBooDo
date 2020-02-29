@@ -3,8 +3,8 @@ package ru.kmorozov.gbd.core.logic.connectors.apache
 import org.apache.hc.client5.http.cookie.BasicCookieStore
 import org.apache.hc.client5.http.cookie.CookieStore
 import org.apache.hc.client5.http.impl.cookie.BasicClientCookie
-import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt
-import ru.kmorozov.gbd.core.logic.Proxy.UrlType
+import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
+import ru.kmorozov.gbd.core.logic.proxy.UrlType
 
 /**
  * Created by km on 22.05.2016.

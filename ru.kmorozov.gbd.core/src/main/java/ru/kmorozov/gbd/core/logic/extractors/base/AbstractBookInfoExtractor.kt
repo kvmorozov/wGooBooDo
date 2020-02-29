@@ -7,7 +7,7 @@ import org.jsoup.nodes.Document
 import ru.kmorozov.db.core.config.IContextLoader
 import ru.kmorozov.db.core.logic.model.book.BookInfo
 import ru.kmorozov.db.core.logic.model.book.BookInfo.Companion.EMPTY_BOOK
-import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt
+import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.context.ContextProvider
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
 import ru.kmorozov.gbd.utils.HttpConnections

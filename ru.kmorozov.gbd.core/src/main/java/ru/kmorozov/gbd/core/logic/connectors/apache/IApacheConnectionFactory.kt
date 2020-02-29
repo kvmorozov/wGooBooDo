@@ -1,7 +1,7 @@
 package ru.kmorozov.gbd.core.logic.connectors.apache
 
 import org.apache.hc.client5.http.classic.HttpClient
-import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt
+import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 
 interface IApacheConnectionFactory {
 

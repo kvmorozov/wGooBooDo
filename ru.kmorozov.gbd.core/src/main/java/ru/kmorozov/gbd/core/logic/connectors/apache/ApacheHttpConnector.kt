@@ -4,7 +4,7 @@ import org.apache.hc.client5.http.classic.HttpClient
 import org.apache.hc.client5.http.classic.methods.HttpGet
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse
 import ru.kmorozov.gbd.core.config.GBDOptions
-import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt
+import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
 import ru.kmorozov.gbd.core.logic.connectors.Response
 import ru.kmorozov.gbd.core.logic.connectors.Response.Companion.EMPTY_RESPONSE

@@ -1,4 +1,4 @@
-package ru.kmorozov.gbd.core.logic.Proxy
+package ru.kmorozov.gbd.core.logic.proxy
 
 import com.google.api.client.http.GenericUrl
 import com.google.api.client.http.HttpHeaders
@@ -12,7 +12,6 @@ import java.net.InetAddress
 import java.net.InetSocketAddress
 import java.net.Proxy
 import java.net.Proxy.Type
-import java.nio.charset.Charset
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 

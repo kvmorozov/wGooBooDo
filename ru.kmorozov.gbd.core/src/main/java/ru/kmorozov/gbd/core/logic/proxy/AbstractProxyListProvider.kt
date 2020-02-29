@@ -1,9 +1,9 @@
-package ru.kmorozov.gbd.core.logic.Proxy
+package ru.kmorozov.gbd.core.logic.proxy
 
 import com.google.common.base.Strings
 import org.apache.commons.lang3.StringUtils
 import ru.kmorozov.gbd.core.config.GBDOptions
-import ru.kmorozov.gbd.core.logic.Proxy.web.WebProxyListProvider
+import ru.kmorozov.gbd.core.logic.proxy.web.WebProxyListProvider
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
 import ru.kmorozov.gbd.logger.Logger
 import ru.kmorozov.gbd.utils.HttpConnections

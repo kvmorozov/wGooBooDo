@@ -1,4 +1,4 @@
-package ru.kmorozov.gbd.core.logic.Proxy
+package ru.kmorozov.gbd.core.logic.proxy
 
 import java.util.*
 

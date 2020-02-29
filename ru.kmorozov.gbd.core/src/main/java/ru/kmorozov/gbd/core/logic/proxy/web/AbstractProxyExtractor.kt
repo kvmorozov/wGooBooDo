@@ -1,4 +1,4 @@
-package ru.kmorozov.gbd.core.logic.Proxy.web
+package ru.kmorozov.gbd.core.logic.proxy.web
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document

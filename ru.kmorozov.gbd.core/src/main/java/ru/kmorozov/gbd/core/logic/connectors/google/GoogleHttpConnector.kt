@@ -6,7 +6,7 @@ import com.google.api.client.http.HttpRequestFactory
 import com.google.api.client.http.HttpResponseException
 import com.google.api.client.http.javanet.NetHttpTransport.Builder
 import ru.kmorozov.gbd.core.config.GBDOptions
-import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt
+import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
 import ru.kmorozov.gbd.core.logic.connectors.Response
 import ru.kmorozov.gbd.core.logic.connectors.Response.Companion.EMPTY_RESPONSE

@@ -1,8 +1,8 @@
 package ru.kmorozov.gbd.core.logic.context
 
-import ru.kmorozov.gbd.core.logic.Proxy.AbstractProxyListProvider
-import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt
-import ru.kmorozov.gbd.core.logic.Proxy.UrlType
+import ru.kmorozov.gbd.core.logic.proxy.AbstractProxyListProvider
+import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
+import ru.kmorozov.gbd.core.logic.proxy.UrlType
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractHttpProcessor
 import ru.kmorozov.gbd.core.logic.extractors.base.IPostProcessor
 import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata
@@ -12,7 +12,6 @@ import ru.kmorozov.gbd.logger.consumers.AbstractOutputReceiver
 import ru.kmorozov.gbd.logger.output.ReceiverProvider
 import ru.kmorozov.gbd.logger.progress.IProgress
 import ru.kmorozov.gbd.utils.QueuedThreadPoolExecutor
-import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.TimeUnit
 import java.util.function.ToLongFunction

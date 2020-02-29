@@ -1,7 +1,7 @@
 package ru.kmorozov.gbd.core.logic.extractors.base
 
 import com.google.api.client.http.HttpStatusCodes
-import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt
+import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
 import ru.kmorozov.gbd.core.logic.connectors.Response
 import ru.kmorozov.gbd.core.logic.connectors.Response.Companion.EMPTY_RESPONSE

@@ -5,8 +5,8 @@ import com.google.api.client.http.HttpHeaders
 import com.google.api.client.http.HttpResponse
 import com.google.api.client.http.javanet.NetHttpTransport.Builder
 import ru.kmorozov.db.core.logic.model.book.google.GoogleBookData
-import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt
-import ru.kmorozov.gbd.core.logic.Proxy.UrlType
+import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
+import ru.kmorozov.gbd.core.logic.proxy.UrlType
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
 import java.io.IOException
 import java.net.InetSocketAddress

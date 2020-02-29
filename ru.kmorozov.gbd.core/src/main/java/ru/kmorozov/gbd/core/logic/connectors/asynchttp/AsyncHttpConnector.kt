@@ -10,15 +10,13 @@ import org.asynchttpclient.DefaultAsyncHttpClientConfig
 import org.asynchttpclient.netty.channel.DefaultChannelPool
 import org.asynchttpclient.netty.ssl.DefaultSslEngineFactory
 import org.asynchttpclient.proxy.ProxyServer.Builder
-import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt
+import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
 import ru.kmorozov.gbd.core.logic.connectors.Response
 import ru.kmorozov.gbd.core.logic.connectors.Response.Companion.EMPTY_RESPONSE
 import java.io.IOException
 import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ExecutionException
 import java.util.concurrent.TimeUnit
-import java.util.concurrent.TimeoutException
 
 /**
  * Created by km on 22.12.2016.

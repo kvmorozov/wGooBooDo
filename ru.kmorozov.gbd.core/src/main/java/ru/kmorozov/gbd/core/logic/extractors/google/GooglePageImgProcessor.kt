@@ -4,8 +4,8 @@ import ru.kmorozov.db.core.logic.model.book.google.GooglePageInfo
 import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.config.constants.GoogleConstants
 import ru.kmorozov.gbd.core.config.constants.GoogleConstants.HTTPS_IMG_TEMPLATE
-import ru.kmorozov.gbd.core.logic.Proxy.AbstractProxyListProvider
-import ru.kmorozov.gbd.core.logic.Proxy.HttpHostExt
+import ru.kmorozov.gbd.core.logic.proxy.AbstractProxyListProvider
+import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.context.BookContext
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractPageImgProcessor
 
