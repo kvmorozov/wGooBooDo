@@ -1,9 +1,7 @@
 package ru.kmorozov.gbd.core.loader
 
 import ru.kmorozov.gbd.core.config.IStoredItem
-import ru.kmorozov.gbd.core.logic.model.book.base.IPage
 import ru.kmorozov.gbd.utils.Images
-
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -21,9 +19,6 @@ open class RawFileItem : IStoredItem {
     }
 
     constructor(path: Path) : this(path.toFile()) {}
-
-    override val page: IPage
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
 
     override lateinit var outputStream: OutputStream
 

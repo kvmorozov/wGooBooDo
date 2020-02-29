@@ -12,6 +12,7 @@ import ru.kmorozov.gbd.core.config.constants.GBDConstants
 import ru.kmorozov.gbd.core.config.constants.GoogleConstants.DEFAULT_PAGE_WIDTH
 import ru.kmorozov.gbd.core.config.options.PdfOptions
 import ru.kmorozov.gbd.core.loader.LocalFSStorage
+import ru.kmorozov.gbd.core.loader.MayBePageItem
 import ru.kmorozov.gbd.core.logic.context.BookContext
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
 import ru.kmorozov.gbd.core.logic.extractors.base.IPostProcessor
@@ -27,10 +28,10 @@ import javax.imageio.ImageIO
  */
 class PdfMaker : IPostProcessor {
 
-    override lateinit var page: BookContext
+    override lateinit var uniqueObject: BookContext
 
     constructor(uniqueObject: BookContext) {
-        this.page = uniqueObject
+        this.uniqueObject = uniqueObject
     }
 
     constructor()
@@ -39,32 +40,28 @@ class PdfMaker : IPostProcessor {
         if (PdfOptions.SKIP === GBDOptions.pdfOptions)
             return
 
-        if (!page.pdfCompleted.compareAndSet(false, true)) return
+        if (!uniqueObject.pdfCompleted.compareAndSet(false, true)) return
 
-        val logger = ExecutionContext.INSTANCE.getLogger(PdfMaker::class.java, page)
+        val logger = ExecutionContext.INSTANCE.getLogger(PdfMaker::class.java, uniqueObject)
         logger.info("Starting making pdf file...")
 
         var existPages = 0L
-        val bookInfo = page.bookInfo
+        val bookInfo = uniqueObject.bookInfo
 
-        val pdfFile = (page.storage as LocalFSStorage).getOrCreatePdf(bookInfo.bookData.title)
+        val pdfFile = (uniqueObject.storage as LocalFSStorage).getOrCreatePdf(bookInfo.bookData.title)
 
-        try {
-            if (pdfFile.lastModified() < bookInfo.lastPdfChecked)
-                existPages = page.pagesBefore
-            else
-                try {
-                    PDDocument.load(pdfFile).use { existDocument -> existPages = existDocument.numberOfPages.toLong() }
-                } catch (ex: Exception) {
-                    pdfFile.createNewFile()
-                }
-        } catch (e: IOException) {
-            e.printStackTrace()
-            return
-        }
+
+        if (pdfFile.lastModified() < bookInfo.lastPdfChecked)
+            existPages = uniqueObject.pagesBefore
+        else
+            try {
+                PDDocument.load(pdfFile).use { existDocument -> existPages = existDocument.numberOfPages.toLong() }
+            } catch (ex: Exception) {
+                pdfFile.createNewFile()
+            }
 
         try {
-            val imgCount = (page.storage as LocalFSStorage).imgCount()
+            val imgCount = (uniqueObject.storage as LocalFSStorage).imgCount()
             if (imgCount <= existPages) {
                 logger.finest("No new pages, exiting...")
                 bookInfo.lastPdfChecked = System.currentTimeMillis()
@@ -84,10 +81,10 @@ class PdfMaker : IPostProcessor {
                 documentInfo.producer = GBDConstants.GBD_APP_NAME;
                 document.documentInformation = documentInfo;
 
-                (page.storage as LocalFSStorage).items.sorted(Comparator.comparing<IStoredItem, Int> { it.pageNum }).forEach { item ->
+                (uniqueObject.storage as LocalFSStorage).items.stream().sorted(Comparator.comparing<IStoredItem, Int> { it.pageNum }).forEach { item ->
                     try {
                         FileInputStream(item.asFile()).use { fis ->
-                            if (/*item.page.isScanned || */!Images.isInvalidImage(item.asFile(), imgWidth)) {
+                            if ((item as MayBePageItem).page!!.isScanned || !Images.isInvalidImage(item.asFile(), imgWidth)) {
                                 val bimg = ImageIO.read(fis)
 
                                 if (null == bimg) {
@@ -96,11 +93,11 @@ class PdfMaker : IPostProcessor {
                                 } else {
                                     val width = bimg.width.toFloat()
                                     val height = bimg.height.toFloat()
-                                    val page = PDPage(PDRectangle(width, height))
+                                    val pdfPage = PDPage(PDRectangle(width, height))
 
-                                    document.addPage(page)
+                                    document.addPage(pdfPage)
                                     val img = PDImageXObject.createFromFile(item.asFile().toPath().toString(), document)
-                                    PDPageContentStream(document, page).use { contentStream -> contentStream.drawImage(img, 0.toFloat(), 0.toFloat()) }
+                                    PDPageContentStream(document, pdfPage).use { contentStream -> contentStream.drawImage(img, 0.toFloat(), 0.toFloat()) }
                                 }
                             } else {
                                 item.delete()
@@ -135,6 +132,6 @@ class PdfMaker : IPostProcessor {
     }
 
     override fun toString(): String {
-        return "Pdf maker:$page"
+        return "Pdf maker:$uniqueObject"
     }
 }

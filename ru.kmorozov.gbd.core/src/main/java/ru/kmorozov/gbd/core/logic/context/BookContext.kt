@@ -63,7 +63,7 @@ class BookContext {
         get() = Arrays.stream(bookInfo.pages.pages).sorted()
 
     fun getPostProcessor(): Runnable {
-        postProcessor.page = this
+        postProcessor.uniqueObject = this
         return postProcessor
     }
 

@@ -1,7 +1,7 @@
 package ru.kmorozov.library.data.server.storage
 
 import ru.kmorozov.gbd.core.config.IStoredItem
-import ru.kmorozov.gbd.core.loader.LocalFSStoredItem
+import ru.kmorozov.gbd.core.loader.MayBePageItem
 import ru.kmorozov.gbd.core.loader.TempLocalItem
 import ru.kmorozov.gbd.core.loader.TempLocalStorage
 import ru.kmorozov.gbd.core.logic.model.book.base.IPage
@@ -12,11 +12,11 @@ import java.io.IOException
 import java.io.OutputStream
 
 class ServerStoredItem @Throws(IOException::class)
-internal constructor(private val storage: ServerStorage, override val page: IPage, imgFormat: String) : IStoredItem {
+internal constructor(private val storage: ServerStorage, val page: IPage, imgFormat: String) : IStoredItem {
     override val createdNew: Boolean
         get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
 
-    private val localItem: LocalFSStoredItem
+    private val localItem: MayBePageItem
     private var remoteItem: OneDriveItem? = null
 
     override val outputStream: OutputStream?

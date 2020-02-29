@@ -20,7 +20,6 @@ import java.util.*
 import java.util.function.BiPredicate
 import java.util.function.Predicate
 import java.util.stream.Collectors
-import java.util.stream.Stream
 import javax.imageio.ImageIO
 
 open class LocalFSStorage : IStorage {
@@ -33,6 +32,7 @@ open class LocalFSStorage : IStorage {
 
     val storageDir: File
     protected val logger: Logger
+    private var detectedItems: MutableSet<MayBePageItem>? = null
 
     private val indexes: MutableMap<String, LocalFSIndex>
 
@@ -55,17 +55,25 @@ open class LocalFSStorage : IStorage {
             return bookIdsList
         }
 
-    override val items: Stream<IStoredItem>
+    override val items: Set<IStoredItem>
         @Throws(IOException::class)
-        get() = Files.walk(storageDir.toPath())
-                .filter { !it.toFile().isDirectory }.filter({ Images.isImageFile(it) })
-                .map { ImageItem(it.toFile()) }
+        get() = getOrFindItems()
+
+    private fun getOrFindItems(): Set<IStoredItem> {
+        if (detectedItems == null)
+            detectedItems = Files.walk(storageDir.toPath())
+                    .filter { !it.toFile().isDirectory }.filter({ Images.isImageFile(it) })
+                    .map { MayBePageItem(it.toFile()) }
+                    .collect(Collectors.toSet());
+
+        return detectedItems!!;
+    }
 
     override fun getChildStorage(bookData: IBookData): IStorage {
         try {
             val optPath = Files.find(storageDir.toPath(), 1,
                     BiPredicate<Path, BasicFileAttributes> { path, _ -> path.toString().contains(bookData.volumeId) }).findAny()
-            if (optPath.isPresent) return LocalFSStorage(optPath.get().toString())
+            if (optPath.isPresent) return getStorage(optPath.get().toString())
         } catch (ignored: IOException) {
         }
 
@@ -76,22 +84,22 @@ open class LocalFSStorage : IStorage {
                 .replace("?", "")
                 .replace("/", ".")
         val volumeId = bookData.volumeId
-        return LocalFSStorage(if (StringUtils.isEmpty(volumeId)) directoryName else directoryName + ' '.toString() + bookData.volumeId)
+        return getStorage(if (StringUtils.isEmpty(volumeId)) directoryName else directoryName + ' '.toString() + bookData.volumeId)
     }
 
     override fun size(): Int {
-        return if (storageDir.listFiles() == null) 0 else storageDir.listFiles().size
+        return if (storageDir.listFiles() == null) 0 else storageDir.listFiles()!!.size
     }
 
     @Throws(IOException::class)
     override fun isPageExists(page: IPage): Boolean {
         val files = File(storageDir.toPath().toUri()).list { _, fileName -> fileName.contains(page.order.toString() + '_'.toString() + page.pid + ".") }
-        return files.size > 0
+        return files!!.size > 0
     }
 
     @Throws(IOException::class)
     override fun getStoredItem(page: IPage, imgFormat: String): IStoredItem {
-        return LocalFSStoredItem(this, page, imgFormat)
+        return MayBePageItem(File(storageDir.path + File.separator + page.order + '_'.toString() + page.pid + '.'.toString() + imgFormat), page)
     }
 
     override fun refresh() {
@@ -108,21 +116,19 @@ open class LocalFSStorage : IStorage {
 
     @Throws(IOException::class)
     override fun restoreState(bookInfo: IBookInfo) {
-        val items = items
-
         val imgWidth = if (0 == GBDOptions.imageWidth) DEFAULT_PAGE_WIDTH else GBDOptions.imageWidth
 
         items.forEach { item ->
             val filePath = item.asFile().toPath()
 
-            if (item.isImage()) {
+            if (item is MayBePageItem) {
                 val fileName = filePath.fileName.toString()
                 val nameParts = fileName.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0].split("_".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 
                 try {
                     val _page = bookInfo.pages.getPageByPid(nameParts[1]) as AbstractPage
 
-                    _page.storedItem = item
+                    item.upgrade(_page)
 
                     try {
                         val order = Integer.valueOf(nameParts[0])
@@ -141,17 +147,21 @@ open class LocalFSStorage : IStorage {
                             _page.isDataProcessed = true
 
                         if (_page.isDataProcessed)
-                            if (Images.isInvalidImage(filePath, imgWidth)) {
+                            if (item.validate()) {
+                                if (_page.order != order && !_page.isGapPage) {
+                                    val oldFile = item.asFile()
+                                    val newFile = File(filePath.toString().replace(order.toString() + "_", _page.order.toString() + "_"))
+                                    if (!newFile.exists()) {
+                                        oldFile.renameTo(newFile)
+                                        logger.severe("Page ${_page.pid} renamed!")
+                                    }
+                                }
+
+                                item.page!!.isScanned = true
+                            } else {
                                 _page.isDataProcessed = false
                                 item.delete()
                                 logger.severe("Page ${_page.pid} deleted!")
-                            } else if (_page.order != order && !_page.isGapPage) {
-                                val oldFile = item.asFile()
-                                val newFile = File(filePath.toString().replace(order.toString() + "_", _page.order.toString() + "_"))
-                                if (!newFile.exists()) {
-                                    oldFile.renameTo(newFile)
-                                    logger.severe("Page ${_page.pid} renamed!")
-                                }
                             }
                     } catch (e: IOException) {
                         // Значит файл с ошибкой
@@ -191,7 +201,7 @@ open class LocalFSStorage : IStorage {
         }
     }
 
-    fun imgCount() : Long {
+    fun imgCount(): Long {
         return Files.list(storageDir.toPath()).filter(Predicate<Path> { filePath -> Images.isImageFile(filePath) }).count()
     }
 

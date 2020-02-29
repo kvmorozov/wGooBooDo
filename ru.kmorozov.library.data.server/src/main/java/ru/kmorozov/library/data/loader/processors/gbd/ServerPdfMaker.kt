@@ -5,7 +5,7 @@ import ru.kmorozov.gbd.core.logic.extractors.base.IPostProcessor
 
 class ServerPdfMaker : IPostProcessor {
 
-    override var page: BookContext
+    override var uniqueObject: BookContext
         get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
         set(_) {}
 

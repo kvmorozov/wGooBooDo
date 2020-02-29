@@ -10,11 +10,8 @@ import ru.kmorozov.gbd.core.logic.model.book.base.IBookInfo
 import ru.kmorozov.gbd.core.logic.model.book.base.IPage
 import ru.kmorozov.onedrive.client.OneDriveItem
 import ru.kmorozov.onedrive.client.OneDriveProvider
-
 import java.io.IOException
-import java.nio.file.Path
-import java.util.HashSet
-import java.util.stream.Stream
+import java.util.*
 
 class ServerStorage(private val api: OneDriveProvider, private val root: OneDriveItem?) : IStorage {
 
@@ -38,7 +35,7 @@ class ServerStorage(private val api: OneDriveProvider, private val root: OneDriv
             return bookIdsList
         }
 
-    override val items: Stream<IStoredItem>?
+    override val items: Set<IStoredItem>?
         @Throws(IOException::class)
         get() = throw IllegalStateException()
 

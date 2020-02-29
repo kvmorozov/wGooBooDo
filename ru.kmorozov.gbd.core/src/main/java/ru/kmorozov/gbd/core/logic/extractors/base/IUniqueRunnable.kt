@@ -5,5 +5,5 @@ package ru.kmorozov.gbd.core.logic.extractors.base
  */
 interface IUniqueRunnable<T : Any> : Runnable {
 
-    var page: T
+    var uniqueObject: T
 }

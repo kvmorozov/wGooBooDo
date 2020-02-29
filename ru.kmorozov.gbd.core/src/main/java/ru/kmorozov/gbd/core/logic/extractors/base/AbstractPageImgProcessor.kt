@@ -19,12 +19,12 @@ import javax.net.ssl.SSLException
  */
 abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcessor, IUniqueRunnable<T> {
     protected val bookContext: BookContext
-    override var page: T
+    override var uniqueObject: T
     protected val usedProxy: HttpHostExt
 
     protected constructor(bookContext: BookContext, page: T, usedProxy: HttpHostExt) : super() {
         this.bookContext = bookContext
-        this.page = page
+        this.uniqueObject = page
         this.usedProxy = usedProxy
         logger = ExecutionContext.INSTANCE.getLogger(javaClass, bookContext)
     }
@@ -40,7 +40,7 @@ abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcesso
         var inputStream: InputStream? = null
         lateinit var storedItem: IStoredItem
 
-        if (page.isLoadingStarted) return false
+        if (uniqueObject.isLoadingStarted) return false
 
         try {
             getContent(imgUrl, proxy, false).use { resp ->
@@ -65,24 +65,24 @@ abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcesso
                     if (firstChunk) {
                         val imgFormat = Images.getImageFormat(resp)
 
-                        if (page.isLoadingStarted) return false
+                        if (uniqueObject.isLoadingStarted) return false
 
-                        page.isLoadingStarted = true
-                        storedItem = bookContext.storage.getStoredItem(page, imgFormat)
+                        uniqueObject.isLoadingStarted = true
+                        storedItem = bookContext.storage.getStoredItem(uniqueObject, imgFormat)
 
                         reloadFlag = !storedItem.createdNew
                         if (reloadFlag)
                             if (GBDOptions.reloadImages)
                                 storedItem.delete()
                             else {
-                                page.isDataProcessed = true
+                                uniqueObject.isDataProcessed = true
                                 return false
                             }
 
                         if (proxy.isLocal)
-                            logger.info("Started img ${if (reloadFlag) "RELOADING" else "processing"} for ${page.pid} without Proxy")
+                            logger.info("Started img ${if (reloadFlag) "RELOADING" else "processing"} for ${uniqueObject.pid} without Proxy")
                         else
-                            logger.info("Started img ${if (reloadFlag) "RELOADING" else "processing"} for ${page.pid} with $proxy Proxy")
+                            logger.info("Started img ${if (reloadFlag) "RELOADING" else "processing"} for ${uniqueObject.pid} with $proxy Proxy")
                     }
 
                     firstChunk = false
@@ -93,14 +93,14 @@ abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcesso
                 storedItem.flush()
 
                 if (storedItem.validate()) {
-                    page.isDataProcessed = true
-                    page.isScanned = true
+                    uniqueObject.isDataProcessed = true
+                    uniqueObject.isScanned = true
 
                     proxy.promoteProxy()
 
                     logger.info(successMsg)
-                    page.isDataProcessed = true
-                    page.isFileExists = true
+                    uniqueObject.isDataProcessed = true
+                    uniqueObject.isFileExists = true
 
                     return true
                 } else {
@@ -130,8 +130,8 @@ abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcesso
                 e.printStackTrace()
             }
 
-            if (!page.isDataProcessed) {
-                logger.info("Loading page ${page.pid} failed!")
+            if (!uniqueObject.isDataProcessed) {
+                logger.info("Loading page ${uniqueObject.pid} failed!")
                 try {
                     storedItem.delete()
                 } catch (e: IOException) {

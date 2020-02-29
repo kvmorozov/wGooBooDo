@@ -2,6 +2,7 @@ package ru.kmorozov.gbd.core.loader
 
 import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.config.constants.GoogleConstants
+import ru.kmorozov.gbd.core.logic.model.book.base.IPage
 import ru.kmorozov.gbd.utils.Images
 import java.awt.image.BufferedImage
 import java.io.ByteArrayInputStream

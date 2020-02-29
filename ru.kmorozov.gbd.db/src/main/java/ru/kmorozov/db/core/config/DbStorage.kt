@@ -6,9 +6,7 @@ import ru.kmorozov.gbd.core.config.IStoredItem
 import ru.kmorozov.gbd.core.logic.model.book.base.IBookData
 import ru.kmorozov.gbd.core.logic.model.book.base.IBookInfo
 import ru.kmorozov.gbd.core.logic.model.book.base.IPage
-
 import java.io.IOException
-import java.util.stream.Stream
 
 class DbStorage : IStorage {
 
@@ -18,7 +16,7 @@ class DbStorage : IStorage {
     override val bookIdsList: Set<String>
         get() = TODO("Not implemented yet")
 
-    override val items: Stream<IStoredItem>?
+    override val items: Set<IStoredItem>?
         get() = null
 
     @Throws(IOException::class)

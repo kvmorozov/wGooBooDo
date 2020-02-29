@@ -40,12 +40,12 @@ internal class GooglePageSigProcessor : AbstractHttpProcessor, IUniqueRunnable<G
         this.proxy = proxy
         sigPageExecutor = QueuedThreadPoolExecutor(bookContext.pagesStream.filter { p -> (p as AbstractPage).isNotProcessed }.count(), QueuedThreadPoolExecutor.THREAD_POOL_SIZE, { it.isProcessed },
                 bookContext.toString() + '/'.toString() + proxy)
-        page = this
+        uniqueObject = this
     }
 
     private val sigPageExecutor: QueuedThreadPoolExecutor<GooglePageInfo>
 
-    override var page: GooglePageSigProcessor
+    override var uniqueObject: GooglePageSigProcessor
 
     override fun run() {
         if (GBDOptions.secureMode && proxy.isLocal || !proxy.isAvailable) return
@@ -81,17 +81,17 @@ internal class GooglePageSigProcessor : AbstractHttpProcessor, IUniqueRunnable<G
         return HashCodeBuilder(17, 37).append(proxy).append(bookContext).toHashCode()
     }
 
-    private inner class SigProcessorInternal internal constructor(override var page: GooglePageInfo) : IUniqueRunnable<GooglePageInfo> {
+    private inner class SigProcessorInternal internal constructor(override var uniqueObject: GooglePageInfo) : IUniqueRunnable<GooglePageInfo> {
 
         override fun run() {
             if (!proxy.isAvailable) return
 
-            if (page.isDataProcessed || null != page.sig || page.isSigChecked || page.isLoadingStarted)
+            if (uniqueObject.isDataProcessed || null != uniqueObject.sig || uniqueObject.isSigChecked || uniqueObject.isLoadingStarted)
                 return
 
             var response: Response = Response.EMPTY_RESPONSE
             val baseUrl = HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, bookContext.bookInfo.bookId)
-            val rqUrl = baseUrl + PAGES_REQUEST_TEMPLATE.replace(RQ_PG_PLACEHOLDER, page.pid)
+            val rqUrl = baseUrl + PAGES_REQUEST_TEMPLATE.replace(RQ_PG_PLACEHOLDER, uniqueObject.pid)
 
             try {
                 response = getContent(rqUrl, proxy, true)
@@ -134,7 +134,7 @@ internal class GooglePageSigProcessor : AbstractHttpProcessor, IUniqueRunnable<G
                             if (null != _frameSrc) _page.src = _frameSrc
 
                             if (null != _page.sig) {
-                                if (_page.pid == page.pid) {
+                                if (_page.pid == uniqueObject.pid) {
                                     _page.isSigChecked = true
 
                                     proxy.promoteProxy()

@@ -15,11 +15,11 @@ import ru.kmorozov.gbd.core.logic.extractors.base.AbstractPageImgProcessor
 internal class GooglePageImgProcessor(bookContext: BookContext, page: GooglePageInfo, usedProxy: HttpHostExt) : AbstractPageImgProcessor<GooglePageInfo>(bookContext, page, usedProxy) {
 
     protected override val successMsg: String
-        get() = "Finished img processing for ${page.pid}${if (page.isGapPage) " with gap" else ""}"
+        get() = "Finished img processing for ${uniqueObject.pid}${if (uniqueObject.isGapPage) " with gap" else ""}"
 
     private fun processImageWithProxy(proxy: HttpHostExt): Boolean {
         return !(!proxy.isLocal && !proxy.isAvailable) &&
-                processImage(page.getImqRqUrl(bookContext.bookInfo.bookId, HTTPS_IMG_TEMPLATE,
+                processImage(uniqueObject.getImqRqUrl(bookContext.bookInfo.bookId, HTTPS_IMG_TEMPLATE,
                         if (0 == GBDOptions.imageWidth) GoogleConstants.DEFAULT_PAGE_WIDTH else GBDOptions.imageWidth), proxy)
     }
 
@@ -28,7 +28,7 @@ internal class GooglePageImgProcessor(bookContext: BookContext, page: GooglePage
     }
 
     override fun run() {
-        if (page.isDataProcessed) return
+        if (uniqueObject.isDataProcessed) return
 
         if (!processImageWithProxy(usedProxy)) {
             // Пробуем скачать страницу с без прокси, если не получилось с той прокси, с помощью которой узнали sig

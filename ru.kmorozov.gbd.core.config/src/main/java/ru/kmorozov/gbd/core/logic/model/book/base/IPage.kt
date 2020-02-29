@@ -19,7 +19,7 @@ interface IPage : Comparable<IPage> {
 
     val isLoadingStarted: Boolean
 
-    val isScanned: Boolean
+    var isScanned: Boolean
 
     var storedItem: IStoredItem
 

@@ -3,9 +3,7 @@ package ru.kmorozov.gbd.core.config
 import ru.kmorozov.gbd.core.logic.model.book.base.IBookData
 import ru.kmorozov.gbd.core.logic.model.book.base.IBookInfo
 import ru.kmorozov.gbd.core.logic.model.book.base.IPage
-
 import java.io.IOException
-import java.util.stream.Stream
 
 interface IStorage {
 
@@ -13,7 +11,7 @@ interface IStorage {
 
     val bookIdsList: Set<String>
 
-    val items: Stream<IStoredItem>?
+    val items: Set<IStoredItem>?
 
     @Throws(IOException::class)
     fun getChildStorage(bookData: IBookData): IStorage
