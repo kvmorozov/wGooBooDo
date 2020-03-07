@@ -10,15 +10,15 @@ abstract class AbstractServerGBDOptions : IGBDOptions {
     override val storage: IStorage
         get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
     override val proxyListFile: String
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+        get() = "web"
     override val imageWidth: Int
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+        get() = 0
 
     override val reloadImages: Boolean
-        get() = TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        get() = false
 
     override val secureMode: Boolean
-        get() = TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        get() = false
 
     override fun pdfOptions(): String {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.

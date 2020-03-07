@@ -1,6 +1,7 @@
 package ru.kmorozov.library.data.loader.processors.gbd
 
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.stereotype.Component
 import ru.kmorozov.gbd.core.config.GBDOptions
@@ -14,6 +15,7 @@ import ru.kmorozov.library.data.server.options.LocalServerGBDOptions
 
 @Component
 @ComponentScan(basePackageClasses = arrayOf(LocalServerGBDOptions::class))
+@Qualifier("local")
 open class GbdLocalProcessor : IGbdProcessor {
 
     @Autowired
@@ -26,7 +28,7 @@ open class GbdLocalProcessor : IGbdProcessor {
         val producer = SingleBookProducer(bookId)
         ContextProvider.contextProvider = ListBasedContextLoader(producer)
 
-        ExecutionContext.initContext(ReceiverProvider.getReceiver(), 1 == producer.bookIds.size)
+        ExecutionContext.initContext(ReceiverProvider.getReceiver(), true)
         ExecutionContext.INSTANCE.addBookContext(producer, DummyProgress(), ServerPdfMaker())
 
         ExecutionContext.INSTANCE.execute()

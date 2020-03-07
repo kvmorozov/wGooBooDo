@@ -34,7 +34,7 @@ open class LocalFSStorage : IStorage {
     protected val logger: Logger
     private var detectedItems: MutableSet<MayBePageItem>? = null
 
-    private val indexes: MutableMap<String, LocalFSIndex>
+    private val indexes: MutableMap<String, IIndex>
 
     override val isValidOrCreate: Boolean
         get() = if (storageDir.exists()) storageDir.isDirectory else storageDir.mkdir()
@@ -108,8 +108,14 @@ open class LocalFSStorage : IStorage {
 
     override fun getIndex(indexName: String, createIfNotExists: Boolean): IIndex {
         if (!indexes.containsKey(indexName)) {
-            val index = LocalFSIndex(this, indexName, createIfNotExists)
-            indexes.put(indexName, index)
+            val indexFile = File(storageDir.path + File.separator + indexName)
+            if (indexFile.exists())
+                indexes.put(indexName, FileBasedIndex(this, indexFile))
+            else if (!indexFile.exists() && createIfNotExists) {
+                indexFile.createNewFile()
+                indexes.put(indexName, FileBasedIndex(this, indexFile))
+            } else
+                indexes.put(indexName, LocalFSIndex(this))
         }
         return indexes.get(indexName)!!
     }

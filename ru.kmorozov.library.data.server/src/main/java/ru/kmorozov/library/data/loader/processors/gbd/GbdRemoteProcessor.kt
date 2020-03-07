@@ -27,6 +27,7 @@ import java.io.IOException
 @Component
 @ComponentScan(basePackageClasses = arrayOf(OneDriveContextLoader::class, ServerProducer::class, DbContextLoader::class, ServerGBDOptions::class))
 @Conditional(StorageEnabledCondition::class)
+@Qualifier("remote")
 open class GbdRemoteProcessor : IGbdProcessor {
 
     @Autowired
