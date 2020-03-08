@@ -1,6 +1,7 @@
 package ru.kmorozov.gbd.utils
 
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
+import ru.kmorozov.gbd.core.logic.extractors.base.IPostProcessor
 import ru.kmorozov.gbd.core.logic.extractors.base.IUniqueRunnable
 import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.ConcurrentHashMap
@@ -72,9 +73,13 @@ class QueuedThreadPoolExecutor<T : Any> : ThreadPoolExecutor {
 
     override fun execute(command: Runnable) {
         if (command is IUniqueRunnable<*>) {
-            val uniqueObj = (command as IUniqueRunnable<T>).uniqueObject
-            synchronized(uniqueObj) {
-                if (null == uniqueMap.putIfAbsent(uniqueObj, command)) super.execute(command)
+            if (command is IPostProcessor && !command.withParam)
+                super.execute(command)
+            else {
+                val uniqueObj = (command as IUniqueRunnable<T>).uniqueObject
+                synchronized(uniqueObj) {
+                    if (null == uniqueMap.putIfAbsent(uniqueObj, command)) super.execute(command)
+                }
             }
         } else
             super.execute(command)

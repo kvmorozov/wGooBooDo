@@ -7,5 +7,8 @@ import ru.kmorozov.gbd.core.logic.context.BookContext
  */
 interface IPostProcessor : IUniqueRunnable<BookContext> {
 
+    val withParam: Boolean
+        get() = true
+
     fun make()
 }

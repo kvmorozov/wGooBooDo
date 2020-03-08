@@ -16,4 +16,7 @@ class ServerPdfMaker : IPostProcessor {
     override fun run() {
 
     }
+
+    override val withParam: Boolean
+        get() = false
 }
