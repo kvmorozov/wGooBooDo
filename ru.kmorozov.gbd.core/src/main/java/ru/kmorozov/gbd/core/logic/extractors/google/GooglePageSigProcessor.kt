@@ -13,13 +13,13 @@ import ru.kmorozov.gbd.core.config.constants.GoogleConstants.BOOK_ID_PLACEHOLDER
 import ru.kmorozov.gbd.core.config.constants.GoogleConstants.HTTPS_TEMPLATE
 import ru.kmorozov.gbd.core.config.constants.GoogleConstants.PAGES_REQUEST_TEMPLATE
 import ru.kmorozov.gbd.core.config.constants.GoogleConstants.RQ_PG_PLACEHOLDER
-import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.connectors.Response
 import ru.kmorozov.gbd.core.logic.context.BookContext
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractHttpProcessor
 import ru.kmorozov.gbd.core.logic.extractors.base.IUniqueRunnable
 import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage
+import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.utils.QueuedThreadPoolExecutor
 import java.net.SocketException
 import java.net.SocketTimeoutException
@@ -86,7 +86,7 @@ internal class GooglePageSigProcessor : AbstractHttpProcessor, IUniqueRunnable<G
         override fun run() {
             if (!proxy.isAvailable) return
 
-            if (uniqueObject.isDataProcessed || null != uniqueObject.sig || uniqueObject.isSigChecked || uniqueObject.isLoadingStarted)
+            if (uniqueObject.isDataProcessed || uniqueObject.isLoadingStarted)
                 return
 
             var response: Response = Response.EMPTY_RESPONSE
@@ -131,28 +131,22 @@ internal class GooglePageSigProcessor : AbstractHttpProcessor, IUniqueRunnable<G
                             if (_page.isDataProcessed) return@forEach;
 
                             val _frameSrc = (framePage as GooglePageInfo).src
-                            if (null != _frameSrc) _page.src = _frameSrc
+                            if (null != _frameSrc)
+                                if (_page.addSrc(_frameSrc)) {
+                                    if (_page.pid == uniqueObject.pid) {
+                                        proxy.promoteProxy()
 
-                            if (null != _page.sig) {
-                                if (_page.pid == uniqueObject.pid) {
-                                    _page.isSigChecked = true
-
-                                    proxy.promoteProxy()
-
-                                    // Если есть возможность - пытаемся грузить страницу сразу
-                                    bookContext.imgExecutor.execute(GooglePageImgProcessor(bookContext, _page, proxy))
-                                }
-                            }
-
-                            if (null != _page.src && null == _page.sig)
-                                logger.finest(String.format(SIG_WRONG_FORMAT, _page.src))
+                                        // Если есть возможность - пытаемся грузить страницу сразу
+                                        bookContext.imgExecutor.execute(GooglePageImgProcessor(bookContext, _page, proxy))
+                                    }
+                                } else
+                                    logger.finest(String.format(SIG_WRONG_FORMAT, _page.src))
                         }
             } catch (ce: SocketTimeoutException) {
                 if (!proxy.isLocal) {
                     proxy.registerFailure()
                     logger.info("Proxy $proxy failed!")
                 }
-
             } catch (ce: SocketException) {
                 if (!proxy.isLocal) {
                     proxy.registerFailure()
@@ -174,7 +168,6 @@ internal class GooglePageSigProcessor : AbstractHttpProcessor, IUniqueRunnable<G
     }
 
     companion object {
-
         protected val logger = ExecutionContext.getLogger(GooglePageSigProcessor::class.java)
 
         private const val SIG_ERROR_TEMPLATE = "No sig at %s with proxy %s"

@@ -3,15 +3,10 @@ package ru.kmorozov.db.core.logic.model.book.google
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import org.apache.commons.lang3.StringUtils
-import ru.kmorozov.gbd.core.config.IStoredItem
-import ru.kmorozov.gbd.core.config.constants.GoogleConstants.BOOK_ID_PLACEHOLDER
-import ru.kmorozov.gbd.core.config.constants.GoogleConstants.IMG_REQUEST_TEMPLATE
-import ru.kmorozov.gbd.core.config.constants.GoogleConstants.RQ_PG_PLACEHOLDER
-import ru.kmorozov.gbd.core.config.constants.GoogleConstants.RQ_SIG_PLACEHOLDER
-import ru.kmorozov.gbd.core.config.constants.GoogleConstants.RQ_WIDTH_PLACEHOLDER
 import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage
 import ru.kmorozov.gbd.core.logic.model.book.base.IPage
 import java.io.Serializable
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Created by km on 21.11.2015.
@@ -34,19 +29,33 @@ class GooglePageInfo : AbstractPage, Serializable, Comparable<IPage> {
 
     @Expose
     var src: String? = null
+        private set
+
     @SerializedName("uf")
     private val uf: String? = null
+
     @Transient
-    public var sig: String? = null
-        get() = if (null == field && null == src) null else src!!.substring(src!!.indexOf("sig=") + 4)
+    public var sigs: MutableSet<String> = ConcurrentHashMap.newKeySet()
         private set
+
+    public fun addSrc(_src: String) : Boolean {
+        src = _src
+        val idx = _src.indexOf("sig=")
+
+        if (idx >= 0)
+            sigs.add(_src.substring(idx + 4))
+
+        return idx >= 0;
+    }
 
     @Expose
     @SerializedName("order")
     override var order: Int = 0
+
     @SerializedName("h")
     private val h: Int = 0
     private val width: Int = 0
+
     @SerializedName("links")
     private val links: Any? = null
 
@@ -67,12 +76,6 @@ class GooglePageInfo : AbstractPage, Serializable, Comparable<IPage> {
         this.order = order
 
         gapPage = true
-    }
-
-    fun getImqRqUrl(bookId: String, urlTemplate: String, width: Int): String {
-        return urlTemplate.replace(BOOK_ID_PLACEHOLDER, bookId) + IMG_REQUEST_TEMPLATE.replace(RQ_PG_PLACEHOLDER, pid)
-                .replace(RQ_SIG_PLACEHOLDER, sig!!)
-                .replace(RQ_WIDTH_PLACEHOLDER, width.toString())
     }
 
     private fun parsePageNum(): String {

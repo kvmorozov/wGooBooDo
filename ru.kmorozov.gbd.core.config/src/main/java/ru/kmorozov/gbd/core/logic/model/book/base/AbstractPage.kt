@@ -8,7 +8,6 @@ import java.util.concurrent.atomic.AtomicBoolean
  */
 abstract class AbstractPage : IPage {
 
-    private val sigChecked = AtomicBoolean(false)
     private val dataProcessed = AtomicBoolean(false)
     private val fileExists = AtomicBoolean(false)
     private val loadingStarted = AtomicBoolean(false)
@@ -22,10 +21,6 @@ abstract class AbstractPage : IPage {
         get() = fileExists.get()
         set(value) = fileExists.set(value)
 
-    override var isSigChecked: Boolean
-        get() = sigChecked.get()
-        set(value) = sigChecked.set(value)
-
     override var isLoadingStarted: Boolean
         get() = loadingStarted.get()
         set(value) = loadingStarted.set(value)
@@ -35,7 +30,7 @@ abstract class AbstractPage : IPage {
         set(value) = scanned.set(value)
 
     val isProcessed: Boolean
-        get() = isDataProcessed || sigChecked.get() || isFileExists
+        get() = isDataProcessed || isFileExists
 
     val isNotProcessed: Boolean
         get() = !isProcessed

@@ -3,10 +3,10 @@ package ru.kmorozov.gbd.core.logic.extractors.google
 import com.google.common.base.Strings
 import ru.kmorozov.db.core.logic.model.book.google.GoogleBookData
 import ru.kmorozov.db.core.logic.model.book.google.GooglePageInfo
-import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.context.BookContext
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractImageExtractor
+import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.logger.progress.IProgress
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.TimeUnit
@@ -79,9 +79,12 @@ class GoogleImageExtractor(bookContext: BookContext) : AbstractImageExtractor<Go
                 uniqueObject.sigExecutor.terminate(10L, TimeUnit.MINUTES)
 
                 uniqueObject.pagesStream
-                        .filter { page -> !page.isDataProcessed && null != (page as GooglePageInfo).sig }
-                        .sorted(Comparator {p1, p2 -> p2.order - p1.order})
-                        .forEach { page -> this@GoogleImageExtractor.uniqueObject.imgExecutor.execute(GooglePageImgProcessor(this@GoogleImageExtractor.uniqueObject, page as GooglePageInfo, HttpHostExt.NO_PROXY)) }
+                        .filter { page -> !page.isDataProcessed }
+                        .sorted(Comparator { p1, p2 -> p2.order - p1.order })
+                        .forEach { page ->
+                            this@GoogleImageExtractor.uniqueObject.imgExecutor
+                                    .execute(GooglePageImgProcessor(this@GoogleImageExtractor.uniqueObject, page as GooglePageInfo, HttpHostExt.NO_PROXY))
+                        }
 
                 uniqueObject.imgExecutor.terminate(10L, TimeUnit.MINUTES)
 

@@ -7,6 +7,9 @@ import ru.kmorozov.gbd.core.logic.context.IBookListProducer
 import ru.kmorozov.gbd.core.logic.library.LibraryFactory
 
 class ListBasedContextLoader(private val producer: IBookListProducer) : IContextLoader {
+
+    private val books: MutableMap<String, BookInfo> = HashMap<String, BookInfo>()
+
     override val empty: Boolean
         get() = false
 
@@ -14,7 +17,7 @@ class ListBasedContextLoader(private val producer: IBookListProducer) : IContext
         get() = producer.bookIds
 
     override val contextSize: Int
-        get() = 0
+        get() = producer.bookIds.size
 
     override val isValid: Boolean
         get() = true
@@ -28,6 +31,9 @@ class ListBasedContextLoader(private val producer: IBookListProducer) : IContext
     }
 
     override fun getBookInfo(bookId: String): BookInfo {
-        return LibraryFactory.getMetadata(bookId).getBookInfoExtractor(bookId, EMPTY_CONTEXT_LOADER).bookInfo
+        if (!books.containsKey(bookId))
+            books.put(bookId, LibraryFactory.getMetadata(bookId).getBookInfoExtractor(bookId, EMPTY_CONTEXT_LOADER).bookInfo)
+
+        return books.get(bookId)!!
     }
 }

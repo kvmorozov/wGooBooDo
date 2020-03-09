@@ -27,8 +27,6 @@ open class MayBePageItem : ImageItem {
             get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
         override val order: Int
             get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
-        override val isSigChecked: Boolean
-            get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
         override val isDataProcessed: Boolean
             get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
         override val isFileExists: Boolean

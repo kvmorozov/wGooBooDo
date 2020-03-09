@@ -11,8 +11,6 @@ interface IPage : Comparable<IPage> {
 
     val order: Int
 
-    val isSigChecked: Boolean
-
     val isDataProcessed: Boolean
 
     val isFileExists: Boolean
