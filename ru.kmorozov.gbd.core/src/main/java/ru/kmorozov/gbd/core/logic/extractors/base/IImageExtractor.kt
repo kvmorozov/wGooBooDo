@@ -7,5 +7,7 @@ import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
  */
 interface IImageExtractor : Runnable {
 
+    fun reset()
+
     fun newProxyEvent(proxy: HttpHostExt)
 }

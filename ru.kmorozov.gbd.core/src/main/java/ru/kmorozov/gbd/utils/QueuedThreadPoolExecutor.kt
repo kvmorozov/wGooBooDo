@@ -1,7 +1,6 @@
 package ru.kmorozov.gbd.utils
 
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
-import ru.kmorozov.gbd.core.logic.extractors.base.IPostProcessor
 import ru.kmorozov.gbd.core.logic.extractors.base.IUniqueRunnable
 import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.ConcurrentHashMap
@@ -13,11 +12,11 @@ import java.util.concurrent.atomic.AtomicInteger
  * Created by km on 12.11.2016.
  */
 class QueuedThreadPoolExecutor<T : Any> : ThreadPoolExecutor {
-    private var needProcessCount: Long
+    private var needProcessCount: Int
     private val completeChecker: (T) -> Boolean
     private val description: String
 
-    constructor(needProcessCount: Long, threadPoolSize: Int, completeChecker: (T) -> Boolean, description: String) : super(threadPoolSize, threadPoolSize, 0L, TimeUnit.MILLISECONDS, ArrayBlockingQueue(RETENTION_QUEUE_SIZE)) {
+    constructor(needProcessCount: Int, threadPoolSize: Int, completeChecker: (T) -> Boolean, description: String) : super(threadPoolSize, threadPoolSize, 0L, TimeUnit.MILLISECONDS, ArrayBlockingQueue(RETENTION_QUEUE_SIZE)) {
         this.needProcessCount = needProcessCount
         this.completeChecker = completeChecker
         this.description = description
@@ -39,10 +38,14 @@ class QueuedThreadPoolExecutor<T : Any> : ThreadPoolExecutor {
     private val timeStart: Long
     private val uniqueMap: ConcurrentHashMap<T, IUniqueRunnable<T>>
 
+    fun reset(needProcessCount: Int) {
+        this.needProcessCount = needProcessCount
+    }
+
     fun terminate(timeout: Long, unit: TimeUnit) {
         val liveTime = Math.min(unit.toMillis(timeout), MAX_LIVE_TIME)
         var counter = AtomicInteger(0)
-        var submitted = 0L
+        var submitted = 0
         while (true)
             try {
                 val completed = uniqueMap.keys.filter(completeChecker).count()
@@ -53,11 +56,11 @@ class QueuedThreadPoolExecutor<T : Any> : ThreadPoolExecutor {
                         logger.finest(String.format("Waiting for %s %d sec (%d of %d completed, %d tasks finished of %d submitted, %d in queue)", description, counter.get(), completed,
                                 needProcessCount, completedTaskCount, taskCount, queue.size))
 
-                    if (submitted == taskCount && 0L < taskCount && submitted < needProcessCount) {
+                    if (submitted == taskCount.toInt() && 0L < taskCount && submitted < needProcessCount) {
                         logger.severe(String.format("Nothing was submitted to %s, set needProcessCount to %d", description, submitted))
                         needProcessCount = submitted
                     } else
-                        submitted = taskCount
+                        submitted = taskCount.toInt()
                 }
                 Thread.sleep(1000L)
             } catch (e: InterruptedException) {
@@ -73,13 +76,9 @@ class QueuedThreadPoolExecutor<T : Any> : ThreadPoolExecutor {
 
     override fun execute(command: Runnable) {
         if (command is IUniqueRunnable<*>) {
-            if (command is IPostProcessor && !command.withParam)
-                super.execute(command)
-            else {
-                val uniqueObj = (command as IUniqueRunnable<T>).uniqueObject
-                synchronized(uniqueObj) {
-                    if (null == uniqueMap.putIfAbsent(uniqueObj, command)) super.execute(command)
-                }
+            val uniqueObj = (command as IUniqueRunnable<T>).uniqueObject
+            synchronized(uniqueObj) {
+                if (null == uniqueMap.putIfAbsent(uniqueObj, command)) super.execute(command)
             }
         } else
             super.execute(command)

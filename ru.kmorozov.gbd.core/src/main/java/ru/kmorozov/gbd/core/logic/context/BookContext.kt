@@ -27,13 +27,11 @@ class BookContext {
     internal constructor(bookId: String, progress: IProgress, postProcessor: IPostProcessor) {
         this.progress = progress
         this.postProcessor = postProcessor
-        this.started = AtomicBoolean(false)
-        this.pdfCompleted = AtomicBoolean(false)
         this.metadata = LibraryFactory.getMetadata(bookId)
         this.bookInfo = metadata.getBookInfoExtractor(bookId).bookInfo
         pagesBefore = pagesStream.filter { pageInfo -> pageInfo.isFileExists }.count()
-        sigExecutor = QueuedThreadPoolExecutor(1L, QueuedThreadPoolExecutor.THREAD_POOL_SIZE, { true }, "Sig_$bookId")
-        imgExecutor = QueuedThreadPoolExecutor(0L, QueuedThreadPoolExecutor.THREAD_POOL_SIZE, { x -> x.isDataProcessed }, "Img_$bookId")
+        sigExecutor = QueuedThreadPoolExecutor(1, QueuedThreadPoolExecutor.THREAD_POOL_SIZE, { true }, "Sig_$bookId")
+        imgExecutor = QueuedThreadPoolExecutor(0, QueuedThreadPoolExecutor.THREAD_POOL_SIZE, { x -> x.isDataProcessed }, "Img_$bookId")
         extractor = metadata.getImageExtractor(this)
         logger = ExecutionContext.INSTANCE.getLogger(BookContext::class.java, this)
     }
@@ -42,8 +40,8 @@ class BookContext {
     val imgExecutor: QueuedThreadPoolExecutor<AbstractPage>
     var bookInfo: IBookInfo
     private val metadata: ILibraryMetadata
-    var started: AtomicBoolean
-    var pdfCompleted: AtomicBoolean
+    var started: AtomicBoolean = AtomicBoolean(false)
+    var pdfCompleted: AtomicBoolean = AtomicBoolean(true)
     lateinit var storage: IStorage
     var extractor: IImageExtractor
     var pagesBefore: Long = 0

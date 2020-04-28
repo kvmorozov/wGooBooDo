@@ -84,7 +84,7 @@ class PdfMaker : IPostProcessor {
                 (uniqueObject.storage as LocalFSStorage).items.stream().sorted(Comparator.comparing<IStoredItem, Int> { it.pageNum }).forEach { item ->
                     try {
                         FileInputStream(item.asFile()).use { fis ->
-                            if ((item as MayBePageItem).page!!.isScanned || !Images.isInvalidImage(item.asFile(), imgWidth)) {
+                            if ((item as MayBePageItem).page.isScanned || !Images.isInvalidImage(item.asFile(), imgWidth)) {
                                 val bimg = ImageIO.read(fis)
 
                                 if (null == bimg) {

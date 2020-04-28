@@ -148,15 +148,11 @@ class GooglePagesInfo : IPagesInfo, Serializable {
             if (condition.test(currentPage))
                 if (null == blockStart) {
                     blockStart = currentPage
-                } else {
                 }
             else {
-                if (null == blockStart) {
-                } else {
                     pairs.add(createPair(blockStart, prevPage!!))
                     blockStart = null
                 }
-            }
 
             if (currentPage == lastPage && null != blockStart) pairs.add(createPair(blockStart, currentPage))
 

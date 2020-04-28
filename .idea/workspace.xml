@@ -6,24 +6,33 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="832600b3-aa6b-4b28-bef7-61710f4358a7" name="funcs" comment="exclude 2nd scan">
-      <change afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/loader/FileBasedIndex.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/loader/DirContextLoader.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/loader/LocalFSIndex.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/loader/LocalFSIndex.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/loader/LocalFSStorage.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/loader/LocalFSStorage.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/context/ContextProvider.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/context/ContextProvider.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/loader/processors/gbd/GbdLocalProcessor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/loader/processors/gbd/GbdLocalProcessor.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/loader/processors/gbd/GbdRemoteProcessor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/loader/processors/gbd/GbdRemoteProcessor.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/server/controllers/LibraryRestController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/server/controllers/LibraryRestController.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/server/options/AbstractServerGBDOptions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/server/options/AbstractServerGBDOptions.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/resources/application.properties" afterDir="false" />
-    </list>
-    <list id="0c8b21df-78f5-408a-867d-4ccd8443679a" name="Default" comment="idea files">
+    <list default="true" id="832600b3-aa6b-4b28-bef7-61710f4358a7" name="funcs" comment="refactoring">
+      <change afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/producers/AppendableProducer.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/loader/processors/gbd/InMemoryProcessor.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/server/options/InMemoryOptions.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_hamcrest_hamcrest_junit_2_0_0_0.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_hamcrest_java_hamcrest_2_0_0_0.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core.logger/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core.logger/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/context/BookContext.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/context/BookContext.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/context/ExecutionContext.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/context/ExecutionContext.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/AbstractImageExtractor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/AbstractImageExtractor.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/IImageExtractor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/IImageExtractor.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/IPostProcessor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/IPostProcessor.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/google/GoogleImageExtractor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/google/GoogleImageExtractor.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/google/GooglePageSigProcessor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/google/GooglePageSigProcessor.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/utils/QueuedThreadPoolExecutor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/utils/QueuedThreadPoolExecutor.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.db/src/main/java/ru/kmorozov/db/core/logic/model/book/google/GooglePagesInfo.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.db/src/main/java/ru/kmorozov/db/core/logic/model/book/google/GooglePagesInfo.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/pdf/PdfMaker.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/pdf/PdfMaker.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/loader/processors/gbd/GbdLocalProcessor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/loader/processors/gbd/GbdLocalProcessor.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/loader/processors/gbd/ServerPdfMaker.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/loader/processors/gbd/ServerPdfMaker.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/server/controllers/LibraryRestController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/server/controllers/LibraryRestController.kt" afterDir="false" />
+    </list>
+    <list id="0c8b21df-78f5-408a-867d-4ccd8443679a" name="Default" comment="idea files">
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,16 +85,57 @@
       </map>
     </option>
   </component>
+  <component name="LineStatusTrackerManager">
+    <file path="$PROJECT_DIR$/.idea/workspace.xml">
+      <ranges>
+        <range start1="8" end1="10" start2="8" end2="17" changelist="0c8b21df-78f5-408a-867d-4ccd8443679a" />
+        <range start1="11" end1="16" start2="18" end2="29" changelist="0c8b21df-78f5-408a-867d-4ccd8443679a" />
+        <range start1="17" end1="18" start2="30" end2="31" changelist="0c8b21df-78f5-408a-867d-4ccd8443679a" />
+        <range start1="19" end1="26" start2="32" end2="32" changelist="0c8b21df-78f5-408a-867d-4ccd8443679a" />
+        <range start1="27" end1="27" start2="33" end2="34" changelist="0c8b21df-78f5-408a-867d-4ccd8443679a" />
+        <range start1="104" end1="104" start2="111" end2="112" changelist="0c8b21df-78f5-408a-867d-4ccd8443679a" />
+        <range start1="111" end1="111" start2="119" end2="120" changelist="0c8b21df-78f5-408a-867d-4ccd8443679a" />
+        <range start1="211" end1="212" start2="220" end2="221" changelist="0c8b21df-78f5-408a-867d-4ccd8443679a" />
+        <range start1="235" end1="237" start2="244" end2="244" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="252" end1="253" start2="259" end2="259" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="256" end1="256" start2="262" end2="263" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="257" end1="257" start2="264" end2="265" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="262" end1="264" start2="270" end2="270" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="319" end1="320" start2="325" end2="326" changelist="0c8b21df-78f5-408a-867d-4ccd8443679a" />
+        <range start1="729" end1="751" start2="735" end2="747" changelist="0c8b21df-78f5-408a-867d-4ccd8443679a" />
+        <range start1="1074" end1="1075" start2="1070" end2="1092" changelist="0c8b21df-78f5-408a-867d-4ccd8443679a" />
+        <range start1="1137" end1="1140" start2="1154" end2="1154" changelist="0c8b21df-78f5-408a-867d-4ccd8443679a" />
+        <range start1="1162" end1="1163" start2="1176" end2="1180" changelist="0c8b21df-78f5-408a-867d-4ccd8443679a" />
+        <range start1="1174" end1="1175" start2="1191" end2="1192" changelist="0c8b21df-78f5-408a-867d-4ccd8443679a" />
+        <range start1="1177" end1="1179" start2="1194" end2="1196" changelist="0c8b21df-78f5-408a-867d-4ccd8443679a" />
+        <range start1="1181" end1="1183" start2="1198" end2="1200" changelist="0c8b21df-78f5-408a-867d-4ccd8443679a" />
+        <range start1="1185" end1="1187" start2="1202" end2="1204" changelist="0c8b21df-78f5-408a-867d-4ccd8443679a" />
+        <range start1="1189" end1="1191" start2="1206" end2="1208" changelist="0c8b21df-78f5-408a-867d-4ccd8443679a" />
+        <range start1="1193" end1="1195" start2="1210" end2="1212" changelist="0c8b21df-78f5-408a-867d-4ccd8443679a" />
+        <range start1="1197" end1="1199" start2="1214" end2="1216" changelist="0c8b21df-78f5-408a-867d-4ccd8443679a" />
+        <range start1="1201" end1="1203" start2="1218" end2="1220" changelist="0c8b21df-78f5-408a-867d-4ccd8443679a" />
+        <range start1="1205" end1="1207" start2="1222" end2="1224" changelist="0c8b21df-78f5-408a-867d-4ccd8443679a" />
+        <range start1="1209" end1="1211" start2="1226" end2="1228" changelist="0c8b21df-78f5-408a-867d-4ccd8443679a" />
+        <range start1="1213" end1="1215" start2="1230" end2="1232" changelist="0c8b21df-78f5-408a-867d-4ccd8443679a" />
+        <range start1="1217" end1="1219" start2="1234" end2="1236" changelist="0c8b21df-78f5-408a-867d-4ccd8443679a" />
+        <range start1="1221" end1="1223" start2="1238" end2="1240" changelist="0c8b21df-78f5-408a-867d-4ccd8443679a" />
+        <range start1="1225" end1="1227" start2="1242" end2="1244" changelist="0c8b21df-78f5-408a-867d-4ccd8443679a" />
+        <range start1="1229" end1="1231" start2="1246" end2="1248" changelist="0c8b21df-78f5-408a-867d-4ccd8443679a" />
+        <range start1="1233" end1="1235" start2="1250" end2="1252" changelist="0c8b21df-78f5-408a-867d-4ccd8443679a" />
+        <range start1="1237" end1="1239" start2="1254" end2="1256" changelist="0c8b21df-78f5-408a-867d-4ccd8443679a" />
+        <range start1="1241" end1="1243" start2="1258" end2="1260" changelist="0c8b21df-78f5-408a-867d-4ccd8443679a" />
+        <range start1="1245" end1="1246" start2="1262" end2="1279" changelist="0c8b21df-78f5-408a-867d-4ccd8443679a" />
+        <range start1="1269" end1="1274" start2="1302" end2="1302" changelist="0c8b21df-78f5-408a-867d-4ccd8443679a" />
+        <range start1="1311" end1="1311" start2="1339" end2="1360" changelist="0c8b21df-78f5-408a-867d-4ccd8443679a" />
+        <range start1="1313" end1="1314" start2="1362" end2="1363" changelist="0c8b21df-78f5-408a-867d-4ccd8443679a" />
+      </ranges>
+    </file>
+  </component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
         <option name="mavenHome" value="C:/Work/Utils/maven/apache-maven-3.6.0" />
       </MavenGeneralSettings>
-    </option>
-    <option name="importingSettings">
-      <MavenImportingSettings>
-        <option name="importAutomatically" value="true" />
-      </MavenImportingSettings>
     </option>
   </component>
   <component name="MavenRunner">
@@ -98,10 +148,10 @@
   </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ExpandSpringBootJavaOptionsPanel" value="true" />
     <property name="Git.Branch.Popup.ShowAllRemotes" value="true" />
     <property name="RequestMappingsPanelOrder0" value="0" />
     <property name="RequestMappingsPanelOrder1" value="1" />
@@ -109,6 +159,7 @@
     <property name="RequestMappingsPanelWidth0" value="75" />
     <property name="RequestMappingsPanelWidth1" value="75" />
     <property name="RequestMappingsPanelWidth2" value="490" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
@@ -209,7 +260,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="HTTP Request.library#1">
+  <component name="RunManager" selected="Application.main_PROXY">
     <configuration default="true" type="AntRunConfigurationType" factoryName="Ant build" debug-port="25000" max-memory="256" logging-level="0">
       <method />
     </configuration>
@@ -233,8 +284,6 @@
       <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
       <option name="FORCE_STOP_RUNNING_APP" value="true" />
       <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
-      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
-      <option name="PREFERRED_AVD" value="" />
       <option name="DEBUGGER_TYPE" value="Java" />
       <Java />
       <Profilers>
@@ -250,18 +299,17 @@
     </configuration>
     <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Instrumented Tests">
       <option name="TESTING_TYPE" value="0" />
-      <option name="INSTRUMENTATION_RUNNER_CLASS" value="" />
       <option name="METHOD_NAME" value="" />
       <option name="CLASS_NAME" value="" />
       <option name="PACKAGE_NAME" value="" />
+      <option name="INSTRUMENTATION_RUNNER_CLASS" value="" />
       <option name="EXTRA_OPTIONS" value="" />
+      <option name="INCLUDE_GRADLE_EXTRA_OPTIONS" value="true" />
       <option name="CLEAR_LOGCAT" value="false" />
       <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
       <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
       <option name="FORCE_STOP_RUNNING_APP" value="true" />
       <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
-      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
-      <option name="PREFERRED_AVD" value="" />
       <option name="DEBUGGER_TYPE" value="Java" />
       <Java />
       <Profilers>
@@ -317,7 +365,7 @@
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="ru.kmorozov.gbd.Main" />
       <module name="ru.kmorozov.gbd.desktop" />
-      <option name="PROGRAM_PARAMETERS" value="-o J:\OneDrive\others -p web -i R_0VvHWEjQIC -S" />
+      <option name="PROGRAM_PARAMETERS" value="-o &quot;J:\OneDrive2\OneDrive - edy\gbdBooks&quot; -p web -i Ol0FDgAAQBAJ -S" />
       <option name="VM_PARAMETERS" value="-Xms1G -Xmx2G" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -727,28 +775,19 @@
       <workItem from="1583563976090" duration="1743000" />
       <workItem from="1583565768124" duration="3264000" />
       <workItem from="1583582474247" duration="5297000" />
-      <workItem from="1583600293741" duration="1959000" />
-    </task>
-    <task id="LOCAL-00116" summary="archive fixes">
-      <created>1546778657813</created>
-      <option name="number" value="00116" />
-      <option name="presentableId" value="LOCAL-00116" />
-      <option name="project" value="LOCAL" />
-      <updated>1546778657813</updated>
-    </task>
-    <task id="LOCAL-00117" summary="proxy options adjusted">
-      <created>1546938492869</created>
-      <option name="number" value="00117" />
-      <option name="presentableId" value="LOCAL-00117" />
-      <option name="project" value="LOCAL" />
-      <updated>1546938492869</updated>
-    </task>
-    <task id="LOCAL-00118" summary="debug output feature, fixes">
-      <created>1546974758359</created>
-      <option name="number" value="00118" />
-      <option name="presentableId" value="LOCAL-00118" />
-      <option name="project" value="LOCAL" />
-      <updated>1546974758359</updated>
+      <workItem from="1583600293741" duration="2139000" />
+      <workItem from="1583648868120" duration="3640000" />
+      <workItem from="1583663157802" duration="3730000" />
+      <workItem from="1583750021939" duration="9997000" />
+      <workItem from="1584031618269" duration="1439000" />
+      <workItem from="1584196847692" duration="541000" />
+      <workItem from="1585482837687" duration="17000" />
+      <workItem from="1585483018282" duration="168000" />
+      <workItem from="1585483237735" duration="8092000" />
+      <workItem from="1585547491365" duration="10947000" />
+      <workItem from="1585730240466" duration="14000" />
+      <workItem from="1586863776931" duration="3919000" />
+      <workItem from="1588083028122" duration="375000" />
     </task>
     <task id="LOCAL-00119" summary="spring -&gt; kotlin">
       <created>1551010511988</created>
@@ -1072,7 +1111,28 @@
       <option name="project" value="LOCAL" />
       <updated>1583569869423</updated>
     </task>
-    <option name="localTasksCounter" value="165" />
+    <task id="LOCAL-00165" summary="refactoring">
+      <created>1583602277683</created>
+      <option name="number" value="00165" />
+      <option name="presentableId" value="LOCAL-00165" />
+      <option name="project" value="LOCAL" />
+      <updated>1583602277684</updated>
+    </task>
+    <task id="LOCAL-00166" summary="fix server">
+      <created>1583652714449</created>
+      <option name="number" value="00166" />
+      <option name="presentableId" value="LOCAL-00166" />
+      <option name="project" value="LOCAL" />
+      <updated>1583652714450</updated>
+    </task>
+    <task id="LOCAL-00167" summary="sigs refactoring">
+      <created>1583759312770</created>
+      <option name="number" value="00167" />
+      <option name="presentableId" value="LOCAL-00167" />
+      <option name="project" value="LOCAL" />
+      <updated>1583759312770</updated>
+    </task>
+    <option name="localTasksCounter" value="168" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1085,7 +1145,7 @@
     </todo-panel>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="1" />
+    <option name="version" value="2" />
   </component>
   <component name="Vcs.Log.History.Properties">
     <option name="COLUMN_ORDER">
@@ -1102,9 +1162,7 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State>
-              <option name="COLUMN_ORDER" />
-            </State>
+            <State />
           </value>
         </entry>
       </map>
@@ -1123,6 +1181,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="Vcs.Log.UiProperties">
     <option name="RECENTLY_FILTERED_USER_GROUPS">

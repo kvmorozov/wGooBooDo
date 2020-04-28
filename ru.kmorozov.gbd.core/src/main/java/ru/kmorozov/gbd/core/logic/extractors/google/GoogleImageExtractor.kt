@@ -55,6 +55,11 @@ class GoogleImageExtractor(bookContext: BookContext) : AbstractImageExtractor<Go
         initComplete.set(true)
     }
 
+    override fun reset() {
+        processingStarted.set(false)
+        proxyReceived.set(0)
+    }
+
     override fun run() {
         super.run()
 

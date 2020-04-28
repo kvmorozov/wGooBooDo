@@ -24,16 +24,16 @@ class LibraryRestController {
     @Autowired
     @Lazy
     @Qualifier("local")
-    private lateinit var gbdProcessor: IGbdProcessor
+    private lateinit var local: IGbdProcessor
 
     @PostMapping("/gbdUpdate")
     fun gbdUpdate() {
-        gbdProcessor.process()
+        local.process()
     }
 
     @PostMapping("/gbdLoadLocal")
     fun gbdLoad(@RequestParam(name = "bookId", required = true) bookId: String) {
-        gbdProcessor.load(bookId)
+        local.load(bookId)
     }
 
     companion object {

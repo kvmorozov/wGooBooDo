@@ -38,7 +38,8 @@ internal class GooglePageSigProcessor : AbstractHttpProcessor, IUniqueRunnable<G
     constructor(bookContext: BookContext, proxy: HttpHostExt) : super() {
         this.bookContext = bookContext
         this.proxy = proxy
-        sigPageExecutor = QueuedThreadPoolExecutor(bookContext.pagesStream.filter { p -> (p as AbstractPage).isNotProcessed }.count(), QueuedThreadPoolExecutor.THREAD_POOL_SIZE, { it.isProcessed },
+        sigPageExecutor = QueuedThreadPoolExecutor(bookContext.pagesStream.filter { p -> (p as AbstractPage).isNotProcessed }.count().toInt(),
+                QueuedThreadPoolExecutor.THREAD_POOL_SIZE, { it.isProcessed },
                 bookContext.toString() + '/'.toString() + proxy)
         uniqueObject = this
     }
@@ -67,12 +68,12 @@ internal class GooglePageSigProcessor : AbstractHttpProcessor, IUniqueRunnable<G
         return "Sig processor:$bookContext"
     }
 
-    override fun equals(o: Any?): Boolean {
-        if (this === o) return true
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
 
-        if (null == o || javaClass != o.javaClass) return false
+        if (null == other || javaClass != other.javaClass) return false
 
-        val that = o as GooglePageSigProcessor?
+        val that = other as GooglePageSigProcessor?
 
         return EqualsBuilder().append(proxy, that!!.proxy).append(bookContext, that.bookContext).isEquals
     }

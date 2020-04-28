@@ -1,12 +1,12 @@
 package ru.kmorozov.gbd.core.logic.context
 
-import ru.kmorozov.gbd.core.logic.proxy.AbstractProxyListProvider
-import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
-import ru.kmorozov.gbd.core.logic.proxy.UrlType
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractHttpProcessor
 import ru.kmorozov.gbd.core.logic.extractors.base.IPostProcessor
 import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata
 import ru.kmorozov.gbd.core.logic.library.LibraryFactory
+import ru.kmorozov.gbd.core.logic.proxy.AbstractProxyListProvider
+import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
+import ru.kmorozov.gbd.core.logic.proxy.UrlType
 import ru.kmorozov.gbd.logger.Logger
 import ru.kmorozov.gbd.logger.consumers.AbstractOutputReceiver
 import ru.kmorozov.gbd.logger.output.ReceiverProvider
@@ -20,10 +20,6 @@ import java.util.function.ToLongFunction
  * Created by km on 22.11.2015.
  */
 class ExecutionContext private constructor(val output: AbstractOutputReceiver, val isSingleMode: Boolean) {
-    private val bookContextMap: MutableMap<String, BookContext> = ConcurrentHashMap<String, BookContext>()
-    lateinit var bookExecutor: QueuedThreadPoolExecutor<BookContext>
-    lateinit var pdfExecutor: QueuedThreadPoolExecutor<BookContext>
-
     lateinit var defaultMetadata: ILibraryMetadata
 
     val bookIds: Iterable<String>
@@ -64,15 +60,22 @@ class ExecutionContext private constructor(val output: AbstractOutputReceiver, v
     }
 
     fun execute() {
-        bookExecutor = QueuedThreadPoolExecutor(bookContextMap.size.toLong(), 5, { x -> x.isImgStarted }, "bookExecutor")
-        pdfExecutor = QueuedThreadPoolExecutor(bookContextMap.size.toLong(), 5, { x -> x.isPdfCompleted }, "pdfExecutor")
-
         val contexts = getContexts(true)
 
+        bookExecutor.reset(contexts.size)
+        pdfExecutor.reset(contexts.size)
+
         for (bookContext in contexts) {
-            val extractor = bookContext.extractor
-            extractor.newProxyEvent(HttpHostExt.NO_PROXY)
-            bookExecutor.execute(extractor)
+            if (bookContext.isPdfCompleted) {
+                bookContext.started.set(false)
+                bookContext.pdfCompleted.set(false)
+
+                val extractor = bookContext.extractor
+                extractor.reset()
+
+                extractor.newProxyEvent(HttpHostExt.NO_PROXY)
+                bookExecutor.execute(extractor)
+            }
         }
 
         defaultMetadata = LibraryFactory.getMetadata(contexts)
@@ -102,6 +105,9 @@ class ExecutionContext private constructor(val output: AbstractOutputReceiver, v
     }
 
     companion object {
+        private val bookContextMap: MutableMap<String, BookContext> = ConcurrentHashMap<String, BookContext>()
+        lateinit var bookExecutor: QueuedThreadPoolExecutor<BookContext>
+        lateinit var pdfExecutor: QueuedThreadPoolExecutor<BookContext>
 
         internal val logger = Logger.getLogger(ExecutionContext::class.java)
 
@@ -113,6 +119,10 @@ class ExecutionContext private constructor(val output: AbstractOutputReceiver, v
         @Synchronized
         fun initContext(output: AbstractOutputReceiver, singleMode: Boolean) {
             INSTANCE = ExecutionContext(output, singleMode)
+
+            bookExecutor = QueuedThreadPoolExecutor(bookContextMap.size, 5, { x -> x.isImgStarted }, "bookExecutor")
+            pdfExecutor = QueuedThreadPoolExecutor(bookContextMap.size, 5, { x -> x.isPdfCompleted }, "pdfExecutor")
+
             initialized = true
         }
 
