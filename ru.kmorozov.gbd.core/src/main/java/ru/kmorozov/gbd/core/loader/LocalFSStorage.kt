@@ -163,7 +163,7 @@ open class LocalFSStorage : IStorage {
                                     }
                                 }
 
-                                item.page!!.isScanned = true
+                                item.page.isScanned = true
                             } else {
                                 _page.isDataProcessed = false
                                 item.delete()

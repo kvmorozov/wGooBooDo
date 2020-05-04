@@ -8,10 +8,6 @@ import java.nio.charset.StandardCharsets
  */
 class StaticProxyListProvider internal constructor() : AbstractProxyListProvider() {
 
-    init {
-        buildList()
-    }
-
     private fun buildList() {
         try {
             Thread.currentThread().contextClassLoader.getResourceAsStream(PROXY_LIST_RES)!!
@@ -20,6 +16,10 @@ class StaticProxyListProvider internal constructor() : AbstractProxyListProvider
             e.printStackTrace()
         }
 
+    }
+
+    override fun findCandidates() {
+        buildList()
     }
 
     override fun updateProxyList() {

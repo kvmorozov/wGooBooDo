@@ -80,6 +80,7 @@ class ExecutionContext private constructor(val output: AbstractOutputReceiver, v
 
         defaultMetadata = LibraryFactory.getMetadata(contexts)
 
+        AbstractProxyListProvider.INSTANCE.findCandidates()
         AbstractProxyListProvider.INSTANCE.processProxyList(UrlType.GOOGLE_BOOKS)
 
         bookExecutor.terminate(10L, TimeUnit.MINUTES)

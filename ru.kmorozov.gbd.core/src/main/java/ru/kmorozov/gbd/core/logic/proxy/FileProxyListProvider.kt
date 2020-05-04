@@ -11,7 +11,7 @@ import java.util.stream.Collectors
  */
 class FileProxyListProvider internal constructor() : AbstractProxyListProvider() {
 
-    init {
+    override fun findCandidates() {
         val proxyListFileName = GBDOptions.proxyListFile
         if (StringUtils.isEmpty(proxyListFileName)) {
             val proxyListFile = File(proxyListFileName)

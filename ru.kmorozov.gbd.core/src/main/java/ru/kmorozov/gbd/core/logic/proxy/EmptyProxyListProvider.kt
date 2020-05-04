@@ -2,7 +2,7 @@ package ru.kmorozov.gbd.core.logic.proxy
 
 class EmptyProxyListProvider private constructor() : AbstractProxyListProvider() {
 
-    init {
+    override fun findCandidates() {
         proxyList.add(HttpHostExt.NO_PROXY)
 
         proxyListCompleted.set(true)

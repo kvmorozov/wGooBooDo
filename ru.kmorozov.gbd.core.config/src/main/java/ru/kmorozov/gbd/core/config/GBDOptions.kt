@@ -10,49 +10,49 @@ import ru.kmorozov.gbd.core.config.options.PdfOptions
  */
 object GBDOptions {
 
-    private lateinit var INSTANCE: IGBDOptions
+    private lateinit var _INSTANCE: IGBDOptions
 
     val bookId: String
-        get() = INSTANCE.bookId
+        get() = _INSTANCE.bookId
 
     val storage: IStorage
-        get() = INSTANCE.storage
+        get() = _INSTANCE.storage
 
     val proxyListFile: String
-        get() = INSTANCE.proxyListFile
+        get() = _INSTANCE.proxyListFile
 
     val imageWidth: Int
-        get() = INSTANCE.imageWidth
+        get() = _INSTANCE.imageWidth
 
     val isValidConfig: Boolean
-        get() = INSTANCE.storage.isValidOrCreate
+        get() = _INSTANCE.storage.isValidOrCreate
 
     val ctxOptions: CtxOptions
-        get() = INSTANCE.ctxOptions()
+        get() = _INSTANCE.ctxOptions()
 
     fun init(optionHolder: IGBDOptions) {
-        INSTANCE = optionHolder
+        _INSTANCE = optionHolder
     }
 
     val reloadImages: Boolean
-        get() = INSTANCE.reloadImages
+        get() = _INSTANCE.reloadImages
 
     val secureMode: Boolean
-        get() = INSTANCE.secureMode
+        get() = _INSTANCE.secureMode
 
     val debugEnabled: Boolean
-        get() = INSTANCE.debugEnabled
+        get() = _INSTANCE.debugEnabled
 
     val scanEnabled: Boolean
-        get() = INSTANCE.scanEnabled
+        get() = _INSTANCE.scanEnabled
 
     val pdfOptions: PdfOptions
-        get() = if (StringUtils.isEmpty(INSTANCE.pdfOptions())) PdfOptions.DEFAULT_MODE else PdfOptions.getOption(INSTANCE.pdfOptions())
+        get() = if (StringUtils.isEmpty(_INSTANCE.pdfOptions())) PdfOptions.DEFAULT_MODE else PdfOptions.getOption(_INSTANCE.pdfOptions())
 
     fun getImageWidth(defaultValue: Int): Int {
-        return if (0 == INSTANCE.imageWidth) defaultValue else INSTANCE.imageWidth
+        return if (0 == _INSTANCE.imageWidth) defaultValue else _INSTANCE.imageWidth
     }
 
     val authOptions: AuthOptions?
-        get() = INSTANCE.authOptions()
+        get() = _INSTANCE.authOptions()
 }

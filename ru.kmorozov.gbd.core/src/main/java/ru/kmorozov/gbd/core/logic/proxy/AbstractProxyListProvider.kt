@@ -117,6 +117,13 @@ abstract class AbstractProxyListProvider : IProxyListProvider {
         return !ProxyBlacklistHolder.BLACKLIST.isProxyInBlacklist(proxyStr)
     }
 
+    public fun reset() {
+        proxyListCompleted.set(false)
+        proxyListInitStarted.set(false)
+    }
+
+    public abstract fun findCandidates()
+
     companion object {
 
         private const val DEFAULT_PROXY_DELIMITER = ":"

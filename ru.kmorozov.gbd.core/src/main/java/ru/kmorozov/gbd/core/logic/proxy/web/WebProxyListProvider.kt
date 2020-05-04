@@ -9,9 +9,8 @@ import java.util.stream.Collectors
  */
 class WebProxyListProvider : AbstractProxyListProvider() {
 
-    init {
+    override fun findCandidates() {
         val candidateProxies = SslProxiesListProvider().proxyList
-        candidateProxies.addAll(SslProxiesListProvider().proxyList)
 
         this.proxyItems = candidateProxies.stream().filter { notBlacklisted(it) }.limit(20).collect(Collectors.toSet())
         this.proxyItems.addAll(ProxyBlacklistHolder.BLACKLIST.whiteList)
