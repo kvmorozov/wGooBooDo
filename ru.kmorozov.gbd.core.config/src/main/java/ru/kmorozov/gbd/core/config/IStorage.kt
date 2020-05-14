@@ -27,6 +27,10 @@ interface IStorage {
 
     fun refresh()
 
+    fun storeItem(item: IStoredItem) {
+        item.flush()
+    }
+
     fun getIndex(indexName: String, createIfNotExists: Boolean): IIndex
 
     @Throws(IOException::class)

@@ -45,7 +45,7 @@ class CommandLineOptions(commandLineArguments: Array<String>) : IGBDOptions {
 
         option = Option(OPTION_PROXY_FILE_SHORT, OPTION_PROXY_FILE_LONG, true, "Proxy list file")
         option.args = 1
-        option.setOptionalArg(false)
+        option.setOptionalArg(true)
         option.argName = "proxy options "
         options.addOption(option)
 

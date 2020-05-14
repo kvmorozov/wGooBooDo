@@ -72,7 +72,7 @@ abstract class AbstractImageExtractor<T : AbstractPage> : AbstractEventSource, I
     }
 
     override fun reset() {
-        TODO("Not yet implemented")
+
     }
 
     protected inner class EventProcessor internal constructor(private val proxy: HttpHostExt) : Runnable {

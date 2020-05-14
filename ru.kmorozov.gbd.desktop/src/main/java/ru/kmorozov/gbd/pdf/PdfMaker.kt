@@ -1,5 +1,7 @@
 package ru.kmorozov.gbd.pdf
 
+import org.apache.pdfbox.cos.COSDictionary
+import org.apache.pdfbox.cos.COSName
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.PDDocumentInformation
 import org.apache.pdfbox.pdmodel.PDPage
@@ -50,7 +52,6 @@ class PdfMaker : IPostProcessor {
 
         val pdfFile = (uniqueObject.storage as LocalFSStorage).getOrCreatePdf(bookInfo.bookData.title)
 
-
         if (pdfFile.lastModified() < bookInfo.lastPdfChecked)
             existPages = uniqueObject.pagesBefore
         else
@@ -93,7 +94,14 @@ class PdfMaker : IPostProcessor {
                                 } else {
                                     val width = bimg.width.toFloat()
                                     val height = bimg.height.toFloat()
-                                    val pdfPage = PDPage(PDRectangle(width, height))
+
+                                    val page = COSDictionary()
+                                    page.setItem(COSName.TYPE, COSName.PAGE)
+                                    page.setItem(COSName.MEDIA_BOX, PDRectangle(width, height))
+                                    page.setString(COSName.ID, item.page.pid)
+                                    page.setInt(COSName.ORDER, item.page.order)
+
+                                    val pdfPage = PDPage(page)
 
                                     document.addPage(pdfPage)
                                     val img = PDImageXObject.createFromFile(item.asFile().toPath().toString(), document)

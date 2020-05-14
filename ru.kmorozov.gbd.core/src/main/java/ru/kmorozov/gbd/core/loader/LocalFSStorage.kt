@@ -106,6 +106,13 @@ open class LocalFSStorage : IStorage {
 
     }
 
+    override fun storeItem(item: IStoredItem) {
+        if (item is MayBePageItem)
+            detectedItems!!.add(item)
+
+        item.flush()
+    }
+
     override fun getIndex(indexName: String, createIfNotExists: Boolean): IIndex {
         if (!indexes.containsKey(indexName)) {
             val indexFile = File(storageDir.path + File.separator + indexName)

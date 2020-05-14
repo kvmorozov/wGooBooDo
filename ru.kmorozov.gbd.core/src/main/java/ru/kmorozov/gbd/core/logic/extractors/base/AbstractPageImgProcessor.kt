@@ -90,7 +90,7 @@ abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcesso
                     storedItem.write(bytes, read)
                 } while (true)
 
-                storedItem.flush()
+                bookContext.storage.storeItem(storedItem)
 
                 if (storedItem.validate()) {
                     uniqueObject.isDataProcessed = true
