@@ -11,6 +11,9 @@ open class MayBePageItem : ImageItem {
 
     constructor(file: File) : super(file)
 
+    public var prev: MayBePageItem? = null
+    public var next: MayBePageItem? = null
+
     constructor(file: File, page: IPage) : super(file) {
         upgrade(page)
     }
@@ -21,6 +24,9 @@ open class MayBePageItem : ImageItem {
             page.storedItem = this
         }
     }
+
+    override val pageNum: Int
+        get() = if (page == DUMMY_PAGE) super.pageNum else page.order
 
     companion object DUMMY_PAGE : IPage {
         override val pid: String

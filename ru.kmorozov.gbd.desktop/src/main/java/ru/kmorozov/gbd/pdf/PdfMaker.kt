@@ -9,7 +9,6 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream
 import org.apache.pdfbox.pdmodel.common.PDRectangle
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject
 import ru.kmorozov.gbd.core.config.GBDOptions
-import ru.kmorozov.gbd.core.config.IStoredItem
 import ru.kmorozov.gbd.core.config.constants.GBDConstants
 import ru.kmorozov.gbd.core.config.constants.GoogleConstants.DEFAULT_PAGE_WIDTH
 import ru.kmorozov.gbd.core.config.options.PdfOptions
@@ -32,6 +31,8 @@ class PdfMaker : IPostProcessor {
 
     override lateinit var uniqueObject: BookContext
 
+    private var internalPagesMap: MutableMap<Int, PDPage> = TreeMap<Int, PDPage>()
+
     constructor(uniqueObject: BookContext) {
         this.uniqueObject = uniqueObject
     }
@@ -52,16 +53,13 @@ class PdfMaker : IPostProcessor {
 
         val pdfFile = (uniqueObject.storage as LocalFSStorage).getOrCreatePdf(bookInfo.bookData.title)
 
-        if (pdfFile.lastModified() < bookInfo.lastPdfChecked)
-            existPages = uniqueObject.pagesBefore
-        else
-            try {
-                PDDocument.load(pdfFile).use { existDocument -> existPages = existDocument.numberOfPages.toLong() }
-            } catch (ex: Exception) {
-                pdfFile.createNewFile()
-            }
+        existPages = uniqueObject.pagesBefore
 
-        try {
+        val imgWidth = if (0 == GBDOptions.imageWidth) DEFAULT_PAGE_WIDTH else GBDOptions.imageWidth
+
+        (if (existPages == 0L) PDDocument() else PDDocument.load(pdfFile)).use { pdfDocument ->
+            existPages = pdfDocument.numberOfPages.toLong()
+
             val imgCount = (uniqueObject.storage as LocalFSStorage).imgCount()
             if (imgCount <= existPages) {
                 logger.finest("No new pages, exiting...")
@@ -69,66 +67,78 @@ class PdfMaker : IPostProcessor {
                 return
             } else
                 logger.info(String.format("Rewriting pdf from %d to %d pages", existPages, imgCount))
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
 
-        val imgWidth = if (0 == GBDOptions.imageWidth) DEFAULT_PAGE_WIDTH else GBDOptions.imageWidth
+            val itr = pdfDocument.pages.iterator()
+            while (itr.hasNext()) {
+                var page = itr.next()
+                internalPagesMap.put(page.getCOSObject().getInt(COSName.ORDER), page)
+            }
 
-        try {
-            PDDocument().use { document ->
-                var documentInfo = PDDocumentInformation();
-                documentInfo.title = bookInfo.bookData.title;
-                documentInfo.producer = GBDConstants.GBD_APP_NAME;
-                document.documentInformation = documentInfo;
+            var documentInfo = PDDocumentInformation();
+            documentInfo.title = bookInfo.bookData.title;
+            documentInfo.producer = GBDConstants.GBD_APP_NAME;
+            pdfDocument.documentInformation = documentInfo;
 
-                (uniqueObject.storage as LocalFSStorage).items.stream().sorted(Comparator.comparing<IStoredItem, Int> { it.pageNum }).forEach { item ->
-                    try {
-                        FileInputStream(item.asFile()).use { fis ->
-                            if ((item as MayBePageItem).page.isScanned || !Images.isInvalidImage(item.asFile(), imgWidth)) {
-                                val bimg = ImageIO.read(fis)
+            (uniqueObject.storage as LocalFSStorage).items.stream()
+                    .filter { item -> item is MayBePageItem }
+                    .map { item -> item as MayBePageItem }
+                    .filter { item -> !internalPagesMap.containsKey(item.page.order) }
+                    .sorted(Comparator.comparing<MayBePageItem, Int> { it.pageNum }).forEach { item ->
+                        try {
+                            FileInputStream(item.asFile()).use { fis ->
+                                if (item.page.isScanned || !Images.isInvalidImage(item.asFile(), imgWidth)) {
+                                    val bimg = ImageIO.read(fis)
 
-                                if (null == bimg) {
+                                    if (null == bimg) {
+                                        item.delete()
+                                        logger.severe("Image ${item.asFile().toPath().fileName} was deleted!")
+                                    } else {
+                                        val width = bimg.width.toFloat()
+                                        val height = bimg.height.toFloat()
+
+                                        val page = COSDictionary()
+                                        page.setItem(COSName.TYPE, COSName.PAGE)
+                                        page.setItem(COSName.MEDIA_BOX, PDRectangle(width, height))
+                                        page.setString(COSName.ID, item.page.pid)
+                                        page.setInt(COSName.ORDER, item.page.order)
+
+                                        val pdfPage = PDPage(page)
+
+                                        if (internalPagesMap.entries.count { entry -> item.page.order > entry.key } > 0)
+                                            pdfDocument.pages.insertAfter(pdfPage, internalPagesMap.entries.last { entry -> item.page.order > entry.key }.value)
+                                        else {
+                                            val opNearestBefore = internalPagesMap.entries.stream()
+                                                    .filter { entry -> item.page.order < entry.key }.findFirst()
+                                            if (opNearestBefore.isPresent)
+                                                pdfDocument.pages.insertBefore(pdfPage, opNearestBefore.get().value)
+                                            else
+                                                pdfDocument.addPage(pdfPage)
+                                        }
+
+                                        internalPagesMap.put(item.page.order, pdfPage)
+
+                                        val img = PDImageXObject.createFromFile(item.asFile().toPath().toString(), pdfDocument)
+                                        PDPageContentStream(pdfDocument, pdfPage).use { contentStream -> contentStream.drawImage(img, 0.toFloat(), 0.toFloat()) }
+                                    }
+                                } else {
                                     item.delete()
                                     logger.severe("Image ${item.asFile().toPath().fileName} was deleted!")
-                                } else {
-                                    val width = bimg.width.toFloat()
-                                    val height = bimg.height.toFloat()
-
-                                    val page = COSDictionary()
-                                    page.setItem(COSName.TYPE, COSName.PAGE)
-                                    page.setItem(COSName.MEDIA_BOX, PDRectangle(width, height))
-                                    page.setString(COSName.ID, item.page.pid)
-                                    page.setInt(COSName.ORDER, item.page.order)
-
-                                    val pdfPage = PDPage(page)
-
-                                    document.addPage(pdfPage)
-                                    val img = PDImageXObject.createFromFile(item.asFile().toPath().toString(), document)
-                                    PDPageContentStream(document, pdfPage).use { contentStream -> contentStream.drawImage(img, 0.toFloat(), 0.toFloat()) }
                                 }
-                            } else {
+                            }
+                        } catch (fse: FileSystemException) {
+                            fse.printStackTrace()
+                        } catch (e: IOException) {
+                            try {
                                 item.delete()
                                 logger.severe("Image ${item.asFile().toPath().fileName} was deleted!")
+                            } catch (ioe: IOException) {
+                                ioe.printStackTrace()
                             }
-                        }
-                    } catch (fse: FileSystemException) {
-                        fse.printStackTrace()
-                    } catch (e: IOException) {
-                        try {
-                            item.delete()
-                            logger.severe("Image ${item.asFile().toPath().fileName} was deleted!")
-                        } catch (ioe: IOException) {
-                            ioe.printStackTrace()
-                        }
 
+                        }
                     }
-                }
 
-                document.save(pdfFile)
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
+            pdfDocument.save(pdfFile)
         }
 
         bookInfo.lastPdfChecked = System.currentTimeMillis()

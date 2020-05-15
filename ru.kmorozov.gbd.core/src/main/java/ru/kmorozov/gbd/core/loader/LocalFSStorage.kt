@@ -60,13 +60,29 @@ open class LocalFSStorage : IStorage {
         get() = getOrFindItems()
 
     private fun getOrFindItems(): Set<IStoredItem> {
-        if (detectedItems == null)
+        if (detectedItems == null) {
             detectedItems = Files.walk(storageDir.toPath())
                     .filter { !it.toFile().isDirectory }.filter({ Images.isImageFile(it) })
                     .map { MayBePageItem(it.toFile()) }
                     .collect(Collectors.toSet());
 
+            linkPages()
+        }
+
         return detectedItems!!;
+    }
+
+    private fun linkPages() {
+        var sortedPages = detectedItems!!.sortedWith(Comparator.comparing<IStoredItem, Int> { it.pageNum })
+        var itPages = sortedPages.listIterator()
+
+        while (itPages.hasNext()) {
+            val page = itPages.next()
+            if (itPages.previousIndex() > 0)
+                page.prev = sortedPages.get(itPages.previousIndex() - 1)
+            if (itPages.hasNext())
+                page.next = sortedPages.get(itPages.nextIndex())
+        }
     }
 
     override fun getChildStorage(bookData: IBookData): IStorage {
@@ -107,8 +123,11 @@ open class LocalFSStorage : IStorage {
     }
 
     override fun storeItem(item: IStoredItem) {
-        if (item is MayBePageItem)
+        if (item is MayBePageItem) {
             detectedItems!!.add(item)
+
+            linkPages()
+        }
 
         item.flush()
     }
@@ -141,7 +160,8 @@ open class LocalFSStorage : IStorage {
                 try {
                     val _page = bookInfo.pages.getPageByPid(nameParts[1]) as AbstractPage
 
-                    item.upgrade(_page)
+                    item.
+                    upgrade(_page)
 
                     try {
                         val order = Integer.valueOf(nameParts[0])
