@@ -48,19 +48,17 @@ class PdfMaker : IPostProcessor {
         val logger = ExecutionContext.INSTANCE.getLogger(PdfMaker::class.java, uniqueObject)
         logger.info("Starting making pdf file...")
 
-        var existPages = 0L
         val bookInfo = uniqueObject.bookInfo
-
-        val pdfFile = (uniqueObject.storage as LocalFSStorage).getOrCreatePdf(bookInfo.bookData.title)
-
-        existPages = uniqueObject.pagesBefore
+        val storage = uniqueObject.storage as LocalFSStorage
+        val pdfExists = storage.isPdfExists()
+        val pdfFile = storage.getOrCreatePdf(bookInfo.bookData.title)
 
         val imgWidth = if (0 == GBDOptions.imageWidth) DEFAULT_PAGE_WIDTH else GBDOptions.imageWidth
 
-        (if (existPages == 0L) PDDocument() else PDDocument.load(pdfFile)).use { pdfDocument ->
-            existPages = pdfDocument.numberOfPages.toLong()
+        (if (pdfExists) PDDocument.load(pdfFile) else PDDocument()).use { pdfDocument ->
+            val existPages = pdfDocument.numberOfPages.toLong()
 
-            val imgCount = (uniqueObject.storage as LocalFSStorage).imgCount()
+            val imgCount = storage.imgCount()
             if (imgCount <= existPages) {
                 logger.finest("No new pages, exiting...")
                 bookInfo.lastPdfChecked = System.currentTimeMillis()
@@ -79,7 +77,7 @@ class PdfMaker : IPostProcessor {
             documentInfo.producer = GBDConstants.GBD_APP_NAME;
             pdfDocument.documentInformation = documentInfo;
 
-            (uniqueObject.storage as LocalFSStorage).items.stream()
+            storage.items.stream()
                     .filter { item -> item is MayBePageItem }
                     .map { item -> item as MayBePageItem }
                     .filter { item -> !internalPagesMap.containsKey(item.page.order) }

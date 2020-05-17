@@ -4,8 +4,8 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import org.apache.commons.lang3.tuple.ImmutablePair
 import org.apache.commons.lang3.tuple.Pair
+import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPagesInfo
 import ru.kmorozov.gbd.core.logic.model.book.base.IPage
-import ru.kmorozov.gbd.core.logic.model.book.base.IPagesInfo
 import ru.kmorozov.gbd.core.logic.model.book.base.PageNotFoundException
 import ru.kmorozov.gbd.logger.Logger
 import ru.kmorozov.gbd.logger.output.ReceiverProvider
@@ -18,7 +18,7 @@ import java.util.function.Predicate.not
 /**
  * Created by km on 21.11.2015.
  */
-class GooglePagesInfo : IPagesInfo, Serializable {
+class GooglePagesInfo : AbstractPagesInfo(), Serializable {
 
     override val missingPagesList: String
         get() = getListByCondition(not(IPage::isFileExists))
@@ -39,9 +39,9 @@ class GooglePagesInfo : IPagesInfo, Serializable {
     private val prefix: String? = null
 
     @Transient
-    private var pagesMap: MutableMap<String, IPage> = HashMap()
-    @Transient
     private var pagesList: LinkedList<IPage> = LinkedList()
+    @Transient
+    protected var pagesMap: MutableMap<String, IPage> = HashMap()
 
     private fun addPage(page: IPage) {
         pagesMap[page.pid] = page

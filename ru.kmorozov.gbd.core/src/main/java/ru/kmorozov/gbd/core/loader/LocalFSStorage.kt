@@ -21,6 +21,7 @@ import java.util.function.BiPredicate
 import java.util.function.Predicate
 import java.util.stream.Collectors
 import javax.imageio.ImageIO
+import kotlin.collections.HashSet
 
 open class LocalFSStorage : IStorage {
 
@@ -32,7 +33,7 @@ open class LocalFSStorage : IStorage {
 
     val storageDir: File
     protected val logger: Logger
-    private var detectedItems: MutableSet<MayBePageItem>? = null
+    private var detectedItems: MutableSet<MayBePageItem> = HashSet<MayBePageItem>()
 
     private val indexes: MutableMap<String, IIndex>
 
@@ -60,20 +61,20 @@ open class LocalFSStorage : IStorage {
         get() = getOrFindItems()
 
     private fun getOrFindItems(): Set<IStoredItem> {
-        if (detectedItems == null) {
+        if (detectedItems.isEmpty()) {
             detectedItems = Files.walk(storageDir.toPath())
                     .filter { !it.toFile().isDirectory }.filter({ Images.isImageFile(it) })
                     .map { MayBePageItem(it.toFile()) }
                     .collect(Collectors.toSet());
-
-            linkPages()
         }
 
-        return detectedItems!!;
+        linkPages()
+
+        return detectedItems;
     }
 
     private fun linkPages() {
-        var sortedPages = detectedItems!!.sortedWith(Comparator.comparing<IStoredItem, Int> { it.pageNum })
+        var sortedPages = detectedItems.sortedWith(Comparator.comparing<IStoredItem, Int> { it.pageNum })
         var itPages = sortedPages.listIterator()
 
         while (itPages.hasNext()) {
@@ -124,9 +125,7 @@ open class LocalFSStorage : IStorage {
 
     override fun storeItem(item: IStoredItem) {
         if (item is MayBePageItem) {
-            detectedItems!!.add(item)
-
-            linkPages()
+            detectedItems.add(item)
         }
 
         item.flush()
@@ -160,8 +159,7 @@ open class LocalFSStorage : IStorage {
                 try {
                     val _page = bookInfo.pages.getPageByPid(nameParts[1]) as AbstractPage
 
-                    item.
-                    upgrade(_page)
+                    item.upgrade(_page)
 
                     try {
                         val order = Integer.valueOf(nameParts[0])
@@ -220,6 +218,11 @@ open class LocalFSStorage : IStorage {
                 }
             }
         }
+    }
+
+    fun isPdfExists(): Boolean {
+        return Files.list(storageDir.toPath())
+                .filter(Predicate<Path> { filePath -> Images.isPdfFile(filePath) }).count() == 1L
     }
 
     fun getOrCreatePdf(title: String): File {
