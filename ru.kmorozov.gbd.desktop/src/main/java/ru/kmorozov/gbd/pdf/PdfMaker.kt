@@ -6,8 +6,11 @@ import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.PDDocumentInformation
 import org.apache.pdfbox.pdmodel.PDPage
 import org.apache.pdfbox.pdmodel.PDPageContentStream
+import org.apache.pdfbox.pdmodel.common.PDMetadata
 import org.apache.pdfbox.pdmodel.common.PDRectangle
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject
+import org.jsoup.helper.DataUtil
+import org.jsoup.parser.Parser
 import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.config.constants.GBDConstants
 import ru.kmorozov.gbd.core.config.constants.GoogleConstants.DEFAULT_PAGE_WIDTH
@@ -20,6 +23,7 @@ import ru.kmorozov.gbd.core.logic.extractors.base.IPostProcessor
 import ru.kmorozov.gbd.utils.Images
 import java.io.FileInputStream
 import java.io.IOException
+import java.nio.charset.Charset
 import java.nio.file.FileSystemException
 import java.util.*
 import javax.imageio.ImageIO
@@ -69,7 +73,11 @@ class PdfMaker : IPostProcessor {
             val itr = pdfDocument.pages.iterator()
             while (itr.hasNext()) {
                 var page = itr.next()
-                internalPagesMap.put(page.getCOSObject().getInt(COSName.ORDER), page)
+                if (page.metadata != null) {
+                    val docMeta = DataUtil.load(page.metadata.exportXMPMetadata(), Charset.defaultCharset().name(), "", Parser.xmlParser())
+                    val order = Integer.parseInt(docMeta.select("order").text())
+                    internalPagesMap.put(order, page)
+                }
             }
 
             var documentInfo = PDDocumentInformation();
@@ -97,10 +105,16 @@ class PdfMaker : IPostProcessor {
                                         val page = COSDictionary()
                                         page.setItem(COSName.TYPE, COSName.PAGE)
                                         page.setItem(COSName.MEDIA_BOX, PDRectangle(width, height))
-                                        page.setString(COSName.ID, item.page.pid)
-                                        page.setInt(COSName.ORDER, item.page.order)
 
                                         val pdfPage = PDPage(page)
+                                        var metadata = pdfPage.metadata
+                                        if (metadata == null) {
+                                            metadata = PDMetadata(pdfDocument)
+                                            pdfPage.metadata = metadata
+                                        }
+
+                                        val strMetadata = "<meta><pid>${item.page.pid}</pid><order>${item.page.order}</order></meta>"
+                                        metadata.importXMPMetadata(strMetadata.toByteArray(Charset.defaultCharset()))
 
                                         if (internalPagesMap.entries.count { entry -> item.page.order > entry.key } > 0)
                                             pdfDocument.pages.insertAfter(pdfPage, internalPagesMap.entries.last { entry -> item.page.order > entry.key }.value)
@@ -115,7 +129,7 @@ class PdfMaker : IPostProcessor {
 
                                         internalPagesMap.put(item.page.order, pdfPage)
 
-                                        val img = PDImageXObject.createFromFile(item.asFile().toPath().toString(), pdfDocument)
+                                        val img = PDImageXObject.createFromFileByExtension(item.asFile(), pdfDocument)
                                         PDPageContentStream(pdfDocument, pdfPage).use { contentStream -> contentStream.drawImage(img, 0.toFloat(), 0.toFloat()) }
                                     }
                                 } else {
