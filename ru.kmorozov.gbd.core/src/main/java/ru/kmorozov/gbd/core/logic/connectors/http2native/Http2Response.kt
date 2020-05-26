@@ -16,6 +16,9 @@ class Http2Response internal constructor(private val response: HttpResponse<*>) 
     override val imageFormat: String
         get() = response.headers().firstValue("content-type").get().split("/".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1]
 
+    override val headers: String
+        get() = response.headers().toString()
+
     init {
         content = ByteArrayInputStream(response.body() as ByteArray)
     }

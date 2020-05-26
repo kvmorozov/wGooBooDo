@@ -1,11 +1,10 @@
 package ru.kmorozov.gbd.utils
 
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
+import ru.kmorozov.gbd.core.logic.extractors.base.IUniqueReusable
 import ru.kmorozov.gbd.core.logic.extractors.base.IUniqueRunnable
-import java.util.concurrent.ArrayBlockingQueue
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ThreadPoolExecutor
-import java.util.concurrent.TimeUnit
+import java.util.*
+import java.util.concurrent.*
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -15,6 +14,7 @@ class QueuedThreadPoolExecutor<T : Any> : ThreadPoolExecutor {
     private var needProcessCount: Int
     private val completeChecker: (T) -> Boolean
     private val description: String
+    private val reusablePool: Queue<IUniqueReusable<T>> = ConcurrentLinkedQueue<IUniqueReusable<T>>()
 
     constructor(needProcessCount: Int, threadPoolSize: Int, completeChecker: (T) -> Boolean, description: String) : super(threadPoolSize, threadPoolSize, 0L, TimeUnit.MILLISECONDS, ArrayBlockingQueue(RETENTION_QUEUE_SIZE)) {
         this.needProcessCount = needProcessCount
@@ -74,11 +74,27 @@ class QueuedThreadPoolExecutor<T : Any> : ThreadPoolExecutor {
         uniqueMap.clear()
     }
 
+    fun returnReusable(runner: IUniqueReusable<T>) {
+        reusablePool.offer(runner)
+    }
+
     override fun execute(command: Runnable) {
         if (command is IUniqueRunnable<*>) {
             val uniqueObj = (command as IUniqueRunnable<T>).uniqueObject
+
+            var commandToRun = command
+
+            if (command is IUniqueReusable<*>) {
+                (command as IUniqueReusable<T>).reuseCallback = ::returnReusable
+                if (reusablePool.size > 0) {
+                    commandToRun = reusablePool.poll()
+                    if (!commandToRun.initReusable(command))
+                        commandToRun = command
+                }
+            }
+
             synchronized(uniqueObj) {
-                if (null == uniqueMap.putIfAbsent(uniqueObj, command)) super.execute(command)
+                if (null == uniqueMap.putIfAbsent(uniqueObj, command)) super.execute(commandToRun)
             }
         } else
             super.execute(command)

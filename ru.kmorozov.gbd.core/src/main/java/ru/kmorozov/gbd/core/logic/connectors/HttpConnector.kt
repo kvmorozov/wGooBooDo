@@ -7,9 +7,8 @@ import ru.kmorozov.db.utils.Mapper
 import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.proxy.UrlType
 import ru.kmorozov.gbd.logger.Logger
-
 import java.io.IOException
-import java.io.StringReader
+import java.io.InputStreamReader
 import java.nio.charset.Charset
 
 /**
@@ -25,7 +24,7 @@ abstract class HttpConnector : AutoCloseable {
         try {
             val response = getContent(url, proxy, withTimeout)
 
-            return parser.parseInput(StringReader(String(response.content.readAllBytes(), Charset.forName("UTF-8"))), url)
+            return parser.parseInput(InputStreamReader(response.content), url)
         } finally {
             proxy.updateTimestamp()
         }

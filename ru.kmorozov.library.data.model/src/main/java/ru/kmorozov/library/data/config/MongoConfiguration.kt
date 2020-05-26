@@ -1,18 +1,17 @@
 package ru.kmorozov.library.data.config
 
-import com.mongodb.MongoClient
-import com.mongodb.MongoClientURI
+import com.mongodb.client.MongoClient
+import com.mongodb.client.MongoClients
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Configuration
-import org.springframework.data.mongodb.config.AbstractMongoConfiguration
-import java.util.Collections
+import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration
 
 /**
  * Created by sbt-morozov-kv on 28.11.2016.
  */
 
 @Configuration
-open class MongoConfiguration : AbstractMongoConfiguration() {
+open class MongoConfiguration : AbstractMongoClientConfiguration() {
 
     @Value("\${mongo.uri}")
     private lateinit var mongoUri: String
@@ -22,7 +21,7 @@ open class MongoConfiguration : AbstractMongoConfiguration() {
     }
 
     override fun mongoClient(): MongoClient {
-        return MongoClient(MongoClientURI(mongoUri))
+        return MongoClients.create(mongoUri)
     }
 
     override fun getMappingBasePackages(): Collection<String> {

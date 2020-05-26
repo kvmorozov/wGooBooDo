@@ -2,10 +2,10 @@ package ru.kmorozov.gbd.core.logic.extractors.base
 
 import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.config.IStoredItem
-import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.context.BookContext
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
 import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage
+import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.logger.Logger
 import ru.kmorozov.gbd.utils.Images
 import java.io.IOException
@@ -17,21 +17,33 @@ import javax.net.ssl.SSLException
 /**
  * Created by sbt-morozov-kv on 18.11.2016.
  */
-abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcessor, IUniqueRunnable<T> {
-    protected val bookContext: BookContext
-    override var uniqueObject: T
-    protected val usedProxy: HttpHostExt
+abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcessor, IUniqueReusable<T> {
+    protected lateinit var bookContext: BookContext
+    override lateinit var uniqueObject: T
+    protected lateinit var usedProxy: HttpHostExt
+    override lateinit var reuseCallback: (IUniqueReusable<T>) -> Unit
+    protected lateinit var logger: Logger
+    protected abstract val successMsg: String
 
     protected constructor(bookContext: BookContext, page: T, usedProxy: HttpHostExt) : super() {
+        initProcessor(bookContext, page, usedProxy)
+    }
+
+    private fun initProcessor(bookContext: BookContext, page: T, usedProxy: HttpHostExt) {
         this.bookContext = bookContext
         this.uniqueObject = page
         this.usedProxy = usedProxy
         logger = ExecutionContext.INSTANCE.getLogger(javaClass, bookContext)
     }
 
-    protected val logger: Logger
+    override fun initReusable(pattern: IUniqueReusable<T>): Boolean {
+        if (pattern is AbstractPageImgProcessor<T>) {
+            initProcessor(pattern.bookContext, pattern.uniqueObject, pattern.usedProxy)
 
-    protected abstract val successMsg: String
+            return true
+        } else
+            return false
+    }
 
     @JvmOverloads
     protected fun processImage(imgUrl: String, proxy: HttpHostExt = HttpHostExt.NO_PROXY): Boolean {
@@ -95,12 +107,11 @@ abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcesso
                 if (storedItem.validate()) {
                     uniqueObject.isDataProcessed = true
                     uniqueObject.isScanned = true
+                    uniqueObject.isFileExists = true
 
                     proxy.promoteProxy()
 
                     logger.info(successMsg)
-                    uniqueObject.isDataProcessed = true
-                    uniqueObject.isFileExists = true
 
                     return true
                 } else {
@@ -138,6 +149,8 @@ abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcesso
                     e.printStackTrace()
                 }
             }
+
+            reuseCallback(this)
         }
 
         return false

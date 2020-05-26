@@ -17,7 +17,7 @@ import ru.kmorozov.gbd.core.logic.connectors.Response
 import ru.kmorozov.gbd.core.logic.context.BookContext
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractHttpProcessor
-import ru.kmorozov.gbd.core.logic.extractors.base.IUniqueRunnable
+import ru.kmorozov.gbd.core.logic.extractors.base.IUniqueReusable
 import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage
 import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.utils.QueuedThreadPoolExecutor
@@ -31,22 +31,34 @@ import javax.net.ssl.SSLException
 /**
  * Created by km on 21.11.2015.
  */
-internal class GooglePageSigProcessor : AbstractHttpProcessor, IUniqueRunnable<GooglePageSigProcessor> {
-    private val bookContext: BookContext
-    private val proxy: HttpHostExt
+internal class GooglePageSigProcessor : AbstractHttpProcessor, IUniqueReusable<GooglePageSigProcessor> {
+    private lateinit var bookContext: BookContext
+    private lateinit var proxy: HttpHostExt
+    override lateinit var reuseCallback: (IUniqueReusable<GooglePageSigProcessor>) -> Unit
+    private val sigPageExecutor: QueuedThreadPoolExecutor<GooglePageInfo>
+    override lateinit var uniqueObject: GooglePageSigProcessor
 
     constructor(bookContext: BookContext, proxy: HttpHostExt) : super() {
-        this.bookContext = bookContext
-        this.proxy = proxy
         sigPageExecutor = QueuedThreadPoolExecutor(bookContext.pagesStream.filter { p -> (p as AbstractPage).isNotProcessed }.count().toInt(),
                 QueuedThreadPoolExecutor.THREAD_POOL_SIZE, { it.isProcessed },
                 bookContext.toString() + '/'.toString() + proxy)
+        initProcessor(bookContext, proxy)
+    }
+
+    private fun initProcessor(bookContext: BookContext, proxy: HttpHostExt) {
+        this.bookContext = bookContext
+        this.proxy = proxy
         uniqueObject = this
     }
 
-    private val sigPageExecutor: QueuedThreadPoolExecutor<GooglePageInfo>
+    override fun initReusable(pattern: IUniqueReusable<GooglePageSigProcessor>): Boolean {
+        if (pattern is GooglePageSigProcessor) {
+            initProcessor(pattern.bookContext, pattern.proxy)
 
-    override var uniqueObject: GooglePageSigProcessor
+            return true
+        } else
+            return false
+    }
 
     override fun run() {
         if (GBDOptions.secureMode && proxy.isLocal || !proxy.isAvailable) return
@@ -82,7 +94,15 @@ internal class GooglePageSigProcessor : AbstractHttpProcessor, IUniqueRunnable<G
         return HashCodeBuilder(17, 37).append(proxy).append(bookContext).toHashCode()
     }
 
-    private inner class SigProcessorInternal internal constructor(override var uniqueObject: GooglePageInfo) : IUniqueRunnable<GooglePageInfo> {
+    private inner class SigProcessorInternal internal constructor(override var uniqueObject: GooglePageInfo) : IUniqueReusable<GooglePageInfo> {
+
+        override lateinit var reuseCallback: (IUniqueReusable<GooglePageInfo>) -> Unit
+
+        override fun initReusable(pattern: IUniqueReusable<GooglePageInfo>): Boolean {
+            this.uniqueObject = pattern.uniqueObject
+
+            return true
+        }
 
         override fun run() {
             if (!proxy.isAvailable) return
@@ -164,6 +184,8 @@ internal class GooglePageSigProcessor : AbstractHttpProcessor, IUniqueRunnable<G
                 ex.printStackTrace()
             } finally {
                 response.close()
+
+                reuseCallback(this)
             }
         }
     }

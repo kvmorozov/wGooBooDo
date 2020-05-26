@@ -14,6 +14,9 @@ class AsyncHttpResponse internal constructor(private val response: Response) : r
     override val content: InputStream
         get() = response.responseBodyAsStream
 
+    override val headers: String
+        get() = response.headers.toString()
+
     override val imageFormat: String
         get() {
             val rawContendType = response.contentType

@@ -3,6 +3,7 @@ package ru.kmorozov.gbd.core.logic.extractors
 import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.context.BookContext
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractPageImgProcessor
+import ru.kmorozov.gbd.core.logic.extractors.base.IUniqueRunnable
 import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage
 
 /**

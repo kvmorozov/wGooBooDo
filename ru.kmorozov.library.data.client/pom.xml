@@ -6,10 +6,6 @@
 
     <artifactId>ru.kmorozov.library.data.client</artifactId>
 
-    <properties>
-        <kotlin.version>1.3.72</kotlin.version>
-    </properties>
-
     <parent>
         <groupId>ru.kmorozov.library</groupId>
         <artifactId>ru.kmorozov.library.parent</artifactId>

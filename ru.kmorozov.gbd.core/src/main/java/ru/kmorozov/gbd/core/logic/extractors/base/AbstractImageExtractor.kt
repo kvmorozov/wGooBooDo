@@ -1,11 +1,11 @@
 package ru.kmorozov.gbd.core.logic.extractors.base
 
 import ru.kmorozov.gbd.core.config.GBDOptions
-import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.context.BookContext
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
 import ru.kmorozov.gbd.core.logic.extractors.SimplePageImgProcessor
 import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage
+import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.logger.Logger
 import ru.kmorozov.gbd.logger.consumers.AbstractOutputReceiver
 import ru.kmorozov.gbd.logger.events.AbstractEventSource

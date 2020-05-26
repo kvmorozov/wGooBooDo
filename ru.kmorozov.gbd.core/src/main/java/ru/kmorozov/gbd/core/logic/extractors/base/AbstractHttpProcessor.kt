@@ -1,12 +1,14 @@
 package ru.kmorozov.gbd.core.logic.extractors.base
 
 import com.google.api.client.http.HttpStatusCodes
-import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
+import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
 import ru.kmorozov.gbd.core.logic.connectors.Response
 import ru.kmorozov.gbd.core.logic.connectors.Response.Companion.EMPTY_RESPONSE
 import ru.kmorozov.gbd.core.logic.connectors.ResponseException
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
+import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
+import ru.kmorozov.gbd.logger.Logger
 import java.io.IOException
 import java.net.SocketException
 import javax.net.ssl.SSLException
@@ -22,8 +24,12 @@ open class AbstractHttpProcessor {
             for (connector in connectors) {
                 resp = connector.getContent(rqUrl, proxy, withTimeout)
 
-                if (!resp.empty)
+                if (!resp.empty) {
+                    if (GBDOptions.debugEnabled && !resp.imageFormat.contentEquals("json"))
+                        logger.info("Headers: ${resp.headers}")
+
                     return resp
+                }
             }
 
             if (resp.empty && !proxy.isLocal)
@@ -59,6 +65,7 @@ open class AbstractHttpProcessor {
     }
 
     companion object {
+        private val logger = Logger.getLogger(AbstractHttpProcessor::class.java)
 
         public val connectors: List<HttpConnector>
             get() = ExecutionContext.INSTANCE.defaultMetadata.preferredConnectors()

@@ -8,7 +8,7 @@ import ru.kmorozov.gbd.core.logic.connectors.apache.SimpleApacheConnections
 import ru.kmorozov.gbd.core.logic.connectors.asynchttp.AsyncHttpConnector
 import ru.kmorozov.gbd.core.logic.connectors.google.GoogleHttpConnector
 import ru.kmorozov.gbd.core.logic.connectors.http2native.Http2Connector
-import ru.kmorozov.gbd.core.logic.connectors.ok.OkHttpConnector
+import ru.kmorozov.gbd.core.logic.connectors.ktor.KtorConnector
 import ru.kmorozov.gbd.core.logic.context.BookContext
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookInfoExtractor
 import ru.kmorozov.gbd.core.logic.extractors.base.IImageExtractor
@@ -32,10 +32,10 @@ interface ILibraryMetadata {
 
     companion object {
         val GOOGLE_CONNECTOR = GoogleHttpConnector()
-//        val ASYNC_CONNECTOR = AsyncHttpConnector()
-        val OK_CONNECTOR = OkHttpConnector()
+        val ASYNC_CONNECTOR = AsyncHttpConnector()
         val GOOGLE_APACHE_CONNECTOR = ApacheHttpConnector(GoogleApacheConnections.INSTANCE)
         val SIMPLE_APACHE_CONNECTOR = ApacheHttpConnector(SimpleApacheConnections.INSTANCE)
         val HTTP_2_CONNECTOR = Http2Connector()
+        val KTOR_CONNECTOR = KtorConnector()
     }
 }

@@ -21,6 +21,17 @@
         </dependency>
 
         <dependency>
+            <groupId>io.ktor</groupId>
+            <artifactId>ktor-client-core</artifactId>
+            <version>1.3.2-1.4-M1-2</version>
+        </dependency>
+        <dependency>
+            <groupId>io.ktor</groupId>
+            <artifactId>ktor-client-cio</artifactId>
+            <version>1.3.2-1.4-M1-2</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>LATEST</version>
@@ -62,20 +73,7 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-transport-native-epoll</artifactId>
-            <version>4.1.46.Final</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>okhttp</artifactId>
-            <version>4.4.0</version>
-            <scope>compile</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.jetbrains.kotlin</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
+            <version>4.1.48.Final</version>
         </dependency>
 
         <dependency>
@@ -146,6 +144,14 @@
             <name>Bintray Kotlin EAP Repository</name>
             <url>https://dl.bintray.com/kotlin/kotlin-eap</url>
         </repository>
+        <repository>
+            <id>ktor</id>
+            <url>https://dl.bintray.com/kotlin/ktor/</url>
+        </repository>
+        <repository>
+            <id>kotlinx</id>
+            <url>https://dl.bintray.com/kotlin/kotlinx/</url>
+        </repository>
     </repositories>
 
     <pluginRepositories>
@@ -193,17 +199,6 @@
 
     <profiles>
         <profile>
-            <id>ok-connector</id>
-            <dependencies>
-                <dependency>
-                    <groupId>com.squareup.okhttp3</groupId>
-                    <artifactId>okhttp</artifactId>
-                    <version>4.4.0</version>
-                </dependency>
-            </dependencies>
-        </profile>
-
-        <profile>
             <id>apachehttp5-connector</id>
             <dependencies>
                 <dependency>
@@ -226,7 +221,7 @@
                 <dependency>
                     <groupId>io.netty</groupId>
                     <artifactId>netty-handler</artifactId>
-                    <version>4.1.46.Final</version>
+                    <version>4.1.48.Final</version>
                 </dependency>
             </dependencies>
         </profile>

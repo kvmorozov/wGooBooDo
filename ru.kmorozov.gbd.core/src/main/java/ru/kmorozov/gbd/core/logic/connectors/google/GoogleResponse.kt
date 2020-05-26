@@ -20,6 +20,9 @@ internal class GoogleResponse(private val response: HttpResponse) : Response {
     override val imageFormat: String
         get() = response.mediaType.subType
 
+    override val headers: String
+        get() = response.headers.toString()
+
     override fun close() {
 
     }

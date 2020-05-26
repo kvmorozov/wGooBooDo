@@ -6,10 +6,10 @@ import com.google.api.client.http.HttpRequestFactory
 import com.google.api.client.http.HttpResponseException
 import com.google.api.client.http.javanet.NetHttpTransport.Builder
 import ru.kmorozov.gbd.core.config.GBDOptions
-import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
 import ru.kmorozov.gbd.core.logic.connectors.Response
 import ru.kmorozov.gbd.core.logic.connectors.Response.Companion.EMPTY_RESPONSE
+import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.logger.Logger
 import java.net.SocketTimeoutException
 import java.net.URI
@@ -23,7 +23,7 @@ class GoogleHttpConnector : HttpConnector() {
     private fun getFactory(proxy: HttpHostExt): HttpRequestFactory {
         val key = getProxyKey(proxy)
 
-        return httpFactoryMap.getOrDefault(key, Builder().setProxy(proxy.proxy).build().createRequestFactory())
+        return httpFactoryMap.getOrPut(key, { Builder().setProxy(proxy.proxy).build().createRequestFactory() })
     }
 
     override fun getContent(rqUrl: String, proxy: HttpHostExt, withTimeout: Boolean): Response {

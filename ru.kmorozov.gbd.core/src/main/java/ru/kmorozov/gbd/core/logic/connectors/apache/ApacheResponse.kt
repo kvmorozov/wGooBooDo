@@ -18,6 +18,9 @@ class ApacheResponse internal constructor(private val response: CloseableHttpRes
         @Throws(IOException::class)
         get() = response.entity.content
 
+    override val headers: String
+        get() = response.headers.toString()
+
     override val imageFormat: String
         get() {
             val contentType = response.entity.contentType

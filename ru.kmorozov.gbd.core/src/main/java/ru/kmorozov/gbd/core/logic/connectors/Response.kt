@@ -12,6 +12,8 @@ interface Response : Closeable {
 
     val imageFormat: String
 
+    val headers: String
+
     val statusCode: Int
 
     val empty: Boolean
@@ -25,6 +27,8 @@ interface Response : Closeable {
                 get() = System.`in`;
             override val imageFormat: String
                 get() = "unknown"
+            override val headers: String
+                get() = "empty headers"
 
             override fun close() {
 

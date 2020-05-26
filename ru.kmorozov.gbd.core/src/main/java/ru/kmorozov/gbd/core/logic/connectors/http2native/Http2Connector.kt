@@ -1,10 +1,10 @@
 package ru.kmorozov.gbd.core.logic.connectors.http2native
 
 import ru.kmorozov.gbd.core.config.GBDOptions
-import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
 import ru.kmorozov.gbd.core.logic.connectors.Response
 import ru.kmorozov.gbd.core.logic.connectors.Response.Companion.EMPTY_RESPONSE
+import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.logger.Logger
 import java.io.IOException
 import java.net.ProxySelector
@@ -89,7 +89,7 @@ class Http2Connector : HttpConnector() {
     companion object {
 
         private val httpClientsMap = ConcurrentHashMap<String, HttpClient>()
-        private val logger = Logger.getLogger(HttpConnector::class.java)
+        private val logger = Logger.getLogger(Http2Connector::class.java)
         private val DEFAULT_CLIENT = HttpClient.newHttpClient()
     }
 }
