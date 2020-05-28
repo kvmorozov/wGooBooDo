@@ -46,7 +46,7 @@ class KtorConnector : HttpConnector() {
         if (GBDOptions.secureMode && proxy.isLocal || !proxy.isAvailable)
             Response.EMPTY_RESPONSE
 
-        val client = DEFAULT_CLIENT
+        val client = getClient(proxy)
 
         val resp: HttpResponse
         val rqBuilder = HttpRequestBuilder()

@@ -3,6 +3,7 @@ package ru.kmorozov.gbd.core.logic.extractors.google
 import com.google.common.base.Strings
 import ru.kmorozov.db.core.logic.model.book.google.GoogleBookData
 import ru.kmorozov.db.core.logic.model.book.google.GooglePageInfo
+import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.logic.context.BookContext
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractImageExtractor
@@ -72,6 +73,9 @@ class GoogleImageExtractor(bookContext: BookContext) : AbstractImageExtractor<Go
                 waitingProxy.add(proxy)
                 return
             }
+
+            if (GBDOptions.debugEnabled)
+                logger.info("Received proxy event for ${proxy.toString()}")
 
             if (proxy.isAvailable) uniqueObject.sigExecutor.execute(GooglePageSigProcessor(uniqueObject, proxy))
 

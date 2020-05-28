@@ -1,7 +1,7 @@
 package ru.kmorozov.gbd.core.logic.extractors.google
 
+import com.google.common.base.Strings
 import com.google.gson.JsonParseException
-import org.apache.commons.lang3.StringUtils
 import org.apache.commons.lang3.builder.EqualsBuilder
 import org.apache.commons.lang3.builder.HashCodeBuilder
 import org.apache.hc.core5.http.NoHttpResponseException
@@ -129,7 +129,7 @@ internal class GooglePageSigProcessor : AbstractHttpProcessor, IUniqueReusable<G
                 } catch (se: SSLException) {
                 }
 
-                if (StringUtils.isEmpty(respStr)) {
+                if (Strings.isNullOrEmpty(respStr)) {
                     logger.finest(String.format(SIG_ERROR_TEMPLATE, rqUrl, proxy.toString()))
                     return
                 }
@@ -152,8 +152,11 @@ internal class GooglePageSigProcessor : AbstractHttpProcessor, IUniqueReusable<G
                             if (_page.isDataProcessed) return@forEach;
 
                             val _frameSrc = (framePage as GooglePageInfo).src
-                            if (null != _frameSrc)
-                                if (_page.addSrc(_frameSrc)) {
+                            if (!Strings.isNullOrEmpty(_frameSrc))
+                                if (GBDOptions.debugEnabled)
+                                    logger.info("Sig candidate found ${_frameSrc}")
+
+                                if (_page.addSrc(_frameSrc!!)) {
                                     if (_page.pid == uniqueObject.pid) {
                                         proxy.promoteProxy()
 

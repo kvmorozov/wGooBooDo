@@ -9,8 +9,7 @@ class ManagedProxyListProvider(private val parentProvider: IProxyListProvider, p
             if (checkReady(HttpHostExt.NO_PROXY))
                 return HttpHostExt.NO_PROXY
 
-            if (!parentProvider.proxyListCompleted())
-                parentProvider.processProxyList(UrlType.JSTOR)
+            parentProvider.processProxyList(UrlType.JSTOR)
 
             var opProxy: Optional<HttpHostExt>
             do {

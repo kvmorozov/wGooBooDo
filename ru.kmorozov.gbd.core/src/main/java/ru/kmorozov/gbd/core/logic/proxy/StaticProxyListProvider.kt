@@ -11,7 +11,10 @@ class StaticProxyListProvider internal constructor() : AbstractProxyListProvider
     private fun buildList() {
         try {
             Thread.currentThread().contextClassLoader.getResourceAsStream(PROXY_LIST_RES)!!
-                    .use { stream -> this.proxyItems = String(stream.readAllBytes(), StandardCharsets.UTF_8).lines().toMutableSet() }
+                    .use { stream ->
+                        this.proxyItems = String(stream.readAllBytes(), StandardCharsets.UTF_8)
+                                .lines().map { getInetAddress(it) }.toMutableSet()
+                    }
         } catch (e: IOException) {
             e.printStackTrace()
         }

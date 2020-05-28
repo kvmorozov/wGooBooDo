@@ -1,6 +1,6 @@
 package ru.kmorozov.library.data.server.storage
 
-import org.apache.commons.lang3.StringUtils
+import com.google.common.base.Strings
 import ru.kmorozov.gbd.core.config.IIndex
 import ru.kmorozov.gbd.core.config.IStorage
 import ru.kmorozov.gbd.core.config.IStoredItem
@@ -52,7 +52,7 @@ class ServerStorage(private val api: OneDriveProvider, private val root: OneDriv
                 .replace(">", "")
                 .replace("?", "")
                 .replace("/", ".")
-        val childName = if (StringUtils.isEmpty(volumeId)) normalizedName else normalizedName + ' '.toString() + bookData.volumeId
+        val childName = if (Strings.isNullOrEmpty(volumeId)) normalizedName else normalizedName + ' '.toString() + bookData.volumeId
 
         return ServerStorage(api, api.createFolder(root!!, childName))
     }

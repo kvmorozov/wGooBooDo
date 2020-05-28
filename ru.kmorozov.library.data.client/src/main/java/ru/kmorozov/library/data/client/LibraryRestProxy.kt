@@ -1,8 +1,8 @@
 package ru.kmorozov.library.data.client
 
+import com.google.common.base.Strings
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder
 import org.springframework.http.HttpMethod
-import org.springframework.util.StringUtils
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
@@ -124,7 +124,7 @@ class LibraryRestProxy(private val template: RestTemplate) : IDataRestServer {
         val builder = UriComponentsBuilder.newInstance()
         builder.scheme("http").host("localhost").port(9000).path(operation)
 
-        if (!StringUtils.isEmpty(paramName) && !StringUtils.isEmpty(paramValue))
+        if (!Strings.isNullOrEmpty(paramName) && !Strings.isNullOrEmpty(paramValue))
             builder.queryParam(paramName!!, paramValue!!)
 
         val uri = builder.build().toString()

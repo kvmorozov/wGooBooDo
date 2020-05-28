@@ -6,28 +6,38 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="832600b3-aa6b-4b28-bef7-61710f4358a7" name="funcs" comment="refactoring">
-      <change afterPath="$PROJECT_DIR$/ru.kmorozov.ldoc.dictionary/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ru.kmorozov.ldoc.dictionary/src/main/java/com/logicaldoc/gbd/dictionary/DictionaryOptions.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ru.kmorozov.ldoc.dictionary/src/main/java/com/logicaldoc/gbd/dictionary/GbdDictionary.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ru.kmorozov.ldoc.dictionary/src/test/java/ru/kmorozov/gbd/dictionary/tests/DictionaryTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/server/scheduler/ProxyUpdater.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/server/state/ServerState.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+    <list default="true" id="832600b3-aa6b-4b28-bef7-61710f4358a7" name="funcs" comment="incremental pdf maker">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core.config/src/main/java/ru/kmorozov/gbd/core/config/GBDOptions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core.config/src/main/java/ru/kmorozov/gbd/core/config/GBDOptions.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/ru/kmorozov/onedrive/client/authoriser/OneDriveAuthorisationProvider.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/ru/kmorozov/onedrive/client/authoriser/OneDriveAuthorisationProvider.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core.logger/src/main/java/ru/kmorozov/gbd/logger/output/DebugReceiver.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core.logger/src/main/java/ru/kmorozov/gbd/logger/output/DebugReceiver.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/loader/LocalFSIndex.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/loader/LocalFSIndex.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/loader/LocalFSStorage.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/loader/LocalFSStorage.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/context/ExecutionContext.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/context/ExecutionContext.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/connectors/HttpConnector.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/connectors/HttpConnector.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/connectors/ktor/KtorConnector.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/connectors/ktor/KtorConnector.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/AbstractHttpProcessor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/AbstractHttpProcessor.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/google/GoogleImageExtractor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/google/GoogleImageExtractor.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/google/GooglePageSigProcessor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/google/GooglePageSigProcessor.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/proxy/AbstractProxyListProvider.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/proxy/AbstractProxyListProvider.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/proxy/EmptyProxyListProvider.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/proxy/EmptyProxyListProvider.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/proxy/FileProxyListProvider.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/proxy/FileProxyListProvider.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/proxy/HttpHostExt.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/proxy/HttpHostExt.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/proxy/IProxyListProvider.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/proxy/IProxyListProvider.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/proxy/ManagedProxyListProvider.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/proxy/ManagedProxyListProvider.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/proxy/StaticProxyListProvider.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/proxy/StaticProxyListProvider.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/proxy/web/WebProxyListProvider.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/proxy/web/WebProxyListProvider.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.db/src/main/java/ru/kmorozov/db/core/logic/model/book/google/GoogleBookData.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.db/src/main/java/ru/kmorozov/db/core/logic/model/book/google/GoogleBookData.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.parent/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.parent/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/producers/OptionsBasedProducer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/producers/OptionsBasedProducer.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.db/src/main/java/ru/kmorozov/db/core/logic/model/book/google/GooglePageInfo.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.db/src/main/java/ru/kmorozov/db/core/logic/model/book/google/GooglePageInfo.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.client/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/server/LibraryRestServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/server/LibraryRestServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/java/ru/kmorozov/library/data/client/LibraryRestProxy.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/main/java/ru/kmorozov/library/data/client/LibraryRestProxy.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/test/java/ru/kmorozov/library/data/client/test/LibraryRestTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.client/src/test/java/ru/kmorozov/library/data/client/test/LibraryRestTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.model/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.model/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.model/src/main/java/ru/kmorozov/library/data/model/dto/UserDTO.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.model/src/main/java/ru/kmorozov/library/data/model/dto/UserDTO.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/loader/processors/gbd/ServerProducer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/loader/processors/gbd/ServerProducer.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/loader/utils/BookUtils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/loader/utils/BookUtils.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/server/controllers/StorageController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/server/controllers/StorageController.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/server/scheduler/ProxyUpdater.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/server/scheduler/ProxyUpdater.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/server/storage/ServerStorage.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/server/storage/ServerStorage.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.parent/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.library.parent/pom.xml" afterDir="false" />
     </list>
     <list id="0c8b21df-78f5-408a-867d-4ccd8443679a" name="Default" comment="idea files">
@@ -42,20 +52,6 @@
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
   </component>
-  <component name="DatabaseView">
-    <option name="SHOW_INTERMEDIATE" value="true" />
-    <option name="GROUP_DATA_SOURCES" value="true" />
-    <option name="GROUP_SCHEMA" value="true" />
-    <option name="GROUP_CONTENTS" value="false" />
-    <option name="SORT_POSITIONED" value="false" />
-    <option name="SHOW_EMPTY_GROUPS" value="false" />
-    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
-    <option name="HIDDEN_KINDS">
-      <set />
-    </option>
-    <expand />
-    <select />
-  </component>
   <component name="DefaultGradleProjectSettings">
     <option name="isMigrated" value="true" />
   </component>
@@ -65,11 +61,11 @@
         <option value="module-info" />
         <option value="Interface" />
         <option value="Enum" />
-        <option value="Kotlin File" />
-        <option value="Kotlin Interface" />
         <option value="Kotlin Object" />
-        <option value="Kotlin Class" />
         <option value="Class" />
+        <option value="Kotlin Interface" />
+        <option value="Kotlin Class" />
+        <option value="Kotlin File" />
       </list>
     </option>
   </component>
@@ -80,13 +76,6 @@
       <map>
         <entry key="$PROJECT_DIR$" value="gbd-web" />
       </map>
-    </option>
-  </component>
-  <component name="MavenImportPreferences">
-    <option name="generalSettings">
-      <MavenGeneralSettings>
-        <option name="mavenHome" value="C:/Work/Utils/maven/apache-maven-3.6.0" />
-      </MavenGeneralSettings>
     </option>
   </component>
   <component name="MavenRunner">
@@ -102,6 +91,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="DatabaseDriversLRU" value="mariadb" />
     <property name="ExpandSpringBootJavaOptionsPanel" value="true" />
     <property name="Git.Branch.Popup.ShowAllRemotes" value="true" />
     <property name="RequestMappingsPanelOrder0" value="0" />
@@ -118,15 +108,15 @@
     <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1553936102230" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="HTTP Request" />
     <property name="js.eslint.eslintPackage" value="" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../LDOC/tomcat/webapps/ROOT/WEB-INF" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../LDOC/tomcat/webapps/ROOT/WEB-INF/lib/logicaldoc-importfolder-8.4.2-plugin.jar!/" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.last.edited" value="Global Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2632184" />
     <property name="prop_add_unversioned_files" value="true" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.javacompiler" />
+    <property name="settings.editor.selected.configurable" value="preferences.language.Kotlin" />
   </component>
   <component name="RecentsManager">
     <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
@@ -212,7 +202,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Remote.ldoc">
+  <component name="RunManager" selected="Application.main_PROXY">
     <configuration default="true" type="AntRunConfigurationType" factoryName="Ant build" debug-port="25000" max-memory="256" logging-level="0">
       <method />
     </configuration>
@@ -287,7 +277,7 @@
     <configuration name="main_ARCHIVE" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="ru.kmorozov.gbd.Main" />
       <module name="ru.kmorozov.gbd.desktop" />
-      <option name="PROGRAM_PARAMETERS" value="-o J:\OneDrive\archBooks -i berengarreformof0000macd -p J:\OneDrive\gbdBooks\proxy.txt -a kvmorozov@gmail.com eW3Zmex9CY7fw4Q" />
+      <option name="PROGRAM_PARAMETERS" value="-o J:\OneDrive\archBooks -i calvinismamyraut0000arms -p J:\OneDrive\gbdBooks\proxy.txt -a kvmorozov@gmail.com eW3Zmex9CY7fw4Q" />
       <option name="VM_PARAMETERS" value="-Xms1G -Xmx2G" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -296,7 +286,7 @@
     <configuration name="main_NOPROXY" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="ru.kmorozov.gbd.Main" />
       <module name="ru.kmorozov.gbd.desktop" />
-      <option name="PROGRAM_PARAMETERS" value="-o &quot;J:\OneDrive2\OneDrive - edy\Expired&quot; -p J:\OneDrive\gbdBooks\proxy.txt -r -i GMpC3MJgmGwC -S" />
+      <option name="PROGRAM_PARAMETERS" value="-o &quot;J:\OneDrive2\OneDrive - edy\gbdBooks&quot; -p -r -i sG-wn6pBA8wC" />
       <option name="VM_PARAMETERS" value="-Xms1G -Xmx2G" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -317,7 +307,7 @@
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="ru.kmorozov.gbd.Main" />
       <module name="ru.kmorozov.gbd.desktop" />
-      <option name="PROGRAM_PARAMETERS" value="-o &quot;J:\OneDrive2\OneDrive - edy\gbdBooks&quot; -p web -i Ol0FDgAAQBAJ -S" />
+      <option name="PROGRAM_PARAMETERS" value="-o &quot;J:\OneDrive2\OneDrive - edy\gbdBooks&quot; -p web -i HF3jdg0peNYC -d" />
       <option name="VM_PARAMETERS" value="-Xms1G -Xmx2G" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -499,8 +489,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.DictionaryTest.loadBookTest" />
         <item itemvalue="HTTP Request.library#1" />
+        <item itemvalue="JUnit.DictionaryTest.loadBookTest" />
         <item itemvalue="HTTP Request.scratch#1" />
         <item itemvalue="JUnit.GoogleImageTest.testOcr" />
         <item itemvalue="JUnit.LoadTest.categoryLoadTest" />
@@ -758,49 +748,27 @@
       <workItem from="1588239455526" duration="5507000" />
       <workItem from="1588352899951" duration="187000" />
       <workItem from="1588497857771" duration="21980000" />
-      <workItem from="1588573812358" duration="966000" />
-    </task>
-    <task id="LOCAL-00120" summary="prepare for heroku">
-      <created>1551021345708</created>
-      <option name="number" value="00120" />
-      <option name="presentableId" value="LOCAL-00120" />
-      <option name="project" value="LOCAL" />
-      <updated>1551021345708</updated>
-    </task>
-    <task id="LOCAL-00121" summary="prepare for heroku">
-      <created>1551023123284</created>
-      <option name="number" value="00121" />
-      <option name="presentableId" value="LOCAL-00121" />
-      <option name="project" value="LOCAL" />
-      <updated>1551023123284</updated>
-    </task>
-    <task id="LOCAL-00122" summary="prepare for heroku">
-      <created>1551023275745</created>
-      <option name="number" value="00122" />
-      <option name="presentableId" value="LOCAL-00122" />
-      <option name="project" value="LOCAL" />
-      <updated>1551023275745</updated>
-    </task>
-    <task id="LOCAL-00123" summary="prepare for heroku">
-      <created>1551023457828</created>
-      <option name="number" value="00123" />
-      <option name="presentableId" value="LOCAL-00123" />
-      <option name="project" value="LOCAL" />
-      <updated>1551023457828</updated>
-    </task>
-    <task id="LOCAL-00124" summary="prepare for heroku">
-      <created>1551024462951</created>
-      <option name="number" value="00124" />
-      <option name="presentableId" value="LOCAL-00124" />
-      <option name="project" value="LOCAL" />
-      <updated>1551024462951</updated>
-    </task>
-    <task id="LOCAL-00125" summary="prepare for heroku">
-      <created>1551030511960</created>
-      <option name="number" value="00125" />
-      <option name="presentableId" value="LOCAL-00125" />
-      <option name="project" value="LOCAL" />
-      <updated>1551030511960</updated>
+      <workItem from="1588573812358" duration="1643000" />
+      <workItem from="1588659043370" duration="1997000" />
+      <workItem from="1588690885286" duration="2631000" />
+      <workItem from="1588708349965" duration="1415000" />
+      <workItem from="1588957456996" duration="1303000" />
+      <workItem from="1589437072894" duration="5602000" />
+      <workItem from="1589451136631" duration="11763000" />
+      <workItem from="1589529373718" duration="11796000" />
+      <workItem from="1589643185662" duration="956000" />
+      <workItem from="1589711113413" duration="8191000" />
+      <workItem from="1589738802814" duration="1925000" />
+      <workItem from="1589788280405" duration="8180000" />
+      <workItem from="1589896454479" duration="4436000" />
+      <workItem from="1589995795510" duration="3586000" />
+      <workItem from="1590001701720" duration="12468000" />
+      <workItem from="1590333376870" duration="1970000" />
+      <workItem from="1590389839654" duration="9460000" />
+      <workItem from="1590474868864" duration="19888000" />
+      <workItem from="1590561822792" duration="10956000" />
+      <workItem from="1590600766926" duration="1038000" />
+      <workItem from="1590648980664" duration="9171000" />
     </task>
     <task id="LOCAL-00126" summary="prepare for heroku">
       <created>1551033128913</created>
@@ -1103,7 +1071,49 @@
       <option name="project" value="LOCAL" />
       <updated>1588083435168</updated>
     </task>
-    <option name="localTasksCounter" value="169" />
+    <task id="LOCAL-00169" summary="ldoc init">
+      <created>1588582295746</created>
+      <option name="number" value="00169" />
+      <option name="presentableId" value="LOCAL-00169" />
+      <option name="project" value="LOCAL" />
+      <updated>1588582295748</updated>
+    </task>
+    <task id="LOCAL-00170" summary="bug fixes">
+      <created>1589452943947</created>
+      <option name="number" value="00170" />
+      <option name="presentableId" value="LOCAL-00170" />
+      <option name="project" value="LOCAL" />
+      <updated>1589452943948</updated>
+    </task>
+    <task id="LOCAL-00171" summary="incremental pdf maker">
+      <created>1589551824674</created>
+      <option name="number" value="00171" />
+      <option name="presentableId" value="LOCAL-00171" />
+      <option name="project" value="LOCAL" />
+      <updated>1589551824675</updated>
+    </task>
+    <task id="LOCAL-00172" summary="bug fix">
+      <created>1589733174137</created>
+      <option name="number" value="00172" />
+      <option name="presentableId" value="LOCAL-00172" />
+      <option name="project" value="LOCAL" />
+      <updated>1589733174137</updated>
+    </task>
+    <task id="LOCAL-00173" summary="incremental pdf maker">
+      <created>1589799801876</created>
+      <option name="number" value="00173" />
+      <option name="presentableId" value="LOCAL-00173" />
+      <option name="project" value="LOCAL" />
+      <updated>1589799801878</updated>
+    </task>
+    <task id="LOCAL-00174" summary="+ktor -ok">
+      <created>1590485267075</created>
+      <option name="number" value="00174" />
+      <option name="presentableId" value="LOCAL-00174" />
+      <option name="project" value="LOCAL" />
+      <updated>1590485267076</updated>
+    </task>
+    <option name="localTasksCounter" value="175" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1165,11 +1175,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="added responseCode to Response interface" />
-    <MESSAGE value="archive fixes" />
-    <MESSAGE value="proxy options adjusted" />
-    <MESSAGE value="debug output feature, fixes" />
-    <MESSAGE value="spring -&gt; kotlin" />
     <MESSAGE value="prepare for heroku" />
     <MESSAGE value="kotlin code style" />
     <MESSAGE value="fix lazy loading" />
@@ -1190,7 +1195,12 @@
     <MESSAGE value="fix server" />
     <MESSAGE value="sigs refactoring" />
     <MESSAGE value="refactoring" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactoring" />
+    <MESSAGE value="ldoc init" />
+    <MESSAGE value="bug fixes" />
+    <MESSAGE value="bug fix" />
+    <MESSAGE value="incremental pdf maker" />
+    <MESSAGE value="+ktor -ok" />
+    <option name="LAST_COMMIT_MESSAGE" value="+ktor -ok" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
   </component>
   <component name="WindowStateProjectService">
@@ -1202,14 +1212,14 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="552" y="181" key="#Project_Structure/0.0.1920.1040@0.0.1920.1040" timestamp="1583589500487" />
-    <state x="414" y="178" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1588531877927">
+    <state x="414" y="178" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1590665103471">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="414" y="178" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1588531877927" />
-    <state x="760" y="239" key="#com.intellij.ide.util.MemberChooser" timestamp="1588507290315">
+    <state x="414" y="178" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1590665103471" />
+    <state x="760" y="239" key="#com.intellij.ide.util.MemberChooser" timestamp="1590400010375">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="760" y="239" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1588507290315" />
+    <state x="760" y="239" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1590400010375" />
     <state x="589" y="208" key="#com.intellij.ide.util.frameworkSupport.AddFrameworkSupportDialog" timestamp="1588498357220">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1218,98 +1228,102 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="640" y="251" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1585483102424" />
-    <state x="715" y="222" width="860" height="595" key="#xdebugger.evaluate" timestamp="1588533663068">
+    <state x="795" y="167" width="860" height="595" key="#xdebugger.evaluate" timestamp="1590650789148">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="715" y="222" width="860" height="595" key="#xdebugger.evaluate/0.0.1920.1040@0.0.1920.1040" timestamp="1588533663068" />
-    <state x="530" y="118" key="CommitChangelistDialog2" timestamp="1588083431248">
+    <state x="795" y="167" width="860" height="595" key="#xdebugger.evaluate/0.0.1920.1040@0.0.1920.1040" timestamp="1590650789148" />
+    <state x="530" y="118" key="CommitChangelistDialog2" timestamp="1590485258975">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="530" y="118" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1588083431248" />
-    <state width="463" height="466" key="DebuggerActiveHint" timestamp="1588532442773">
+    <state x="530" y="118" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1590485258975" />
+    <state width="877" height="466" key="DebuggerActiveHint" timestamp="1590665218479">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="463" height="466" key="DebuggerActiveHint/0.0.1920.1040@0.0.1920.1040" timestamp="1588532442773" />
+    <state width="877" height="466" key="DebuggerActiveHint/0.0.1920.1040@0.0.1920.1040" timestamp="1590665218479" />
     <state x="92" y="92" width="1736" height="856" key="DiffContextDialog" timestamp="1586880435428">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="92" y="92" width="1736" height="856" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1586880435428" />
-    <state x="740" y="274" key="FileChooserDialogImpl" timestamp="1588353098636">
+    <state x="740" y="274" key="FileChooserDialogImpl" timestamp="1588708409755">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="740" y="274" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1588353098636" />
-    <state width="1877" height="285" key="GridCell.Tab.0.bottom" timestamp="1588582239621">
+    <state x="740" y="274" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1588708409755" />
+    <state width="1877" height="285" key="GridCell.Tab.0.bottom" timestamp="1590669137489">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="285" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1588582239621" />
-    <state width="1877" height="285" key="GridCell.Tab.0.center" timestamp="1588582239621">
+    <state width="1877" height="285" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1590669137489" />
+    <state width="1877" height="285" key="GridCell.Tab.0.center" timestamp="1590669137489">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="285" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1588582239621" />
-    <state width="1877" height="285" key="GridCell.Tab.0.left" timestamp="1588582239621">
+    <state width="1877" height="285" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1590669137489" />
+    <state width="1877" height="285" key="GridCell.Tab.0.left" timestamp="1590669137488">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="285" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1588582239621" />
-    <state width="1877" height="285" key="GridCell.Tab.0.right" timestamp="1588582239621">
+    <state width="1877" height="285" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1590669137488" />
+    <state width="1877" height="285" key="GridCell.Tab.0.right" timestamp="1590669137489">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="285" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1588582239621" />
-    <state width="1877" height="347" key="GridCell.Tab.1.bottom" timestamp="1588533624407">
+    <state width="1877" height="285" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1590669137489" />
+    <state width="1877" height="318" key="GridCell.Tab.1.bottom" timestamp="1590665366166">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="347" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1588533624407" />
-    <state width="1877" height="347" key="GridCell.Tab.1.center" timestamp="1588533624407">
+    <state width="1877" height="318" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1590665366166" />
+    <state width="1877" height="318" key="GridCell.Tab.1.center" timestamp="1590665366166">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="347" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1588533624407" />
-    <state width="1877" height="347" key="GridCell.Tab.1.left" timestamp="1588533624406">
+    <state width="1877" height="318" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1590665366166" />
+    <state width="1877" height="318" key="GridCell.Tab.1.left" timestamp="1590665366166">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="347" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1588533624406" />
-    <state width="1877" height="347" key="GridCell.Tab.1.right" timestamp="1588533624407">
+    <state width="1877" height="318" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1590665366166" />
+    <state width="1877" height="318" key="GridCell.Tab.1.right" timestamp="1590665366166">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="347" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1588533624407" />
-    <state width="1877" height="347" key="GridCell.Tab.2.bottom" timestamp="1588252852159">
+    <state width="1877" height="318" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1590665366166" />
+    <state width="1877" height="318" key="GridCell.Tab.2.bottom" timestamp="1590590741232">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="347" key="GridCell.Tab.2.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1588252852159" />
-    <state width="1877" height="347" key="GridCell.Tab.2.center" timestamp="1588252852159">
+    <state width="1877" height="318" key="GridCell.Tab.2.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1590590741232" />
+    <state width="1877" height="318" key="GridCell.Tab.2.center" timestamp="1590590741232">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="347" key="GridCell.Tab.2.center/0.0.1920.1040@0.0.1920.1040" timestamp="1588252852159" />
-    <state width="1877" height="347" key="GridCell.Tab.2.left" timestamp="1588252852158">
+    <state width="1877" height="318" key="GridCell.Tab.2.center/0.0.1920.1040@0.0.1920.1040" timestamp="1590590741232" />
+    <state width="1877" height="318" key="GridCell.Tab.2.left" timestamp="1590590741232">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="347" key="GridCell.Tab.2.left/0.0.1920.1040@0.0.1920.1040" timestamp="1588252852158" />
-    <state width="1877" height="347" key="GridCell.Tab.2.right" timestamp="1588252852159">
+    <state width="1877" height="318" key="GridCell.Tab.2.left/0.0.1920.1040@0.0.1920.1040" timestamp="1590590741232" />
+    <state width="1877" height="318" key="GridCell.Tab.2.right" timestamp="1590590741232">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="347" key="GridCell.Tab.2.right/0.0.1920.1040@0.0.1920.1040" timestamp="1588252852159" />
-    <state x="490" y="174" key="Maven.ArtifactSearchDialog" timestamp="1588499684245">
+    <state width="1877" height="318" key="GridCell.Tab.2.right/0.0.1920.1040@0.0.1920.1040" timestamp="1590590741232" />
+    <state x="490" y="174" key="Maven.ArtifactSearchDialog" timestamp="1590500111221">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="490" y="174" key="Maven.ArtifactSearchDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1588499684245" />
+    <state x="490" y="174" key="Maven.ArtifactSearchDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1590500111221" />
     <state x="707" y="234" key="RollbackChangesDialog" timestamp="1583653262346">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="707" y="234" key="RollbackChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1583653262346" />
-    <state x="461" y="164" key="SettingsEditor" timestamp="1588500572582">
+    <state x="461" y="164" key="SettingsEditor" timestamp="1590334787146">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="461" y="164" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1588500572582" />
-    <state x="552" y="256" key="Vcs.Push.Dialog.v2" timestamp="1588083437777">
+    <state x="461" y="164" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1590334787146" />
+    <state x="552" y="256" key="Vcs.Push.Dialog.v2" timestamp="1590485269228">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="552" y="256" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1588083437777" />
-    <state width="968" height="528" key="XDebugger.FullValuePopup" timestamp="1588509703342">
+    <state x="552" y="256" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1590485269228" />
+    <state width="968" height="528" key="XDebugger.FullValuePopup" timestamp="1588709178297">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="968" height="528" key="XDebugger.FullValuePopup/0.0.1920.1040@0.0.1920.1040" timestamp="1588509703342" />
-    <state x="667" y="276" width="657" height="530" key="find.popup" timestamp="1588242052822">
+    <state width="968" height="528" key="XDebugger.FullValuePopup/0.0.1920.1040@0.0.1920.1040" timestamp="1588709178297" />
+    <state x="409" y="248" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2" timestamp="1588709760201">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="667" y="276" width="657" height="530" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1588242052822" />
+    <state x="409" y="248" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/0.0.1920.1040@0.0.1920.1040" timestamp="1588709760201" />
+    <state x="766" y="58" width="683" height="620" key="find.popup" timestamp="1590576967588">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="766" y="58" width="683" height="620" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1590576967588" />
     <state x="464" y="101" key="new project wizard" timestamp="1588498327352">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -1318,135 +1332,166 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="616" y="240" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1588500323013" />
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1588523614513">
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1590500098141">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1588523614513" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1590500098141" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
+        <line-breakpoint type="java-line">
           <url>file://$PROJECT_DIR$/ru.kmorozov.api.onedrive/src/main/java/ru/kmorozov/onedrive/client/authoriser/TokenFactory.kt</url>
           <line>25</line>
           <option name="timeStamp" value="113" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
+        <line-breakpoint type="java-line">
           <url>file://$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/loader/LoaderConfiguration.kt</url>
           <line>48</line>
           <option name="timeStamp" value="115" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
+        <line-breakpoint type="java-line">
           <url>file://$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/loader/LoaderConfiguration.kt</url>
           <line>56</line>
           <option name="timeStamp" value="117" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
+        <line-breakpoint type="java-line">
           <url>file://$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/loader/LoaderConfiguration.kt</url>
           <line>64</line>
           <option name="timeStamp" value="118" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
+        <line-breakpoint type="java-line">
           <url>file://$PROJECT_DIR$/ru.kmorozov.ldoc.dictionary/src/test/java/ru/kmorozov/gbd/dictionary/tests/DictionaryTest.java</url>
           <line>23</line>
           <option name="timeStamp" value="405" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/ru.kmorozov.ldoc.dictionary/src/main/java/com/logicaldoc/gbd/dictionary/GbdDictionary.java</url>
-          <line>67</line>
-          <option name="timeStamp" value="407" />
+        <line-breakpoint type="java-line">
+          <url>jar://$PROJECT_DIR$/../../LDOC/tomcat/webapps/ROOT/WEB-INF/lib/logicaldoc-importfolder-8.4.2-plugin.jar!/com/logicaldoc/importfolder/ImportFolderCrawler.class</url>
+          <line>141</line>
+          <option name="timeStamp" value="408" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/ru.kmorozov.ldoc.dictionary/src/main/java/com/logicaldoc/gbd/dictionary/GbdDictionary.java</url>
-          <line>88</line>
+        <line-breakpoint type="java-line">
+          <url>jar://$PROJECT_DIR$/../../LDOC/tomcat/webapps/ROOT/WEB-INF/lib/logicaldoc-importfolder-8.4.2-plugin.jar!/com/logicaldoc/importfolder/ImportFolderCrawler.class</url>
+          <line>148</line>
+          <option name="timeStamp" value="409" />
+        </line-breakpoint>
+        <line-breakpoint type="java-line">
+          <url>jar://$PROJECT_DIR$/../../LDOC/tomcat/webapps/ROOT/WEB-INF/lib/logicaldoc-importfolder-8.4.2-plugin.jar!/com/logicaldoc/importfolder/ImportFolderCrawler.class</url>
+          <line>160</line>
           <option name="timeStamp" value="410" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/ru.kmorozov.ldoc.dictionary/src/main/java/com/logicaldoc/gbd/dictionary/GbdDictionary.java</url>
-          <line>47</line>
-          <option name="timeStamp" value="411" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/ru.kmorozov.ldoc.dictionary/src/main/java/com/logicaldoc/gbd/dictionary/GbdDictionary.java</url>
-          <line>64</line>
+        <line-breakpoint type="java-line">
+          <url>jar://$PROJECT_DIR$/../../LDOC/tomcat/webapps/ROOT/WEB-INF/lib/logicaldoc-importfolder-8.4.2-plugin.jar!/com/logicaldoc/importfolder/ImportFolderCache.class</url>
+          <line>81</line>
           <option name="timeStamp" value="412" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/AbstractPageImgProcessor.kt</url>
-          <line>117</line>
-          <option name="timeStamp" value="297" />
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$MAVEN_REPOSITORY$/org/apache/pdfbox/pdfbox/2.0.19/pdfbox-2.0.19-sources.jar!/org/apache/pdfbox/pdfparser/COSParser.java</url>
+          <line>2335</line>
+          <option name="timeStamp" value="446" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$MAVEN_REPOSITORY$/org/apache/pdfbox/pdfbox/2.0.19/pdfbox-2.0.19-sources.jar!/org/apache/pdfbox/pdmodel/PDPage.java</url>
+          <line>153</line>
+          <option name="timeStamp" value="451" />
+        </line-breakpoint>
+        <line-breakpoint type="kotlin-line">
           <url>file://$PROJECT_DIR$/ru.kmorozov.library.data.model/src/main/java/ru/kmorozov/library/utils/BookUtils.kt</url>
           <line>23</line>
           <option name="timeStamp" value="302" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
+        <line-breakpoint type="kotlin-line">
           <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/connectors/google/GoogleHttpConnector.kt</url>
           <line>54</line>
           <option name="timeStamp" value="348" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
+        <line-breakpoint type="kotlin-line">
           <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/loader/LazyBookInfo.kt</url>
           <line>35</line>
           <option name="timeStamp" value="359" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
+        <line-breakpoint type="kotlin-line">
           <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/test/java/ru/kmorozov/gbd/test/core/GoogleImageTest.kt</url>
           <line>55</line>
           <option name="timeStamp" value="362" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
+        <line-breakpoint type="kotlin-line">
           <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/connectors/http2native/Http2Connector.kt</url>
           <line>51</line>
           <option name="timeStamp" value="364" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
+        <line-breakpoint type="kotlin-line">
           <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/loader/LocalFSStorage.kt</url>
-          <line>147</line>
+          <line>172</line>
           <option name="timeStamp" value="365" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
+        <line-breakpoint type="kotlin-line">
           <condition expression="sigs.size &gt; 1" language="kotlin" />
           <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.db/src/main/java/ru/kmorozov/db/core/logic/model/book/google/GooglePageInfo.kt</url>
-          <line>45</line>
+          <line>44</line>
           <option name="timeStamp" value="377" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/loader/processors/gbd/GbdLocalProcessor.kt</url>
-          <line>34</line>
-          <option name="timeStamp" value="378" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
+        <line-breakpoint type="kotlin-line">
           <url>file://$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/loader/processors/gbd/ServerPdfMaker.kt</url>
           <line>10</line>
           <option name="timeStamp" value="392" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/loader/ImageItem.kt</url>
-          <line>26</line>
-          <option name="timeStamp" value="398" />
+          <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/AbstractHttpProcessor.kt</url>
+          <line>47</line>
+          <option name="timeStamp" value="456" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/pdf/PdfMaker.kt</url>
-          <line>119</line>
-          <option name="timeStamp" value="399" />
+          <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/AbstractHttpProcessor.kt</url>
+          <line>50</line>
+          <option name="timeStamp" value="457" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/AbstractHttpProcessor.kt</url>
+          <line>53</line>
+          <option name="timeStamp" value="458" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/loader/processors/gbd/GbdLocalProcessor.kt</url>
+          <line>34</line>
+          <option name="timeStamp" value="460" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="kotlin-line">
           <url>file://$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/server/scheduler/ProxyUpdater.kt</url>
           <line>12</line>
-          <option name="timeStamp" value="401" />
+          <option name="timeStamp" value="461" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/proxy/web/WebProxyListProvider.kt</url>
-          <line>12</line>
-          <option name="timeStamp" value="402" />
+          <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/google/GooglePageImgProcessor.kt</url>
+          <line>53</line>
+          <option name="timeStamp" value="470" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.core.logger/src/main/java/ru/kmorozov/gbd/logger/consumers/AbstractOutputReceiver.kt</url>
+          <line>19</line>
+          <properties>
+            <option name="lambda-ordinal" value="-1" />
+          </properties>
+          <option name="timeStamp" value="477" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.core.logger/src/main/java/ru/kmorozov/gbd/logger/listeners/DebugEventListener.kt</url>
+          <line>10</line>
+          <option name="timeStamp" value="478" />
         </line-breakpoint>
         <line-breakpoint suspend="NONE" type="kotlin-field">
           <url>file://$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/server/controllers/LibraryRestController.kt</url>
           <line>40</line>
           <properties myFieldName="logger" myClassName="ru.kmorozov.library.data.server.controllers.LibraryRestController.Companion" />
           <option name="timeStamp" value="322" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-function">
+          <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.core.config/src/main/java/ru/kmorozov/gbd/core/config/GBDOptions.kt</url>
+          <line>43</line>
+          <properties class="ru.kmorozov.gbd.core.config.GBDOptions" method="getDebugEnabled">
+            <option name="EMULATED" value="true" />
+          </properties>
+          <option name="timeStamp" value="476" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

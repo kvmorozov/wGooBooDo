@@ -8,7 +8,7 @@ import ru.kmorozov.gbd.core.logic.proxy.UrlType
 @Component
 class ProxyUpdater {
 
-    @Scheduled(fixedDelay = 5 * 60 * 1000)
+    @Scheduled(fixedDelay = 1 * 60 * 1000)
     fun proxyUpdater() {
         INSTANCE.reset()
         INSTANCE.findCandidates()

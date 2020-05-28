@@ -1,6 +1,6 @@
 package ru.kmorozov.gbd.core.logic.connectors
 
-import org.apache.commons.lang3.StringUtils
+import com.google.common.base.Strings
 import org.jsoup.nodes.Document
 import org.jsoup.parser.Parser
 import ru.kmorozov.db.utils.Mapper
@@ -73,7 +73,7 @@ abstract class HttpConnector : AutoCloseable {
 
         val headers = proxy.getHeaders(urlType)
 
-        if (StringUtils.isEmpty(headers.cookie))
+        if (Strings.isNullOrEmpty(headers.cookie))
             return false
 
         when (urlType) {

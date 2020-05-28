@@ -1,6 +1,6 @@
 package ru.kmorozov.gbd.core.loader
 
-import org.apache.commons.lang3.StringUtils
+import com.google.common.base.Strings
 import ru.kmorozov.db.core.logic.model.book.BookInfo
 import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.config.IIndex
@@ -52,7 +52,7 @@ open class LocalFSIndex : IIndex {
     }
 
     override fun updateContext() {
-        if (!StringUtils.isEmpty(GBDOptions.bookId)) return
+        if (!Strings.isNullOrEmpty(GBDOptions.bookId)) return
 
         if (ExecutionContext.initialized) {
             booksMap = ExecutionContext.INSTANCE.getContexts(false).stream()

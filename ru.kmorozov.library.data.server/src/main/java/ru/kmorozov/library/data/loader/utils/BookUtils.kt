@@ -1,11 +1,10 @@
 package ru.kmorozov.library.data.loader.utils
 
-import ru.kmorozov.onedrive.client.OneDriveUrl
-import org.springframework.util.StringUtils
+import com.google.common.base.Strings
 import ru.kmorozov.library.data.model.book.Book
 import ru.kmorozov.library.data.model.book.Storage
 import ru.kmorozov.library.data.model.dto.BookDTO
-
+import ru.kmorozov.onedrive.client.OneDriveUrl
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -27,7 +26,7 @@ object BookUtils {
 
     fun bookLoaded(book: Book): Boolean {
         val bookPath = book.storage!!.localPath + File.separator + book.bookInfo.fileName
-        return if (!StringUtils.isEmpty(bookPath)) {
+        return if (!Strings.isNullOrEmpty(bookPath)) {
             Files.exists(Paths.get(bookPath))
         } else false
 

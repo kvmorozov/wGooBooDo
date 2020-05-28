@@ -1,6 +1,6 @@
 package ru.kmorozov.gbd.core.loader
 
-import org.apache.commons.lang3.StringUtils
+import com.google.common.base.Strings
 import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.config.IIndex
 import ru.kmorozov.gbd.core.config.IStorage
@@ -101,7 +101,7 @@ open class LocalFSStorage : IStorage {
                 .replace("?", "")
                 .replace("/", ".")
         val volumeId = bookData.volumeId
-        return getStorage(if (StringUtils.isEmpty(volumeId)) directoryName else directoryName + ' '.toString() + bookData.volumeId)
+        return getStorage(if (Strings.isNullOrEmpty(volumeId)) directoryName else directoryName + ' '.toString() + bookData.volumeId)
     }
 
     override fun size(): Int {

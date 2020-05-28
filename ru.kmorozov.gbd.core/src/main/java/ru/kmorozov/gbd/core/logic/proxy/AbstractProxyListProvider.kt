@@ -1,15 +1,17 @@
 package ru.kmorozov.gbd.core.logic.proxy
 
 import com.google.common.base.Strings
-import org.apache.commons.lang3.StringUtils
 import ru.kmorozov.gbd.core.config.GBDOptions
-import ru.kmorozov.gbd.core.logic.proxy.web.WebProxyListProvider
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
+import ru.kmorozov.gbd.core.logic.proxy.web.WebProxyListProvider
 import ru.kmorozov.gbd.logger.Logger
 import ru.kmorozov.gbd.utils.HttpConnections
 import java.net.InetSocketAddress
-import java.util.concurrent.atomic.AtomicBoolean
+import java.util.*
 import java.util.stream.Stream
+import kotlin.collections.HashSet
+import kotlin.concurrent.thread
+import kotlin.streams.toList
 
 /**
  * Created by km on 27.11.2015.
@@ -18,26 +20,22 @@ import java.util.stream.Stream
 abstract class AbstractProxyListProvider : IProxyListProvider {
 
     override val proxyList: MutableCollection<HttpHostExt> = HashSet()
-    protected var proxyItems: MutableSet<String> = HashSet()
+    protected var proxyItems: MutableSet<Optional<InetSocketAddress>> = HashSet()
 
-    protected val proxyListCompleted = AtomicBoolean(false)
-    private val proxyListInitStarted = AtomicBoolean(false)
+    constructor () {
+        this.proxyItems.addAll(
+                ProxyBlacklistHolder.BLACKLIST.whiteList.stream()
+                        .map { getInetAddress(it) }
+                        .filter { it.isPresent }
+                        .toList()
+        )
+    }
 
     override val parallelProxyStream: Stream<HttpHostExt>
-        get() {
-            if (!proxyListCompleted.get()) {
-                try {
-                    Thread.sleep(500L)
-                } catch (e: InterruptedException) {
-                    e.printStackTrace()
-                }
-
-            }
-            return proxyList.parallelStream()
-        }
+        get() = proxyList.parallelStream()
 
     override val proxyCount: Int
-        get() = proxyItems.size
+        get() = proxyList.size
 
     private fun splitItems(proxyItem: String): Array<String>? {
         var tmpItems = splitItems(proxyItem, DEFAULT_PROXY_DELIMITER)
@@ -50,18 +48,12 @@ abstract class AbstractProxyListProvider : IProxyListProvider {
     }
 
     override fun processProxyList(urlType: UrlType) {
-        if (proxyListCompleted.get() || proxyListInitStarted.get())
-            return
-
-        proxyListInitStarted.set(true)
-
-        for (proxyString in proxyItems)
-            if (!Strings.isNullOrEmpty(proxyString))
-                Thread(ProxyChecker(proxyString, urlType)).start()
-    }
-
-    override fun proxyListCompleted(): Boolean {
-        return proxyListCompleted.get()
+        proxyItems.forEach {
+            thread {
+                val host = processProxyItem(it.get(), urlType)
+                ExecutionContext.sendProxyEvent(host)
+            }
+        }
     }
 
     override fun invalidatedProxyListener() {
@@ -69,48 +61,34 @@ abstract class AbstractProxyListProvider : IProxyListProvider {
         if (0L == liveProxyCount && GBDOptions.secureMode) throw RuntimeException("No more proxies!")
     }
 
-    private inner class ProxyChecker internal constructor(private val proxyStr: String, private val urlType: UrlType) : Runnable {
+    protected fun getInetAddress(proxyItem: String): Optional<InetSocketAddress> {
+        val proxyItemArr = splitItems(proxyItem)
+        if (null == proxyItemArr || 2 > proxyItemArr.size)
+            return Optional.empty()
+        else
+            return Optional.of(InetSocketAddress(proxyItemArr[0], Integer.parseInt(proxyItemArr[1])))
+    }
 
-        override fun run() {
-            val host = processProxyItem(proxyStr)
-            ExecutionContext.sendProxyEvent(host)
-        }
+    private fun processProxyItem(host: InetSocketAddress, urlType: UrlType): HttpHostExt {
+        var proxy: HttpHostExt
 
-        private fun getCookie(proxy: InetSocketAddress): String {
-            return HttpConnections.getCookieString(proxy, urlType)
-        }
-
-        private fun processProxyItem(proxyItem: String): HttpHostExt {
-            var proxy: HttpHostExt = HttpHostExt.NO_PROXY
-
-            try {
-                val proxyItemArr = splitItems(proxyItem)
-
-                if (null == proxyItemArr || 2 > proxyItemArr.size) return HttpHostExt.NO_PROXY
-
-                val host = InetSocketAddress(proxyItemArr[0], Integer.parseInt(proxyItemArr[1]))
-                val cookie = getCookie(host)
-                proxy = HttpHostExt(host, cookie)
-                if (!StringUtils.isEmpty(cookie)) {
-                    if (!GBDOptions.secureMode || proxy.isSecure) {
-                        logger.finest("${if (GBDOptions.secureMode) if (proxy.isSecure) "Secure p" else "NOT secure p" else "P"}roxy $host added.")
-                    } else {
-                        logger.finest("NOT secure proxy $host NOT added.")
-                        proxy.forceInvalidate(false)
-                    }
-                } else {
-                    logger.finest("Proxy $host NOT added.")
-                    proxy.forceInvalidate(false)
-                }
-            } catch (ex: Exception) {
-                logger.finest("Not valid proxy string $proxyItem.")
+        val cookie = HttpConnections.getCookieString(host, urlType)
+        proxy = HttpHostExt(host, cookie)
+        if (!Strings.isNullOrEmpty(cookie)) {
+            if (!GBDOptions.secureMode || proxy.isSecure) {
+                logger.finest("${if (GBDOptions.secureMode) if (proxy.isSecure) "Secure p" else "NOT secure p" else "P"}roxy $host added.")
+            } else {
+                logger.finest("NOT secure proxy $host NOT added.")
+                proxy.forceInvalidate(false)
             }
-
-            proxyList.add(proxy)
-            proxyListCompleted.set(proxyList.size == proxyItems.size)
-
-            return proxy
+        } else {
+            logger.finest("Proxy $host NOT added.")
+            proxy.forceInvalidate(false)
         }
+
+        proxyList.add(proxy)
+
+        return proxy
     }
 
     protected fun notBlacklisted(proxyStr: String): Boolean {
@@ -118,8 +96,7 @@ abstract class AbstractProxyListProvider : IProxyListProvider {
     }
 
     public fun reset() {
-        proxyListCompleted.set(false)
-        proxyListInitStarted.set(false)
+
     }
 
     public abstract fun findCandidates()
@@ -131,10 +108,10 @@ abstract class AbstractProxyListProvider : IProxyListProvider {
         private val logger = Logger.getLogger(AbstractProxyListProvider::class.java)
 
         public val INSTANCE: AbstractProxyListProvider
-            get() = if (StringUtils.isEmpty(GBDOptions.proxyListFile))
+            get() = if (Strings.isNullOrEmpty(GBDOptions.proxyListFile))
                 EmptyProxyListProvider.INSTANCE
             else if (GBDOptions.proxyListFile.equals("web", ignoreCase = true))
-                WebProxyListProvider()
+                WebProxyListProvider.INSTANCE
             else FileProxyListProvider()
 
         fun updateBlacklist() {

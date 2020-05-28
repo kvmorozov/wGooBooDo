@@ -25,8 +25,8 @@ open class AbstractHttpProcessor {
                 resp = connector.getContent(rqUrl, proxy, withTimeout)
 
                 if (!resp.empty) {
-                    if (GBDOptions.debugEnabled && !resp.imageFormat.contentEquals("json"))
-                        logger.info("Headers: ${resp.headers}")
+//                    if (GBDOptions.debugEnabled && !resp.imageFormat.contentEquals("json"))
+//                        logger.info("Headers: ${resp.headers}")
 
                     return resp
                 }

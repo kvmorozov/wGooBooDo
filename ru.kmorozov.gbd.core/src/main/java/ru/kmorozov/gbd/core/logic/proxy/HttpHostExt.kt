@@ -29,6 +29,7 @@ class HttpHostExt {
     var cookie: String? = null
     var isSecure = true
         private set
+
     @Volatile
     private var headers: HttpHeaders? = null
 
@@ -174,8 +175,13 @@ class HttpHostExt {
         private const val NO_PROXY_STR = "NO_PROXY"
 
         fun getProxyFromString(proxyStr: String): HttpHostExt {
-            val proxyVars = proxyStr.split(";".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-            return HttpHostExt(InetSocketAddress.createUnresolved(proxyVars[0], Integer.parseInt(proxyVars[1])), Integer.parseInt(proxyVars[2]))
+            try {
+                val proxyVars = proxyStr.split("[;:]".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                return HttpHostExt(InetSocketAddress.createUnresolved(proxyVars[0], Integer.parseInt(proxyVars[1])), Integer.parseInt(proxyVars[2]))
+            } catch (ex: Exception) {
+                logger.error("Failed load proxyStr ${proxyStr}")
+                return NO_PROXY
+            }
         }
     }
 }

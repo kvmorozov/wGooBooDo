@@ -18,6 +18,4 @@ interface IProxyListProvider {
     fun updateProxyList()
 
     fun processProxyList(urlType: UrlType)
-
-    fun proxyListCompleted(): Boolean
 }

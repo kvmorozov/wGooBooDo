@@ -5,7 +5,6 @@ import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.JsonObjectParser
 import com.google.api.client.util.Preconditions
 import com.google.api.client.util.Strings
-import org.apache.commons.lang3.StringUtils
 import org.apache.logging.log4j.LogManager
 import ru.kmorozov.onedrive.client.OneDriveAPIException
 import ru.kmorozov.onedrive.client.exceptions.InvalidCodeException
@@ -109,7 +108,7 @@ constructor(keyFile: Path, private val clientId: String, private val clientSecre
     private fun getTokenFromRefreshToken(refreshToken: String) {
         log.debug("Fetching authorisation token using refresh token")
 
-        if (StringUtils.isEmpty(refreshToken))
+        if (Strings.isNullOrEmpty(refreshToken))
             throw InvalidCodeException(OneDriveErrorInfo())
 
         val data = mapOf<String, String>(

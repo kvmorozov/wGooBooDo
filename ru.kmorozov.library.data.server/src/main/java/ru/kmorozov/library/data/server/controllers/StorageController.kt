@@ -1,11 +1,11 @@
 package ru.kmorozov.library.data.server.controllers
 
+import com.google.common.base.Strings
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Conditional
 import org.springframework.context.annotation.Lazy
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories
-import org.springframework.util.StringUtils
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RequestParam
@@ -68,7 +68,7 @@ class StorageController : IDataRestServer {
 
     @RequestMapping("/storagesByParentId")
     override fun getStoragesByParentId(@RequestParam(name = "storageId") storageId: String): List<StorageDTO> {
-        val parentStorage = if (StringUtils.isEmpty(storageId)) null else storageRepository.findById(storageId).get()
+        val parentStorage = if (Strings.isNullOrEmpty(storageId)) null else storageRepository.findById(storageId).get()
 
         val realStorages = storageRepository.findAllByParent(parentStorage!!)
         val linksInStorages = booksRepository.findAllByStorageAndBookInfoFormat(parentStorage, BookInfo.BookFormat.LNK)
@@ -85,7 +85,7 @@ class StorageController : IDataRestServer {
 
     @RequestMapping("/booksByStorageId")
     override fun getBooksByStorageId(@RequestParam(name = "storageId") storageId: String): List<BookDTO> {
-        val storage = (if (StringUtils.isEmpty(storageId)) null else storageRepository.findById(storageId).get())
+        val storage = (if (Strings.isNullOrEmpty(storageId)) null else storageRepository.findById(storageId).get())
                 ?: return emptyList()
 
         return booksRepository.findAllByStorage(storage).stream()

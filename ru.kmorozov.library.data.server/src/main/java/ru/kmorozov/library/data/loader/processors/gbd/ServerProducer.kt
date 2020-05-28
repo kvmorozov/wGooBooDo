@@ -1,6 +1,6 @@
 package ru.kmorozov.library.data.loader.processors.gbd
 
-import org.apache.commons.lang3.StringUtils
+import com.google.common.base.Strings
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Lazy
@@ -8,10 +8,7 @@ import org.springframework.stereotype.Component
 import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.logic.context.IBookListProducer
 import ru.kmorozov.gbd.core.logic.library.LibraryFactory
-
-import java.util.Arrays
-import java.util.Collections
-import java.util.HashSet
+import java.util.*
 
 @Component
 open class ServerProducer : IBookListProducer {
@@ -29,11 +26,11 @@ open class ServerProducer : IBookListProducer {
         get() {
             val bookId = GBDOptions.bookId
 
-            if (!StringUtils.isEmpty(bookId) && LibraryFactory.isValidId(bookId))
+            if (!Strings.isNullOrEmpty(bookId) && LibraryFactory.isValidId(bookId))
                 ids = HashSet(listOf(bookId))
 
             if (ids == null)
-                if (StringUtils.isEmpty(defaultIds))
+                if (Strings.isNullOrEmpty(defaultIds))
                     ids = dbCtx!!.bookIdsList
                 else
                     ids = HashSet(Arrays.asList(*defaultIds!!.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()))
