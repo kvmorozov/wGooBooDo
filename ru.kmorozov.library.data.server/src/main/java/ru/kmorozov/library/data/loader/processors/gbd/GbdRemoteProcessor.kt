@@ -112,14 +112,14 @@ open class GbdRemoteProcessor : IGbdProcessor {
         logger.info("Process GBD finished.")
     }
 
-    override fun load(bookId: String) {
+    override fun addBook(bookId: String) {
         options.bookId = bookId
         GBDOptions.init(options)
 
         ContextProvider.contextProvider = dbCtx
 
         ExecutionContext.initContext(ReceiverProvider.getReceiver(), 1 == producer.bookIds.size)
-        ExecutionContext.INSTANCE.addBookContext(producer, DummyProgress(), ServerPdfMaker())
+        ExecutionContext.INSTANCE.addBookContext(producer, ServerPostProcessor())
 
         ExecutionContext.INSTANCE.execute()
     }

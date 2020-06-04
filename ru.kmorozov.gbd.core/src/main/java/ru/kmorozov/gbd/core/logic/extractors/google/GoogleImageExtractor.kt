@@ -8,7 +8,6 @@ import ru.kmorozov.gbd.core.logic.context.BookContext
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractImageExtractor
 import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
-import ru.kmorozov.gbd.logger.progress.IProgress
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
@@ -19,10 +18,6 @@ import java.util.function.Consumer
  * Created by km on 21.11.2015.
  */
 class GoogleImageExtractor(bookContext: BookContext) : AbstractImageExtractor<GooglePageInfo>(bookContext, GoogleImageExtractor::class.java) {
-
-    override var processStatus: IProgress
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
-        set(value) {}
 
     private val proxyReceived = AtomicInteger(0)
     private val processingStarted = AtomicBoolean(false)
@@ -45,10 +40,6 @@ class GoogleImageExtractor(bookContext: BookContext) : AbstractImageExtractor<Go
         uniqueObject.bookInfo.pages.build()
     }
 
-    override fun newProxyEvent(proxy: HttpHostExt) {
-        Thread(EventProcessor(proxy)).start()
-    }
-
     override fun process() {
         super.process()
 
@@ -66,45 +57,42 @@ class GoogleImageExtractor(bookContext: BookContext) : AbstractImageExtractor<Go
         waitingProxy.forEach(Consumer<HttpHostExt> { this.newProxyEvent(it) })
     }
 
-    private inner class EventProcessor internal constructor(private val proxy: HttpHostExt) : Runnable {
+    protected override fun processProxyEvent(proxy: HttpHostExt) {
+        while (!initComplete.get()) {
+            waitingProxy.add(proxy)
+            return
+        }
 
-        override fun run() {
-            while (!initComplete.get()) {
-                waitingProxy.add(proxy)
-                return
-            }
+        if (GBDOptions.debugEnabled)
+            logger.info("Received proxy event for ${proxy.toString()}")
 
-            if (GBDOptions.debugEnabled)
-                logger.info("Received proxy event for ${proxy.toString()}")
+        if (proxy.isAvailable) uniqueObject.sigExecutor.execute(GooglePageSigProcessor(uniqueObject, proxy))
 
-            if (proxy.isAvailable) uniqueObject.sigExecutor.execute(GooglePageSigProcessor(uniqueObject, proxy))
+        val proxyNeeded = ExecutionContext.proxyCount - proxyReceived.incrementAndGet()
 
-            val proxyNeeded = ExecutionContext.proxyCount - proxyReceived.incrementAndGet()
+        if (0 >= proxyNeeded) {
+            if (!processingStarted.compareAndSet(false, true)) return
 
-            if (0 >= proxyNeeded) {
-                if (!processingStarted.compareAndSet(false, true)) return
+            uniqueObject.sigExecutor.terminate(10L, TimeUnit.MINUTES)
 
-                uniqueObject.sigExecutor.terminate(10L, TimeUnit.MINUTES)
+            uniqueObject.pagesStream
+                    .filter { page -> !page.isDataProcessed }
+                    .sorted(Comparator { p1, p2 -> p2.order - p1.order })
+                    .forEach { page ->
+                        this@GoogleImageExtractor.uniqueObject.imgExecutor
+                                .execute(GooglePageImgProcessor(this@GoogleImageExtractor.uniqueObject, page as GooglePageInfo, HttpHostExt.NO_PROXY))
+                    }
 
-                uniqueObject.pagesStream
-                        .filter { page -> !page.isDataProcessed }
-                        .sorted(Comparator { p1, p2 -> p2.order - p1.order })
-                        .forEach { page ->
-                            this@GoogleImageExtractor.uniqueObject.imgExecutor
-                                    .execute(GooglePageImgProcessor(this@GoogleImageExtractor.uniqueObject, page as GooglePageInfo, HttpHostExt.NO_PROXY))
-                        }
+            uniqueObject.imgExecutor.terminate(10L, TimeUnit.MINUTES)
 
-                uniqueObject.imgExecutor.terminate(10L, TimeUnit.MINUTES)
+            logger.info(uniqueObject.bookInfo.pages.missingPagesList)
 
-                logger.info(uniqueObject.bookInfo.pages.missingPagesList)
+            val pagesAfter = uniqueObject.pagesStream.filter { pageInfo -> pageInfo.isDataProcessed }.count()
 
-                val pagesAfter = uniqueObject.pagesStream.filter { pageInfo -> pageInfo.isDataProcessed }.count()
+            uniqueObject.pagesProcessed = pagesAfter - uniqueObject.pagesBefore
+            logger.info("Processed ${uniqueObject.pagesProcessed} pages")
 
-                uniqueObject.pagesProcessed = pagesAfter - uniqueObject.pagesBefore
-                logger.info("Processed ${uniqueObject.pagesProcessed} pages")
-
-                ExecutionContext.INSTANCE.postProcessBook(uniqueObject)
-            }
+            ExecutionContext.INSTANCE.postProcessBook(uniqueObject)
         }
     }
 }

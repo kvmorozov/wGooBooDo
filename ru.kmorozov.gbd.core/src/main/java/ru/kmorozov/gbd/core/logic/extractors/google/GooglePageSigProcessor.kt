@@ -65,15 +65,10 @@ internal class GooglePageSigProcessor : AbstractHttpProcessor, IUniqueReusable<G
 
         if (!proxy.isLocal && !(proxy.isAvailable && 0 < proxy.host.port)) return
 
-        val psSigs = bookContext.progress.getSubProgress(bookContext.bookInfo.pages.pages.size)
-
         bookContext.pagesStream.filter { p -> (p as AbstractPage).isNotProcessed }.forEach { page ->
-            psSigs.inc()
             sigPageExecutor.execute(SigProcessorInternal(page as GooglePageInfo))
         }
         sigPageExecutor.terminate(3L, TimeUnit.MINUTES)
-
-        psSigs.finish()
     }
 
     override fun toString(): String {

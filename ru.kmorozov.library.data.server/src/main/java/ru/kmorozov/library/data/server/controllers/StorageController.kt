@@ -164,7 +164,7 @@ class StorageController : IDataRestServer {
 
     @RequestMapping("/gbdLoadRemote")
     fun gbdLoad(@RequestParam(name = "bookId", required = false) bookId: String) {
-        gbdProcessor.load(bookId)
+        gbdProcessor.addBook(bookId)
     }
 
     companion object {

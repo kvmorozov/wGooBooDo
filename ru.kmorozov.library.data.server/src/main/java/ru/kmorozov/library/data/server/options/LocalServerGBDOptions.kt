@@ -17,6 +17,10 @@ class LocalServerGBDOptions : AbstractServerGBDOptions() {
     override val storage: IStorage
         get() = LocalFSStorage.getStorage(localLibraryPath)
 
+    override fun serverMode(): Boolean {
+        return true
+    }
+
     override fun ctxOptions(): CtxOptions {
         return CtxOptions.DEFAULT_CTX_OPTIONS
     }

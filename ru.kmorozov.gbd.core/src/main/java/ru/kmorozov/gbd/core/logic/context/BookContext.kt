@@ -10,7 +10,6 @@ import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage
 import ru.kmorozov.gbd.core.logic.model.book.base.IBookInfo
 import ru.kmorozov.gbd.core.logic.model.book.base.IPage
 import ru.kmorozov.gbd.logger.Logger
-import ru.kmorozov.gbd.logger.progress.IProgress
 import ru.kmorozov.gbd.utils.QueuedThreadPoolExecutor
 import java.io.IOException
 import java.util.*
@@ -21,11 +20,9 @@ import java.util.stream.Stream
  * Created by km on 08.11.2016.
  */
 class BookContext {
-    val progress: IProgress
     val postProcessor: IPostProcessor
 
-    internal constructor(bookId: String, progress: IProgress, postProcessor: IPostProcessor) {
-        this.progress = progress
+    internal constructor(bookId: String, postProcessor: IPostProcessor) {
         this.postProcessor = postProcessor
         this.metadata = LibraryFactory.getMetadata(bookId)
         this.bookInfo = metadata.getBookInfoExtractor(bookId).bookInfo
@@ -86,8 +83,6 @@ class BookContext {
             storage.restoreState(bookInfo)
         } catch (e: Exception) {
             e.printStackTrace()
-        } finally {
-            progress.finish()
         }
 
         pagesBefore = pagesStream.filter { it.isFileExists }.count()

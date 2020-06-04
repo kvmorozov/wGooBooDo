@@ -33,4 +33,8 @@ interface IGBDOptions {
     fun authOptions(): AuthOptions? {
         TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
     }
+
+    fun serverMode(): Boolean {
+        return false
+    }
 }

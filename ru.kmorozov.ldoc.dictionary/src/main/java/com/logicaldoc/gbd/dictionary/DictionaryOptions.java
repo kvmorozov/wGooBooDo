@@ -64,6 +64,11 @@ public class DictionaryOptions implements IGBDOptions {
         return false;
     }
 
+    @Override
+    public boolean serverMode() {
+        return false;
+    }
+
     @Nullable
     @Override
     public AuthOptions authOptions() {

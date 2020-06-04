@@ -24,7 +24,7 @@ open class InMemoryProcessor : IGbdProcessor {
     @Autowired
     private lateinit var options: InMemoryOptions
 
-    override fun load(bookId: String) {
+    override fun addBook(bookId: String) {
         producer.appendBook(bookId)
     }
 

@@ -33,7 +33,7 @@ class LibraryRestController {
 
     @PostMapping("/gbdLoadLocal")
     fun gbdLoad(@RequestParam(name = "bookId", required = true) bookId: String) {
-        local.load(bookId)
+        local.addBook(bookId)
     }
 
     companion object {

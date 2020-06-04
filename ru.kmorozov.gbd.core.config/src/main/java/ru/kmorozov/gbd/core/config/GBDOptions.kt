@@ -55,4 +55,7 @@ object GBDOptions {
 
     val authOptions: AuthOptions?
         get() = _INSTANCE.authOptions()
+
+    val serverMode: Boolean
+        get() = _INSTANCE.serverMode()
 }

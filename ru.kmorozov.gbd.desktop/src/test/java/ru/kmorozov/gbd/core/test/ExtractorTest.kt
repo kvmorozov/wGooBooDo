@@ -86,8 +86,8 @@ class ExtractorTest {
         val ctxSizeBefore = contextProvider.contextSize
         Assert.assertTrue(0 < ctxSizeBefore)
 
-        ExecutionContext.INSTANCE.addBookContext(OptionsBasedProducer(), null!!, null!!)
-        ExecutionContext.INSTANCE.addBookContext(SingleBookProducer("http://localhost/elib.shpl.ru"), null!!, null!!)
+        ExecutionContext.INSTANCE.addBookContext(OptionsBasedProducer(), null!!)
+        ExecutionContext.INSTANCE.addBookContext(SingleBookProducer("http://localhost/elib.shpl.ru"), null!!)
 
         contextProvider.updateContext()
 

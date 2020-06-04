@@ -6,9 +6,7 @@ import ru.kmorozov.gbd.core.logic.context.ExecutionContext
 import ru.kmorozov.gbd.core.logic.extractors.google.GoogleImageExtractor
 import ru.kmorozov.gbd.core.producers.SingleBookProducer
 import ru.kmorozov.gbd.desktop.output.consumers.SwingOutputReceiver
-import ru.kmorozov.gbd.desktop.output.progress.ProcessStatus
 import ru.kmorozov.gbd.logger.events.AbstractEventSource
-import ru.kmorozov.gbd.logger.events.IEventSource
 import ru.kmorozov.gbd.logger.model.LogIconColumnRenderer
 import ru.kmorozov.gbd.logger.model.LogTableModel
 import ru.kmorozov.gbd.pdf.PdfMaker
@@ -82,7 +80,7 @@ class MainBookForm {
             bMakeBook!!.isEnabled = false
 
 
-            ExecutionContext.INSTANCE.addBookContext(SingleBookProducer(tfBookId.text), ProcessStatus(), PdfMaker())
+            ExecutionContext.INSTANCE.addBookContext(SingleBookProducer(tfBookId.text), PdfMaker())
             workerExtractor = object : ImageExtractorWorker(GoogleImageExtractor(ExecutionContext.INSTANCE.getContexts(false)[0])) {
 
                 public override fun done() {
@@ -93,8 +91,7 @@ class MainBookForm {
 
             workerExtractor!!.addPropertyChangeListener { event ->
                 if ("progress" == event.propertyName && event.source is AbstractEventSource) {
-                    val status = (event.source as IEventSource).processStatus as ProcessStatus
-                    status.progressBar!!.value = status.get()
+
                 }
             }
 
@@ -116,7 +113,7 @@ class MainBookForm {
             workerPdfmaker = object : SwingWorker<Void, Void>() {
 
                 override fun doInBackground(): Void? {
-                    ExecutionContext.INSTANCE.addBookContext(SingleBookProducer(tfBookId.text), ProcessStatus(), PdfMaker())
+                    ExecutionContext.INSTANCE.addBookContext(SingleBookProducer(tfBookId.text), PdfMaker())
                     PdfMaker(ExecutionContext.INSTANCE.getContexts(false)[0]).make()
 
                     return null

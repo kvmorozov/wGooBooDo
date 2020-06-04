@@ -23,4 +23,8 @@ class ServerGBDOptions : AbstractServerGBDOptions() {
 
     override val storage: IStorage
         get() = ServerStorage(api, root)
+
+    override fun serverMode(): Boolean {
+        return true
+    }
 }

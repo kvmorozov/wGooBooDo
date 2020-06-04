@@ -22,6 +22,9 @@ open class GbdLocalProcessor : IGbdProcessor {
     @Autowired
     private lateinit var options: LocalServerGBDOptions
 
+    @Autowired
+    private lateinit var serverContext: ServerContext
+
     private val producer: AppendableProducer = AppendableProducer()
 
     @PostConstruct
@@ -31,11 +34,10 @@ open class GbdLocalProcessor : IGbdProcessor {
         ExecutionContext.initContext(ReceiverProvider.getReceiver(), true)
     }
 
-    override fun load(bookId: String) {
+    override fun addBook(bookId: String) {
         producer.appendBook(bookId)
 
-        ExecutionContext.INSTANCE.addBookContext(producer, DummyProgress(), ServerPdfMaker())
-        ExecutionContext.INSTANCE.execute()
+        serverContext.updateBookList(producer)
     }
 
     override fun process() {

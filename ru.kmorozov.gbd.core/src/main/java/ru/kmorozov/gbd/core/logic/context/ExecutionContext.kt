@@ -1,5 +1,6 @@
 package ru.kmorozov.gbd.core.logic.context
 
+import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractHttpProcessor
 import ru.kmorozov.gbd.core.logic.extractors.base.IPostProcessor
 import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata
@@ -10,9 +11,10 @@ import ru.kmorozov.gbd.core.logic.proxy.UrlType
 import ru.kmorozov.gbd.logger.Logger
 import ru.kmorozov.gbd.logger.consumers.AbstractOutputReceiver
 import ru.kmorozov.gbd.logger.output.ReceiverProvider
-import ru.kmorozov.gbd.logger.progress.IProgress
 import ru.kmorozov.gbd.utils.QueuedThreadPoolExecutor
+import java.util.*
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.TimeUnit
 import java.util.function.ToLongFunction
 
@@ -21,6 +23,8 @@ import java.util.function.ToLongFunction
  */
 class ExecutionContext private constructor(val output: AbstractOutputReceiver, val isSingleMode: Boolean) {
     lateinit var defaultMetadata: ILibraryMetadata
+    private val mainTaskQueue: Queue<BookTask> = ConcurrentLinkedQueue<BookTask>()
+    private val auxTaskQueue: Queue<BookTask> = ConcurrentLinkedQueue<BookTask>()
 
     val bookIds: Iterable<String>
         get() = bookContextMap.keys
@@ -33,10 +37,10 @@ class ExecutionContext private constructor(val output: AbstractOutputReceiver, v
         return Logger.getLogger(output, location, EMPTY)
     }
 
-    fun addBookContext(idsProducer: IBookListProducer, progress: IProgress, postProcessor: IPostProcessor) {
+    fun addBookContext(idsProducer: IBookListProducer, postProcessor: IPostProcessor) {
         idsProducer.bookIds.stream().parallel().forEach {
             try {
-                bookContextMap.computeIfAbsent(it) { BookContext(it, progress, postProcessor) }
+                bookContextMap.computeIfAbsent(it) { BookContext(it, postProcessor) }
             } catch (ex: Exception) {
                 logger.severe("Cannot add book $it because of $ex.message")
             }
@@ -59,6 +63,10 @@ class ExecutionContext private constructor(val output: AbstractOutputReceiver, v
         AbstractProxyListProvider.updateBlacklist()
     }
 
+    fun size(): Int {
+        return bookContextMap.size
+    }
+
     fun execute() {
         val contexts = getContexts(true)
 
@@ -73,15 +81,19 @@ class ExecutionContext private constructor(val output: AbstractOutputReceiver, v
                 val extractor = bookContext.extractor
                 extractor.reset()
 
-                extractor.newProxyEvent(HttpHostExt.NO_PROXY)
+                if (GBDOptions.serverMode)
+                    AbstractProxyListProvider.INSTANCE.parallelProxyStream.forEach { extractor.newProxyEvent(it) }
+
                 bookExecutor.execute(extractor)
             }
         }
 
         defaultMetadata = LibraryFactory.getMetadata(contexts)
 
-        AbstractProxyListProvider.INSTANCE.findCandidates()
-        AbstractProxyListProvider.INSTANCE.processProxyList(UrlType.GOOGLE_BOOKS)
+        if (!GBDOptions.serverMode) {
+            AbstractProxyListProvider.INSTANCE.findCandidates()
+            AbstractProxyListProvider.INSTANCE.processProxyList(UrlType.GOOGLE_BOOKS)
+        }
 
         bookExecutor.terminate(10L, TimeUnit.MINUTES)
         pdfExecutor.terminate(30L, TimeUnit.MINUTES)
@@ -103,6 +115,10 @@ class ExecutionContext private constructor(val output: AbstractOutputReceiver, v
 
     fun postProcessBook(bookContext: BookContext) {
         pdfExecutor.execute(bookContext.getPostProcessor())
+    }
+
+    public fun inProcess(): Boolean {
+        return bookContextMap.values.filter { !it.pdfCompleted.get() }.count() > 0
     }
 
     companion object {

@@ -11,6 +11,7 @@ import ru.kmorozov.gbd.logger.consumers.AbstractOutputReceiver
 import ru.kmorozov.gbd.logger.events.AbstractEventSource
 import java.io.IOException
 import java.util.concurrent.TimeUnit
+import kotlin.concurrent.thread
 
 /**
  * Created by sbt-morozov-kv on 16.11.2016.
@@ -21,7 +22,6 @@ abstract class AbstractImageExtractor<T : AbstractPage> : AbstractEventSource, I
 
     protected constructor(uniqueObject: BookContext, extractorClass: Class<out AbstractImageExtractor<T>>) : super() {
         this.uniqueObject = uniqueObject
-        processStatus = uniqueObject.progress
         logger = ExecutionContext.INSTANCE.getLogger(extractorClass, uniqueObject)
         this.output = ExecutionContext.INSTANCE.output
     }
@@ -58,7 +58,6 @@ abstract class AbstractImageExtractor<T : AbstractPage> : AbstractEventSource, I
 
         try {
             uniqueObject.storage = GBDOptions.storage.getChildStorage(uniqueObject.bookInfo.bookData)
-            uniqueObject.progress.resetMaxValue(uniqueObject.storage.size())
         } catch (e: IOException) {
             logger.error(e)
         }
@@ -68,34 +67,31 @@ abstract class AbstractImageExtractor<T : AbstractPage> : AbstractEventSource, I
     }
 
     override fun newProxyEvent(proxy: HttpHostExt) {
-        if (!proxy.isLocal) return
-
-        Thread(EventProcessor(proxy)).start()
+        thread { processProxyEvent(proxy) }
     }
 
     override fun reset() {
 
     }
 
-    protected inner class EventProcessor internal constructor(private val proxy: HttpHostExt) : Runnable {
+    protected open fun processProxyEvent(proxy: HttpHostExt) {
+        if (!proxy.isLocal) return
 
-        override fun run() {
-            for (page in uniqueObject.bookInfo.pages.pages)
-                this@AbstractImageExtractor.uniqueObject.imgExecutor.execute(SimplePageImgProcessor(this@AbstractImageExtractor.uniqueObject, page as T, HttpHostExt.NO_PROXY))
+        for (page in uniqueObject.bookInfo.pages.pages)
+            this@AbstractImageExtractor.uniqueObject.imgExecutor.execute(SimplePageImgProcessor(this@AbstractImageExtractor.uniqueObject, page as T, proxy))
 
-            uniqueObject.imgExecutor.terminate(20L, TimeUnit.MINUTES)
+        uniqueObject.imgExecutor.terminate(20L, TimeUnit.MINUTES)
 
-            ExecutionContext.INSTANCE.updateProxyList()
+        ExecutionContext.INSTANCE.updateProxyList()
 
-            logger.info(uniqueObject.bookInfo.pages.missingPagesList)
+        logger.info(uniqueObject.bookInfo.pages.missingPagesList)
 
-            val pagesAfter = uniqueObject.pagesStream.filter { pageInfo -> pageInfo.isDataProcessed }.count()
+        val pagesAfter = uniqueObject.pagesStream.filter { pageInfo -> pageInfo.isDataProcessed }.count()
 
-            logger.info("Processed ${pagesAfter - uniqueObject.pagesBefore} pages")
+        logger.info("Processed ${pagesAfter - uniqueObject.pagesBefore} pages")
 
-            synchronized(uniqueObject) {
-                ExecutionContext.INSTANCE.postProcessBook(uniqueObject)
-            }
+        synchronized(uniqueObject) {
+            ExecutionContext.INSTANCE.postProcessBook(uniqueObject)
         }
     }
 }
