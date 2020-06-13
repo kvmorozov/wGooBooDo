@@ -13,7 +13,7 @@ class BooksLoader {
     @Autowired
     private lateinit var serverContext: ServerContext
 
-    @Scheduled(fixedDelay = 30 * 1000)
+    @Scheduled(fixedDelay = 1 * 60 * 1000)
     fun loadBooks() {
         serverContext.execute()
     }

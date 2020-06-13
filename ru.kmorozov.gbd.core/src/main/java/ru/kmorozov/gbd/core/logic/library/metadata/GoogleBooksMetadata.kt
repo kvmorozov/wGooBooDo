@@ -36,7 +36,7 @@ class GoogleBooksMetadata private constructor() : ILibraryMetadata {
     }
 
     override fun preferredConnectors(): List<HttpConnector> {
-        return listOf(KTOR_CONNECTOR, GOOGLE_CONNECTOR, HTTP_2_CONNECTOR, ASYNC_CONNECTOR, GOOGLE_APACHE_CONNECTOR)
+        return listOf(/*KTOR_CONNECTOR, */GOOGLE_CONNECTOR, HTTP_2_CONNECTOR, ASYNC_CONNECTOR, GOOGLE_APACHE_CONNECTOR)
     }
 
     companion object {

@@ -16,7 +16,8 @@ class QueuedThreadPoolExecutor<T : Any> : ThreadPoolExecutor {
     private val description: String
     private val reusablePool: Queue<IUniqueReusable<T>> = ConcurrentLinkedQueue<IUniqueReusable<T>>()
 
-    constructor(needProcessCount: Int, threadPoolSize: Int, completeChecker: (T) -> Boolean, description: String) : super(threadPoolSize, threadPoolSize, 0L, TimeUnit.MILLISECONDS, ArrayBlockingQueue(RETENTION_QUEUE_SIZE)) {
+    constructor(needProcessCount: Int, threadPoolSize: Int, completeChecker: (T) -> Boolean, description: String) :
+            super(threadPoolSize, threadPoolSize, 0L, TimeUnit.MILLISECONDS, ArrayBlockingQueue(RETENTION_QUEUE_SIZE), NamedThreadFactory(description)) {
         this.needProcessCount = needProcessCount
         this.completeChecker = completeChecker
         this.description = description
@@ -82,10 +83,10 @@ class QueuedThreadPoolExecutor<T : Any> : ThreadPoolExecutor {
         if (command is IUniqueRunnable<*>) {
             val uniqueObj = (command as IUniqueRunnable<T>).uniqueObject
 
-            var commandToRun = command
+            var commandToRun = command as IUniqueRunnable<T>
 
             if (command is IUniqueReusable<*>) {
-                (command as IUniqueReusable<T>).reuseCallback = ::returnReusable
+                (command as IUniqueReusable<T>).reuseCallback = this::returnReusable
                 if (reusablePool.size > 0) {
                     commandToRun = reusablePool.poll()
                     if (!commandToRun.initReusable(command))
@@ -94,7 +95,7 @@ class QueuedThreadPoolExecutor<T : Any> : ThreadPoolExecutor {
             }
 
             synchronized(uniqueObj) {
-                if (null == uniqueMap.putIfAbsent(uniqueObj, command)) super.execute(commandToRun)
+                if (null == uniqueMap.putIfAbsent(uniqueObj, commandToRun)) super.execute(commandToRun)
             }
         } else
             super.execute(command)

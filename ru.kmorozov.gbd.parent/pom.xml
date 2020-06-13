@@ -15,8 +15,8 @@
         <maven.compiler.target>13</maven.compiler.target>
 
         <selenium.version>3.141.59</selenium.version>
-        <kotlin.version>1.4-M1</kotlin.version>
-        <kotlin.maven.plugin.version>1.4-M1</kotlin.maven.plugin.version>
+        <kotlin.version>1.4-M2</kotlin.version>
+        <kotlin.maven.plugin.version>1.4-M2</kotlin.maven.plugin.version>
     </properties>
 
     <modules>
@@ -126,7 +126,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
+                <version>3.8.1</version>
                 <configuration>
                     <source>13</source>
                     <target>13</target>

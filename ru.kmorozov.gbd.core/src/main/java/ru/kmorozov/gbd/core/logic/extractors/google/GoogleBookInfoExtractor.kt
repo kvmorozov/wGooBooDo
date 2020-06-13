@@ -52,7 +52,9 @@ open class GoogleBookInfoExtractor : AbstractBookInfoExtractor {
                     val bookJsonData = data.substring(data.indexOf(BOOK_INFO_START_TAG) - 2, data.lastIndexOf(BOOK_INFO_END_TAG) - 3)
                     val bookData = Mapper.gson.fromJson(bookJsonData, GoogleBookData::class.java)
 
-                    return BookInfo(bookData, pages, bookId)
+                    val result = BookInfo(bookData, pages, bookId)
+                    result.pages.build()
+                    return result
                 }
             }
         }

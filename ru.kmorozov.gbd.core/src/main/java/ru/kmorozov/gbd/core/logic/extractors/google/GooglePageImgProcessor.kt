@@ -13,7 +13,7 @@ import java.util.stream.Collectors
 /**
  * Created by km on 21.11.2015.
  */
-internal class GooglePageImgProcessor(bookContext: BookContext, page: GooglePageInfo, usedProxy: HttpHostExt) : AbstractPageImgProcessor<GooglePageInfo>(bookContext, page, usedProxy) {
+class GooglePageImgProcessor(bookContext: BookContext, page: GooglePageInfo, usedProxy: HttpHostExt) : AbstractPageImgProcessor<GooglePageInfo>(bookContext, page, usedProxy) {
 
     protected override val successMsg: String
         get() = "Finished img processing for ${uniqueObject.pid}${if (uniqueObject.isGapPage) " with gap" else ""}"
@@ -35,11 +35,11 @@ internal class GooglePageImgProcessor(bookContext: BookContext, page: GooglePage
         val width = if (0 == GBDOptions.imageWidth) GoogleConstants.DEFAULT_PAGE_WIDTH else GBDOptions.imageWidth
 
         return uniqueObject.sigs.stream().map { sig ->
-                    urlTemplate.replace(GoogleConstants.BOOK_ID_PLACEHOLDER, bookId) +
-                            GoogleConstants.IMG_REQUEST_TEMPLATE.replace(GoogleConstants.RQ_PG_PLACEHOLDER, uniqueObject.pid)
-                                    .replace(GoogleConstants.RQ_SIG_PLACEHOLDER, sig!!)
-                                    .replace(GoogleConstants.RQ_WIDTH_PLACEHOLDER, width.toString())
-                }
+            urlTemplate.replace(GoogleConstants.BOOK_ID_PLACEHOLDER, bookId) +
+                    GoogleConstants.IMG_REQUEST_TEMPLATE.replace(GoogleConstants.RQ_PG_PLACEHOLDER, uniqueObject.pid)
+                            .replace(GoogleConstants.RQ_SIG_PLACEHOLDER, sig!!)
+                            .replace(GoogleConstants.RQ_WIDTH_PLACEHOLDER, width.toString())
+        }
                 .collect(Collectors.toSet())
     }
 

@@ -21,7 +21,7 @@ abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcesso
     protected lateinit var bookContext: BookContext
     override lateinit var uniqueObject: T
     protected lateinit var usedProxy: HttpHostExt
-    override lateinit var reuseCallback: (IUniqueReusable<T>) -> Unit
+    override var reuseCallback: (IUniqueReusable<T>) -> Unit = {}
     protected lateinit var logger: Logger
     protected abstract val successMsg: String
 

@@ -35,11 +35,6 @@ class GoogleImageExtractor(bookContext: BookContext) : AbstractImageExtractor<Go
             return true
     }
 
-    override fun prepareStorage() {
-        super.prepareStorage()
-        uniqueObject.bookInfo.pages.build()
-    }
-
     override fun process() {
         super.process()
 
@@ -79,8 +74,8 @@ class GoogleImageExtractor(bookContext: BookContext) : AbstractImageExtractor<Go
                     .filter { page -> !page.isDataProcessed }
                     .sorted(Comparator { p1, p2 -> p2.order - p1.order })
                     .forEach { page ->
-                        this@GoogleImageExtractor.uniqueObject.imgExecutor
-                                .execute(GooglePageImgProcessor(this@GoogleImageExtractor.uniqueObject, page as GooglePageInfo, HttpHostExt.NO_PROXY))
+                        uniqueObject.imgExecutor
+                                .execute(GooglePageImgProcessor(uniqueObject, page as GooglePageInfo, HttpHostExt.NO_PROXY))
                     }
 
             uniqueObject.imgExecutor.terminate(10L, TimeUnit.MINUTES)
@@ -89,7 +84,7 @@ class GoogleImageExtractor(bookContext: BookContext) : AbstractImageExtractor<Go
 
             val pagesAfter = uniqueObject.pagesStream.filter { pageInfo -> pageInfo.isDataProcessed }.count()
 
-            uniqueObject.pagesProcessed = pagesAfter - uniqueObject.pagesBefore
+            uniqueObject.pagesProcessed.set(pagesAfter - uniqueObject.pagesBefore)
             logger.info("Processed ${uniqueObject.pagesProcessed} pages")
 
             ExecutionContext.INSTANCE.postProcessBook(uniqueObject)

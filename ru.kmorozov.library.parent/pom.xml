@@ -106,8 +106,8 @@
         <spring-boot-version>2.3.0.RELEASE</spring-boot-version>
         <spring-mongo-version>3.0.0.RELEASE</spring-mongo-version>
         <spring-hateoas-version>1.1.0.RELEASE</spring-hateoas-version>
-        <kotlin.version>1.4-M1</kotlin.version>
-        <kotlin.maven.plugin.version>1.4-M1</kotlin.maven.plugin.version>
+        <kotlin.version>1.4-M2</kotlin.version>
+        <kotlin.maven.plugin.version>1.4-M2</kotlin.maven.plugin.version>
     </properties>
 
     <dependencyManagement>

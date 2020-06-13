@@ -11,7 +11,6 @@ import java.util.*
 import java.util.stream.Stream
 import kotlin.collections.HashSet
 import kotlin.concurrent.thread
-import kotlin.streams.toList
 
 /**
  * Created by km on 27.11.2015.
@@ -23,13 +22,10 @@ abstract class AbstractProxyListProvider : IProxyListProvider {
     protected var proxyItems: MutableSet<Optional<InetSocketAddress>> = HashSet()
 
     constructor () {
-        this.proxyItems.addAll(
-                ProxyBlacklistHolder.BLACKLIST.whiteList.stream()
-                        .map { getInetAddress(it) }
-                        .filter { it.isPresent }
-                        .toList()
-        )
+        initList()
     }
+
+    open fun initList() {}
 
     override val parallelProxyStream: Stream<HttpHostExt>
         get() = proxyList.parallelStream()
@@ -37,13 +33,13 @@ abstract class AbstractProxyListProvider : IProxyListProvider {
     override val proxyCount: Int
         get() = proxyList.size
 
-    private fun splitItems(proxyItem: String): Array<String>? {
+    private fun splitItems(proxyItem: String): Array<String> {
         var tmpItems = splitItems(proxyItem, DEFAULT_PROXY_DELIMITER)
         if (2 <= tmpItems.size)
             return tmpItems
         else {
             tmpItems = splitItems(proxyItem, "\\s+")
-            return if (2 <= tmpItems.size) tmpItems else null
+            return if (2 <= tmpItems.size) tmpItems else emptyArray()
         }
     }
 
@@ -63,7 +59,7 @@ abstract class AbstractProxyListProvider : IProxyListProvider {
 
     protected fun getInetAddress(proxyItem: String): Optional<InetSocketAddress> {
         val proxyItemArr = splitItems(proxyItem)
-        if (null == proxyItemArr || 2 > proxyItemArr.size)
+        if (2 > proxyItemArr.size)
             return Optional.empty()
         else
             return Optional.of(InetSocketAddress(proxyItemArr[0], Integer.parseInt(proxyItemArr[1])))
@@ -96,7 +92,7 @@ abstract class AbstractProxyListProvider : IProxyListProvider {
     }
 
     public fun reset() {
-
+        proxyList.removeIf { !it.isAvailable }
     }
 
     public abstract fun findCandidates()

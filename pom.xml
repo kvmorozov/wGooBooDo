@@ -15,7 +15,6 @@
 
     <properties>
         <start-class>ru.kmorozov.library.data.server.LibraryRestServer</start-class>
-        <kotlin.version>1.4-M1</kotlin.version>
     </properties>
 
     <build>

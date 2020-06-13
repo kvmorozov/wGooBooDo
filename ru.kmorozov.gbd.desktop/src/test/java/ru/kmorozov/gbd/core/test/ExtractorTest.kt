@@ -1,5 +1,7 @@
 package ru.kmorozov.gbd.core.test
 
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 import org.eclipse.jetty.http.MimeTypes.Type
 import org.eclipse.jetty.server.Request
 import org.eclipse.jetty.server.Server
@@ -27,8 +29,6 @@ import ru.kmorozov.gbd.logger.output.ReceiverProvider
 import java.io.File
 import java.io.IOException
 import java.nio.file.Files
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
 
 /**
  * Created by sbt-morozov-kv on 16.11.2016.

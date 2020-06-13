@@ -1,5 +1,6 @@
 package ru.kmorozov.gbd.core.logic.context
 
+import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.config.IStorage
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractHttpProcessor
 import ru.kmorozov.gbd.core.logic.extractors.base.IImageExtractor
@@ -14,6 +15,7 @@ import ru.kmorozov.gbd.utils.QueuedThreadPoolExecutor
 import java.io.IOException
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicLong
 import java.util.stream.Stream
 
 /**
@@ -31,6 +33,8 @@ class BookContext {
         imgExecutor = QueuedThreadPoolExecutor(0, QueuedThreadPoolExecutor.THREAD_POOL_SIZE, { x -> x.isDataProcessed }, "Img_$bookId")
         extractor = metadata.getImageExtractor(this)
         logger = ExecutionContext.INSTANCE.getLogger(BookContext::class.java, this)
+
+        prepareStorage()
     }
 
     val sigExecutor: QueuedThreadPoolExecutor<out AbstractHttpProcessor>
@@ -42,8 +46,19 @@ class BookContext {
     lateinit var storage: IStorage
     var extractor: IImageExtractor
     var pagesBefore: Long = 0
-    var pagesProcessed: Long = 0
+    var pagesProcessed: AtomicLong = AtomicLong(0)
     private val logger: Logger
+
+    protected fun prepareStorage() {
+        if (!GBDOptions.storage.isValidOrCreate) return
+
+        logger.info(if (ExecutionContext.INSTANCE.isSingleMode) "Working with ${bookInfo.bookData.title}" else "Starting...")
+
+        storage = GBDOptions.storage.getChildStorage(bookInfo.bookData)
+
+        if (!storage.isValidOrCreate)
+            logger.severe("Invalid book title: ${bookInfo.bookData.title}")
+    }
 
     val bookId: String
         get() = bookInfo.bookId

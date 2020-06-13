@@ -1,6 +1,5 @@
 package ru.kmorozov.gbd.core.logic.extractors.base
 
-import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.logic.context.BookContext
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
 import ru.kmorozov.gbd.core.logic.extractors.SimplePageImgProcessor
@@ -9,7 +8,6 @@ import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.logger.Logger
 import ru.kmorozov.gbd.logger.consumers.AbstractOutputReceiver
 import ru.kmorozov.gbd.logger.events.AbstractEventSource
-import java.io.IOException
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.thread
 
@@ -38,8 +36,6 @@ abstract class AbstractImageExtractor<T : AbstractPage> : AbstractEventSource, I
 
         if (!preCheck()) return
 
-        prepareStorage()
-
         uniqueObject.restoreState()
     }
 
@@ -49,21 +45,6 @@ abstract class AbstractImageExtractor<T : AbstractPage> : AbstractEventSource, I
 
     override fun run() {
         process()
-    }
-
-    protected open fun prepareStorage() {
-        if (!GBDOptions.storage.isValidOrCreate) return
-
-        logger.info(if (ExecutionContext.INSTANCE.isSingleMode) "Working with ${uniqueObject.bookInfo.bookData.title}" else "Starting...")
-
-        try {
-            uniqueObject.storage = GBDOptions.storage.getChildStorage(uniqueObject.bookInfo.bookData)
-        } catch (e: IOException) {
-            logger.error(e)
-        }
-
-        if (!uniqueObject.storage.isValidOrCreate)
-            logger.severe("Invalid book title: ${uniqueObject.bookInfo.bookData.title}")
     }
 
     override fun newProxyEvent(proxy: HttpHostExt) {
@@ -78,7 +59,7 @@ abstract class AbstractImageExtractor<T : AbstractPage> : AbstractEventSource, I
         if (!proxy.isLocal) return
 
         for (page in uniqueObject.bookInfo.pages.pages)
-            this@AbstractImageExtractor.uniqueObject.imgExecutor.execute(SimplePageImgProcessor(this@AbstractImageExtractor.uniqueObject, page as T, proxy))
+            uniqueObject.imgExecutor.execute(SimplePageImgProcessor(uniqueObject, page as T, proxy))
 
         uniqueObject.imgExecutor.terminate(20L, TimeUnit.MINUTES)
 

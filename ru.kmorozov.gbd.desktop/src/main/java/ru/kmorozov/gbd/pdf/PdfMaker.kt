@@ -54,8 +54,8 @@ class PdfMaker : IPostProcessor {
 
         val bookInfo = uniqueObject.bookInfo
         val storage = uniqueObject.storage as LocalFSStorage
-        val pdfExists = storage.isPdfExists()
         val pdfFile = storage.getOrCreatePdf(bookInfo.bookData.title)
+        val pdfExists = storage.isPdfExists()
 
         val imgWidth = if (0 == GBDOptions.imageWidth) DEFAULT_PAGE_WIDTH else GBDOptions.imageWidth
 

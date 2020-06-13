@@ -12,9 +12,7 @@ import ru.kmorozov.gbd.logger.Logger
 import ru.kmorozov.gbd.logger.consumers.AbstractOutputReceiver
 import ru.kmorozov.gbd.logger.output.ReceiverProvider
 import ru.kmorozov.gbd.utils.QueuedThreadPoolExecutor
-import java.util.*
 import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.TimeUnit
 import java.util.function.ToLongFunction
 
@@ -23,8 +21,6 @@ import java.util.function.ToLongFunction
  */
 class ExecutionContext private constructor(val output: AbstractOutputReceiver, val isSingleMode: Boolean) {
     lateinit var defaultMetadata: ILibraryMetadata
-    private val mainTaskQueue: Queue<BookTask> = ConcurrentLinkedQueue<BookTask>()
-    private val auxTaskQueue: Queue<BookTask> = ConcurrentLinkedQueue<BookTask>()
 
     val bookIds: Iterable<String>
         get() = bookContextMap.keys
@@ -77,15 +73,15 @@ class ExecutionContext private constructor(val output: AbstractOutputReceiver, v
             if (bookContext.isPdfCompleted) {
                 bookContext.started.set(false)
                 bookContext.pdfCompleted.set(false)
-
-                val extractor = bookContext.extractor
-                extractor.reset()
-
-                if (GBDOptions.serverMode)
-                    AbstractProxyListProvider.INSTANCE.parallelProxyStream.forEach { extractor.newProxyEvent(it) }
-
-                bookExecutor.execute(extractor)
             }
+
+            val extractor = bookContext.extractor
+            extractor.reset()
+
+            if (GBDOptions.serverMode)
+                AbstractProxyListProvider.INSTANCE.parallelProxyStream.forEach { extractor.newProxyEvent(it) }
+
+            bookExecutor.execute(extractor)
         }
 
         defaultMetadata = LibraryFactory.getMetadata(contexts)
@@ -98,7 +94,7 @@ class ExecutionContext private constructor(val output: AbstractOutputReceiver, v
         bookExecutor.terminate(10L, TimeUnit.MINUTES)
         pdfExecutor.terminate(30L, TimeUnit.MINUTES)
 
-        val totalProcessed = getContexts(false).stream().mapToLong(ToLongFunction<BookContext> { x -> (x as BookContext).pagesProcessed }).sum()
+        val totalProcessed = getContexts(false).stream().mapToLong(ToLongFunction<BookContext> { x -> (x as BookContext).pagesProcessed.get() }).sum()
         getLogger("Total").info("Total pages processed: $totalProcessed")
 
         val contextProvider = ContextProvider.contextProvider
@@ -137,8 +133,8 @@ class ExecutionContext private constructor(val output: AbstractOutputReceiver, v
         fun initContext(output: AbstractOutputReceiver, singleMode: Boolean) {
             INSTANCE = ExecutionContext(output, singleMode)
 
-            bookExecutor = QueuedThreadPoolExecutor(bookContextMap.size, 5, { x -> x.isImgStarted }, "bookExecutor")
-            pdfExecutor = QueuedThreadPoolExecutor(bookContextMap.size, 5, { x -> x.isPdfCompleted }, "pdfExecutor")
+            bookExecutor = QueuedThreadPoolExecutor(bookContextMap.size, 5, { it.isImgStarted }, "bookExecutor")
+            pdfExecutor = QueuedThreadPoolExecutor(bookContextMap.size, 5, { it.isPdfCompleted }, "pdfExecutor")
 
             initialized = true
         }

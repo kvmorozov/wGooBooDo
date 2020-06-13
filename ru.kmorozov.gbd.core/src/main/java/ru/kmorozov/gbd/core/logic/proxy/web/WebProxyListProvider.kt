@@ -1,12 +1,23 @@
 package ru.kmorozov.gbd.core.logic.proxy.web
 
 import ru.kmorozov.gbd.core.logic.proxy.AbstractProxyListProvider
+import ru.kmorozov.gbd.core.logic.proxy.ProxyBlacklistHolder
 import java.util.stream.Collectors
+import kotlin.streams.toList
 
 /**
  * Created by km on 23.11.2015.
  */
 class WebProxyListProvider : AbstractProxyListProvider() {
+
+    override fun initList() {
+        this.proxyItems.addAll(
+                ProxyBlacklistHolder.BLACKLIST.whiteList.stream()
+                        .map { getInetAddress(it) }
+                        .filter { it.isPresent }
+                        .toList()
+        )
+    }
 
     override fun findCandidates() {
         val candidateProxies = SslProxiesListProvider().proxyList
