@@ -40,6 +40,7 @@ class GooglePagesInfo : AbstractPagesInfo(), Serializable {
 
     @Transient
     private var pagesList: LinkedList<IPage> = LinkedList()
+
     @Transient
     protected var pagesMap: MutableMap<String, IPage> = HashMap()
 
@@ -145,14 +146,16 @@ class GooglePagesInfo : AbstractPagesInfo(), Serializable {
         val lastPage = pagesList.last
 
         for (currentPage in pagesList) {
-            if (condition.test(currentPage))
+            if (condition.test(currentPage)) {
                 if (null == blockStart) {
                     blockStart = currentPage
                 }
-            else {
+            } else {
+                if (blockStart != null) {
                     pairs.add(createPair(blockStart, prevPage!!))
                     blockStart = null
                 }
+            }
 
             if (currentPage == lastPage && null != blockStart) pairs.add(createPair(blockStart, currentPage))
 
