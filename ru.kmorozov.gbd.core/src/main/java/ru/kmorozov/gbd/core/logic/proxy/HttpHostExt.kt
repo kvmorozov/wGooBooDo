@@ -87,7 +87,7 @@ class HttpHostExt {
                 return !respStr.contains(InetAddress.getLocalHost().hostName)
             }
         } catch (e: IOException) {
-            return false
+            return true
         }
 
         return false
@@ -127,6 +127,8 @@ class HttpHostExt {
                 available.set(false)
                 if (reportFailure)
                     logger.info("Proxy ${if (host.port == 1) NO_PROXY_STR else host.toString()} force-invalidated!")
+
+                AbstractProxyListProvider.INSTANCE.invalidatedProxyListener()
             }
         }
     }

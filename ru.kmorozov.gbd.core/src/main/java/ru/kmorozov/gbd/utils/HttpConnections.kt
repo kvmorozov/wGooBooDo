@@ -55,7 +55,7 @@ class HttpConnections private constructor() {
 
         fun getCookieString(proxy: InetSocketAddress, urlType: UrlType): String {
             try {
-                val resp = getResponse(proxy, urlType) ?: return ""
+                val resp = getResponse(proxy, urlType) ?: return "ppp"
 
                 return (resp.headers["set-cookie"] as Collection<String>).stream()
                         .map { s -> s.split(";".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0] }.collect(Collectors.joining(";"))

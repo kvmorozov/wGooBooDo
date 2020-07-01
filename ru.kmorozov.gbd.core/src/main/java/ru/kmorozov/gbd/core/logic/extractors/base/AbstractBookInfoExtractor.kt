@@ -1,19 +1,17 @@
 package ru.kmorozov.gbd.core.logic.extractors.base
 
-import org.jsoup.Connection
 import org.jsoup.Connection.Method
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import ru.kmorozov.db.core.config.IContextLoader
 import ru.kmorozov.db.core.logic.model.book.BookInfo
 import ru.kmorozov.db.core.logic.model.book.BookInfo.Companion.EMPTY_BOOK
-import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
+import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.logic.context.ContextProvider
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
+import ru.kmorozov.gbd.core.logic.proxy.AbstractProxyListProvider
+import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.utils.HttpConnections
-import java.io.IOException
-import java.net.UnknownHostException
-import java.nio.charset.Charset
 
 /**
  * Created by sbt-morozov-kv on 16.11.2016.
@@ -33,33 +31,13 @@ abstract class AbstractBookInfoExtractor : AbstractHttpProcessor {
     protected open val reserveBookUrl: String
         get() = bookUrl
 
-    protected val documentWithoutProxy: Document?
-        @Throws(Exception::class)
+    protected val rawDocument: Document
         get() {
-            var res: Connection.Response? = null
-            var doc: Document? = null
-
-            try {
-                res = Jsoup.connect(bookUrl).userAgent(HttpConnections.USER_AGENT).followRedirects(false).timeout(20000).method(Method.GET).execute()
-            } catch (uhe: UnknownHostException) {
-                logger.severe("Not connected to Internet!")
-            } catch (ex: Exception) {
-                try {
-                    res = Jsoup.connect(reserveBookUrl).userAgent(HttpConnections.USER_AGENT).method(Method.GET).execute()
-                } catch (ex1: Exception) {
-                    throw Exception(ex1)
-                }
-            }
-
-            try {
-                if (null != res) {
-                    doc = res.parse()
-                }
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-
-            return doc
+            if (GBDOptions.secureMode)
+                return getDocumentWithProxy(AbstractProxyListProvider.INSTANCE.getSomeProxy())!!
+            else
+                return Jsoup.connect(bookUrl).userAgent(HttpConnections.USER_AGENT)
+                        .timeout(10000).method(Method.GET).execute().parse()
         }
 
     constructor(storedLoader: IContextLoader) {
@@ -67,7 +45,7 @@ abstract class AbstractBookInfoExtractor : AbstractHttpProcessor {
     }
 
     @JvmOverloads
-    protected constructor(bookId: String, storedLoader: IContextLoader = ContextProvider.contextProvider) {
+    protected constructor (bookId: String, storedLoader: IContextLoader = ContextProvider.contextProvider) {
         this.bookId = bookId
         this.storedLoader = storedLoader
 
@@ -78,7 +56,7 @@ abstract class AbstractBookInfoExtractor : AbstractHttpProcessor {
     open fun findBookInfo(): BookInfo {
         logger.info("Loading bookinfo for $bookId...")
         try {
-            return extractBookInfo(documentWithoutProxy)
+            return extractBookInfo(rawDocument)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -89,19 +67,8 @@ abstract class AbstractBookInfoExtractor : AbstractHttpProcessor {
     protected abstract fun extractBookInfo(doc: Document?): BookInfo
 
     protected fun getDocumentWithProxy(proxy: HttpHostExt): Document? {
-        val resp = getContent(bookUrl, proxy, true)
+        val doc = getDocumentWithProxy(bookUrl, proxy)
 
-        if (resp.empty)
-            return null
-        else {
-            try {
-                resp.content.use { `is` ->
-                    val respStr = String(`is`.readAllBytes(), Charset.defaultCharset())
-                    return Jsoup.parse(respStr)
-                }
-            } catch (e: IOException) {
-                return null
-            }
-        }
+        return if (doc.isPresent()) doc.get() else null;
     }
 }

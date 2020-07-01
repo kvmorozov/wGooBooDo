@@ -1,6 +1,8 @@
 package ru.kmorozov.gbd.core.logic.extractors.base
 
 import com.google.api.client.http.HttpStatusCodes
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
 import ru.kmorozov.gbd.core.logic.connectors.Response
@@ -11,6 +13,8 @@ import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.logger.Logger
 import java.io.IOException
 import java.net.SocketException
+import java.nio.charset.Charset
+import java.util.*
 import javax.net.ssl.SSLException
 
 /**
@@ -20,6 +24,8 @@ open class AbstractHttpProcessor {
 
     protected fun getContent(rqUrl: String, proxy: HttpHostExt, withTimeout: Boolean): Response {
         try {
+            if (GBDOptions.secureMode && proxy.isLocal) return EMPTY_RESPONSE
+
             var resp: Response = EMPTY_RESPONSE
             for (connector in connectors) {
                 resp = connector.getContent(rqUrl, proxy, withTimeout)
@@ -62,6 +68,23 @@ open class AbstractHttpProcessor {
             return EMPTY_RESPONSE
         }
 
+    }
+
+    protected fun getDocumentWithProxy(url: String, proxy: HttpHostExt): Optional<Document> {
+        val resp = getContent(url, proxy, true)
+
+        if (resp.empty)
+            return Optional.empty()
+        else {
+            try {
+                resp.content.use { `is` ->
+                    val respStr = String(`is`.readAllBytes(), Charset.defaultCharset())
+                    return Optional.of(Jsoup.parse(respStr))
+                }
+            } catch (e: IOException) {
+                return Optional.empty()
+            }
+        }
     }
 
     companion object {

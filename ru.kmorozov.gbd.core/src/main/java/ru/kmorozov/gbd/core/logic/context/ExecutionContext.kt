@@ -5,6 +5,7 @@ import ru.kmorozov.gbd.core.logic.extractors.base.AbstractHttpProcessor
 import ru.kmorozov.gbd.core.logic.extractors.base.IPostProcessor
 import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata
 import ru.kmorozov.gbd.core.logic.library.LibraryFactory
+import ru.kmorozov.gbd.core.logic.library.metadata.GoogleBooksMetadata.Companion.GOOGLE_METADATA
 import ru.kmorozov.gbd.core.logic.proxy.AbstractProxyListProvider
 import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.proxy.UrlType
@@ -20,7 +21,7 @@ import java.util.function.ToLongFunction
  * Created by km on 22.11.2015.
  */
 class ExecutionContext private constructor(val output: AbstractOutputReceiver, val isSingleMode: Boolean) {
-    lateinit var defaultMetadata: ILibraryMetadata
+    var defaultMetadata: ILibraryMetadata = GOOGLE_METADATA
 
     val bookIds: Iterable<String>
         get() = bookContextMap.keys

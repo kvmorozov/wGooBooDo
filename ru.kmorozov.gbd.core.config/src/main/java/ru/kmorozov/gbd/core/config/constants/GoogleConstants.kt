@@ -12,6 +12,7 @@ object GoogleConstants {
     const val RQ_SIG_PLACEHOLDER = "%SIG%"
     const val RQ_WIDTH_PLACEHOLDER = "%WIDTH%"
 
-    const val PAGES_REQUEST_TEMPLATE = "&lpg=PP1&hl=en&pg=%PG%&jscmd=click3"
+    const val PAGES_REQUEST_TEMPLATE = "&lpg=%PG%&hl=en&pg=%PG%&jscmd=click3"
     const val IMG_REQUEST_TEMPLATE = "&pg=%PG%&img=1&zoom=3&hl=ru&sig=%SIG%&w=%WIDTH%"
+    const val PAGE_REQUEST_TEMPLATE = "&pg=%PG%#v=onepage&q&f=false"
 }

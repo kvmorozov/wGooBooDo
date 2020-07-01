@@ -53,7 +53,9 @@ abstract class HttpConnector : AutoCloseable {
     }
 
     fun getUrlType(url: String): UrlType {
-        return if (url.contains("books.google"))
+        return if (url.contains("frontcover"))
+            UrlType.GOOGLE_BOOK_INFO
+        else if (url.contains("books.google"))
             UrlType.GOOGLE_BOOKS
         else if (url.contains("jstor"))
             UrlType.JSTOR
@@ -62,7 +64,7 @@ abstract class HttpConnector : AutoCloseable {
     }
 
     protected fun needHeaders(url: String): Boolean {
-        return getUrlType(url) != UrlType.OTHER
+        return getUrlType(url) == UrlType.GOOGLE_BOOKS
     }
 
     protected fun validateProxy(url: String, proxy: HttpHostExt): Boolean {

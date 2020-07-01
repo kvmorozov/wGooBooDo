@@ -8,6 +8,7 @@ import ru.kmorozov.gbd.logger.Logger
 import ru.kmorozov.gbd.utils.HttpConnections
 import java.net.InetSocketAddress
 import java.util.*
+import java.util.concurrent.LinkedBlockingQueue
 import java.util.stream.Stream
 import kotlin.collections.HashSet
 import kotlin.concurrent.thread
@@ -18,7 +19,7 @@ import kotlin.concurrent.thread
 
 abstract class AbstractProxyListProvider : IProxyListProvider {
 
-    override val proxyList: MutableCollection<HttpHostExt> = HashSet()
+    override val proxyList: LinkedBlockingQueue<HttpHostExt> = LinkedBlockingQueue<HttpHostExt>()
     protected var proxyItems: MutableSet<Optional<InetSocketAddress>> = HashSet()
 
     constructor () {
@@ -32,6 +33,10 @@ abstract class AbstractProxyListProvider : IProxyListProvider {
 
     override val proxyCount: Int
         get() = proxyList.size
+
+    fun getSomeProxy(): HttpHostExt {
+        return proxyList.take()
+    }
 
     private fun splitItems(proxyItem: String): Array<String> {
         var tmpItems = splitItems(proxyItem, DEFAULT_PROXY_DELIMITER)
@@ -53,8 +58,9 @@ abstract class AbstractProxyListProvider : IProxyListProvider {
     }
 
     override fun invalidatedProxyListener() {
-        val liveProxyCount = proxyList.stream().filter { it.isAvailable }.count()
-        if (0L == liveProxyCount && GBDOptions.secureMode) throw RuntimeException("No more proxies!")
+        proxyList.removeIf { !it.isAvailable }
+        val liveProxyCount = proxyList.count()
+        if (0 == liveProxyCount && GBDOptions.secureMode) throw RuntimeException("No more proxies!")
     }
 
     protected fun getInetAddress(proxyItem: String): Optional<InetSocketAddress> {
