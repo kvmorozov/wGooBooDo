@@ -21,9 +21,10 @@ import java.util.concurrent.atomic.AtomicInteger
 class HttpHostExt {
     private val available: AtomicBoolean
     private val failureCount: AtomicInteger
+
     var host: InetSocketAddress
         private set
-    public var proxy: Proxy? = null
+    public var proxy: Proxy
         private set
 
     var cookie: String? = null
@@ -50,9 +51,9 @@ class HttpHostExt {
         get() = host.toString()
 
     constructor(host: InetSocketAddress, cookie: String) {
-        this.host = host
         this.cookie = cookie
 
+        this.host = host
         proxy = Proxy(Type.HTTP, host)
 
         if (GBDOptions.secureMode) isSecure = checkSecurity()
@@ -62,17 +63,20 @@ class HttpHostExt {
     }
 
     internal constructor(host: InetSocketAddress, failureCount: Int) {
-        this.host = host
         this.failureCount = AtomicInteger(failureCount)
 
+        this.host = host
         proxy = Proxy(Type.HTTP, host)
 
         available = AtomicBoolean(REMOTE_FAILURES_THRESHOLD >= failureCount)
     }
 
-    private constructor() {
-        proxy = Proxy.NO_PROXY
-        this.host = InetSocketAddress("localhost", 1)
+    private constructor() : this(InetSocketAddress("localhost", 1), Proxy.NO_PROXY)
+
+    private constructor(host: InetSocketAddress, proxy: Proxy) {
+        this.proxy = proxy
+        this.host = host
+
         failureCount = AtomicInteger(0)
         available = AtomicBoolean(true)
     }
@@ -150,7 +154,8 @@ class HttpHostExt {
             synchronized(this) {
                 if (null == headers || Strings.isNullOrEmpty(headers!!.cookie)) {
                     headers = HttpConnections.getHeaders(this)
-                    if (Strings.isNullOrEmpty(headers!!.cookie)) headers!!.cookie = HttpConnections.getCookieString(host, urlType)
+                    if (Strings.isNullOrEmpty(headers!!.cookie)) headers!!.cookie =
+                            HttpConnections.getCookieString(host, urlType)
                     if (Strings.isNullOrEmpty(headers!!.cookie)) {
                         logger.severe("Cannot get cookies for proxy $this")
                         forceInvalidate(false)
@@ -169,6 +174,7 @@ class HttpHostExt {
     companion object {
 
         val NO_PROXY = HttpHostExt()
+        val TOR_PROXY = HttpHostExt(InetSocketAddress("localhost", 9150), Proxy(Type.SOCKS, InetSocketAddress("localhost", 9150)))
 
         private val logger = Logger.getLogger(HttpHostExt::class.java)
         private val checkProxyUrl = GenericUrl("http://mxtoolbox.com/WhatIsMyIP/")

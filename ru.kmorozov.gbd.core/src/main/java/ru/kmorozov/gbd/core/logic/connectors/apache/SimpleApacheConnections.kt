@@ -11,6 +11,7 @@ import org.apache.hc.core5.http.HttpHost
 import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt.Companion.NO_PROXY
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
+import ru.kmorozov.gbd.core.logic.proxy.AbstractProxyListProvider
 import ru.kmorozov.gbd.utils.HttpConnections
 import java.io.Closeable
 import java.io.IOException
@@ -72,11 +73,11 @@ open class SimpleApacheConnections : IApacheConnectionFactory {
         }
     }
 
-    protected open fun getCookieStore(proxy: HttpHostExt = NO_PROXY): CookieStore? {
+    protected open fun getCookieStore(proxy: HttpHostExt = AbstractProxyListProvider.INSTANCE.getSomeProxy()): CookieStore? {
         return null
     }
 
-    protected open fun getHeaders(proxy: HttpHostExt = NO_PROXY): List<Header>? {
+    protected open fun getHeaders(proxy: HttpHostExt = AbstractProxyListProvider.INSTANCE.getSomeProxy()): List<Header>? {
         return null
     }
 

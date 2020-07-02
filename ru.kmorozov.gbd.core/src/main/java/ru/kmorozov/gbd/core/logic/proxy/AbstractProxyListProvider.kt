@@ -35,7 +35,9 @@ abstract class AbstractProxyListProvider : IProxyListProvider {
         get() = proxyList.size
 
     fun getSomeProxy(): HttpHostExt {
-        return proxyList.take()
+        val proxy = proxyList.take()
+        proxyList.offer(proxy)
+        return proxy
     }
 
     private fun splitItems(proxyItem: String): Array<String> {
@@ -76,6 +78,7 @@ abstract class AbstractProxyListProvider : IProxyListProvider {
 
         val cookie = HttpConnections.getCookieString(host, urlType)
         proxy = HttpHostExt(host, cookie)
+
         if (!Strings.isNullOrEmpty(cookie)) {
             if (!GBDOptions.secureMode || proxy.isSecure) {
                 logger.finest("${if (GBDOptions.secureMode) if (proxy.isSecure) "Secure p" else "NOT secure p" else "P"}roxy $host added.")
@@ -114,6 +117,8 @@ abstract class AbstractProxyListProvider : IProxyListProvider {
                 EmptyProxyListProvider.INSTANCE
             else if (GBDOptions.proxyListFile.equals("web", ignoreCase = true))
                 WebProxyListProvider.INSTANCE
+            else if (GBDOptions.proxyListFile.equals("tor", ignoreCase = true))
+                TorProxyListProvider.INSTANCE
             else FileProxyListProvider()
 
         fun updateBlacklist() {

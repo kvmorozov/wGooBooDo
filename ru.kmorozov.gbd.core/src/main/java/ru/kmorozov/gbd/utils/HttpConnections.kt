@@ -5,9 +5,9 @@ import com.google.api.client.http.HttpHeaders
 import com.google.api.client.http.HttpResponse
 import com.google.api.client.http.javanet.NetHttpTransport.Builder
 import ru.kmorozov.db.core.logic.model.book.google.GoogleBookData
+import ru.kmorozov.gbd.core.logic.context.ExecutionContext
 import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.proxy.UrlType
-import ru.kmorozov.gbd.core.logic.context.ExecutionContext
 import java.io.IOException
 import java.net.InetSocketAddress
 import java.net.Proxy
@@ -41,12 +41,22 @@ class HttpConnections private constructor() {
         private val INSTANCE = HttpConnections()
         private val baseUrls = HashMap<UrlType, GenericUrl>(1)
 
-        private fun hostToProxy(host: InetSocketAddress): Proxy {
-            return if ("localhost" == host.hostName) NO_PROXY else Proxy(Type.HTTP, host)
-        }
-
         fun getResponse(host: InetSocketAddress, urlType: UrlType): HttpResponse? {
-            return _getResponse(hostToProxy(host), urlType)
+            val baseUrl = getBaseUrl(urlType)
+            val proxy: Proxy
+            if ("localhost" == host.hostName && 1 == host.port)
+                proxy = NO_PROXY
+            else if ("localhost" == host.hostName && 9150 == host.port)
+                proxy = Proxy(Type.SOCKS, InetSocketAddress("localhost", 9150))
+            else
+                proxy = Proxy(Type.HTTP, host)
+
+            try {
+                val request = if (proxy == NO_PROXY) Builder().build() else Builder().setProxy(proxy).build()
+                return request.createRequestFactory().buildGetRequest(baseUrl).setHeaders(headers).setConnectTimeout(10000).execute()
+            } catch (e: IOException) {
+                return null
+            }
         }
 
         fun getHeaders(proxy: HttpHostExt): HttpHeaders {
@@ -90,18 +100,6 @@ class HttpConnections private constructor() {
                     else -> GenericUrl("http://www.ya.ru")
                 }
             }
-        }
-
-        private fun _getResponse(proxy: Proxy, urlType: UrlType): HttpResponse? {
-            val baseUrl = getBaseUrl(urlType)
-
-            try {
-                val request = if (proxy == NO_PROXY) Builder().build() else Builder().setProxy(proxy).build()
-                return request.createRequestFactory().buildGetRequest(baseUrl).setHeaders(headers).setConnectTimeout(10000).execute()
-            } catch (e: IOException) {
-                return null
-            }
-
         }
     }
 }
