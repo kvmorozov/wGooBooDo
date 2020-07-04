@@ -1,5 +1,6 @@
 package ru.kmorozov.gbd.core.logic.context
 
+import ru.kmorozov.db.core.logic.model.book.BookInfo
 import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.config.IStorage
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractHttpProcessor
@@ -50,7 +51,7 @@ class BookContext {
     private val logger: Logger
 
     protected fun prepareStorage() {
-        if (!GBDOptions.storage.isValidOrCreate) return
+        if (!GBDOptions.storage.isValidOrCreate || bookInfo == BookInfo.EMPTY_BOOK) return
 
         logger.info(if (ExecutionContext.INSTANCE.isSingleMode) "Working with ${bookInfo.bookData.title}" else "Starting...")
 

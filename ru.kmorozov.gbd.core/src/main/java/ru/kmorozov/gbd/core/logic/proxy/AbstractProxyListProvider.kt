@@ -6,6 +6,7 @@ import ru.kmorozov.gbd.core.logic.context.ExecutionContext
 import ru.kmorozov.gbd.core.logic.proxy.web.WebProxyListProvider
 import ru.kmorozov.gbd.logger.Logger
 import ru.kmorozov.gbd.utils.HttpConnections
+import ru.kmorozov.gbd.utils.SetBlockingQueue
 import java.net.InetSocketAddress
 import java.util.*
 import java.util.concurrent.LinkedBlockingQueue
@@ -19,7 +20,7 @@ import kotlin.concurrent.thread
 
 abstract class AbstractProxyListProvider : IProxyListProvider {
 
-    override val proxyList: LinkedBlockingQueue<HttpHostExt> = LinkedBlockingQueue<HttpHostExt>()
+    override val proxyList: LinkedBlockingQueue<HttpHostExt> = SetBlockingQueue<HttpHostExt>()
     protected var proxyItems: MutableSet<Optional<InetSocketAddress>> = HashSet()
 
     constructor () {

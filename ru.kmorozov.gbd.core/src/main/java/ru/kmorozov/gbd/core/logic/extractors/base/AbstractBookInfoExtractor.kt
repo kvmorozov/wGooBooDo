@@ -12,6 +12,7 @@ import ru.kmorozov.gbd.core.logic.context.ExecutionContext
 import ru.kmorozov.gbd.core.logic.proxy.AbstractProxyListProvider
 import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.utils.HttpConnections
+import java.util.*
 
 /**
  * Created by sbt-morozov-kv on 16.11.2016.
@@ -31,13 +32,13 @@ abstract class AbstractBookInfoExtractor : AbstractHttpProcessor {
     protected open val reserveBookUrl: String
         get() = bookUrl
 
-    protected val rawDocument: Document
+    protected val rawDocument: Optional<Document>
         get() {
             if (GBDOptions.secureMode)
-                return getDocumentWithProxy(AbstractProxyListProvider.INSTANCE.getSomeProxy())!!
+                return getDocumentWithProxy(AbstractProxyListProvider.INSTANCE.getSomeProxy())
             else
-                return Jsoup.connect(bookUrl).userAgent(HttpConnections.USER_AGENT)
-                        .timeout(10000).method(Method.GET).execute().parse()
+                return Optional.of(Jsoup.connect(bookUrl).userAgent(HttpConnections.USER_AGENT)
+                        .timeout(10000).method(Method.GET).execute().parse())
         }
 
     constructor(storedLoader: IContextLoader) {
@@ -55,20 +56,12 @@ abstract class AbstractBookInfoExtractor : AbstractHttpProcessor {
 
     open fun findBookInfo(): BookInfo {
         logger.info("Loading bookinfo for $bookId...")
-        try {
-            return extractBookInfo(rawDocument)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-        return EMPTY_BOOK
+        return if (rawDocument.isPresent) extractBookInfo(rawDocument.get()) else EMPTY_BOOK
     }
 
     protected abstract fun extractBookInfo(doc: Document?): BookInfo
 
-    protected fun getDocumentWithProxy(proxy: HttpHostExt): Document? {
-        val doc = getDocumentWithProxy(bookUrl, proxy)
-
-        return if (doc.isPresent()) doc.get() else null;
+    protected fun getDocumentWithProxy(proxy: HttpHostExt): Optional<Document> {
+        return getDocumentWithProxy(bookUrl, proxy)
     }
 }

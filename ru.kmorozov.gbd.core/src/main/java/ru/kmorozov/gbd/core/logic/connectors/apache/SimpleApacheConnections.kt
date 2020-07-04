@@ -2,16 +2,16 @@ package ru.kmorozov.gbd.core.logic.connectors.apache
 
 import org.apache.hc.client5.http.classic.HttpClient
 import org.apache.hc.client5.http.config.RequestConfig
+import org.apache.hc.client5.http.cookie.BasicCookieStore
 import org.apache.hc.client5.http.cookie.CookieStore
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient
 import org.apache.hc.client5.http.impl.classic.HttpClientBuilder
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager
 import org.apache.hc.core5.http.Header
 import org.apache.hc.core5.http.HttpHost
-import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
-import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt.Companion.NO_PROXY
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
 import ru.kmorozov.gbd.core.logic.proxy.AbstractProxyListProvider
+import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.utils.HttpConnections
 import java.io.Closeable
 import java.io.IOException
@@ -45,7 +45,12 @@ open class SimpleApacheConnections : IApacheConnectionFactory {
                 .setUserAgent(HttpConnections.USER_AGENT)
                 .setConnectionManager(connPool)
 
-        val defaultCookieStore = getCookieStore()
+        var defaultCookieStore: CookieStore = BasicCookieStore()
+        try {
+            defaultCookieStore = getCookieStore()!!
+        } catch (ex: Exception) {
+        }
+
         val defaultHeaders = getHeaders()
 
         noProxyClient = builder.setDefaultCookieStore(defaultCookieStore).setDefaultHeaders(defaultHeaders).build()
