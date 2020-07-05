@@ -2,7 +2,6 @@ package ru.kmorozov.gbd.core.logic.extractors.google
 
 import com.google.common.base.Strings
 import com.google.gson.JsonParseException
-import org.apache.hc.core5.http.NoHttpResponseException
 import ru.kmorozov.db.core.logic.model.book.google.GooglePageInfo
 import ru.kmorozov.db.core.logic.model.book.google.GooglePagesInfo
 import ru.kmorozov.db.utils.Mapper
@@ -112,12 +111,6 @@ class SigProcessorInternal : AbstractHttpProcessor, IUniqueReusable<GooglePageIn
                 logger.info("Proxy ${proxy} failed!")
             }
         } catch (ce: SocketException) {
-            if (!proxy.isLocal) {
-                proxy.registerFailure()
-                logger.info("Proxy ${proxy} failed!")
-            }
-            if (ce !is SocketTimeoutException) ce.printStackTrace()
-        } catch (ce: NoHttpResponseException) {
             if (!proxy.isLocal) {
                 proxy.registerFailure()
                 logger.info("Proxy ${proxy} failed!")

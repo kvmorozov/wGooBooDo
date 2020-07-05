@@ -1,8 +1,9 @@
 package ru.kmorozov.gbd.core.logic.context
 
-import ru.kmorozov.db.core.logic.model.book.BookInfo
 import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.config.IStorage
+import ru.kmorozov.gbd.core.loader.GlobalIndex
+import ru.kmorozov.gbd.core.loader.LazyBookInfo
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractHttpProcessor
 import ru.kmorozov.gbd.core.logic.extractors.base.IImageExtractor
 import ru.kmorozov.gbd.core.logic.extractors.base.IPostProcessor
@@ -28,18 +29,16 @@ class BookContext {
     internal constructor(bookId: String, postProcessor: IPostProcessor) {
         this.postProcessor = postProcessor
         this.metadata = LibraryFactory.getMetadata(bookId)
-        this.bookInfo = metadata.getBookInfoExtractor(bookId).bookInfo
-        pagesBefore = pagesStream.filter { pageInfo -> pageInfo.isFileExists }.count()
+        this.bookInfo = LazyBookInfo(bookId, GlobalIndex.INSTANCE)
         sigExecutor = QueuedThreadPoolExecutor(1, QueuedThreadPoolExecutor.THREAD_POOL_SIZE, { true }, "Sig_$bookId")
         imgExecutor = QueuedThreadPoolExecutor(0, QueuedThreadPoolExecutor.THREAD_POOL_SIZE, { x -> x.isDataProcessed }, "Img_$bookId")
         extractor = metadata.getImageExtractor(this)
         logger = ExecutionContext.INSTANCE.getLogger(BookContext::class.java, this)
-
-        prepareStorage()
     }
 
     val sigExecutor: QueuedThreadPoolExecutor<out AbstractHttpProcessor>
     val imgExecutor: QueuedThreadPoolExecutor<AbstractPage>
+    private var initComplete = false
     var bookInfo: IBookInfo
     private val metadata: ILibraryMetadata
     var started: AtomicBoolean = AtomicBoolean(false)
@@ -49,6 +48,15 @@ class BookContext {
     var pagesBefore: Long = 0
     var pagesProcessed: AtomicLong = AtomicLong(0)
     private val logger: Logger
+
+    fun resetBookInfo() {
+        if (!initComplete) {
+            bookInfo = metadata.getBookInfoExtractor(bookId).bookInfo
+            pagesBefore = pagesStream.filter { pageInfo -> pageInfo.isFileExists }.count()
+            prepareStorage()
+            initComplete = true
+        }
+    }
 
     protected fun prepareStorage() {
         if (!GBDOptions.storage.isValidOrCreate || bookInfo.empty) return
@@ -71,7 +79,7 @@ class BookContext {
         get() = started.get()
 
     val isEmpty: Boolean
-        get() = bookInfo == BookInfo.EMPTY_BOOK
+        get() = bookInfo.empty
 
     val pagesStream: Stream<IPage>
         get() = Arrays.stream(bookInfo.pages.pages).sorted()

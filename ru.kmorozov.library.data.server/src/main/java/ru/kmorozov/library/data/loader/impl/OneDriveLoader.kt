@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Conditional
 import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Component
 import ru.kmorozov.gbd.logger.Logger
-import ru.kmorozov.library.data.loader.SocketReporter
 import ru.kmorozov.library.data.loader.impl.LoaderExecutor.State
 import ru.kmorozov.library.data.loader.utils.ConsistencyUtils
 import ru.kmorozov.library.data.loader.utils.WindowsShortcut
@@ -24,6 +23,7 @@ import ru.kmorozov.onedrive.client.walker.OneDriveWalkers
 import ru.kmorozov.onedrive.filesystem.FileSystemProvider.FACTORY
 import ru.kmorozov.onedrive.tasks.DownloadTask
 import ru.kmorozov.onedrive.tasks.Task.TaskOptions
+import ru.kmorozov.onedrive.tasks.TaskReporter
 import java.io.File
 import java.io.IOException
 import java.nio.charset.Charset
@@ -215,7 +215,7 @@ open class OneDriveLoader : StoredLoader() {
             val itemPartSize = if (0L < bookItem.size) bookItem.size.toInt() / 5 else Integer.MAX_VALUE
 
             val task = DownloadTask(
-                    TaskOptions(TaskQueue(), api, FACTORY.readWriteProvider(), SocketReporter()),
+                    TaskOptions(TaskQueue(), api, FACTORY.readWriteProvider(), TaskReporter()),
                     parent, bookItem, true, itemPartSize)
 
             task.run()

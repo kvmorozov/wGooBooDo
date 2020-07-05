@@ -77,6 +77,7 @@ class ExecutionContext private constructor(val output: AbstractOutputReceiver, v
                 bookContext.pdfCompleted.set(false)
             }
 
+            bookContext.resetBookInfo()
             val extractor = bookContext.extractor
             extractor.reset()
 

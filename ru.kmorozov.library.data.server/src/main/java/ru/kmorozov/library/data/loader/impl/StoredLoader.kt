@@ -2,19 +2,12 @@ package ru.kmorozov.library.data.loader.impl
 
 import org.springframework.beans.factory.annotation.Autowired
 import ru.kmorozov.gbd.logger.Logger
-import ru.kmorozov.library.data.loader.netty.EventSender
-import ru.kmorozov.library.data.model.book.Book
-import ru.kmorozov.library.data.model.book.BookInfo
-import ru.kmorozov.library.data.model.book.Category
-import ru.kmorozov.library.data.model.book.Storage
-import ru.kmorozov.library.data.model.book.StorageInfo
+import ru.kmorozov.library.data.model.book.*
 import ru.kmorozov.library.data.repository.BooksRepository
 import ru.kmorozov.library.data.repository.CategoryRepository
 import ru.kmorozov.library.data.repository.StorageRepository
 import ru.kmorozov.library.utils.BookUtils
-
 import java.io.IOException
-import java.util.Date
 import java.util.function.Predicate
 import java.util.stream.Stream
 
@@ -124,11 +117,9 @@ abstract class StoredLoader : BaseLoader() {
 
                                 if (book.isLink && !postponedLinksLoad()) {
                                     links.add(serverItem.originalItem)
-                                    EventSender.INSTANCE.sendInfo(logger, "Added link " + serverItem.name)
                                 } else {
                                     booksRepository.save(book)
                                     storage.storageInfo!!.incFilesCount()
-                                    EventSender.INSTANCE.sendInfo(logger, "Added file " + serverItem.name)
                                 }
                             } else {
                                 val oldDate = existBook.bookInfo.lastModifiedDateTime
@@ -148,8 +139,6 @@ abstract class StoredLoader : BaseLoader() {
                                     existBook.bookInfo.size = newSize
                                     existBook.storage = storage
                                     booksRepository.save(existBook)
-
-                                    EventSender.INSTANCE.sendInfo(logger, "Updated file " + serverItem.name)
                                 }
                             }
                         }
