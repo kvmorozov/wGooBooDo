@@ -149,6 +149,11 @@ class HttpHostExt {
         failureCount.set(failureCount.get() + anotherHost.failureCount.get())
     }
 
+    fun resetHeaders() {
+        headers = null
+        cookie = null
+    }
+
     fun getHeaders(urlType: UrlType): HttpHeaders {
         if (null == headers || null == headers!!.cookie) {
             synchronized(this) {
@@ -159,7 +164,8 @@ class HttpHostExt {
                     if (Strings.isNullOrEmpty(headers!!.cookie)) {
                         logger.severe("Cannot get cookies for proxy $this")
                         forceInvalidate(false)
-                    }
+                    } else
+                        cookie = headers!!.cookie
                 }
             }
         }

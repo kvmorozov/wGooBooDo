@@ -36,9 +36,12 @@ abstract class AbstractProxyListProvider : IProxyListProvider {
         get() = proxyList.size
 
     fun getSomeProxy(): HttpHostExt {
-        val proxy = proxyList.take()
-        proxyList.add(proxy)
-        return proxy
+        if (proxyList.isEmpty()) {
+            val proxy = proxyList.take()
+            proxyList.add(proxy)
+            return proxy
+        } else
+            return proxyList.element()
     }
 
     private fun splitItems(proxyItem: String): Array<String> {

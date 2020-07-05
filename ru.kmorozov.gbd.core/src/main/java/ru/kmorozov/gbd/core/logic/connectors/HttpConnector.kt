@@ -64,7 +64,7 @@ abstract class HttpConnector : AutoCloseable {
     }
 
     protected fun needHeaders(url: String): Boolean {
-        return getUrlType(url) == UrlType.GOOGLE_BOOKS
+        return getUrlType(url) == UrlType.GOOGLE_BOOKS || getUrlType(url) == UrlType.GOOGLE_BOOK_INFO
     }
 
     protected fun validateProxy(url: String, proxy: HttpHostExt): Boolean {
@@ -94,7 +94,7 @@ abstract class HttpConnector : AutoCloseable {
 
         const val CONNECT_TIMEOUT = 30000
         private val logger = Logger.getLogger(HttpConnector::class.java)
-        public const val MAX_RETRY_COUNT = 2
+        public const val MAX_RETRY_COUNT = 5
         public const val SLEEP_TIME = 500
 
         private val parser = Parser.htmlParser()

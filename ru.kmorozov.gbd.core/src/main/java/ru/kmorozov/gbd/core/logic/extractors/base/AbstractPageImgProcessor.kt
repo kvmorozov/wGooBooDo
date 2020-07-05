@@ -115,6 +115,7 @@ abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcesso
 
                     return true
                 } else {
+                    proxy.resetHeaders()
                     storedItem.delete()
                     return false
                 }

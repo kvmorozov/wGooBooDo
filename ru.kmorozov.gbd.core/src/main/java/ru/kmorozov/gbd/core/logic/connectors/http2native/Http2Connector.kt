@@ -41,13 +41,19 @@ class Http2Connector : HttpConnector() {
                 }
 
                 resp = getContent(reqBuilder.build(), proxy, 0)
-            } else
-                throw RuntimeException("Invalid proxy config!")
+            } else {
+                logger.error("Invalid proxy config! " + proxy.toString())
+                return EMPTY_RESPONSE
+            }
 
             if (null == resp)
                 logger.finest("No response at url $rqUrl with proxy $proxy")
 
-            return Http2Response(resp!!)
+            if (resp?.statusCode() == 403) {
+                proxy.resetHeaders()
+                return EMPTY_RESPONSE
+            } else
+                return Http2Response(resp!!)
         } catch (ioe: IOException) {
             logger.severe("Connection error: ${ioe.message}")
             return EMPTY_RESPONSE

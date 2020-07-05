@@ -61,7 +61,7 @@ object Images {
             1280 -> return if (fileSize > 96183L || fileSize < 70000L) {
                 try {
                     val bimg = ImageIO.read(imgfile)
-                    1670 == bimg.height
+                    bimg != null && 1670 == bimg.height
                 } catch (e: IOException) {
                     true
                 }

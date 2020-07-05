@@ -10,6 +10,7 @@ import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
 import ru.kmorozov.gbd.core.logic.connectors.Response
 import ru.kmorozov.gbd.core.logic.connectors.Response.Companion.EMPTY_RESPONSE
 import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
+import ru.kmorozov.gbd.core.logic.proxy.UrlType
 import ru.kmorozov.gbd.logger.Logger
 import java.net.SocketTimeoutException
 import java.net.URI
@@ -76,8 +77,15 @@ class GoogleHttpConnector : HttpConnector() {
         } catch (ste1: SocketTimeoutException) {
             proxy.registerFailure()
             return getContent(req, proxy, attempt + 1)
+        } catch (hre: HttpResponseException) {
+            proxy.registerFailure()
+            if (hre.statusCode == 403) {
+                proxy.resetHeaders()
+                req.headers = proxy.getHeaders(UrlType.GOOGLE_BOOKS)
+                return getContent(req, proxy, attempt + 1)
+            } else
+                throw (hre)
         }
-
     }
 
     override fun close() {

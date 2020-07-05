@@ -18,12 +18,13 @@ internal object Main {
         if (0 < args.size) {
             GBDOptions.init(CommandLineOptions(args))
 
-            thread {
-               ProxyInitiator().proxyInit()
-            }
-
             val producer = OptionsBasedProducer()
             ExecutionContext.initContext(ReceiverProvider.getReceiver(GBDOptions.debugEnabled), 1 == producer.bookIds.size)
+
+            thread {
+                ProxyInitiator().proxyInit()
+            }
+
             ExecutionContext.INSTANCE.addBookContext(producer, PdfMaker())
 
             ExecutionContext.INSTANCE.execute()
