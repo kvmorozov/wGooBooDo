@@ -18,11 +18,17 @@ object Images {
 
     private val logger = ExecutionContext.getLogger(Images::class.java)
 
-    val ocr: Tesseract
+    private lateinit var ocr: Tesseract
+    private var ocrInitialized = false
 
     init {
-        ocr = Tesseract() // create a new OCR engine
-        ocr.setDatapath("J:\\OCR\\tesseract\\tessdata")
+        try {
+            ocr = Tesseract() // create a new OCR engine
+            ocr.setDatapath("J:\\OCR\\tesseract\\tessdata")
+            ocrInitialized = true
+        } catch (ex: Exception) {
+
+        }
     }
 
     fun isImageFile(filePath: Path): Boolean {
@@ -40,7 +46,7 @@ object Images {
         }
     }
 
-    fun getImageFormat(filePath: Path) : String {
+    fun getImageFormat(filePath: Path): String {
         return MoreFiles.getFileExtension(filePath).toLowerCase()
     }
 
@@ -70,7 +76,7 @@ object Images {
 
     @Synchronized
     public fun doOCR(imgfile: File): String {
-        if (!GBDOptions.scanEnabled)
+        if (!GBDOptions.scanEnabled || !ocrInitialized)
             return ""
 
         try {
@@ -86,7 +92,7 @@ object Images {
 
         val ext = MoreFiles.getFileExtension(filePath).toLowerCase()
 
-        return "pdf" == ext
+        return "pdf" == ext && filePath.toFile().length() > 0
     }
 
     fun getImageFormat(response: Response): String {

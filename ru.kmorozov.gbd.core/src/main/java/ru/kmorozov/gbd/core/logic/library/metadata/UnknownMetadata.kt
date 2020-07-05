@@ -28,7 +28,7 @@ class UnknownMetadata : ILibraryMetadata {
     }
 
     override fun preferredConnectors(): List<HttpConnector> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return emptyList()
     }
 
     companion object {

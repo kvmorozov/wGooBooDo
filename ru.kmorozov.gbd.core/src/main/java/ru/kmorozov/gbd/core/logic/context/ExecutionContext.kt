@@ -6,6 +6,7 @@ import ru.kmorozov.gbd.core.logic.extractors.base.IPostProcessor
 import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata
 import ru.kmorozov.gbd.core.logic.library.LibraryFactory
 import ru.kmorozov.gbd.core.logic.library.metadata.GoogleBooksMetadata.Companion.GOOGLE_METADATA
+import ru.kmorozov.gbd.core.logic.library.metadata.UnknownMetadata
 import ru.kmorozov.gbd.core.logic.proxy.AbstractProxyListProvider
 import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.proxy.UrlType
@@ -86,23 +87,27 @@ class ExecutionContext private constructor(val output: AbstractOutputReceiver, v
         }
 
         defaultMetadata = LibraryFactory.getMetadata(contexts)
+        if (defaultMetadata == UnknownMetadata.UNKNOWN_METADATA) {
+            for (bookContext in contexts)
+                postProcessBook(bookContext)
+        } else {
+            if (!GBDOptions.serverMode) {
+                AbstractProxyListProvider.INSTANCE.findCandidates()
+                AbstractProxyListProvider.INSTANCE.processProxyList(UrlType.GOOGLE_BOOKS)
+            }
 
-        if (!GBDOptions.serverMode) {
-            AbstractProxyListProvider.INSTANCE.findCandidates()
-            AbstractProxyListProvider.INSTANCE.processProxyList(UrlType.GOOGLE_BOOKS)
+            bookExecutor.terminate(10L, TimeUnit.MINUTES)
+            pdfExecutor.terminate(30L, TimeUnit.MINUTES)
+
+            val totalProcessed = getContexts(false).stream().mapToLong(ToLongFunction<BookContext> { x -> (x as BookContext).pagesProcessed.get() }).sum()
+            getLogger("Total").info("Total pages processed: $totalProcessed")
+
+            val contextProvider = ContextProvider.contextProvider
+
+            contextProvider.updateContext()
+            updateBlacklist()
+            AbstractHttpProcessor.close()
         }
-
-        bookExecutor.terminate(10L, TimeUnit.MINUTES)
-        pdfExecutor.terminate(30L, TimeUnit.MINUTES)
-
-        val totalProcessed = getContexts(false).stream().mapToLong(ToLongFunction<BookContext> { x -> (x as BookContext).pagesProcessed.get() }).sum()
-        getLogger("Total").info("Total pages processed: $totalProcessed")
-
-        val contextProvider = ContextProvider.contextProvider
-
-        contextProvider.updateContext()
-        updateBlacklist()
-        AbstractHttpProcessor.close()
     }
 
     private fun newProxyEvent(proxy: HttpHostExt) {

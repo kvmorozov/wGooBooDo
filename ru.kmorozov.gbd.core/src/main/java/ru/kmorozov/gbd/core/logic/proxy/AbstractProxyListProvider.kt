@@ -37,7 +37,7 @@ abstract class AbstractProxyListProvider : IProxyListProvider {
 
     fun getSomeProxy(): HttpHostExt {
         val proxy = proxyList.take()
-        proxyList.offer(proxy)
+        proxyList.add(proxy)
         return proxy
     }
 

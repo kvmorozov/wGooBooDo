@@ -44,7 +44,7 @@ class PdfMaker : IPostProcessor {
     constructor()
 
     override fun make() {
-        if (PdfOptions.SKIP === GBDOptions.pdfOptions)
+        if (PdfOptions.SKIP === GBDOptions.pdfOptions || uniqueObject.bookInfo.empty)
             return
 
         if (!uniqueObject.pdfCompleted.compareAndSet(false, true)) return

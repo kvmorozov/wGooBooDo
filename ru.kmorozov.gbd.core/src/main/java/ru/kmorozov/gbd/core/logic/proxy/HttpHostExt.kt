@@ -98,7 +98,7 @@ class HttpHostExt {
     }
 
     override fun hashCode(): Int {
-        return host.hashCode()
+        return (host.hostName + host.port).hashCode()
     }
 
     override fun equals(other: Any?): Boolean {

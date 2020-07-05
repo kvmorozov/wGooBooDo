@@ -51,7 +51,7 @@ class BookContext {
     private val logger: Logger
 
     protected fun prepareStorage() {
-        if (!GBDOptions.storage.isValidOrCreate || bookInfo == BookInfo.EMPTY_BOOK) return
+        if (!GBDOptions.storage.isValidOrCreate || bookInfo.empty) return
 
         logger.info(if (ExecutionContext.INSTANCE.isSingleMode) "Working with ${bookInfo.bookData.title}" else "Starting...")
 
@@ -69,6 +69,9 @@ class BookContext {
 
     val isImgStarted: Boolean
         get() = started.get()
+
+    val isEmpty: Boolean
+        get() = bookInfo == BookInfo.EMPTY_BOOK
 
     val pagesStream: Stream<IPage>
         get() = Arrays.stream(bookInfo.pages.pages).sorted()
@@ -102,5 +105,7 @@ class BookContext {
         }
 
         pagesBefore = pagesStream.filter { it.isFileExists }.count()
+        val pagesNeded = bookInfo.pages.pages.size - pagesBefore
+        imgExecutor.reset(pagesNeded.toInt())
     }
 }

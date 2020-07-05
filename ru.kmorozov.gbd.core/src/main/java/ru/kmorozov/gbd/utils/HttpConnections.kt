@@ -4,8 +4,6 @@ import com.google.api.client.http.GenericUrl
 import com.google.api.client.http.HttpHeaders
 import com.google.api.client.http.HttpResponse
 import com.google.api.client.http.javanet.NetHttpTransport.Builder
-import ru.kmorozov.db.core.logic.model.book.google.GoogleBookData
-import ru.kmorozov.gbd.core.logic.context.ExecutionContext
 import ru.kmorozov.gbd.core.logic.exceptions.BookNotFoundException
 import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.proxy.UrlType
@@ -66,7 +64,6 @@ class HttpConnections private constructor() {
 
         fun getCookieString(proxy: InetSocketAddress, urlType: UrlType): String {
             val resp = getResponse(proxy, urlType)
-
             return (resp.headers["set-cookie"] as Collection<String>).stream()
                     .map { s -> s.split(";".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0] }.collect(Collectors.joining(";"))
         }
@@ -84,14 +81,7 @@ class HttpConnections private constructor() {
         private fun getBaseUrl(urlType: UrlType): GenericUrl {
             return baseUrls.computeIfAbsent(urlType) {
                 when (urlType) {
-                    UrlType.GOOGLE_BOOKS -> {
-                        val anyContext = ExecutionContext.INSTANCE.getContexts(false).stream().filter { bookContext -> bookContext.bookInfo.bookData is GoogleBookData }.findAny()
-                        if (!anyContext.isPresent)
-                            GenericUrl("https://books.google.ru")
-                        else {
-                            GenericUrl((anyContext.get().bookInfo.bookData as GoogleBookData).baseUrl)
-                        }
-                    }
+                    UrlType.GOOGLE_BOOKS -> GenericUrl("https://www.google.com/")
                     UrlType.JSTOR -> GenericUrl("https://www.jstor.org")
                     else -> GenericUrl("http://www.ya.ru")
                 }

@@ -1,6 +1,7 @@
 package ru.kmorozov.gbd.core.logic.extractors.google
 
 import com.google.common.base.Strings
+import ru.kmorozov.db.core.logic.model.book.BookInfo.Companion.EMPTY_BOOK
 import ru.kmorozov.db.core.logic.model.book.google.GoogleBookData
 import ru.kmorozov.db.core.logic.model.book.google.GooglePageInfo
 import ru.kmorozov.gbd.core.config.GBDOptions
@@ -36,6 +37,9 @@ class GoogleImageExtractor(bookContext: BookContext) : AbstractImageExtractor<Go
     }
 
     override fun process() {
+        if (uniqueObject.bookInfo == EMPTY_BOOK)
+            return
+
         super.process()
 
         initComplete.set(true)

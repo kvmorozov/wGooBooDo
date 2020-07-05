@@ -1,5 +1,6 @@
 package ru.kmorozov.gbd.core.logic.library.metadata
 
+import org.apache.commons.lang3.StringUtils
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
 import ru.kmorozov.gbd.core.logic.connectors.apache.ApacheHttpConnector
 import ru.kmorozov.gbd.core.logic.connectors.apache.ArchiveApacheConnections
@@ -16,7 +17,7 @@ class ArchiveMetadata private constructor() : ILibraryMetadata {
     val ARCHIVE_PATTERN = Pattern.compile("[a-z]*[0-9]*[a-z]*")
 
     override fun isValidId(bookId: String): Boolean {
-        return ARCHIVE_PATTERN.matcher(bookId).matches()
+        return !StringUtils.isEmpty(bookId) && ARCHIVE_PATTERN.matcher(bookId).matches()
     }
 
     override fun getImageExtractor(bookContext: BookContext): IImageExtractor {
