@@ -102,5 +102,7 @@ class BookContext {
         }
 
         pagesBefore = pagesStream.filter { it.isFileExists }.count()
+        val pagesNeded = bookInfo.pages.pages.size - pagesBefore
+        imgExecutor.reset(pagesNeded.toInt())
     }
 }

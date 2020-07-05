@@ -6,6 +6,7 @@ import ru.kmorozov.gbd.core.logic.extractors.base.IPostProcessor
 import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata
 import ru.kmorozov.gbd.core.logic.library.LibraryFactory
 import ru.kmorozov.gbd.core.logic.library.metadata.GoogleBooksMetadata.Companion.GOOGLE_METADATA
+import ru.kmorozov.gbd.core.logic.library.metadata.UnknownMetadata
 import ru.kmorozov.gbd.core.logic.proxy.AbstractProxyListProvider
 import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.proxy.UrlType
@@ -86,6 +87,8 @@ class ExecutionContext private constructor(val output: AbstractOutputReceiver, v
         }
 
         defaultMetadata = LibraryFactory.getMetadata(contexts)
+        if (defaultMetadata == UnknownMetadata.UNKNOWN_METADATA)
+            return
 
         if (!GBDOptions.serverMode) {
             AbstractProxyListProvider.INSTANCE.findCandidates()

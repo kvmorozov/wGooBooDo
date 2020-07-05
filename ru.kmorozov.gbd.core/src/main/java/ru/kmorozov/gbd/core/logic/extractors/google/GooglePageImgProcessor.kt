@@ -2,6 +2,7 @@ package ru.kmorozov.gbd.core.logic.extractors.google
 
 import org.apache.commons.lang3.StringUtils
 import ru.kmorozov.db.core.logic.model.book.google.GooglePageInfo
+import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.logic.context.BookContext
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractPageImgProcessor
 import ru.kmorozov.gbd.core.logic.proxy.AbstractProxyListProvider
@@ -35,15 +36,18 @@ class GooglePageImgProcessor(bookContext: BookContext, page: GooglePageInfo, use
 
     private fun preProcessPage() {
         val singlePageUrl = urlBuilder.getSinglePageUrl(uniqueObject.pid)
+        val proxy = getSomeProxy()
 
-        val doc = getDocumentWithProxy(singlePageUrl, HttpHostExt.NO_PROXY)
+        val doc = getDocumentWithProxy(singlePageUrl, getSomeProxy())
         if (doc.isPresent) {
             try {
                 val sig = doc.get().getElementsByTag("script")[0].html()
                         .split("'")[3].split("\\x3d")[6].split("\\x26w")[0]
 
-                if (!StringUtils.isEmpty(sig))
+                if (!StringUtils.isEmpty(sig)) {
                     uniqueObject.sigs.add(sig)
+                    usedProxy = proxy
+                }
             } catch (ex: Exception) {
             }
         }
@@ -62,7 +66,7 @@ class GooglePageImgProcessor(bookContext: BookContext, page: GooglePageInfo, use
 
         if (!processImageWithProxy(usedProxy)) {
             // Пробуем скачать страницу с без прокси, если не получилось с той прокси, с помощью которой узнали sig
-            if (!usedProxy.isLocal)
+            if (!usedProxy.isLocal && !GBDOptions.secureMode)
                 if (!processImageWithProxy(HttpHostExt.NO_PROXY))
                 // Пробуем скачать страницу с другими прокси, если не получилось с той, с помощью которой узнали sig
                     AbstractProxyListProvider.INSTANCE.parallelProxyStream.forEach { proxy ->

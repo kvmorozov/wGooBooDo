@@ -9,6 +9,7 @@ import ru.kmorozov.gbd.core.logic.connectors.Response
 import ru.kmorozov.gbd.core.logic.connectors.Response.Companion.EMPTY_RESPONSE
 import ru.kmorozov.gbd.core.logic.connectors.ResponseException
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
+import ru.kmorozov.gbd.core.logic.proxy.AbstractProxyListProvider
 import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.logger.Logger
 import java.io.IOException
@@ -31,8 +32,8 @@ open class AbstractHttpProcessor {
                 resp = connector.getContent(rqUrl, proxy, withTimeout)
 
                 if (!resp.empty) {
-//                    if (GBDOptions.debugEnabled && !resp.imageFormat.contentEquals("json"))
-//                        logger.info("Headers: ${resp.headers}")
+                    if (GBDOptions.debugEnabled && !resp.imageFormat.contentEquals("json"))
+                        logger.info("Headers: ${resp.headers}")
 
                     return resp
                 }
@@ -85,6 +86,10 @@ open class AbstractHttpProcessor {
                 return Optional.empty()
             }
         }
+    }
+
+    protected fun getSomeProxy(): HttpHostExt {
+        return AbstractProxyListProvider.INSTANCE.getSomeProxy()
     }
 
     companion object {

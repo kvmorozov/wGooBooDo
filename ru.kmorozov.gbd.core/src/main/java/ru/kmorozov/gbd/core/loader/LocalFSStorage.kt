@@ -222,7 +222,7 @@ open class LocalFSStorage : IStorage {
 
     fun isPdfExists(): Boolean {
         return Files.list(storageDir.toPath())
-                .filter(Predicate<Path> { filePath -> Images.isPdfFile(filePath) }).count() == 1L && storageDir.length() > 0
+                .filter(Predicate<Path> { filePath -> Images.isPdfFile(filePath) }).count() == 1L
     }
 
     fun getOrCreatePdf(title: String): File {
