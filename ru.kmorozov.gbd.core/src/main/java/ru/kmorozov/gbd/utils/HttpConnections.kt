@@ -12,7 +12,6 @@ import java.net.InetSocketAddress
 import java.net.Proxy
 import java.net.Proxy.NO_PROXY
 import java.net.Proxy.Type
-import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.stream.Collectors
 
@@ -38,7 +37,7 @@ class HttpConnections private constructor() {
         const val USER_AGENT = "Mozilla/5.0 (Linux; Android 7.0; SM-G892A Build/NRD90M; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/60.0.3112.107 Mobile Safari/537.36"
         private val headers = HttpHeaders().setUserAgent(USER_AGENT)
         private val INSTANCE = HttpConnections()
-        private val baseUrls = HashMap<UrlType, GenericUrl>(1)
+        private val baseUrls = ConcurrentHashMap<UrlType, GenericUrl>(1)
 
         fun getResponse(host: InetSocketAddress, urlType: UrlType): HttpResponse {
             val baseUrl = getBaseUrl(urlType)

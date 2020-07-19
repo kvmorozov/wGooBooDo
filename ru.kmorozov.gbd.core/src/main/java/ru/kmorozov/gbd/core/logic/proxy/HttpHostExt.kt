@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger
 /**
  * Created by km on 29.11.2015.
  */
-class HttpHostExt {
+open class HttpHostExt {
     private val available: AtomicBoolean
     private val failureCount: AtomicInteger
 
@@ -71,9 +71,9 @@ class HttpHostExt {
         available = AtomicBoolean(REMOTE_FAILURES_THRESHOLD >= failureCount)
     }
 
-    private constructor() : this(InetSocketAddress("localhost", 1), Proxy.NO_PROXY)
+    constructor() : this(InetSocketAddress("localhost", 1), Proxy.NO_PROXY)
 
-    private constructor(host: InetSocketAddress, proxy: Proxy) {
+    constructor(host: InetSocketAddress, proxy: Proxy) {
         this.proxy = proxy
         this.host = host
 
@@ -109,7 +109,7 @@ class HttpHostExt {
         return String.format("%s (%d)", if (host.port == 1) NO_PROXY_STR else host.toString(), -1 * failureCount.get())
     }
 
-    fun registerFailure() {
+    open fun registerFailure() {
         if (!isAvailable) return
 
         failureCount.incrementAndGet()
@@ -179,8 +179,8 @@ class HttpHostExt {
 
     companion object {
 
-        val NO_PROXY = HttpHostExt()
-        val TOR_PROXY = HttpHostExt(InetSocketAddress("localhost", 9150), Proxy(Type.SOCKS, InetSocketAddress("localhost", 9150)))
+        val NO_PROXY = StableProxy()
+        val TOR_PROXY = StableProxy(InetSocketAddress("localhost", 9150), Proxy(Type.SOCKS, InetSocketAddress("localhost", 9150)))
 
         private val logger = Logger.getLogger(HttpHostExt::class.java)
         private val checkProxyUrl = GenericUrl("http://mxtoolbox.com/WhatIsMyIP/")

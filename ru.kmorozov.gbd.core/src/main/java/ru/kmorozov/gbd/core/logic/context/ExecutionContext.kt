@@ -91,6 +91,12 @@ class ExecutionContext private constructor(val output: AbstractOutputReceiver, v
         if (defaultMetadata == UnknownMetadata.UNKNOWN_METADATA) {
             for (bookContext in contexts)
                 postProcessBook(bookContext)
+
+            pdfExecutor.reset(0)
+            bookExecutor.terminate(10L, TimeUnit.MINUTES)
+            pdfExecutor.terminate(30L, TimeUnit.MINUTES)
+
+            AbstractHttpProcessor.close()
         } else {
             if (!GBDOptions.serverMode) {
                 AbstractProxyListProvider.INSTANCE.findCandidates()
@@ -117,7 +123,8 @@ class ExecutionContext private constructor(val output: AbstractOutputReceiver, v
     }
 
     fun postProcessBook(bookContext: BookContext) {
-        pdfExecutor.execute(bookContext.getPostProcessor())
+        if (!bookContext.isEmpty)
+            pdfExecutor.execute(bookContext.getPostProcessor())
     }
 
     public fun inProcess(): Boolean {
@@ -140,8 +147,8 @@ class ExecutionContext private constructor(val output: AbstractOutputReceiver, v
         fun initContext(output: AbstractOutputReceiver, singleMode: Boolean) {
             INSTANCE = ExecutionContext(output, singleMode)
 
-            bookExecutor = QueuedThreadPoolExecutor(bookContextMap.size, 5, { it.isImgStarted }, "bookExecutor")
-            pdfExecutor = QueuedThreadPoolExecutor(bookContextMap.size, 5, { it.isPdfCompleted }, "pdfExecutor")
+            bookExecutor = QueuedThreadPoolExecutor(bookContextMap.size, 5, { it.isImgStarted || it.isEmpty }, "bookExecutor")
+            pdfExecutor = QueuedThreadPoolExecutor(bookContextMap.size, 5, { it.isPdfCompleted || it.isEmpty }, "pdfExecutor")
 
             initialized = true
         }
