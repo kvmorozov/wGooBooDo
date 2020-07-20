@@ -1,5 +1,6 @@
-package ru.kmorozov.gbd.core.logic.proxy
+package ru.kmorozov.gbd.core.logic.proxy.providers
 
+import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException

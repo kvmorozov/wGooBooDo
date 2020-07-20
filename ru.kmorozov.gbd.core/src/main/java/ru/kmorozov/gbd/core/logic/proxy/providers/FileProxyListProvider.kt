@@ -1,4 +1,4 @@
-package ru.kmorozov.gbd.core.logic.proxy
+package ru.kmorozov.gbd.core.logic.proxy.providers
 
 import com.google.common.base.Strings
 import ru.kmorozov.gbd.core.config.GBDOptions

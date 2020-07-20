@@ -73,14 +73,15 @@ class GoogleHttpConnector : HttpConnector() {
             }
 
         try {
-            return GoogleResponse(req.execute())
+            val res = GoogleResponse(req.execute())
+            return res;
         } catch (ste1: SocketTimeoutException) {
             proxy.registerFailure()
             return getContent(req, proxy, attempt + 1)
         } catch (hre: HttpResponseException) {
             proxy.registerFailure()
             if (hre.statusCode == 403) {
-                proxy.resetHeaders()
+                proxy.reset()
                 req.headers = proxy.getHeaders(UrlType.GOOGLE_BOOKS)
                 return getContent(req, proxy, attempt + 1)
             } else

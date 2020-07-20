@@ -3,7 +3,7 @@ package ru.kmorozov.gbd.core.logic.proxy
 import java.net.InetSocketAddress
 import java.net.Proxy
 
-class StableProxy : HttpHostExt {
+open class StableProxy : HttpHostExt {
 
     constructor() : super()
 

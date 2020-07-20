@@ -1,4 +1,4 @@
-package ru.kmorozov.gbd.core.logic.proxy
+package ru.kmorozov.gbd.core.logic.proxy.providers
 
 import java.io.IOException
 import java.nio.charset.StandardCharsets

@@ -3,9 +3,9 @@ package ru.kmorozov.gbd.core.config.constants
 object GoogleConstants {
 
     const val DEFAULT_PAGE_WIDTH = 1280
-    const val HTTP_TEMPLATE = "http://books.google.ru/books?id=%BOOK_ID%"
-    const val HTTPS_TEMPLATE = "https://books.google.ru/books?id=%BOOK_ID%"
-    const val HTTPS_IMG_TEMPLATE = "https://books.google.ru/books/content?id=%BOOK_ID%"
+    const val HTTP_TEMPLATE = "http://books.google.com/books?id=%BOOK_ID%"
+    const val HTTPS_TEMPLATE = "https://books.google.com/books?id=%BOOK_ID%"
+    const val HTTPS_IMG_TEMPLATE = "https://books.google.com/books/content?id=%BOOK_ID%"
 
     const val BOOK_ID_PLACEHOLDER = "%BOOK_ID%"
     const val RQ_PG_PLACEHOLDER = "%PG%"

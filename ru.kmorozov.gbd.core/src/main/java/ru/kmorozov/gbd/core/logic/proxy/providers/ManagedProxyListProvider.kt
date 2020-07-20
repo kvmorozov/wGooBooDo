@@ -1,5 +1,7 @@
-package ru.kmorozov.gbd.core.logic.proxy
+package ru.kmorozov.gbd.core.logic.proxy.providers
 
+import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
+import ru.kmorozov.gbd.core.logic.proxy.UrlType
 import java.util.*
 
 class ManagedProxyListProvider(private val parentProvider: IProxyListProvider, private val timeout: Int) {

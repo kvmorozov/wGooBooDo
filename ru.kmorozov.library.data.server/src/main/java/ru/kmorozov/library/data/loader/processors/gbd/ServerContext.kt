@@ -5,7 +5,7 @@ import ru.kmorozov.gbd.core.logic.context.BookTask
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
 import ru.kmorozov.gbd.core.logic.context.IBookListProducer
 import ru.kmorozov.gbd.core.logic.library.LibraryFactory
-import ru.kmorozov.gbd.core.logic.proxy.AbstractProxyListProvider
+import ru.kmorozov.gbd.core.logic.proxy.providers.AbstractProxyListProvider
 import ru.kmorozov.gbd.utils.QueuedThreadPoolExecutor
 import ru.kmorozov.library.data.loader.processors.gbd.workers.PageWorker
 import ru.kmorozov.library.data.loader.processors.gbd.workers.SigWorker

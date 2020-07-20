@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Component
-import ru.kmorozov.gbd.core.logic.proxy.EmptyProxyListProvider
-import ru.kmorozov.gbd.core.logic.proxy.ManagedProxyListProvider
+import ru.kmorozov.gbd.core.logic.proxy.providers.EmptyProxyListProvider
+import ru.kmorozov.gbd.core.logic.proxy.providers.ManagedProxyListProvider
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
 import ru.kmorozov.gbd.core.logic.connectors.google.GoogleHttpConnector
 import ru.kmorozov.gbd.logger.Logger

@@ -5,7 +5,7 @@ import ru.kmorozov.db.core.logic.model.book.google.GooglePageInfo
 import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.logic.context.BookContext
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractPageImgProcessor
-import ru.kmorozov.gbd.core.logic.proxy.AbstractProxyListProvider
+import ru.kmorozov.gbd.core.logic.proxy.providers.AbstractProxyListProvider
 import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import java.util.stream.Collectors
 

@@ -50,7 +50,7 @@ class Http2Connector : HttpConnector() {
                 logger.finest("No response at url $rqUrl with proxy $proxy")
 
             if (resp?.statusCode() == 403) {
-                proxy.resetHeaders()
+                proxy.reset()
                 return EMPTY_RESPONSE
             } else
                 return Http2Response(resp!!)

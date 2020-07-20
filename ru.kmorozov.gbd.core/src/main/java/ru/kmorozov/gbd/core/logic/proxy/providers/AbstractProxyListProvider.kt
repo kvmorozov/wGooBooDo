@@ -1,8 +1,10 @@
-package ru.kmorozov.gbd.core.logic.proxy
+package ru.kmorozov.gbd.core.logic.proxy.providers
 
 import com.google.common.base.Strings
 import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
+import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
+import ru.kmorozov.gbd.core.logic.proxy.UrlType
 import ru.kmorozov.gbd.core.logic.proxy.web.WebProxyListProvider
 import ru.kmorozov.gbd.logger.Logger
 import ru.kmorozov.gbd.utils.HttpConnections

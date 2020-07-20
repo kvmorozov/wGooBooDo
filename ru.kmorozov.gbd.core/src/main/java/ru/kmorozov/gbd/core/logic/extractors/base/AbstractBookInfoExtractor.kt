@@ -9,7 +9,7 @@ import ru.kmorozov.db.core.logic.model.book.BookInfo.Companion.EMPTY_BOOK
 import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.logic.context.ContextProvider
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
-import ru.kmorozov.gbd.core.logic.proxy.AbstractProxyListProvider
+import ru.kmorozov.gbd.core.logic.proxy.providers.AbstractProxyListProvider
 import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.utils.HttpConnections
 import java.util.*

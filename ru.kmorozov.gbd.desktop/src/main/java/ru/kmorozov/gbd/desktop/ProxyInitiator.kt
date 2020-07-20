@@ -1,6 +1,6 @@
 package ru.kmorozov.gbd.desktop
 
-import ru.kmorozov.gbd.core.logic.proxy.AbstractProxyListProvider
+import ru.kmorozov.gbd.core.logic.proxy.providers.AbstractProxyListProvider
 import ru.kmorozov.gbd.core.logic.proxy.UrlType
 
 class ProxyInitiator {

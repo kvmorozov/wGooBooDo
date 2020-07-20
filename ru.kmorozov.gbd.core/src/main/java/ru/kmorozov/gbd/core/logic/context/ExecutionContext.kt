@@ -7,7 +7,7 @@ import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata
 import ru.kmorozov.gbd.core.logic.library.LibraryFactory
 import ru.kmorozov.gbd.core.logic.library.metadata.GoogleBooksMetadata.Companion.GOOGLE_METADATA
 import ru.kmorozov.gbd.core.logic.library.metadata.UnknownMetadata
-import ru.kmorozov.gbd.core.logic.proxy.AbstractProxyListProvider
+import ru.kmorozov.gbd.core.logic.proxy.providers.AbstractProxyListProvider
 import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.proxy.UrlType
 import ru.kmorozov.gbd.logger.Logger

@@ -115,7 +115,7 @@ abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcesso
 
                     return true
                 } else {
-                    proxy.resetHeaders()
+                    proxy.reset()
                     storedItem.delete()
                     return false
                 }
@@ -146,6 +146,7 @@ abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcesso
                 logger.info("Loading page ${uniqueObject.pid} failed!")
                 try {
                     storedItem.delete()
+                    proxy.reset()
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }

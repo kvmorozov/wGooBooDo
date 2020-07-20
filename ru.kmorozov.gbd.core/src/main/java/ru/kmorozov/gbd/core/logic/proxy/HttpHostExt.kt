@@ -5,6 +5,7 @@ import com.google.api.client.http.HttpHeaders
 import com.google.api.client.http.javanet.NetHttpTransport.Builder
 import com.google.common.base.Strings
 import ru.kmorozov.gbd.core.config.GBDOptions
+import ru.kmorozov.gbd.core.logic.proxy.providers.AbstractProxyListProvider
 import ru.kmorozov.gbd.logger.Logger
 import ru.kmorozov.gbd.utils.HttpConnections
 import java.io.IOException
@@ -149,11 +150,6 @@ open class HttpHostExt {
         failureCount.set(failureCount.get() + anotherHost.failureCount.get())
     }
 
-    fun resetHeaders() {
-        headers = null
-        cookie = null
-    }
-
     fun getHeaders(urlType: UrlType): HttpHeaders {
         if (null == headers || null == headers!!.cookie) {
             synchronized(this) {
@@ -177,10 +173,15 @@ open class HttpHostExt {
         lastUsedTimestamp = System.currentTimeMillis()
     }
 
+    open public fun reset() {
+        headers = null
+        cookie = null
+    }
+
     companion object {
 
         val NO_PROXY = StableProxy()
-        val TOR_PROXY = StableProxy(InetSocketAddress("localhost", 9150), Proxy(Type.SOCKS, InetSocketAddress("localhost", 9150)))
+        val TOR_PROXY = TorProxy()
 
         private val logger = Logger.getLogger(HttpHostExt::class.java)
         private val checkProxyUrl = GenericUrl("http://mxtoolbox.com/WhatIsMyIP/")

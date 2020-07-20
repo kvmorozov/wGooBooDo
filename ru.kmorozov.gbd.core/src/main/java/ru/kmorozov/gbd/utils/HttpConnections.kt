@@ -6,6 +6,7 @@ import com.google.api.client.http.HttpResponse
 import com.google.api.client.http.javanet.NetHttpTransport.Builder
 import ru.kmorozov.gbd.core.logic.exceptions.BookNotFoundException
 import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
+import ru.kmorozov.gbd.core.logic.proxy.TorProxy
 import ru.kmorozov.gbd.core.logic.proxy.UrlType
 import java.io.IOException
 import java.net.InetSocketAddress
@@ -20,18 +21,6 @@ import java.util.stream.Collectors
  */
 class HttpConnections private constructor() {
 
-    private val headersMap = ConcurrentHashMap<HttpHostExt, HttpHeaders>()
-
-    private fun _getHeaders(proxy: HttpHostExt): HttpHeaders {
-        return (headersMap as MutableMap<HttpHostExt, HttpHeaders>).computeIfAbsent(proxy) { httpHostExt ->
-            val _headers = HttpHeaders()
-            _headers.userAgent = USER_AGENT
-            _headers.cookie = httpHostExt.cookie
-
-            _headers
-        }
-    }
-
     companion object {
 
         const val USER_AGENT = "Mozilla/5.0 (Linux; Android 7.0; SM-G892A Build/NRD90M; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/60.0.3112.107 Mobile Safari/537.36"
@@ -44,8 +33,8 @@ class HttpConnections private constructor() {
             val proxy: Proxy
             if ("localhost" == host.hostName && 1 == host.port)
                 proxy = NO_PROXY
-            else if ("localhost" == host.hostName && 9150 == host.port)
-                proxy = Proxy(Type.SOCKS, InetSocketAddress("localhost", 9150))
+            else if (TorProxy.TOR_HOST == host.hostName && 9150 == host.port)
+                proxy = Proxy(Type.SOCKS, InetSocketAddress(TorProxy.TOR_HOST, TorProxy.TOR_HTTP_PORT))
             else
                 proxy = Proxy(Type.HTTP, host)
 
@@ -58,7 +47,10 @@ class HttpConnections private constructor() {
         }
 
         fun getHeaders(proxy: HttpHostExt): HttpHeaders {
-            return INSTANCE._getHeaders(proxy)
+            val headers = HttpHeaders()
+            headers.userAgent = USER_AGENT
+            headers.cookie = proxy.cookie
+            return headers
         }
 
         fun getCookieString(proxy: InetSocketAddress, urlType: UrlType): String {
