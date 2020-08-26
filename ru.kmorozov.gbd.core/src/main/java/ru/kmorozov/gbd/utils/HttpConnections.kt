@@ -72,7 +72,7 @@ class HttpConnections private constructor() {
         private fun getBaseUrl(urlType: UrlType): GenericUrl {
             return baseUrls.computeIfAbsent(urlType) {
                 when (urlType) {
-                    UrlType.GOOGLE_BOOKS -> GenericUrl("https://books.google.com/")
+                    UrlType.GOOGLE_BOOKS -> GenericUrl("https://www.google.com/")
                     UrlType.GOOGLE_BOOK_INFO -> GenericUrl("https://www.google.com/")
                     UrlType.JSTOR -> GenericUrl("https://www.jstor.org")
                     else -> GenericUrl("http://www.ya.ru")

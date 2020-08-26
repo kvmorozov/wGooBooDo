@@ -4,7 +4,6 @@ import com.mongodb.BasicDBObject
 import org.bson.Document
 import org.bson.types.ObjectId
 import org.springframework.data.mongodb.core.MongoTemplate
-import java.util.Collections
 import java.util.HashSet
 
 /**

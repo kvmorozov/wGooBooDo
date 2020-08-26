@@ -6,41 +6,26 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="832600b3-aa6b-4b28-bef7-61710f4358a7" name="funcs" comment="fixes">
-      <change afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/context/BookTask.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/loader/processors/gbd/ServerContext.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/server/scheduler/BooksLoader.kt" afterDir="false" />
+    <list default="true" id="832600b3-aa6b-4b28-bef7-61710f4358a7" name="funcs" comment="fix hangs">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core.config/src/main/java/ru/kmorozov/gbd/core/config/GBDOptions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core.config/src/main/java/ru/kmorozov/gbd/core/config/GBDOptions.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core.config/src/main/java/ru/kmorozov/gbd/core/config/IGBDOptions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core.config/src/main/java/ru/kmorozov/gbd/core/config/IGBDOptions.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core.logger/src/main/java/ru/kmorozov/gbd/logger/events/AbstractEventSource.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core.logger/src/main/java/ru/kmorozov/gbd/logger/events/AbstractEventSource.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core.logger/src/main/java/ru/kmorozov/gbd/logger/events/IEventSource.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core.logger/src/main/java/ru/kmorozov/gbd/logger/events/IEventSource.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core.logger/src/main/java/ru/kmorozov/gbd/logger/progress/IProgress.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/context/BookContext.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/context/BookContext.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/context/ExecutionContext.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/context/ExecutionContext.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/AbstractImageExtractor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/AbstractImageExtractor.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/google/GoogleImageExtractor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/google/GoogleImageExtractor.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/google/GooglePageSigProcessor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/google/GooglePageSigProcessor.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/Main.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/desktop/gui/ImageExtractorWorker.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/desktop/gui/ImageExtractorWorker.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/desktop/gui/MainBookForm.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/desktop/gui/MainBookForm.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/desktop/output/progress/ProcessStatus.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/test/java/ru/kmorozov/gbd/core/test/ExtractorTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/test/java/ru/kmorozov/gbd/core/test/ExtractorTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.ldoc.dictionary/src/main/java/com/logicaldoc/gbd/dictionary/DictionaryOptions.java" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.ldoc.dictionary/src/main/java/com/logicaldoc/gbd/dictionary/DictionaryOptions.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/loader/processors/IGbdProcessor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/loader/processors/IGbdProcessor.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/loader/processors/gbd/DummyProgress.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/loader/processors/gbd/GbdLocalProcessor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/loader/processors/gbd/GbdLocalProcessor.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/loader/processors/gbd/GbdRemoteProcessor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/loader/processors/gbd/GbdRemoteProcessor.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/loader/processors/gbd/InMemoryProcessor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/loader/processors/gbd/InMemoryProcessor.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/loader/processors/gbd/ServerPdfMaker.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/loader/processors/gbd/ServerPostProcessor.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/server/controllers/LibraryRestController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/server/controllers/LibraryRestController.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/server/controllers/StorageController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/server/controllers/StorageController.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/server/options/LocalServerGBDOptions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/server/options/LocalServerGBDOptions.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/server/options/ServerGBDOptions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/server/options/ServerGBDOptions.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/proxy/TorProxy.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/proxy/TorProxy.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/utils/HttpConnections.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/utils/HttpConnections.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.gbd.db.mongo/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.db.mongo/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.ldoc.dictionary/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.ldoc.dictionary/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.model/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.model/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.model/src/main/java/ru/kmorozov/library/data/config/MongoConfiguration.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.db.mongo/src/main/java/ru/kmorozov/library/data/config/MongoConfiguration.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.model/src/main/java/ru/kmorozov/library/data/storage/mongo/LikeTextSearch.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.gbd.db.mongo/src/main/java/ru/kmorozov/library/data/storage/mongo/LikeTextSearch.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.model/src/test/java/ru/kmorozov/library/data/test/mongo/BaseOperationsTest.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/server/LibraryRestServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/server/LibraryRestServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.data.server/src/test/java/ru/kmorozov/library/data/loader/test/QueryDataTest.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ru.kmorozov.library.parent/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ru.kmorozov.library.parent/pom.xml" afterDir="false" />
     </list>
     <list id="0c8b21df-78f5-408a-867d-4ccd8443679a" name="Default" comment="idea files">
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,22 +45,108 @@
         <option value="Interface" />
         <option value="Enum" />
         <option value="Kotlin Object" />
-        <option value="Class" />
         <option value="Kotlin Interface" />
-        <option value="Kotlin File" />
         <option value="Kotlin Enum" />
+        <option value="Class" />
+        <option value="Kotlin File" />
         <option value="Kotlin Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="ROOT_SYNC" value="DONT_SYNC" />
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="PUSH_AUTO_UPDATE" value="true" />
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
         <entry key="$PROJECT_DIR$" value="gbd-web" />
       </map>
     </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
+  </component>
+  <component name="LineStatusTrackerManager">
+    <file path="$PROJECT_DIR$/.idea/workspace.xml">
+      <ranges>
+        <range start1="7" end1="7" start2="7" end2="51" changelist="0c8b21df-78f5-408a-867d-4ccd8443679a" />
+        <range start1="8" end1="12" start2="52" end2="53" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="13" end1="39" start2="54" end2="66" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="42" end1="42" start2="69" end2="70" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="43" end1="43" start2="71" end2="72" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="62" end1="63" start2="91" end2="91" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="64" end1="65" start2="92" end2="92" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="66" end1="66" start2="93" end2="95" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="71" end1="73" start2="100" end2="101" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="78" end1="78" start2="106" end2="193" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="109" end1="110" start2="224" end2="225" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="111" end1="112" start2="226" end2="227" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="113" end1="114" start2="228" end2="229" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="117" end1="118" start2="232" end2="234" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="121" end1="121" start2="237" end2="241" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="122" end1="124" start2="242" end2="242" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="126" end1="126" start2="244" end2="245" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="129" end1="129" start2="248" end2="255" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="143" end1="150" start2="269" end2="269" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="155" end1="155" start2="274" end2="322" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="204" end1="205" start2="371" end2="372" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="288" end1="289" start2="455" end2="456" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="309" end1="310" start2="476" end2="488" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="420" end1="420" start2="598" end2="612" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="480" end1="480" start2="672" end2="673" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="485" end1="485" start2="678" end2="679" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="774" end1="873" start2="968" end2="996" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1119" end1="1120" start2="1242" end2="1341" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1122" end1="1131" start2="1343" end2="1343" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1181" end1="1189" start2="1393" end2="1393" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1199" end1="1200" start2="1403" end2="1403" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1202" end1="1203" start2="1405" end2="1405" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1205" end1="1205" start2="1407" end2="1413" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1206" end1="1207" start2="1414" end2="1419" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1210" end1="1211" start2="1422" end2="1427" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1213" end1="1215" start2="1429" end2="1431" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1217" end1="1219" start2="1433" end2="1435" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1221" end1="1223" start2="1437" end2="1439" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1225" end1="1227" start2="1441" end2="1443" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1229" end1="1231" start2="1445" end2="1447" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1233" end1="1235" start2="1449" end2="1451" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1237" end1="1239" start2="1453" end2="1455" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1241" end1="1243" start2="1457" end2="1459" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1245" end1="1247" start2="1461" end2="1463" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1249" end1="1251" start2="1465" end2="1467" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1253" end1="1255" start2="1469" end2="1471" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1257" end1="1259" start2="1473" end2="1475" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1261" end1="1263" start2="1477" end2="1479" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1265" end1="1267" start2="1481" end2="1483" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1269" end1="1271" start2="1485" end2="1487" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1273" end1="1275" start2="1489" end2="1491" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1277" end1="1279" start2="1493" end2="1495" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1281" end1="1283" start2="1497" end2="1499" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1285" end1="1287" start2="1501" end2="1503" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1289" end1="1291" start2="1505" end2="1507" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1293" end1="1295" start2="1509" end2="1511" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1297" end1="1299" start2="1513" end2="1515" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1301" end1="1303" start2="1517" end2="1519" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1305" end1="1307" start2="1521" end2="1523" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1309" end1="1311" start2="1525" end2="1527" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1313" end1="1315" start2="1529" end2="1531" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1317" end1="1319" start2="1533" end2="1535" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1321" end1="1323" start2="1537" end2="1539" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1325" end1="1327" start2="1541" end2="1543" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1329" end1="1331" start2="1545" end2="1547" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1333" end1="1335" start2="1549" end2="1551" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1337" end1="1339" start2="1553" end2="1555" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1341" end1="1343" start2="1557" end2="1559" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1345" end1="1346" start2="1561" end2="1562" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1411" end1="1421" start2="1627" end2="1627" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1426" end1="1431" start2="1632" end2="1632" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1443" end1="1445" start2="1644" end2="1656" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1447" end1="1450" start2="1658" end2="1696" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1452" end1="1455" start2="1698" end2="1701" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1457" end1="1460" start2="1703" end2="1706" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1462" end1="1465" start2="1708" end2="1711" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1467" end1="1470" start2="1713" end2="1716" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1472" end1="1475" start2="1718" end2="1721" changelist="832600b3-aa6b-4b28-bef7-61710f4358a7" />
+        <range start1="1481" end1="1489" start2="1727" end2="1727" changelist="0c8b21df-78f5-408a-867d-4ccd8443679a" />
+      </ranges>
+    </file>
   </component>
   <component name="MavenRunner">
     <option name="skipTests" value="true" />
@@ -107,26 +178,37 @@
     <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1553936102230" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="HTTP Request" />
     <property name="js.eslint.eslintPackage" value="" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../LDOC/tomcat/webapps/ROOT/WEB-INF/lib/logicaldoc-importfolder-8.4.2-plugin.jar!/" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/docker/gbd-server/Dockerfile" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="project.structure.last.edited" value="Global Libraries" />
+    <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
-    <property name="project.structure.side.proportion" value="0.2632184" />
+    <property name="project.structure.side.proportion" value="0.40229884" />
     <property name="prop_add_unversioned_files" value="true" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="preferences.language.Kotlin" />
+    <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.javacompiler" />
+    <property name="show.run.dashboard.notification" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
+      <recent name="ru.kmorozov.library.data.storage.mongo" />
+      <recent name="ru.kmorozov.library.data.test.mongo" />
+      <recent name="ru.kmorozov.library.data.config" />
+      <recent name="ru.kmorozov.gbd.core.logic.proxy.providers" />
       <recent name="ru.kmorozov.gbd.core.config" />
-      <recent name="ru.kmorozov.gbd.core.logic.connectors.apache" />
-      <recent name="ru.kmorozov.gbd.core.loader" />
     </key>
     <key name="CopyKotlinDeclarationDialog.RECENTS_KEY">
+      <recent name="ru.kmorozov.gbd.core.logic.proxy" />
       <recent name="ru.kmorozov.gbd.logger.output" />
       <recent name="ru.kmorozov.gbd.core.logic.connectors.apache" />
       <recent name="ru.kmorozov.gbd.core.logic.extractors.archive" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="J:\Work\wGooBooDo\repo\ru\kmorozov\library\ru.kmorozov.library.data.model\2.2-b2" />
+      <recent name="E:\Work\wGooBooDo\ru.kmorozov.library.data.client\src\main\resources\static" />
+      <recent name="E:\Work\wGooBooDo\ru.kmorozov.library.data.client\src\main\resources\templates" />
+      <recent name="E:\Work\wGooBooDo\ru.kmorozov.library.data.client\src\main\resources\static\app\fonts" />
+      <recent name="E:\Work\wGooBooDo\ru.kmorozov.library.data.client\src\main\resources\static\app\tree-utils" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="" />
@@ -142,17 +224,58 @@
       <recent name="ru.kmorozov.gbd.core.logic.extractors.rfbr" />
       <recent name="ru.kmorozov.gbd.core.logic.extractors" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="J:\Work\wGooBooDo\repo\ru\kmorozov\library\ru.kmorozov.library.data.model\2.2-b2" />
-      <recent name="E:\Work\wGooBooDo\ru.kmorozov.library.data.client\src\main\resources\static" />
-      <recent name="E:\Work\wGooBooDo\ru.kmorozov.library.data.client\src\main\resources\templates" />
-      <recent name="E:\Work\wGooBooDo\ru.kmorozov.library.data.client\src\main\resources\static\app\fonts" />
-      <recent name="E:\Work\wGooBooDo\ru.kmorozov.library.data.client\src\main\resources\static\app\tree-utils" />
-    </key>
   </component>
   <component name="RestClientSettings">
     <option name="REQUEST_HISTORY">
       <list>
+        <RestClientRequest>
+          <option name="httpMethod" value="POST" />
+          <option name="urlBase" value="http://localhost:9000/gbdLoadLocal" />
+          <option name="urlPath" value="" />
+          <option name="parameters">
+            <list>
+              <KeyValuePair>
+                <option name="key" value="bookId" />
+                <option name="value" value="Gd4ExObjw2AC" />
+              </KeyValuePair>
+            </list>
+          </option>
+          <option name="parametersEnabled" value="true" />
+          <option name="textToSend" value="" />
+          <option name="filesToSend" value="" />
+        </RestClientRequest>
+        <RestClientRequest>
+          <option name="httpMethod" value="POST" />
+          <option name="urlBase" value="http://localhost:9000/gbdLoadLocal" />
+          <option name="urlPath" value="" />
+          <option name="parameters">
+            <list>
+              <KeyValuePair>
+                <option name="key" value="bookId" />
+                <option name="value" value="S9XHd76lgloC" />
+              </KeyValuePair>
+            </list>
+          </option>
+          <option name="parametersEnabled" value="true" />
+          <option name="textToSend" value="" />
+          <option name="filesToSend" value="" />
+        </RestClientRequest>
+        <RestClientRequest>
+          <option name="httpMethod" value="POST" />
+          <option name="urlBase" value="http://localhost:9000/gbdLoadLocal" />
+          <option name="urlPath" value="" />
+          <option name="parameters">
+            <list>
+              <KeyValuePair>
+                <option name="key" value="bookId" />
+                <option name="value" value="_mZjDwAAQBAJ" />
+              </KeyValuePair>
+            </list>
+          </option>
+          <option name="parametersEnabled" value="true" />
+          <option name="textToSend" value="" />
+          <option name="filesToSend" value="" />
+        </RestClientRequest>
         <RestClientRequest>
           <option name="httpMethod" value="POST" />
           <option name="urlBase" value="http://localhost:9000/gbdLoadLocal" />
@@ -202,7 +325,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.main_PROXY">
+  <component name="RunManager" selected="HTTP Request.library#1">
     <configuration default="true" type="AntRunConfigurationType" factoryName="Ant build" debug-port="25000" max-memory="256" logging-level="0">
       <method />
     </configuration>
@@ -286,7 +409,7 @@
     <configuration name="main_NOPROXY" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="ru.kmorozov.gbd.Main" />
       <module name="ru.kmorozov.gbd.desktop" />
-      <option name="PROGRAM_PARAMETERS" value="-o &quot;J:\OneDrive2\OneDrive - edy\gbdBooks&quot; -p -r -i sG-wn6pBA8wC" />
+      <option name="PROGRAM_PARAMETERS" value="-o &quot;J:\OneDrive2\OneDrive - edy\gbdBooks&quot; -p -r -i Gd4ExObjw2AC" />
       <option name="VM_PARAMETERS" value="-Xms1G -Xmx2G" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -307,7 +430,18 @@
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="ru.kmorozov.gbd.Main" />
       <module name="ru.kmorozov.gbd.desktop" />
-      <option name="PROGRAM_PARAMETERS" value="-o &quot;J:\OneDrive2\OneDrive - edy\gbdBooks&quot; -p web -i HF3jdg0peNYC -d" />
+      <option name="PROGRAM_PARAMETERS" value="-o &quot;J:\OneDrive2\OneDrive - edy\gbdBooks&quot; -p web -i Gd4ExObjw2AC" />
+      <option name="VM_PARAMETERS" value="-Xms1G -Xmx2G" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="main_SECURE" type="Application" factoryName="Application">
+      <option name="ALTERNATIVE_JRE_PATH" value="openjdk-14" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="ru.kmorozov.gbd.Main" />
+      <module name="ru.kmorozov.gbd.desktop" />
+      <option name="PROGRAM_PARAMETERS" value="-o &quot;J:\OneDrive2\OneDrive - edy\gbdBooks&quot; -p tor -i Gd4ExObjw2AC -s -S" />
       <option name="VM_PARAMETERS" value="-Xms1G -Xmx2G" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -418,6 +552,20 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="gbd-docker" type="Remote">
+      <module name="ru.kmorozov.library.data.server" />
+      <option name="USE_SOCKET_TRANSPORT" value="true" />
+      <option name="SERVER_MODE" value="false" />
+      <option name="SHMEM_ADDRESS" />
+      <option name="HOST" value="localhost" />
+      <option name="PORT" value="5005" />
+      <option name="AUTO_RESTART" value="false" />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="5005" />
+        <option name="LOCAL" value="false" />
+      </RunnerSettings>
+      <method v="2" />
+    </configuration>
     <configuration name="ldoc" type="Remote">
       <module name="ru.kmorozov.ldoc.dictionary" />
       <option name="USE_SOCKET_TRANSPORT" value="true" />
@@ -478,11 +626,13 @@
       <item itemvalue="Application.main_NOPROXY" />
       <item itemvalue="Application.main_NOPROXY_SHPL" />
       <item itemvalue="Application.main_PROXY" />
+      <item itemvalue="Application.main_SECURE" />
       <item itemvalue="HTTP Request.scratch#1" />
       <item itemvalue="HTTP Request.library#1" />
       <item itemvalue="JUnit.LoadTest.categoryLoadTest" />
       <item itemvalue="JUnit.GoogleImageTest.testOcr" />
       <item itemvalue="JUnit.DictionaryTest.loadBookTest" />
+      <item itemvalue="Remote.gbd-docker" />
       <item itemvalue="Remote.ldoc" />
       <item itemvalue="Spring Boot.LibraryClient" />
       <item itemvalue="Spring Boot.LibraryRestServer" />
@@ -772,105 +922,34 @@
       <workItem from="1590733308652" duration="2025000" />
       <workItem from="1591186098623" duration="5081000" />
       <workItem from="1591258634341" duration="7888000" />
-      <workItem from="1591277866497" duration="3987000" />
-    </task>
-    <task id="LOCAL-00127" summary="prepare for heroku">
-      <created>1551034178401</created>
-      <option name="number" value="00127" />
-      <option name="presentableId" value="LOCAL-00127" />
-      <option name="project" value="LOCAL" />
-      <updated>1551034178401</updated>
-    </task>
-    <task id="LOCAL-00128" summary="prepare for heroku">
-      <created>1551037669484</created>
-      <option name="number" value="00128" />
-      <option name="presentableId" value="LOCAL-00128" />
-      <option name="project" value="LOCAL" />
-      <updated>1551037669484</updated>
-    </task>
-    <task id="LOCAL-00129" summary="prepare for heroku">
-      <created>1551117748518</created>
-      <option name="number" value="00129" />
-      <option name="presentableId" value="LOCAL-00129" />
-      <option name="project" value="LOCAL" />
-      <updated>1551117748518</updated>
-    </task>
-    <task id="LOCAL-00130" summary="prepare for heroku">
-      <created>1551121989924</created>
-      <option name="number" value="00130" />
-      <option name="presentableId" value="LOCAL-00130" />
-      <option name="project" value="LOCAL" />
-      <updated>1551121989924</updated>
-    </task>
-    <task id="LOCAL-00131" summary="prepare for heroku">
-      <created>1551122795188</created>
-      <option name="number" value="00131" />
-      <option name="presentableId" value="LOCAL-00131" />
-      <option name="project" value="LOCAL" />
-      <updated>1551122795188</updated>
-    </task>
-    <task id="LOCAL-00132" summary="prepare for heroku">
-      <created>1551123292187</created>
-      <option name="number" value="00132" />
-      <option name="presentableId" value="LOCAL-00132" />
-      <option name="project" value="LOCAL" />
-      <updated>1551123292187</updated>
-    </task>
-    <task id="LOCAL-00133" summary="prepare for heroku">
-      <created>1551209431252</created>
-      <option name="number" value="00133" />
-      <option name="presentableId" value="LOCAL-00133" />
-      <option name="project" value="LOCAL" />
-      <updated>1551209431253</updated>
-    </task>
-    <task id="LOCAL-00134" summary="kotlin code style">
-      <created>1551517355965</created>
-      <option name="number" value="00134" />
-      <option name="presentableId" value="LOCAL-00134" />
-      <option name="project" value="LOCAL" />
-      <updated>1551517355966</updated>
-    </task>
-    <task id="LOCAL-00135" summary="fix lazy loading">
-      <created>1551624035933</created>
-      <option name="number" value="00135" />
-      <option name="presentableId" value="LOCAL-00135" />
-      <option name="project" value="LOCAL" />
-      <updated>1551624035933</updated>
-    </task>
-    <task id="LOCAL-00136" summary="fix lazy loading">
-      <created>1551724228376</created>
-      <option name="number" value="00136" />
-      <option name="presentableId" value="LOCAL-00136" />
-      <option name="project" value="LOCAL" />
-      <updated>1551724228376</updated>
-    </task>
-    <task id="LOCAL-00137" summary="fix poms">
-      <created>1552240291858</created>
-      <option name="number" value="00137" />
-      <option name="presentableId" value="LOCAL-00137" />
-      <option name="project" value="LOCAL" />
-      <updated>1552240291858</updated>
-    </task>
-    <task id="LOCAL-00138" summary="server main class: kotlin -&gt; java">
-      <created>1552241062194</created>
-      <option name="number" value="00138" />
-      <option name="presentableId" value="LOCAL-00138" />
-      <option name="project" value="LOCAL" />
-      <updated>1552241062194</updated>
-    </task>
-    <task id="LOCAL-00139" summary="server main class: kotlin -&gt; java">
-      <created>1557592677780</created>
-      <option name="number" value="00139" />
-      <option name="presentableId" value="LOCAL-00139" />
-      <option name="project" value="LOCAL" />
-      <updated>1557592677780</updated>
-    </task>
-    <task id="LOCAL-00140" summary="upd">
-      <created>1557593558874</created>
-      <option name="number" value="00140" />
-      <option name="presentableId" value="LOCAL-00140" />
-      <option name="project" value="LOCAL" />
-      <updated>1557593558874</updated>
+      <workItem from="1591277866497" duration="5873000" />
+      <workItem from="1591357654057" duration="10165000" />
+      <workItem from="1591984671940" duration="3782000" />
+      <workItem from="1592031102368" duration="17132000" />
+      <workItem from="1592116584509" duration="16055000" />
+      <workItem from="1592230787913" duration="5355000" />
+      <workItem from="1592308671943" duration="132000" />
+      <workItem from="1593248345609" duration="1890000" />
+      <workItem from="1593277114652" duration="3739000" />
+      <workItem from="1593328254075" duration="9594000" />
+      <workItem from="1593444241067" duration="813000" />
+      <workItem from="1593614124912" duration="10829000" />
+      <workItem from="1593667551419" duration="2777000" />
+      <workItem from="1593695027198" duration="2216000" />
+      <workItem from="1593864510000" duration="13355000" />
+      <workItem from="1593932064401" duration="15807000" />
+      <workItem from="1594235990575" duration="451000" />
+      <workItem from="1595143306324" duration="1638000" />
+      <workItem from="1595156090944" duration="1610000" />
+      <workItem from="1595161593102" duration="8140000" />
+      <workItem from="1595175094007" duration="7616000" />
+      <workItem from="1595222537190" duration="11299000" />
+      <workItem from="1595340332219" duration="2028000" />
+      <workItem from="1595402787559" duration="4723000" />
+      <workItem from="1596181343931" duration="1211000" />
+      <workItem from="1596445856996" duration="4361000" />
+      <workItem from="1598341677163" duration="8514000" />
+      <workItem from="1598420102937" duration="4497000" />
     </task>
     <task id="LOCAL-00141" summary="add dep">
       <created>1557594395738</created>
@@ -1117,17 +1196,106 @@
       <option name="project" value="LOCAL" />
       <updated>1590669166148</updated>
     </task>
-    <option name="localTasksCounter" value="176" />
+    <task id="LOCAL-00176" summary="refactoring">
+      <created>1591283053274</created>
+      <option name="number" value="00176" />
+      <option name="presentableId" value="LOCAL-00176" />
+      <option name="project" value="LOCAL" />
+      <updated>1591283053275</updated>
+    </task>
+    <task id="LOCAL-00177" summary="server mode">
+      <created>1592125188545</created>
+      <option name="number" value="00177" />
+      <option name="presentableId" value="LOCAL-00177" />
+      <option name="project" value="LOCAL" />
+      <updated>1592125188546</updated>
+    </task>
+    <task id="LOCAL-00178" summary="server mode">
+      <created>1592159687791</created>
+      <option name="number" value="00178" />
+      <option name="presentableId" value="LOCAL-00178" />
+      <option name="project" value="LOCAL" />
+      <updated>1592159687791</updated>
+    </task>
+    <task id="LOCAL-00179" summary="server mode">
+      <created>1592163332204</created>
+      <option name="number" value="00179" />
+      <option name="presentableId" value="LOCAL-00179" />
+      <option name="project" value="LOCAL" />
+      <updated>1592163332204</updated>
+    </task>
+    <task id="LOCAL-00180" summary="bug fix">
+      <created>1592232540752</created>
+      <option name="number" value="00180" />
+      <option name="presentableId" value="LOCAL-00180" />
+      <option name="project" value="LOCAL" />
+      <updated>1592232540753</updated>
+    </task>
+    <task id="LOCAL-00181" summary="fixes, updates, improvements">
+      <created>1593621538189</created>
+      <option name="number" value="00181" />
+      <option name="presentableId" value="LOCAL-00181" />
+      <option name="project" value="LOCAL" />
+      <updated>1593621538190</updated>
+    </task>
+    <task id="LOCAL-00182" summary="secure fixes &amp;&amp; tor support">
+      <created>1593697001696</created>
+      <option name="number" value="00182" />
+      <option name="presentableId" value="LOCAL-00182" />
+      <option name="project" value="LOCAL" />
+      <updated>1593697001697</updated>
+    </task>
+    <task id="LOCAL-00183" summary="error handling">
+      <created>1593869340284</created>
+      <option name="number" value="00183" />
+      <option name="presentableId" value="LOCAL-00183" />
+      <option name="project" value="LOCAL" />
+      <updated>1593869340285</updated>
+    </task>
+    <task id="LOCAL-00184" summary="fixes">
+      <created>1593952756453</created>
+      <option name="number" value="00184" />
+      <option name="presentableId" value="LOCAL-00184" />
+      <option name="project" value="LOCAL" />
+      <updated>1593952756454</updated>
+    </task>
+    <task id="LOCAL-00185" summary="fixes">
+      <created>1593957947949</created>
+      <option name="number" value="00185" />
+      <option name="presentableId" value="LOCAL-00185" />
+      <option name="project" value="LOCAL" />
+      <updated>1593957947950</updated>
+    </task>
+    <task id="LOCAL-00186" summary="rm old trash">
+      <created>1593960756185</created>
+      <option name="number" value="00186" />
+      <option name="presentableId" value="LOCAL-00186" />
+      <option name="project" value="LOCAL" />
+      <updated>1593960756185</updated>
+    </task>
+    <task id="LOCAL-00187" summary="fixes in secure mode">
+      <created>1593969770106</created>
+      <option name="number" value="00187" />
+      <option name="presentableId" value="LOCAL-00187" />
+      <option name="project" value="LOCAL" />
+      <updated>1593969770106</updated>
+    </task>
+    <task id="LOCAL-00188" summary="fix hangs">
+      <created>1595165530268</created>
+      <option name="number" value="00188" />
+      <option name="presentableId" value="LOCAL-00188" />
+      <option name="project" value="LOCAL" />
+      <updated>1595165530268</updated>
+    </task>
+    <task id="LOCAL-00189" summary="security fixes">
+      <created>1595227665920</created>
+      <option name="number" value="00189" />
+      <option name="presentableId" value="LOCAL-00189" />
+      <option name="project" value="LOCAL" />
+      <updated>1595227665921</updated>
+    </task>
+    <option name="localTasksCounter" value="190" />
     <servers />
-  </component>
-  <component name="TodoView">
-    <todo-panel id="selected-file">
-      <is-autoscroll-to-source value="true" />
-    </todo-panel>
-    <todo-panel id="all">
-      <are-packages-shown value="true" />
-      <is-autoscroll-to-source value="true" />
-    </todo-panel>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="2" />
@@ -1179,14 +1347,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="kotlin code style" />
-    <MESSAGE value="fix lazy loading" />
-    <MESSAGE value="fix poms" />
-    <MESSAGE value="server main class: kotlin -&gt; java" />
-    <MESSAGE value="upd" />
-    <MESSAGE value="add dep" />
-    <MESSAGE value="updates" />
-    <MESSAGE value="dependencies fixes, gson fixes" />
     <MESSAGE value="fix deps" />
     <MESSAGE value="fix deps, OCR introduced (with trial popups)" />
     <MESSAGE value="ocr fix" />
@@ -1197,153 +1357,165 @@
     <MESSAGE value="updates &amp; fixes" />
     <MESSAGE value="fix server" />
     <MESSAGE value="sigs refactoring" />
-    <MESSAGE value="refactoring" />
     <MESSAGE value="ldoc init" />
     <MESSAGE value="bug fixes" />
-    <MESSAGE value="bug fix" />
     <MESSAGE value="incremental pdf maker" />
     <MESSAGE value="+ktor -ok" />
+    <MESSAGE value="refactoring" />
+    <MESSAGE value="server mode" />
+    <MESSAGE value="bug fix" />
+    <MESSAGE value="fixes, updates, improvements" />
+    <MESSAGE value="secure fixes &amp;&amp; tor support" />
+    <MESSAGE value="error handling" />
     <MESSAGE value="fixes" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixes" />
+    <MESSAGE value="rm old trash" />
+    <MESSAGE value="fixes in secure mode" />
+    <MESSAGE value="fix hangs" />
+    <MESSAGE value="security fixes" />
+    <option name="LAST_COMMIT_MESSAGE" value="security fixes" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="552" y="181" key="#Notifications" timestamp="1583582496828">
+    <state x="799" y="431" key="#Path_mapping" timestamp="1595236859505">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="552" y="181" key="#Notifications/0.0.1920.1040@0.0.1920.1040" timestamp="1583582496828" />
-    <state x="552" y="181" key="#Project_Structure" timestamp="1583589500487">
+    <state x="799" y="431" key="#Path_mapping/0.0.1920.1040@0.0.1920.1040" timestamp="1595236859505" />
+    <state x="552" y="160" key="#Plugins" timestamp="1595234402310">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="552" y="181" key="#Project_Structure/0.0.1920.1040@0.0.1920.1040" timestamp="1583589500487" />
-    <state x="414" y="178" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1591271128237">
+    <state x="552" y="160" key="#Plugins/0.0.1920.1040@0.0.1920.1040" timestamp="1595234402310" />
+    <state x="414" y="178" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1598357999659">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="414" y="178" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1591271128237" />
-    <state x="760" y="239" key="#com.intellij.ide.util.MemberChooser" timestamp="1591281492834">
+    <state x="414" y="178" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1598357999659" />
+    <state x="760" y="239" key="#com.intellij.ide.util.MemberChooser" timestamp="1595172352511">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="760" y="239" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1591281492834" />
-    <state x="589" y="208" key="#com.intellij.ide.util.frameworkSupport.AddFrameworkSupportDialog" timestamp="1588498357220">
+    <state x="760" y="239" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1595172352511" />
+    <state x="753" y="350" key="#com.intellij.refactoring.move.moveInner.MoveInnerDialog" timestamp="1591365107882">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="589" y="208" key="#com.intellij.ide.util.frameworkSupport.AddFrameworkSupportDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1588498357220" />
-    <state x="640" y="251" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1585483102424">
+    <state x="753" y="350" key="#com.intellij.refactoring.move.moveInner.MoveInnerDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1591365107882" />
+    <state x="648" y="298" key="#org.jetbrains.kotlin.idea.refactoring.move.moveDeclarations.ui.MoveKotlinTopLevelDeclarationsDialog" timestamp="1598423694777">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="640" y="251" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1585483102424" />
-    <state x="648" y="298" key="#org.jetbrains.kotlin.idea.refactoring.move.moveDeclarations.ui.MoveKotlinTopLevelDeclarationsDialog" timestamp="1591262964442">
+    <state x="648" y="298" key="#org.jetbrains.kotlin.idea.refactoring.move.moveDeclarations.ui.MoveKotlinTopLevelDeclarationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1598423694777" />
+    <state x="857" y="219" width="1009" height="821" key="#xdebugger.evaluate" timestamp="1598426982331">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="648" y="298" key="#org.jetbrains.kotlin.idea.refactoring.move.moveDeclarations.ui.MoveKotlinTopLevelDeclarationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1591262964442" />
-    <state x="795" y="167" width="860" height="595" key="#xdebugger.evaluate" timestamp="1591189546129">
+    <state x="857" y="219" width="1009" height="821" key="#xdebugger.evaluate/0.0.1920.1040@0.0.1920.1040" timestamp="1598426982331" />
+    <state x="530" y="118" key="CommitChangelistDialog2" timestamp="1595227649186">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="795" y="167" width="860" height="595" key="#xdebugger.evaluate/0.0.1920.1040@0.0.1920.1040" timestamp="1591189546129" />
-    <state x="530" y="118" key="CommitChangelistDialog2" timestamp="1590669156831">
+    <state x="530" y="118" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1595227649186" />
+    <state width="877" height="466" key="DebuggerActiveHint" timestamp="1598359991946">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="530" y="118" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1590669156831" />
-    <state width="877" height="466" key="DebuggerActiveHint" timestamp="1590665218479">
+    <state width="877" height="466" key="DebuggerActiveHint/0.0.1920.1040@0.0.1920.1040" timestamp="1598359991946" />
+    <state x="92" y="92" width="1736" height="856" key="DiffContextDialog" timestamp="1598342283579">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="877" height="466" key="DebuggerActiveHint/0.0.1920.1040@0.0.1920.1040" timestamp="1590665218479" />
-    <state x="92" y="92" width="1736" height="856" key="DiffContextDialog" timestamp="1586880435428">
+    <state x="92" y="92" width="1736" height="856" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1598342283579" />
+    <state x="740" y="274" key="FileChooserDialogImpl" timestamp="1598342009684">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="92" y="92" width="1736" height="856" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1586880435428" />
-    <state x="740" y="274" key="FileChooserDialogImpl" timestamp="1588708409755">
+    <state x="740" y="274" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1598342009684" />
+    <state width="1877" height="285" key="GridCell.Tab.0.bottom" timestamp="1598426942147">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="740" y="274" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1588708409755" />
-    <state width="1877" height="285" key="GridCell.Tab.0.bottom" timestamp="1591283023280">
+    <state width="1877" height="285" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1598426942147" />
+    <state width="1877" height="285" key="GridCell.Tab.0.center" timestamp="1598426942146">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="285" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1591283023280" />
-    <state width="1877" height="285" key="GridCell.Tab.0.center" timestamp="1591283023279">
+    <state width="1877" height="285" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1598426942146" />
+    <state width="1877" height="285" key="GridCell.Tab.0.left" timestamp="1598426942146">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="285" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1591283023279" />
-    <state width="1877" height="285" key="GridCell.Tab.0.left" timestamp="1591283023279">
+    <state width="1877" height="285" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1598426942146" />
+    <state width="1877" height="285" key="GridCell.Tab.0.right" timestamp="1598426942146">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="285" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1591283023279" />
-    <state width="1877" height="285" key="GridCell.Tab.0.right" timestamp="1591283023279">
+    <state width="1877" height="285" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1598426942146" />
+    <state width="1877" height="328" key="GridCell.Tab.1.bottom" timestamp="1598427001058">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="285" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1591283023279" />
-    <state width="1877" height="318" key="GridCell.Tab.1.bottom" timestamp="1591191300115">
+    <state width="1877" height="328" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1598427001058" />
+    <state width="1877" height="328" key="GridCell.Tab.1.center" timestamp="1598427001058">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="318" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1591191300115" />
-    <state width="1877" height="318" key="GridCell.Tab.1.center" timestamp="1591191300115">
+    <state width="1877" height="328" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1598427001058" />
+    <state width="1877" height="328" key="GridCell.Tab.1.left" timestamp="1598427001058">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="318" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1591191300115" />
-    <state width="1877" height="318" key="GridCell.Tab.1.left" timestamp="1591191300115">
+    <state width="1877" height="328" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1598427001058" />
+    <state width="1877" height="328" key="GridCell.Tab.1.right" timestamp="1598427001058">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="318" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1591191300115" />
-    <state width="1877" height="318" key="GridCell.Tab.1.right" timestamp="1591191300115">
+    <state width="1877" height="328" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1598427001058" />
+    <state width="1877" height="328" key="GridCell.Tab.2.bottom" timestamp="1598426938165">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="318" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1591191300115" />
-    <state width="1877" height="318" key="GridCell.Tab.2.bottom" timestamp="1591191300116">
+    <state width="1877" height="328" key="GridCell.Tab.2.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1598426938165" />
+    <state width="1877" height="328" key="GridCell.Tab.2.center" timestamp="1598426938165">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="318" key="GridCell.Tab.2.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1591191300116" />
-    <state width="1877" height="318" key="GridCell.Tab.2.center" timestamp="1591191300115">
+    <state width="1877" height="328" key="GridCell.Tab.2.center/0.0.1920.1040@0.0.1920.1040" timestamp="1598426938165" />
+    <state width="1877" height="328" key="GridCell.Tab.2.left" timestamp="1598426938165">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="318" key="GridCell.Tab.2.center/0.0.1920.1040@0.0.1920.1040" timestamp="1591191300115" />
-    <state width="1877" height="318" key="GridCell.Tab.2.left" timestamp="1591191300115">
+    <state width="1877" height="328" key="GridCell.Tab.2.left/0.0.1920.1040@0.0.1920.1040" timestamp="1598426938165" />
+    <state width="1877" height="328" key="GridCell.Tab.2.right" timestamp="1598426938165">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="318" key="GridCell.Tab.2.left/0.0.1920.1040@0.0.1920.1040" timestamp="1591191300115" />
-    <state width="1877" height="318" key="GridCell.Tab.2.right" timestamp="1591191300116">
+    <state width="1877" height="328" key="GridCell.Tab.2.right/0.0.1920.1040@0.0.1920.1040" timestamp="1598426938165" />
+    <state x="490" y="174" key="Maven.ArtifactSearchDialog" timestamp="1598423351291">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="318" key="GridCell.Tab.2.right/0.0.1920.1040@0.0.1920.1040" timestamp="1591191300116" />
-    <state x="490" y="174" key="Maven.ArtifactSearchDialog" timestamp="1590500111221">
+    <state x="490" y="174" key="Maven.ArtifactSearchDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1598423351291" />
+    <state x="170" y="0" key="MergeDialog" timestamp="1593958028278">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="490" y="174" key="Maven.ArtifactSearchDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1590500111221" />
-    <state x="707" y="234" key="RollbackChangesDialog" timestamp="1583653262346">
+    <state x="170" y="0" key="MergeDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1593958028278" />
+    <state x="848" y="387" width="753" height="362" key="MultipleFileMergeDialog" timestamp="1593958028285">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="707" y="234" key="RollbackChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1583653262346" />
-    <state x="461" y="164" key="SettingsEditor" timestamp="1590334787146">
+    <state x="848" y="387" width="753" height="362" key="MultipleFileMergeDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1593958028285" />
+    <state x="707" y="234" key="RollbackChangesDialog" timestamp="1593957888397">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="461" y="164" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1590334787146" />
-    <state x="552" y="256" key="Vcs.Push.Dialog.v2" timestamp="1590669170061">
+    <state x="707" y="234" key="RollbackChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1593957888397" />
+    <state x="461" y="164" key="SettingsEditor" timestamp="1598422340980">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="552" y="256" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1590669170061" />
-    <state width="968" height="528" key="XDebugger.FullValuePopup" timestamp="1588709178297">
+    <state x="461" y="164" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1598422340980" />
+    <state x="552" y="256" key="Vcs.Push.Dialog.v2" timestamp="1595227667624">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="968" height="528" key="XDebugger.FullValuePopup/0.0.1920.1040@0.0.1920.1040" timestamp="1588709178297" />
-    <state x="409" y="248" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2" timestamp="1588709760201">
+    <state x="552" y="256" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1595227667624" />
+    <state width="968" height="528" key="XDebugger.FullValuePopup" timestamp="1593885191605">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="409" y="248" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/0.0.1920.1040@0.0.1920.1040" timestamp="1588709760201" />
-    <state x="766" y="58" width="683" height="620" key="find.popup" timestamp="1591266089790">
+    <state width="968" height="528" key="XDebugger.FullValuePopup/0.0.1920.1040@0.0.1920.1040" timestamp="1593885191605" />
+    <state x="859" y="419" width="562" height="208" key="com.intellij.docker.deployment.ui.DockerPortBindingsField.v173.dialogSize" timestamp="1596457814972">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="766" y="58" width="683" height="620" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1591266089790" />
-    <state x="464" y="101" key="new project wizard" timestamp="1588498327352">
+    <state x="859" y="419" width="562" height="208" key="com.intellij.docker.deployment.ui.DockerPortBindingsField.v173.dialogSize/0.0.1920.1040@0.0.1920.1040" timestamp="1596457814972" />
+    <state x="859" y="419" width="472" height="268" key="com.intellij.docker.deployment.ui.DockerVolumeBindingsField.v173.dialogSize" timestamp="1598342280709">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="464" y="101" key="new project wizard/0.0.1920.1040@0.0.1920.1040" timestamp="1588498327351" />
-    <state x="616" y="240" key="run.anything.popup" timestamp="1588500323013">
+    <state x="859" y="419" width="472" height="268" key="com.intellij.docker.deployment.ui.DockerVolumeBindingsField.v173.dialogSize/0.0.1920.1040@0.0.1920.1040" timestamp="1598342280709" />
+    <state x="1014" y="111" width="700" height="620" key="find.popup" timestamp="1598423080346">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="616" y="240" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1588500323013" />
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1591282510847">
+    <state x="1014" y="111" width="700" height="620" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1598423080346" />
+    <state x="803" y="291" key="refactoring.ChangeSignatureDialog" timestamp="1595162694071">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1591282510847" />
+    <state x="803" y="291" key="refactoring.ChangeSignatureDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1595162694071" />
+    <state x="623" y="225" width="999" height="678" key="search.everywhere.popup" timestamp="1598422727622">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="623" y="225" width="999" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1598422727622" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1409,24 +1581,9 @@
           <option name="timeStamp" value="302" />
         </line-breakpoint>
         <line-breakpoint type="kotlin-line">
-          <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/connectors/google/GoogleHttpConnector.kt</url>
-          <line>54</line>
-          <option name="timeStamp" value="348" />
-        </line-breakpoint>
-        <line-breakpoint type="kotlin-line">
-          <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/loader/LazyBookInfo.kt</url>
-          <line>35</line>
-          <option name="timeStamp" value="359" />
-        </line-breakpoint>
-        <line-breakpoint type="kotlin-line">
           <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/test/java/ru/kmorozov/gbd/test/core/GoogleImageTest.kt</url>
           <line>55</line>
           <option name="timeStamp" value="362" />
-        </line-breakpoint>
-        <line-breakpoint type="kotlin-line">
-          <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/connectors/http2native/Http2Connector.kt</url>
-          <line>51</line>
-          <option name="timeStamp" value="364" />
         </line-breakpoint>
         <line-breakpoint type="kotlin-line">
           <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/loader/LocalFSStorage.kt</url>
@@ -1441,38 +1598,78 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="kotlin-line">
           <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/AbstractHttpProcessor.kt</url>
-          <line>47</line>
-          <option name="timeStamp" value="456" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/AbstractHttpProcessor.kt</url>
-          <line>50</line>
-          <option name="timeStamp" value="457" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/base/AbstractHttpProcessor.kt</url>
-          <line>53</line>
+          <line>60</line>
           <option name="timeStamp" value="458" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="kotlin-line">
           <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/extractors/google/GooglePageImgProcessor.kt</url>
-          <line>53</line>
+          <line>71</line>
           <option name="timeStamp" value="470" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/loader/processors/gbd/workers/SigWorker.kt</url>
+          <line>30</line>
+          <option name="timeStamp" value="494" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.db/src/main/java/ru/kmorozov/db/core/logic/model/book/google/GooglePagesInfo.kt</url>
+          <line>128</line>
+          <option name="timeStamp" value="507" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/loader/processors/gbd/workers/PageWorker.kt</url>
+          <line>24</line>
+          <option name="timeStamp" value="508" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/connectors/apache/SimpleApacheConnections.kt</url>
+          <line>72</line>
+          <option name="timeStamp" value="589" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/connectors/ktor/KtorConnector.kt</url>
+          <line>23</line>
+          <option name="timeStamp" value="596" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/connectors/ktor/KtorConnector.kt</url>
+          <line>45</line>
+          <option name="timeStamp" value="597" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/connectors/HttpConnector.kt</url>
+          <line>78</line>
+          <option name="timeStamp" value="607" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/connectors/http2native/Http2Connector.kt</url>
+          <line>57</line>
+          <option name="timeStamp" value="616" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/connectors/google/GoogleHttpConnector.kt</url>
+          <line>87</line>
+          <option name="timeStamp" value="619" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/utils/HttpConnections.kt</url>
+          <line>44</line>
+          <option name="timeStamp" value="625" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/loader/LazyBookInfo.kt</url>
+          <line>37</line>
+          <option name="timeStamp" value="632" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/loader/LazyBookInfo.kt</url>
+          <line>17</line>
+          <option name="timeStamp" value="635" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
           <url>file://$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/loader/processors/gbd/ServerContext.kt</url>
-          <line>14</line>
-          <option name="timeStamp" value="471" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/loader/processors/gbd/ServerPostProcessor.kt</url>
-          <line>10</line>
-          <option name="timeStamp" value="472" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/ru.kmorozov.gbd.core/src/main/java/ru/kmorozov/gbd/core/logic/context/ExecutionContext.kt</url>
-          <line>70</line>
-          <option name="timeStamp" value="474" />
+          <line>32</line>
+          <option name="timeStamp" value="636" />
         </line-breakpoint>
         <line-breakpoint suspend="NONE" type="kotlin-field">
           <url>file://$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java/ru/kmorozov/library/data/server/controllers/LibraryRestController.kt</url>
