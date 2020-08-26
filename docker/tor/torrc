@@ -1,0 +1,7 @@
+User tor
+HardwareAccel 1
+Log notice stdout
+DNSPort 0.0.0.0:53
+SocksPort 0.0.0.0:9150
+ControlPort 0.0.0.0:9151
+DataDirectory /var/lib/tor
