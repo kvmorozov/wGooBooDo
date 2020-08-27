@@ -43,6 +43,7 @@ class ServerContext {
 
             ExecutionContext.INSTANCE.defaultMetadata = LibraryFactory.getMetadata(contexts)
 
+            bookContext.resetBookInfo()
             bookContext.pagesStream
                     .filter { !it.isDataProcessed }
                     .forEach { page ->
