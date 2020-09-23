@@ -11,13 +11,14 @@ import ru.kmorozov.library.data.loader.processors.gbd.workers.PageWorker
 import ru.kmorozov.library.data.loader.processors.gbd.workers.SigWorker
 import java.util.*
 import java.util.concurrent.ConcurrentLinkedQueue
-import java.util.concurrent.TimeUnit
 
 @Component
 class ServerContext {
 
     private val sigTaskQueue: Queue<BookTask> = ConcurrentLinkedQueue<BookTask>()
     private val pageTaskQueue: Queue<BookTask> = ConcurrentLinkedQueue<BookTask>()
+    private val sigWorker = SigWorker(sigTaskQueue, pageTaskQueue)
+    private val pageWorker = PageWorker(pageTaskQueue)
 
     private lateinit var sigExecutor: QueuedThreadPoolExecutor<SigWorker>
     private lateinit var pagesExecutor: QueuedThreadPoolExecutor<PageWorker>
@@ -27,8 +28,13 @@ class ServerContext {
     }
 
     fun execute() {
-        if (ExecutionContext.INSTANCE.size() == 0 || inProcess())
+        if (ExecutionContext.INSTANCE.size() == 0)
             return
+
+        if (inProcess()) {
+            tryTerminate()
+            return
+        }
 
         val contexts = ExecutionContext.INSTANCE.getContexts(true)
 
@@ -55,19 +61,21 @@ class ServerContext {
                     }
         }
 
-        repeat(sigExecutor.corePoolSize) {
-            sigExecutor.execute { SigWorker(sigTaskQueue, pageTaskQueue).doWork() }
-        }
+        if (sigExecutor.activeCount < sigExecutor.corePoolSize)
+            repeat(sigExecutor.corePoolSize) {
+                sigExecutor.execute { sigWorker.doWork() }
+            }
 
-        repeat(pagesExecutor.corePoolSize) {
-            pagesExecutor.execute { PageWorker(pageTaskQueue).doWork() }
-        }
+        if (pagesExecutor.activeCount < pagesExecutor.corePoolSize)
+            repeat(pagesExecutor.corePoolSize) {
+                pagesExecutor.execute { pageWorker.doWork() }
+            }
+    }
 
-        sigExecutor.terminate(5, TimeUnit.MINUTES)
-        pagesExecutor.terminate(5, TimeUnit.MINUTES)
-
-        for (bookContext in contexts)
-            ExecutionContext.INSTANCE.postProcessBook(bookContext)
+    private fun tryTerminate() {
+        if (sigTaskQueue.isEmpty() && pageTaskQueue.isEmpty())
+            for (bookContext in ExecutionContext.INSTANCE.getContexts(true))
+                ExecutionContext.INSTANCE.postProcessBook(bookContext)
     }
 
     private fun inProcess(): Boolean {

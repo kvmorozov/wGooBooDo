@@ -26,4 +26,8 @@ RUN mkdir -p /logs
 
 EXPOSE 9000/tcp
 
+RUN mkdir -p /apps/data
+
+WORKDIR /apps
+
 ENTRYPOINT /apps/gbd-entrypoint.sh

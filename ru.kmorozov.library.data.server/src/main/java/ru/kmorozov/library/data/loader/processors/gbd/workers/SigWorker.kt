@@ -12,9 +12,10 @@ class SigWorker(private val sigTaskQueue: Queue<BookTask>, private val pageTaskQ
     fun doWork() {
         while (true) {
             val task = sigTaskQueue.poll()
-            if (task == null)
-                return
-            else {
+            if (task == null) {
+                Thread.sleep(1000L)
+                continue
+            } else {
                 val sigProcessor = SigProcessorInternal(task.book, task.proxy, task.page as GooglePageInfo)
                 sigProcessor.run()
 

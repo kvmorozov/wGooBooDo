@@ -83,7 +83,7 @@ class QueuedThreadPoolExecutor<T : Any> : ThreadPoolExecutor {
         if (command is IUniqueRunnable<*>) {
             val uniqueObj = (command as IUniqueRunnable<T>).uniqueObject
 
-            var commandToRun = command as IUniqueRunnable<T>
+            var commandToRun = command
 
             if (command is IUniqueReusable<*>) {
                 (command as IUniqueReusable<T>).reuseCallback = this::returnReusable
@@ -95,7 +95,7 @@ class QueuedThreadPoolExecutor<T : Any> : ThreadPoolExecutor {
             }
 
             synchronized(uniqueObj) {
-                if (null == uniqueMap.putIfAbsent(uniqueObj, commandToRun)) super.execute(commandToRun)
+                if (null == uniqueMap.putIfAbsent(uniqueObj, commandToRun as IUniqueRunnable<T>)) super.execute(commandToRun)
             }
         } else
             super.execute(command)

@@ -94,7 +94,7 @@ open class LocalFSStorage : IStorage {
         } catch (ignored: IOException) {
         }
 
-        val directoryName = storageDir.path + '\\'.toString() + bookData.title
+        val directoryName = storageDir.path + File.separator + bookData.title
                 .replace(":", "")
                 .replace("<", "")
                 .replace(">", "")
@@ -154,7 +154,7 @@ open class LocalFSStorage : IStorage {
 
             if (item is MayBePageItem) {
                 val fileName = filePath.fileName.toString()
-                val nameParts = fileName.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0].split("_".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                val nameParts = fileName.split(File.separator.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0].split("_".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 
                 try {
                     val _page = bookInfo.pages.getPageByPid(nameParts[1]) as AbstractPage

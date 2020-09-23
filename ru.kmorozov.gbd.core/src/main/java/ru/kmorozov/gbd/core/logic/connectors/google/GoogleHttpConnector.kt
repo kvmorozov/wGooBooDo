@@ -84,7 +84,9 @@ class GoogleHttpConnector : HttpConnector() {
                 proxy.reset()
                 req.headers = proxy.getHeaders(UrlType.GOOGLE_BOOKS)
                 return getContent(req, proxy, attempt + 1)
-            } else
+            } else if (hre.statusCode == 404)
+                return EMPTY_RESPONSE
+            else
                 throw (hre)
         }
     }

@@ -12,9 +12,10 @@ class PageWorker(private val pageTaskQueue: Queue<BookTask>) {
     fun doWork() {
         while (true) {
             val task = pageTaskQueue.poll()
-            if (task == null)
-                return
-            else {
+            if (task == null) {
+                Thread.sleep(1000L)
+                continue
+            } else {
                 val pageProcessor = GooglePageImgProcessor(task.book, task.page as GooglePageInfo, task.proxy)
                 pageProcessor.run()
 
