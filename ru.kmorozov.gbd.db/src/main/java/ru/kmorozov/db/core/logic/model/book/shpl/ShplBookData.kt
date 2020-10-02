@@ -5,11 +5,11 @@ import ru.kmorozov.gbd.core.logic.model.book.base.IBookData
 /**
  * Created by sbt-morozov-kv on 16.11.2016.
  */
-class ShplBookData(title: String) : IBookData {
-
-    override var title: String = ""
-        get() = field.trim { it <= ' ' }
+class ShplBookData(private val bookId: String) : IBookData {
 
     override val volumeId: String
-        get() = title.hashCode().toString()
+        get() = bookId
+
+    override val title: String
+        get() = bookId
 }

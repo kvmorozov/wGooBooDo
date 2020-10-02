@@ -38,11 +38,17 @@ open class ImageItem(outputFile: File) : RawFileItem(outputFile) {
 
             setDPI(metadata)
             val stream = ImageIO.createImageOutputStream(outputFile)
+            val data = ByteArrayInputStream((outputStream as ByteArrayOutputStream).toByteArray())
+            val image = IIOImage(ImageIO.read(data), null, null)
+            writer.setOutput(stream)
+
             try {
-                val data = ByteArrayInputStream((outputStream as ByteArrayOutputStream).toByteArray())
-                writer.setOutput(stream)
-                writer.write(metadata, IIOImage(ImageIO.read(data), null, metadata), writeParam)
-            } finally {
+                writer.write(metadata, image, writeParam)
+            }
+            catch (ex: Exception) {
+                writer.write(null, image, writeParam)
+            }
+            finally {
                 stream.close()
                 outputStream.close()
             }

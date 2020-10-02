@@ -21,7 +21,7 @@ class GlobalIndex : IIndex {
     }
 
     override fun updateBook(book: IBookInfo) {
-        TODO("Not yet implemented")
+
     }
 
     override fun updateContext() {

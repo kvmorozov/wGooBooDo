@@ -20,8 +20,7 @@ class ShplBookInfoExtractor(bookId: String) : AbstractBookInfoExtractor(bookId) 
     protected override fun extractBookInfo(doc: Document?): BookInfo {
         if (null == doc) return BookInfo.EMPTY_BOOK
 
-        val title = doc.select("title")[0]
-        val bookData = ShplBookData(title.textNodes()[0].text().split("\\|".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1])
+        val bookData = ShplBookData(doc.select("title")[0].text().replace("|", ""))
         lateinit var pagesInfo: ShplPagesInfo
 
         val scripts = doc.select("script")
@@ -33,7 +32,7 @@ class ShplBookInfoExtractor(bookId: String) : AbstractBookInfoExtractor(bookId) 
                 if (data.isEmpty()) continue
 
                 if (data.contains(JSON_TAG_PAGES)) {
-                    val pagesData = '['.toString() + data.split("[|]".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[2].split("[\\[\\]]".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[3] + ']'.toString()
+                    val pagesData = '['.toString() + data.split("[")[2].split("]")[0] + ']'.toString()
 
                     val pages = Mapper.gson.fromJson(pagesData, Array<ShplPage>::class.java) as Array<IPage>
                     for (i in 1..pages.size)
@@ -49,6 +48,6 @@ class ShplBookInfoExtractor(bookId: String) : AbstractBookInfoExtractor(bookId) 
 
     companion object {
 
-        private const val JSON_TAG_PAGES = "pages: "
+        private const val JSON_TAG_PAGES = "\"pages\":"
     }
 }
