@@ -154,7 +154,7 @@ open class LocalFSStorage : IStorage {
 
             if (item is MayBePageItem) {
                 val fileName = filePath.fileName.toString()
-                val nameParts = fileName.split(File.separator.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0].split("_".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                val nameParts = fileName.split("[_.]".toRegex())
 
                 try {
                     val _page = bookInfo.pages.getPageByPid(nameParts[1]) as AbstractPage

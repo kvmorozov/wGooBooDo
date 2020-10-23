@@ -155,13 +155,18 @@ open class HttpHostExt {
             synchronized(this) {
                 if (null == headers || Strings.isNullOrEmpty(headers!!.cookie)) {
                     headers = HttpConnections.getHeaders(this)
-                    if (Strings.isNullOrEmpty(headers!!.cookie)) headers!!.cookie =
-                            HttpConnections.getCookieString(host, urlType)
-                    if (Strings.isNullOrEmpty(headers!!.cookie)) {
+                    if (null == headers) {
                         logger.severe("Cannot get cookies for proxy $this")
                         forceInvalidate(false)
-                    } else
-                        cookie = headers!!.cookie
+                    } else {
+                        if (Strings.isNullOrEmpty(headers!!.cookie)) headers!!.cookie =
+                                HttpConnections.getCookieString(host, urlType)
+                        if (Strings.isNullOrEmpty(headers!!.cookie)) {
+                            logger.severe("Cannot get cookies for proxy $this")
+                            forceInvalidate(false)
+                        } else
+                            cookie = headers!!.cookie
+                    }
                 }
             }
         }
@@ -181,7 +186,8 @@ open class HttpHostExt {
     companion object {
 
         val NO_PROXY = StableProxy()
-        val TOR_PROXY = TorProxy()
+        val TOR_PROXY: StableProxy
+            get() = if (GBDOptions.proxyListFile.equals("tor", ignoreCase = true)) TorProxy.TOR_PROXY else StableProxy()
 
         private val logger = Logger.getLogger(HttpHostExt::class.java)
         private val checkProxyUrl = GenericUrl("http://mxtoolbox.com/WhatIsMyIP/")

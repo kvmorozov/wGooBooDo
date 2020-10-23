@@ -5,6 +5,7 @@ import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.logger.Logger
 import java.net.InetSocketAddress
 import java.net.Proxy
+import java.util.concurrent.ConcurrentHashMap
 
 class TorProxy : StableProxy {
 
@@ -12,7 +13,7 @@ class TorProxy : StableProxy {
     private val readBytes = ByteArray(4096)
     private var lastResetedMillis = -1L
 
-    constructor() : super(InetSocketAddress(TOR_HOST, TOR_HTTP_PORT), Proxy(Proxy.Type.SOCKS, InetSocketAddress(TOR_HOST, TOR_HTTP_PORT))) {
+    private constructor() : super(InetSocketAddress(TOR_HOST, TOR_HTTP_PORT), Proxy(Proxy.Type.SOCKS, InetSocketAddress(TOR_HOST, TOR_HTTP_PORT))) {
         if (GBDOptions.proxyListFile.equals("tor", ignoreCase = true)) {
             telnetClient.connect(TOR_HOST, TOR_CONTROL_PORT)
 
@@ -51,6 +52,11 @@ class TorProxy : StableProxy {
     }
 
     companion object {
+        private val internalMap = ConcurrentHashMap<Int, TorProxy>(1)
+
+        val TOR_PROXY: TorProxy
+            get() = internalMap.getOrPut(1, ::TorProxy)
+
         public val TOR_HOST = "localhost"
         public val TOR_HTTP_PORT = 9150
         val TOR_CONTROL_PORT = 9151

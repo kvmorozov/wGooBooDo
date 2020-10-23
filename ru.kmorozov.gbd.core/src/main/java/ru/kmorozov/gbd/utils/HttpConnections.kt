@@ -4,7 +4,6 @@ import com.google.api.client.http.GenericUrl
 import com.google.api.client.http.HttpHeaders
 import com.google.api.client.http.HttpResponse
 import com.google.api.client.http.javanet.NetHttpTransport.Builder
-import ru.kmorozov.gbd.core.logic.exceptions.BookNotFoundException
 import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.proxy.TorProxy
 import ru.kmorozov.gbd.core.logic.proxy.UrlType
@@ -13,6 +12,7 @@ import java.net.InetSocketAddress
 import java.net.Proxy
 import java.net.Proxy.NO_PROXY
 import java.net.Proxy.Type
+import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.stream.Collectors
 
@@ -28,7 +28,7 @@ class HttpConnections private constructor() {
         private val INSTANCE = HttpConnections()
         private val baseUrls = ConcurrentHashMap<UrlType, GenericUrl>(1)
 
-        fun getResponse(host: InetSocketAddress, urlType: UrlType): HttpResponse {
+        fun getResponse(host: InetSocketAddress, urlType: UrlType): Optional<HttpResponse> {
             val baseUrl = getBaseUrl(urlType)
             val proxy: Proxy
             if ("localhost" == host.hostName && 1 == host.port)
@@ -40,9 +40,9 @@ class HttpConnections private constructor() {
 
             try {
                 val request = if (proxy == NO_PROXY) Builder().build() else Builder().setProxy(proxy).build()
-                return request.createRequestFactory().buildGetRequest(baseUrl).setHeaders(headers).setConnectTimeout(10000).execute()
+                return Optional.of(request.createRequestFactory().buildGetRequest(baseUrl).setHeaders(headers).setConnectTimeout(10000).execute())
             } catch (e: IOException) {
-                throw BookNotFoundException("Init book error", e)
+                return Optional.empty()
             }
         }
 
@@ -55,8 +55,11 @@ class HttpConnections private constructor() {
 
         fun getCookieString(proxy: InetSocketAddress, urlType: UrlType): String {
             val resp = getResponse(proxy, urlType)
-            return (resp.headers["set-cookie"] as Collection<String>).stream()
-                    .map { s -> s.split(";".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0] }.collect(Collectors.joining(";"))
+            if (resp.isEmpty)
+                return ""
+            else
+                return (resp.get().headers["set-cookie"] as Collection<String>).stream()
+                        .map { s -> s.split(";".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0] }.collect(Collectors.joining(";"))
         }
 
         private fun _setDefaultCookies(cookiesMap: Map<String, String>) {
