@@ -3,7 +3,7 @@ package ru.kmorozov.db.core.logic.model.book.rfbr
 import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage
 import ru.kmorozov.gbd.core.logic.model.book.base.IPage
 
-class RfbrPage(private val bookId: String, override val order: Int) : AbstractPage() {
+class RfbrPage(private val bookId: String, override var order: Int) : AbstractPage() {
 
     private constructor() : this("", 0)
 

@@ -31,7 +31,7 @@ open class MayBePageItem : ImageItem {
     companion object DUMMY_PAGE : IPage {
         override val pid: String
             get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
-        override val order: Int
+        override var order: Int = 0
             get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
         override val isDataProcessed: Boolean
             get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.

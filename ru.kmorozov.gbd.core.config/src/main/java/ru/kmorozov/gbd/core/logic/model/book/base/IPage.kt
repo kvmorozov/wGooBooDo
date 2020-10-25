@@ -9,7 +9,7 @@ interface IPage : Comparable<IPage> {
 
     val pid: String
 
-    val order: Int
+    var order: Int
 
     val isDataProcessed: Boolean
 

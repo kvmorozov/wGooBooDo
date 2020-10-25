@@ -7,7 +7,7 @@ import ru.kmorozov.gbd.core.config.constants.ArchiveConstants.PID_PLACEHOLDER
 import ru.kmorozov.gbd.core.config.constants.ArchiveConstants.SERVER_PLACEHOLDER
 import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage
 
-class ArchivePage(private val bookId: String, override val order: Int, val itemPath: String, val server: String) : AbstractPage() {
+class ArchivePage(private val bookId: String, override var order: Int, val itemPath: String, val server: String) : AbstractPage() {
 
     override val imgUrl: String
         get() = ARCHIVE_IMG_TEMPLATE

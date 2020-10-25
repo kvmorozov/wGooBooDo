@@ -49,7 +49,7 @@ abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcesso
     protected fun processImage(imgUrl: String, proxy: HttpHostExt = HttpHostExt.NO_PROXY): Boolean {
         if (GBDOptions.secureMode && proxy.isLocal) return false
 
-        var inputStream: InputStream? = null
+        var inputStream: InputStream = System.`in`
         lateinit var storedItem: IStoredItem
 
         if (uniqueObject.isLoadingStarted) return false
@@ -58,7 +58,7 @@ abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcesso
             getContent(imgUrl, proxy, false).use { resp ->
                 inputStream = resp.content
 
-                if (null == inputStream) {
+                if (System.`in` == inputStream) {
                     logger.info(getErrorMsg(imgUrl, proxy))
                     return false
                 }
@@ -69,7 +69,7 @@ abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcesso
                 var reloadFlag: Boolean
 
                 do {
-                    read = inputStream!!.read(bytes)
+                    read = inputStream.read(bytes)
 
                     if (read == -1)
                         break
@@ -129,20 +129,21 @@ abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcesso
         } catch (ex: Exception) {
             ex.printStackTrace()
         } finally {
-            if (null != inputStream) {
+            if (System.`in` != inputStream) {
                 try {
-                    inputStream!!.close()
+                    inputStream.close()
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
             }
             try {
-                storedItem.close()
+                if (uniqueObject.isLoadingStarted)
+                    storedItem.close()
             } catch (e: IOException) {
                 e.printStackTrace()
             }
 
-            if (!uniqueObject.isDataProcessed) {
+            if (uniqueObject.isLoadingStarted && !uniqueObject.isDataProcessed) {
                 logger.info("Loading page ${uniqueObject.pid} failed!")
                 try {
                     storedItem.delete()

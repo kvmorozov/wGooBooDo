@@ -29,6 +29,6 @@ class GlobalIndex : IIndex {
     }
 
     companion object {
-        public val INSTANCE = GlobalIndex()
+        val INSTANCE = GlobalIndex()
     }
 }
