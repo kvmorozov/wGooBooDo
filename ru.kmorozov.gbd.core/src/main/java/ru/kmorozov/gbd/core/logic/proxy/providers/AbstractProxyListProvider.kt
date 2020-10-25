@@ -118,7 +118,7 @@ abstract class AbstractProxyListProvider : IProxyListProvider {
 
         private val logger = Logger.getLogger(AbstractProxyListProvider::class.java)
 
-        public val INSTANCE: AbstractProxyListProvider
+        val INSTANCE: AbstractProxyListProvider
             get() = if (Strings.isNullOrEmpty(GBDOptions.proxyListFile))
                 EmptyProxyListProvider.INSTANCE
             else if (GBDOptions.proxyListFile.equals("web", ignoreCase = true))

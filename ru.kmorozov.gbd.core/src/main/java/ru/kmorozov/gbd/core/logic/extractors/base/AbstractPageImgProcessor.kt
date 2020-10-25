@@ -7,7 +7,6 @@ import ru.kmorozov.gbd.core.logic.context.ExecutionContext
 import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage
 import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.logger.Logger
-import ru.kmorozov.gbd.utils.Images
 import java.io.IOException
 import java.io.InputStream
 import java.net.SocketException
@@ -75,12 +74,10 @@ abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcesso
                         break
 
                     if (firstChunk) {
-                        val imgFormat = Images.getImageFormat(resp)
-
                         if (uniqueObject.isLoadingStarted) return false
 
                         uniqueObject.isLoadingStarted = true
-                        storedItem = bookContext.storage.getStoredItem(uniqueObject, imgFormat)
+                        storedItem = bookContext.storage.getStoredItem(uniqueObject, resp.imageFormat)
 
                         reloadFlag = !storedItem.createdNew
                         if (reloadFlag)

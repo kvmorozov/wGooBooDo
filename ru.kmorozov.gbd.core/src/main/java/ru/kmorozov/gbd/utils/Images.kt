@@ -94,8 +94,4 @@ object Images {
 
         return "pdf" == ext && filePath.toFile().length() > 0
     }
-
-    fun getImageFormat(response: Response): String {
-        return response.imageFormat
-    }
 }

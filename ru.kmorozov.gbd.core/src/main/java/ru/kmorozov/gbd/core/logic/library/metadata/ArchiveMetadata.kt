@@ -2,6 +2,8 @@ package ru.kmorozov.gbd.core.logic.library.metadata
 
 import org.apache.commons.lang3.StringUtils
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
+import ru.kmorozov.gbd.core.logic.connectors.apache.ApacheHttpConnector
+import ru.kmorozov.gbd.core.logic.connectors.apache.ArchiveApacheConnections
 import ru.kmorozov.gbd.core.logic.context.BookContext
 import ru.kmorozov.gbd.core.logic.extractors.archive.ArchiveBookInfoExtractor
 import ru.kmorozov.gbd.core.logic.extractors.archive.ArchiveImageExtractor
@@ -27,7 +29,7 @@ class ArchiveMetadata private constructor() : ILibraryMetadata {
     }
 
     override fun preferredConnectors(): List<HttpConnector> {
-        return listOf(ILibraryMetadata.GOOGLE_CONNECTOR)
+        return listOf(ApacheHttpConnector(ArchiveApacheConnections.INSTANCE))
     }
 
     companion object {
