@@ -35,7 +35,7 @@ class ContextProvider(protected var loader: IIndex) : IContextLoader {
     }
 
     companion object {
-        public var contextProvider: IContextLoader =
+        var contextProvider: IContextLoader =
                 ContextProvider(GBDOptions.storage.getIndex(GBDOptions.ctxOptions.connectionParams, false))
     }
 }

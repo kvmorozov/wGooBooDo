@@ -62,7 +62,9 @@ class GooglePageImgProcessor(bookContext: BookContext, page: GooglePageInfo, use
     override fun run() {
         if (uniqueObject.isDataProcessed) return
 
-        preProcessPage()
+//        preProcessPage()
+
+        if (uniqueObject.sigs.isEmpty()) return
 
         if (!processImageWithProxy(usedProxy)) {
             // Пробуем скачать страницу с без прокси, если не получилось с той прокси, с помощью которой узнали sig

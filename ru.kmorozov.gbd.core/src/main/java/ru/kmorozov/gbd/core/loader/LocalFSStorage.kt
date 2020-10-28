@@ -63,7 +63,7 @@ open class LocalFSStorage : IStorage {
     private fun getOrFindItems(): Set<IStoredItem> {
         if (detectedItems.isEmpty()) {
             detectedItems = Files.walk(storageDir.toPath())
-                    .filter { !it.toFile().isDirectory }.filter({ Images.isImageFile(it) })
+                    .filter { !it.toFile().isDirectory }.filter { Images.isImageFile(it) }
                     .map { MayBePageItem(it.toFile()) }
                     .collect(Collectors.toSet());
         }
@@ -135,12 +135,12 @@ open class LocalFSStorage : IStorage {
         if (!indexes.containsKey(indexName)) {
             val indexFile = File(storageDir.path + File.separator + indexName)
             if (indexFile.exists())
-                indexes.put(indexName, FileBasedIndex(this, indexFile))
+                indexes[indexName] = FileBasedIndex(this, indexFile)
             else if (!indexFile.exists() && createIfNotExists) {
                 indexFile.createNewFile()
-                indexes.put(indexName, FileBasedIndex(this, indexFile))
+                indexes[indexName] = FileBasedIndex(this, indexFile)
             } else
-                indexes.put(indexName, LocalFSIndex(this))
+                indexes[indexName] = LocalFSIndex(this)
         }
         return indexes.get(indexName)!!
     }
@@ -246,7 +246,7 @@ open class LocalFSStorage : IStorage {
 
         fun getStorage(storageDirName: String): LocalFSStorage {
             if (!storages.containsKey(storageDirName))
-                storages.put(storageDirName, LocalFSStorage(storageDirName))
+                storages[storageDirName] = LocalFSStorage(storageDirName)
 
             return storages.get(storageDirName)!!
         }

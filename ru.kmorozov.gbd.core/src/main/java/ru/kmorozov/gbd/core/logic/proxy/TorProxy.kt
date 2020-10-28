@@ -57,7 +57,7 @@ class TorProxy : StableProxy {
         val TOR_PROXY: TorProxy
             get() = internalMap.getOrPut(1, ::TorProxy)
 
-        public val TOR_HOST = "localhost"
+        val TOR_HOST = "localhost"
         public val TOR_HTTP_PORT = 9150
         val TOR_CONTROL_PORT = 9151
 

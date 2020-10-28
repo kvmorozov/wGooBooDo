@@ -179,7 +179,7 @@ open class HttpHostExt {
     }
 
     open public fun reset() {
-        headers = null
+        headers = HttpConnections.getHeaders(this)
         cookie = null
     }
 
@@ -187,7 +187,7 @@ open class HttpHostExt {
 
         val NO_PROXY = StableProxy()
         val TOR_PROXY: StableProxy
-            get() = if (GBDOptions.proxyListFile.equals("tor", ignoreCase = true)) TorProxy.TOR_PROXY else StableProxy()
+            get() = if (GBDOptions.proxyListFile.equals("tor", ignoreCase = true)) TorProxy.TOR_PROXY as StableProxy else StableProxy()
 
         private val logger = Logger.getLogger(HttpHostExt::class.java)
         private val checkProxyUrl = GenericUrl("http://mxtoolbox.com/WhatIsMyIP/")

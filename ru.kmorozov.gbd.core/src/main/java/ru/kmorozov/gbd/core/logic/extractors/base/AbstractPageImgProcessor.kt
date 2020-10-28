@@ -51,7 +51,7 @@ abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcesso
         var inputStream: InputStream = System.`in`
         lateinit var storedItem: IStoredItem
 
-        if (uniqueObject.isLoadingStarted) return false
+        if (uniqueObject.isLoadingStarted || uniqueObject.isDataProcessed) return false
 
         try {
             getContent(imgUrl, proxy, false).use { resp ->
@@ -112,7 +112,7 @@ abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcesso
 
                     return true
                 } else {
-                    proxy.reset()
+ //                   proxy.reset()
                     storedItem.delete()
                     return false
                 }

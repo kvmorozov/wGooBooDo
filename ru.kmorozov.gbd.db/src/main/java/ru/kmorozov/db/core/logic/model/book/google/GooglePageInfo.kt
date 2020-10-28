@@ -38,7 +38,7 @@ class GooglePageInfo : AbstractPage, Serializable, Comparable<IPage> {
     public var sigs: MutableSet<String> = ConcurrentHashMap.newKeySet()
         private set
 
-    public fun addSrc(_src: String): Boolean {
+    fun addSrc(_src: String): Boolean {
         src = _src
         val idx = _src.indexOf("sig=")
 
