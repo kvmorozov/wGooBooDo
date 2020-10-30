@@ -21,18 +21,14 @@ import java.util.function.ToLongFunction
 /**
  * Created by km on 22.11.2015.
  */
-class ExecutionContext private constructor(val output: AbstractOutputReceiver, val isSingleMode: Boolean) {
+class ExecutionContext private constructor(val isSingleMode: Boolean) {
     var defaultMetadata: ILibraryMetadata = GOOGLE_METADATA
 
     val bookIds: Iterable<String>
         get() = bookContextMap.keys
 
     fun getLogger(clazz: Class<*>, bookContext: BookContext? = null): Logger {
-        return Logger.getLogger(output, clazz.name, if (isSingleMode || null == bookContext) EMPTY else bookContext.bookInfo.bookData.title + ": ")
-    }
-
-    fun getLogger(location: String): Logger {
-        return Logger.getLogger(output, location, EMPTY)
+        return Logger.getLogger(ReceiverProvider.getReceiver(GBDOptions.debugEnabled), clazz.name, if (isSingleMode || null == bookContext) EMPTY else bookContext.bookInfo.bookData.title + ": ")
     }
 
     fun addBookContext(idsProducer: IBookListProducer, postProcessor: IPostProcessor) {
@@ -144,8 +140,8 @@ class ExecutionContext private constructor(val output: AbstractOutputReceiver, v
         public var initialized = false
 
         @Synchronized
-        fun initContext(output: AbstractOutputReceiver, singleMode: Boolean) {
-            INSTANCE = ExecutionContext(output, singleMode)
+        fun initContext(singleMode: Boolean) {
+            INSTANCE = ExecutionContext(singleMode)
 
             bookExecutor = QueuedThreadPoolExecutor(bookContextMap.size, 5, { it.isImgStarted || it.isEmpty }, "bookExecutor")
             pdfExecutor = QueuedThreadPoolExecutor(bookContextMap.size, 5, { it.isPdfCompleted || it.isEmpty }, "pdfExecutor")
@@ -154,7 +150,11 @@ class ExecutionContext private constructor(val output: AbstractOutputReceiver, v
         }
 
         fun getLogger(clazz: Class<*>): Logger {
-            return Logger.getLogger(ReceiverProvider.getReceiver(), clazz.name, "")
+            return Logger.getLogger(ReceiverProvider.getReceiver(GBDOptions.debugEnabled), clazz.name, "")
+        }
+
+        fun getLogger(location: String): Logger {
+            return Logger.getLogger(ReceiverProvider.getReceiver(), location, EMPTY)
         }
 
         val proxyCount: Int

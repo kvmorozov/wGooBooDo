@@ -34,6 +34,6 @@ class PageWorker(private val pageTaskQueue: Queue<BookTask>) {
 
     companion object {
         private val counter = AtomicInteger(0)
-        private val logger = ExecutionContext.INSTANCE.getLogger("PageWorker")
+        private val logger = ExecutionContext.getLogger("PageWorker")
     }
 }

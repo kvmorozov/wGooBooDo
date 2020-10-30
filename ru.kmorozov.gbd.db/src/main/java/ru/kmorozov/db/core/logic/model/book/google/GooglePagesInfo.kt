@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import org.apache.commons.lang3.tuple.ImmutablePair
 import org.apache.commons.lang3.tuple.Pair
+import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPagesInfo
 import ru.kmorozov.gbd.core.logic.model.book.base.IPage
 import ru.kmorozov.gbd.core.logic.model.book.base.PageNotFoundException
@@ -69,7 +70,7 @@ class GooglePagesInfo : AbstractPagesInfo(), Serializable {
     }
 
     private fun fillGap(beginGap: GooglePageInfo, endGap: GooglePageInfo) {
-        val logger = Logger(ReceiverProvider.getReceiver(), "gapFinder", ": ")
+        val logger = Logger(ReceiverProvider.getReceiver(GBDOptions.debugEnabled), "gapFinder", ": ")
 
         if (beginGap.isGapPage || endGap.isGapPage) return
 

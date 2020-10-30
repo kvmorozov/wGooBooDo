@@ -1,5 +1,6 @@
 package ru.kmorozov.library.data.loader.processors.gbd
 
+import org.springframework.context.annotation.DependsOn
 import org.springframework.stereotype.Component
 import ru.kmorozov.gbd.core.logic.context.BookTask
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext

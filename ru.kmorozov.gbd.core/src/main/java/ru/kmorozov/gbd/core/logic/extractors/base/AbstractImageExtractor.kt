@@ -1,5 +1,6 @@
 package ru.kmorozov.gbd.core.logic.extractors.base
 
+import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.logic.context.BookContext
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
 import ru.kmorozov.gbd.core.logic.extractors.SimplePageImgProcessor
@@ -8,6 +9,7 @@ import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.logger.Logger
 import ru.kmorozov.gbd.logger.consumers.AbstractOutputReceiver
 import ru.kmorozov.gbd.logger.events.AbstractEventSource
+import ru.kmorozov.gbd.logger.output.ReceiverProvider
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.thread
 
@@ -21,7 +23,7 @@ abstract class AbstractImageExtractor<T : AbstractPage> : AbstractEventSource, I
     protected constructor(uniqueObject: BookContext, extractorClass: Class<out AbstractImageExtractor<T>>) : super() {
         this.uniqueObject = uniqueObject
         logger = ExecutionContext.INSTANCE.getLogger(extractorClass, uniqueObject)
-        this.output = ExecutionContext.INSTANCE.output
+        this.output = ReceiverProvider.getReceiver(GBDOptions.debugEnabled)
     }
 
     protected val output: AbstractOutputReceiver

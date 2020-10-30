@@ -31,7 +31,7 @@ open class GbdLocalProcessor : IGbdProcessor {
     private fun init() {
         GBDOptions.init(options)
         ContextProvider.contextProvider = ListBasedContextLoader(producer)
-        ExecutionContext.initContext(ReceiverProvider.getReceiver(), true)
+        ExecutionContext.initContext(true)
     }
 
     override fun addBook(bookId: String) {

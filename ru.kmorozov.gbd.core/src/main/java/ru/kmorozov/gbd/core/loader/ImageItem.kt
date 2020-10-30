@@ -2,7 +2,6 @@ package ru.kmorozov.gbd.core.loader
 
 import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.config.constants.GoogleConstants
-import ru.kmorozov.gbd.core.logic.model.book.base.IPage
 import ru.kmorozov.gbd.utils.Images
 import java.awt.image.BufferedImage
 import java.io.ByteArrayInputStream
@@ -12,6 +11,7 @@ import javax.imageio.*
 import javax.imageio.metadata.IIOInvalidTreeException
 import javax.imageio.metadata.IIOMetadata
 import javax.imageio.metadata.IIOMetadataNode
+
 
 open class ImageItem(outputFile: File) : RawFileItem(outputFile) {
 
@@ -36,7 +36,11 @@ open class ImageItem(outputFile: File) : RawFileItem(outputFile) {
                 continue
             }
 
-            setDPI(metadata)
+            when (formatName) {
+                "png" -> setDPIpng(metadata)
+                else -> setDPI(metadata)
+            }
+
             val stream = ImageIO.createImageOutputStream(outputFile)
             val data = ByteArrayInputStream((outputStream as ByteArrayOutputStream).toByteArray())
             val image = IIOImage(ImageIO.read(data), null, null)
@@ -44,11 +48,9 @@ open class ImageItem(outputFile: File) : RawFileItem(outputFile) {
 
             try {
                 writer.write(metadata, image, writeParam)
-            }
-            catch (ex: Exception) {
+            } catch (ex: Exception) {
                 writer.write(null, image, writeParam)
-            }
-            finally {
+            } finally {
                 stream.close()
                 outputStream.close()
             }
@@ -61,7 +63,7 @@ open class ImageItem(outputFile: File) : RawFileItem(outputFile) {
     }
 
     @Throws(IIOInvalidTreeException::class)
-    fun setDPI(metadata: IIOMetadata) { // for PMG, it's dots per millimeter
+    fun setDPI(metadata: IIOMetadata) {
         val dotsPerMilli = 100.0
         val horiz = IIOMetadataNode("HorizontalPixelSize")
         horiz.setAttribute("value", java.lang.Double.toString(dotsPerMilli))
@@ -73,5 +75,22 @@ open class ImageItem(outputFile: File) : RawFileItem(outputFile) {
         val root = IIOMetadataNode("javax_imageio_1.0")
         root.appendChild(dim)
         metadata.mergeTree("javax_imageio_1.0", root)
+    }
+
+    fun setDPIpng(metadata: IIOMetadata) {
+        val pngMetadataFormatName = "javax_imageio_png_1.0"
+
+        val metersToInches = 39.3701
+        val dotsPerMeter = Math.round(100 * metersToInches).toInt()
+
+        val pHYs_node = IIOMetadataNode("pHYs")
+        pHYs_node.setAttribute("pixelsPerUnitXAxis", Integer.toString(dotsPerMeter))
+        pHYs_node.setAttribute("pixelsPerUnitYAxis", Integer.toString(dotsPerMeter))
+        pHYs_node.setAttribute("unitSpecifier", "meter")
+
+        val root = IIOMetadataNode(pngMetadataFormatName)
+        root.appendChild(pHYs_node)
+
+        metadata.mergeTree(pngMetadataFormatName, root)
     }
 }

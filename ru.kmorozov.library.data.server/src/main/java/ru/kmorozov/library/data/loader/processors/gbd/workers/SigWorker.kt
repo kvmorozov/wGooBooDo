@@ -34,6 +34,6 @@ class SigWorker(private val sigTaskQueue: Queue<BookTask>, private val pageTaskQ
 
     companion object {
         private val counter = AtomicInteger(0)
-        private val logger = ExecutionContext.INSTANCE.getLogger("SigWorker")
+        private val logger = ExecutionContext.getLogger("SigWorker")
     }
 }

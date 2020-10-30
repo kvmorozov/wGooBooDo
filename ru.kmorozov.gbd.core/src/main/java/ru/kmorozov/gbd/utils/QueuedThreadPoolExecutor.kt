@@ -104,7 +104,7 @@ class QueuedThreadPoolExecutor<T : Any> : ThreadPoolExecutor {
     companion object {
 
         const val THREAD_POOL_SIZE = 10
-        private val logger = ExecutionContext.INSTANCE.getLogger("Executor")
+        private val logger = ExecutionContext.getLogger("Executor")
         private const val RETENTION_QUEUE_SIZE = 200
         private val MAX_LIVE_TIME = TimeUnit.HOURS.toMillis(1L)
     }

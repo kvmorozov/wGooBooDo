@@ -19,7 +19,7 @@ internal object Main {
             GBDOptions.init(CommandLineOptions(args))
 
             val producer = OptionsBasedProducer()
-            ExecutionContext.initContext(ReceiverProvider.getReceiver(GBDOptions.debugEnabled), 1 == producer.bookIds.size)
+            ExecutionContext.initContext(1 == producer.bookIds.size)
 
             thread {
                 ProxyInitiator().proxyInit()

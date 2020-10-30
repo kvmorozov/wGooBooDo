@@ -41,7 +41,7 @@ class MainBookForm {
     init {
         instance = this
 
-        ExecutionContext.initContext(SwingOutputReceiver(this), true)
+//        ExecutionContext.initContext(SwingOutputReceiver(this), true)
 
         tfRootOutDir!!.text = SystemConfigs.rootDir
         tfProxyListFile!!.text = SystemConfigs.proxyListFile

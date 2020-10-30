@@ -84,7 +84,7 @@ open class GbdRemoteProcessor : IGbdProcessor {
             return
         }
 
-        ExecutionContext.initContext(ReceiverProvider.getReceiver(), true)
+        ExecutionContext.initContext(true)
 
         ctx.initContext(gbdRoot)
         if (!ctx.bookIdsList.isEmpty())
@@ -118,7 +118,7 @@ open class GbdRemoteProcessor : IGbdProcessor {
 
         ContextProvider.contextProvider = dbCtx
 
-        ExecutionContext.initContext(ReceiverProvider.getReceiver(), 1 == producer.bookIds.size)
+        ExecutionContext.initContext(1 == producer.bookIds.size)
         ExecutionContext.INSTANCE.addBookContext(producer, ServerPostProcessor())
 
         ExecutionContext.INSTANCE.execute()
