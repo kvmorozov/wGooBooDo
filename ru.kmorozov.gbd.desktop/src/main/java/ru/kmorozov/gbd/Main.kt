@@ -21,9 +21,8 @@ internal object Main {
             val producer = OptionsBasedProducer()
             ExecutionContext.initContext(1 == producer.bookIds.size)
 
-            thread {
-                ProxyInitiator().proxyInit()
-            }
+            val trProxy = Thread {ProxyInitiator().proxyInit()}
+            trProxy.start()
 
             ExecutionContext.INSTANCE.addBookContext(producer, PdfMaker())
 

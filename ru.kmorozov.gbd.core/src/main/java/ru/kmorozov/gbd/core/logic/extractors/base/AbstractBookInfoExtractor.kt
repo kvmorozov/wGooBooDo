@@ -38,7 +38,7 @@ abstract class AbstractBookInfoExtractor : AbstractHttpProcessor {
                 return getDocumentWithProxy(AbstractProxyListProvider.INSTANCE.getSomeProxy())
             else
                 return Optional.of(Jsoup.connect(bookUrl).userAgent(HttpConnections.USER_AGENT)
-                        .timeout(10000).method(Method.GET).execute().parse())
+                        .timeout(30000).method(Method.GET).execute().parse())
         }
 
     constructor(storedLoader: IContextLoader) {

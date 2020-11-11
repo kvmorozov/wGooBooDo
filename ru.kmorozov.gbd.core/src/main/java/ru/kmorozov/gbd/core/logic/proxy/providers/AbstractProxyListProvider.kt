@@ -14,7 +14,6 @@ import java.util.*
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.stream.Stream
 import kotlin.collections.HashSet
-import kotlin.concurrent.thread
 
 /**
  * Created by km on 27.11.2015.
@@ -58,11 +57,15 @@ abstract class AbstractProxyListProvider : IProxyListProvider {
 
     override fun processProxyList(urlType: UrlType) {
         proxyItems.forEach {
-            thread {
-                val host = processProxyItem(it.get(), urlType)
-                ExecutionContext.sendProxyEvent(host)
+            val trProxyItem = Thread {
+                val opHost = processProxyItem(it.get(), urlType)
+                if (opHost.isPresent)
+                    ExecutionContext.sendProxyEvent(opHost.get())
             }
+            trProxyItem.start()
         }
+
+        ExecutionContext.sendProxyEvent(HttpHostExt.NO_PROXY)
     }
 
     override fun invalidatedProxyListener() {
@@ -79,7 +82,7 @@ abstract class AbstractProxyListProvider : IProxyListProvider {
             return Optional.of(InetSocketAddress(proxyItemArr[0], Integer.parseInt(proxyItemArr[1])))
     }
 
-    private fun processProxyItem(host: InetSocketAddress, urlType: UrlType): HttpHostExt {
+    private fun processProxyItem(host: InetSocketAddress, urlType: UrlType): Optional<HttpHostExt> {
         var proxy: HttpHostExt
 
         val cookie = HttpConnections.getCookieString(host, urlType)
@@ -97,9 +100,11 @@ abstract class AbstractProxyListProvider : IProxyListProvider {
             proxy.forceInvalidate(false)
         }
 
-        proxyList.add(proxy)
-
-        return proxy
+        if (proxy.isAvailable) {
+            proxyList.add(proxy)
+            return Optional.of(proxy)
+        } else
+            return Optional.empty()
     }
 
     protected fun notBlacklisted(proxyStr: String): Boolean {

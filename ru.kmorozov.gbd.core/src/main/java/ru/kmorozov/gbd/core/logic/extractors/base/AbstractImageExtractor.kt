@@ -50,7 +50,10 @@ abstract class AbstractImageExtractor<T : AbstractPage> : AbstractEventSource, I
     }
 
     override fun newProxyEvent(proxy: HttpHostExt) {
-        thread { processProxyEvent(proxy) }
+        if (proxy.isAvailable) {
+            val trEvent = Thread { processProxyEvent(proxy) }
+            trEvent.start()
+        }
     }
 
     override fun reset() {

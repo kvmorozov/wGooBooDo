@@ -36,6 +36,6 @@ class WebProxyListProvider : AbstractProxyListProvider() {
 
     companion object {
         private val PROXY_LIMIT = 20L
-        public val INSTANCE = WebProxyListProvider()
+        val INSTANCE = WebProxyListProvider()
     }
 }

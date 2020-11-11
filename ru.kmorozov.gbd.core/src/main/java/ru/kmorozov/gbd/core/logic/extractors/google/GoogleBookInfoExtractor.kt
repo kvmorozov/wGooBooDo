@@ -54,7 +54,11 @@ open class GoogleBookInfoExtractor : AbstractBookInfoExtractor {
 
                     val result = BookInfo(bookData, pages, bookId)
                     result.pages.build()
-                    return result
+
+                    if (result.pages.pages.size > 0)
+                        return result
+                    else
+                        return EMPTY_BOOK
                 }
             }
         }
