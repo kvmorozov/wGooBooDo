@@ -1,6 +1,5 @@
 package ru.kmorozov.gbd.core.logic.proxy.web
 
-import com.google.api.client.util.Strings
 import org.apache.commons.lang3.StringUtils
 import org.jsoup.nodes.Document
 import java.util.*
@@ -17,19 +16,12 @@ class SslProxiesListProvider : AbstractProxyExtractor() {
 
     override fun extractProxyList(doc: Document): MutableList<String> {
         val textWithProxies = doc.html().replace("<".toRegex(), "|").replace(">".toRegex(), "|")
-        return Arrays.stream(textWithProxies.split("\\|".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray())
+        return Arrays.stream(textWithProxies.split("\\|".toRegex()).toTypedArray()).map { it.trim() }.filter { it.length > 10 && it.length < 20 }
                 .filter { s -> validIpPort(s) }.collect(Collectors.toList())
     }
 
     private fun validIpPort(str: String): Boolean {
-        if (Strings.isNullOrEmpty(str))
-            return false
-
-        if (str.length < 10 || str.length > 20)
-            return false
-
         return if (StringUtils.countMatches(str, ".") != 3 || !str.contains(":")) false else !SslProxiesListProvider.checkRegexp || pattern.matcher(str).matches()
-
     }
 
     companion object {

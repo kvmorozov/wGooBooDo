@@ -94,11 +94,6 @@ class ExecutionContext private constructor(val isSingleMode: Boolean) {
 
             AbstractHttpProcessor.close()
         } else {
-            if (!GBDOptions.serverMode) {
-                AbstractProxyListProvider.INSTANCE.findCandidates()
-                AbstractProxyListProvider.INSTANCE.processProxyList(UrlType.GOOGLE_BOOKS)
-            }
-
             bookExecutor.terminate(10L, TimeUnit.MINUTES)
             pdfExecutor.terminate(30L, TimeUnit.MINUTES)
 

@@ -13,7 +13,7 @@ class FileProxyListProvider internal constructor() : AbstractProxyListProvider()
 
     override fun findCandidates() {
         val proxyListFileName = GBDOptions.proxyListFile
-        if (Strings.isNullOrEmpty(proxyListFileName)) {
+        if (!Strings.isNullOrEmpty(proxyListFileName)) {
             val proxyListFile = File(proxyListFileName)
             if (proxyListFile.exists() && proxyListFile.canRead())
                 this.proxyItems = Files.lines(proxyListFile.toPath()).map { getInetAddress(it) }.collect(Collectors.toSet())
@@ -30,5 +30,9 @@ class FileProxyListProvider internal constructor() : AbstractProxyListProvider()
 
         Files.write(proxyListPath,
                 proxyList.filter { !it.isLocal && it.isAvailable }.map { String.format("%s %s%n", it.host.hostName, it.host.port) })
+    }
+
+    companion object {
+        val INSTANCE = FileProxyListProvider()
     }
 }

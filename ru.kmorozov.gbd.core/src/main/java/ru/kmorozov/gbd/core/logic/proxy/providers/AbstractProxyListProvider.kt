@@ -130,7 +130,7 @@ abstract class AbstractProxyListProvider : IProxyListProvider {
                 WebProxyListProvider.INSTANCE
             else if (GBDOptions.proxyListFile.equals("tor", ignoreCase = true))
                 TorProxyListProvider.INSTANCE
-            else FileProxyListProvider()
+            else FileProxyListProvider.INSTANCE
 
         fun updateBlacklist() {
             if (INSTANCE.proxyList.size > 1)
