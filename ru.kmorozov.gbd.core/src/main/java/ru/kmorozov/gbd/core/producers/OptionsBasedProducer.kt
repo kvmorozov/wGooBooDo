@@ -18,8 +18,8 @@ class OptionsBasedProducer : IBookListProducer {
     init {
         val bookId = GBDOptions.bookId
 
-        if (!Strings.isNullOrEmpty(bookId) && LibraryFactory.isValidId(bookId))
-            bookIds = HashSet(listOf(bookId))
+        if (!Strings.isNullOrEmpty(bookId))
+            bookIds = bookId.split(";").filter { LibraryFactory.isValidId(it) }.toSet()
         else if (GBDOptions.isValidConfig)
             bookIds = ContextProvider.contextProvider.bookIdsList
     }

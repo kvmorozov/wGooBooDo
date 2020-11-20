@@ -40,7 +40,8 @@ class HttpConnections private constructor() {
 
             try {
                 val request = if (proxy == NO_PROXY) Builder().build() else Builder().setProxy(proxy).build()
-                return Optional.of(request.createRequestFactory().buildGetRequest(baseUrl).setHeaders(headers).setConnectTimeout(10000).execute())
+                val responce = request.createRequestFactory().buildGetRequest(baseUrl).setHeaders(headers).setConnectTimeout(10000).execute()
+                return Optional.of(responce)
             } catch (e: IOException) {
                 return Optional.empty()
             }

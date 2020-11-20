@@ -82,6 +82,7 @@ class GoogleImageExtractor(bookContext: BookContext) : AbstractImageExtractor<Go
                                 .execute(GooglePageImgProcessor(uniqueObject, page as GooglePageInfo, HttpHostExt.NO_PROXY))
                     }
 
+            ExecutionContext.proxyExecutor.terminate(3L, TimeUnit.MINUTES)
             uniqueObject.imgExecutor.terminate(10L, TimeUnit.MINUTES)
 
             logger.info(uniqueObject.bookInfo.pages.missingPagesList)

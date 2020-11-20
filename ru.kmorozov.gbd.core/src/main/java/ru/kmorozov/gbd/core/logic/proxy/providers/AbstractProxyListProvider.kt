@@ -8,6 +8,7 @@ import ru.kmorozov.gbd.core.logic.proxy.UrlType
 import ru.kmorozov.gbd.core.logic.proxy.web.WebProxyListProvider
 import ru.kmorozov.gbd.logger.Logger
 import ru.kmorozov.gbd.utils.HttpConnections
+import ru.kmorozov.gbd.utils.QueuedThreadPoolExecutor
 import ru.kmorozov.gbd.utils.SetBlockingQueue
 import java.net.InetSocketAddress
 import java.util.*
@@ -56,13 +57,13 @@ abstract class AbstractProxyListProvider : IProxyListProvider {
     }
 
     override fun processProxyList(urlType: UrlType) {
+        ExecutionContext.proxyExecutor = QueuedThreadPoolExecutor(proxyItems.size, 5, { true }, "proxyExecutor")
         proxyItems.forEach {
-            val trProxyItem = Thread {
+            ExecutionContext.proxyExecutor.execute {
                 val opHost = processProxyItem(it.get(), urlType)
                 if (opHost.isPresent)
                     ExecutionContext.sendProxyEvent(opHost.get())
             }
-            trProxyItem.start()
         }
 
         ExecutionContext.sendProxyEvent(HttpHostExt.NO_PROXY)

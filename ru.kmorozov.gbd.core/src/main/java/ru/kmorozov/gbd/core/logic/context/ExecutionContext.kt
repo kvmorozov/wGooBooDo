@@ -7,13 +7,12 @@ import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata
 import ru.kmorozov.gbd.core.logic.library.LibraryFactory
 import ru.kmorozov.gbd.core.logic.library.metadata.GoogleBooksMetadata.Companion.GOOGLE_METADATA
 import ru.kmorozov.gbd.core.logic.library.metadata.UnknownMetadata
-import ru.kmorozov.gbd.core.logic.proxy.providers.AbstractProxyListProvider
 import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
-import ru.kmorozov.gbd.core.logic.proxy.UrlType
+import ru.kmorozov.gbd.core.logic.proxy.providers.AbstractProxyListProvider
 import ru.kmorozov.gbd.logger.Logger
-import ru.kmorozov.gbd.logger.consumers.AbstractOutputReceiver
 import ru.kmorozov.gbd.logger.output.ReceiverProvider
 import ru.kmorozov.gbd.utils.QueuedThreadPoolExecutor
+import java.net.InetSocketAddress
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.TimeUnit
 import java.util.function.ToLongFunction
@@ -126,6 +125,7 @@ class ExecutionContext private constructor(val isSingleMode: Boolean) {
         private val bookContextMap: MutableMap<String, BookContext> = ConcurrentHashMap<String, BookContext>()
         lateinit var bookExecutor: QueuedThreadPoolExecutor<BookContext>
         lateinit var pdfExecutor: QueuedThreadPoolExecutor<BookContext>
+        lateinit var proxyExecutor: QueuedThreadPoolExecutor<InetSocketAddress>
 
         internal val logger = Logger.getLogger(ExecutionContext::class.java)
 
