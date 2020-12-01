@@ -2,6 +2,7 @@ package ru.kmorozov.gbd.core.config
 
 import java.io.File
 import java.io.IOException
+import java.io.InputStream
 import java.io.OutputStream
 
 interface IStoredItem {
@@ -18,7 +19,7 @@ interface IStoredItem {
     fun close()
 
     @Throws(IOException::class)
-    fun write(bytes: ByteArray, len: Int)
+    fun write(inStream: InputStream)
 
     fun flush()
 

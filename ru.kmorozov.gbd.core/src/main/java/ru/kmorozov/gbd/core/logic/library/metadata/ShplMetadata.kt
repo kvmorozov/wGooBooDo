@@ -26,7 +26,7 @@ class ShplMetadata private constructor() : ILibraryMetadata {
     }
 
     override fun preferredConnectors(): List<HttpConnector> {
-        return listOf(ILibraryMetadata.GOOGLE_CONNECTOR)
+        return listOf(ILibraryMetadata.HTTP_2_CONNECTOR)
     }
 
     companion object {

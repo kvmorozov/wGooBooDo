@@ -9,6 +9,7 @@ import ru.kmorozov.onedrive.client.OneDriveItem
 
 import java.io.File
 import java.io.IOException
+import java.io.InputStream
 import java.io.OutputStream
 
 class ServerStoredItem @Throws(IOException::class)
@@ -48,8 +49,8 @@ internal constructor(private val storage: ServerStorage, val page: IPage, imgFor
     }
 
     @Throws(IOException::class)
-    override fun write(bytes: ByteArray, len: Int) {
-        localItem.write(bytes, len)
+    override fun write(inStream: InputStream) {
+        localItem.write(inStream)
     }
 
     override fun flush() {

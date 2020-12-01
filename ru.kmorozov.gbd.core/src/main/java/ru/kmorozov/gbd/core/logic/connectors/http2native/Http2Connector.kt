@@ -76,7 +76,7 @@ class Http2Connector : HttpConnector() {
             }
 
         try {
-            return DEFAULT_CLIENT.send(req, HttpResponse.BodyHandlers.ofByteArray())
+            return DEFAULT_CLIENT.send(req, HttpResponse.BodyHandlers.ofInputStream())
         } catch (ste1: SocketTimeoutException) {
             proxy.registerFailure()
             return getContent(req, proxy, attempt + 1)

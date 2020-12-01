@@ -53,6 +53,7 @@ open class ImageItem(outputFile: File) : RawFileItem(outputFile) {
             } finally {
                 stream.close()
                 outputStream.close()
+                writer.dispose()
             }
             break
         }

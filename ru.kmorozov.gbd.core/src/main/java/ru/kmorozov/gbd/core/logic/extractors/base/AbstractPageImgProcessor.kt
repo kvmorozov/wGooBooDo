@@ -62,42 +62,25 @@ abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcesso
                     return false
                 }
 
-                var read: Int
-                val bytes = ByteArray(dataChunk)
-                var firstChunk = true
                 var reloadFlag: Boolean
 
-                do {
-                    read = inputStream.read(bytes)
-
-                    if (read == -1)
-                        break
-
-                    if (firstChunk) {
-                        if (uniqueObject.isLoadingStarted) return false
-
-                        uniqueObject.isLoadingStarted = true
-                        storedItem = bookContext.storage.getStoredItem(uniqueObject, resp.imageFormat)
-
-                        reloadFlag = !storedItem.createdNew
-                        if (reloadFlag)
-                            if (GBDOptions.reloadImages)
-                                storedItem.delete()
-                            else {
-                                uniqueObject.isDataProcessed = true
-                                return false
-                            }
-
-                        if (proxy.isLocal)
-                            logger.info("Started img ${if (reloadFlag) "RELOADING" else "processing"} for ${uniqueObject.pid} without Proxy")
-                        else
-                            logger.info("Started img ${if (reloadFlag) "RELOADING" else "processing"} for ${uniqueObject.pid} with $proxy Proxy")
+                if (!uniqueObject.loadingStarted.compareAndSet(false, true)) return false
+                storedItem = bookContext.storage.getStoredItem(uniqueObject, resp.imageFormat)
+                reloadFlag = !storedItem.createdNew
+                if (reloadFlag)
+                    if (GBDOptions.reloadImages)
+                        storedItem.delete()
+                    else {
+                        uniqueObject.isDataProcessed = true
+                        return false
                     }
 
-                    firstChunk = false
+                if (proxy.isLocal)
+                    logger.info("Started img ${if (reloadFlag) "RELOADING" else "processing"} for ${uniqueObject.pid} without Proxy")
+                else
+                    logger.info("Started img ${if (reloadFlag) "RELOADING" else "processing"} for ${uniqueObject.pid} with $proxy Proxy")
 
-                    storedItem.write(bytes, read)
-                } while (true)
+                storedItem.write(inputStream)
 
                 bookContext.storage.storeItem(storedItem)
 
@@ -112,7 +95,7 @@ abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcesso
 
                     return true
                 } else {
- //                   proxy.reset()
+                    //                   proxy.reset()
                     storedItem.delete()
                     return false
                 }

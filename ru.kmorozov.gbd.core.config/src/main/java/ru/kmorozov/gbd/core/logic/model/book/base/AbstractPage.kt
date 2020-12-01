@@ -10,7 +10,7 @@ abstract class AbstractPage : IPage {
 
     private val dataProcessed = AtomicBoolean(false)
     private val fileExists = AtomicBoolean(false)
-    private val loadingStarted = AtomicBoolean(false)
+    public val loadingStarted = AtomicBoolean(false)
     private val scanned = AtomicBoolean(false)
 
     override var isDataProcessed: Boolean

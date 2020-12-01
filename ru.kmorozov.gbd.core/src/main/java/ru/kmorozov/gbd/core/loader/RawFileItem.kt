@@ -2,10 +2,7 @@ package ru.kmorozov.gbd.core.loader
 
 import ru.kmorozov.gbd.core.config.IStoredItem
 import ru.kmorozov.gbd.utils.Images
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.io.OutputStream
+import java.io.*
 import java.nio.file.Path
 
 open class RawFileItem : IStoredItem {
@@ -22,7 +19,7 @@ open class RawFileItem : IStoredItem {
 
     override lateinit var outputStream: OutputStream
 
-    var totalLen = 0
+    var totalLen = 0L
 
     override val pageNum: Int
         get() = Integer.parseInt(outputFile.toPath().fileName.toString().split("_".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0])
@@ -53,13 +50,12 @@ open class RawFileItem : IStoredItem {
     }
 
     @Throws(IOException::class)
-    override fun write(bytes: ByteArray, len: Int) {
+    override fun write(inStream: InputStream) {
         try {
-            if (totalLen == 0)
+            if (totalLen == 0L)
                 init()
 
-            writeInternal(bytes, len)
-            totalLen += len
+            totalLen += inStream.transferTo(outputStream)
         } catch (ex: IOException) {
             ex.printStackTrace()
         }
@@ -67,10 +63,6 @@ open class RawFileItem : IStoredItem {
 
     open fun init() {
         outputStream = FileOutputStream(outputFile)
-    }
-
-    fun writeInternal(bytes: ByteArray, len: Int) {
-        outputStream.write(bytes, 0, len)
     }
 
     override fun flush() {

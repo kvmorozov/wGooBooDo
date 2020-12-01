@@ -1,8 +1,6 @@
 package ru.kmorozov.gbd.core.logic.connectors.http2native
 
 import ru.kmorozov.gbd.core.logic.connectors.Response
-
-import java.io.ByteArrayInputStream
 import java.io.IOException
 import java.io.InputStream
 import java.net.http.HttpResponse
@@ -12,16 +10,13 @@ class Http2Response internal constructor(private val response: HttpResponse<*>) 
         get() = response.statusCode()
 
     override val content: InputStream
+        get() = response.body() as InputStream
 
     override val imageFormat: String
         get() = response.headers().firstValue("content-type").get().split("/".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1]
 
     override val headers: String
         get() = response.headers().toString()
-
-    init {
-        content = ByteArrayInputStream(response.body() as ByteArray)
-    }
 
     @Throws(IOException::class)
     override fun close() {

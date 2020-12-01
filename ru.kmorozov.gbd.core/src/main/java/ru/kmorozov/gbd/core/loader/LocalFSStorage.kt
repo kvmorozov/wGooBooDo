@@ -100,8 +100,8 @@ open class LocalFSStorage : IStorage {
                 .replace(">", "")
                 .replace("?", "")
                 .replace("/", ".")
-        val volumeId = bookData.volumeId
-        return getStorage(if (Strings.isNullOrEmpty(volumeId)) directoryName else directoryName + ' '.toString() + bookData.volumeId)
+        return getStorage(if (Strings.isNullOrEmpty(bookData.volumeId) || bookData.volumeId.equals(bookData.title))
+            directoryName else directoryName + ' '.toString() + bookData.volumeId)
     }
 
     override fun size(): Int {
