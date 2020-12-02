@@ -33,7 +33,6 @@ open class RawFileItem : IStoredItem {
     override fun delete() {
         try {
             if (totalLen > 0) {
-                outputStream.close()
                 totalLen = 0;
             }
 
@@ -45,24 +44,15 @@ open class RawFileItem : IStoredItem {
 
     @Throws(IOException::class)
     override fun close() {
-        if (totalLen > 0)
-            outputStream.close()
     }
 
     @Throws(IOException::class)
     override fun write(inStream: InputStream) {
-        try {
-            if (totalLen == 0L)
-                init()
-
-            totalLen += inStream.transferTo(outputStream)
-        } catch (ex: IOException) {
-            ex.printStackTrace()
-        }
+        FileOutputStream(outputFile).use { totalLen += inStream.transferTo(it) }
     }
 
     open fun init() {
-        outputStream = FileOutputStream(outputFile)
+
     }
 
     override fun flush() {

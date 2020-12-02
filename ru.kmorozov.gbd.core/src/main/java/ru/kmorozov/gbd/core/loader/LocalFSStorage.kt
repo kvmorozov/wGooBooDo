@@ -16,12 +16,10 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.nio.file.attribute.BasicFileAttributes
-import java.util.*
 import java.util.function.BiPredicate
 import java.util.function.Predicate
 import java.util.stream.Collectors
 import javax.imageio.ImageIO
-import kotlin.collections.HashSet
 
 open class LocalFSStorage : IStorage {
 
@@ -63,27 +61,13 @@ open class LocalFSStorage : IStorage {
     private fun getOrFindItems(): Set<IStoredItem> {
         if (detectedItems.isEmpty()) {
             detectedItems = Files.walk(storageDir.toPath())
-                    .filter { !it.toFile().isDirectory }.filter { Images.isImageFile(it) }
+                    .filter { !it.toFile().isDirectory && Images.isImageFile(it) }
                     .map { MayBePageItem(it.toFile()) }
+                    .sorted { o1, o2 -> o1.pageNum.compareTo(o2.pageNum) }
                     .collect(Collectors.toSet());
         }
 
-        linkPages()
-
         return detectedItems;
-    }
-
-    private fun linkPages() {
-        var sortedPages = detectedItems.sortedWith(Comparator.comparing<IStoredItem, Int> { it.pageNum })
-        var itPages = sortedPages.listIterator()
-
-        while (itPages.hasNext()) {
-            val page = itPages.next()
-            if (itPages.previousIndex() > 0)
-                page.prev = sortedPages.get(itPages.previousIndex() - 1)
-            if (itPages.hasNext())
-                page.next = sortedPages.get(itPages.nextIndex())
-        }
     }
 
     override fun getChildStorage(bookData: IBookData): IStorage {
@@ -128,7 +112,7 @@ open class LocalFSStorage : IStorage {
             detectedItems.add(item)
         }
 
-        item.flush()
+//        item.flush()
     }
 
     override fun getIndex(indexName: String, createIfNotExists: Boolean): IIndex {
