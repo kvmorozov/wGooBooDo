@@ -117,7 +117,7 @@ class ExecutionContext private constructor(val isSingleMode: Boolean) {
             pdfExecutor.execute(bookContext.getPostProcessor())
     }
 
-    public fun inProcess(): Boolean {
+    fun inProcess(): Boolean {
         return bookContextMap.values.filter { !it.pdfCompleted.get() }.count() > 0
     }
 
@@ -132,7 +132,7 @@ class ExecutionContext private constructor(val isSingleMode: Boolean) {
         private const val EMPTY = ""
         lateinit var INSTANCE: ExecutionContext
 
-        public var initialized = false
+        var initialized = false
 
         @Synchronized
         fun initContext(singleMode: Boolean) {

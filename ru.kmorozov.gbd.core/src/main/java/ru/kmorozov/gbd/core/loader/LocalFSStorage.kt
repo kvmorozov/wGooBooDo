@@ -73,7 +73,7 @@ open class LocalFSStorage : IStorage {
     override fun getChildStorage(bookData: IBookData): IStorage {
         try {
             val optPath = Files.find(storageDir.toPath(), 1,
-                    BiPredicate<Path, BasicFileAttributes> { path, _ -> path.toString().contains(bookData.volumeId) }).findAny()
+                { path, _ -> path.toString().contains(bookData.volumeId) }).findAny()
             if (optPath.isPresent) return getStorage(optPath.get().toString())
         } catch (ignored: IOException) {
         }
@@ -83,6 +83,7 @@ open class LocalFSStorage : IStorage {
                 .replace("<", "")
                 .replace(">", "")
                 .replace("?", "")
+                .replace("\"", "")
                 .replace("/", ".")
         return getStorage(if (Strings.isNullOrEmpty(bookData.volumeId) || bookData.volumeId.equals(bookData.title))
             directoryName else directoryName + ' '.toString() + bookData.volumeId)

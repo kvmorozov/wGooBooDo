@@ -25,7 +25,7 @@ abstract class AbstractProxyListProvider : IProxyListProvider {
     override val proxyList: LinkedBlockingQueue<HttpHostExt> = SetBlockingQueue<HttpHostExt>()
     protected var proxyItems: MutableSet<Optional<InetSocketAddress>> = HashSet()
 
-    constructor () {
+    init {
         initList()
     }
 
@@ -84,7 +84,7 @@ abstract class AbstractProxyListProvider : IProxyListProvider {
     }
 
     private fun processProxyItem(host: InetSocketAddress, urlType: UrlType): Optional<HttpHostExt> {
-        var proxy: HttpHostExt
+        val proxy: HttpHostExt
 
         val cookie = HttpConnections.getCookieString(host, urlType)
         proxy = HttpHostExt(host, cookie)
