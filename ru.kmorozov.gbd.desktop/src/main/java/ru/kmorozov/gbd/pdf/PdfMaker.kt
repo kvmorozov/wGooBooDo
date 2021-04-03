@@ -1,5 +1,6 @@
 package ru.kmorozov.gbd.pdf
 
+import org.apache.pdfbox.Loader
 import org.apache.pdfbox.cos.COSDictionary
 import org.apache.pdfbox.cos.COSName
 import org.apache.pdfbox.pdmodel.PDDocument
@@ -59,7 +60,7 @@ class PdfMaker : IPostProcessor {
 
         val imgWidth = if (0 == GBDOptions.imageWidth) DEFAULT_PAGE_WIDTH else GBDOptions.imageWidth
 
-        (if (pdfExists) PDDocument.load(pdfFile) else PDDocument()).use { pdfDocument ->
+        (if (pdfExists) Loader.loadPDF(pdfFile) else PDDocument()).use { pdfDocument ->
             val existPages = pdfDocument.numberOfPages.toLong()
 
             val imgCount = storage.imgCount()
@@ -72,24 +73,24 @@ class PdfMaker : IPostProcessor {
 
             val itr = pdfDocument.pages.iterator()
             while (itr.hasNext()) {
-                var page = itr.next()
+                val page = itr.next()
                 if (page.metadata != null) {
                     val docMeta = DataUtil.load(page.metadata.exportXMPMetadata(), Charset.defaultCharset().name(), "", Parser.xmlParser())
                     val order = Integer.parseInt(docMeta.select("order").text())
-                    internalPagesMap.put(order, page)
+                    internalPagesMap[order] = page
                 }
             }
 
-            var documentInfo = PDDocumentInformation();
-            documentInfo.title = bookInfo.bookData.title;
-            documentInfo.producer = GBDConstants.GBD_APP_NAME;
-            pdfDocument.documentInformation = documentInfo;
+            val documentInfo = PDDocumentInformation()
+            documentInfo.title = bookInfo.bookData.title
+            documentInfo.producer = GBDConstants.GBD_APP_NAME
+            pdfDocument.documentInformation = documentInfo
 
             storage.items.stream()
                     .filter { item -> item is MayBePageItem }
                     .map { item -> item as MayBePageItem }
                     .filter { item -> !internalPagesMap.containsKey(item.page.order) }
-                    .sorted(Comparator.comparing<MayBePageItem, Int> { it.pageNum }).forEach { item ->
+                    .sorted(Comparator.comparing { it.pageNum }).forEach { item ->
                         try {
                             FileInputStream(item.asFile()).use { fis ->
                                 if (item.page.isScanned || !Images.isInvalidImage(item.asFile(), imgWidth)) {
@@ -127,7 +128,7 @@ class PdfMaker : IPostProcessor {
                                                 pdfDocument.addPage(pdfPage)
                                         }
 
-                                        internalPagesMap.put(item.page.order, pdfPage)
+                                        internalPagesMap[item.page.order] = pdfPage
 
                                         val img = PDImageXObject.createFromFileByExtension(item.asFile(), pdfDocument)
                                         PDPageContentStream(pdfDocument, pdfPage).use { contentStream -> contentStream.drawImage(img, 0.toFloat(), 0.toFloat()) }

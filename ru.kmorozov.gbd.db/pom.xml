@@ -6,6 +6,10 @@
 
     <artifactId>ru.kmorozov.gbd.db</artifactId>
 
+    <properties>
+        <kotlin.version>1.5.0-M2</kotlin.version>
+    </properties>
+
     <parent>
         <groupId>ru.kmorozov.gbd</groupId>
         <artifactId>parent</artifactId>
@@ -31,6 +35,22 @@
             <artifactId>ru.kmorozov.gbd.core.logger</artifactId>
             <version>${version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib-jdk8</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-test</artifactId>
+            <version>${kotlin.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib-jdk8</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -38,7 +58,7 @@
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
-                <version>${kotlin.maven.plugin.version}</version>
+                <version>${kotlin.version}</version>
                 <executions>
                     <execution>
                         <id>compile</id>
