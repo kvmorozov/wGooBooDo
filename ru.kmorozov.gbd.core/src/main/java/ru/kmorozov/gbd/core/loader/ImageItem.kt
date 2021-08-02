@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.InputStream
 import javax.imageio.*
 import javax.imageio.metadata.IIOInvalidTreeException
 import javax.imageio.metadata.IIOMetadata
@@ -23,7 +24,7 @@ open class ImageItem(outputFile: File) : RawFileItem(outputFile) {
         outputStream = ByteArrayOutputStream()
     }
 
-    override fun flush() {
+    override fun write(inStream: InputStream) {
         val formatName = Images.getImageFormat(outputFile.toPath())
 
         val iw: Iterator<ImageWriter> = ImageIO.getImageWritersByFormatName(formatName)
@@ -42,8 +43,7 @@ open class ImageItem(outputFile: File) : RawFileItem(outputFile) {
             }
 
             val stream = ImageIO.createImageOutputStream(outputFile)
-            val data = ByteArrayInputStream((outputStream as ByteArrayOutputStream).toByteArray())
-            val image = IIOImage(ImageIO.read(data), null, null)
+            val image = IIOImage(ImageIO.read(inStream), null, null)
             writer.setOutput(stream)
 
             try {
@@ -52,11 +52,14 @@ open class ImageItem(outputFile: File) : RawFileItem(outputFile) {
                 writer.write(null, image, writeParam)
             } finally {
                 stream.close()
-                outputStream.close()
                 writer.dispose()
             }
             break
         }
+    }
+
+    override fun flush() {
+
     }
 
     override fun validate(): Boolean {

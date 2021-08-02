@@ -7,7 +7,7 @@
     <artifactId>ru.kmorozov.gbd.core.config</artifactId>
 
     <properties>
-        <kotlin.version>1.5.0-M2</kotlin.version>
+        <kotlin.version>1.5.21</kotlin.version>
     </properties>
 
     <dependencies>

@@ -62,7 +62,7 @@ abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcesso
                     return false
                 }
 
-                var reloadFlag: Boolean
+                val reloadFlag: Boolean
 
                 if (!uniqueObject.loadingStarted.compareAndSet(false, true)) return false
                 storedItem = bookContext.storage.getStoredItem(uniqueObject, resp.imageFormat)
