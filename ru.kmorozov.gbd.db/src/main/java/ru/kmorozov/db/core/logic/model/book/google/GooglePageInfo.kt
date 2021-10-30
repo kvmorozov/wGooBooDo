@@ -35,7 +35,7 @@ class GooglePageInfo : AbstractPage, Serializable, Comparable<IPage> {
     private val uf: String? = null
 
     @Transient
-    public var sigs: MutableSet<String> = ConcurrentHashMap.newKeySet()
+    var sigs: MutableSet<String> = ConcurrentHashMap.newKeySet()
         private set
 
     fun addSrc(_src: String): Boolean {
@@ -65,7 +65,7 @@ class GooglePageInfo : AbstractPage, Serializable, Comparable<IPage> {
     @Transient
     private var gapPage: Boolean = false
 
-    constructor() {}
+    constructor()
 
     // Создание страниц для заполнения разрыва
     constructor(pid: String, order: Int) {

@@ -11,7 +11,7 @@ import java.util.stream.Collectors
  */
 class SslProxiesListProvider : AbstractProxyExtractor() {
 
-    protected override val proxyListUrl: String
+    override val proxyListUrl: String
         get() = PROXY_LIST_URL
 
     override fun extractProxyList(doc: Document): MutableList<String> {

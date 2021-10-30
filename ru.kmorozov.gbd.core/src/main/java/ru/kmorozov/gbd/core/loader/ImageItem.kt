@@ -30,7 +30,7 @@ open class ImageItem(outputFile: File) : RawFileItem(outputFile) {
         val iw: Iterator<ImageWriter> = ImageIO.getImageWritersByFormatName(formatName)
         while (iw.hasNext()) {
             val writer: ImageWriter = iw.next()
-            val writeParam: ImageWriteParam = writer.getDefaultWriteParam()
+            val writeParam: ImageWriteParam = writer.defaultWriteParam
             val typeSpecifier = ImageTypeSpecifier.createFromBufferedImageType(BufferedImage.TYPE_INT_RGB)
             val metadata: IIOMetadata = writer.getDefaultImageMetadata(typeSpecifier, writeParam)
             if (metadata.isReadOnly || !metadata.isStandardMetadataFormatSupported) {
@@ -44,7 +44,7 @@ open class ImageItem(outputFile: File) : RawFileItem(outputFile) {
 
             val stream = ImageIO.createImageOutputStream(outputFile)
             val image = IIOImage(ImageIO.read(inStream), null, null)
-            writer.setOutput(stream)
+            writer.output = stream
 
             try {
                 writer.write(metadata, image, writeParam)

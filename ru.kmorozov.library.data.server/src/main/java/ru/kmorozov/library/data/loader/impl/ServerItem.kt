@@ -60,7 +60,7 @@ class ServerItem {
             filesCount = oneDriveItem.folder!!.childCount
     }
 
-    internal constructor(oneDriveItem: OneDriveItem) : this(oneDriveItem, true) {}
+    internal constructor(oneDriveItem: OneDriveItem) : this(oneDriveItem, true)
 
     private constructor(path: Path, lookupParent: Boolean) {
         val file = path.toFile()
@@ -76,5 +76,5 @@ class ServerItem {
             parent = ServerItem(path.parent, false)
     }
 
-    internal constructor(path: Path) : this(path, true) {}
+    internal constructor(path: Path) : this(path, true)
 }

@@ -4,7 +4,7 @@ import java.util.*
 
 abstract class AbstractPagesInfo : IPagesInfo {
 
-    open override fun getPageByPid(pid: String): IPage {
+    override fun getPageByPid(pid: String): IPage {
         val opPage = Arrays.asList(*pages).stream().filter { page -> page.pid.equals(pid) }.findFirst()
         if (opPage.isPresent)
             return opPage.get()

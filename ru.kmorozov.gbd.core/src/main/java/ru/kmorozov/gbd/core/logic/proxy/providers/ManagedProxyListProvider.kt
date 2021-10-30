@@ -31,7 +31,7 @@ class ManagedProxyListProvider(private val parentProvider: IProxyListProvider, p
             return opProxy.get()
         }
 
-    constructor(timeout: Int) : this(AbstractProxyListProvider.INSTANCE, timeout) {}
+    constructor(timeout: Int) : this(AbstractProxyListProvider.INSTANCE, timeout)
 
     private fun checkReady(proxy: HttpHostExt): Boolean {
         return System.currentTimeMillis() - proxy.lastUsedTimestamp > timeout.toLong()

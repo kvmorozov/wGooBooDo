@@ -18,7 +18,7 @@ object LibraryFactory {
         if (contexts.size > 0)
             return getMetadata(contexts.get(0).bookId)
         else
-            return GOOGLE_METADATA;
+            return GOOGLE_METADATA
     }
 
     fun getMetadata(bookId: String): ILibraryMetadata {

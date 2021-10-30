@@ -1,6 +1,5 @@
 package ru.kmorozov.gbd.pdf
 
-import org.apache.pdfbox.Loader
 import org.apache.pdfbox.cos.COSDictionary
 import org.apache.pdfbox.cos.COSName
 import org.apache.pdfbox.pdmodel.PDDocument
@@ -60,7 +59,7 @@ class PdfMaker : IPostProcessor {
 
         val imgWidth = if (0 == GBDOptions.imageWidth) DEFAULT_PAGE_WIDTH else GBDOptions.imageWidth
 
-        (if (pdfExists) Loader.loadPDF(pdfFile) else PDDocument()).use { pdfDocument ->
+        (if (pdfExists) PDDocument.load(pdfFile) else PDDocument()).use { pdfDocument ->
             val existPages = pdfDocument.numberOfPages.toLong()
 
             val imgCount = storage.imgCount()
@@ -77,7 +76,7 @@ class PdfMaker : IPostProcessor {
                 if (page.metadata != null) {
                     val docMeta = DataUtil.load(page.metadata.exportXMPMetadata(), Charset.defaultCharset().name(), "", Parser.xmlParser())
                     val order = Integer.parseInt(docMeta.select("order").text())
-                    internalPagesMap[order] = page
+                    internalPagesMap.put(order, page)
                 }
             }
 
@@ -87,69 +86,69 @@ class PdfMaker : IPostProcessor {
             pdfDocument.documentInformation = documentInfo
 
             storage.items.stream()
-                    .filter { item -> item is MayBePageItem }
-                    .map { item -> item as MayBePageItem }
-                    .filter { item -> !internalPagesMap.containsKey(item.page.order) }
-                    .sorted(Comparator.comparing { it.pageNum }).forEach { item ->
-                        try {
-                            FileInputStream(item.asFile()).use { fis ->
-                                if (item.page.isScanned || !Images.isInvalidImage(item.asFile(), imgWidth)) {
-                                    val bimg = ImageIO.read(fis)
+                .filter { item -> item is MayBePageItem }
+                .map { item -> item as MayBePageItem }
+                .filter { item -> !internalPagesMap.containsKey(item.page.order) }
+                .sorted(Comparator.comparing<MayBePageItem, Int> { it.pageNum }).forEach { item ->
+                    try {
+                        FileInputStream(item.asFile()).use { fis ->
+                            if (item.page.isScanned || !Images.isInvalidImage(item.asFile(), imgWidth)) {
+                                val bimg = ImageIO.read(fis)
 
-                                    if (null == bimg) {
-                                        item.delete()
-                                        logger.severe("Image ${item.asFile().toPath().fileName} was deleted!")
-                                    } else {
-                                        val width = bimg.width.toFloat()
-                                        val height = bimg.height.toFloat()
-
-                                        val page = COSDictionary()
-                                        page.setItem(COSName.TYPE, COSName.PAGE)
-                                        page.setItem(COSName.MEDIA_BOX, PDRectangle(width, height))
-
-                                        val pdfPage = PDPage(page)
-                                        var metadata = pdfPage.metadata
-                                        if (metadata == null) {
-                                            metadata = PDMetadata(pdfDocument)
-                                            pdfPage.metadata = metadata
-                                        }
-
-                                        val strMetadata = "<meta><pid>${item.page.pid}</pid><order>${item.page.order}</order></meta>"
-                                        metadata.importXMPMetadata(strMetadata.toByteArray(Charset.defaultCharset()))
-
-                                        if (internalPagesMap.entries.count { entry -> item.page.order > entry.key } > 0)
-                                            pdfDocument.pages.insertAfter(pdfPage, internalPagesMap.entries.last { entry -> item.page.order > entry.key }.value)
-                                        else {
-                                            val opNearestBefore = internalPagesMap.entries.stream()
-                                                    .filter { entry -> item.page.order < entry.key }.findFirst()
-                                            if (opNearestBefore.isPresent)
-                                                pdfDocument.pages.insertBefore(pdfPage, opNearestBefore.get().value)
-                                            else
-                                                pdfDocument.addPage(pdfPage)
-                                        }
-
-                                        internalPagesMap[item.page.order] = pdfPage
-
-                                        val img = PDImageXObject.createFromFileByExtension(item.asFile(), pdfDocument)
-                                        PDPageContentStream(pdfDocument, pdfPage).use { contentStream -> contentStream.drawImage(img, 0.toFloat(), 0.toFloat()) }
-                                    }
-                                } else {
+                                if (null == bimg) {
                                     item.delete()
                                     logger.severe("Image ${item.asFile().toPath().fileName} was deleted!")
+                                } else {
+                                    val width = bimg.width.toFloat()
+                                    val height = bimg.height.toFloat()
+
+                                    val page = COSDictionary()
+                                    page.setItem(COSName.TYPE, COSName.PAGE)
+                                    page.setItem(COSName.MEDIA_BOX, PDRectangle(width, height))
+
+                                    val pdfPage = PDPage(page)
+                                    var metadata = pdfPage.metadata
+                                    if (metadata == null) {
+                                        metadata = PDMetadata(pdfDocument)
+                                        pdfPage.metadata = metadata
+                                    }
+
+                                    val strMetadata = "<meta><pid>${item.page.pid}</pid><order>${item.page.order}</order></meta>"
+                                    metadata.importXMPMetadata(strMetadata.toByteArray(Charset.defaultCharset()))
+
+                                    if (internalPagesMap.entries.count { entry -> item.page.order > entry.key } > 0)
+                                        pdfDocument.pages.insertAfter(pdfPage, internalPagesMap.entries.last { entry -> item.page.order > entry.key }.value)
+                                    else {
+                                        val opNearestBefore = internalPagesMap.entries.stream()
+                                            .filter { entry -> item.page.order < entry.key }.findFirst()
+                                        if (opNearestBefore.isPresent)
+                                            pdfDocument.pages.insertBefore(pdfPage, opNearestBefore.get().value)
+                                        else
+                                            pdfDocument.addPage(pdfPage)
+                                    }
+
+                                    internalPagesMap.put(item.page.order, pdfPage)
+
+                                    val img = PDImageXObject.createFromFileByExtension(item.asFile(), pdfDocument)
+                                    PDPageContentStream(pdfDocument, pdfPage).use { contentStream -> contentStream.drawImage(img, 0.toFloat(), 0.toFloat()) }
                                 }
-                            }
-                        } catch (fse: FileSystemException) {
-                            fse.printStackTrace()
-                        } catch (e: IOException) {
-                            try {
+                            } else {
                                 item.delete()
                                 logger.severe("Image ${item.asFile().toPath().fileName} was deleted!")
-                            } catch (ioe: IOException) {
-                                ioe.printStackTrace()
                             }
-
                         }
+                    } catch (fse: FileSystemException) {
+                        fse.printStackTrace()
+                    } catch (e: IOException) {
+                        try {
+                            item.delete()
+                            logger.severe("Image ${item.asFile().toPath().fileName} was deleted!")
+                        } catch (ioe: IOException) {
+                            ioe.printStackTrace()
+                        }
+
                     }
+                }
 
             pdfDocument.save(pdfFile)
         }

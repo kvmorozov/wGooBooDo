@@ -14,10 +14,10 @@ import ru.kmorozov.gbd.core.logic.model.book.base.IPage
  */
 class ShplBookInfoExtractor(bookId: String) : AbstractBookInfoExtractor(bookId) {
 
-    protected override val bookUrl: String
+    override val bookUrl: String
         get() = bookId
 
-    protected override fun extractBookInfo(doc: Document?): BookInfo {
+    override fun extractBookInfo(doc: Document?): BookInfo {
         if (null == doc) return BookInfo.EMPTY_BOOK
 
         val bookData = ShplBookData(doc.select("title")[0].text().replace("|", ""))
@@ -29,7 +29,7 @@ class ShplBookInfoExtractor(bookId: String) : AbstractBookInfoExtractor(bookId) 
             if (null != childs && !childs.isEmpty()) {
                 val data = childs[0].toString()
 
-                if (data.isEmpty()) continue
+                if (data.isEmpty) continue
 
                 if (data.contains(JSON_TAG_PAGES)) {
                     val pagesData = '['.toString() + data.split("[")[2].split("]")[0] + ']'.toString()

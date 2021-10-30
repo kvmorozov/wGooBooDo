@@ -5,6 +5,4 @@ import org.springframework.stereotype.Component
 
 @Component
 @Qualifier("inMemory")
-class InMemoryOptions : AbstractServerGBDOptions() {
-
-}
+class InMemoryOptions : AbstractServerGBDOptions()

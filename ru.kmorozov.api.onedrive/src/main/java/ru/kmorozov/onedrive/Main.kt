@@ -62,7 +62,7 @@ object Main {
         }
 
         if (CommandLineOpts.commandLineOpts.version()) {
-            val version = CommandLineOpts.commandLineOpts.javaClass.getPackage().getImplementationVersion()
+            val version = CommandLineOpts.commandLineOpts.javaClass.getPackage().implementationVersion
             log.info("onedrive-java-client version " + if (null != version) version else "DEVELOPMENT")
             return
         }
@@ -144,7 +144,7 @@ object Main {
         // Check the target folder
         val localFolder = File(CommandLineOpts.commandLineOpts.localPath!!)
 
-        if (!localFolder.exists() || !localFolder.isDirectory()) {
+        if (!localFolder.exists() || !localFolder.isDirectory) {
             log.error("Specified local path '${CommandLineOpts.commandLineOpts.localPath}' is not a valid folder")
             return
         }

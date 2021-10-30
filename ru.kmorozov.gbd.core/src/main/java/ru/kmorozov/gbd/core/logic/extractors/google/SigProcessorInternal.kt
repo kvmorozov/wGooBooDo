@@ -85,7 +85,7 @@ class SigProcessorInternal : AbstractHttpProcessor, IUniqueReusable<GooglePageIn
                     .forEach { framePage ->
                         val _page = bookContext.bookInfo.pages.getPageByPid(framePage.pid) as GooglePageInfo
 
-                        if (_page.isDataProcessed) return@forEach;
+                        if (_page.isDataProcessed) return@forEach
 
                         val _frameSrc = (framePage as GooglePageInfo).src
                         if (!Strings.isNullOrEmpty(_frameSrc))

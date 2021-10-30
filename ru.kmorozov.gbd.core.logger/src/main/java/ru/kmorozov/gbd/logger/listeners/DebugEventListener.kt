@@ -19,6 +19,6 @@ class DebugEventListener : IEventListener {
 
     init {
         dbgOutput = createTempFile("dbg", ".log")
-        DefaultReceiver.INSTANCE.consumeEvent(LogEvent(Level.INFO, "Created debug file ${dbgOutput.toString()}"))
+        DefaultReceiver.INSTANCE.consumeEvent(LogEvent(Level.INFO, "Created debug file $dbgOutput"))
     }
 }

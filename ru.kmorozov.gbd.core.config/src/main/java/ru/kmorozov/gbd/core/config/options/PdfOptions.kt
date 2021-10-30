@@ -1,6 +1,6 @@
 package ru.kmorozov.gbd.core.config.options
 
-enum class PdfOptions private constructor(private val pdfMode: String) {
+enum class PdfOptions(private val pdfMode: String) {
     CREATE("PDF_CREATE"),
     CREATE_ONLY("PDF_CREATE_ONLY"),
     SKIP("PDF_SKIP");

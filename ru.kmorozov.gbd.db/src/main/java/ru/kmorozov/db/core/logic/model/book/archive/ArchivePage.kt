@@ -17,5 +17,5 @@ class ArchivePage(private val bookId: String, override var order: Int, val itemP
                 .replace(PID_PLACEHOLDER, pid)
 
     override val pid: String
-        get() = String.format("%04d", order);
+        get() = String.format("%04d", order)
 }

@@ -45,7 +45,7 @@ open class LocalFSStorage : IStorage {
 
             Files.walk(Paths.get(storageDir.toURI())).forEach { filePath ->
                 if (filePath.toFile().isDirectory) {
-                    val nameParts = filePath.toFile().name.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                    val nameParts = filePath.toFile().name.split(" ".toRegex()).dropLastWhile { it.isEmpty }.toTypedArray()
                     if (LibraryFactory.isValidId(nameParts[nameParts.size - 1]))
                         bookIdsList.add(nameParts[nameParts.size - 1])
                 }
@@ -64,10 +64,10 @@ open class LocalFSStorage : IStorage {
                     .filter { !it.toFile().isDirectory && Images.isImageFile(it) }
                     .map { MayBePageItem(it.toFile()) }
                     .sorted { o1, o2 -> o1.pageNum.compareTo(o2.pageNum) }
-                    .collect(Collectors.toSet());
+                    .collect(Collectors.toSet())
         }
 
-        return detectedItems;
+        return detectedItems
     }
 
     override fun getChildStorage(bookData: IBookData): IStorage {
@@ -213,12 +213,12 @@ open class LocalFSStorage : IStorage {
     fun getOrCreatePdf(title: String): File {
         val pdfFiles = Files.list(storageDir.toPath()).filter(Predicate<Path> { filePath -> Images.isPdfFile(filePath) }).collect(Collectors.toList())
         if (1 == pdfFiles.size)
-            return pdfFiles[0].toFile();
+            return pdfFiles[0].toFile()
         else {
-            val pdfFile = File(storageDir.path + File.separator + title.replace("[^А-Яа-яa-zA-Z0-9-]".toRegex(), " ") + ".pdf");
-            pdfFile.createNewFile();
+            val pdfFile = File(storageDir.path + File.separator + title.replace("[^А-Яа-яa-zA-Z0-9-]".toRegex(), " ") + ".pdf")
+            pdfFile.createNewFile()
 
-            return pdfFile;
+            return pdfFile
         }
     }
 

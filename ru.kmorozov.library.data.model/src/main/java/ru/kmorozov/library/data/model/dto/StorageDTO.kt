@@ -16,10 +16,10 @@ class StorageDTO {
     var parentId: String? = null
     var filesCount: Long = 0
     var lastChecked: Long = 0
-    public var categories: Set<Category>? = null
+    var categories: Set<Category>? = null
         private set
 
-    constructor() {}
+    constructor()
 
     @JvmOverloads
     constructor(storage: Storage, withCategories: Boolean = false) {

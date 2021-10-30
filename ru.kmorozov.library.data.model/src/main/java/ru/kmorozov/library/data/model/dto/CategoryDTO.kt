@@ -10,7 +10,7 @@ class CategoryDTO {
     lateinit var id: String
     lateinit var name: String
 
-    constructor() {}
+    constructor()
 
     constructor(category: Category) {
         this.id = category.id

@@ -15,7 +15,7 @@ class DuplicatedBookDTO {
 
     private var format: String = "unknown"
 
-    constructor() {}
+    constructor()
 
     constructor(duplicatedBook: BooksBySize) {
         this.count = duplicatedBook.count

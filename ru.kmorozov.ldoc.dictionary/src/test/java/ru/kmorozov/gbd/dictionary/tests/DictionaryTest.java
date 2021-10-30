@@ -13,14 +13,14 @@ public class DictionaryTest {
 
     @Test
     public void loadBookTest() {
-        var gbd = new GbdDictionary();
+        final var gbd = new GbdDictionary();
 
-        var folder = mock(Folder.class);
+        final var folder = mock(Folder.class);
         when(folder.getName()).thenReturn("A Companion to Anglican Eucharistic Theology YjY2q6aLaMEC");
-        var document = mock(Document.class);
+        final var document = mock(Document.class);
         when(document.getFolder()).thenReturn(folder);
 
-        var bookInfo = gbd.getBookInfo(document);
+        final var bookInfo = gbd.getBookInfo(document);
         assertNotNull(bookInfo);
     }
 }

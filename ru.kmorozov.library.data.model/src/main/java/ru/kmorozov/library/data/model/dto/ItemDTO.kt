@@ -33,7 +33,7 @@ class ItemDTO : RepresentationModel<ItemDTO> {
         updated
     }
 
-    constructor() {}
+    constructor()
 
     constructor(storageDTO: StorageDTO) {
         this.itemId = storageDTO.id

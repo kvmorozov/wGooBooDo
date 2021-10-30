@@ -112,11 +112,11 @@ abstract class AbstractProxyListProvider : IProxyListProvider {
         return !ProxyBlacklistHolder.BLACKLIST.isProxyInBlacklist(proxyStr)
     }
 
-    public fun reset() {
+    fun reset() {
         proxyList.removeIf { !it.isAvailable }
     }
 
-    public abstract fun findCandidates()
+    abstract fun findCandidates()
 
     companion object {
 
@@ -139,7 +139,7 @@ abstract class AbstractProxyListProvider : IProxyListProvider {
         }
 
         private fun splitItems(proxyItem: String, delimiter: String): Array<String> {
-            return proxyItem.split(delimiter.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+            return proxyItem.split(delimiter.toRegex()).dropLastWhile { it.isEmpty }.toTypedArray()
         }
     }
 }

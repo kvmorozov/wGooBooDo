@@ -35,7 +35,7 @@ open class BookInfo : Serializable, ILoggableObject, IBookInfo {
     override val empty: Boolean
         get() = this == EMPTY_BOOK
 
-    public val locked: Boolean
+    val locked: Boolean
         get() = pages.pages.map { it.isLoadingStarted }.contains(true)
 
     companion object {

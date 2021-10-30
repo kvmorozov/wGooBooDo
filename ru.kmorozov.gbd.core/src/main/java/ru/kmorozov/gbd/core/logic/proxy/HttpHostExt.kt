@@ -25,7 +25,7 @@ open class HttpHostExt {
 
     var host: InetSocketAddress
         private set
-    public var proxy: Proxy
+    var proxy: Proxy
         private set
 
     var cookie: String? = null
@@ -178,7 +178,7 @@ open class HttpHostExt {
         lastUsedTimestamp = System.currentTimeMillis()
     }
 
-    open public fun reset() {
+    open fun reset() {
         headers = HttpConnections.getHeaders(this)
         cookie = null
     }
@@ -197,7 +197,7 @@ open class HttpHostExt {
 
         fun getProxyFromString(proxyStr: String): HttpHostExt {
             try {
-                val proxyVars = proxyStr.split("[;:]".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                val proxyVars = proxyStr.split("[;:]".toRegex()).dropLastWhile { it.isEmpty }.toTypedArray()
                 return HttpHostExt(InetSocketAddress.createUnresolved(proxyVars[0], Integer.parseInt(proxyVars[1])), Integer.parseInt(proxyVars[2]))
             } catch (ex: Exception) {
                 logger.error("Failed load proxyStr ${proxyStr}")

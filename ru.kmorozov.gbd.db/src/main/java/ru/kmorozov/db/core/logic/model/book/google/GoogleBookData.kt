@@ -62,11 +62,11 @@ class GoogleBookData : IBookData, Serializable {
     @Expose @SerializedName("num_reviews")
     private val numReviews: Int = 0
     @Expose @SerializedName("publisher")
-    public val publisher: String? = null
+    val publisher: String? = null
     @Expose @SerializedName("publication_date")
-    public val publicationDate: String? = null
+    val publicationDate: String? = null
     @Expose @SerializedName("num_pages")
-    public val numPages: Int = 0
+    val numPages: Int = 0
     @Expose @SerializedName("sample_url")
     private val sampleUrl: String? = null
     @Expose @SerializedName("synposis")

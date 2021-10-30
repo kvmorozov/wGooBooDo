@@ -56,14 +56,14 @@ class GoogleImageExtractor(bookContext: BookContext) : AbstractImageExtractor<Go
         waitingProxy.forEach(Consumer<HttpHostExt> { this.newProxyEvent(it) })
     }
 
-    protected override fun processProxyEvent(proxy: HttpHostExt) {
+    override fun processProxyEvent(proxy: HttpHostExt) {
         while (!initComplete.get()) {
             waitingProxy.add(proxy)
             return
         }
 
         if (GBDOptions.debugEnabled)
-            logger.info("Received proxy event for ${proxy.toString()}")
+            logger.info("Received proxy event for $proxy")
 
         if (proxy.isAvailable) uniqueObject.sigExecutor.execute(GooglePageSigProcessor(uniqueObject, proxy))
 

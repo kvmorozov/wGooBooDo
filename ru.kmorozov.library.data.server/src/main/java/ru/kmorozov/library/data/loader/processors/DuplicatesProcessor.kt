@@ -62,7 +62,7 @@ open class DuplicatesProcessor : IProcessor {
                     val books = duplicate.getBookIds()!!
                             .stream()
                             .map { id -> booksRepository.findById(id) }
-                            .filter { it.isPresent() }
+                            .filter { it.isPresent }
                             .map<Book> { it.get() }
                             .collect(Collectors.toList())
 

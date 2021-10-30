@@ -33,15 +33,15 @@ class ShplPage : AbstractPage {
     @SerializedName("downloadUrl")
     private val downloadUrl: String? = null
 
-    public override var order: Int = 0
+    override var order: Int = 0
 
-    constructor() {}
+    constructor()
 
     constructor(order: Int) {
         this.order = order
     }
 
     companion object {
-        public val EMPTY_SHPL_PAGE: ShplPage = ShplPage()
+        val EMPTY_SHPL_PAGE: ShplPage = ShplPage()
     }
 }

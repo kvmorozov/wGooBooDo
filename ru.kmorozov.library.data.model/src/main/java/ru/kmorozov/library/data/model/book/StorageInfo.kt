@@ -12,7 +12,7 @@ class StorageInfo {
     var filesCount: Long = 0
     var lastChecked: Long = 0
 
-    constructor() {}
+    constructor()
 
     constructor(filesCount: Long) {
         this.filesCount = filesCount

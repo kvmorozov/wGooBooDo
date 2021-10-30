@@ -11,7 +11,7 @@ import ru.kmorozov.gbd.core.logic.model.book.base.IPage
 class ShplPagesInfo(pages: Array<IPage>) : AbstractPagesInfo() {
 
     @field:SerializedName("page")
-    public override val pages = pages
+    override val pages = pages
 
     override fun getPageByPid(pid: String): IPage {
         return EMPTY_SHPL_PAGE

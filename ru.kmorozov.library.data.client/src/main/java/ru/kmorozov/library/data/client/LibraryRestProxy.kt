@@ -129,7 +129,7 @@ class LibraryRestProxy(private val template: RestTemplate) : IDataRestServer {
 
         val uri = builder.build().toString()
 
-        return Arrays.stream(template.getForEntity(uri, arrClass).getBody()).collect(Collectors.toList())
+        return Arrays.stream(template.getForEntity(uri, arrClass).body).collect(Collectors.toList())
     }
 
     @RequestMapping("/findDuplicates")

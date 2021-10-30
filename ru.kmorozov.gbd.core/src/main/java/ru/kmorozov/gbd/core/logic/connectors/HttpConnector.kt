@@ -94,8 +94,8 @@ abstract class HttpConnector : AutoCloseable {
 
         const val CONNECT_TIMEOUT = 30000
         private val logger = Logger.getLogger(HttpConnector::class.java)
-        public const val MAX_RETRY_COUNT = 5
-        public const val SLEEP_TIME = 500
+        const val MAX_RETRY_COUNT = 5
+        const val SLEEP_TIME = 500
 
         private val parser = Parser.htmlParser()
     }

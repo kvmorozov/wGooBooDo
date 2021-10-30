@@ -24,7 +24,7 @@ class FileBasedIndex : LocalFSIndex {
         }
     }
 
-    protected override fun getOrLoadBooks(): List<IBookInfo> {
+    override fun getOrLoadBooks(): List<IBookInfo> {
         if (!loaded) {
             lateinit var ctxObjArr: Array<BookInfo>
             try {

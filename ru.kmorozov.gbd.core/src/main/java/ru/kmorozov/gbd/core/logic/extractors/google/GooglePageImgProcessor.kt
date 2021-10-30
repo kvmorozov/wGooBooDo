@@ -16,7 +16,7 @@ class GooglePageImgProcessor(bookContext: BookContext, page: GooglePageInfo, use
 
     private val urlBuilder: GoogleUrlBuilder
 
-    protected override val successMsg: String
+    override val successMsg: String
         get() = "Finished img processing for ${uniqueObject.pid}${if (uniqueObject.isGapPage) " with gap" else ""}"
 
     init {

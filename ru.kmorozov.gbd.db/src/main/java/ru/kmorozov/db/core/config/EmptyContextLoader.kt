@@ -2,7 +2,7 @@ package ru.kmorozov.db.core.config
 
 import ru.kmorozov.db.core.logic.model.book.BookInfo
 
-class EmptyContextLoader() : IContextLoader {
+class EmptyContextLoader : IContextLoader {
     override val empty: Boolean
         get() = true
 

@@ -33,20 +33,20 @@ public class GbdDictionary {
     private final Template bookTemplate;
 
     public GbdDictionary() {
-        GBDOptions.INSTANCE.init(options);
+        GBDOptions.INSTANCE.init(this.options);
 
-        folderDao = (FolderDAO) Context.get().getBean(FolderDAO.class);
-        documentDao = (DocumentDAO) Context.get().getBean(DocumentDAO.class);
-        userDao = (UserDAO) Context.get().getBean(UserDAO.class);
-        templateDao = (TemplateDAO) Context.get().getBean(TemplateDAO.class);
+        this.folderDao = (FolderDAO) Context.get().getBean(FolderDAO.class);
+        this.documentDao = (DocumentDAO) Context.get().getBean(DocumentDAO.class);
+        this.userDao = (UserDAO) Context.get().getBean(UserDAO.class);
+        this.templateDao = (TemplateDAO) Context.get().getBean(TemplateDAO.class);
 
-        adminUser = userDao.findByUsernameIgnoreCase("admin");
-        bookTemplate = templateDao.findByName("book", adminUser.getTenantId());
+        this.adminUser = this.userDao.findByUsernameIgnoreCase("admin");
+        this.bookTemplate = this.templateDao.findByName("book", this.adminUser.getTenantId());
     }
 
-    public BookInfo getBookInfo(Document document) {
-        var folderNameParts = document.getFolder().getName().split(" ");
-        var bookId = folderNameParts[folderNameParts.length - 1];
+    public BookInfo getBookInfo(final Document document) {
+        final var folderNameParts = document.getFolder().getName().split(" ");
+        final var bookId = folderNameParts[folderNameParts.length - 1];
         if (LibraryFactory.INSTANCE.isValidId(bookId))
             return LibraryFactory.INSTANCE.getMetadata(bookId)
                     .getBookInfoExtractor(bookId, EmptyContextLoader.Companion.getEMPTY_CONTEXT_LOADER()).getBookInfo();
@@ -54,44 +54,44 @@ public class GbdDictionary {
             return BookInfo.Companion.getEMPTY_BOOK();
     }
 
-    public void setDocumentInfo(Document document) {
-        var bookInfo = getBookInfo(document);
+    public void setDocumentInfo(final Document document) {
+        final var bookInfo = this.getBookInfo(document);
         if (bookInfo.getEmpty())
             return;
 
-        document.setTemplate(bookTemplate);
-        document.setTemplateId(bookTemplate.getId());
+        document.setTemplate(this.bookTemplate);
+        document.setTemplateId(this.bookTemplate.getId());
 
-        templateDao.initialize(bookTemplate);
-        documentDao.initialize(document);
+        this.templateDao.initialize(this.bookTemplate);
+        this.documentDao.initialize(document);
 
-        for (var attribute : bookTemplate.getAttributes().entrySet())
+        for (final var attribute : this.bookTemplate.getAttributes().entrySet())
             document.getAttributes().put(attribute.getKey(), attribute.getValue());
 
-        docTool.store(document);
+        this.docTool.store(document);
 
         document.setValue("bookId", bookInfo.getBookId());
         document.setValue("title", bookInfo.getBookData().getTitle());
 
         if (bookInfo.getBookData() instanceof GoogleBookData) {
-            var gBookData = (GoogleBookData) bookInfo.getBookData();
+            final var gBookData = (GoogleBookData) bookInfo.getBookData();
             document.setValue("publisherName", gBookData.getPublisher());
             document.setValue("publicationDate", gBookData.getPublicationDate());
             document.setValue("numPages", gBookData.getNumPages());
             document.setValue("bookType", "Google");
         }
 
-        docTool.store(document);
+        this.docTool.store(document);
     }
 
-    public void setFolderInfo(Folder folder) {
-        var documents = documentDao.findByFolder(folder.getId(), 0);
-        for (var document : documents)
-            setDocumentInfo(document);
+    public void setFolderInfo(final Folder folder) {
+        final var documents = this.documentDao.findByFolder(folder.getId(), 0);
+        for (final var document : documents)
+            this.setDocumentInfo(document);
 
-        var children = folderDao.findChildren(folder.getId(), adminUser.getId());
-        for (var child : children)
-            setFolderInfo(child);
+        final var children = this.folderDao.findChildren(folder.getId(), this.adminUser.getId());
+        for (final var child : children)
+            this.setFolderInfo(child);
     }
 
 }

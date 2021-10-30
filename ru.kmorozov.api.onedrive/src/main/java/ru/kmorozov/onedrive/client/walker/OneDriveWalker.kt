@@ -125,26 +125,26 @@ class OneDriveWalker internal constructor(private val api: OneDriveProvider, pri
         ENTRY
     }
 
-    private inner class DirectoryNode internal constructor(private val item: OneDriveItem, private val key: Any, private val stream: Stream<OneDriveItem>) {
+    private inner class DirectoryNode(private val item: OneDriveItem, private val key: Any, private val stream: Stream<OneDriveItem>) {
         private val iterator: Iterator<OneDriveItem>
 
         init {
             this.iterator = stream.iterator()
         }
 
-        internal fun item(): OneDriveItem {
+        fun item(): OneDriveItem {
             return this.item
         }
 
-        internal fun stream(): BaseStream<*, *> {
+        fun stream(): BaseStream<*, *> {
             return this.stream
         }
 
-        internal operator fun iterator(): Iterator<OneDriveItem> {
+        operator fun iterator(): Iterator<OneDriveItem> {
             return this.iterator
         }
 
-        internal fun skipped(): Boolean {
+        fun skipped(): Boolean {
             return skipCondition.invoke(item)
         }
     }

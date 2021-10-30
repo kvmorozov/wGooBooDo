@@ -18,7 +18,7 @@ class SwingOutputReceiver(form: MainBookForm) : AbstractOutputReceiver() {
 
     override fun receive(bookInfo: ILoggableObject) {
         if (!SwingUtilities.isEventDispatchThread()) {
-            SwingUtilities.invokeLater { MainBookForm.instance.tfBookTitle!!.setText(bookInfo.description) }
+            SwingUtilities.invokeLater { MainBookForm.instance.tfBookTitle!!.text = bookInfo.description }
         }
     }
 }

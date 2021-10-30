@@ -74,7 +74,7 @@ class GoogleHttpConnector : HttpConnector() {
 
         try {
             val res = GoogleResponse(req.execute())
-            return res;
+            return res
         } catch (ste1: SocketTimeoutException) {
             proxy.registerFailure()
             return getContent(req, proxy, attempt + 1)

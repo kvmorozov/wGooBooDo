@@ -7,7 +7,7 @@ import ru.kmorozov.gbd.logger.events.LogEvent
  */
 abstract class AbstractLogEventListener : IEventListener {
 
-    open override fun eventMatched(event: LogEvent): Boolean {
+    override fun eventMatched(event: LogEvent): Boolean {
         return true
     }
 }

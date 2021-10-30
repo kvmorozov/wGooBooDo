@@ -95,7 +95,7 @@ open class AbstractHttpProcessor {
     companion object {
         private val logger = Logger.getLogger(AbstractHttpProcessor::class.java)
 
-        public val connectors: List<HttpConnector>
+        val connectors: List<HttpConnector>
             get() = ExecutionContext.INSTANCE.defaultMetadata.preferredConnectors()
 
         fun close() {

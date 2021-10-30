@@ -27,7 +27,7 @@ class ServerStorage(private val api: OneDriveProvider, private val root: OneDriv
 
             for (child in getChildren())
                 if (child.isDirectory) {
-                    val nameParts = child.name.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                    val nameParts = child.name.split(" ".toRegex()).dropLastWhile { it.isEmpty }.toTypedArray()
                     if (LibraryFactory.isValidId(nameParts[nameParts.size - 1]))
                         bookIdsList.add(nameParts[nameParts.size - 1])
                 }

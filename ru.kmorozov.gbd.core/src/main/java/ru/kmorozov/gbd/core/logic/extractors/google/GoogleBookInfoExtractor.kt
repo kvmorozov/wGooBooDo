@@ -19,17 +19,17 @@ import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookInfoExtractor
  */
 open class GoogleBookInfoExtractor : AbstractBookInfoExtractor {
 
-    protected override val bookUrl: String
+    override val bookUrl: String
         get() = HTTPS_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, bookId) + OPEN_PAGE_ADD_URL
 
-    protected override val reserveBookUrl: String
+    override val reserveBookUrl: String
         get() = HTTP_TEMPLATE.replace(BOOK_ID_PLACEHOLDER, bookId) + OPEN_PAGE_ADD_URL
 
-    constructor(bookId: String) : super(bookId, ContextProvider.contextProvider) {}
+    constructor(bookId: String) : super(bookId, ContextProvider.contextProvider)
 
-    constructor(bookId: String, storedLoader: IContextLoader) : super(bookId, storedLoader) {}
+    constructor(bookId: String, storedLoader: IContextLoader) : super(bookId, storedLoader)
 
-    protected override fun extractBookInfo(doc: Document?): BookInfo {
+    override fun extractBookInfo(doc: Document?): BookInfo {
         if (null == doc) return EMPTY_BOOK
 
         val scripts = doc.select("script")
@@ -38,7 +38,7 @@ open class GoogleBookInfoExtractor : AbstractBookInfoExtractor {
             if (null != childs && !childs.isEmpty() && childs[0] is DataNode) {
                 val data = (childs[0] as DataNode).wholeData
 
-                if (null == data || data.isEmpty()) continue
+                if (null == data || data.isEmpty) continue
 
                 if (data.startsWith(ADD_FLAGS_ATTRIBUTE) && 0 < data.indexOf(OC_RUN_ATTRIBUTE)) {
                     val jsonStart = data.indexOf(OC_RUN_ATTRIBUTE) + OC_RUN_ATTRIBUTE.length + 1

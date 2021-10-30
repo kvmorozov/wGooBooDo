@@ -15,14 +15,14 @@ open class RawFileItem : IStoredItem {
         this.createdNew = !outputFile.exists()
     }
 
-    constructor(path: Path) : this(path.toFile()) {}
+    constructor(path: Path) : this(path.toFile())
 
     override lateinit var outputStream: OutputStream
 
     var totalLen = 0L
 
     override val pageNum: Int
-        get() = Integer.parseInt(outputFile.toPath().fileName.toString().split("_".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0])
+        get() = Integer.parseInt(outputFile.toPath().fileName.toString().split("_".toRegex()).dropLastWhile { it.isEmpty }.toTypedArray()[0])
 
     @Throws(IOException::class)
     override fun exists(): Boolean {
@@ -33,7 +33,7 @@ open class RawFileItem : IStoredItem {
     override fun delete() {
         try {
             if (totalLen > 0) {
-                totalLen = 0;
+                totalLen = 0
             }
 
             outputFile.delete()

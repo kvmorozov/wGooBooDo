@@ -16,7 +16,7 @@ import kotlin.system.exitProcess
 
 class ArchiveApacheConnections : SimpleApacheConnections() {
 
-    protected override fun getCookieStore(proxy: HttpHostExt): CookieStore {
+    override fun getCookieStore(proxy: HttpHostExt): CookieStore {
         val cookieStore = BasicCookieStore()
 
         try {
@@ -30,7 +30,7 @@ class ArchiveApacheConnections : SimpleApacheConnections() {
             loginParams.add(BasicNameValuePair("action", "login"))
             loginParams.add(BasicNameValuePair("submit", "Log in"))
 
-            loginRq.setEntity(UrlEncodedFormEntity(loginParams))
+            loginRq.entity = UrlEncodedFormEntity(loginParams)
 
             loginRq.addHeader(BasicHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8"))
             loginRq.addHeader(BasicHeader("Accept-Encoding", "gzip, deflate, br"))
@@ -55,7 +55,7 @@ class ArchiveApacheConnections : SimpleApacheConnections() {
             val loanParams: MutableList<BasicNameValuePair> = ArrayList<BasicNameValuePair>()
             loanParams.add(BasicNameValuePair("action", "create_token"))
             loanParams.add(BasicNameValuePair("identifier", GBDOptions.bookId))
-            loanRq.setEntity(UrlEncodedFormEntity(loanParams))
+            loanRq.entity = UrlEncodedFormEntity(loanParams)
 
             val loanRs = builder.setDefaultCookieStore(cookieStore).setDefaultHeaders(loginRq.allHeaders.asList()).build().execute(loanRq)
             val loanJson: Map<String, String> = Mapper.gson.fromJson(String(loanRs.entity.content.readAllBytes()), Mapper.mapType)

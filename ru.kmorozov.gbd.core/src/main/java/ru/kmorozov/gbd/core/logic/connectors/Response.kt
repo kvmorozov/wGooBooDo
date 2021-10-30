@@ -24,7 +24,7 @@ interface Response : Closeable {
             override val statusCode: Int
                 get() = 200
             override val content: InputStream
-                get() = System.`in`;
+                get() = System.`in`
             override val imageFormat: String
                 get() = "unknown"
             override val headers: String

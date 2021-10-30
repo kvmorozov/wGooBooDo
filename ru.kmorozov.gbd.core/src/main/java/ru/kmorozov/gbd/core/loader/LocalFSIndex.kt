@@ -28,7 +28,7 @@ open class LocalFSIndex : IIndex {
     override val bookIdsList: Set<String>
         get() = if (loaded) booksMap.keys else getOrLoadBooks().map { it.bookId }.toSet()
 
-    open protected fun getOrLoadBooks(): List<IBookInfo> {
+    protected open fun getOrLoadBooks(): List<IBookInfo> {
         if (!loaded) {
             booksMap = getFromStorage().associateBy { it.bookId }.toMutableMap()
 

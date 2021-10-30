@@ -3,7 +3,6 @@ package ru.kmorozov.gbd.utils
 import com.google.common.io.MoreFiles
 import net.sourceforge.tess4j.Tesseract
 import ru.kmorozov.gbd.core.config.GBDOptions
-import ru.kmorozov.gbd.core.logic.connectors.Response
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
 import java.io.File
 import java.io.IOException
@@ -75,12 +74,12 @@ object Images {
     }
 
     @Synchronized
-    public fun doOCR(imgfile: File): String {
+    fun doOCR(imgfile: File): String {
         if (!GBDOptions.scanEnabled || !ocrInitialized)
             return ""
 
         try {
-            return ocr.doOCR(imgfile);
+            return ocr.doOCR(imgfile)
         } catch (ex: Exception) {
             logger.error(ex.localizedMessage)
             return ""

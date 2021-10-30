@@ -7,6 +7,6 @@ import ru.kmorozov.gbd.core.logic.proxy.providers.IProxyListProvider
 @Component
 class ServerState {
 
-    public val proxyState: IProxyListProvider
+    val proxyState: IProxyListProvider
         get() = AbstractProxyListProvider.INSTANCE
 }

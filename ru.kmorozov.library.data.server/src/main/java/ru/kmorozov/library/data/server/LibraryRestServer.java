@@ -12,7 +12,7 @@ import ru.kmorozov.library.data.server.scheduler.ProxyUpdater;
         LibraryRestController.class, ProxyUpdater.class})
 public class LibraryRestServer {
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         SpringApplication.run(LibraryRestServer.class, args);
     }
 }

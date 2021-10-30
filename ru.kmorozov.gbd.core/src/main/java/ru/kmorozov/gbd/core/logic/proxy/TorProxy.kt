@@ -17,13 +17,13 @@ class TorProxy : StableProxy {
         if (GBDOptions.proxyListFile.equals("tor", ignoreCase = true)) {
             telnetClient.connect(TOR_HOST, TOR_CONTROL_PORT)
 
-            telnetClient.getOutputStream().write("AUTHENTICATE \"tor_gbd_password\"\r\n".toByteArray())
-            telnetClient.getOutputStream().flush()
+            telnetClient.outputStream.write("AUTHENTICATE \"tor_gbd_password\"\r\n".toByteArray())
+            telnetClient.outputStream.flush()
             telnetClient.inputStream.read(readBytes)
             logger.info("Tor authentication result: " + String(readBytes))
 
-            telnetClient.getOutputStream().write("SETEVENTS SIGNAL\r\n".toByteArray())
-            telnetClient.getOutputStream().flush()
+            telnetClient.outputStream.write("SETEVENTS SIGNAL\r\n".toByteArray())
+            telnetClient.outputStream.flush()
             telnetClient.inputStream.read(readBytes)
             logger.info("Tor SETEVENTS SIGNAL result: " + String(readBytes))
         }
@@ -36,8 +36,8 @@ class TorProxy : StableProxy {
         synchronized(this) {
             super.reset()
 
-            telnetClient.getOutputStream().write("SIGNAL NEWNYM\r\n".toByteArray())
-            telnetClient.getOutputStream().flush()
+            telnetClient.outputStream.write("SIGNAL NEWNYM\r\n".toByteArray())
+            telnetClient.outputStream.flush()
 
             do {
                 telnetClient.inputStream.read(readBytes)
@@ -58,7 +58,7 @@ class TorProxy : StableProxy {
             get() = internalMap.getOrPut(1, ::TorProxy)
 
         val TOR_HOST = "localhost"
-        public val TOR_HTTP_PORT = 9150
+        val TOR_HTTP_PORT = 9150
         val TOR_CONTROL_PORT = 9151
 
         private val RESET_MIN_DELAY = 10_000L

@@ -30,7 +30,7 @@ class BookInfo {
     internal val isLink: Boolean
         get() = BookFormat.LNK == format
 
-    enum class BookFormat private constructor(val ext: String) {
+    enum class BookFormat(val ext: String) {
         PDF("pdf"),
         DJVU("djvu"),
         DOC("doc"),

@@ -18,7 +18,7 @@ class BookDTO {
     lateinit var size: String
     var isLoaded: Boolean = false
 
-    constructor() {}
+    constructor()
 
     constructor(book: Book, loaded: Boolean) {
         this.id = book.bookId

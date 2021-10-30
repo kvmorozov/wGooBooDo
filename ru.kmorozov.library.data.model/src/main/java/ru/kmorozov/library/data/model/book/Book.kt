@@ -42,7 +42,7 @@ class Book {
     val isBrokenLink: Boolean
         get() = this.bookInfo.isLink && (null == this.linkInfo || this.linkInfo!!.isBroken)
 
-    constructor() {}
+    constructor()
 
     fun getBookIds(): Map<IdType, String>? {
         return this.bookIds
