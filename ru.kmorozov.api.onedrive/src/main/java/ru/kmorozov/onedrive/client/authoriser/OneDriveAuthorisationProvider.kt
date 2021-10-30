@@ -90,7 +90,7 @@ constructor(keyFile: Path, private val clientId: String, private val clientSecre
     private fun getTokenFromCode(code: String) {
         log.debug("Fetching authorisation token using authorisation code")
 
-        val data = mapOf<String, String>(
+        val data = mapOf(
                 "client_id" to clientId,
                 "code" to code,
                 "client_secret" to clientSecret,
@@ -111,7 +111,7 @@ constructor(keyFile: Path, private val clientId: String, private val clientSecre
         if (Strings.isNullOrEmpty(refreshToken))
             throw InvalidCodeException(OneDriveErrorInfo())
 
-        val data = mapOf<String, String>(
+        val data = mapOf(
                 "client_id" to clientId,
                 "client_secret" to clientSecret,
                 "grant_type" to "refresh_token",
@@ -165,7 +165,7 @@ constructor(keyFile: Path, private val clientId: String, private val clientSecre
 
     companion object {
 
-        private val EMPTY_STR_ARR = arrayOf<String>("")
+        private val EMPTY_STR_ARR = arrayOf("")
 
         val HTTP_TRANSPORT: HttpTransport = NetHttpTransport()
         private val log = LogManager.getLogger(OneDriveAuthorisationProvider::class.java.name)

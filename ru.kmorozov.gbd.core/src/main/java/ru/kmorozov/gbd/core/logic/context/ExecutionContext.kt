@@ -96,7 +96,7 @@ class ExecutionContext private constructor(val isSingleMode: Boolean) {
             bookExecutor.terminate(10L, TimeUnit.MINUTES)
             pdfExecutor.terminate(30L, TimeUnit.MINUTES)
 
-            val totalProcessed = getContexts(false).stream().mapToLong(ToLongFunction<BookContext> { x -> (x as BookContext).pagesProcessed.get() }).sum()
+            val totalProcessed = getContexts(false).stream().mapToLong({ x -> (x as BookContext).pagesProcessed.get() }).sum()
             getLogger("Total").info("Total pages processed: $totalProcessed")
 
             val contextProvider = ContextProvider.contextProvider

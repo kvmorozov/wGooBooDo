@@ -22,7 +22,7 @@ import kotlin.collections.HashSet
 
 abstract class AbstractProxyListProvider : IProxyListProvider {
 
-    override val proxyList: LinkedBlockingQueue<HttpHostExt> = SetBlockingQueue<HttpHostExt>()
+    override val proxyList: LinkedBlockingQueue<HttpHostExt> = SetBlockingQueue()
     protected var proxyItems: MutableSet<Optional<InetSocketAddress>> = HashSet()
 
     init {

@@ -8,7 +8,7 @@ import ru.kmorozov.gbd.core.logic.library.LibraryFactory
 
 class ListBasedContextLoader(private val producer: IBookListProducer) : IContextLoader {
 
-    private val books: MutableMap<String, BookInfo> = HashMap<String, BookInfo>()
+    private val books: MutableMap<String, BookInfo> = HashMap()
 
     override val empty: Boolean
         get() = false

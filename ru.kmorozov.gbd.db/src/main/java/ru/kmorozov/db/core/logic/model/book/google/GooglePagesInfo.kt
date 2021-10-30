@@ -26,8 +26,8 @@ class GooglePagesInfo : AbstractPagesInfo(), Serializable {
 
     @Expose
     @SerializedName("page")
-    override var pages: Array<IPage> = arrayOf<IPage>()
-        set(pages: Array<IPage>) {
+    override var pages: Array<IPage> = arrayOf()
+        set(pages) {
             field = pages
             this.pagesMap = HashMap()
 
@@ -55,7 +55,7 @@ class GooglePagesInfo : AbstractPagesInfo(), Serializable {
         pagesMap = ConcurrentHashMap(_pages.size)
         pagesList = LinkedList()
 
-        _pages.sortWith(Comparator { obj, anotherPage -> obj.compareTo(anotherPage) })
+        _pages.sortWith({ obj, anotherPage -> obj.compareTo(anotherPage) })
 
         var prevPage: GooglePageInfo? = null
         for (page in _pages) {
@@ -122,7 +122,7 @@ class GooglePagesInfo : AbstractPagesInfo(), Serializable {
             }
         }
 
-        pagesList.sortWith(Comparator { obj, anotherPage -> obj.compareTo(anotherPage) })
+        pagesList.sortWith({ obj, anotherPage -> obj.compareTo(anotherPage) })
     }
 
     override fun getPageByPid(pid: String): GooglePageInfo {

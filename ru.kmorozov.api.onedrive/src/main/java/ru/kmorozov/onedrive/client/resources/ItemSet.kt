@@ -1,8 +1,6 @@
 package ru.kmorozov.onedrive.client.resources
 
 import com.google.api.client.util.Key
-
-import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 class ItemSet {

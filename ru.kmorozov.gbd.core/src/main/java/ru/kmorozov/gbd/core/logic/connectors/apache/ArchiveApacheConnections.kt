@@ -23,7 +23,7 @@ class ArchiveApacheConnections : SimpleApacheConnections() {
             val client = SimpleApacheConnections.INSTANCE.getClient()
             val loginRq = HttpPost("https://archive.org/account/login.php")
 
-            val loginParams: MutableList<BasicNameValuePair> = ArrayList<BasicNameValuePair>()
+            val loginParams: MutableList<BasicNameValuePair> = ArrayList()
             loginParams.add(BasicNameValuePair("username", GBDOptions.authOptions!!.login))
             loginParams.add(BasicNameValuePair("password", GBDOptions.authOptions!!.password))
             loginParams.add(BasicNameValuePair("remember", "CHECKED"))
@@ -52,7 +52,7 @@ class ArchiveApacheConnections : SimpleApacheConnections() {
             }
 
             val loanRq = HttpPost("https://archive.org/services/loans/loan/")
-            val loanParams: MutableList<BasicNameValuePair> = ArrayList<BasicNameValuePair>()
+            val loanParams: MutableList<BasicNameValuePair> = ArrayList()
             loanParams.add(BasicNameValuePair("action", "create_token"))
             loanParams.add(BasicNameValuePair("identifier", GBDOptions.bookId))
             loanRq.entity = UrlEncodedFormEntity(loanParams)

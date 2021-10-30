@@ -3,8 +3,6 @@ package ru.kmorozov.onedrive.client
 import com.google.api.client.http.GenericUrl
 import com.google.api.client.util.Key
 import ru.kmorozov.onedrive.client.resources.Drive
-
-import java.io.UnsupportedEncodingException
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 

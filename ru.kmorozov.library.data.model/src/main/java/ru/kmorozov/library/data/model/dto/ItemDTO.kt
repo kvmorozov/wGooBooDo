@@ -42,10 +42,10 @@ class ItemDTO : RepresentationModel<ItemDTO> {
         this.displayName = storageDTO.displayName
         this.filesCount = storageDTO.filesCount
 
-        refreshStatus = if (ItemDTO.REFRESH_INTERVAL.toLong() > System.currentTimeMillis() - storageDTO.lastChecked) RefreshStatus.updated else RefreshStatus.dirty
+        refreshStatus = if (REFRESH_INTERVAL.toLong() > System.currentTimeMillis() - storageDTO.lastChecked) RefreshStatus.updated else RefreshStatus.dirty
 
         if (null != storageDTO.categories)
-            this.categories = storageDTO.categories!!.stream().map<CategoryDTO> { CategoryDTO(it) }.toList()
+            this.categories = storageDTO.categories!!.stream().map { CategoryDTO(it) }.toList()
     }
 
     constructor(bookDTO: BookDTO) {

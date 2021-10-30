@@ -12,7 +12,6 @@ import ru.kmorozov.gbd.logger.consumers.AbstractOutputReceiver
 import ru.kmorozov.gbd.logger.events.AbstractEventSource
 import ru.kmorozov.gbd.logger.output.ReceiverProvider
 import java.util.concurrent.TimeUnit
-import kotlin.concurrent.thread
 
 /**
  * Created by sbt-morozov-kv on 16.11.2016.

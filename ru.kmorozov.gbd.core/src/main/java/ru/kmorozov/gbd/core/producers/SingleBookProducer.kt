@@ -1,9 +1,7 @@
 package ru.kmorozov.gbd.core.producers
 
 import ru.kmorozov.gbd.core.logic.context.IBookListProducer
-
-import java.util.Collections
-import java.util.HashSet
+import java.util.*
 
 /**
  * Created by km on 12.11.2016.

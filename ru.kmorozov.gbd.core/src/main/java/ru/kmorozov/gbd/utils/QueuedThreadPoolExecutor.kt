@@ -14,7 +14,7 @@ class QueuedThreadPoolExecutor<T : Any> : ThreadPoolExecutor {
     private var needProcessCount: Int
     private val completeChecker: (T) -> Boolean
     private val description: String
-    private val reusablePool: Queue<IUniqueReusable<T>> = ConcurrentLinkedQueue<IUniqueReusable<T>>()
+    private val reusablePool: Queue<IUniqueReusable<T>> = ConcurrentLinkedQueue()
 
     constructor(needProcessCount: Int, threadPoolSize: Int, completeChecker: (T) -> Boolean, description: String) :
             super(threadPoolSize, threadPoolSize, 0L, TimeUnit.MILLISECONDS, ArrayBlockingQueue(RETENTION_QUEUE_SIZE), NamedThreadFactory(description)) {

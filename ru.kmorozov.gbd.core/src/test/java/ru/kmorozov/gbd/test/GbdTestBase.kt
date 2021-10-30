@@ -5,7 +5,6 @@ import org.mockito.Mockito
 import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.config.IGBDOptions
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
-import ru.kmorozov.gbd.logger.output.ReceiverProvider
 
 /**
  * Created by km on 22.01.2017.

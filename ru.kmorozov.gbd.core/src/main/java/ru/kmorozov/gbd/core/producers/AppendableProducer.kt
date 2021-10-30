@@ -4,7 +4,7 @@ import ru.kmorozov.gbd.core.logic.context.IBookListProducer
 
 class AppendableProducer : IBookListProducer {
 
-    private val internalBookIds : MutableSet<String> = HashSet<String>()
+    private val internalBookIds : MutableSet<String> = HashSet()
 
     override val bookIds: Set<String>
         get() = internalBookIds

@@ -2,10 +2,8 @@ package ru.kmorozov.onedrive.client.walker
 
 import ru.kmorozov.onedrive.client.OneDriveItem
 import ru.kmorozov.onedrive.client.OneDriveProvider
-
 import java.io.IOException
-import java.util.Spliterators
-import java.util.function.Predicate
+import java.util.*
 import java.util.stream.Stream
 import java.util.stream.StreamSupport
 

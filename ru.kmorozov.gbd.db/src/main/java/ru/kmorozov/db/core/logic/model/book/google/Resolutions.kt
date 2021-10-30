@@ -14,7 +14,7 @@ enum class Resolutions(val resolution: Int) {
     companion object {
 
         fun getEnum(value: Int): Resolutions {
-            for (v in Resolutions.values())
+            for (v in values())
                 if (v.resolution == value) return v
 
             throw IllegalArgumentException()

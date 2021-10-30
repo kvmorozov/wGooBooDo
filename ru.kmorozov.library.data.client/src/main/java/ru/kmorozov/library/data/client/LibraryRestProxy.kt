@@ -51,7 +51,7 @@ class LibraryRestProxy(private val template: RestTemplate) : IDataRestServer {
 
         return result
                 .stream()
-                .map<ItemDTO> { addLinks(it) }
+                .map { addLinks(it) }
                 .collect(Collectors.toList())
     }
 

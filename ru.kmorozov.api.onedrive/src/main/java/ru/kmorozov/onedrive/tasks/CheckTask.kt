@@ -2,13 +2,10 @@ package ru.kmorozov.onedrive.tasks
 
 import com.google.api.client.util.Maps
 import com.google.api.client.util.Preconditions
+import org.apache.logging.log4j.LogManager
+import ru.kmorozov.onedrive.CommandLineOpts
 import ru.kmorozov.onedrive.client.OneDriveItem
 import ru.kmorozov.onedrive.filesystem.FileSystemProvider
-import ru.kmorozov.onedrive.CommandLineOpts
-import org.apache.logging.log4j.LogManager
-import org.apache.logging.log4j.Logger
-import ru.kmorozov.onedrive.tasks.Task.TaskOptions
-
 import java.io.File
 import java.io.IOException
 

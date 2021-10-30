@@ -15,7 +15,7 @@ class HideMeListProvider : AbstractProxyExtractor() {
 
     override fun extractProxyList(doc: Document): MutableList<String> {
         return doc.getElementsByClass("proxy-table")[0].getElementsByTag("tbody")[0].getElementsByTag("tr")
-                .stream().map<String> { extractProxyData(it) }.collect(Collectors.toList())
+                .stream().map { extractProxyData(it) }.collect(Collectors.toList())
     }
 
     companion object {

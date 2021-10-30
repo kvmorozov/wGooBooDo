@@ -46,7 +46,7 @@ open class BookInfo : Serializable, ILoggableObject, IBookInfo {
                 get() = "empty"
         }, object : IPagesInfo {
             override val pages: Array<IPage>
-                get() = arrayOf<IPage>()
+                get() = arrayOf()
             override val missingPagesList: String
                 get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
 

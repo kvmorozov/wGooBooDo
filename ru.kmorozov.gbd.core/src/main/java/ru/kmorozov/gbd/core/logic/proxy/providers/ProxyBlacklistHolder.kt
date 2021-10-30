@@ -17,7 +17,7 @@ class ProxyBlacklistHolder private constructor() {
     private val storedHosts = CopyOnWriteArrayList<HttpHostExt>()
 
     val whiteList: Collection<String>
-        get() = storedHosts.parallelStream().filter { it.isAvailable }.map<String> { it.proxyStringShort }.collect(Collectors.toList())
+        get() = storedHosts.parallelStream().filter { it.isAvailable }.map { it.proxyStringShort }.collect(Collectors.toList())
 
     init {
         blacklistFile = File(System.getProperty("java.io.tmpdir") + File.separator + BL_FILE_NAME)

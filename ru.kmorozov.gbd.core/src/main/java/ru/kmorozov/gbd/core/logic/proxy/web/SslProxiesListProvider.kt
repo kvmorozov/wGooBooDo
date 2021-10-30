@@ -21,7 +21,7 @@ class SslProxiesListProvider : AbstractProxyExtractor() {
     }
 
     private fun validIpPort(str: String): Boolean {
-        return if (StringUtils.countMatches(str, ".") != 3 || !str.contains(":")) false else !SslProxiesListProvider.checkRegexp || pattern.matcher(str).matches()
+        return if (StringUtils.countMatches(str, ".") != 3 || !str.contains(":")) false else !checkRegexp || pattern.matcher(str).matches()
     }
 
     companion object {

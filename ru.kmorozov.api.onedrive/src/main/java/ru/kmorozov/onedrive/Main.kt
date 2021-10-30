@@ -1,21 +1,17 @@
 package ru.kmorozov.onedrive
 
+import org.apache.commons.cli.ParseException
+import org.apache.logging.log4j.LogManager
 import ru.kmorozov.onedrive.client.OneDriveAPIException
 import ru.kmorozov.onedrive.client.OneDriveItem
 import ru.kmorozov.onedrive.client.OneDriveProvider
-import ru.kmorozov.onedrive.client.resources.Drive
+import ru.kmorozov.onedrive.client.authoriser.AuthorisationProvider
 import ru.kmorozov.onedrive.client.utils.LogUtils
 import ru.kmorozov.onedrive.filesystem.FileSystemProvider
 import ru.kmorozov.onedrive.tasks.CheckTask
 import ru.kmorozov.onedrive.tasks.Task
 import ru.kmorozov.onedrive.tasks.TaskReporter
-import ru.kmorozov.onedrive.client.authoriser.AuthorisationProvider
-import org.apache.commons.cli.ParseException
-import org.apache.logging.log4j.LogManager
-import org.apache.logging.log4j.Logger
-
 import java.io.File
-import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 /***

@@ -31,7 +31,7 @@ open class LocalFSStorage : IStorage {
 
     val storageDir: File
     protected val logger: Logger
-    private var detectedItems: MutableSet<MayBePageItem> = HashSet<MayBePageItem>()
+    private var detectedItems: MutableSet<MayBePageItem> = HashSet()
 
     private val indexes: MutableMap<String, IIndex>
 
@@ -207,11 +207,11 @@ open class LocalFSStorage : IStorage {
 
     fun isPdfExists(): Boolean {
         return Files.list(storageDir.toPath())
-                .filter(Predicate<Path> { filePath -> Images.isPdfFile(filePath) }).count() == 1L
+                .filter({ filePath -> Images.isPdfFile(filePath) }).count() == 1L
     }
 
     fun getOrCreatePdf(title: String): File {
-        val pdfFiles = Files.list(storageDir.toPath()).filter(Predicate<Path> { filePath -> Images.isPdfFile(filePath) }).collect(Collectors.toList())
+        val pdfFiles = Files.list(storageDir.toPath()).filter({ filePath -> Images.isPdfFile(filePath) }).collect(Collectors.toList())
         if (1 == pdfFiles.size)
             return pdfFiles[0].toFile()
         else {
@@ -223,7 +223,7 @@ open class LocalFSStorage : IStorage {
     }
 
     fun imgCount(): Long {
-        return Files.list(storageDir.toPath()).filter(Predicate<Path> { filePath -> Images.isImageFile(filePath) }).count()
+        return Files.list(storageDir.toPath()).filter({ filePath -> Images.isImageFile(filePath) }).count()
     }
 
     companion object {

@@ -9,7 +9,7 @@ enum class PdfOptions(private val pdfMode: String) {
         val DEFAULT_MODE = CREATE
 
         fun getOption(pdfMode: String): PdfOptions {
-            for (option in PdfOptions.values())
+            for (option in values())
                 if (option.pdfMode.equals(pdfMode, ignoreCase = true))
                     return option
 

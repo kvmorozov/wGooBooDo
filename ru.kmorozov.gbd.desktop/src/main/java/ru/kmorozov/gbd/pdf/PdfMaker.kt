@@ -89,7 +89,7 @@ class PdfMaker : IPostProcessor {
                 .filter { item -> item is MayBePageItem }
                 .map { item -> item as MayBePageItem }
                 .filter { item -> !internalPagesMap.containsKey(item.page.order) }
-                .sorted(Comparator.comparing<MayBePageItem, Int> { it.pageNum }).forEach { item ->
+                .sorted(Comparator.comparing { it.pageNum }).forEach { item ->
                     try {
                         FileInputStream(item.asFile()).use { fis ->
                             if (item.page.isScanned || !Images.isInvalidImage(item.asFile(), imgWidth)) {

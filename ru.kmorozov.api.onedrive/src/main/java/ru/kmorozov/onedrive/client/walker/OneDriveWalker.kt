@@ -56,7 +56,7 @@ class OneDriveWalker internal constructor(private val api: OneDriveProvider, pri
     private fun visit(item: OneDriveItem): Event {
         val size = this.stack.size
         if (size < this.maxDepth && item.isDirectory) {
-            if (OneDriveWalker.followLinks && wouldLoop(item)) {
+            if (followLinks && wouldLoop(item)) {
                 return Event(EventType.ENTRY, item, OneDriveException(item.toString()))
             } else {
                 val itemStream: Stream<OneDriveItem>

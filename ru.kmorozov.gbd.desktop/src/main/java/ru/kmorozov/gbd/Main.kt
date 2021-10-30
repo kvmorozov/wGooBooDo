@@ -7,9 +7,7 @@ import ru.kmorozov.gbd.core.logic.context.ExecutionContext
 import ru.kmorozov.gbd.core.producers.OptionsBasedProducer
 import ru.kmorozov.gbd.desktop.ProxyInitiator
 import ru.kmorozov.gbd.desktop.gui.MainFrame
-import ru.kmorozov.gbd.logger.output.ReceiverProvider
 import ru.kmorozov.gbd.pdf.PdfMaker
-import kotlin.concurrent.thread
 
 internal object Main {
 

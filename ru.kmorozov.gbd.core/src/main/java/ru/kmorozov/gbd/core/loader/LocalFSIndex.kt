@@ -7,7 +7,6 @@ import ru.kmorozov.gbd.core.config.IIndex
 import ru.kmorozov.gbd.core.logic.context.BookContext
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
 import ru.kmorozov.gbd.core.logic.model.book.base.IBookInfo
-import kotlin.streams.toList
 
 open class LocalFSIndex : IIndex {
 

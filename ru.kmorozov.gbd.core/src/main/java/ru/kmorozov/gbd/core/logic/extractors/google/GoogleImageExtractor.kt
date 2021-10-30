@@ -53,7 +53,7 @@ class GoogleImageExtractor(bookContext: BookContext) : AbstractImageExtractor<Go
     override fun run() {
         super.run()
 
-        waitingProxy.forEach(Consumer<HttpHostExt> { this.newProxyEvent(it) })
+        waitingProxy.forEach(Consumer { this.newProxyEvent(it) })
     }
 
     override fun processProxyEvent(proxy: HttpHostExt) {
@@ -76,7 +76,7 @@ class GoogleImageExtractor(bookContext: BookContext) : AbstractImageExtractor<Go
 
             uniqueObject.pagesStream
                     .filter { page -> !page.isDataProcessed }
-                    .sorted(Comparator { p1, p2 -> p2.order - p1.order })
+                    .sorted({ p1, p2 -> p2.order - p1.order })
                     .forEach { page ->
                         uniqueObject.imgExecutor
                                 .execute(GooglePageImgProcessor(uniqueObject, page as GooglePageInfo, HttpHostExt.NO_PROXY))

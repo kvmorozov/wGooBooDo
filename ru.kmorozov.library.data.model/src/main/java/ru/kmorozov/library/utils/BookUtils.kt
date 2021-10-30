@@ -1,11 +1,9 @@
 package ru.kmorozov.library.utils
 
 import ru.kmorozov.library.data.model.book.Book
-import ru.kmorozov.library.data.model.book.BookInfo
 import ru.kmorozov.library.data.model.book.BookInfo.BookFormat
 import ru.kmorozov.library.data.model.book.Category
-
-import java.util.HashSet
+import java.util.*
 import java.util.logging.Level
 import java.util.logging.Logger
 

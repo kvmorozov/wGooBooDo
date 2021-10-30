@@ -90,7 +90,7 @@ class SigProcessorInternal : AbstractHttpProcessor, IUniqueReusable<GooglePageIn
                         val _frameSrc = (framePage as GooglePageInfo).src
                         if (!Strings.isNullOrEmpty(_frameSrc))
                             if (GBDOptions.debugEnabled)
-                                logger.info("Sig candidate found ${_frameSrc}")
+                                logger.info("Sig candidate found $_frameSrc")
 
                         if (_page.addSrc(_frameSrc!!)) {
                             if (_page.pid == uniqueObject.pid) {
@@ -108,12 +108,12 @@ class SigProcessorInternal : AbstractHttpProcessor, IUniqueReusable<GooglePageIn
         } catch (ce: SocketTimeoutException) {
             if (!proxy.isLocal) {
                 proxy.registerFailure()
-                logger.info("Proxy ${proxy} failed!")
+                logger.info("Proxy $proxy failed!")
             }
         } catch (ce: SocketException) {
             if (!proxy.isLocal) {
                 proxy.registerFailure()
-                logger.info("Proxy ${proxy} failed!")
+                logger.info("Proxy $proxy failed!")
             }
             if (ce !is SocketTimeoutException) ce.printStackTrace()
         } catch (ex: Exception) {

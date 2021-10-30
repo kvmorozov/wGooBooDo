@@ -1,7 +1,6 @@
 package ru.kmorozov.library.data.model.dto
 
 import ru.kmorozov.library.data.model.book.Book
-import ru.kmorozov.library.data.model.book.BookInfo
 import ru.kmorozov.library.data.model.book.BookInfo.BookFormat
 import ru.kmorozov.library.utils.BookUtils
 

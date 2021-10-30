@@ -4,12 +4,10 @@ import com.google.api.client.http.HttpRequest
 import com.google.api.client.http.HttpResponse
 import com.google.api.client.http.HttpStatusCodes
 import com.google.api.client.http.HttpUnsuccessfulResponseHandler
-import com.google.api.client.util.BackOff
 import com.google.api.client.util.BackOffUtils
 import com.google.api.client.util.ExponentialBackOff
 import com.google.api.client.util.Sleeper
 import ru.kmorozov.onedrive.client.authoriser.AuthorisationProvider
-
 import java.io.IOException
 
 internal class OneDriveResponseHandler(private val authoriser: AuthorisationProvider) : HttpUnsuccessfulResponseHandler {

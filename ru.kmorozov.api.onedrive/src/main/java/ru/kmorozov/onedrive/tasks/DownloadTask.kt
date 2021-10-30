@@ -1,14 +1,11 @@
 package ru.kmorozov.onedrive.tasks
 
 import com.google.api.client.util.Preconditions
+import org.apache.logging.log4j.LogManager
 import ru.kmorozov.onedrive.client.OneDriveItem
-import ru.kmorozov.onedrive.client.utils.LogUtils
 import ru.kmorozov.onedrive.client.downloader.ResumableDownloader
 import ru.kmorozov.onedrive.client.downloader.ResumableDownloaderProgressListener
-import org.apache.logging.log4j.LogManager
-import org.apache.logging.log4j.Logger
-import ru.kmorozov.onedrive.tasks.Task.TaskOptions
-
+import ru.kmorozov.onedrive.client.utils.LogUtils
 import java.io.File
 import java.io.IOException
 
