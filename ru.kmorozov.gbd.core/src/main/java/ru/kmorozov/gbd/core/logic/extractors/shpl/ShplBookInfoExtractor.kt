@@ -29,7 +29,7 @@ class ShplBookInfoExtractor(bookId: String) : AbstractBookInfoExtractor(bookId) 
             if (null != childs && !childs.isEmpty()) {
                 val data = childs[0].toString()
 
-                if (data.isEmpty) continue
+                if (data.isEmpty()) continue
 
                 if (data.contains(JSON_TAG_PAGES)) {
                     val pagesData = '['.toString() + data.split("[")[2].split("]")[0] + ']'.toString()

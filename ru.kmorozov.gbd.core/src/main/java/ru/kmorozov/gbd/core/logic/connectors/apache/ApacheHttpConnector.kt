@@ -41,9 +41,15 @@ class ApacheHttpConnector(private var factory: IApacheConnectionFactory) : HttpC
         try {
             return ApacheResponse(client.execute(req) as CloseableHttpResponse)
         } catch (ste1: SocketTimeoutException) {
+            if (GBDOptions.debugEnabled)
+                logger.info(ste1.stackTraceToString())
+
             proxy.registerFailure()
             return getContent(client, req, proxy, attempt + 1)
         } catch (ex: Exception) {
+            if (GBDOptions.debugEnabled)
+                logger.info(ex.stackTraceToString())
+
             proxy.registerFailure()
             return EMPTY_RESPONSE
         }

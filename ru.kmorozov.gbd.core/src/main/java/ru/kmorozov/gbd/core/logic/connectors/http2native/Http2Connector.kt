@@ -56,6 +56,10 @@ class Http2Connector : HttpConnector() {
                 return Http2Response(resp!!)
         } catch (ioe: IOException) {
             logger.severe("Connection error: ${ioe.message}")
+
+            if (GBDOptions.debugEnabled)
+                logger.info(ioe.stackTraceToString())
+
             return EMPTY_RESPONSE
         }
 

@@ -50,7 +50,7 @@ open class OneDriveContextLoader : IContextLoader {
         try {
             for (item in api.getChildren(root))
                 if (item.isDirectory) {
-                    val nameTokens = item.name.split(" ".toRegex()).dropLastWhile { it.isEmpty }.toTypedArray()
+                    val nameTokens = item.name.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
                     val bookId = nameTokens[nameTokens.size - 1]
                     booksMap[bookId] = BookInfo.EMPTY_BOOK
                     itemsMap[bookId] = item

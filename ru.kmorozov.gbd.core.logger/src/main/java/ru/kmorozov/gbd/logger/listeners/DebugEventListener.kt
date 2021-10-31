@@ -18,7 +18,7 @@ class DebugEventListener : IEventListener {
     val dbgOutput: File
 
     init {
-        dbgOutput = createTempFile("dbg", ".log")
+        dbgOutput = File.createTempFile("dbg", ".log")
         DefaultReceiver.INSTANCE.consumeEvent(LogEvent(Level.INFO, "Created debug file $dbgOutput"))
     }
 }

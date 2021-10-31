@@ -25,7 +25,7 @@ class ApacheResponse internal constructor(private val response: CloseableHttpRes
         get() {
             val contentType = response.entity.contentType.value
 
-            return if (contentType.startsWith("image/")) contentType.split("/".toRegex()).dropLastWhile { it.isEmpty }.toTypedArray()[1] else "unknown"
+            return if (contentType.startsWith("image/")) contentType.split("/".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1] else "unknown"
         }
 
     override fun close() {

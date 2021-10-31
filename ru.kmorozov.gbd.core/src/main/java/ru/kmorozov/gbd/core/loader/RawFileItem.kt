@@ -22,7 +22,7 @@ open class RawFileItem : IStoredItem {
     var totalLen = 0L
 
     override val pageNum: Int
-        get() = Integer.parseInt(outputFile.toPath().fileName.toString().split("_".toRegex()).dropLastWhile { it.isEmpty }.toTypedArray()[0])
+        get() = Integer.parseInt(outputFile.toPath().fileName.toString().split("_".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0])
 
     @Throws(IOException::class)
     override fun exists(): Boolean {

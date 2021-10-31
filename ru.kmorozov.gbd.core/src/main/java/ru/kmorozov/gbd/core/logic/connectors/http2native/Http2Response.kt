@@ -13,7 +13,7 @@ class Http2Response internal constructor(private val response: HttpResponse<*>) 
         get() = response.body() as InputStream
 
     override val imageFormat: String
-        get() = response.headers().firstValue("content-type").get().split("/".toRegex()).dropLastWhile { it.isEmpty }.toTypedArray()[1]
+        get() = response.headers().firstValue("content-type").get().split("/".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1]
 
     override val headers: String
         get() = response.headers().toString()

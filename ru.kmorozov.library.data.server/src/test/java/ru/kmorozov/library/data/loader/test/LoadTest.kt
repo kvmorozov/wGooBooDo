@@ -59,7 +59,7 @@ class LoadTest {
 
     @Test
     fun loadLinksTestOneMiltiDir() {
-        val names = MULTIPLE_LNK_DIR.split(delimiter.toRegex()).dropLastWhile { it.isEmpty }.toTypedArray()
+        val names = MULTIPLE_LNK_DIR.split(delimiter.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         var storages = storageRepository!!.findAllByName(names[names.size - 1])
         var parentName: String?
 

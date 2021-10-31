@@ -13,10 +13,10 @@
         <maven.compiler.source>14</maven.compiler.source>
         <maven.compiler.target>14</maven.compiler.target>
 
-        <gbd.version>2.3</gbd.version>
+        <gbd.version>2.3.1</gbd.version>
         <ldoc.version>8.4.2</ldoc.version>
         <spring.version>4.3.20.RELEASE</spring.version>
-        <kotlin.version>1.4.30</kotlin.version>
+        <kotlin.version>1.6.0-RC</kotlin.version>
     </properties>
 
     <dependencies>

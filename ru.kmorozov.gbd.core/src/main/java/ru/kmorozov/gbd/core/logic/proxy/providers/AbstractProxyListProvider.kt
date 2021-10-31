@@ -14,7 +14,6 @@ import java.net.InetSocketAddress
 import java.util.*
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.stream.Stream
-import kotlin.collections.HashSet
 
 /**
  * Created by km on 27.11.2015.
@@ -139,7 +138,7 @@ abstract class AbstractProxyListProvider : IProxyListProvider {
         }
 
         private fun splitItems(proxyItem: String, delimiter: String): Array<String> {
-            return proxyItem.split(delimiter.toRegex()).dropLastWhile { it.isEmpty }.toTypedArray()
+            return proxyItem.split(delimiter.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         }
     }
 }

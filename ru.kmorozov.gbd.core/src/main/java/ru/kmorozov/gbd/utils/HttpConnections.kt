@@ -60,7 +60,7 @@ class HttpConnections private constructor() {
                 return ""
             else
                 return (resp.get().headers["set-cookie"] as Collection<String>).stream()
-                        .map { s -> s.split(";".toRegex()).dropLastWhile { it.isEmpty }.toTypedArray()[0] }.collect(Collectors.joining(";"))
+                        .map { s -> s.split(";".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0] }.collect(Collectors.joining(";"))
         }
 
         private fun _setDefaultCookies(cookiesMap: Map<String, String>) {

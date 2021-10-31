@@ -14,7 +14,7 @@ class GoogleApacheConnections : SimpleApacheConnections() {
     override fun getCookieStore(proxy: HttpHostExt): CookieStore {
         return cookieStoreMap.computeIfAbsent(proxy) {
             val cookieStore = BasicCookieStore()
-            val cookies = proxy.getHeaders(UrlType.GOOGLE_BOOKS).cookie.split(";".toRegex()).dropLastWhile { it.isEmpty }.toTypedArray()
+            val cookies = proxy.getHeaders(UrlType.GOOGLE_BOOKS).cookie.split(";".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 
             for (cookieEntry in cookies) {
                 val cookieParts = cookieEntry.split("=".toRegex(), 2).toTypedArray()

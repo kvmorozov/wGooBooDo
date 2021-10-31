@@ -38,7 +38,7 @@ open class GoogleBookInfoExtractor : AbstractBookInfoExtractor {
             if (null != childs && !childs.isEmpty() && childs[0] is DataNode) {
                 val data = (childs[0] as DataNode).wholeData
 
-                if (null == data || data.isEmpty) continue
+                if (null == data || data.isEmpty()) continue
 
                 if (data.startsWith(ADD_FLAGS_ATTRIBUTE) && 0 < data.indexOf(OC_RUN_ATTRIBUTE)) {
                     val jsonStart = data.indexOf(OC_RUN_ATTRIBUTE) + OC_RUN_ATTRIBUTE.length + 1

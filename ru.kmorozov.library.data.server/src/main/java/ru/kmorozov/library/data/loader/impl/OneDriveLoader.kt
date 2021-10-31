@@ -148,7 +148,7 @@ open class OneDriveLoader : StoredLoader() {
     }
 
     private fun getBookByLink(lnkFileName: String): Book? {
-        val names = lnkFileName.split(delimiter.toRegex()).dropLastWhile { it.isEmpty }.toTypedArray()
+        val names = lnkFileName.split(delimiter.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         val books = booksRepository.findAllByBookInfoFileName(names[names.size - 1])
 
         return if (1 == books.size) books[0] else null
@@ -159,7 +159,7 @@ open class OneDriveLoader : StoredLoader() {
     }
 
     private fun getStorageByLink(lnkFileName: String): Storage? {
-        val names = lnkFileName.split(delimiter.toRegex()).dropLastWhile { it.isEmpty }.toTypedArray()
+        val names = lnkFileName.split(delimiter.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         var storages = storageRepository.findAllByName(names[names.size - 1])
         var parentName: String?
 

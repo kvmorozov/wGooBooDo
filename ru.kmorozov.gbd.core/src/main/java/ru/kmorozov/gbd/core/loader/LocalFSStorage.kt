@@ -45,7 +45,7 @@ open class LocalFSStorage : IStorage {
 
             Files.walk(Paths.get(storageDir.toURI())).forEach { filePath ->
                 if (filePath.toFile().isDirectory) {
-                    val nameParts = filePath.toFile().name.split(" ".toRegex()).dropLastWhile { it.isEmpty }.toTypedArray()
+                    val nameParts = filePath.toFile().name.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
                     if (LibraryFactory.isValidId(nameParts[nameParts.size - 1]))
                         bookIdsList.add(nameParts[nameParts.size - 1])
                 }

@@ -33,7 +33,7 @@ open class ServerProducer : IBookListProducer {
                 if (Strings.isNullOrEmpty(defaultIds))
                     ids = dbCtx!!.bookIdsList
                 else
-                    ids = HashSet(Arrays.asList(*defaultIds!!.split(",".toRegex()).dropLastWhile { it.isEmpty }.toTypedArray()))
+                    ids = HashSet(Arrays.asList(*defaultIds!!.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()))
 
             return ids!!
         }

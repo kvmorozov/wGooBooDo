@@ -76,9 +76,15 @@ class GoogleHttpConnector : HttpConnector() {
             val res = GoogleResponse(req.execute())
             return res
         } catch (ste1: SocketTimeoutException) {
+            if (GBDOptions.debugEnabled)
+                logger.info(ste1.stackTraceToString())
+
             proxy.registerFailure()
             return getContent(req, proxy, attempt + 1)
         } catch (hre: HttpResponseException) {
+            if (GBDOptions.debugEnabled)
+                logger.info(hre.stackTraceToString())
+
             proxy.registerFailure()
             if (hre.statusCode == 403) {
                 proxy.reset()

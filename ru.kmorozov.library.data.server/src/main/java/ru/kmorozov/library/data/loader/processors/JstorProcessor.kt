@@ -61,13 +61,13 @@ open class JstorProcessor : IProcessor {
         val doi: String
         try {
             val doc = jstorConnector.getString(JSTOR_ARTICLE_PREFIX + jstorId, proxy, true)
-            val opDoi = Arrays.stream(doc.split("\\r?\\n".toRegex()).dropLastWhile { it.isEmpty }.toTypedArray())
+            val opDoi = Arrays.stream(doc.split("\\r?\\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray())
                     .filter { s -> s.contains("ST.discriminator") }
                     .findFirst()
             if (opDoi.isPresent)
-                doi = Arrays.stream(opDoi.get().split(" ".toRegex()).dropLastWhile { it.isEmpty }.toTypedArray())
+                doi = Arrays.stream(opDoi.get().split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray())
                         .filter { s -> s.contains("content") }
-                        .map { s -> s.split("=".toRegex()).dropLastWhile { it.isEmpty }.toTypedArray()[1] }
+                        .map { s -> s.split("=".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1] }
                         .findFirst().get().replace("\"", "")
             else {
                 logger.error("$jstorId not a valid JSTOR id")
@@ -101,10 +101,10 @@ open class JstorProcessor : IProcessor {
     }
 
     private fun parseArticleData(data: String): MutableMap<String, String> {
-        return Arrays.stream(data.split("\\r?\\n".toRegex()).dropLastWhile { it.isEmpty }.toTypedArray())
+        return Arrays.stream(data.split("\\r?\\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray())
                 .filter { s -> s.contains("=") }
                 .map<ImmutablePair<String, String>> { s ->
-                    val items = s.split("=".toRegex()).dropLastWhile { it.isEmpty }.toTypedArray()
+                    val items = s.split("=".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
                     if (items.size == 2) ImmutablePair(formatItem(items[0]), formatItem(items[1])) else null
                 }
                 .collect(Collectors.toMap({ it.getLeft() }, { it.getRight() }))

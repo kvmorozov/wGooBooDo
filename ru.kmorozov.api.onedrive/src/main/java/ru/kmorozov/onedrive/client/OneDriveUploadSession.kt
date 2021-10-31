@@ -49,7 +49,7 @@ constructor(val parent: OneDriveItem, val file: File, val uploadUrl: String, ran
             val s = stringRanges[i].substring(stringRanges[i].indexOf('-') + 1)
 
             var end = 0L
-            if (!s.isEmpty) {
+            if (!s.isEmpty()) {
                 end = java.lang.Long.parseLong(s)
             }
 
