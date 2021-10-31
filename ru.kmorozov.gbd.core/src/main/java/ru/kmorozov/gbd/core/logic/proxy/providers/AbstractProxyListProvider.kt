@@ -121,7 +121,7 @@ abstract class AbstractProxyListProvider : IProxyListProvider {
 
         private const val DEFAULT_PROXY_DELIMITER = ":"
 
-        private val logger = Logger.getLogger(AbstractProxyListProvider::class.java)
+        private val logger = Logger.getLogger(GBDOptions.debugEnabled, AbstractProxyListProvider::class.java)
 
         val INSTANCE: AbstractProxyListProvider
             get() = if (Strings.isNullOrEmpty(GBDOptions.proxyListFile))

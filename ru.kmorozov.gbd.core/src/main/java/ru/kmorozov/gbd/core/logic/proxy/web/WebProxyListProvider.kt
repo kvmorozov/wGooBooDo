@@ -3,7 +3,6 @@ package ru.kmorozov.gbd.core.logic.proxy.web
 import ru.kmorozov.gbd.core.logic.proxy.providers.AbstractProxyListProvider
 import ru.kmorozov.gbd.core.logic.proxy.providers.ProxyBlacklistHolder
 import java.util.stream.Collectors
-import kotlin.streams.toList
 
 /**
  * Created by km on 23.11.2015.
@@ -12,10 +11,10 @@ class WebProxyListProvider : AbstractProxyListProvider() {
 
     override fun initList() {
         this.proxyItems.addAll(
-                ProxyBlacklistHolder.BLACKLIST.whiteList.stream()
-                        .map { getInetAddress(it) }
-                        .filter { it.isPresent }
-                        .toList()
+            ProxyBlacklistHolder.BLACKLIST.whiteList.stream()
+                .map { getInetAddress(it) }
+                .filter { it.isPresent }
+                .collect(Collectors.toList())
         )
     }
 
@@ -23,11 +22,11 @@ class WebProxyListProvider : AbstractProxyListProvider() {
         val candidateProxies = SslProxiesListProvider().proxyList
 
         this.proxyItems = candidateProxies.stream()
-                .filter { notBlacklisted(it) }
-                .map { getInetAddress(it) }
-                .filter { it.isPresent }
-                .filter { !proxyItems.contains(it) }
-                .limit(PROXY_LIMIT - proxyCount).collect(Collectors.toSet())
+            .filter { notBlacklisted(it) }
+            .map { getInetAddress(it) }
+            .filter { it.isPresent }
+            .filter { !proxyItems.contains(it) }
+            .limit(PROXY_LIMIT - proxyCount).collect(Collectors.toSet())
     }
 
     override fun updateProxyList() {

@@ -4,6 +4,7 @@ import com.google.common.base.Strings
 import org.jsoup.nodes.Document
 import org.jsoup.parser.Parser
 import ru.kmorozov.db.utils.Mapper
+import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.proxy.UrlType
 import ru.kmorozov.gbd.logger.Logger
@@ -93,7 +94,7 @@ abstract class HttpConnector : AutoCloseable {
     companion object {
 
         const val CONNECT_TIMEOUT = 30000
-        private val logger = Logger.getLogger(HttpConnector::class.java)
+        private val logger = Logger.getLogger(GBDOptions.debugEnabled, HttpConnector::class.java)
         const val MAX_RETRY_COUNT = 5
         const val SLEEP_TIME = 500
 

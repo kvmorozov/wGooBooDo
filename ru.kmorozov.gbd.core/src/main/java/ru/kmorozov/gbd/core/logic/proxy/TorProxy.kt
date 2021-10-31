@@ -63,6 +63,6 @@ class TorProxy : StableProxy {
 
         private val RESET_MIN_DELAY = 10_000L
 
-        private val logger = Logger.getLogger(TorProxy::class.java)
+        private val logger = Logger.getLogger(GBDOptions.debugEnabled, TorProxy::class.java)
     }
 }

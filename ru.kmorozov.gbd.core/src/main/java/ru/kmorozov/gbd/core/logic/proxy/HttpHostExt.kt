@@ -189,7 +189,7 @@ open class HttpHostExt {
         val TOR_PROXY: StableProxy
             get() = if (GBDOptions.proxyListFile.equals("tor", ignoreCase = true)) TorProxy.TOR_PROXY else StableProxy()
 
-        private val logger = Logger.getLogger(HttpHostExt::class.java)
+        private val logger = Logger.getLogger(GBDOptions.debugEnabled, HttpHostExt::class.java)
         private val checkProxyUrl = GenericUrl("http://mxtoolbox.com/WhatIsMyIP/")
         private const val REMOTE_FAILURES_THRESHOLD = 15
         private const val LOCAL_FAILURES_THRESHOLD = 50

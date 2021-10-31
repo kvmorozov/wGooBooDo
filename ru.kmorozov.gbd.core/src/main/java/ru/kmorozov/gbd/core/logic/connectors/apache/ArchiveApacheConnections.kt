@@ -95,7 +95,7 @@ class ArchiveApacheConnections : SimpleApacheConnections() {
 
     companion object {
 
-        private val logger = Logger.getLogger(ArchiveApacheConnections::class.java)
+        private val logger = Logger.getLogger(GBDOptions.debugEnabled, ArchiveApacheConnections::class.java)
         internal val INSTANCE = ArchiveApacheConnections()
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Conditional
 import org.springframework.context.annotation.Lazy
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
+import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.logger.Logger
 import ru.kmorozov.library.data.loader.impl.OneDriveLoader
 import ru.kmorozov.library.data.server.condition.StorageEnabledCondition
@@ -53,6 +54,6 @@ class ScheduledOneDriveTasks {
     companion object {
 
         private const val SCHEDULE_INTERVAL = (1 * 60 * 60 * 1000).toLong()
-        private val logger = Logger.getLogger(ScheduledOneDriveTasks::class.java)
+        private val logger = Logger.getLogger(GBDOptions.debugEnabled, ScheduledOneDriveTasks::class.java)
     }
 }

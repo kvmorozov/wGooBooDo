@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Conditional
 import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Component
+import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.logger.Logger
 import ru.kmorozov.library.data.loader.impl.LoaderExecutor.State
 import ru.kmorozov.library.data.loader.utils.ConsistencyUtils
@@ -227,7 +228,7 @@ open class OneDriveLoader : StoredLoader() {
 
     companion object {
 
-        private val logger = Logger.getLogger(OneDriveLoader::class.java)
+        private val logger = Logger.getLogger(GBDOptions.debugEnabled, OneDriveLoader::class.java)
         private val delimiter = Pattern.quote(File.separator)
         private const val DEFAULT_PARENT = "E:\\tmp"
     }

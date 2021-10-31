@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Lazy
+import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
 import ru.kmorozov.gbd.core.logic.connectors.google.GoogleHttpConnector
 import ru.kmorozov.gbd.logger.Logger
@@ -98,6 +99,6 @@ open class LoaderConfiguration {
 
     companion object {
 
-        private val logger = Logger.getLogger(LoaderConfiguration::class.java)
+        private val logger = Logger.getLogger(GBDOptions.debugEnabled, LoaderConfiguration::class.java)
     }
 }

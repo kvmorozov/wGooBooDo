@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Component
+import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.logic.proxy.providers.EmptyProxyListProvider
 import ru.kmorozov.gbd.core.logic.proxy.providers.ManagedProxyListProvider
 import ru.kmorozov.gbd.core.logic.connectors.HttpConnector
@@ -123,7 +124,7 @@ open class JstorProcessor : IProcessor {
         private const val JSTOR_ARTICLE_PREFIX = "https://www.jstor.org/stable/"
         private const val JSTOR_CITATION_PREFIX = "https://www.jstor.org/citation/text/"
 
-        protected val logger = Logger.getLogger(JstorProcessor::class.java)
+        protected val logger = Logger.getLogger(GBDOptions.debugEnabled, JstorProcessor::class.java)
 
         private val doiConnector = GoogleHttpConnector()
     }

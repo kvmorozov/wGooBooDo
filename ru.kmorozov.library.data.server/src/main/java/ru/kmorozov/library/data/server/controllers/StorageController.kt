@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.logger.Logger
 import ru.kmorozov.library.data.loader.LoaderConfiguration
 import ru.kmorozov.library.data.loader.impl.LoaderExecutor
@@ -169,7 +170,7 @@ class StorageController : IDataRestServer {
 
     companion object {
 
-        protected val logger = Logger.getLogger(StorageController::class.java)
+        protected val logger = Logger.getLogger(GBDOptions.debugEnabled, StorageController::class.java)
     }
 
 }

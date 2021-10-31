@@ -1,7 +1,8 @@
 package ru.kmorozov.gbd.client
 
-import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
+import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.logic.extractors.base.AbstractHttpProcessor
+import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.logger.Logger
 import java.io.IOException
 import java.net.InetSocketAddress
@@ -58,7 +59,7 @@ abstract class AbstractRestClient : AbstractHttpProcessor() {
 
     companion object {
 
-        protected val logger = Logger.getLogger(AbstractRestClient::class.java)
+        protected val logger = Logger.getLogger(GBDOptions.debugEnabled, AbstractRestClient::class.java)
 
         protected const val restServiceBaseUrl = "http://localhost:8080/"
     }

@@ -1,6 +1,7 @@
 package ru.kmorozov.library.data.loader.impl
 
 import org.springframework.stereotype.Component
+import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.logger.Logger
 import ru.kmorozov.library.data.model.book.Book
 import ru.kmorozov.library.data.model.book.Storage
@@ -35,6 +36,6 @@ class LocalDirectoryLoader : BaseLoader() {
 
     companion object {
 
-        private val logger = Logger.getLogger(LocalDirectoryLoader::class.java)
+        private val logger = Logger.getLogger(GBDOptions.debugEnabled, LocalDirectoryLoader::class.java)
     }
 }

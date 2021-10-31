@@ -9,8 +9,8 @@ import ru.kmorozov.gbd.core.logic.connectors.Response
 import ru.kmorozov.gbd.core.logic.connectors.Response.Companion.EMPTY_RESPONSE
 import ru.kmorozov.gbd.core.logic.connectors.ResponseException
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
-import ru.kmorozov.gbd.core.logic.proxy.providers.AbstractProxyListProvider
 import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
+import ru.kmorozov.gbd.core.logic.proxy.providers.AbstractProxyListProvider
 import ru.kmorozov.gbd.logger.Logger
 import java.io.IOException
 import java.net.SocketException
@@ -93,7 +93,7 @@ open class AbstractHttpProcessor {
     }
 
     companion object {
-        private val logger = Logger.getLogger(AbstractHttpProcessor::class.java)
+        private val logger = Logger.getLogger(GBDOptions.debugEnabled, AbstractHttpProcessor::class.java)
 
         val connectors: List<HttpConnector>
             get() = ExecutionContext.INSTANCE.defaultMetadata.preferredConnectors()

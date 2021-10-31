@@ -99,7 +99,7 @@ class Http2Connector : HttpConnector() {
     companion object {
 
         private val httpClientsMap = ConcurrentHashMap<String, HttpClient>()
-        private val logger = Logger.getLogger(Http2Connector::class.java)
+        private val logger = Logger.getLogger(GBDOptions.debugEnabled, Http2Connector::class.java)
         private val DEFAULT_CLIENT = HttpClient.newHttpClient()
     }
 }

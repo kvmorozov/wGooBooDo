@@ -11,7 +11,6 @@ import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.logic.context.ContextProvider
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
 import ru.kmorozov.gbd.logger.Logger
-import ru.kmorozov.gbd.logger.output.ReceiverProvider
 import ru.kmorozov.library.data.loader.processors.IGbdProcessor
 import ru.kmorozov.library.data.model.book.BookInfo.BookFormat.PDF
 import ru.kmorozov.library.data.model.book.BookInfo.BookType.GOOGLE_BOOK
@@ -126,6 +125,6 @@ open class GbdRemoteProcessor : IGbdProcessor {
 
     companion object {
 
-        protected val logger = Logger.getLogger(GbdRemoteProcessor::class.java)
+        protected val logger = Logger.getLogger(GBDOptions.debugEnabled, GbdRemoteProcessor::class.java)
     }
 }

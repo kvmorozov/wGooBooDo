@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.aggregation.Aggregation
 import org.springframework.data.mongodb.core.aggregation.AggregationOptions
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.stereotype.Component
+import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.logger.Logger
 import ru.kmorozov.library.data.model.book.Book
 import ru.kmorozov.library.data.model.book.BookInfo
@@ -111,6 +112,6 @@ open class DuplicatesProcessor : IProcessor {
 
     companion object {
 
-        protected val logger = Logger.getLogger(DuplicatesProcessor::class.java)
+        protected val logger = Logger.getLogger(GBDOptions.debugEnabled, DuplicatesProcessor::class.java)
     }
 }

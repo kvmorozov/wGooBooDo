@@ -3,6 +3,7 @@ package ru.kmorozov.gbd.logger
 import ru.kmorozov.gbd.logger.consumers.IEventConsumer
 import ru.kmorozov.gbd.logger.events.LogEvent
 import ru.kmorozov.gbd.logger.output.DefaultReceiver
+import ru.kmorozov.gbd.logger.output.ReceiverProvider
 
 import java.util.logging.Level
 
@@ -45,8 +46,8 @@ class Logger(private val eventConsumer: IEventConsumer, private val name: String
             return Logger(eventConsumer, name, prefix)
         }
 
-        fun getLogger(claszz: Class<*>): Logger {
-            return Logger(DefaultReceiver.INSTANCE, claszz.name, ": ")
+        fun getLogger(debugEnabled: Boolean, claszz: Class<*>): Logger {
+            return Logger(ReceiverProvider.getReceiver(debugEnabled), claszz.name, ": ")
         }
 
         fun getLogger(claszz: Class<*>, prefix: String): Logger {

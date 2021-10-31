@@ -1,6 +1,7 @@
 package ru.kmorozov.library.data.loader.impl
 
 import org.springframework.beans.factory.annotation.Autowired
+import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.logger.Logger
 import ru.kmorozov.library.data.model.book.*
 import ru.kmorozov.library.data.repository.BooksRepository
@@ -153,7 +154,7 @@ abstract class StoredLoader : BaseLoader() {
 
     companion object {
 
-        private val logger = Logger.getLogger(StoredLoader::class.java)
+        private val logger = Logger.getLogger(GBDOptions.debugEnabled, StoredLoader::class.java)
 
     }
 

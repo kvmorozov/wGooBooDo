@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Lazy
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.logger.Logger
 import ru.kmorozov.library.data.loader.processors.IGbdProcessor
 import ru.kmorozov.library.data.server.condition.LibraryEnabledCondition
@@ -38,6 +39,6 @@ class LibraryRestController {
 
     companion object {
 
-        protected val logger = Logger.getLogger(LibraryRestController::class.java)
+        protected val logger = Logger.getLogger(GBDOptions.debugEnabled, LibraryRestController::class.java)
     }
 }

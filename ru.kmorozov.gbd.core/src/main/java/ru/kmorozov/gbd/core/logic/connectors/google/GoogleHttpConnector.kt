@@ -36,8 +36,8 @@ class GoogleHttpConnector : HttpConnector() {
             val resp: Response
             if (validateProxy(rqUrl, proxy)) {
                 val req = getFactory(proxy).buildGetRequest(url)
-                        .setConnectTimeout(if (withTimeout) CONNECT_TIMEOUT else CONNECT_TIMEOUT * 10)
-                        .setSuppressUserAgentSuffix(true)
+                    .setConnectTimeout(if (withTimeout) CONNECT_TIMEOUT else CONNECT_TIMEOUT * 10)
+                    .setSuppressUserAgentSuffix(true)
                 if (needHeaders(rqUrl))
                     req.headers = proxy.getHeaders(getUrlType(rqUrl))
 
@@ -52,6 +52,9 @@ class GoogleHttpConnector : HttpConnector() {
 
             return resp
         } catch (hre: HttpResponseException) {
+            if (GBDOptions.debugEnabled)
+                logger.info(hre.stackTraceToString())
+
             if (hre.statusCode != 404)
                 logger.severe("Connection error: ${hre.statusMessage}")
             return EMPTY_RESPONSE
@@ -103,7 +106,7 @@ class GoogleHttpConnector : HttpConnector() {
 
     companion object {
 
-        private val logger = Logger.getLogger(HttpConnector::class.java)
+        private val logger = Logger.getLogger(GBDOptions.debugEnabled, GoogleHttpConnector::class.java)
         private val httpFactoryMap = ConcurrentHashMap<String, HttpRequestFactory>()
     }
 }

@@ -15,7 +15,6 @@ import ru.kmorozov.gbd.utils.QueuedThreadPoolExecutor
 import java.net.InetSocketAddress
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.TimeUnit
-import java.util.function.ToLongFunction
 
 /**
  * Created by km on 22.11.2015.
@@ -127,7 +126,7 @@ class ExecutionContext private constructor(val isSingleMode: Boolean) {
         lateinit var pdfExecutor: QueuedThreadPoolExecutor<BookContext>
         lateinit var proxyExecutor: QueuedThreadPoolExecutor<InetSocketAddress>
 
-        internal val logger = Logger.getLogger(ExecutionContext::class.java)
+        internal val logger = Logger.getLogger(GBDOptions.debugEnabled, ExecutionContext::class.java)
 
         private const val EMPTY = ""
         lateinit var INSTANCE: ExecutionContext

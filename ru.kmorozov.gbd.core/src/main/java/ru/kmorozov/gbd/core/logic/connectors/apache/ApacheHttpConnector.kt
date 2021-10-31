@@ -62,6 +62,6 @@ class ApacheHttpConnector(private var factory: IApacheConnectionFactory) : HttpC
 
     companion object {
 
-        private val logger = Logger.getLogger(HttpConnector::class.java)
+        private val logger = Logger.getLogger(GBDOptions.debugEnabled, ApacheHttpConnector::class.java)
     }
 }
