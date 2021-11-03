@@ -81,7 +81,7 @@ class HttpConnections private constructor() {
             if (resp.isEmpty)
                 return ""
             else
-                return (resp.get().headers().allValues("set-cookie") as Collection<String>).stream()
+                return resp.get().headers().allValues("set-cookie").stream()
                     .map { s -> s.split(";".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0] }
                     .collect(Collectors.joining(";"))
         }
