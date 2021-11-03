@@ -1,21 +1,19 @@
 package ru.kmorozov.gbd.utils
 
-import com.google.api.client.http.GenericUrl
 import com.google.api.client.http.HttpHeaders
-import com.google.api.client.http.HttpResponse
-import com.google.api.client.http.javanet.NetHttpTransport.Builder
 import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import ru.kmorozov.gbd.core.logic.proxy.TorProxy
 import ru.kmorozov.gbd.core.logic.proxy.UrlType
 import ru.kmorozov.gbd.logger.Logger
 import java.io.IOException
-import java.net.ConnectException
-import java.net.InetSocketAddress
-import java.net.Proxy
+import java.net.*
 import java.net.Proxy.NO_PROXY
 import java.net.Proxy.Type
-import java.net.SocketTimeoutException
+import java.net.http.HttpClient
+import java.net.http.HttpRequest
+import java.net.http.HttpResponse
+import java.time.Duration
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.stream.Collectors
@@ -29,12 +27,11 @@ class HttpConnections private constructor() {
 
         const val USER_AGENT =
             "Mozilla/5.0 (Linux; Android 7.0; SM-G892A Build/NRD90M; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/60.0.3112.107 Mobile Safari/537.36"
-        private val headers = HttpHeaders().setUserAgent(USER_AGENT)
-        private val baseUrls = ConcurrentHashMap<UrlType, GenericUrl>(1)
+        private val baseUrls = ConcurrentHashMap<UrlType, URI>(1)
 
         private val logger = Logger.getLogger(GBDOptions.debugEnabled, HttpConnections::class.java)
 
-        fun getResponse(host: InetSocketAddress, urlType: UrlType): Optional<HttpResponse> {
+        fun getResponse(host: InetSocketAddress, urlType: UrlType): Optional<HttpResponse<*>> {
             val baseUrl = getBaseUrl(urlType)
             val proxy: Proxy
             if ("localhost" == host.hostName && 1 == host.port)
@@ -45,11 +42,13 @@ class HttpConnections private constructor() {
                 proxy = Proxy(Type.HTTP, host)
 
             try {
-                val request = if (proxy == NO_PROXY) Builder().build() else Builder().setProxy(proxy).build()
-                val responce =
-                    request.createRequestFactory().buildGetRequest(baseUrl).setHeaders(headers).setConnectTimeout(10000)
-                        .execute()
-                return Optional.of(responce)
+                val client = if (proxy == NO_PROXY) HttpClient.newBuilder().build() else HttpClient.newBuilder()
+                    .proxy(ProxySelector.of(host)).build()
+                val reqBuilder = HttpRequest.newBuilder().uri(baseUrl).GET().timeout(Duration.ofMillis(10000))
+                reqBuilder.setHeader("User-Agent", USER_AGENT)
+
+                val response = client.send(reqBuilder.build(), HttpResponse.BodyHandlers.ofInputStream())
+                return Optional.of(response)
             } catch (e: IOException) {
                 if (GBDOptions.debugEnabled)
                     logger.info("Proxy $proxy error:" + e.localizedMessage)
@@ -82,18 +81,18 @@ class HttpConnections private constructor() {
             if (resp.isEmpty)
                 return ""
             else
-                return (resp.get().headers["set-cookie"] as Collection<String>).stream()
+                return (resp.get().headers().allValues("set-cookie") as Collection<String>).stream()
                     .map { s -> s.split(";".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0] }
                     .collect(Collectors.joining(";"))
         }
 
-        private fun getBaseUrl(urlType: UrlType): GenericUrl {
+        private fun getBaseUrl(urlType: UrlType): URI {
             return baseUrls.computeIfAbsent(urlType) {
                 when (urlType) {
-                    UrlType.GOOGLE_BOOKS -> GenericUrl("https://www.google.com/")
-                    UrlType.GOOGLE_BOOK_INFO -> GenericUrl("https://www.google.com/")
-                    UrlType.JSTOR -> GenericUrl("https://www.jstor.org")
-                    else -> GenericUrl("http://www.ya.ru")
+                    UrlType.GOOGLE_BOOKS -> URI.create("https://www.google.com/")
+                    UrlType.GOOGLE_BOOK_INFO -> URI.create("https://www.google.com/")
+                    UrlType.JSTOR -> URI.create("https://www.jstor.org")
+                    else -> URI.create("http://www.ya.ru")
                 }
             }
         }
