@@ -1,5 +1,6 @@
 package ru.kmorozov.db.core.logic.model.book.google
 
+import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 import java.io.Serializable
@@ -21,6 +22,6 @@ class VolumeResultFlags : Serializable {
     private val pdfDrmEnabled: Boolean = false
     @SerializedName("is_epub_drm_enabled")
     private val epubDrmEnabled: Boolean = false
-    @SerializedName("download_pdf_url")
+    @Expose @SerializedName("download_pdf_url")
     val downloadPdfUrl: String? = null
 }

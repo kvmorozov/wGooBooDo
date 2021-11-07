@@ -49,7 +49,11 @@ open class GoogleBookInfoExtractor : AbstractBookInfoExtractor {
                     val pagesJsonData = data.substring(jsonStart, jsonEnd)
                     val pages = Mapper.gson.fromJson(pagesJsonData, GooglePagesInfo::class.java)
 
-                    val bookJsonData = data.substring(data.indexOf(BOOK_INFO_START_TAG) - 2, data.lastIndexOf(BOOK_INFO_END_TAG) - 3)
+                    val endIndex1 = data.lastIndexOf(BOOK_INFO_END_TAG_1)
+                    val endIndex2 = data.lastIndexOf(BOOK_INFO_END_TAG_2)
+                    val endIndex: Int;
+                    if (endIndex1 > 0) endIndex = endIndex1  else endIndex = endIndex2;
+                    val bookJsonData = data.substring(data.indexOf(BOOK_INFO_START_TAG) - 2, endIndex - 3)
                     val bookData = Mapper.gson.fromJson(bookJsonData, GoogleBookData::class.java)
 
                     val result = BookInfo(bookData, pages, bookId)
@@ -71,7 +75,8 @@ open class GoogleBookInfoExtractor : AbstractBookInfoExtractor {
         private const val ADD_FLAGS_ATTRIBUTE = "_OC_addFlags"
         private const val OC_RUN_ATTRIBUTE = "_OC_Run"
         private const val BOOK_INFO_START_TAG = "fullview"
-        private const val BOOK_INFO_END_TAG = "enableUserFeedbackUI"
+        private const val BOOK_INFO_END_TAG_1 = "enableClips"
+        private const val BOOK_INFO_END_TAG_2 = "enableUserFeedbackUI"
         private const val OPEN_PAGE_ADD_URL = "&printsec=frontcover&hl=ru#v=onepage&q&f=false"
     }
 }
