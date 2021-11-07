@@ -18,7 +18,8 @@ import java.util.function.Consumer
 /**
  * Created by km on 21.11.2015.
  */
-class GoogleImageExtractor(bookContext: BookContext) : AbstractImageExtractor<GooglePageInfo>(bookContext, GoogleImageExtractor::class.java) {
+class GoogleImageExtractor(bookContext: BookContext) :
+    AbstractImageExtractor<GooglePageInfo>(bookContext, GoogleImageExtractor::class.java) {
 
     private val proxyReceived = AtomicInteger(0)
     private val processingStarted = AtomicBoolean(false)
@@ -31,6 +32,7 @@ class GoogleImageExtractor(bookContext: BookContext) : AbstractImageExtractor<Go
 
         if (!Strings.isNullOrEmpty((uniqueObject.bookInfo.bookData as GoogleBookData).flags!!.downloadPdfUrl)) {
             logger.severe("There is direct url to download book. DIY!")
+            uniqueObject.forceComplete()
             return false
         } else
             return true
@@ -65,6 +67,9 @@ class GoogleImageExtractor(bookContext: BookContext) : AbstractImageExtractor<Go
         if (GBDOptions.debugEnabled)
             logger.info("Received proxy event for $proxy")
 
+        if (uniqueObject.pdfCompleted.get())
+            return
+
         if (proxy.isAvailable) uniqueObject.sigExecutor.execute(GooglePageSigProcessor(uniqueObject, proxy))
 
         val proxyNeeded = ExecutionContext.proxyCount - proxyReceived.incrementAndGet()
@@ -75,12 +80,12 @@ class GoogleImageExtractor(bookContext: BookContext) : AbstractImageExtractor<Go
             uniqueObject.sigExecutor.terminate(10L, TimeUnit.MINUTES)
 
             uniqueObject.pagesStream
-                    .filter { page -> !page.isDataProcessed }
-                    .sorted({ p1, p2 -> p2.order - p1.order })
-                    .forEach { page ->
-                        uniqueObject.imgExecutor
-                                .execute(GooglePageImgProcessor(uniqueObject, page as GooglePageInfo, HttpHostExt.NO_PROXY))
-                    }
+                .filter { page -> !page.isDataProcessed }
+                .sorted({ p1, p2 -> p2.order - p1.order })
+                .forEach { page ->
+                    uniqueObject.imgExecutor
+                        .execute(GooglePageImgProcessor(uniqueObject, page as GooglePageInfo, HttpHostExt.NO_PROXY))
+                }
 
             ExecutionContext.proxyExecutor.terminate(3L, TimeUnit.MINUTES)
             uniqueObject.imgExecutor.terminate(10L, TimeUnit.MINUTES)

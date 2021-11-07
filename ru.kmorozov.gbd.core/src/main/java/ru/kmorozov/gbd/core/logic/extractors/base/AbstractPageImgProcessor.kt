@@ -16,7 +16,11 @@ import javax.net.ssl.SSLException
 /**
  * Created by sbt-morozov-kv on 18.11.2016.
  */
-abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcessor, IUniqueReusable<T> {
+abstract class AbstractPageImgProcessor<T : AbstractPage> protected constructor(
+    bookContext: BookContext,
+    page: T,
+    usedProxy: HttpHostExt
+) : AbstractHttpProcessor(), IUniqueReusable<T> {
     protected lateinit var bookContext: BookContext
     override lateinit var uniqueObject: T
     protected lateinit var usedProxy: HttpHostExt
@@ -24,7 +28,7 @@ abstract class AbstractPageImgProcessor<T : AbstractPage> : AbstractHttpProcesso
     protected lateinit var logger: Logger
     protected abstract val successMsg: String
 
-    protected constructor(bookContext: BookContext, page: T, usedProxy: HttpHostExt) : super() {
+    init {
         initProcessor(bookContext, page, usedProxy)
     }
 

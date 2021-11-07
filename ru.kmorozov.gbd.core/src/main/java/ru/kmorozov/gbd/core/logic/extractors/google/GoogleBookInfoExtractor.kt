@@ -35,10 +35,10 @@ open class GoogleBookInfoExtractor : AbstractBookInfoExtractor {
         val scripts = doc.select("script")
         for (script in scripts) {
             val childs = script.childNodes()
-            if (null != childs && !childs.isEmpty() && childs[0] is DataNode) {
+            if (!childs.isEmpty() && childs[0] is DataNode) {
                 val data = (childs[0] as DataNode).wholeData
 
-                if (null == data || data.isEmpty()) continue
+                if (data.isEmpty()) continue
 
                 if (data.startsWith(ADD_FLAGS_ATTRIBUTE) && 0 < data.indexOf(OC_RUN_ATTRIBUTE)) {
                     val jsonStart = data.indexOf(OC_RUN_ATTRIBUTE) + OC_RUN_ATTRIBUTE.length + 1

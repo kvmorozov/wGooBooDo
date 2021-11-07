@@ -31,7 +31,12 @@ class BookContext {
         this.metadata = LibraryFactory.getMetadata(bookId)
         this.bookInfo = LazyBookInfo(bookId, GlobalIndex.INSTANCE)
         sigExecutor = QueuedThreadPoolExecutor(1, QueuedThreadPoolExecutor.THREAD_POOL_SIZE, { true }, "Sig_$bookId")
-        imgExecutor = QueuedThreadPoolExecutor(0, QueuedThreadPoolExecutor.THREAD_POOL_SIZE, { x -> x.isDataProcessed }, "Img_$bookId")
+        imgExecutor = QueuedThreadPoolExecutor(
+            0,
+            QueuedThreadPoolExecutor.THREAD_POOL_SIZE,
+            { x -> x.isDataProcessed },
+            "Img_$bookId"
+        )
         extractor = metadata.getImageExtractor(this)
         logger = ExecutionContext.INSTANCE.getLogger(BookContext::class.java, this)
     }
@@ -56,6 +61,12 @@ class BookContext {
             prepareStorage()
             initComplete = true
         }
+    }
+
+    fun forceComplete() {
+        started.set(true)
+        pdfCompleted.set(true)
+        ExecutionContext.INSTANCE.forceComepleteOne()
     }
 
     protected fun prepareStorage() {

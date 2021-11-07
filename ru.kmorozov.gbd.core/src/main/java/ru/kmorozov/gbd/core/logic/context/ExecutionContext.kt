@@ -106,6 +106,10 @@ class ExecutionContext private constructor(val isSingleMode: Boolean) {
         }
     }
 
+    public fun forceComepleteOne() {
+        pdfExecutor.dec()
+    }
+
     private fun newProxyEvent(proxy: HttpHostExt) {
         for (bookContext in getContexts(true))
             bookContext.extractor.newProxyEvent(proxy)
