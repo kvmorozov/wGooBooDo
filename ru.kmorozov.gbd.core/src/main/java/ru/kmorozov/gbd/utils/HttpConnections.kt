@@ -44,14 +44,13 @@ class HttpConnections private constructor() {
             try {
                 val client = if (proxy == NO_PROXY) HttpClient.newBuilder().build() else HttpClient.newBuilder()
                     .proxy(ProxySelector.of(host)).build()
-                val reqBuilder = HttpRequest.newBuilder().uri(baseUrl).GET().timeout(Duration.ofMillis(10000))
-                reqBuilder.setHeader("User-Agent", USER_AGENT)
+                val reqBuilder = HttpRequest.newBuilder()
+                    .uri(baseUrl).GET().timeout(Duration.ofMillis(10000)).setHeader("User-Agent", USER_AGENT)
 
-                val response = client.send(reqBuilder.build(), HttpResponse.BodyHandlers.ofInputStream())
-                return Optional.of(response)
+                return Optional.of(client.send(reqBuilder.build(), HttpResponse.BodyHandlers.ofInputStream()))
             } catch (e: IOException) {
                 if (GBDOptions.debugEnabled)
-                    logger.info("Proxy $proxy error:" + e.localizedMessage)
+                    logger.info("Proxy $proxy error: " + e.message)
 
                 return Optional.empty()
             } catch (ste: SocketTimeoutException) {
@@ -80,10 +79,14 @@ class HttpConnections private constructor() {
             val resp = getResponse(proxy, urlType)
             if (resp.isEmpty)
                 return ""
-            else
+            else {
+                if (GBDOptions.debugEnabled)
+                    logger.info("Got cookies for $proxy : ${resp.get().headers()}")
+
                 return resp.get().headers().allValues("set-cookie").stream()
                     .map { s -> s.split(";".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0] }
                     .collect(Collectors.joining(";"))
+            }
         }
 
         private fun getBaseUrl(urlType: UrlType): URI {
