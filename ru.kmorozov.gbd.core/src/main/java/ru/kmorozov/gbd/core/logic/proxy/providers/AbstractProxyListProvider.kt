@@ -71,7 +71,10 @@ abstract class AbstractProxyListProvider : IProxyListProvider {
     override fun invalidatedProxyListener() {
         proxyList.removeIf { !it.isAvailable }
         val liveProxyCount = proxyList.count()
-        if (0 == liveProxyCount && GBDOptions.secureMode) throw RuntimeException("No more proxies!")
+        if (0 == liveProxyCount && GBDOptions.secureMode) {
+            logger.severe("No more proxies!")
+            ExecutionContext.INSTANCE.forceCompleteAll()
+        }
     }
 
     protected fun getInetAddress(proxyItem: String): Optional<InetSocketAddress> {

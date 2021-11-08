@@ -106,8 +106,12 @@ class ExecutionContext private constructor(val isSingleMode: Boolean) {
         }
     }
 
-    public fun forceComepleteOne() {
+    fun forceComepleteOne() {
         pdfExecutor.dec()
+    }
+
+    fun forceCompleteAll() {
+        bookContextMap.values.forEach { it.forceComplete() }
     }
 
     private fun newProxyEvent(proxy: HttpHostExt) {
