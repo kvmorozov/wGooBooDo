@@ -43,7 +43,7 @@ class HttpConnections private constructor() {
 
             try {
                 val client = if (proxy == NO_PROXY) HttpClient.newBuilder().build() else HttpClient.newBuilder()
-                    .proxy(ProxySelector.of(host)).build()
+                    .proxy(SimpleProxySelector(proxy)).build()
                 val reqBuilder = HttpRequest.newBuilder()
                     .uri(baseUrl).GET().timeout(Duration.ofMillis(10000)).setHeader("User-Agent", USER_AGENT)
 
