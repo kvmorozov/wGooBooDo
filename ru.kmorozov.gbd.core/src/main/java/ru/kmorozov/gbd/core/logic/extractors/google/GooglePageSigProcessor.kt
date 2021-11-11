@@ -26,7 +26,7 @@ class GooglePageSigProcessor : AbstractHttpProcessor, IUniqueReusable<GooglePage
     constructor(bookContext: BookContext, proxy: HttpHostExt) : super() {
         sigPageExecutor = QueuedThreadPoolExecutor(bookContext.pagesStream.filter { p -> (p as AbstractPage).isNotProcessed }.count().toInt(),
                 QueuedThreadPoolExecutor.THREAD_POOL_SIZE, { it.isProcessed },
-                bookContext.toString() + '/'.toString() + proxy)
+                "sigPage_" + bookContext.toString() + '/'.toString() + proxy)
         initProcessor(bookContext, proxy)
     }
 

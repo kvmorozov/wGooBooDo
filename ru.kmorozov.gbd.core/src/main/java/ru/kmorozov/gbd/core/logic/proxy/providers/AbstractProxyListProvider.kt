@@ -71,7 +71,7 @@ abstract class AbstractProxyListProvider : IProxyListProvider {
     override fun invalidatedProxyListener() {
         proxyList.removeIf { !it.isAvailable }
         val liveProxyCount = proxyList.count()
-        if (0 == liveProxyCount && GBDOptions.secureMode) {
+        if (0 == liveProxyCount) {
             logger.severe("No more proxies!")
             ExecutionContext.INSTANCE.forceCompleteAll()
         }
@@ -88,7 +88,7 @@ abstract class AbstractProxyListProvider : IProxyListProvider {
     private fun processProxyItem(host: InetSocketAddress, urlType: UrlType): Optional<HttpHostExt> {
         val proxy: HttpHostExt
 
-        val cookie = HttpConnections.getCookieString(host, urlType)
+        val cookie = HttpConnections.INSTANCE.getCookieString(host, urlType)
         proxy = HttpHostExt(host, cookie)
 
         if (!Strings.isNullOrEmpty(cookie)) {

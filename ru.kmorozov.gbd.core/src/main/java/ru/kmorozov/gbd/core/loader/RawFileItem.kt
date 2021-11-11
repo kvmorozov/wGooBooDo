@@ -8,7 +8,7 @@ import java.nio.file.Path
 open class RawFileItem : IStoredItem {
     protected val outputFile: File
 
-    override val createdNew: Boolean
+    final override val createdNew: Boolean
 
     constructor(outputFile: File) {
         this.outputFile = outputFile

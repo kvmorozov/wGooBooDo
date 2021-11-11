@@ -21,13 +21,13 @@
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
-            <version>LATEST</version>
+            <version>1.14.3</version>
         </dependency>
 
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>LATEST</version>
+            <version>31.0.1-jre</version>
         </dependency>
 
         <dependency>
@@ -176,35 +176,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <profiles>
-        <profile>
-            <id>apachehttp5-connector</id>
-            <dependencies>
-                <dependency>
-                    <groupId>org.apache.httpcomponents.client5</groupId>
-                    <artifactId>httpclient5</artifactId>
-                    <version>5.0</version>
-                </dependency>
-            </dependencies>
-        </profile>
-
-        <profile>
-            <id>async-connector</id>
-            <dependencies>
-                <dependency>
-                    <groupId>org.asynchttpclient</groupId>
-                    <artifactId>async-http-client</artifactId>
-                    <version>LATEST</version>
-                </dependency>
-
-                <dependency>
-                    <groupId>io.netty</groupId>
-                    <artifactId>netty-handler</artifactId>
-                    <version>4.1.49.Final</version>
-                </dependency>
-            </dependencies>
-        </profile>
-    </profiles>
-
 </project>

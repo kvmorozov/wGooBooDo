@@ -8,7 +8,7 @@ import java.util.logging.Level
 class DebugEventListener : IEventListener {
 
     override fun receiveEvent(event: LogEvent) {
-        dbgOutput.appendText(event.eventInfo + System.lineSeparator())
+        dbgOutput.appendText(Thread.currentThread().name + " > " + event.eventInfo + System.lineSeparator())
     }
 
     override fun eventMatched(event: LogEvent): Boolean {

@@ -151,16 +151,16 @@ open class HttpHostExt {
     }
 
     fun getHeaders(urlType: UrlType): HttpHeaders {
-        if (null == headers || null == headers!!.cookie) {
+        if (isAvailable && (null == headers || null == headers!!.cookie)) {
             synchronized(this) {
-                if (null == headers || Strings.isNullOrEmpty(headers!!.cookie)) {
-                    headers = HttpConnections.getHeaders(this)
+                if (isAvailable && (null == headers || Strings.isNullOrEmpty(headers!!.cookie))) {
+                    headers = HttpConnections.INSTANCE.getHeaders(this)
                     if (null == headers) {
                         logger.severe("Cannot get cookies for proxy $this")
                         forceInvalidate(false)
                     } else {
                         if (Strings.isNullOrEmpty(headers!!.cookie)) headers!!.cookie =
-                                HttpConnections.getCookieString(host, urlType)
+                                HttpConnections.INSTANCE.getCookieString(host, urlType)
                         if (Strings.isNullOrEmpty(headers!!.cookie)) {
                             logger.severe("Cannot get cookies for proxy $this")
                             forceInvalidate(false)
@@ -179,7 +179,7 @@ open class HttpHostExt {
     }
 
     open fun reset() {
-        headers = HttpConnections.getHeaders(this)
+        headers = HttpConnections.INSTANCE.getHeaders(this)
         cookie = null
     }
 

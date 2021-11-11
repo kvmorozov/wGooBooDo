@@ -93,6 +93,7 @@ class CheckTask(options: TaskOptions, remoteFile: OneDriveItem, localFile: File)
                 reporter.skipped()
                 return
             }
+            else -> {}
         }
 
         if (localFile.isFile && !remoteFile.isDirectory) { // If we are syncing files
