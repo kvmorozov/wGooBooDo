@@ -7,7 +7,7 @@
     <artifactId>ru.kmorozov.gbd.db</artifactId>
 
     <properties>
-        <kotlin.version>1.6.0-RC</kotlin.version>
+        <kotlin.version>1.6.0</kotlin.version>
     </properties>
 
     <parent>
