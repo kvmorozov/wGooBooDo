@@ -16,8 +16,8 @@ import java.util.concurrent.ConcurrentLinkedQueue
 @Component
 class ServerContext {
 
-    private val sigTaskQueue: Queue<BookTask> = ConcurrentLinkedQueue<BookTask>()
-    private val pageTaskQueue: Queue<BookTask> = ConcurrentLinkedQueue<BookTask>()
+    private val sigTaskQueue = ConcurrentLinkedQueue<BookTask>()
+    private val pageTaskQueue: Queue<BookTask> = ConcurrentLinkedQueue()
     private val sigWorker = SigWorker(sigTaskQueue, pageTaskQueue)
     private val pageWorker = PageWorker(pageTaskQueue)
 

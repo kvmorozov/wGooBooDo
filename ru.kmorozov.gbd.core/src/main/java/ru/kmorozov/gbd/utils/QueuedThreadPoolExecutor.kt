@@ -6,6 +6,7 @@ import ru.kmorozov.gbd.core.logic.extractors.base.IUniqueRunnable
 import java.util.*
 import java.util.concurrent.*
 import java.util.concurrent.atomic.AtomicInteger
+import kotlin.math.min
 
 /**
  * Created by km on 12.11.2016.
@@ -55,12 +56,12 @@ class QueuedThreadPoolExecutor<T : Any> : ThreadPoolExecutor {
     }
 
     fun terminate(timeout: Long, unit: TimeUnit) {
-        val liveTime = Math.min(unit.toMillis(timeout), MAX_LIVE_TIME)
+        val liveTime = min(unit.toMillis(timeout), MAX_LIVE_TIME)
         val counter = AtomicInteger(0)
         var submitted = 0
         while (true)
             try {
-                val completed = uniqueMap.keys.filter(completeChecker).count()
+                val completed = uniqueMap.keys.count(completeChecker)
                 if (completedTaskCount == taskCount && completedTaskCount >= needProcessCount.get() || System.currentTimeMillis() - timeStart > liveTime)
                     break
                 if (0 == counter.incrementAndGet() % 100) {

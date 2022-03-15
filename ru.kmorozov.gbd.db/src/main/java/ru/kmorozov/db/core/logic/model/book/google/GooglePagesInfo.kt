@@ -51,11 +51,11 @@ class GooglePagesInfo : AbstractPagesInfo(), Serializable {
     }
 
     override fun build() {
-        val _pages = Arrays.asList(*pages)
+        val _pages = mutableListOf(*pages)
         pagesMap = ConcurrentHashMap(_pages.size)
         pagesList = LinkedList()
 
-        _pages.sortWith({ obj, anotherPage -> obj.compareTo(anotherPage) })
+        _pages.sortWith { obj, anotherPage -> obj.compareTo(anotherPage) }
 
         var prevPage: GooglePageInfo? = null
         for (page in _pages) {
@@ -80,7 +80,7 @@ class GooglePagesInfo : AbstractPagesInfo(), Serializable {
         val beginPageNum = beginGap.pageNum
         val endPageNum = endGap.pageNum
 
-        if (beginPageNum >= endPageNum && 1 < endPageNum && beginPagePrefix == endPagePrefix)
+        if (endPageNum in 2..beginPageNum && beginPagePrefix == endPagePrefix)
             logger.severe("Cannot fill gap between pages ${beginGap.pid}(order=${beginGap.order}) and ${endGap.pid}(order=${endGap.order})")
 
         if (beginPagePrefix == endPagePrefix) {
@@ -122,7 +122,7 @@ class GooglePagesInfo : AbstractPagesInfo(), Serializable {
             }
         }
 
-        pagesList.sortWith({ obj, anotherPage -> obj.compareTo(anotherPage) })
+        pagesList.sortWith { obj, anotherPage -> obj.compareTo(anotherPage) }
     }
 
     override fun getPageByPid(pid: String): GooglePageInfo {
@@ -169,7 +169,7 @@ class GooglePagesInfo : AbstractPagesInfo(), Serializable {
             else
                 bList.append("${pair.left.pid}-${pair.right.pid}, ")
 
-        if (0 < bList.length) {
+        if (bList.isNotEmpty()) {
             bList.deleteCharAt(bList.length - 1).deleteCharAt(bList.length - 1)
             bList.append(String.format(". Total = %d/%d", filteredCount, pagesList.size))
         }

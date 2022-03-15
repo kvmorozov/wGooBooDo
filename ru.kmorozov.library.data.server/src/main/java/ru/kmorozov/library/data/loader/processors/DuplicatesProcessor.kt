@@ -51,7 +51,7 @@ open class DuplicatesProcessor : IProcessor {
         }
 
     fun findDuplicates(): List<DuplicatedBookDTO> {
-        return duplicates.stream().map<DuplicatedBookDTO> { this.createDuplicateDTO(it) }.collect(Collectors.toList())
+        return duplicates.stream().map { this.createDuplicateDTO(it) }.collect(Collectors.toList())
     }
 
     override fun process() {
@@ -64,7 +64,7 @@ open class DuplicatesProcessor : IProcessor {
                             .stream()
                             .map { id -> booksRepository.findById(id) }
                             .filter { it.isPresent }
-                            .map<Book> { it.get() }
+                            .map { it.get() }
                             .collect(Collectors.toList())
 
                     if (books.size < 2)

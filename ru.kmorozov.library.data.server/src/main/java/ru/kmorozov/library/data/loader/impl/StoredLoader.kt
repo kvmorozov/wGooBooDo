@@ -97,7 +97,7 @@ abstract class StoredLoader : BaseLoader() {
         val storageInfo = if (null == storage.storageInfo) StorageInfo() else storage.storageInfo
 
         getItemsStreamByStorage(storage)
-                .filter(Predicate<ServerItem> { it.isLoadableOrLink })
+                .filter(Predicate { it.isLoadableOrLink })
                 .forEach { serverItem ->
                     if (!serverItem.isDirectory) {
                         val bookFormat = BookUtils.getFormat(serverItem.name)

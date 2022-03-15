@@ -51,8 +51,8 @@ open class GoogleBookInfoExtractor : AbstractBookInfoExtractor {
 
                     val endIndex1 = data.lastIndexOf(BOOK_INFO_END_TAG_1)
                     val endIndex2 = data.lastIndexOf(BOOK_INFO_END_TAG_2)
-                    val endIndex: Int;
-                    if (endIndex1 > 0) endIndex = endIndex1  else endIndex = endIndex2;
+                    val endIndex: Int
+                    if (endIndex1 > 0) endIndex = endIndex1  else endIndex = endIndex2
                     val bookJsonData = data.substring(data.indexOf(BOOK_INFO_START_TAG) - 2, endIndex - 3)
                     val bookData = Mapper.gson.fromJson(bookJsonData, GoogleBookData::class.java)
 

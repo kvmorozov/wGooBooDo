@@ -103,7 +103,7 @@ class CommandLineOpts {
                 if ("up" != chosen && "down" != chosen) {
                     throw ParseException("Direction must be one of up or down")
                 }
-                commandLineOpts.direction = Direction.valueOf(chosen.toUpperCase())
+                commandLineOpts.direction = Direction.valueOf(chosen.uppercase(Locale.getDefault()))
             }
 
             if (line.hasOption("threads")) {

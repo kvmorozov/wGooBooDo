@@ -54,7 +54,7 @@ class HttpConnections private constructor() {
                 override fun checkServerTrusted(p0: Array<out X509Certificate>?, p1: String?) {}
 
                 override fun getAcceptedIssuers(): Array<X509Certificate> {
-                    return emptyArray();
+                    return emptyArray()
                 }
             }
 

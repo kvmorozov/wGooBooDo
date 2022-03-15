@@ -81,7 +81,7 @@ class StorageController : IDataRestServer {
 
         realStorages.addAll(linkedStorages)
 
-        return realStorages.stream().map<StorageDTO> { StorageDTO(it) }.collect(Collectors.toList())
+        return realStorages.stream().map { StorageDTO(it) }.collect(Collectors.toList())
     }
 
     @RequestMapping("/booksByStorageId")
@@ -93,14 +93,14 @@ class StorageController : IDataRestServer {
                 .filter { book -> !book.isBrokenLink }
                 .map { book -> if (book.isLink) book.linkInfo!!.linkedBook else book }
                 .filter { Objects.nonNull(it) }
-                .map<BookDTO> { BookUtils.createBookDIO(it!!) }
+                .map { BookUtils.createBookDIO(it!!) }
                 .collect(Collectors.toList())
     }
 
     @RequestMapping("/itemsByStorageId")
     override fun getItemsByStorageId(storageId: String): List<ItemDTO> {
-        val result = getBooksByStorageId(storageId).stream().map<ItemDTO> { ItemDTO(it) }.collect(Collectors.toList())
-        result.addAll(getStoragesByParentId(storageId).stream().map<ItemDTO> { ItemDTO(it) }.collect(Collectors.toList()))
+        val result = getBooksByStorageId(storageId).stream().map { ItemDTO(it) }.collect(Collectors.toList())
+        result.addAll(getStoragesByParentId(storageId).stream().map { ItemDTO(it) }.collect(Collectors.toList()))
 
         return result
     }
