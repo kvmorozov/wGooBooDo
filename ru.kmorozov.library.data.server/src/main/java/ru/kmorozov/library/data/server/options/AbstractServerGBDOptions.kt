@@ -3,6 +3,7 @@ package ru.kmorozov.library.data.server.options
 import ru.kmorozov.gbd.core.config.IGBDOptions
 import ru.kmorozov.gbd.core.config.IStorage
 import ru.kmorozov.gbd.core.config.options.CtxOptions
+import ru.kmorozov.gbd.core.config.options.ScanOptions
 
 abstract class AbstractServerGBDOptions : IGBDOptions {
     override var bookId: String = ""
@@ -22,6 +23,10 @@ abstract class AbstractServerGBDOptions : IGBDOptions {
 
     override fun pdfOptions(): String {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun scanOptions(): ScanOptions {
+        TODO("Not yet implemented")
     }
 
     override fun ctxOptions(): CtxOptions {

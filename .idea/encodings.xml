@@ -22,11 +22,15 @@
     <file url="file://$PROJECT_DIR$/ru.kmorozov.gbd.db/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ru.kmorozov.gbd.desktop" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ru.kmorozov.gbd.desktop.app" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ru.kmorozov.gbd.desktop.app/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ru.kmorozov.gbd.desktop.app/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/resources/gui.properties" charset="ISO-8859-1" />
-    <file url="file://$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/resources/gui_ru.properties" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/resources/gui.properties" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/resources/gui_ru.properties" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ru.kmorozov.gbd.parent" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ru.kmorozov.gbd.parent/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ru.kmorozov.gbd.parent/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ru.kmorozov.ldoc.dictionary/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ru.kmorozov.ldoc.dictionary/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ru.kmorozov.library.data.client" charset="UTF-8" />
@@ -36,6 +40,9 @@
     <file url="file://$PROJECT_DIR$/ru.kmorozov.library.data.server" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ru.kmorozov.library.data.server/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ru.kmorozov.library.parent" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ru.kmorozov.library.parent/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ru.kmorozov.library.parent/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

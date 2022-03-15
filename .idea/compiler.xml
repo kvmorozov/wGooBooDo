@@ -1,48 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
+    <excludeFromCompile>
+      <file url="file://$PROJECT_DIR$/ru.kmorozov.gbd.desktop/src/main/java/ru/kmorozov/gbd/desktop/gui/MainBookForm.form" />
+    </excludeFromCompile>
     <annotationProcessing>
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="ru.kmorozov.library.data.model" />
+        <module name="ru.kmorozov.library" />
+        <module name="ru.kmorozov.library.data.client" />
+        <module name="ru.kmorozov.gbd.desktop.app" />
+        <module name="ru.kmorozov.gbd.db.mongo" />
+        <module name="ru.kmorozov.gbd.core" />
         <module name="ru.kmorozov.gbd.desktop" />
         <module name="ru.kmorozov.library.data.server" />
-        <module name="ru.kmorozov.library.data.client" />
-        <module name="ru.kmorozov.library.data.model" />
-        <module name="ru.kmorozov.gbd.db.mongo" />
-        <module name="ru.kmorozov.gbd.core.logger" />
-        <module name="ru.kmorozov.gbd.core" />
-        <module name="ru.kmorozov.gbd.db" />
-        <module name="ru.kmorozov.gbd.desktop.app" />
-        <module name="ru.kmorozov.library" />
         <module name="ru.kmorozov.gbd.core.config" />
         <module name="ru.kmorozov.api.onedrive" />
+        <module name="ru.kmorozov.gbd.db" />
+        <module name="ru.kmorozov.gbd.core.logger" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="11">
-      <module name="ru.kmorozov.api.onedrive" target="13" />
-      <module name="ru.kmorozov.gbd.core" target="13" />
-      <module name="ru.kmorozov.gbd.core.config" target="13" />
-      <module name="ru.kmorozov.gbd.core.logger" target="13" />
-      <module name="ru.kmorozov.gbd.db" target="13" />
-      <module name="ru.kmorozov.gbd.db.mongo" target="13" />
-      <module name="ru.kmorozov.gbd.desktop" target="13" />
-      <module name="ru.kmorozov.gbd.desktop.app" target="13" />
+      <module name="parent" target="14" />
+      <module name="ru.kmorozov.api.onedrive" target="14" />
+      <module name="ru.kmorozov.gbd.core" target="14" />
+      <module name="ru.kmorozov.gbd.core.config" target="14" />
+      <module name="ru.kmorozov.gbd.core.logger" target="14" />
+      <module name="ru.kmorozov.gbd.db" target="14" />
+      <module name="ru.kmorozov.gbd.db.mongo" target="14" />
+      <module name="ru.kmorozov.gbd.desktop" target="14" />
+      <module name="ru.kmorozov.gbd.desktop.app" target="14" />
       <module name="ru.kmorozov.gbd.parent" target="13" />
-      <module name="ru.kmorozov.library" target="11" />
-      <module name="ru.kmorozov.library.data.client" target="11" />
-      <module name="ru.kmorozov.library.data.model" target="11" />
-      <module name="ru.kmorozov.library.data.server" target="11" />
+      <module name="ru.kmorozov.library" target="14" />
+      <module name="ru.kmorozov.library.data.client" target="14" />
+      <module name="ru.kmorozov.library.data.model" target="14" />
+      <module name="ru.kmorozov.library.data.server" target="14" />
       <module name="ru.kmorozov.library.data.server (1)" target="11" />
       <module name="ru.kmorozov.library.data.server.her" target="11" />
-      <module name="ru.kmorozov.library.parent" target="11" />
+      <module name="ru.kmorozov.library.parent" target="14" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="GENERATE_NO_WARNINGS" value="true" />
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="ru.kmorozov.gbd.core" options="" />
+      <module name="ru.kmorozov.gbd.db.mongo" options="-parameters" />
       <module name="ru.kmorozov.library" options="-parameters" />
       <module name="ru.kmorozov.library.data.client" options="-parameters" />
       <module name="ru.kmorozov.library.data.model" options="-parameters" />

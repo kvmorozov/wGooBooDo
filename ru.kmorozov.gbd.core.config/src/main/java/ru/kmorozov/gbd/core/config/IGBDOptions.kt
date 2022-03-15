@@ -2,6 +2,7 @@ package ru.kmorozov.gbd.core.config
 
 import ru.kmorozov.gbd.core.config.options.AuthOptions
 import ru.kmorozov.gbd.core.config.options.CtxOptions
+import ru.kmorozov.gbd.core.config.options.ScanOptions
 
 /**
  * Created by km on 06.12.2015.
@@ -21,8 +22,7 @@ interface IGBDOptions {
 
     val reloadImages: Boolean
 
-    val scanEnabled: Boolean
-        get() = false
+    fun scanOptions(): ScanOptions
 
     val secureMode: Boolean
 

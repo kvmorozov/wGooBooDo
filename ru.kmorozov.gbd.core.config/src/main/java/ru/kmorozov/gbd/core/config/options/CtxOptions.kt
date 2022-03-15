@@ -2,7 +2,7 @@ package ru.kmorozov.gbd.core.config.options
 
 class CtxOptions {
 
-    val ctxMode: CtxMode
+    private val ctxMode: CtxMode
     val connectionParams: String
 
     enum class CtxMode {

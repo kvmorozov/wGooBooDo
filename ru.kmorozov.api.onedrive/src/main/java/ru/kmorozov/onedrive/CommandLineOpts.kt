@@ -7,6 +7,7 @@ import java.io.IOException
 import java.nio.charset.Charset
 import java.nio.file.Files
 import java.nio.file.Paths
+import java.util.*
 
 class CommandLineOpts {
     private var isInitialised: Boolean = false
@@ -98,7 +99,7 @@ class CommandLineOpts {
             }
 
             if (line.hasOption("direction")) {
-                val chosen = line.getOptionValue("direction").toLowerCase()
+                val chosen = line.getOptionValue("direction").lowercase(Locale.getDefault())
                 if ("up" != chosen && "down" != chosen) {
                     throw ParseException("Direction must be one of up or down")
                 }

@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils
 import ru.kmorozov.gbd.core.config.options.AuthOptions
 import ru.kmorozov.gbd.core.config.options.CtxOptions
 import ru.kmorozov.gbd.core.config.options.PdfOptions
+import ru.kmorozov.gbd.core.config.options.ScanOptions
 
 /**
  * Created by km on 01.12.2015.
@@ -43,8 +44,8 @@ object GBDOptions {
     val debugEnabled: Boolean
         get() = _INSTANCE.debugEnabled
 
-    val scanEnabled: Boolean
-        get() = _INSTANCE.scanEnabled
+    val scanOptions: ScanOptions
+        get() = _INSTANCE.scanOptions()
 
     val pdfOptions: PdfOptions
         get() = if (StringUtils.isEmpty(_INSTANCE.pdfOptions())) PdfOptions.DEFAULT_MODE else PdfOptions.getOption(_INSTANCE.pdfOptions())

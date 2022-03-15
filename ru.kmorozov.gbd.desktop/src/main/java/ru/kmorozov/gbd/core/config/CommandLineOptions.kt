@@ -6,6 +6,7 @@ import org.apache.commons.cli.Option
 import org.apache.commons.cli.Options
 import ru.kmorozov.gbd.core.config.options.AuthOptions
 import ru.kmorozov.gbd.core.config.options.CtxOptions
+import ru.kmorozov.gbd.core.config.options.ScanOptions
 import ru.kmorozov.gbd.core.loader.LocalFSStorage
 
 /**
@@ -80,7 +81,7 @@ class CommandLineOptions(commandLineArguments: Array<String>) : IGBDOptions {
         options.addOption(option)
 
         option = Option(OPTION_SCAN_MODE_SHORT, OPTION_SCAN_MODE_LONG, true, "Scan mode")
-        option.args = 0
+        option.args = 1
         option.setOptionalArg(true)
         option.argName = "Scan mode "
         options.addOption(option)
@@ -131,8 +132,10 @@ class CommandLineOptions(commandLineArguments: Array<String>) : IGBDOptions {
     override val debugEnabled: Boolean
         get() = getBoolOptionValue(OPTION_DEBUG_MODE_SHORT)
 
-    override val scanEnabled: Boolean
-        get() = getBoolOptionValue(OPTION_SCAN_MODE_SHORT)
+    override fun scanOptions(): ScanOptions {
+        val scanOpts = getStringOptionValues(OPTION_SCAN_MODE_SHORT)
+        return if (scanOpts == null || scanOpts.size != 1) ScanOptions.DEFAULT_SCAN_OPTIONS else ScanOptions(true, scanOpts[0])
+    }
 
     override fun pdfOptions(): String {
         return getStringOptionValue(OPTION_PDF_MODE_SHORT)

@@ -8,6 +8,7 @@ import java.io.File
 import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
+import java.util.*
 import javax.imageio.ImageIO
 
 /**
@@ -23,7 +24,7 @@ object Images {
     init {
         try {
             ocr = Tesseract() // create a new OCR engine
-            ocr.setDatapath("J:\\OCR\\tesseract\\tessdata")
+            ocr.setDatapath(GBDOptions.scanOptions.tessDataPath)
             ocrInitialized = true
         } catch (ex: Exception) {
 
@@ -33,20 +34,18 @@ object Images {
     fun isImageFile(filePath: Path): Boolean {
         if (!Files.isRegularFile(filePath)) return false
 
-        val ext = getImageFormat(filePath)
-
-        when (ext) {
-            "png", "jpg", "jpeg" -> return true
-            "pdf" -> return false
+        return when (getImageFormat(filePath)) {
+            "png", "jpg", "jpeg" -> true
+            "pdf" -> false
             else -> {
                 logger.severe("Unknown img format for $filePath")
-                return false
+                false
             }
         }
     }
 
     fun getImageFormat(filePath: Path): String {
-        return MoreFiles.getFileExtension(filePath).toLowerCase()
+        return MoreFiles.getFileExtension(filePath).lowercase(Locale.getDefault())
     }
 
     fun isInvalidImage(filePath: Path, imgWidth: Int): Boolean {
@@ -75,21 +74,21 @@ object Images {
 
     @Synchronized
     fun doOCR(imgfile: File): String {
-        if (!GBDOptions.scanEnabled || !ocrInitialized)
+        if (!GBDOptions.scanOptions.scanEnabled || !ocrInitialized)
             return ""
 
-        try {
-            return ocr.doOCR(imgfile)
+        return try {
+            ocr.doOCR(imgfile)
         } catch (ex: Exception) {
             logger.error(ex.localizedMessage)
-            return ""
+            ""
         }
     }
 
     fun isPdfFile(filePath: Path): Boolean {
         if (!Files.isRegularFile(filePath)) return false
 
-        val ext = MoreFiles.getFileExtension(filePath).toLowerCase()
+        val ext = MoreFiles.getFileExtension(filePath).lowercase(Locale.getDefault())
 
         return "pdf" == ext && filePath.toFile().length() > 0
     }

@@ -1,6 +1,7 @@
 package ru.kmorozov.gbd.core.config
 
 import ru.kmorozov.gbd.core.config.options.CtxOptions
+import ru.kmorozov.gbd.core.config.options.ScanOptions
 import ru.kmorozov.gbd.core.loader.LocalFSStorage
 
 /**
@@ -22,6 +23,10 @@ class LocalSystemOptions : IGBDOptions {
 
     override val reloadImages: Boolean
         get() = SystemConfigs.reloadImages
+
+    override fun scanOptions(): ScanOptions {
+        TODO("Not yet implemented")
+    }
 
     override val secureMode: Boolean
         get() = SystemConfigs.secureMode
