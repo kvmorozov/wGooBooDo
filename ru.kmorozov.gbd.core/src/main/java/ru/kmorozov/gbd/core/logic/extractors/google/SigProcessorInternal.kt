@@ -19,18 +19,13 @@ import java.nio.charset.Charset
 import java.util.*
 import javax.net.ssl.SSLException
 
-class SigProcessorInternal : AbstractHttpProcessor, IUniqueReusable<GooglePageInfo> {
-
-    private val bookContext: BookContext
-    private val proxy: HttpHostExt
+class SigProcessorInternal(
+    private val bookContext: BookContext,
+    private val proxy: HttpHostExt,
     override var uniqueObject: GooglePageInfo
-    var sigFound = false
+) : AbstractHttpProcessor(), IUniqueReusable<GooglePageInfo> {
 
-    constructor(bookContext: BookContext, proxy: HttpHostExt, uniqueObject: GooglePageInfo) {
-        this.bookContext = bookContext
-        this.proxy = proxy
-        this.uniqueObject = uniqueObject
-    }
+    var sigFound = false
 
     override var reuseCallback: (IUniqueReusable<GooglePageInfo>) -> Unit = {}
 
@@ -79,7 +74,7 @@ class SigProcessorInternal : AbstractHttpProcessor, IUniqueReusable<GooglePageIn
 
             if (null == framePages) return
 
-            Arrays.asList(*framePages.pages)
+            listOf(*framePages.pages)
                     .stream()
                     .filter { page -> null != (page as GooglePageInfo).src }
                     .forEach { framePage ->

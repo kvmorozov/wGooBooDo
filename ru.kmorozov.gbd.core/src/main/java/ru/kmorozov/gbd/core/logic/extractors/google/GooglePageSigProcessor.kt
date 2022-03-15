@@ -16,17 +16,18 @@ import java.util.concurrent.TimeUnit
 /**
  * Created by km on 21.11.2015.
  */
-class GooglePageSigProcessor : AbstractHttpProcessor, IUniqueReusable<GooglePageSigProcessor> {
+class GooglePageSigProcessor(bookContext: BookContext, proxy: HttpHostExt) : AbstractHttpProcessor(), IUniqueReusable<GooglePageSigProcessor> {
     lateinit var bookContext: BookContext
     lateinit var proxy: HttpHostExt
     override var reuseCallback: (IUniqueReusable<GooglePageSigProcessor>) -> Unit = {}
     private val sigPageExecutor: QueuedThreadPoolExecutor<GooglePageInfo>
     override lateinit var uniqueObject: GooglePageSigProcessor
 
-    constructor(bookContext: BookContext, proxy: HttpHostExt) : super() {
+    init {
         sigPageExecutor = QueuedThreadPoolExecutor(bookContext.pagesStream.filter { p -> (p as AbstractPage).isNotProcessed }.count().toInt(),
                 QueuedThreadPoolExecutor.THREAD_POOL_SIZE, { it.isProcessed },
-                "sigPage_" + bookContext.toString() + '/'.toString() + proxy)
+            "sigPage_$bookContext/$proxy"
+        )
         initProcessor(bookContext, proxy)
     }
 

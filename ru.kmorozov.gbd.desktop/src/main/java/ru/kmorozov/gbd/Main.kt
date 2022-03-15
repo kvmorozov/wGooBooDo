@@ -14,7 +14,7 @@ internal object Main {
 
     @JvmStatic
     fun main(args: Array<String>) {
-        if (0 < args.size) {
+        if (args.isNotEmpty()) {
             try {
                 GBDOptions.init(CommandLineOptions(args))
 

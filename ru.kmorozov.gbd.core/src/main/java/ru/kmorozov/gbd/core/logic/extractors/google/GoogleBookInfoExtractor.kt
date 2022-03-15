@@ -35,7 +35,7 @@ open class GoogleBookInfoExtractor : AbstractBookInfoExtractor {
         val scripts = doc.select("script")
         for (script in scripts) {
             val childs = script.childNodes()
-            if (!childs.isEmpty() && childs[0] is DataNode) {
+            if (childs.isNotEmpty() && childs[0] is DataNode) {
                 val data = (childs[0] as DataNode).wholeData
 
                 if (data.isEmpty()) continue
@@ -59,7 +59,7 @@ open class GoogleBookInfoExtractor : AbstractBookInfoExtractor {
                     val result = BookInfo(bookData, pages, bookId)
                     result.pages.build()
 
-                    if (result.pages.pages.size > 0)
+                    if (result.pages.pages.isNotEmpty())
                         return result
                     else
                         return EMPTY_BOOK

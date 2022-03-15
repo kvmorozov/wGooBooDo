@@ -79,10 +79,10 @@ abstract class HttpConnector : AutoCloseable {
         if (Strings.isNullOrEmpty(headers.cookie))
             return false
 
-        when (urlType) {
-            UrlType.GOOGLE_BOOKS -> return headers.cookie.contains("NID")
-            UrlType.JSTOR -> return headers.cookie.contains("UUID")
-            else -> return true
+        return when (urlType) {
+            UrlType.GOOGLE_BOOKS -> headers.cookie.contains("NID")
+            UrlType.JSTOR -> headers.cookie.contains("UUID")
+            else -> true
         }
     }
 

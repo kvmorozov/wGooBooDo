@@ -23,23 +23,7 @@ import java.util.stream.Stream
 /**
  * Created by km on 08.11.2016.
  */
-class BookContext {
-    val postProcessor: IPostProcessor
-
-    internal constructor(bookId: String, postProcessor: IPostProcessor) {
-        this.postProcessor = postProcessor
-        this.metadata = LibraryFactory.getMetadata(bookId)
-        this.bookInfo = LazyBookInfo(bookId, GlobalIndex.INSTANCE)
-        sigExecutor = QueuedThreadPoolExecutor(1, QueuedThreadPoolExecutor.THREAD_POOL_SIZE, { true }, "Sig_$bookId")
-        imgExecutor = QueuedThreadPoolExecutor(
-            0,
-            QueuedThreadPoolExecutor.THREAD_POOL_SIZE,
-            { x -> x.isDataProcessed },
-            "Img_$bookId"
-        )
-        extractor = metadata.getImageExtractor(this)
-        logger = ExecutionContext.INSTANCE.getLogger(BookContext::class.java, this)
-    }
+class BookContext internal constructor(bookId: String, val postProcessor: IPostProcessor) {
 
     val sigExecutor: QueuedThreadPoolExecutor<out AbstractHttpProcessor>
     val imgExecutor: QueuedThreadPoolExecutor<AbstractPage>
@@ -126,5 +110,19 @@ class BookContext {
         pagesBefore = pagesStream.filter { it.isFileExists }.count()
         val pagesNeded = bookInfo.pages.pages.size - pagesBefore
         imgExecutor.reset(pagesNeded.toInt())
+    }
+
+    init {
+        this.metadata = LibraryFactory.getMetadata(bookId)
+        this.bookInfo = LazyBookInfo(bookId, GlobalIndex.INSTANCE)
+        sigExecutor = QueuedThreadPoolExecutor(1, QueuedThreadPoolExecutor.THREAD_POOL_SIZE, { true }, "Sig_$bookId")
+        imgExecutor = QueuedThreadPoolExecutor(
+            0,
+            QueuedThreadPoolExecutor.THREAD_POOL_SIZE,
+            { x -> x.isDataProcessed },
+            "Img_$bookId"
+        )
+        extractor = metadata.getImageExtractor(this)
+        logger = ExecutionContext.INSTANCE.getLogger(BookContext::class.java, this)
     }
 }

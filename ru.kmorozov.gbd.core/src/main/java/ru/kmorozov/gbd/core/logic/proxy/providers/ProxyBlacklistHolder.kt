@@ -13,14 +13,13 @@ import java.util.stream.Collectors
  * Created by km on 29.10.2016.
  */
 class ProxyBlacklistHolder private constructor() {
-    private val blacklistFile: File
+    private val blacklistFile: File = File(System.getProperty("java.io.tmpdir") + File.separator + BL_FILE_NAME)
     private val storedHosts = CopyOnWriteArrayList<HttpHostExt>()
 
     val whiteList: Collection<String>
         get() = storedHosts.parallelStream().filter { it.isAvailable }.map { it.proxyStringShort }.collect(Collectors.toList())
 
     init {
-        blacklistFile = File(System.getProperty("java.io.tmpdir") + File.separator + BL_FILE_NAME)
         if (!blacklistFile.exists())
             try {
                 blacklistFile.createNewFile()

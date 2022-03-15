@@ -27,7 +27,7 @@ class GoogleImageExtractor(bookContext: BookContext) :
     private var waitingProxy: MutableList<HttpHostExt> = CopyOnWriteArrayList()
 
     override fun preCheck(): Boolean {
-        if (uniqueObject.bookInfo.empty || uniqueObject.bookInfo.pages.pages.size == 0)
+        if (uniqueObject.bookInfo.empty || uniqueObject.bookInfo.pages.pages.isEmpty())
             uniqueObject.bookInfo = GoogleBookInfoExtractor(uniqueObject.bookInfo.bookId).findBookInfo()
 
         if (!Strings.isNullOrEmpty((uniqueObject.bookInfo.bookData as GoogleBookData).flags!!.downloadPdfUrl)) {
@@ -81,7 +81,7 @@ class GoogleImageExtractor(bookContext: BookContext) :
 
             uniqueObject.pagesStream
                 .filter { page -> !page.isDataProcessed }
-                .sorted({ p1, p2 -> p2.order - p1.order })
+                .sorted { p1, p2 -> p2.order - p1.order }
                 .forEach { page ->
                     uniqueObject.imgExecutor
                         .execute(GooglePageImgProcessor(uniqueObject, page as GooglePageInfo, HttpHostExt.NO_PROXY))

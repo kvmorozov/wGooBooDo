@@ -56,7 +56,7 @@ constructor(val parent: OneDriveItem, val file: File, val uploadUrl: String, ran
             ranges!![i] = Range(start, end)
         }
 
-        if (0 < ranges!!.size) {
+        if (ranges!!.isNotEmpty()) {
             lastUploaded = ranges!![0]!!.start - totalUploaded
             totalUploaded = ranges!![0]!!.start
         }

@@ -26,7 +26,7 @@ class ShplBookInfoExtractor(bookId: String) : AbstractBookInfoExtractor(bookId) 
         val scripts = doc.select("script")
         for (script in scripts) {
             val childs = script.childNodes()
-            if (null != childs && !childs.isEmpty()) {
+            if (childs.isNotEmpty()) {
                 val data = childs[0].toString()
 
                 if (data.isEmpty()) continue
@@ -34,7 +34,7 @@ class ShplBookInfoExtractor(bookId: String) : AbstractBookInfoExtractor(bookId) 
                 if (data.contains(JSON_TAG_PAGES)) {
                     val pagesData = '['.toString() + data.split("[")[2].split("]")[0] + ']'.toString()
 
-                    var pages = Mapper.gson.fromJson(pagesData, Array<IPage>::class.java)
+                    val pages = Mapper.gson.fromJson(pagesData, Array<IPage>::class.java)
                     for (i in 1..pages.size)
                         pages[i - 1].order = i
                     pagesInfo = ShplPagesInfo(pages)

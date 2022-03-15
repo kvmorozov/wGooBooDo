@@ -7,9 +7,7 @@ import ru.kmorozov.gbd.core.logic.extractors.base.AbstractBookInfoExtractor
 import ru.kmorozov.gbd.core.logic.extractors.base.IImageExtractor
 import ru.kmorozov.gbd.core.logic.library.ILibraryMetadata
 
-class UnknownMetadata : ILibraryMetadata {
-
-    private constructor()
+class UnknownMetadata private constructor() : ILibraryMetadata {
 
     override fun isValidId(bookId: String): Boolean {
         return true

@@ -8,14 +8,7 @@ import ru.kmorozov.gbd.core.logic.context.BookContext
 import ru.kmorozov.gbd.core.logic.context.ExecutionContext
 import ru.kmorozov.gbd.core.logic.model.book.base.IBookInfo
 
-open class LocalFSIndex : IIndex {
-
-    private val storage: LocalFSStorage
-
-    constructor(storage: LocalFSStorage) {
-        this.storage = storage
-        this.booksMap = emptyMap<String, IBookInfo>().toMutableMap()
-    }
+open class LocalFSIndex(private val storage: LocalFSStorage) : IIndex {
 
     protected var loaded: Boolean = false
 
@@ -65,5 +58,9 @@ open class LocalFSIndex : IIndex {
 
     override fun getBookInfo(bookId: String): IBookInfo {
         return booksMap.getOrDefault(bookId, BookInfo.EMPTY_BOOK)
+    }
+
+    init {
+        this.booksMap = emptyMap<String, IBookInfo>().toMutableMap()
     }
 }

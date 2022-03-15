@@ -11,38 +11,21 @@ import kotlin.math.min
 /**
  * Created by km on 12.11.2016.
  */
-class QueuedThreadPoolExecutor<T : Any> : ThreadPoolExecutor {
-    private var needProcessCount: AtomicInteger
-    private val completeChecker: (T) -> Boolean
+class QueuedThreadPoolExecutor<T : Any>(
+    needProcessCount: Int,
+    threadPoolSize: Int,
+    private val completeChecker: (T) -> Boolean,
     private val description: String
+) : ThreadPoolExecutor(
+    threadPoolSize,
+    threadPoolSize,
+    0L,
+    TimeUnit.MILLISECONDS,
+    ArrayBlockingQueue(RETENTION_QUEUE_SIZE),
+    NamedThreadFactory(description)
+) {
+    private var needProcessCount: AtomicInteger
     private val reusablePool: Queue<IUniqueReusable<T>> = ConcurrentLinkedQueue()
-
-    constructor(needProcessCount: Int, threadPoolSize: Int, completeChecker: (T) -> Boolean, description: String) :
-            super(
-                threadPoolSize,
-                threadPoolSize,
-                0L,
-                TimeUnit.MILLISECONDS,
-                ArrayBlockingQueue(RETENTION_QUEUE_SIZE),
-                NamedThreadFactory(description)
-            ) {
-        this.needProcessCount = AtomicInteger(needProcessCount)
-        this.completeChecker = completeChecker
-        this.description = description
-        this.uniqueMap = ConcurrentHashMap<T, IUniqueRunnable<T>>()
-        this.timeStart = System.currentTimeMillis()
-        setRejectedExecutionHandler { r, _ ->
-            try {
-                if (r is IUniqueRunnable<*>) {
-                    synchronized((r as IUniqueRunnable<T>).uniqueObject as Any) {
-                        if (!completeChecker.invoke(r.uniqueObject)) queue.put(r)
-                    }
-                }
-            } catch (e: InterruptedException) {
-                e.printStackTrace()
-            }
-        }
-    }
 
     private val timeStart: Long
     private val uniqueMap: ConcurrentHashMap<T, IUniqueRunnable<T>>
@@ -143,5 +126,22 @@ class QueuedThreadPoolExecutor<T : Any> : ThreadPoolExecutor {
         private val logger = ExecutionContext.getLogger("Executor")
         private const val RETENTION_QUEUE_SIZE = 200
         private val MAX_LIVE_TIME = TimeUnit.HOURS.toMillis(1L)
+    }
+
+    init {
+        this.needProcessCount = AtomicInteger(needProcessCount)
+        this.uniqueMap = ConcurrentHashMap<T, IUniqueRunnable<T>>()
+        this.timeStart = System.currentTimeMillis()
+        setRejectedExecutionHandler { r, _ ->
+            try {
+                if (r is IUniqueRunnable<*>) {
+                    synchronized((r as IUniqueRunnable<T>).uniqueObject as Any) {
+                        if (!completeChecker.invoke(r.uniqueObject)) queue.put(r)
+                    }
+                }
+            } catch (e: InterruptedException) {
+                e.printStackTrace()
+            }
+        }
     }
 }

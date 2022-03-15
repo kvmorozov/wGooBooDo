@@ -8,13 +8,7 @@ import java.io.FileReader
 import java.io.FileWriter
 import java.io.IOException
 
-class FileBasedIndex : LocalFSIndex {
-
-    private val indexFile: File
-
-    constructor(storage: LocalFSStorage, indexFile: File) : super(storage) {
-        this.indexFile = indexFile
-    }
+class FileBasedIndex(storage: LocalFSStorage, private val indexFile: File) : LocalFSIndex(storage) {
 
     override fun updateIndex(books: List<IBookInfo>) {
         try {

@@ -24,7 +24,7 @@ class GoogleHttpConnector : HttpConnector() {
     private fun getFactory(proxy: HttpHostExt): HttpRequestFactory {
         val key = getProxyKey(proxy)
 
-        return httpFactoryMap.getOrPut(key, { Builder().setProxy(proxy.proxy).build().createRequestFactory() })
+        return httpFactoryMap.getOrPut(key) { Builder().setProxy(proxy.proxy).build().createRequestFactory() }
     }
 
     override fun getContent(rqUrl: String, proxy: HttpHostExt, withTimeout: Boolean): Response {
@@ -43,7 +43,7 @@ class GoogleHttpConnector : HttpConnector() {
 
                 resp = getContent(req, proxy, 0)
             } else {
-                logger.error("Invalid proxy config! " + proxy.toString())
+                logger.error("Invalid proxy config! $proxy")
                 return EMPTY_RESPONSE
             }
 

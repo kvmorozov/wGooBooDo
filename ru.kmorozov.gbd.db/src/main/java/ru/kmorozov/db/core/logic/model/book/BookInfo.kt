@@ -12,20 +12,12 @@ import java.io.Serializable
 /**
  * Created by km on 28.11.2015.
  */
-open class BookInfo : Serializable, ILoggableObject, IBookInfo {
-
+open class BookInfo(
     @Expose
-    override val bookData: IBookData
-    @Expose
-    override val pages: IPagesInfo
-    @Expose
+    override val bookData: IBookData, @Expose
+    override val pages: IPagesInfo, @Expose
     override var bookId: String
-
-    constructor(bookData: IBookData, pages: IPagesInfo, bookId: String) {
-        this.bookData = bookData
-        this.pages = pages
-        this.bookId = bookId
-    }
+) : Serializable, ILoggableObject, IBookInfo {
 
     override val description: String?
         get() = bookData.title

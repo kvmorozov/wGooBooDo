@@ -9,9 +9,8 @@ import ru.kmorozov.gbd.core.logic.model.book.base.AbstractPage
 /**
  * Created by sbt-morozov-kv on 18.11.2016.
  */
-open class SimplePageImgProcessor<T : AbstractPage> : AbstractPageImgProcessor<T> {
-
-    constructor(bookContext: BookContext, page: T, usedProxy: HttpHostExt) : super(bookContext, page, usedProxy)
+open class SimplePageImgProcessor<T : AbstractPage>(bookContext: BookContext, page: T, usedProxy: HttpHostExt) :
+    AbstractPageImgProcessor<T>(bookContext, page, usedProxy) {
 
     override val successMsg: String
         get() = "Finished img processing for ${uniqueObject.pid}"

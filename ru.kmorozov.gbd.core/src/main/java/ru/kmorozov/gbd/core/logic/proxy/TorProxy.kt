@@ -7,13 +7,16 @@ import java.net.InetSocketAddress
 import java.net.Proxy
 import java.util.concurrent.ConcurrentHashMap
 
-class TorProxy : StableProxy {
+class TorProxy private constructor() : StableProxy(
+    InetSocketAddress(TOR_HOST, TOR_HTTP_PORT),
+    Proxy(Proxy.Type.SOCKS, InetSocketAddress(TOR_HOST, TOR_HTTP_PORT))
+) {
 
     private val telnetClient = TelnetClient()
     private val readBytes = ByteArray(4096)
     private var lastResetedMillis = -1L
 
-    private constructor() : super(InetSocketAddress(TOR_HOST, TOR_HTTP_PORT), Proxy(Proxy.Type.SOCKS, InetSocketAddress(TOR_HOST, TOR_HTTP_PORT))) {
+    init {
         if (GBDOptions.proxyListFile.equals("tor", ignoreCase = true)) {
             telnetClient.connect(TOR_HOST, TOR_CONTROL_PORT)
 

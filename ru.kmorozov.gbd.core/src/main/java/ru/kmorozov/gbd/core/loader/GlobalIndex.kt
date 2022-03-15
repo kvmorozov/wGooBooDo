@@ -3,9 +3,7 @@ package ru.kmorozov.gbd.core.loader
 import ru.kmorozov.gbd.core.config.IIndex
 import ru.kmorozov.gbd.core.logic.model.book.base.IBookInfo
 
-class GlobalIndex : IIndex {
-
-    private constructor()
+class GlobalIndex private constructor() : IIndex {
 
     override val books: List<IBookInfo>
         get() = TODO("Not yet implemented")

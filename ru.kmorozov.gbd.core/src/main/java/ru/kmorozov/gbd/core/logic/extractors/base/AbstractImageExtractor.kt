@@ -16,15 +16,10 @@ import java.util.concurrent.TimeUnit
 /**
  * Created by sbt-morozov-kv on 16.11.2016.
  */
-abstract class AbstractImageExtractor<T : AbstractPage> : AbstractEventSource, IUniqueRunnable<BookContext>, IImageExtractor {
-
-    override var uniqueObject: BookContext
-
-    protected constructor(uniqueObject: BookContext, extractorClass: Class<out AbstractImageExtractor<T>>) : super() {
-        this.uniqueObject = uniqueObject
-        logger = ExecutionContext.INSTANCE.getLogger(extractorClass, uniqueObject)
-        this.output = ReceiverProvider.getReceiver(GBDOptions.debugEnabled)
-    }
+abstract class AbstractImageExtractor<T : AbstractPage> protected constructor(
+    override var uniqueObject: BookContext,
+    extractorClass: Class<out AbstractImageExtractor<T>>
+) : AbstractEventSource(), IUniqueRunnable<BookContext>, IImageExtractor {
 
     protected val output: AbstractOutputReceiver
     protected val logger: Logger
@@ -89,5 +84,10 @@ abstract class AbstractImageExtractor<T : AbstractPage> : AbstractEventSource, I
         synchronized(uniqueObject) {
             ExecutionContext.INSTANCE.postProcessBook(uniqueObject)
         }
+    }
+
+    init {
+        logger = ExecutionContext.INSTANCE.getLogger(extractorClass, uniqueObject)
+        this.output = ReceiverProvider.getReceiver(GBDOptions.debugEnabled)
     }
 }

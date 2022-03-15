@@ -21,13 +21,7 @@ import java.util.function.Predicate
 import java.util.stream.Collectors
 import javax.imageio.ImageIO
 
-open class LocalFSStorage : IStorage {
-
-    internal constructor(storageDirName: String) {
-        this.indexes = mapOf<String, LocalFSIndex>().toMutableMap()
-        storageDir = File(storageDirName)
-        logger = Logger.getLogger(LocalFSStorage::class.java, storageDirName)
-    }
+open class LocalFSStorage internal constructor(storageDirName: String) : IStorage {
 
     val storageDir: File
     protected val logger: Logger
@@ -96,7 +90,7 @@ open class LocalFSStorage : IStorage {
     @Throws(IOException::class)
     override fun isPageExists(page: IPage): Boolean {
         val files = File(storageDir.toPath().toUri()).list { _, fileName -> fileName.contains(page.order.toString() + '_'.toString() + page.pid + ".") }
-        return files!!.size > 0
+        return files!!.isNotEmpty()
     }
 
     @Throws(IOException::class)
@@ -235,5 +229,11 @@ open class LocalFSStorage : IStorage {
 
             return storages.get(storageDirName)!!
         }
+    }
+
+    init {
+        this.indexes = mapOf<String, LocalFSIndex>().toMutableMap()
+        storageDir = File(storageDirName)
+        logger = Logger.getLogger(LocalFSStorage::class.java, storageDirName)
     }
 }

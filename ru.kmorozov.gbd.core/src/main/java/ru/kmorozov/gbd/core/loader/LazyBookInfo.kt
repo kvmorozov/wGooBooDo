@@ -8,15 +8,10 @@ import ru.kmorozov.gbd.core.logic.library.LibraryFactory
 import ru.kmorozov.gbd.core.logic.model.book.base.IBookData
 import ru.kmorozov.gbd.core.logic.model.book.base.IPagesInfo
 
-class LazyBookInfo : BookInfo {
-    private val index: IIndex
+class LazyBookInfo(bookId: String, private val index: IIndex) :
+    BookInfo(EMPTY_BOOK.bookData, EMPTY_BOOK.pages, bookId) {
 
     private var loaded: Boolean = false
-
-    constructor(bookId: String, index: IIndex) : super(EMPTY_BOOK.bookData, EMPTY_BOOK.pages, bookId) {
-        this.bookId = bookId
-        this.index = index
-    }
 
     override val empty: Boolean
         get() = false
