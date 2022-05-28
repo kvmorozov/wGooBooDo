@@ -22,8 +22,7 @@ class ArchiveBookInfoExtractor(bookId: String) : AbstractBookInfoExtractor(bookI
         val pageElts = doc.body().getElementsByAttributeValue("itemprop", "numberOfPages")
         val numPages = if (pageElts.size == 0) 100 else pageElts[0].text().toInt()
         val params =
-            doc.body().getElementById("theatre-controls")!!.parent()!!.children().filter { it.tagName() == "script" }
-                .first()
+            doc.body().getElementById("theatre-controls")!!.parent()!!.children().first { it.tagName() == "script" }
                 .data().lines().find { it.contains("url:") }!!.split("?")[1].split("&")
 
         val itemPath = params[1].split("=")[1]

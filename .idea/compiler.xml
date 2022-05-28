@@ -30,17 +30,17 @@
       <module name="ru.kmorozov.gbd.core.config" target="14" />
       <module name="ru.kmorozov.gbd.core.logger" target="14" />
       <module name="ru.kmorozov.gbd.db" target="14" />
-      <module name="ru.kmorozov.gbd.db.mongo" target="14" />
+      <module name="ru.kmorozov.gbd.db.mongo" target="17" />
       <module name="ru.kmorozov.gbd.desktop" target="14" />
       <module name="ru.kmorozov.gbd.desktop.app" target="14" />
       <module name="ru.kmorozov.gbd.parent" target="13" />
-      <module name="ru.kmorozov.library" target="14" />
-      <module name="ru.kmorozov.library.data.client" target="14" />
-      <module name="ru.kmorozov.library.data.model" target="14" />
-      <module name="ru.kmorozov.library.data.server" target="14" />
+      <module name="ru.kmorozov.library" target="17" />
+      <module name="ru.kmorozov.library.data.client" target="17" />
+      <module name="ru.kmorozov.library.data.model" target="17" />
+      <module name="ru.kmorozov.library.data.server" target="17" />
       <module name="ru.kmorozov.library.data.server (1)" target="11" />
       <module name="ru.kmorozov.library.data.server.her" target="11" />
-      <module name="ru.kmorozov.library.parent" target="14" />
+      <module name="ru.kmorozov.library.parent" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
@@ -54,6 +54,7 @@
       <module name="ru.kmorozov.library.data.server" options="-parameters" />
       <module name="ru.kmorozov.library.data.server (1)" options="-parameters" />
       <module name="ru.kmorozov.library.data.server.her" options="-parameters" />
+      <module name="ru.kmorozov.library.parent" options="" />
     </option>
   </component>
 </project>

@@ -9,14 +9,14 @@ import java.util.stream.Collectors
 /**
  * Created by km on 17.12.2016.
  */
-class SslProxiesListProvider : AbstractProxyExtractor() {
+class SimpleHtmlIpExtractor : AbstractProxyExtractor() {
 
     override val proxyListUrl: String
         get() = PROXY_LIST_URL
 
     override fun extractProxyList(doc: Document): MutableList<String> {
         val textWithProxies = doc.html().replace("<".toRegex(), "|").replace(">".toRegex(), "|")
-        return Arrays.stream(textWithProxies.split("\\|".toRegex()).toTypedArray()).map { it.trim() }.filter { it.length > 10 && it.length < 20 }
+        return Arrays.stream(textWithProxies.split("\\|".toRegex()).toTypedArray()).map { it.trim() }.filter { it.length in 11..19 }
                 .filter { s -> validIpPort(s) }.collect(Collectors.toList())
     }
 
@@ -26,7 +26,7 @@ class SslProxiesListProvider : AbstractProxyExtractor() {
 
     companion object {
 
-        private const val PROXY_LIST_URL = "http://www.proxz.com/proxy_list_anonymous_us_0.html"
+        private const val PROXY_LIST_URL = "https://spys.one/sslproxy/"
         private const val ipPortPattern = "^([0-9]|[0-9][0-9]|[01][0-9][0-9]|2[0-4][0-9]|25[0-5])\\." +
                 "([0-9]|[0-9][0-9]|[01][0-9][0-9]|2[0-4][0-9]|25[0-5])\\." +
                 "([0-9]|[0-9][0-9]|[01][0-9][0-9]|2[0-4][0-9]|25[0-5])\\." +

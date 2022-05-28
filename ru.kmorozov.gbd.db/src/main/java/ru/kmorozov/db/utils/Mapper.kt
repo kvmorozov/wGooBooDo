@@ -17,7 +17,7 @@ object Mapper {
 
     var mapType = object : TypeToken<Map<String, String>>() {
 
-    }.type
+    }.type!!
 
     val gson: Gson
         get() = GsonBuilder()

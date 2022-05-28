@@ -60,11 +60,11 @@ class TorProxy private constructor() : StableProxy(
         val TOR_PROXY: TorProxy
             get() = internalMap.getOrPut(1, ::TorProxy)
 
-        val TOR_HOST = "localhost"
-        val TOR_HTTP_PORT = 9150
-        val TOR_CONTROL_PORT = 9151
+        const val TOR_HOST = "localhost"
+        const val TOR_HTTP_PORT = 9150
+        const val TOR_CONTROL_PORT = 9151
 
-        private val RESET_MIN_DELAY = 10_000L
+        private const val RESET_MIN_DELAY = 10_000L
 
         private val logger = Logger.getLogger(GBDOptions.debugEnabled, TorProxy::class.java)
     }

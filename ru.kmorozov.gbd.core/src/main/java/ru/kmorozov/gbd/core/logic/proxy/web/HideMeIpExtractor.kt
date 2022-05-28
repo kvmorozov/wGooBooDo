@@ -8,7 +8,7 @@ import java.util.stream.Collectors
 /**
  * Created by km on 17.12.2016.
  */
-class HideMeListProvider : AbstractProxyExtractor() {
+class HideMeIpExtractor : AbstractProxyExtractor() {
 
     override val proxyListUrl: String
         get() = PROXY_LIST_URL

@@ -23,7 +23,7 @@ import java.util.stream.Stream
 /**
  * Created by km on 08.11.2016.
  */
-class BookContext internal constructor(bookId: String, val postProcessor: IPostProcessor) {
+open class BookContext internal constructor(bookId: String, val postProcessor: IPostProcessor) {
 
     val sigExecutor: QueuedThreadPoolExecutor<out AbstractHttpProcessor>
     val imgExecutor: QueuedThreadPoolExecutor<AbstractPage>

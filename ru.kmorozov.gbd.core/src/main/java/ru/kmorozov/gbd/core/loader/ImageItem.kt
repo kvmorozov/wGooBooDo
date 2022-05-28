@@ -44,9 +44,9 @@ open class ImageItem(outputFile: File) : RawFileItem(outputFile) {
 
             val stream = ImageIO.createImageOutputStream(outputFile)
             val image = IIOImage(ImageIO.read(inStream), null, null)
-            writer.output = stream
 
             try {
+                writer.output = stream
                 writer.write(metadata, image, writeParam)
             } catch (ex: Exception) {
                 writer.write(null, image, writeParam)

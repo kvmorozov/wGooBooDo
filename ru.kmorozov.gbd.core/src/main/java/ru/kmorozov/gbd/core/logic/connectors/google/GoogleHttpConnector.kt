@@ -44,6 +44,7 @@ class GoogleHttpConnector : HttpConnector() {
                 resp = getContent(req, proxy, 0)
             } else {
                 logger.error("Invalid proxy config! $proxy")
+                proxy.registerFailure()
                 return EMPTY_RESPONSE
             }
 

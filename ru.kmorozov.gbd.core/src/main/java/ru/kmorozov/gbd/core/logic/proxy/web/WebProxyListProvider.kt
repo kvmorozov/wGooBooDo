@@ -19,7 +19,7 @@ class WebProxyListProvider : AbstractProxyListProvider() {
     }
 
     override fun findCandidates() {
-        val candidateProxies = SslProxiesListProvider().proxyList
+        val candidateProxies = JsonIpExtractor().proxyList
 
         this.proxyItems = candidateProxies.stream()
             .filter { notBlacklisted(it) }
@@ -34,7 +34,7 @@ class WebProxyListProvider : AbstractProxyListProvider() {
     }
 
     companion object {
-        private val PROXY_LIMIT = 20L
+        private const val PROXY_LIMIT = 20L
         val INSTANCE = WebProxyListProvider()
     }
 }

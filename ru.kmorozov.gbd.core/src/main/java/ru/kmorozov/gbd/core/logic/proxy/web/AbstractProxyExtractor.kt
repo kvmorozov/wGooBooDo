@@ -15,9 +15,10 @@ abstract class AbstractProxyExtractor {
     val proxyList: MutableList<String>
         get() {
             try {
-                val doc = Jsoup.connect(proxyListUrl).userAgent(HttpConnections.USER_AGENT).get()
+                val doc = Jsoup.connect(proxyListUrl).userAgent(HttpConnections.USER_AGENT).ignoreContentType(true).get()
                 return extractProxyList(doc)
             } catch (e: IOException) {
+                e.printStackTrace()
             }
 
             return ArrayList()

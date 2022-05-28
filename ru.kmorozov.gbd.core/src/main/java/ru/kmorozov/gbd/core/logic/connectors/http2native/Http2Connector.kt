@@ -43,6 +43,7 @@ class Http2Connector : HttpConnector() {
                 resp = getContent(reqBuilder.build(), proxy, 0)
             } else {
                 logger.error("Invalid proxy config! $proxy")
+                proxy.registerFailure()
                 return EMPTY_RESPONSE
             }
 

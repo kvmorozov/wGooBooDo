@@ -55,7 +55,7 @@ class QueuedThreadPoolExecutor<T : Any>(
                                 description,
                                 counter.get(),
                                 completed,
-                                needProcessCount,
+                                needProcessCount.get(),
                                 completedTaskCount,
                                 taskCount,
                                 queue.size
@@ -82,9 +82,9 @@ class QueuedThreadPoolExecutor<T : Any>(
         if (0L < needProcessCount.get())
             logger.finest(
                 "Terminating working threads for $description after ${counter.get()} sec (${
-                    uniqueMap.keys.filter(
+                    uniqueMap.keys.count(
                         completeChecker
-                    ).count()
+                    )
                 } of $needProcessCount completed, $completedTaskCount tasks finished of $taskCount submitted)"
             )
         shutdownNow()

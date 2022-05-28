@@ -27,7 +27,7 @@ open class LocalFSStorage internal constructor(storageDirName: String) : IStorag
     protected val logger: Logger
     private var detectedItems: MutableSet<MayBePageItem> = HashSet()
 
-    private val indexes: MutableMap<String, IIndex>
+    private val indexes: MutableMap<String, IIndex> = mapOf<String, LocalFSIndex>().toMutableMap()
 
     override val isValidOrCreate: Boolean
         get() = if (storageDir.exists()) storageDir.isDirectory else storageDir.mkdir()
@@ -148,7 +148,7 @@ open class LocalFSStorage internal constructor(storageDirName: String) : IStorag
                             _page.isDataProcessed = bimg != null && bimg.width >= imgWidth
 
                             // 1.4 - эмпирически, высота переменная
-                            if (bimg == null || (bimg.width * 1.4 > bimg.height && bimg.height < 800)) {
+                            if (bimg == null || (bimg.width * 1.4 > bimg.height || bimg.height < 800)) {
                                 item.delete()
                                 _page.isDataProcessed = false
                                 logger.severe("Page ${_page.pid} deleted!")
@@ -201,11 +201,11 @@ open class LocalFSStorage internal constructor(storageDirName: String) : IStorag
 
     fun isPdfExists(): Boolean {
         return Files.list(storageDir.toPath())
-                .filter({ filePath -> Images.isPdfFile(filePath) }).count() == 1L
+                .filter { filePath -> Images.isPdfFile(filePath) }.count() == 1L
     }
 
     fun getOrCreatePdf(title: String): File {
-        val pdfFiles = Files.list(storageDir.toPath()).filter({ filePath -> Images.isPdfFile(filePath) }).collect(Collectors.toList())
+        val pdfFiles = Files.list(storageDir.toPath()).filter { filePath -> Images.isPdfFile(filePath) }.collect(Collectors.toList())
         if (1 == pdfFiles.size)
             return pdfFiles[0].toFile()
         else {
@@ -217,7 +217,7 @@ open class LocalFSStorage internal constructor(storageDirName: String) : IStorag
     }
 
     fun imgCount(): Long {
-        return Files.list(storageDir.toPath()).filter({ filePath -> Images.isImageFile(filePath) }).count()
+        return Files.list(storageDir.toPath()).filter { filePath -> Images.isImageFile(filePath) }.count()
     }
 
     companion object {
@@ -227,12 +227,11 @@ open class LocalFSStorage internal constructor(storageDirName: String) : IStorag
             if (!storages.containsKey(storageDirName))
                 storages[storageDirName] = LocalFSStorage(storageDirName)
 
-            return storages.get(storageDirName)!!
+            return storages[storageDirName]!!
         }
     }
 
     init {
-        this.indexes = mapOf<String, LocalFSIndex>().toMutableMap()
         storageDir = File(storageDirName)
         logger = Logger.getLogger(LocalFSStorage::class.java, storageDirName)
     }
