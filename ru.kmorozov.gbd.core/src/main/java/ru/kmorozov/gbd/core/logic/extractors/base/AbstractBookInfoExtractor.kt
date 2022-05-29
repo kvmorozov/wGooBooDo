@@ -34,11 +34,11 @@ abstract class AbstractBookInfoExtractor : AbstractHttpProcessor {
 
     protected val rawDocument: Optional<Document>
         get() {
-            if (GBDOptions.secureMode)
-                return getDocumentWithProxy(AbstractProxyListProvider.INSTANCE.getSomeProxy())
+            return if (GBDOptions.secureMode)
+                getDocumentWithProxy(AbstractProxyListProvider.INSTANCE.getSomeProxy())
             else
-                return Optional.of(Jsoup.connect(bookUrl).userAgent(HttpConnections.USER_AGENT)
-                        .timeout(30000).method(Method.GET).execute().parse())
+                Optional.of(Jsoup.connect(bookUrl).userAgent(HttpConnections.USER_AGENT)
+                    .timeout(30000).method(Method.GET).execute().parse())
         }
 
     constructor(storedLoader: IContextLoader) {

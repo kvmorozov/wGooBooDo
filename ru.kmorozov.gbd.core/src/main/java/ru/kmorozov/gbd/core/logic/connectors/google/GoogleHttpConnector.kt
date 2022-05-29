@@ -77,8 +77,7 @@ class GoogleHttpConnector : HttpConnector() {
             }
 
         try {
-            val res = GoogleResponse(req.execute())
-            return res
+            return GoogleResponse(req.execute())
         } catch (ste1: SocketTimeoutException) {
             if (GBDOptions.debugEnabled)
                 logger.info(ste1.stackTraceToString())
@@ -90,14 +89,15 @@ class GoogleHttpConnector : HttpConnector() {
                 logger.info(hre.stackTraceToString())
 
             proxy.registerFailure()
-            if (hre.statusCode == 403) {
-                proxy.reset()
-                req.headers = proxy.getHeaders(UrlType.GOOGLE_BOOKS)
-                return getContent(req, proxy, attempt + 1)
-            } else if (hre.statusCode == 404)
-                return EMPTY_RESPONSE
-            else
-                throw (hre)
+            return when (hre.statusCode) {
+                403 -> {
+                    proxy.reset()
+                    req.headers = proxy.getHeaders(UrlType.GOOGLE_BOOKS)
+                    getContent(req, proxy, attempt + 1)
+                }
+                404 -> EMPTY_RESPONSE
+                else -> throw (hre)
+            }
         }
     }
 

@@ -30,12 +30,12 @@ class GoogleImageExtractor(bookContext: BookContext) :
         if (uniqueObject.bookInfo.empty || uniqueObject.bookInfo.pages.pages.isEmpty())
             uniqueObject.bookInfo = GoogleBookInfoExtractor(uniqueObject.bookInfo.bookId).findBookInfo()
 
-        if (!Strings.isNullOrEmpty((uniqueObject.bookInfo.bookData as GoogleBookData).flags!!.downloadPdfUrl)) {
+        return if (!Strings.isNullOrEmpty((uniqueObject.bookInfo.bookData as GoogleBookData).flags!!.downloadPdfUrl)) {
             logger.severe("There is direct url to download book. DIY!")
             uniqueObject.forceComplete()
-            return false
+            false
         } else
-            return true
+            true
     }
 
     override fun process() {

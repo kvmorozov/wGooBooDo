@@ -13,11 +13,7 @@ import ru.kmorozov.gbd.utils.Images
 import java.io.File
 import java.io.IOException
 import java.nio.file.Files
-import java.nio.file.Path
 import java.nio.file.Paths
-import java.nio.file.attribute.BasicFileAttributes
-import java.util.function.BiPredicate
-import java.util.function.Predicate
 import java.util.stream.Collectors
 import javax.imageio.ImageIO
 
@@ -136,56 +132,56 @@ open class LocalFSStorage internal constructor(storageDirName: String) : IStorag
                 val nameParts = fileName.split("[_.]".toRegex())
 
                 try {
-                    val _page = bookInfo.pages.getPageByPid(nameParts[1]) as AbstractPage
+                    val page = bookInfo.pages.getPageByPid(nameParts[1]) as AbstractPage
 
-                    item.upgrade(_page)
+                    item.upgrade(page)
 
                     try {
                         val order = Integer.valueOf(nameParts[0])
 
                         if (GBDOptions.reloadImages) {
                             val bimg = ImageIO.read(item.asFile())
-                            _page.isDataProcessed = bimg != null && bimg.width >= imgWidth
+                            page.isDataProcessed = bimg != null && bimg.width >= imgWidth
 
                             // 1.4 - эмпирически, высота переменная
-                            if (bimg == null || (bimg.width * 1.4 > bimg.height || bimg.height < 800)) {
+                            if (bimg == null || (bimg.width * 1.4 > bimg.height && bimg.height < 800)) {
                                 item.delete()
-                                _page.isDataProcessed = false
-                                logger.severe("Page ${_page.pid} deleted!")
+                                page.isDataProcessed = false
+                                logger.severe("Page ${page.pid} deleted!")
                             }
                         } else
-                            _page.isDataProcessed = true
+                            page.isDataProcessed = true
 
-                        if (_page.isDataProcessed)
+                        if (page.isDataProcessed)
                             if (item.validate()) {
-                                if (_page.order != order && !_page.isGapPage) {
+                                if (page.order != order && !page.isGapPage) {
                                     val oldFile = item.asFile()
-                                    val newFile = File(filePath.toString().replace(order.toString() + "_", _page.order.toString() + "_"))
+                                    val newFile = File(filePath.toString().replace(order.toString() + "_", page.order.toString() + "_"))
                                     if (!newFile.exists()) {
                                         oldFile.renameTo(newFile)
-                                        logger.severe("Page ${_page.pid} renamed!")
+                                        logger.severe("Page ${page.pid} renamed!")
                                     }
                                 }
 
                                 item.page.isScanned = true
                             } else {
-                                _page.isDataProcessed = false
+                                page.isDataProcessed = false
                                 item.delete()
-                                logger.severe("Page ${_page.pid} deleted!")
+                                logger.severe("Page ${page.pid} deleted!")
                             }
                     } catch (e: IOException) {
                         // Значит файл с ошибкой
                         try {
                             item.delete()
                         } catch (e1: IOException) {
-                            logger.severe("Cannot delete page ${_page.pid}!")
+                            logger.severe("Cannot delete page ${page.pid}!")
                         }
 
-                        _page.isDataProcessed = false
-                        logger.severe("Page ${_page.pid} deleted!")
+                        page.isDataProcessed = false
+                        logger.severe("Page ${page.pid} deleted!")
                     }
 
-                    _page.isFileExists = item.asFile().exists()
+                    page.isFileExists = item.asFile().exists()
                 } catch (pnf: PageNotFoundException) {
                     logger.severe("Page $fileName not found!")
                     try {

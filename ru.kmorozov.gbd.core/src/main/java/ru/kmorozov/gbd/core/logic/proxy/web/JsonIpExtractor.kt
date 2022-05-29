@@ -18,7 +18,7 @@ class JsonIpExtractor : AbstractProxyExtractor() {
     companion object {
 
         private const val PROXY_LIST_URL =
-            "https://proxylist.geonode.com/api/proxy-list?limit=50&page=2&sort_by=lastChecked&sort_type=desc&protocols=https"
+            "https://proxylist.geonode.com/api/proxy-list?limit=50&page=1&sort_by=lastChecked&sort_type=desc&protocols=https"
 
         private fun extractProxyData(element: JsonObject): String {
             return element["ip"].asString + ":" + element["port"].asString

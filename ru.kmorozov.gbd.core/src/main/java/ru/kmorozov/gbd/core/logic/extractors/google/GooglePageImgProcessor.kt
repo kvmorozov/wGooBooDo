@@ -53,7 +53,7 @@ class GooglePageImgProcessor(bookContext: BookContext, page: GooglePageInfo, use
         }
     }
 
-    fun getImqRqUrls(): Set<String> {
+    private fun getImqRqUrls(): Set<String> {
         return uniqueObject.sigs.stream()
                 .map { sig -> urlBuilder.getSigPageUrl(uniqueObject.pid, sig) }
                 .collect(Collectors.toSet())

@@ -15,10 +15,10 @@ object LibraryFactory {
     private val METADATA = arrayOf(GOOGLE_METADATA, SHPL_METADATA, RFBR_METADATA, ARCHIVE_METADATA, UNKNOWN_METADATA)
 
     fun getMetadata(contexts: List<BookContext>): ILibraryMetadata {
-        if (contexts.isNotEmpty())
-            return getMetadata(contexts.get(0).bookId)
+        return if (contexts.isNotEmpty())
+            getMetadata(contexts[0].bookId)
         else
-            return GOOGLE_METADATA
+            GOOGLE_METADATA
     }
 
     fun getMetadata(bookId: String): ILibraryMetadata {
@@ -26,6 +26,6 @@ object LibraryFactory {
     }
 
     fun isValidId(bookId: String): Boolean {
-        return !getMetadata(bookId).equals(UNKNOWN_METADATA)
+        return getMetadata(bookId) != UNKNOWN_METADATA
     }
 }

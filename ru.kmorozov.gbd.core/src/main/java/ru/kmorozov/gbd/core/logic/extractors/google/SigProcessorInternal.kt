@@ -16,10 +16,9 @@ import ru.kmorozov.gbd.core.logic.proxy.HttpHostExt
 import java.net.SocketException
 import java.net.SocketTimeoutException
 import java.nio.charset.Charset
-import java.util.*
 import javax.net.ssl.SSLException
 
-class SigProcessorInternal(
+open class SigProcessorInternal(
     private val bookContext: BookContext,
     private val proxy: HttpHostExt,
     override var uniqueObject: GooglePageInfo
@@ -78,27 +77,27 @@ class SigProcessorInternal(
                     .stream()
                     .filter { page -> null != (page as GooglePageInfo).src }
                     .forEach { framePage ->
-                        val _page = bookContext.bookInfo.pages.getPageByPid(framePage.pid) as GooglePageInfo
+                        val page = bookContext.bookInfo.pages.getPageByPid(framePage.pid) as GooglePageInfo
 
-                        if (_page.isDataProcessed) return@forEach
+                        if (page.isDataProcessed) return@forEach
 
-                        val _frameSrc = (framePage as GooglePageInfo).src
-                        if (!Strings.isNullOrEmpty(_frameSrc))
+                        val frameSrc = (framePage as GooglePageInfo).src
+                        if (!Strings.isNullOrEmpty(frameSrc))
                             if (GBDOptions.debugEnabled)
-                                logger.info("Sig candidate found $_frameSrc")
+                                logger.info("Sig candidate found $frameSrc")
 
-                        if (_page.addSrc(_frameSrc!!)) {
-                            if (_page.pid == uniqueObject.pid) {
+                        if (page.addSrc(frameSrc!!)) {
+                            if (page.pid == uniqueObject.pid) {
                                 proxy.promoteProxy()
 
                                 // Если есть возможность - пытаемся грузить страницу сразу
                                 if (!GBDOptions.serverMode)
-                                    bookContext.imgExecutor.execute(GooglePageImgProcessor(bookContext, _page, proxy))
+                                    bookContext.imgExecutor.execute(GooglePageImgProcessor(bookContext, page, proxy))
 
                                 sigFound = true
                             }
                         } else
-                            logger.finest(String.format(SIG_WRONG_FORMAT, _page.src))
+                            logger.finest(String.format(SIG_WRONG_FORMAT, page.src))
                     }
         } catch (ce: SocketTimeoutException) {
             if (!proxy.isLocal) {
@@ -110,7 +109,6 @@ class SigProcessorInternal(
                 proxy.registerFailure()
                 logger.info("Proxy $proxy failed!")
             }
-            if (ce !is SocketTimeoutException) ce.printStackTrace()
         } catch (ex: Exception) {
             ex.printStackTrace()
         } finally {

@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit
 /**
  * Created by km on 21.11.2015.
  */
-class GooglePageSigProcessor(bookContext: BookContext, proxy: HttpHostExt) : AbstractHttpProcessor(), IUniqueReusable<GooglePageSigProcessor> {
+open class GooglePageSigProcessor(bookContext: BookContext, proxy: HttpHostExt) : AbstractHttpProcessor(), IUniqueReusable<GooglePageSigProcessor> {
     lateinit var bookContext: BookContext
     lateinit var proxy: HttpHostExt
     override var reuseCallback: (IUniqueReusable<GooglePageSigProcessor>) -> Unit = {}
@@ -38,12 +38,12 @@ class GooglePageSigProcessor(bookContext: BookContext, proxy: HttpHostExt) : Abs
     }
 
     override fun initReusable(pattern: IUniqueReusable<GooglePageSigProcessor>): Boolean {
-        if (pattern is GooglePageSigProcessor) {
+        return if (pattern is GooglePageSigProcessor) {
             initProcessor(pattern.bookContext, pattern.proxy)
 
-            return true
+            true
         } else
-            return false
+            false
     }
 
     override fun run() {
