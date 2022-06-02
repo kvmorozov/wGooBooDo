@@ -19,7 +19,11 @@ import java.util.concurrent.ConcurrentHashMap
 class Http2Connector : HttpConnector() {
 
     private fun getClient(proxy: HttpHostExt): HttpClient {
-        return httpClientsMap.computeIfAbsent(getProxyKey(proxy)) { HttpClient.newBuilder().proxy(ProxySelector.of(proxy.host)).build() }
+        return httpClientsMap.computeIfAbsent(getProxyKey(proxy)) {
+            HttpClient.newBuilder()
+                .followRedirects(HttpClient.Redirect.ALWAYS)
+                .proxy(ProxySelector.of(proxy.host)).build()
+        }
     }
 
     @Throws(IOException::class)
@@ -32,7 +36,8 @@ class Http2Connector : HttpConnector() {
             val resp: HttpResponse<*>?
             if (validateProxy(rqUrl, proxy)) {
                 val reqBuilder = HttpRequest.newBuilder()
-                        .uri(uri).GET().timeout(Duration.ofMillis((if (withTimeout) CONNECT_TIMEOUT else CONNECT_TIMEOUT * 10).toLong()))
+                    .uri(uri).GET()
+                    .timeout(Duration.ofMillis((if (withTimeout) CONNECT_TIMEOUT else CONNECT_TIMEOUT * 10).toLong()))
 
                 if (needHeaders(rqUrl)) {
                     val headers = proxy.getHeaders(getUrlType(rqUrl))
@@ -50,11 +55,11 @@ class Http2Connector : HttpConnector() {
             if (null == resp)
                 logger.finest("No response at url $rqUrl with proxy $proxy")
 
-            if (resp?.statusCode() == 403) {
+            return if (resp?.statusCode() == 403) {
                 proxy.reset()
-                return EMPTY_RESPONSE
+                EMPTY_RESPONSE
             } else
-                return Http2Response(resp!!)
+                Http2Response(resp!!)
         } catch (ioe: IOException) {
             logger.severe("Connection error: ${ioe.message}")
 
@@ -80,14 +85,14 @@ class Http2Connector : HttpConnector() {
             } catch (ignored: InterruptedException) {
             }
 
-        try {
-            return DEFAULT_CLIENT.send(req, HttpResponse.BodyHandlers.ofInputStream())
+        return try {
+            getClient(proxy).send(req, HttpResponse.BodyHandlers.ofInputStream())
         } catch (ste1: SocketTimeoutException) {
             proxy.registerFailure()
-            return getContent(req, proxy, attempt + 1)
+            getContent(req, proxy, attempt + 1)
         } catch (ste1: InterruptedException) {
             proxy.registerFailure()
-            return getContent(req, proxy, attempt + 1)
+            getContent(req, proxy, attempt + 1)
         }
 
     }

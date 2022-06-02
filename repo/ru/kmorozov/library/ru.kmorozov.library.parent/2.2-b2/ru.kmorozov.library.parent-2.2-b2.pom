@@ -81,8 +81,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>18</maven.compiler.source>
+        <maven.compiler.target>18</maven.compiler.target>
 
         <spring-data-release-train>Lovelace-SR5</spring-data-release-train>
         <spring-version>5.1.5.RELEASE</spring-version>
