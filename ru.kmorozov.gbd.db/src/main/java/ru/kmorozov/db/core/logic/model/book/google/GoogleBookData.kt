@@ -38,9 +38,9 @@ class GoogleBookData : IBookData, Serializable {
     @Expose @SerializedName("attribution")
     private val attribution: String? = null
     @Expose @SerializedName("additional_info")
-    private val additionalInfo: AdditionalInfo? = null
+    val additionalInfo: AdditionalInfo? = null
     @Expose @SerializedName("table_of_contents_page_id")
-    private val tableOfContentsPageId: String? = null
+    val tableOfContentsPageId: String? = null
     @Expose @SerializedName("max_resolution_image_width")
     private val maxResolutionImageWidth: Int = 0
     @Expose @SerializedName("max_resolution_image_height")

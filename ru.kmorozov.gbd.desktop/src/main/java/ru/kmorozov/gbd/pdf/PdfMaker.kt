@@ -1,5 +1,6 @@
 package ru.kmorozov.gbd.pdf
 
+import org.apache.pdfbox.Loader
 import org.apache.pdfbox.cos.COSDictionary
 import org.apache.pdfbox.cos.COSName
 import org.apache.pdfbox.pdmodel.PDDocument
@@ -9,8 +10,12 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream
 import org.apache.pdfbox.pdmodel.common.PDMetadata
 import org.apache.pdfbox.pdmodel.common.PDRectangle
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject
+import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDPageXYZDestination
+import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDDocumentOutline
+import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDOutlineItem
 import org.jsoup.helper.DataUtil
 import org.jsoup.parser.Parser
+import ru.kmorozov.db.core.logic.model.book.google.GoogleBookData
 import ru.kmorozov.gbd.core.config.GBDOptions
 import ru.kmorozov.gbd.core.config.constants.GBDConstants
 import ru.kmorozov.gbd.core.config.constants.GoogleConstants.DEFAULT_PAGE_WIDTH
@@ -27,6 +32,7 @@ import java.nio.charset.Charset
 import java.nio.file.FileSystemException
 import java.util.*
 import javax.imageio.ImageIO
+
 
 /**
  * Created by km on 17.12.2015.
@@ -59,7 +65,7 @@ class PdfMaker : IPostProcessor {
 
         val imgWidth = if (0 == GBDOptions.imageWidth) DEFAULT_PAGE_WIDTH else GBDOptions.imageWidth
 
-        (if (pdfExists) PDDocument.load(pdfFile) else PDDocument()).use { pdfDocument ->
+        (if (pdfExists) Loader.loadPDF(pdfFile) else PDDocument()).use { pdfDocument ->
             val existPages = pdfDocument.numberOfPages.toLong()
 
             val imgCount = storage.imgCount()
@@ -74,9 +80,14 @@ class PdfMaker : IPostProcessor {
             while (itr.hasNext()) {
                 val page = itr.next()
                 if (page.metadata != null) {
-                    val docMeta = DataUtil.load(page.metadata.exportXMPMetadata(), Charset.defaultCharset().name(), "", Parser.xmlParser())
+                    val docMeta = DataUtil.load(
+                        page.metadata.exportXMPMetadata(),
+                        Charset.defaultCharset().name(),
+                        "",
+                        Parser.xmlParser()
+                    )
                     val order = Integer.parseInt(docMeta.select("order").text())
-                    internalPagesMap.put(order, page)
+                    internalPagesMap[order] = page
                 }
             }
 
@@ -84,6 +95,12 @@ class PdfMaker : IPostProcessor {
             documentInfo.title = bookInfo.bookData.title
             documentInfo.producer = GBDConstants.GBD_APP_NAME
             pdfDocument.documentInformation = documentInfo
+            val toc =
+                if (bookInfo.bookData is GoogleBookData) (bookInfo.bookData as GoogleBookData).additionalInfo?.jsonBookInfo?.toc else null
+
+            if (pdfDocument.documentCatalog.documentOutline == null)
+                pdfDocument.documentCatalog.documentOutline = PDDocumentOutline()
+            val outline = pdfDocument.documentCatalog.documentOutline
 
             storage.items.stream()
                 .filter { item -> item is MayBePageItem }
@@ -113,11 +130,15 @@ class PdfMaker : IPostProcessor {
                                         pdfPage.metadata = metadata
                                     }
 
-                                    val strMetadata = "<meta><pid>${item.page.pid}</pid><order>${item.page.order}</order></meta>"
+                                    val strMetadata =
+                                        "<meta><pid>${item.page.pid}</pid><order>${item.page.order}</order></meta>"
                                     metadata.importXMPMetadata(strMetadata.toByteArray(Charset.defaultCharset()))
 
                                     if (internalPagesMap.entries.count { entry -> item.page.order > entry.key } > 0)
-                                        pdfDocument.pages.insertAfter(pdfPage, internalPagesMap.entries.last { entry -> item.page.order > entry.key }.value)
+                                        pdfDocument.pages.insertAfter(
+                                            pdfPage,
+                                            internalPagesMap.entries.last { entry -> item.page.order > entry.key }.value
+                                        )
                                     else {
                                         val opNearestBefore = internalPagesMap.entries.stream()
                                             .filter { entry -> item.page.order < entry.key }.findFirst()
@@ -127,10 +148,38 @@ class PdfMaker : IPostProcessor {
                                             pdfDocument.addPage(pdfPage)
                                     }
 
-                                    internalPagesMap.put(item.page.order, pdfPage)
+                                    internalPagesMap[item.page.order] = pdfPage
 
                                     val img = PDImageXObject.createFromFileByExtension(item.asFile(), pdfDocument)
-                                    PDPageContentStream(pdfDocument, pdfPage).use { contentStream -> contentStream.drawImage(img, 0.toFloat(), 0.toFloat()) }
+                                    PDPageContentStream(
+                                        pdfDocument,
+                                        pdfPage
+                                    ).use { contentStream -> contentStream.drawImage(img, 0.toFloat(), 0.toFloat()) }
+
+                                    if (toc != null) {
+                                        if (item.page.pid == (bookInfo.bookData as GoogleBookData).tableOfContentsPageId) {
+                                            val dest = PDPageXYZDestination()
+                                            dest.page = pdfPage
+
+                                            val outlineItem = PDOutlineItem()
+                                            outlineItem.destination = dest
+                                            outlineItem.title = "Content"
+
+                                            outline.addLast(outlineItem)
+                                        }
+
+                                        val tocItem = toc.find { it.order == item.page.order }
+                                        if (tocItem != null && !outline.children().any { it.title == tocItem.title }) {
+                                            val dest = PDPageXYZDestination()
+                                            dest.page = pdfPage
+
+                                            val outlineItem = PDOutlineItem()
+                                            outlineItem.destination = dest
+                                            outlineItem.title = tocItem.title
+
+                                            outline.addLast(outlineItem)
+                                        }
+                                    }
                                 }
                             } else {
                                 item.delete()
@@ -146,7 +195,6 @@ class PdfMaker : IPostProcessor {
                         } catch (ioe: IOException) {
                             ioe.printStackTrace()
                         }
-
                     }
                 }
 
