@@ -41,8 +41,12 @@ open class SigProcessorInternal(
             return
 
         var response: Response = Response.EMPTY_RESPONSE
-        val baseUrl = GoogleConstants.HTTPS_TEMPLATE.replace(GoogleConstants.BOOK_ID_PLACEHOLDER, bookContext.bookInfo.bookId)
-        val rqUrl = baseUrl + GoogleConstants.PAGES_REQUEST_TEMPLATE.replace(GoogleConstants.RQ_PG_PLACEHOLDER, uniqueObject.pid)
+        val baseUrl =
+            GoogleConstants.HTTPS_TEMPLATE.replace(GoogleConstants.BOOK_ID_PLACEHOLDER, bookContext.bookInfo.bookId)
+        val rqUrl = baseUrl + GoogleConstants.PAGES_REQUEST_TEMPLATE.replace(
+            GoogleConstants.RQ_PG_PLACEHOLDER,
+            uniqueObject.pid
+        )
 
         try {
             response = getContent(rqUrl, proxy, true)
@@ -74,31 +78,31 @@ open class SigProcessorInternal(
             if (null == framePages) return
 
             listOf(*framePages.pages)
-                    .stream()
-                    .filter { page -> null != (page as GooglePageInfo).src }
-                    .forEach { framePage ->
-                        val page = bookContext.bookInfo.pages.getPageByPid(framePage.pid) as GooglePageInfo
+                .stream()
+                .filter { page -> null != (page as GooglePageInfo).src }
+                .forEach { framePage ->
+                    val page = bookContext.bookInfo.pages.getPageByPid(framePage.pid) as GooglePageInfo
 
-                        if (page.isDataProcessed) return@forEach
+                    if (page.isDataProcessed) return@forEach
 
-                        val frameSrc = (framePage as GooglePageInfo).src
-                        if (!Strings.isNullOrEmpty(frameSrc))
-                            if (GBDOptions.debugEnabled)
-                                logger.info("Sig candidate found $frameSrc")
+                    val frameSrc = (framePage as GooglePageInfo).src
+                    if (!Strings.isNullOrEmpty(frameSrc))
+                        if (GBDOptions.debugEnabled)
+                            logger.info("Sig candidate found $frameSrc")
 
-                        if (page.addSrc(frameSrc!!)) {
-                            if (page.pid == uniqueObject.pid) {
-                                proxy.promoteProxy()
+                    if (page.addSrc(frameSrc!!)) {
+                        if (page.pid == uniqueObject.pid) {
+                            proxy.promoteProxy()
 
-                                // Если есть возможность - пытаемся грузить страницу сразу
-                                if (!GBDOptions.serverMode)
-                                    bookContext.imgExecutor.execute(GooglePageImgProcessor(bookContext, page, proxy))
+                            // Если есть возможность - пытаемся грузить страницу сразу
+                            if (!GBDOptions.serverMode)
+                                bookContext.imgExecutor.execute(GooglePageImgProcessor(bookContext, page, proxy))
 
-                                sigFound = true
-                            }
-                        } else
-                            logger.finest(String.format(SIG_WRONG_FORMAT, page.src))
-                    }
+                            sigFound = true
+                        }
+                    } else
+                        logger.finest(String.format(SIG_WRONG_FORMAT, page.src))
+                }
         } catch (ce: SocketTimeoutException) {
             if (!proxy.isLocal) {
                 proxy.registerFailure()

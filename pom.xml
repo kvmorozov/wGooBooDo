@@ -10,7 +10,6 @@
         <groupId>ru.kmorozov.library</groupId>
         <artifactId>ru.kmorozov.library.parent</artifactId>
         <version>2.3.1</version>
-        <relativePath>ru.kmorozov.library.parent/pom.xml</relativePath>
     </parent>
 
     <properties>
@@ -44,7 +43,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <jvmTarget>17</jvmTarget>
+                    <jvmTarget>18</jvmTarget>
                 </configuration>
             </plugin>
             <plugin>
@@ -58,26 +57,15 @@
         </plugins>
     </build>
 
-    <repositories>
-        <!--other repositories if any-->
-        <repository>
-            <id>project.local</id>
-            <name>project</name>
-            <url>file:${project.basedir}/repo</url>
-        </repository>
-    </repositories>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <version>2.6.7</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.hateoas</groupId>
             <artifactId>spring-hateoas</artifactId>
-            <version>${spring-hateoas-version}</version>
         </dependency>
 
         <dependency>

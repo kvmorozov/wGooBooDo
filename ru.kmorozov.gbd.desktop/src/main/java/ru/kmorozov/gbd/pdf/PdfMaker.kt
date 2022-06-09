@@ -1,6 +1,5 @@
 package ru.kmorozov.gbd.pdf
 
-import org.apache.pdfbox.Loader
 import org.apache.pdfbox.cos.COSDictionary
 import org.apache.pdfbox.cos.COSName
 import org.apache.pdfbox.pdmodel.PDDocument
@@ -61,11 +60,20 @@ class PdfMaker : IPostProcessor {
         val bookInfo = uniqueObject.bookInfo
         val storage = uniqueObject.storage as LocalFSStorage
         val pdfFile = storage.getOrCreatePdf(bookInfo.bookData.title)
-        val pdfExists = storage.isPdfExists()
+        var pdfExists = storage.isPdfExists()
 
         val imgWidth = if (0 == GBDOptions.imageWidth) DEFAULT_PAGE_WIDTH else GBDOptions.imageWidth
 
-        (if (pdfExists) Loader.loadPDF(pdfFile) else PDDocument()).use { pdfDocument ->
+/*        if (pdfExists) {
+            val result = PreflightParser.validate(pdfFile)
+            if (!result.isValid) {
+                logger.error("PDF with errors, deleting...")
+                pdfFile.delete()
+                pdfExists = false
+            }
+        }*/
+
+        (if (pdfExists) PDDocument.load(pdfFile) else PDDocument()).use { pdfDocument ->
             val existPages = pdfDocument.numberOfPages.toLong()
 
             val imgCount = storage.imgCount()
@@ -95,6 +103,7 @@ class PdfMaker : IPostProcessor {
             documentInfo.title = bookInfo.bookData.title
             documentInfo.producer = GBDConstants.GBD_APP_NAME
             pdfDocument.documentInformation = documentInfo
+            pdfDocument.version = 1.7f
             val toc =
                 if (bookInfo.bookData is GoogleBookData) (bookInfo.bookData as GoogleBookData).additionalInfo?.jsonBookInfo?.toc else null
 

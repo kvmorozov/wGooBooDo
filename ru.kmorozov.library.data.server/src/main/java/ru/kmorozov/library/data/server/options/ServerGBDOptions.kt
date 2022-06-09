@@ -27,4 +27,7 @@ class ServerGBDOptions : AbstractServerGBDOptions() {
     override fun serverMode(): Boolean {
         return true
     }
+
+    override val debugEnabled: Boolean
+        get() = false
 }

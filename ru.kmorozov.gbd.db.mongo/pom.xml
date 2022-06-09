@@ -21,12 +21,10 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-mongodb</artifactId>
-            <version>3.4.0</version>
         </dependency>
         <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongo-java-driver</artifactId>
-            <version>3.12.11</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>

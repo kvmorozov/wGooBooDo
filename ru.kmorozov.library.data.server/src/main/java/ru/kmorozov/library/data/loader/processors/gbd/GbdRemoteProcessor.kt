@@ -22,9 +22,10 @@ import ru.kmorozov.library.data.server.options.ServerGBDOptions
 import ru.kmorozov.onedrive.client.OneDriveItem
 import ru.kmorozov.onedrive.client.OneDriveProvider
 import java.io.IOException
+import javax.annotation.PostConstruct
 
 @Component
-@ComponentScan(basePackageClasses = arrayOf(OneDriveContextLoader::class, ServerProducer::class, DbContextLoader::class, ServerGBDOptions::class))
+@ComponentScan(basePackageClasses = [OneDriveContextLoader::class, ServerProducer::class, DbContextLoader::class, ServerGBDOptions::class])
 @Conditional(StorageEnabledCondition::class)
 @Qualifier("remote")
 open class GbdRemoteProcessor : IGbdProcessor {
@@ -57,7 +58,7 @@ open class GbdRemoteProcessor : IGbdProcessor {
     @Qualifier("remote")
     private lateinit var options: ServerGBDOptions
 
-    val gbdRoot: OneDriveItem?
+    private val gbdRoot: OneDriveItem?
         @Bean
         @Lazy
         get() {
@@ -86,14 +87,14 @@ open class GbdRemoteProcessor : IGbdProcessor {
         ExecutionContext.initContext(true)
 
         ctx.initContext(gbdRoot)
-        if (!ctx.bookIdsList.isEmpty())
+        if (ctx.bookIdsList.isNotEmpty())
             for (bookId in ctx.bookIdsList) {
                 val bookInfo = ctx.getBookInfo(bookId)
                 if (bookInfo.empty) {
                     val dirItem = ctx.getBookDir(bookId)
                     val storage = storageRepository.findByUrl(dirItem.id!!)
                     val opBook = booksRepository.findAllByStorage(storage!!)
-                            .stream().filter { book -> book.bookInfo.format === PDF }.findFirst()
+                        .stream().filter { book -> book.bookInfo.format === PDF }.findFirst()
                     if (opBook.isPresent) {
                         val book = opBook.get()
                         book.addBookId(IdType.GOOGLE_BOOK_ID, bookId)
@@ -123,8 +124,14 @@ open class GbdRemoteProcessor : IGbdProcessor {
         ExecutionContext.INSTANCE.execute()
     }
 
+    @PostConstruct
+    fun init() {
+        GBDOptions.init(options)
+        logger = Logger.getLogger(GBDOptions.debugEnabled, GbdRemoteProcessor::class.java)
+    }
+
     companion object {
 
-        protected val logger = Logger.getLogger(GBDOptions.debugEnabled, GbdRemoteProcessor::class.java)
+        protected lateinit var logger: Logger
     }
 }
