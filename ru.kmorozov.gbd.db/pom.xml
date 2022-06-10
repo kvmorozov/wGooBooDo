@@ -14,7 +14,7 @@
         <groupId>ru.kmorozov.gbd</groupId>
         <artifactId>parent</artifactId>
         <version>2.3.1</version>
-        <relativePath>../ru.kmorozov.gbd.parent/pom.xml</relativePath>
+        <relativePath/>
     </parent>
 
     <dependencies>
@@ -27,13 +27,13 @@
         <dependency>
             <groupId>ru.kmorozov.gbd</groupId>
             <artifactId>ru.kmorozov.gbd.core.config</artifactId>
-            <version>${version}</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>ru.kmorozov.gbd</groupId>
             <artifactId>ru.kmorozov.gbd.core.logger</artifactId>
-            <version>${version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
