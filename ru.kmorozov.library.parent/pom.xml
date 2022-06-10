@@ -60,8 +60,8 @@
 
         <spring-data-release-train>Neumann-SR9</spring-data-release-train>
         <spring-boot-version>2.7.0</spring-boot-version>
-        <kotlin.version>1.6.21</kotlin.version>
-        <kotlin.maven.plugin.version>1.6.21</kotlin.maven.plugin.version>
+        <kotlin.version>1.7.0</kotlin.version>
+        <kotlin.maven.plugin.version>1.7.0</kotlin.maven.plugin.version>
     </properties>
 
     <dependencies>

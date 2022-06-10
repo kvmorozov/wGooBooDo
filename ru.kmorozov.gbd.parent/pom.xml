@@ -15,8 +15,8 @@
         <maven.compiler.target>18</maven.compiler.target>
 
         <selenium.version>3.141.59</selenium.version>
-        <kotlin.version>1.6.21</kotlin.version>
-        <kotlin.maven.plugin.version>1.6.21</kotlin.maven.plugin.version>
+        <kotlin.version>1.7.0</kotlin.version>
+        <kotlin.maven.plugin.version>1.7.0</kotlin.maven.plugin.version>
     </properties>
 
     <modules>
